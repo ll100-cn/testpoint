@@ -1,0 +1,8 @@
+services:
+  - postgresql
+
+rvm:
+  - 2.3
+
+before_script:
+  - bin/rake db:create
