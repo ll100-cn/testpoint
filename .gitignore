@@ -19,4 +19,5 @@
 /public/packs
 
 # Custom
-.byebug_history
+/.byebug_history
+/spec/examples.txt
