@@ -41,6 +41,12 @@ module.exports = {
     new ManifestPlugin({
       publicPath: output.publicPath,
       writeToFileEmit: true
+    }),
+    new webpack.ProvidePlugin({
+      // 兼容 bootstrap v4
+      jQuery: 'jquery',
+      Tether: 'tether',
+      Popper: 'popper.js/dist/umd/popper.js'
     })
   ],
 

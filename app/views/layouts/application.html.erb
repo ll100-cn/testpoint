@@ -4,11 +4,31 @@
     <title>Testpoint</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="navbar navbar-expand navbar-dark bg-dark mb-4">
+      <div class="container">
+        <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
+        <ul class="navbar-nav flex-row ml-md-auto">
+          <% if user_signed_in? %>
+            <li class="nav-item dropdown">
+              <%= link_to current_user.email, "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } %>
+              <div class="dropdown-menu dropdown-menu-right">
+                <%= link_to "sign out", destroy_user_session_path, class: "dropdown-item", method: :delete %>
+              </div>
+            </li>
+          <% else %>
+            <%= link_to "sign in", user_session_path, class: "dropdown-item" %>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>

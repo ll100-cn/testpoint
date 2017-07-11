@@ -12,21 +12,17 @@ gem 'rails', '~> 5.1.2'
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
-# Use CoffeeScript for .coffee assets and views
+# Models
+gem 'devise', '~> 4.3'
+
+# Assets
+gem 'sass-rails', '~> 5.0'
+gem 'uglifier', '>= 1.3.0'
+gem 'webpacker'
 gem 'coffee-rails', '~> 4.2'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
@@ -42,6 +38,8 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
 
+  gem "annotate"
+  gem 'factory_girl_rails', '~> 4.8'
   gem 'rspec-rails', '~> 3.6'
 end
 
@@ -55,6 +53,7 @@ group :development do
 end
 
 group :test do
+  gem 'faker', '~> 1.8', '>= 1.8.2'
   gem "rspec-do_action", "0.0.4"
 end
 

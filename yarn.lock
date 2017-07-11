@@ -799,6 +799,13 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
+"bootstrap@https://github.com/twbs/bootstrap.git#6436233":
+  version "4.0.0-alpha.6"
+  resolved "https://github.com/twbs/bootstrap.git#6436233"
+  dependencies:
+    jquery ">=1.9.1"
+    popper.js "^1.10.8"
+
 brace-expansion@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.8.tgz#c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
@@ -2385,6 +2392,10 @@ javascript-natural-sort@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/javascript-natural-sort/-/javascript-natural-sort-0.7.1.tgz#f9e2303d4507f6d74355a73664d1440fb5a0ef59"
 
+jquery@>=1.9.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.1.9"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.1.9.tgz#f0e80ae039a4bd654b5f281fc93f04a914a7fcce"
@@ -3192,6 +3203,10 @@ pkg-dir@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
+popper.js@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.10.8.tgz#0fd6343e68aa8c1cc8cfe35e02c673500a1bc609"
+
 portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
@@ -3752,6 +3767,10 @@ rails-erb-loader@^5.0.2:
   dependencies:
     loader-utils "^1.1.0"
     lodash.defaults "^4.2.0"
+
+rails-ujs@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/rails-ujs/-/rails-ujs-5.1.2.tgz#94919e35e7fa07467223e9c81444704593559ef5"
 
 randomatic@^1.1.3:
   version "1.1.7"
@@ -4468,6 +4487,10 @@ tunnel-agent@^0.6.0:
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
   dependencies:
     safe-buffer "^5.0.1"
+
+turbolinks@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/turbolinks/-/turbolinks-5.0.3.tgz#c8ce128cfc9be1d691a1e41ffa858a5a5ee86a02"
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
