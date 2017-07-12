@@ -13,11 +13,16 @@ gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 
+# Controllers
+gem 'responders', '~> 2.4'
+
 # Models
 gem 'devise', '~> 4.3'
+gem 'cancancan', '~> 2.0'
 
 # Views
 gem 'simple_form', '~> 3.5'
+gem 'kaminari', '~> 1.0', '>= 1.0.1'
 
 # Assets
 gem 'sass-rails', '~> 5.0'
