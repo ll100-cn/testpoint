@@ -16,6 +16,9 @@ gem 'puma', '~> 3.7'
 # Models
 gem 'devise', '~> 4.3'
 
+# Views
+gem 'simple_form', '~> 3.5'
+
 # Assets
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -37,6 +40,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'pry-rails', '~> 0.3.6'
 
   gem "annotate"
   gem 'factory_girl_rails', '~> 4.8'
