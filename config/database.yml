@@ -84,3 +84,4 @@ production:
   <<: *default
   database: testpoint_production
   password: <%= ENV['TESTPOINT_DATABASE_PASSWORD'] %>
+  host: postgres

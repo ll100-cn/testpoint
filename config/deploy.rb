@@ -7,7 +7,6 @@ fetch(:linked_files).concat %w[
 ]
 
 fetch(:linked_dirs).concat %w[
-  node_modules
   public/packs
   public/uploads
 ]
@@ -26,3 +25,17 @@ module YarnBeforePrecompile
   end
 end
 SSHKit::Backend::Netssh.prepend(YarnBeforePrecompile)
+
+namespace :deploy do
+  desc "rake db:seed"
+  task :seed do
+    on primary(:db) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, "db:seed"
+        end
+      end
+    end
+  end
+end
+after "deploy:migrate", "deploy:seed"
