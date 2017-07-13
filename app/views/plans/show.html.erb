@@ -1,0 +1,9 @@
+<div class="page-header">
+  <h4><%= t "views.page.show", model_name: @plan.model_name.human %></h4>
+</div>
+
+<h5><%= @plan.title %></h5>
+
+<hr>
+
+<%= back_link url_for(action: :index), class: "btn btn-link" %>
