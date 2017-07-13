@@ -1,0 +1,11 @@
+<%= bootstrap_horizontal_form_for @test_case do |f| %>
+  <%= f.input :title %>
+  <%= f.input :content, input_html: { rows: 5 } %>
+
+  <hr>
+
+  <%= f.actions_content do %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= back_link url_for(action: :index), class: "btn btn-link" %>
+  <% end %>
+<% end %>

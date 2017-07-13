@@ -34,6 +34,11 @@ en:
     page:
       index: "%{model_name} List"
       new: "New %{model_name}"
+      edit: "Edit %{model_name}"
+      show: "Show %{model_name}"
+      actions: "Actions"
+    action:
+      new: "New %{model_name}"
       edit: "Edit"
       show: "Show"
-      actions: "Actions"
+      back: "Back"
