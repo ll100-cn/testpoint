@@ -12,6 +12,7 @@ gem 'rails', '~> 5.1.2'
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
+gem 'dotenv-rails', '~> 2.2.1'
 
 # Controllers
 gem 'responders', '~> 2.4'
