@@ -30,4 +30,15 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  views:
+    page:
+      index: "%{model_name} List"
+      new: "New %{model_name}"
+      edit: "Edit %{model_name}"
+      show: "Show %{model_name}"
+      actions: "Actions"
+    action:
+      new: "New %{model_name}"
+      edit: "Edit"
+      show: "Show"
+      back: "Back"

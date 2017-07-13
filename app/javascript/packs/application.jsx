@@ -17,3 +17,5 @@ Turbolinks.start()
 
 import 'bootstrap'
 import 'bootstrap/scss/bootstrap.scss'
+
+import './style.scss';

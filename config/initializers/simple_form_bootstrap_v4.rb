@@ -52,7 +52,8 @@ SimpleForm.setup do |config|
     b.use :hint,  wrap_with: { tag: 'small', class: 'form-text text-muted' }
   end
 
-  config.wrappers :horizontal_form, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
+  config.wrappers :horizontal_form, tag: 'div', class: 'form-group row', error_class: '' do |b|
+    b.use :bootstrap_v4
     b.use :html5
     b.use :placeholder
     b.optional :maxlength
@@ -60,12 +61,28 @@ SimpleForm.setup do |config|
     b.optional :pattern
     b.optional :min_max
     b.optional :readonly
-    b.use :label, class: 'col-sm-3 control-label'
+    b.use :label, class: 'col-form-label text-sm-right'
 
-    b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
+    b.wrapper :content, tag: 'div', class: 'form-content' do |ba|
       ba.use :input, class: 'form-control'
-      ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+      ba.use :error, wrap_with: { tag: 'span', class: 'invalid-feedback' }
+      ba.use :hint,  wrap_with: { tag: 'small', class: 'form-text text-muted' }
+    end
+  end
+
+  config.wrappers :horizontal_offset_content, tag: 'div', class: 'form-group row', error_class: 'has-danger' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :minlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+
+    b.wrapper :offset_content, tag: 'div', class: '' do |ba|
+      ba.use :input, class: 'form-control'
+      ba.use :error, wrap_with: { tag: 'span', class: 'invalid-feedback' }
+      ba.use :hint,  wrap_with: { tag: 'small', class: 'form-text text-muted' }
     end
   end
 
