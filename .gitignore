@@ -21,3 +21,4 @@
 # Custom
 /.byebug_history
 /spec/examples.txt
+/config/deploy/*.rb
