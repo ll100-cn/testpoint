@@ -26,7 +26,7 @@ class TestCasesController < ApplicationController
     respond_with @test_case
   end
 
-  protected
+protected
 
   def test_case_params
     params.fetch(:test_case, {}).permit(:title, :content)

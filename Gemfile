@@ -20,6 +20,7 @@ gem 'responders', '~> 2.4'
 # Models
 gem 'devise', '~> 4.3'
 gem 'cancancan', '~> 2.0'
+gem 'enumerize', '2.1.2'
 
 # Views
 gem 'simple_form', '~> 3.5'

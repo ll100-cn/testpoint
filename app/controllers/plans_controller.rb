@@ -10,7 +10,7 @@ class PlansController < ApplicationController
   end
 
   def create
-    @plan.save
+    @plan.generate(test_case_ids: TestCase.ids)
 
     respond_with @plan
   end
@@ -24,7 +24,7 @@ class PlansController < ApplicationController
     respond_with @plan
   end
 
-  protected
+protected
 
   def plan_params
     params.fetch(:plan, {}).permit(:title)

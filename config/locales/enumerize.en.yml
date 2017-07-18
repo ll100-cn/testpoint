@@ -1,0 +1,7 @@
+en:
+  enumerize:
+    task:
+      state:
+        pending: "Pending"
+        pass: "Pass"
+        failure: "Failure"
