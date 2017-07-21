@@ -3,4 +3,7 @@ Rails.application.routes.draw do
   root 'main#root'
 
   resources :test_cases
+  resources :plans do
+    resources :tasks
+  end
 end

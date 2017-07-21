@@ -18,4 +18,15 @@ module PageHelper
     label = t("views.action.back")
     link_to label, url, options
   end
+
+  def task_state_text(task)
+    class_name = case task.state
+                 when "pass"
+                   "text-success"
+                 when "failure"
+                   "text-danger"
+                 end
+
+    content_tag :span, task.state_text, class: class_name
+  end
 end

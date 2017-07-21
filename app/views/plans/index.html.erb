@@ -1,0 +1,33 @@
+<div class="page-header">
+  <h4><%= t "views.page.index", model_name: h(Plan) %></h4>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= ::TestCase.human_attribute_name(:title) %></th>
+      <th><%= t "views.page.actions" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @plans.each do |plan| %>
+      <tr>
+        <td><%= plan.title %></td>
+        <td>
+          <%= show_link action: :show, id: plan %>
+          <%= edit_link action: :edit, id: plan %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<nav class="table-pagination">
+  <%= paginate @plans %>
+</nav>
+
+<hr>
+
+<div class="page-actions">
+  <%= new_button Plan, action: :new %>
+</div>
