@@ -14,6 +14,11 @@ module PageHelper
     link_to label, url, options
   end
 
+  def destroy_link(url, options = {})
+    label = t("views.action.destroy")
+    link_to label, url, { method: :delete, data: { confirm: "are you sure?" } }.merge(options)
+  end
+
   def back_link(url, options = {})
     label = t("views.action.back")
     link_to label, url, options

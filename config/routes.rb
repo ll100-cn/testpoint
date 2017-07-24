@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   resources :plans do
     resources :tasks
   end
+  resources :components
 end

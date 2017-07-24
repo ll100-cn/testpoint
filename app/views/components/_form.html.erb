@@ -1,0 +1,12 @@
+<%= bootstrap_horizontal_form_for component do |f| %>
+  <%= f.input :title %>
+  <% components = Component.where.not(id: component.id).map { |c| [ c.title, c.id ] } %>
+  <%= f.input :parent_id, collection: components %>
+
+  <hr>
+
+  <%= f.actions_content do %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= back_link [ ::TestCase, component_id: component.id ], class: "btn btn-link" %>
+  <% end %>
+<% end %>

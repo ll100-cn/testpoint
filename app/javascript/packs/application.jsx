@@ -18,4 +18,7 @@ Turbolinks.start()
 import 'bootstrap'
 import 'bootstrap/scss/bootstrap.scss'
 
-import '../application.scss';
+import '../widgets/font-awesome.scss'
+
+import '../application.scss'
+import '../bootstrap-v4-ext'
