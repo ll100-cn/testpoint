@@ -42,4 +42,4 @@ en:
       new: "New %{model_name}"
       edit: "Edit"
       show: "Show"
-      back: "Back"
+      cancel: "Cancel"

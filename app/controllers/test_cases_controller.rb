@@ -1,10 +1,12 @@
 class TestCasesController < ApplicationController
   before_action { @navbar = "cases" }
   load_and_authorize_resource :component
+  load_and_authorize_resource :platform
   load_and_authorize_resource
 
   def index
     @test_cases = @test_cases.where(component_id: @component.subtree) if @component.present?
+    @test_cases = @test_cases.where(platform_id: @platform) if @platform.present?
     @test_cases = @test_cases.page(params[:page])
   end
 
@@ -32,6 +34,6 @@ class TestCasesController < ApplicationController
 protected
 
   def test_case_params
-    params.fetch(:test_case, {}).permit(:title, :content, :component_id)
+    params.fetch(:test_case, {}).permit(:title, :content, :component_id, :platform_id)
   end
 end

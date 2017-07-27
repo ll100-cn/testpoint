@@ -1,0 +1,10 @@
+<%= bootstrap_horizontal_form_for platform do |f| %>
+  <%= f.input :name %>
+
+  <hr>
+
+  <%= f.actions_content do %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= cancel_link [ ::TestCase ], class: "btn btn-link" %>
+  <% end %>
+<% end %>

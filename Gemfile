@@ -70,7 +70,7 @@ end
 group :test do
   gem 'faker', '~> 1.8', '>= 1.8.2'
   gem "rails-controller-testing"
-  gem "rspec-do_action", "0.0.4"
+  gem "rspec-do_action", "0.0.5"
   gem "shoulda-matchers", "3.1.1"
 end
 
