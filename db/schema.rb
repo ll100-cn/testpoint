@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170714072140) do
+ActiveRecord::Schema.define(version: 20170727015440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "components", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "ancestry"
+    t.index ["ancestry"], name: "index_components_on_ancestry"
+  end
 
   create_table "plans", force: :cascade do |t|
     t.string "title"
@@ -36,6 +44,8 @@ ActiveRecord::Schema.define(version: 20170714072140) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "component_id"
+    t.index ["component_id"], name: "index_test_cases_on_component_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -1,0 +1,23 @@
+<% components.each do |component| %>
+  <% active = @component.try(:id) == component.id %>
+  <% collapse = path_ids.include?(component.id) %>
+  <% has_children = component.has_children? %>
+  <li class="list-group-item d-block pr-0">
+    <div class="list-group-item-text">
+      <% collapse_class = collapse ? "link-icon collapse-handle" : "link-icon collapse-handle collapsed" %>
+      <%= link_to "##{dom_id(component)}", class: collapse_class, data: { toggle: "collapse", parent: "#unit-module-panel-group" } do %>
+        <span class="fa fa-fw icon"></span>
+      <% end if has_children %>
+      <%= link_to component.name, { action: :index, component_id: component }, class: active ? "text-primary" : "text-muted" %>
+      <span class="actions float-right">
+        <%= link_to "Edit", [ :edit, component ], class: "mr-2" %>
+      </span>
+    </div>
+
+    <div>
+      <ul id="<%= dom_id(component) %>" class="list-group collapse <%= 'show' if collapse %>">
+        <%= render "treeview", components: component.children, path_ids: path_ids %>
+      </ul>
+    </div>
+  </li>
+<% end %>

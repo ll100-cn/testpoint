@@ -9,3 +9,5 @@
 User.where(email: "testpoint@gmail.com").first_or_create do |u|
   u.password = u.password_confirmation = "testpoint"
 end
+
+Component.where(title: "Default").first_or_create

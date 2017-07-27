@@ -1,0 +1,12 @@
+<%= bootstrap_horizontal_form_for component do |f| %>
+  <%= f.input :name %>
+  <% without_ids = f.object.new_record? ? nil : f.object.subtree %>
+  <%= f.input :parent_id, collection: Component.where.not(id: without_ids).ranked %>
+
+  <hr>
+
+  <%= f.actions_content do %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= back_link [ ::TestCase, component_id: component.id ], class: "btn btn-link" %>
+  <% end %>
+<% end %>

@@ -17,8 +17,9 @@ RSpec.describe TestCasesController, type: :controller do
   end
 
   describe "POST create" do
+    let(:component) { create :component }
     let(:new_test_case) { { title: "user change password", content: "input password and password_confirmation" } }
-    let(:create_request) { post :create, params: { test_case: new_test_case } }
+    let(:create_request) { post :create, params: { test_case: new_test_case.merge({component_id: component.id}) } }
 
     it { expect { create_request }.to change { TestCase.count }.from(count).to(count + 1) }
   end

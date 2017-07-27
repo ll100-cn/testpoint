@@ -2,34 +2,54 @@
   <h4><%= t "views.page.index", model_name: h(::TestCase) %></h4>
 </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th><%= ::TestCase.human_attribute_name(:title) %></th>
-      <th><%= ::TestCase.human_attribute_name(:content) %></th>
-      <th><%= t "views.page.actions" %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @test_cases.each do |test_case| %>
-      <tr>
-        <td><%= test_case.title %></td>
-        <td><%= test_case.content %></td>
-        <td>
-          <%= show_link action: :show, id: test_case %>
-          <%= edit_link action: :edit, id: test_case %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-md-3">
+    <% @components = Component.all %>
+    <% path_ids = @component.try(:path_ids) || [] %>
+    <% components_mapping = @components.group_by(&:parent_id) %>
+    <div class="card treeview">
+      <% components = components_mapping[nil] || [] %>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <% class_name = @component.present? ? "text-muted" : "" %>
+          <%= link_to "All", { action: :index }, class: class_name %>
+        </li>
+        <%= render "treeview", components: components, path_ids: path_ids %>
+      </ul>
+    </div>
+    <%= new_button Component, [ :new, :component ], class: "text-muted d-block mt-2" %>
+  </div>
+  <div class="col-md-9">
+    <table class="table">
+      <thead>
+        <tr>
+          <th><%= ::TestCase.human_attribute_name(:title) %></th>
+          <th><%= ::TestCase.human_attribute_name(:content) %></th>
+          <th><%= t "views.page.actions" %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @test_cases.each do |test_case| %>
+          <tr>
+            <td><%= test_case.title %></td>
+            <td><%= test_case.content %></td>
+            <td>
+              <%= show_link action: :show, id: test_case %>
+              <%= edit_link action: :edit, id: test_case %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<nav class="table-pagination">
-  <%= paginate @test_cases %>
-</nav>
+    <nav class="table-pagination">
+      <%= paginate @test_cases %>
+    </nav>
 
-<hr>
+    <hr>
 
-<div class="page-actions">
-  <%= new_button ::TestCase, action: :new %>
+    <div class="page-actions">
+      <%= new_button ::TestCase, action: :new %>
+    </div>
+  </div>
 </div>

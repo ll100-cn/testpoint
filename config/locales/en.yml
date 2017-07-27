@@ -36,6 +36,7 @@ en:
       new: "New %{model_name}"
       edit: "Edit %{model_name}"
       show: "Show %{model_name}"
+      destroy: "Destroy %{model_name}"
       actions: "Actions"
     action:
       new: "New %{model_name}"

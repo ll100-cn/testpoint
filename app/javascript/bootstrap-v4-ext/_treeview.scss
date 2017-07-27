@@ -1,0 +1,43 @@
+@import "~font-awesome/scss/variables";
+
+.treeview {
+  .link-icon {
+    outline: none;
+    text-decoration: none;
+
+    .icon::before {
+      content: $fa-var-minus-square-o;
+    }
+
+    &.collapsed .icon::before {
+      content: $fa-var-plus-square-o;
+    }
+  }
+
+  .list-group-item {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+
+    .list-group {
+      margin-left: 0.4rem;
+    }
+  }
+
+  .list-group-item-text {
+    .actions {
+      display: none;
+    }
+
+    &:hover > .actions {
+      display: inline-block;
+    }
+  }
+
+  .collapse {
+    display: none;
+
+    &.show {
+      display: block;
+    }
+  }
+}

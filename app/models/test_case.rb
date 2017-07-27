@@ -2,13 +2,16 @@
 #
 # Table name: test_cases
 #
-#  id         :integer          not null, primary key
-#  title      :string
-#  content    :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :integer          not null, primary key
+#  title        :string
+#  content      :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  component_id :integer
 #
 
 class TestCase < ApplicationRecord
-  validates :title, :content, presence: true
+  belongs_to :component
+
+  validates :title, :content, :component_id, presence: true
 end

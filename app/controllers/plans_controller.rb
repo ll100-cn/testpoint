@@ -1,4 +1,5 @@
 class PlansController < ApplicationController
+  before_action { @navbar = "plans" }
   load_and_authorize_resource
 
   def index
