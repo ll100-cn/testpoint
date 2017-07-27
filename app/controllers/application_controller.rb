@@ -5,4 +5,10 @@ class ApplicationController < ActionController::Base
   respond_to :html
 
   protect_from_forgery with: :exception
+
+protected
+  def ok_url_or_default(default)
+    params[:ok_url] || default
+  end
+  helper_method :ok_url_or_default
 end

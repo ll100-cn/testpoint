@@ -1,4 +1,8 @@
 module PageHelper
+  def ok_url_tag
+    hidden_field_tag "ok_url", params[:ok_url] if params[:ok_url].present?
+  end
+
   def new_button(model, url, options = {})
     label = t("views.action.new", model_name: h(model))
     link_to label, url, { class: "btn btn-primary" }.merge(options)

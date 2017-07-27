@@ -18,7 +18,7 @@
         <%= render "treeview", components: components, path_ids: path_ids %>
       </ul>
     </div>
-    <%= new_button Component, [ :new, :component ], class: "text-muted d-block mt-2" %>
+    <%= new_button Component, [ :new, :component, ok_url: request.fullpath ], class: "text-muted d-block mt-2" %>
   </div>
   <div class="col-md-9">
     <%= fume_nav @platform.try(:id) do |n| %>
@@ -36,7 +36,7 @@
         </li>
         <% if @platform %>
           <li class="nav-item ml-auto">
-            <%= edit_link [ :edit, @platform ], class: "nav-link border-0" %>
+            <%= edit_link [ :edit, @platform, ok_url: request.fullpath ], class: "nav-link border-0" %>
           </li>
         <% end %>
       </ul>

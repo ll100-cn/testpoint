@@ -7,19 +7,19 @@ class PlatformsController < ApplicationController
   def create
     @platform.save
 
-    respond_with @platform, location: [ ::TestCase ]
+    respond_with @platform, location: ok_url_or_default([TestCase])
   end
 
   def update
     @platform.update(platform_params)
 
-    respond_with @platform, location: [ ::TestCase ]
+    respond_with @platform, location: ok_url_or_default([TestCase])
   end
 
   def destroy
     @platform.destroy
 
-    respond_with @platform, location: [ ::TestCase ]
+    respond_with @platform, location: [TestCase]
   end
 
 protected
