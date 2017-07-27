@@ -8,7 +8,7 @@
       <%= link_to "##{dom_id(component)}", class: collapse_class, data: { toggle: "collapse", parent: "#unit-module-panel-group" } do %>
         <span class="fa fa-fw icon"></span>
       <% end if has_children %>
-      <%= link_to component.title, { action: :index, component_id: component }, class: active ? "text-primary" : "text-muted" %>
+      <%= link_to component.name, { action: :index, component_id: component }, class: active ? "text-primary" : "text-muted" %>
       <span class="actions float-right">
         <%= link_to "Edit", [ :edit, component ], class: "mr-2" %>
       </span>

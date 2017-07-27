@@ -23,12 +23,12 @@ class ComponentsController < ApplicationController
   def destroy
     @component.destroy
 
-    respond_with @component, location: [ ::TestCase, component_id: @component ]
+    respond_with @component, location: [ ::TestCase ]
   end
 
 protected
 
   def component_params
-    params.fetch(:component, {}).permit(:title, :parent_id)
+    params.fetch(:component, {}).permit(:name, :parent_id)
   end
 end

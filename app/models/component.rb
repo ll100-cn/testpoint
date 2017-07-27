@@ -3,7 +3,7 @@
 # Table name: components
 #
 #  id         :integer          not null, primary key
-#  title      :string
+#  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  ancestry   :string
@@ -15,10 +15,10 @@ class Component < ApplicationRecord
   has_many :test_cases
 
   def self.ranked
-    order(:title).sort_by { |c| c.ancestor_ids + [c.id] }
+    order(:name).sort_by { |c| c.ancestor_ids + [c.id] }
   end
 
   def to_label
-    "　" * ancestor_ids.size + title
+    "　" * ancestor_ids.size + name
   end
 end

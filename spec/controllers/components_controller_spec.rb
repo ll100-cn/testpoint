@@ -8,7 +8,7 @@ RSpec.describe ComponentsController, type: :controller do
   end
 
   describe "POST create" do
-    let(:new_component) { { title: "new component title" } }
+    let(:new_component) { { name: "new component name" } }
     let(:create_request) { post :create, params: new_component }
 
     it { expect { create_request }.to change { Component.count }.from(0).to(1) }
@@ -16,11 +16,11 @@ RSpec.describe ComponentsController, type: :controller do
 
   describe "PUT update" do
     let(:component) { create :component }
-    let(:new_title) { "new title" }
+    let(:new_name) { "new name" }
 
-    action { put :update, params: { id: component.id, component: { title: new_title } } }
+    action { put :update, params: { id: component.id, component: { name: new_name } } }
 
-    it { expect(component.reload.title).to eq new_title }
+    it { expect(component.reload.name).to eq new_name }
   end
 
   describe "GET show" do
