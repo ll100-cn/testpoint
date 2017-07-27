@@ -6,8 +6,7 @@ RSpec.describe MainController, type: :controller do
 
     context "when sign in" do
       login_user
-
-      it { expect(response).to have_http_status(:success) }
+      it { is_expected.to respond_with :success }
     end
 
     context "when not sign in" do
