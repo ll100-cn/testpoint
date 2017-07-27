@@ -21,12 +21,14 @@
     .list-group {
       margin-left: 0.4rem;
     }
+  }
 
+  .list-group-item-text {
     .actions {
       display: none;
     }
 
-    &:hover .actions {
+    &:hover > .actions {
       display: inline-block;
     }
   }

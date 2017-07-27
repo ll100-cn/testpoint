@@ -13,14 +13,16 @@
       <div class="container">
         <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
         <div class="navbar-nav-scroll">
-          <ul class="navbar-nav flex-row">
-            <li class="nav-item">
-              <%= link_to "Cases", [ ::TestCase ], class: "nav-link" %>
-            </li>
-            <li class="nav-item">
-              <%= link_to "Plans", [ Plan ], class: "nav-link" %>
-            </li>
-          </ul>
+          <%= fume_nav @navbar do |n| %>
+            <ul class="navbar-nav flex-row">
+              <%= n.li_tag "cases", class: "nav-item" do %>
+                <%= link_to "Cases", [ ::TestCase ], class: "nav-link" %>
+              <% end %>
+              <%= n.li_tag "plans", class: "nav-item" do %>
+                <%= link_to "Plans", [ Plan ], class: "nav-link" %>
+              <% end %>
+            </ul>
+          <% end %>
         </div>
         <ul class="navbar-nav flex-row ml-md-auto">
           <% if user_signed_in? %>

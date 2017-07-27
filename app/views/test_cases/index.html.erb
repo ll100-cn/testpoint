@@ -10,14 +10,13 @@
       <% components = components_mapping[nil] || [] %>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          <%= link_to "All", action: :index %>
+          <% class_name = @component.present? ? "text-muted" : "" %>
+          <%= link_to "All", { action: :index }, class: class_name %>
         </li>
         <%= render "treeview", components: components, path_ids: path_ids %>
-        <li class="list-group-item">
-          <%= new_button Component, [ :new, :component ], class: "small" %>
-        </li>
       </ul>
     </div>
+    <%= new_button Component, [ :new, :component ], class: "text-muted d-block mt-2" %>
   </div>
   <div class="col-md-9">
     <table class="table">

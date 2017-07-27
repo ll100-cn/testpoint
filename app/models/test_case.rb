@@ -13,5 +13,5 @@
 class TestCase < ApplicationRecord
   belongs_to :component
 
-  validates :title, :content, presence: true
+  validates :title, :content, :component_id, presence: true
 end
