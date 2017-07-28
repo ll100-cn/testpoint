@@ -15,8 +15,7 @@ class TestCasesController < ApplicationController
 
   def create
     @test_case.save
-
-    respond_with @test_case
+    respond_with @test_case, location: ok_url_or_default([TestCase])
   end
 
   def show
@@ -27,8 +26,7 @@ class TestCasesController < ApplicationController
 
   def update
     @test_case.update(test_case_params)
-
-    respond_with @test_case
+    respond_with @test_case, location: ok_url_or_default([TestCase])
   end
 
 protected

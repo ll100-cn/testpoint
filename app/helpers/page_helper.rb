@@ -23,9 +23,9 @@ module PageHelper
     link_to label, url, { method: :delete, data: { confirm: "Are you sure?" } }.merge(options)
   end
 
-  def cancel_link(url, options = {})
+  def cancel_link(default_url, options = {})
     label = t("views.action.cancel")
-    link_to label, url, options
+    link_to label, ok_url_or_default(default_url), options
   end
 
   def task_state_text(task)

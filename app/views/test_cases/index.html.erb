@@ -24,15 +24,15 @@
     <%= fume_nav @platform.try(:id) do |n| %>
       <ul class="nav nav-tabs mb-4">
         <li class="nav-item ml-2">
-          <%= n.link_to nil, "All Platforms", url_for(params.permit!.merge(platform_id: nil)), class: "nav-link" %>
+          <%= n.link_to nil, "All Platforms", url_for(params.permit!.merge(platform_id: nil)), class: "nav-link text-muted" %>
         </li>
         <% Platform.all.each do |platform| %>
           <li class="nav-item">
-            <%= n.link_to platform.id, platform.name, url_for(params.permit!.merge(platform_id: platform)), class: "nav-link" %>
+            <%= n.link_to platform.id, platform.name, url_for(params.permit!.merge(platform_id: platform)), class: "nav-link text-muted" %>
           </li>
         <% end %>
         <li class="nav-item">
-          <%= link_to "+", [ :new, :platform, ok_url: request.fullpath ], class: "nav-link" %>
+          <%= link_to "+", [ :new, :platform, ok_url: request.fullpath ], class: "nav-link text-muted" %>
         </li>
         <% if @platform %>
           <li class="nav-item ml-auto">
@@ -58,7 +58,7 @@
               <td><%= test_case.content %></td>
               <td>
                 <%= show_link action: :show, id: test_case %>
-                <%= edit_link action: :edit, id: test_case %>
+                <%= edit_link action: :edit, id: test_case, ok_url: request.fullpath %>
               </td>
             </tr>
           <% end %>

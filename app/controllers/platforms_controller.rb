@@ -6,7 +6,6 @@ class PlatformsController < ApplicationController
 
   def create
     @platform.save
-
     respond_with @platform, location: ok_url_or_default([TestCase])
   end
 
@@ -18,8 +17,7 @@ class PlatformsController < ApplicationController
 
   def destroy
     @platform.destroy
-
-    respond_with @platform, location: [TestCase]
+    respond_with @platform, location: ok_url_or_default([TestCase])
   end
 
 protected
