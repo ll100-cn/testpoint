@@ -12,8 +12,7 @@ class PlansController < ApplicationController
 
   def create
     @plan.generate(test_case_ids: TestCase.ids)
-
-    respond_with @plan
+    respond_with @plan, location: ok_url_or_default([Plan])
   end
 
   def edit
@@ -21,8 +20,7 @@ class PlansController < ApplicationController
 
   def update
     @plan.update(plan_params)
-
-    respond_with @plan
+    respond_with @plan, location: ok_url_or_default([Plan])
   end
 
 protected

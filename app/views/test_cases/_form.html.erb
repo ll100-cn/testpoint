@@ -2,11 +2,13 @@
   <%= f.input :title %>
   <%= f.input :content, input_html: { rows: 5 } %>
   <%= f.input :component_id, collection: Component.all %>
+  <%= f.input :platform_id, collection: Platform.all %>
 
   <hr>
 
   <%= f.actions_content do %>
+    <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
-    <%= back_link url_for(action: :index), class: "btn btn-link" %>
+    <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
   <% end %>
 <% end %>

@@ -5,12 +5,13 @@
   <li class="list-group-item d-block pr-0">
     <div class="list-group-item-text">
       <% collapse_class = collapse ? "link-icon collapse-handle" : "link-icon collapse-handle collapsed" %>
+      <% collapse_class += " text-muted" unless active %>
       <%= link_to "##{dom_id(component)}", class: collapse_class, data: { toggle: "collapse", parent: "#unit-module-panel-group" } do %>
         <span class="fa fa-fw icon"></span>
       <% end if has_children %>
-      <%= link_to component.name, { action: :index, component_id: component }, class: active ? "text-primary" : "text-muted" %>
+      <%= link_to component.name, { action: :index, component_id: component }, class: active ? "" : "text-muted" %>
       <span class="actions float-right">
-        <%= link_to "Edit", [ :edit, component ], class: "mr-2" %>
+        <%= link_to "Edit", [ :edit, component, ok_url: request.fullpath ], class: "mr-2" %>
       </span>
     </div>
 

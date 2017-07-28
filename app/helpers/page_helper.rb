@@ -1,4 +1,8 @@
 module PageHelper
+  def ok_url_tag
+    hidden_field_tag "ok_url", params[:ok_url] if params[:ok_url].present?
+  end
+
   def new_button(model, url, options = {})
     label = t("views.action.new", model_name: h(model))
     link_to label, url, { class: "btn btn-primary" }.merge(options)
@@ -16,12 +20,12 @@ module PageHelper
 
   def destroy_link(url, options = {})
     label = t("views.action.destroy")
-    link_to label, url, { method: :delete, data: { confirm: "are you sure?" } }.merge(options)
+    link_to label, url, { method: :delete, data: { confirm: "Are you sure?" } }.merge(options)
   end
 
-  def back_link(url, options = {})
-    label = t("views.action.back")
-    link_to label, url, options
+  def cancel_link(default_url, options = {})
+    label = t("views.action.cancel")
+    link_to label, ok_url_or_default(default_url), options
   end
 
   def task_state_text(task)

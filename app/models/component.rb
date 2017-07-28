@@ -14,6 +14,8 @@ class Component < ApplicationRecord
 
   has_many :test_cases
 
+  validates :name, presence: true
+
   def self.ranked
     order(:name).sort_by { |c| c.ancestor_ids + [c.id] }
   end

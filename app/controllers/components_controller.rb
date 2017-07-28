@@ -7,8 +7,7 @@ class ComponentsController < ApplicationController
 
   def create
     @component.save
-
-    respond_with @component, location: [ ::TestCase, component_id: @component ]
+    respond_with @component, location: ok_url_or_default([TestCase])
   end
 
   def edit
@@ -16,14 +15,12 @@ class ComponentsController < ApplicationController
 
   def update
     @component.update(component_params)
-
-    respond_with @component, location: [ ::TestCase, component_id: @component ]
+    respond_with @component, location: ok_url_or_default([TestCase])
   end
 
   def destroy
     @component.destroy
-
-    respond_with @component, location: [ ::TestCase ]
+    respond_with @component, location: ok_url_or_default([TestCase])
   end
 
 protected

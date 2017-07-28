@@ -7,4 +7,5 @@ Rails.application.routes.draw do
     resources :tasks
   end
   resources :components
+  resources :platforms
 end

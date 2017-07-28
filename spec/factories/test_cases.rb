@@ -8,6 +8,7 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  component_id :integer
+#  platform_id  :integer
 #
 
 FactoryGirl.define do
@@ -15,5 +16,6 @@ FactoryGirl.define do
     title "user sign in"
     content "input username and password"
     component { create :component }
+    platform { create :platform }
   end
 end

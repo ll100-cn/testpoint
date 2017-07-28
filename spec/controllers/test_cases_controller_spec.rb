@@ -1,43 +1,42 @@
 require 'rails_helper'
 
 RSpec.describe TestCasesController, type: :controller do
-  let(:count) { 5 }
-  let!(:test_cases) { create_list :test_case, count, title: "user sign in", content: "input username and password" }
+  let!(:test_case) { create :test_case }
 
   describe "GET index" do
     action { get :index }
-
-    it { expect(TestCase.count).to eq count }
+    it { is_expected.to respond_with :success }
   end
 
   describe "GET new" do
     action { get :new }
-
     it { is_expected.to respond_with :success }
   end
 
   describe "POST create" do
     let(:component) { create :component }
-    let(:new_test_case) { { title: "user change password", content: "input password and password_confirmation" } }
-    let(:create_request) { post :create, params: { test_case: new_test_case.merge({component_id: component.id}) } }
+    let(:platform) { create :platform }
+    let(:attributes) { { title: "user change password", content: "input password and password_confirmation" } }
+    action { post :create, params: { test_case: attributes.merge(component_id: component.id, platform_id: platform.id) } }
 
-    it { expect { create_request }.to change { TestCase.count }.from(count).to(count + 1) }
+    context "success" do
+      it { is_expected.to respond_with :redirect }
+    end
+
+    context "invalid" do
+      before { attributes[:title] = "" }
+      it { is_expected.to render_template :new }
+    end
   end
 
   describe "PUT update" do
-    let(:test_case) { test_cases.first }
-    let(:new_title) { "user sign out" }
-
-    action { put :update, params: { id: test_case.id, test_case: { title: new_title } } }
-
-    it { expect(test_case.reload.title).to eq new_title }
+    let(:attributes) { { title: "user sign out" } }
+    action { put :update, params: { id: test_case.id, test_case: attributes } }
+    it { is_expected.to respond_with :redirect }
   end
 
   describe "GET show" do
-    let(:test_case) { test_cases.first }
-
     action { get :show, params: { id: test_case.id } }
-
-    it { expect(test_case).to eq assigns(:test_case) }
+    it { is_expected.to respond_with :success }
   end
 end

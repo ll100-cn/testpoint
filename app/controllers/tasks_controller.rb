@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   def update
     @task.update(task_params)
 
-    respond_with @task, action: false, location: [ @task.plan ]
+    respond_with @task, action: false, location: [@task.plan]
   end
 
 protected
