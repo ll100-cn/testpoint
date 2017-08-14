@@ -5,6 +5,7 @@ class TestCasesController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @default_cases_url_options = request.query_parameters
     @test_cases = @test_cases.where(component_id: @component.subtree) if @component.present?
     @test_cases = @test_cases.where(platform_id: @platform) if @platform.present?
     @test_cases = @test_cases.page(params[:page])
