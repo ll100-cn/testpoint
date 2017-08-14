@@ -1,0 +1,30 @@
+<% components.each do |component| %>
+  <% children = components_mapping[component.id] || [] %>
+  <% children_dom_id = dom_id(component, "children") %>
+  <% collapse = path_ids.include?(component.id) %>
+
+  <%= n.apply_content component.id do |cls| %>
+    <li class="treeview-item">
+      <div class="treeview-item-text clearfix">
+        <%= link_to "##{children_dom_id}", class: "link-icon collapse-handle pull-left text-muted #{'collapsed' unless collapse}", data: { toggle: "collapse", parent: "#unit-module-panel-group" } do %>
+          <span class="fa fa-fw icon"></span>
+        <% end if children.any? %>
+
+        <%= link_to component.name, { action: :index, component_id: component }, class: "pull-left #{cls || 'text-muted'}" %>
+
+        <span class="actions float-right">
+          <%= link_to "Edit", [ :edit, component, ok_url: request.fullpath ], class: "mr-2" %>
+        </span>
+      </div>
+
+      <% if children.any? %>
+        <ul id="<%= children_dom_id %>" class="treeview-subtree collapse <%= 'show' if collapse %>">
+          <%= render "shared/treeview_components", components: children,
+                                                   path_ids: path_ids,
+                                                   components_mapping: components_mapping,
+                                                   n: n %>
+        </ul>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>

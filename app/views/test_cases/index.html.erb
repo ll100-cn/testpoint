@@ -2,78 +2,57 @@
   <h2><%= t "views.page.index", model_name: h(::TestCase) %></h2>
 </div>
 
-<div class="row">
-  <div class="col-md-3">
-    <h5>Components</h5>
-    <% @components = Component.all %>
-    <% path_ids = @component.try(:path_ids) || [] %>
-    <% components_mapping = @components.group_by(&:parent_id) %>
-    <div class="card treeview">
-      <% components = components_mapping[nil] || [] %>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <% class_name = @component.present? ? "text-muted" : "" %>
-          <%= link_to "All Components", { action: :index }, class: class_name %>
-        </li>
-        <%= render "treeview", components: components, path_ids: path_ids %>
-      </ul>
-    </div>
-    <%= new_button Component, [ :new, :component, ok_url: request.fullpath ], class: "text-muted d-block mt-2" %>
-  </div>
-  <div class="col-md-9">
-    <%= fume_nav @platform.try(:id) do |n| %>
-      <ul class="nav nav-tabs mb-4">
-        <li class="nav-item ml-2">
-          <%= n.link_to nil, "All Platforms", url_for(params.permit!.merge(platform_id: nil)), class: "nav-link text-muted" %>
-        </li>
-        <% Platform.all.each do |platform| %>
-          <li class="nav-item">
-            <%= n.link_to platform.id, platform.name, url_for(params.permit!.merge(platform_id: platform)), class: "nav-link text-muted" %>
-          </li>
-        <% end %>
-        <li class="nav-item">
-          <%= link_to "+", [ :new, :platform, ok_url: request.fullpath ], class: "nav-link text-muted" %>
-        </li>
-        <% if @platform %>
-          <li class="nav-item ml-auto">
-            <%= edit_link [ :edit, @platform, ok_url: request.fullpath ], class: "nav-link border-0" %>
-          </li>
-        <% end %>
-      </ul>
+<%= fume_nav @platform.try(:id) do |n| %>
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item ml-2">
+      <%= n.link_to nil, "All Platforms", url_for(params.permit!.merge(platform_id: nil)), class: "nav-link text-muted" %>
+    </li>
+    <% Platform.all.each do |platform| %>
+      <li class="nav-item">
+        <%= n.link_to platform.id, platform.name, url_for(params.permit!.merge(platform_id: platform)), class: "nav-link text-muted" %>
+      </li>
     <% end %>
+    <li class="nav-item">
+      <%= link_to "+", [ :new, :platform, ok_url: request.fullpath ], class: "nav-link text-muted" %>
+    </li>
+    <% if @platform %>
+      <li class="nav-item ml-auto">
+        <%= edit_link [ :edit, @platform, ok_url: request.fullpath ], class: "nav-link border-0" %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
 
-    <div class="tab-content">
-      <table class="table">
-        <thead>
-          <tr>
-            <th><%= ::TestCase.human_attribute_name(:title) %></th>
-            <th><%= ::TestCase.human_attribute_name(:content) %></th>
-            <th><%= t "views.page.actions" %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @test_cases.each do |test_case| %>
-            <tr>
-              <td><%= test_case.title %></td>
-              <td><%= test_case.content %></td>
-              <td>
-                <%= show_link action: :show, id: test_case %>
-                <%= edit_link action: :edit, id: test_case, ok_url: request.fullpath %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+<div class="tab-content">
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= ::TestCase.human_attribute_name(:title) %></th>
+        <th><%= ::TestCase.human_attribute_name(:content) %></th>
+        <th><%= t "views.page.actions" %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @test_cases.each do |test_case| %>
+        <tr>
+          <td><%= test_case.title %></td>
+          <td><%= test_case.content %></td>
+          <td>
+            <%= show_link action: :show, id: test_case %>
+            <%= edit_link action: :edit, id: test_case, ok_url: request.fullpath %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-      <nav class="table-pagination">
-        <%= paginate @test_cases %>
-      </nav>
-    </div>
+  <nav class="table-pagination">
+    <%= paginate @test_cases %>
+  </nav>
+</div>
 
-    <hr>
+<hr>
 
-    <div class="page-actions">
-      <%= new_button ::TestCase, action: :new %>
-    </div>
-  </div>
+<div class="page-actions">
+  <%= new_button ::TestCase, action: :new %>
 </div>

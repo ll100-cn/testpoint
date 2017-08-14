@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testpoint</title>
+    <%= csrf_meta_tags %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class="full-height">
+    <%= render "layouts/nav" %>
+
+    <div class="d-flex h-100 align-items-stretch">
+      <div class="col-12 col-md-3 col-xl-2 bg-light sticky-top tp-sidebar">
+        <h5>Components</h5>
+        <% components_mapping = Component.ranked.group_by(&:parent_id) %>
+        <%= fume_nav @component.try(:id), active_class: "" do |n| %>
+          <ul class="treeview">
+            <%= n.apply_content nil do |cls| %>
+              <li class="treeview-item">
+                <%= link_to "All Components", { action: :index }, class: cls || "text-muted" %>
+              </li>
+            <% end %>
+
+            <%= render "shared/treeview_components", components: components_mapping[nil] || [],
+                                                     path_ids: @component.try(:path_ids) || [],
+                                                     components_mapping: components_mapping,
+                                                     n: n %>
+          </ul>
+        <% end %>
+        
+        <%= new_button Component, [ :new, :component, ok_url: request.fullpath ], class: "text-muted d-block mt-2" %>
+      </div>
+
+
+      <div class="col-12 col-md-9 col-xl-10 tp-main">
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>

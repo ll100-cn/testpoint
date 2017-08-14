@@ -26,7 +26,7 @@ gem 'ancestry', '3.0.1'
 # Views
 gem 'simple_form', '~> 3.5'
 gem 'kaminari', '~> 1.0', '>= 1.0.1'
-gem 'fume-nav', '0.1.0'
+gem 'fume-nav', '0.1.2'
 
 # Assets
 gem 'sass-rails', '~> 5.0'
