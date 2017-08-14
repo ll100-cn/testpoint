@@ -22,3 +22,4 @@
 /.byebug_history
 /spec/examples.txt
 /config/deploy/*.rb
+/docker-compose.yml

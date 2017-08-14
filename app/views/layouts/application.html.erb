@@ -3,41 +3,14 @@
   <head>
     <title>Testpoint</title>
     <%= csrf_meta_tags %>
-
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand navbar-dark bg-dark mb-4">
-      <div class="container">
-        <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
-        <div class="navbar-nav-scroll">
-          <%= fume_nav @navbar do |n| %>
-            <ul class="navbar-nav flex-row">
-              <%= n.li_tag "cases", class: "nav-item" do %>
-                <%= link_to "Cases", [ ::TestCase ], class: "nav-link" %>
-              <% end %>
-              <%= n.li_tag "plans", class: "nav-item" do %>
-                <%= link_to "Plans", [ Plan ], class: "nav-link" %>
-              <% end %>
-            </ul>
-          <% end %>
-        </div>
-        <ul class="navbar-nav flex-row ml-md-auto">
-          <% if user_signed_in? %>
-            <li class="nav-item dropdown">
-              <%= link_to current_user.email, "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } %>
-              <div class="dropdown-menu dropdown-menu-right">
-                <%= link_to "sign out", destroy_user_session_path, class: "dropdown-item", method: :delete %>
-              </div>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </nav>
+    <%= render "layouts/nav", current: @navbar %>
 
-    <div class="container">
+    <div id="tp-main" class="container-fluid">
       <%= yield %>
     </div>
   </body>

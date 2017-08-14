@@ -1,9 +1,51 @@
 @import "~font-awesome/scss/variables";
 
-.treeview {
+.treeview, .treeview-subtree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.treeview-subtree {
+  padding-left: 1.3rem;
+
+  &.collapse {
+    display: none;
+
+    &.show {
+      display: block;
+    }
+  }
+}
+
+.treeview-item-text {
+  /* border: 1px solid transparent; */
+
+  &:hover {
+    border-bottom-color: #ccc;
+  }
+
+  .actions {
+    display: none;
+  }
+
+  &:hover > .actions {
+    display: inline-block;
+  }
+}
+
+.treeview-item {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+
   .link-icon {
     outline: none;
     text-decoration: none;
+    width: 1.3rem;
+
+    .icon {
+      text-align: left;
+    }
 
     .icon::before {
       content: $fa-var-minus-square-o;
@@ -11,33 +53,6 @@
 
     &.collapsed .icon::before {
       content: $fa-var-plus-square-o;
-    }
-  }
-
-  .list-group-item {
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
-
-    .list-group {
-      margin-left: 0.4rem;
-    }
-  }
-
-  .list-group-item-text {
-    .actions {
-      display: none;
-    }
-
-    &:hover > .actions {
-      display: inline-block;
-    }
-  }
-
-  .collapse {
-    display: none;
-
-    &.show {
-      display: block;
     }
   }
 }

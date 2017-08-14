@@ -1,3 +1,27 @@
+// ========================
+// Layouts
+// ------------------------
+#tp-main, #tp-sidebar {
+  padding: 1rem;
+}
+
+.full-height {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  #tp-contianer {
+    flex: 1;
+  }
+
+  #tp-main {
+    overflow: scroll;
+  }
+}
+
+// ========================
+// Styles
+// ------------------------
 .page-header {
   margin-bottom: 2rem;
   border-bottom: 1px solid #ccc;
@@ -16,5 +40,17 @@
 .table-pagination {
   .pagination {
     justify-content: flex-end;
+  }
+}
+
+.tp-side-link {
+  padding: 0.25rem 0;
+
+  > a {
+    color: rgba(0,0,0,.65);
+  }
+
+  &.active > a {
+    color: red;
   }
 }
