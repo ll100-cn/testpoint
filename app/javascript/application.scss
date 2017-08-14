@@ -1,3 +1,27 @@
+// ========================
+// Layouts
+// ------------------------
+#tp-main, #tp-sidebar {
+  padding: 1rem;
+}
+
+.full-height {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  #tp-contianer {
+    flex: 1;
+  }
+
+  #tp-main {
+    overflow: scroll;
+  }
+}
+
+// ========================
+// Styles
+// ------------------------
 .page-header {
   margin-bottom: 2rem;
   border-bottom: 1px solid #ccc;
@@ -17,24 +41,6 @@
   .pagination {
     justify-content: flex-end;
   }
-}
-
-html {
-  height: 100%;
-}
-
-.full-height {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.tp-navbar {
-  min-height: 4rem;
-}
-
-.tp-sidebar {
-  top: 4rem;
 }
 
 .tp-side-link {

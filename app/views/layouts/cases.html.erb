@@ -8,10 +8,10 @@
   </head>
 
   <body class="full-height">
-    <%= render "layouts/nav" %>
+    <%= render "layouts/nav", current: "cases" %>
 
-    <div class="d-flex h-100 align-items-stretch">
-      <div class="col-12 col-md-3 col-xl-2 bg-light sticky-top tp-sidebar">
+    <div id="tp-contianer" class="d-flex align-items-stretch">
+      <div id="tp-sidebar" class="col-12 col-md-3 col-xl-2 bg-light">
         <h5>Components</h5>
         <% components_mapping = Component.ranked.group_by(&:parent_id) %>
         <%= fume_nav @component.try(:id), active_class: "" do |n| %>
@@ -28,12 +28,11 @@
                                                      n: n %>
           </ul>
         <% end %>
-        
+
         <%= new_button Component, [ :new, :component, ok_url: request.fullpath ], class: "text-muted d-block mt-2" %>
       </div>
 
-
-      <div class="col-12 col-md-9 col-xl-10 tp-main">
+      <div id="tp-main" class="col-12 col-md-9 col-xl-10">
         <%= yield %>
       </div>
     </div>

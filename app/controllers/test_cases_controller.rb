@@ -1,6 +1,5 @@
 class TestCasesController < ApplicationController
   layout "cases"
-  before_action { @navbar = "cases" }
   load_and_authorize_resource :component
   load_and_authorize_resource :platform
   load_and_authorize_resource

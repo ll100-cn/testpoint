@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-dark sticky-top tp-navbar">
   <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
   <div class="navbar-nav-scroll">
-    <%= fume_nav @navbar do |n| %>
+    <%= fume_nav current do |n| %>
     <ul class="navbar-nav flex-row">
       <%= n.li_tag "cases", class: "nav-item" do %>
       <%= link_to "Cases", [ ::TestCase ], class: "nav-link" %>

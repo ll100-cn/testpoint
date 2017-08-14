@@ -8,8 +8,9 @@
   </head>
 
   <body>
-    <%= render "layouts/nav" %>
-    <div class="container-fluid">
+    <%= render "layouts/nav", current: @navbar %>
+
+    <div id="tp-main" class="container-fluid">
       <%= yield %>
     </div>
   </body>
