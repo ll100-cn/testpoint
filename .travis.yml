@@ -5,4 +5,7 @@ rvm:
   - 2.3
 
 before_script:
+  - nvm install stable
+  - npm install -g yarn
+  - bin/yarn
   - bin/rake db:create
