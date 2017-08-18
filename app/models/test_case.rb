@@ -12,7 +12,7 @@
 
 class TestCase < ApplicationRecord
   belongs_to :component
-  belongs_to :platform
+  has_and_belongs_to_many :platforms
 
-  validates :title, :content, :component_id, :platform_id, presence: true
+  validates :title, :content, :component_id, :platform_ids, presence: true
 end

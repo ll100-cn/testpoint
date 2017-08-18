@@ -28,17 +28,19 @@
     <thead>
       <tr>
         <th><%= ::TestCase.human_attribute_name(:title) %></th>
-        <th><%= ::TestCase.human_attribute_name(:content) %></th>
         <th><%= t "views.page.actions" %></th>
       </tr>
     </thead>
     <tbody>
       <% @test_cases.each do |test_case| %>
         <tr>
-          <td><%= test_case.title %></td>
-          <td><%= test_case.content %></td>
           <td>
-            <%= show_link action: :show, id: test_case %>
+            <h5><%= test_case.title %></h5>
+            <% test_case.platforms.each do |platform| %>
+              <span class="badge badge-info"><%= platform.name %></span>
+            <% end %>
+          </td>
+          <td>
             <%= edit_link action: :edit, id: test_case, ok_url: request.fullpath %>
           </td>
         </tr>

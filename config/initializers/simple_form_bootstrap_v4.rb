@@ -115,14 +115,13 @@ SimpleForm.setup do |config|
     end
   end
 
-  config.wrappers :horizontal_radio_and_checkboxes, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
+  config.wrappers :horizontal_radio_and_checkboxes, tag: 'div', class: 'form-group row', error_class: 'has-error' do |b|
     b.use :html5
     b.optional :readonly
+    b.use :label, class: 'col-form-label text-sm-right'
 
-    b.use :label, class: 'col-sm-3 control-label'
-
-    b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
-      ba.use :input
+    b.wrapper :content, tag: 'div', class: 'form-content py-1' do |ba|
+      ba.use :input, class: "form-check-input"
       ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
     end

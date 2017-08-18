@@ -15,6 +15,6 @@ FactoryGirl.define do
     title "user sign in"
     content "input username and password"
     component { create :component }
-    platform { create :platform }
+    platforms { create_list :platform, 1 }
   end
 end
