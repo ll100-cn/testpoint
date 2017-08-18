@@ -25,8 +25,8 @@ class CreatePlatformsTestCases < ActiveRecord::Migration[5.1]
       test_cases.each do |test_case|
         migrate_sql = <<-SQL
           UPDATE platforms_test_cases
-          SET platform_id=#{primary_case.id}
-          WHERE platform_id=#{test_case.id}
+          SET test_case_id=#{primary_case.id}
+          WHERE test_case_id=#{test_case.id}
         SQL
         ActiveRecord::Base.connection.execute(migrate_sql)
         Task.where(test_case_id: test_case).update_all(test_case_id: primary_case)
