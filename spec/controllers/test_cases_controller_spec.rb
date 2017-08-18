@@ -17,7 +17,7 @@ RSpec.describe TestCasesController, type: :controller do
     let(:component) { create :component }
     let(:platform) { create :platform }
     let(:attributes) { { title: "user change password", content: "input password and password_confirmation" } }
-    action { post :create, params: { test_case: attributes.merge(component_id: component.id, platform_id: platform.id) } }
+    action { post :create, params: { test_case: attributes.merge(component_id: component.id, platform_ids: [platform.id]) } }
 
     context "success" do
       it { is_expected.to respond_with :redirect }

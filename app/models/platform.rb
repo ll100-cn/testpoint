@@ -9,5 +9,11 @@
 #
 
 class Platform < ApplicationRecord
+  has_many :tasks
+  has_and_belongs_to_many :test_cases
   validates :name, presence: true
+
+  def to_label
+    " #{name}"
+  end
 end

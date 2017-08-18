@@ -14,7 +14,13 @@ class Plan < ApplicationRecord
   validates :title, presence: true
 
   def generate(params)
-    self.test_case_ids = params[:test_case_ids]
+    test_cases = TestCase.where(id: params[:test_case_ids])
+    test_cases.each do |test_case|
+      test_case.platform_ids.each do |platform_id|
+        tasks.new(test_case_id: test_case.id, platform_id: platform_id)
+      end
+    end
+
     save
   end
 end

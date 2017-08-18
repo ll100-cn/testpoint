@@ -15,7 +15,9 @@ module BootstrapV4Helper
   def bootstrap_horizontal_form_for(*args, &block)
     options = {
       wrapper: 'horizontal_form',
-      wrapper_mappings: {},
+      wrapper_mappings: {
+        check_boxes: :horizontal_radio_and_checkboxes
+      },
       html: { class: "form-horizontal" },
       builder: BootstrapHorizontalBuilder
     }.deep_merge(args.extract_options!)
