@@ -3,16 +3,36 @@
 </div>
 
 <table class="table">
+  <colgroup>
+    <col width="20%"/>
+    <col width="60%"/>
+    <col width="20%"/>
+  </colgroup>
   <thead>
     <tr>
       <th><%= ::TestCase.human_attribute_name(:title) %></th>
+      <th>进度</th>
       <th><%= t "views.page.actions" %></th>
     </tr>
   </thead>
   <tbody>
+    <% progress_bg_mapping = { "pass" => "bg-success", "failure" => "bg-danger" } %>
     <% @plans.each do |plan| %>
       <tr>
         <td><%= plan.title %></td>
+        <td>
+          <div class="progress">
+            <% tasks_state_count = @tasks_count_mapping[plan.id] || {} %>
+            <% tasks_count = tasks_state_count.sum(&:last) %>
+            <div class="progress-bar" style="width: 0%"></div>
+            <% Task.state.values.each do |state| %>
+              <% count = tasks_state_count[state] || 0 %>
+              <% if count.nonzero? && (bar_bg = progress_bg_mapping[state]) %>
+                <div class="progress-bar <%= bar_bg %>" style="width: <%= 100.0 * count / tasks_count %>%"></div>
+              <% end %>
+            <% end %>
+          </div>
+        </td>
         <td>
           <%= show_link action: :show, id: plan, ok_url: request.fullpath %>
           <%= edit_link action: :edit, id: plan, ok_url: request.fullpath %>
