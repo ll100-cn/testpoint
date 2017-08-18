@@ -8,11 +8,13 @@
 #  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  platform_id  :integer
 #
 
 FactoryGirl.define do
   factory :task do
     plan { create :plan }
     test_case { create :test_case }
+    platform { create :platform }
   end
 end

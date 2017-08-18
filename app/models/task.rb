@@ -8,6 +8,7 @@
 #  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  platform_id  :integer
 #
 
 class Task < ApplicationRecord
@@ -17,4 +18,5 @@ class Task < ApplicationRecord
 
   belongs_to :test_case
   belongs_to :plan
+  belongs_to :platform
 end

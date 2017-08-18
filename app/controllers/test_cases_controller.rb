@@ -6,9 +6,9 @@ class TestCasesController < ApplicationController
 
   def index
     @default_cases_url_options = request.query_parameters
-    @test_cases = @test_cases.where(component_id: @component.subtree) if @component.present?
-    @test_cases = @test_cases.joins(:platforms).where(platforms: { id: @platform }) if @platform.present?
-    @test_cases = @test_cases.includes(:platforms).page(params[:page])
+    @test_cases = @test_cases.where(component_id: @component.subtree) if @component
+    @test_cases = @test_cases.where(platforms: { id: @platform }) if @platform
+    @test_cases = @test_cases.joins(:platforms).includes(:platforms).page(params[:page])
   end
 
   def new

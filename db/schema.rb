@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20170817073051) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "platforms_test_cases", force: :cascade do |t|
+  create_table "platforms_test_cases", id: false, force: :cascade do |t|
     t.bigint "platform_id"
     t.bigint "test_case_id"
     t.index ["platform_id"], name: "index_platforms_test_cases_on_platform_id"
@@ -48,7 +48,9 @@ ActiveRecord::Schema.define(version: 20170817073051) do
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "platform_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
+    t.index ["platform_id"], name: "index_tasks_on_platform_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
   end
 
@@ -78,4 +80,7 @@ ActiveRecord::Schema.define(version: 20170817073051) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "platforms_test_cases", "platforms"
+  add_foreign_key "platforms_test_cases", "test_cases"
+  add_foreign_key "tasks", "platforms"
 end

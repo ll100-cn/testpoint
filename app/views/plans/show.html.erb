@@ -9,6 +9,7 @@
     <tr>
       <th><%= ::TestCase.human_attribute_name(:title) %></th>
       <th><%= ::TestCase.human_attribute_name(:content) %></th>
+      <th><%= ::TestCase.human_attribute_name(:platform) %></th>
       <th><%= Task.human_attribute_name(:state) %></th>
       <th><%= t "views.page.actions" %></th>
     </tr>
@@ -19,6 +20,7 @@
       <tr>
         <td><%= test_case.title %></td>
         <td><%= test_case.content %></td>
+        <td><%= task.platform.name %></td>
         <td><%= task_state_text(task) %></td>
         <td>
           <%= link_to "Pass", [ @plan, task, task: { state: :pass } ], method: :patch %>
