@@ -35,7 +35,7 @@
       <% @test_cases.each do |test_case| %>
         <tr>
           <td>
-            <h5><%= test_case.title %></h5>
+            <h5><%= "##{test_case.id}" %> <%= test_case.title %></h5>
             <% test_case.platforms.each do |platform| %>
               <span class="badge badge-info"><%= platform.name %></span>
             <% end %>
