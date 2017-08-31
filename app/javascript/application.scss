@@ -54,3 +54,17 @@
     color: red;
   }
 }
+
+article {
+  line-height: 1.4;
+
+  p {
+    margin-bottom: 0.5em;
+  }
+}
+
+.line-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
