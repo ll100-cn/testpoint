@@ -24,29 +24,29 @@
 <% end %>
 
 <div class="tab-content">
-  <table class="table">
-    <thead>
-      <tr>
-        <th><%= ::TestCase.human_attribute_name(:title) %></th>
-        <th><%= t "views.page.actions" %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @test_cases.each do |test_case| %>
-        <tr>
-          <td>
-            <h5><%= test_case.title %></h5>
-            <% test_case.platforms.each do |platform| %>
-              <span class="badge badge-info"><%= platform.name %></span>
-            <% end %>
-          </td>
-          <td>
-            <%= edit_link action: :edit, id: test_case, ok_url: request.fullpath %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <div class="d-flex flex-wrap">
+    <% @test_cases.each do |test_case| %>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 pb-4">
+        <div class="card card-case">
+          <div class="card-body">
+            <div class="pull-right">
+              <%= edit_link action: :edit, id: test_case, ok_url: request.fullpath %>
+            </div>
+            <h4 class="card-title" ><%= "##{test_case.id}" %> <%= test_case.title %></h4>
+
+            <p class="line-1 card-text text-muted"><%= test_case.content.lines.first %></p>
+            <div>
+              <% component = test_case.component %>
+              <span class="badge badge-secondary"><%= ([component] + component.ancestors).reverse_each.map(&:name).join(" / ") %></span>
+              <% test_case.platforms.each do |platform| %>
+                <span class="badge badge-secondary"><%= platform.name %></span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 
   <nav class="table-pagination">
     <%= paginate @test_cases %>
