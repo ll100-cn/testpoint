@@ -39,6 +39,17 @@ module BootstrapV4Helper
     }
   end
 
+  def ransack_form_for(*args, &block)
+    options = {
+      wrapper: 'inline_form',
+      html: { class: "form-inline backend-search-form" }
+    }.deep_merge(args.extract_options!)
+
+    # options[:defaults] = backend_search_form_defaults.deep_merge(options[:defaults] || {})
+
+    search_form_for(*args, options, &block)
+  end
+
   class BootstrapHorizontalBuilder < SimpleForm::FormBuilder
     def actions_content(options = {}, &block)
       input :to_s, { wrapper: :horizontal_offset_content, wrapper_html: { class: "form-actions" } }.merge(options), &block

@@ -2,9 +2,14 @@
   <h3><%= @plan.title %></h3>
 </div>
 
+<%= ransack_form_for [ @plan, @q ], url: [ @plan ], method: :get do |f| %>
+  <%= f.input :state_eq, collection: Task.state.options, include_blank: "All", required: false %>
+  <%= f.submit class: "btn btn-outline-secondary btn-sm ml-2" %>
+<% end %>
+
 <hr>
 
-<% @tasks_mapping = @plan.tasks.with_test_case.with_platform.group_by(&:test_case) %>
+<% @tasks_mapping = @tasks.with_test_case.with_platform.group_by(&:test_case) %>
 <% @test_cases_mapping = @tasks_mapping.keys.group_by(&:component) %>
 <% component_ids = @test_cases_mapping.keys.flat_map(&:ancestor_ids_with_self).uniq %>
 <% @components_mapping = Component.where(id: component_ids).group_by(&:parent_id) %>

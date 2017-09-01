@@ -22,6 +22,7 @@ gem 'devise', '~> 4.3'
 gem 'cancancan', '~> 2.0'
 gem 'enumerize', '2.1.2'
 gem 'ancestry', '3.0.1'
+gem "ransack", "1.8.2", require: false
 
 # Views
 gem 'simple_form', '~> 3.5'
