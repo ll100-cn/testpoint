@@ -16,5 +16,7 @@ class TestCase < ApplicationRecord
 
   cleanup_column :title, :content
 
-  validates :title, :content, :component_id, :platform_ids, presence: true
+  validates :title, :component_id, :platform_ids, presence: true
+
+  scope :with_component, -> { joins(:component).includes(:component) }
 end

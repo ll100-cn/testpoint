@@ -30,6 +30,14 @@ class PlansController < ApplicationController
     respond_with @plan, location: ok_url_or_default([Plan])
   end
 
+  def show
+    @tasks = @plan.tasks
+    @q = @tasks.search(params[:q])
+    @tasks = @q.result
+
+    respond_with @plan, location: ok_url_or_default(action: :show)
+  end
+
 protected
 
   def plan_params

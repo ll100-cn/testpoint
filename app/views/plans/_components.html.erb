@@ -1,0 +1,17 @@
+<% (@components_mapping[key] || []).each do |component| %>
+  <li class="pl-4">
+    <span class="text-muted">
+      <span class="fa fa-fw fa-folder-o"></span> <%= component.name %>
+    </span>
+    <ul class="list-unstyled">
+      <%= render "components", key: component.id %>
+      <% (@test_cases_mapping[component] || []).each do |test_case| %>
+        <% @tasks_mapping[test_case].each do |task| %>
+          <li class="pl-4 mb-2 card-task-wrapper">
+            <%= render "shared/card_task", test_case: test_case, task: task %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </li>
+<% end %>

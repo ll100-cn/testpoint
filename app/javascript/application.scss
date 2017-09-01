@@ -1,3 +1,5 @@
+@import './bootstrap-v4/variables';
+
 // ========================
 // Layouts
 // ------------------------
@@ -67,4 +69,58 @@ article {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.card-task {
+  vertical-align: middle;
+  border-color: rgba(0, 0, 0, 0.25);
+
+  &.pass, &.failure {
+    color: $text-muted;
+    border-color: rgba(0, 0, 0, 0.125);
+
+    .badge {
+      opacity: 0.7;
+    }
+  }
+
+  .card-body {
+    padding: 0.5rem 1rem;
+  }
+
+  .card-title {
+    margin-bottom: 0;
+    > * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  .actions {
+    display: none;
+
+    a + a {
+      margin-left: 0.5rem;
+    }
+  }
+
+  &[data-toggle] {
+    cursor: pointer;
+  }
+
+  &:hover, &.hover {
+    border-color: theme-color-level("primary", -5);
+
+    .actions {
+      display: inline-block;
+    }
+  }
+}
+
+.marginfix-bottom {
+  margin-bottom: -100px;
+
+  > .inner {
+    margin-bottom: 100px;
+  }
 }

@@ -1,32 +1,19 @@
 <div class="page-header">
-  <h2><%= t "views.page.show", model_name: @plan.model_name.human %></h2>
+  <h3><%= @plan.title %></h3>
 </div>
 
-<h5><%= @plan.title %></h5>
+<%= ransack_form_for [ @plan, @q ], url: [ @plan ], method: :get do |f| %>
+  <%= f.input :state_eq, collection: Task.state.options, include_blank: "All", required: false %>
+  <%= f.submit class: "btn btn-outline-secondary btn-sm ml-2" %>
+<% end %>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th><%= ::TestCase.human_attribute_name(:title) %></th>
-      <th><%= ::TestCase.human_attribute_name(:content) %></th>
-      <th><%= ::TestCase.human_attribute_name(:platform) %></th>
-      <th><%= Task.human_attribute_name(:state) %></th>
-      <th><%= t "views.page.actions" %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @plan.tasks.each do |task| %>
-      <% test_case = task.test_case %>
-      <tr>
-        <td><%= test_case.title %></td>
-        <td><%= test_case.content %></td>
-        <td><%= task.platform.name %></td>
-        <td><%= task_state_text(task) %></td>
-        <td>
-          <%= link_to "Pass", [ @plan, task, task: { state: :pass } ], method: :patch %>
-          <%= link_to "Failure", [ @plan, task, task: { state: :failure } ] , method: :patch %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<hr>
+
+<% @tasks_mapping = @tasks.with_test_case.with_platform.group_by(&:test_case) %>
+<% @test_cases_mapping = @tasks_mapping.keys.group_by(&:component) %>
+<% component_ids = @test_cases_mapping.keys.flat_map(&:ancestor_ids_with_self).uniq %>
+<% @components_mapping = Component.where(id: component_ids).group_by(&:parent_id) %>
+
+<ul class="list-unstyled">
+  <%= render "components", key: nil %>
+</ul>

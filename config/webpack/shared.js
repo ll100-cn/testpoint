@@ -44,6 +44,7 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       // 兼容 bootstrap v4
+      $: 'jquery',
       jQuery: 'jquery',
       Tether: 'tether',
       Popper: 'popper.js/dist/umd/popper.js'
