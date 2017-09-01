@@ -23,4 +23,8 @@ class Component < ApplicationRecord
   def to_label
     "　" * ancestor_ids.size + name
   end
+
+  def ancestor_ids_with_self
+    [id] + ancestor_ids
+  end
 end

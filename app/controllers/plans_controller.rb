@@ -30,6 +30,9 @@ class PlansController < ApplicationController
     respond_with @plan, location: ok_url_or_default([Plan])
   end
 
+  def show
+  end
+
 protected
 
   def plan_params

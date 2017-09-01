@@ -19,4 +19,11 @@ class Task < ApplicationRecord
   belongs_to :test_case
   belongs_to :plan
   belongs_to :platform
+
+  scope :with_platform, -> { joins(:platform).includes(:platform) }
+  scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
+
+  def completed?
+    !pending?
+  end
 end
