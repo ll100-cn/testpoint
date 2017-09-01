@@ -6,7 +6,13 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  before_action :adjust_format_for_xhr_html
+
 protected
+  def adjust_format_for_xhr_html
+    request.format = :xhrml if request.format.to_sym == :html && (request.xhr? || params[:xhr])
+  end
+
   def ok_url_or_default(default)
     params[:ok_url] || default
   end

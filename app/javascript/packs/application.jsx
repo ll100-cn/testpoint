@@ -10,8 +10,7 @@
 import $ from 'jquery'
 window.$ = $
 
-import Rails from 'rails-ujs'
-Rails.start()
+import {} from 'jquery-ujs'
 
 import Turbolinks from 'turbolinks'
 Turbolinks.start()
@@ -22,3 +21,5 @@ import '../bootstrap-v4'
 
 import '../application.scss'
 import '../bootstrap-v4-ext'
+
+import '../widgets/xhrml'

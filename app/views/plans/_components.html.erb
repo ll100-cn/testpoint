@@ -7,43 +7,8 @@
       <%= render "components", key: component.id %>
       <% (@test_cases_mapping[component] || []).each do |test_case| %>
         <% @tasks_mapping[test_case].each do |task| %>
-          <li class="pl-4 mb-2">
-            <% task_dom_id = dom_id(task) %>
-            <div class="card card-task collapsed <%= task.state %>" data-toggle="collapse" data-target="#<%= task_dom_id %>">
-              <div class="card-body">
-                <div class="card-title">
-                  <span><%= test_case.title %></span>
-                  <span class="badge badge-secondary"><%= task.platform.name %></span>
-                  <% if test_case.content? %>
-                    <% content_html = capture do %>
-                      <div id="<%= task_dom_id %>" class="collapse text-muted py-2">
-                        <article class="alert alert-warning mb-0">
-                          <div class="marginfix-bottom"><div class="inner">
-                            <%=simple_format test_case.content %>
-                          </div></div>
-                        </article>
-                      </div>
-                    <% end %>
-                    <%= link_to "#", data: { toggle: "collapse", target: "##{task_dom_id}" } do %><span class="fa fa-fw fa-sticky-note-o text-muted"></span><% end %>
-                  <% end %>
-
-                  <div class="dropdown small ml-2">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                      <%= task_state_with_icon(task.state) %>
-                    </a>
-                    <div class="dropdown-menu">
-                      <%= link_to [ @plan, task, task: { state: :pass } ], method: :patch, class: "dropdown-item small" do %>
-                        <%= task_state_with_icon("pass") %>
-                      <% end %>
-                      <%= link_to [ @plan, task, task: { state: :failure } ] , method: :patch, class: "dropdown-item small" do %>
-                        <%= task_state_with_icon("failure") %>
-                      <% end %>
-                    </div>
-                  </div>
-                </div>
-                <%= content_html %>
-              </div>
-            </div>
+          <li class="pl-4 mb-2 card-task-wrapper">
+            <%= render "shared/card_task", test_case: test_case, task: task %>
           </li>
         <% end %>
       <% end %>
