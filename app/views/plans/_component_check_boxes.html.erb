@@ -1,0 +1,14 @@
+<% (@components_mapping[key] || []).each do |component| %>
+  <li class="<%= 'pl-4' unless key.nil? %>">
+    <div class="form-check">
+      <label class="form-check-label">
+        <input class="form-check-input" name="component_ids[]" type="checkbox" value="<%= component.id %>"/>
+        <%= component.name %>
+      </label>
+    </div>
+
+    <ul class="list-unstyled">
+      <%= render "component_check_boxes", key: component.id %>
+    </ul>
+  </li>
+<% end %>

@@ -6,7 +6,7 @@ RSpec.describe TasksController, type: :controller do
     let(:plan) { task.plan }
     let(:task_attributes) { {} }
 
-    action { put :update, params: { plan_id: plan, id: task, task: task_attributes } }
+    action { put :update, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
 
     context "state pass" do
       before { task_attributes[:state] = :pass }
