@@ -18,7 +18,8 @@ class PlansController < ApplicationController
   end
 
   def create
-    @plan.generate(test_case_ids: TestCase.ids)
+    test_case_ids = Component.where(id: params[:component_ids]).flat_map(&:test_case_ids)
+    @plan.generate(test_case_ids: test_case_ids || TestCase.ids)
     respond_with @plan, location: ok_url_or_default([Plan])
   end
 
