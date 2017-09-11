@@ -34,7 +34,7 @@
             </div>
             <h4 class="card-title" ><%= "##{test_case.id}" %> <%= test_case.title %></h4>
 
-            <p class="line-1 card-text text-muted"><%= test_case.content.lines.first %></p>
+            <p class="line-1 card-text text-muted"><%= (test_case.content || "").lines.first %></p>
             <div>
               <% component = test_case.component %>
               <span class="badge badge-secondary"><%= ([component] + component.ancestors).reverse_each.map(&:name).join(" / ") %></span>
