@@ -1,4 +1,5 @@
 class PlansController < ApplicationController
+  layout "sidebar", only: [:show]
   before_action { @navbar = "plans" }
   load_and_authorize_resource
 

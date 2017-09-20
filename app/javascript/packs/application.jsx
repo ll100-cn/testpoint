@@ -22,4 +22,6 @@ import '../bootstrap-v4'
 import '../application.scss'
 import '../bootstrap-v4-ext'
 
+import '../widgets/turbolinks'
 import '../widgets/xhrml'
+import '../widgets/sidebar'
