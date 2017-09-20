@@ -1,60 +1,40 @@
-<div class="page-header">
-  <h2><%= t "views.page.index", model_name: h(::TestCase) %></h2>
-</div>
-
-<%= fume_nav @platform.try(:id) do |n| %>
-  <ul class="nav nav-tabs mb-4">
-    <li class="nav-item ml-2">
-      <%= n.link_to nil, "All Platforms", url_for(params.permit!.merge(platform_id: nil)), class: "nav-link text-muted" %>
-    </li>
-    <% Platform.all.each do |platform| %>
-      <li class="nav-item">
-        <%= n.link_to platform.id, platform.name, url_for(params.permit!.merge(platform_id: platform)), class: "nav-link text-muted" %>
-      </li>
-    <% end %>
-    <li class="nav-item">
-      <%= link_to "+", [ :new, :platform, ok_url: request.fullpath ], class: "nav-link text-muted" %>
-    </li>
-    <% if @platform %>
-      <li class="nav-item ml-auto">
-        <%= edit_link [ :edit, @platform, ok_url: request.fullpath ], class: "nav-link border-0" %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-
-<div class="tab-content">
-  <div class="d-flex flex-wrap">
-    <% @test_cases.each do |test_case| %>
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 pb-4">
-        <div class="card card-case">
-          <div class="card-body">
-            <div class="pull-right">
-              <%= edit_link action: :edit, id: test_case, ok_url: request.fullpath %>
-            </div>
-            <h4 class="card-title" ><%= "##{test_case.id}" %> <%= test_case.title %></h4>
-
-            <p class="line-1 card-text text-muted"><%= (test_case.content || "").lines.first %></p>
-            <div>
-              <% component = test_case.component %>
-              <span class="badge badge-secondary"><%= ([component] + component.ancestors).reverse_each.map(&:name).join(" / ") %></span>
-              <% test_case.platforms.each do |platform| %>
-                <span class="badge badge-secondary"><%= platform.name %></span>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
+<div class="page-header d-flex">
+  <h2>
+    <%= t "views.page.index", model_name: h(::TestCase) %>
+  </h2>
+  <div class="ml-3 mt-1 actions">
+    <%= new_button ::TestCase, [:new, :test_case], class: "btn btn-outline-primary btn-sm" %>
+    <%= new_button Component, [ :new, :component ], class: "btn btn-outline-primary btn-sm" %>
   </div>
-
-  <nav class="table-pagination">
-    <%= paginate @test_cases %>
-  </nav>
 </div>
 
-<hr>
+<% @test_cases_mapping = @test_cases.group_by(&:component) %>
+<% @components_mapping = Component.ranked.group_by(&:parent_id) %>
+<ul class="list-unstyled">
+  <%= render "components", key: nil %>
+</ul>
 
-<div class="page-actions">
-  <%= new_button ::TestCase, action: :new %>
-</div>
+<% content_for :sidebar do %>
+  <h5>Platform</h5>
+  <%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
+    <ul class="list-unstyled">
+      <% ([["All", nil]] + Platform.all.map { |p| [p.name, p.id] }).each do |key, value| %>
+        <li>
+          <% if value %>
+            <span class="float-right actions">
+              <%= edit_link edit_platform_path(value) %>
+            </span>
+          <% end %>
+          <%= n.apply_content value do |active_class| %>
+            <%= link_to [::TestCase, platform_id: value], class: active_class do %>
+              <span class="fa fa-fw <%= 'fa-angle-right' if active_class %>"></span><%= key %>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+      <li>
+        <span class="fa fa-fw"></span><%= link_to "New Platform", [ :new, :platform, ok_url: request.fullpath ], class: "text-muted" %>
+      </li>
+    </ul>
+  <% end %>
+<% end %>

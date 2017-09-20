@@ -27,6 +27,12 @@
 .page-header {
   margin-bottom: 2rem;
   border-bottom: 1px solid #ccc;
+
+  .actions {
+    a + a {
+      margin-left: 0.5rem;
+    }
+  }
 }
 
 .page-actions {
@@ -71,7 +77,7 @@ article {
   white-space: nowrap;
 }
 
-.card-task {
+.card-collapsed {
   vertical-align: middle;
   border-color: rgba(0, 0, 0, 0.25);
 
@@ -118,6 +124,7 @@ article {
 }
 
 .marginfix-bottom {
+  overflow: hidden;
   margin-bottom: -100px;
 
   > .inner {

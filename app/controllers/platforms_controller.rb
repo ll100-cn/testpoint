@@ -1,5 +1,5 @@
 class PlatformsController < ApplicationController
-  layout "cases"
+  # layout "cases"
   load_and_authorize_resource
 
   def new

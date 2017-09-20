@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testpoint</title>
+    <%= csrf_meta_tags %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class="full-height">
+    <%= render "layouts/nav", current: @navbar %>
+
+    <div id="tp-contianer" class="d-flex align-items-stretch">
+      <div id="tp-main" class="col-12 col-md-9 col-xl-10">
+        <%= yield %>
+      </div>
+      <div id="tp-sidebar" class="col-12 col-md-3 col-xl-2 bg-light sidebar">
+        <%= yield :sidebar %>
+      </div>
+    </div>
+  </body>
+</html>

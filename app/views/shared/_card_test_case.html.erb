@@ -1,0 +1,30 @@
+<% test_case_dom_id = dom_id(test_case) %>
+<div class="card card-collapsed collapsed" data-target="#<%= test_case_dom_id %>">
+  <div class="card-body">
+    <div class="card-title">
+      <span><%= test_case.title %></span>
+      <% test_case.platforms.each do |platform| %>
+        <span class="badge badge-secondary"><%= platform.name %></span>
+      <% end %>
+      <% if test_case.content? %>
+        <% content_html = capture do %>
+          <div id="<%= test_case_dom_id %>" class="collapse text-muted">
+            <div class="py-2">
+              <article class="alert alert-warning mb-0">
+                <div class="marginfix-bottom-wrapper clearfix">
+                <div class="marginfix-bottom" style="float: left;"><div class="inner">
+                  <%=simple_format test_case.content %>
+                </div></div>
+                </div>
+              </article>
+            </div>
+          </div>
+        <% end %>
+        <span class="fa fa-fw fa-sticky-note-o text-muted"></span>
+      <% end %>
+
+      <%= edit_link [ :edit, test_case, ok_url: request.fullpath ], class: "small" %>
+    </div>
+    <%= content_html %>
+  </div>
+</div>
