@@ -28,7 +28,7 @@ class TestCasesController < ApplicationController
 
   def update
     @test_case.update(test_case_params)
-    respond_with @test_case, location: ok_url_or_default([TestCase])
+    respond_with @test_case, action: :edit, location: -> { ok_url_or_default([TestCase]) }
   end
 
 protected
