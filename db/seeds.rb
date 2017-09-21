@@ -10,5 +10,5 @@ User.where(email: "testpoint@gmail.com").first_or_create do |u|
   u.password = u.password_confirmation = "testpoint"
 end
 
-Component.where(name: "Default Component").first_or_create
-Platform.where(name: "Default Platform").first_or_create
+Component.where(name: "Default Component").first_or_create if Component.none?
+Platform.where(name: "Default Platform").first_or_create if Platform.none?
