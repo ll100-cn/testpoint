@@ -9,7 +9,7 @@ class TestCasesController < ApplicationController
     @default_cases_url_options = request.query_parameters
     @test_cases = @test_cases.where(component_id: @component.subtree) if @component
     @test_cases = @test_cases.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
-    @test_cases = @test_cases.joins(:platforms).includes(:platforms).page(params[:page])
+    @test_cases = @test_cases.joins(:platforms).includes(:platforms)
   end
 
   def new
