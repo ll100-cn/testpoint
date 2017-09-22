@@ -102,24 +102,8 @@ article {
     }
   }
 
-  .actions {
-    display: none;
-
-    a + a {
-      margin-left: 0.5rem;
-    }
-  }
-
   &[data-toggle] {
     cursor: pointer;
-  }
-
-  &:hover, &.hover {
-    border-color: theme-color-level("primary", -5);
-
-    .actions {
-      display: inline-block;
-    }
   }
 }
 
@@ -129,5 +113,17 @@ article {
 
   > .inner {
     margin-bottom: 100px;
+  }
+}
+
+.hidden-actions {
+  .actions {
+    display: none;
+  }
+
+  &:hover, &.hover {
+    .actions {
+      display: inline-block;
+    }
   }
 }

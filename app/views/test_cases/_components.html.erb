@@ -1,8 +1,11 @@
 <% (@components_mapping[key] || []).each do |component| %>
   <li class="pl-4">
-    <span class="text-muted">
+    <div class="text-muted hidden-actions">
       <span class="fa fa-fw fa-folder-o"></span> <%= component.name %>
-    </span>
+      <span class="actions ml-1">
+        <%= edit_link [:edit, component, ok_url: request.fullpath] %>
+      </span>
+    </div>
     <ul class="list-unstyled">
       <%= render "components", key: component.id %>
       <% (@test_cases_mapping[component] || []).each do |test_case| %>
