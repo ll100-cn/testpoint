@@ -122,7 +122,7 @@ SimpleForm.setup do |config|
 
     b.wrapper :content, tag: 'div', class: 'form-content py-1' do |ba|
       ba.use :input, class: "form-check-input"
-      ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
+      ba.use :error, wrap_with: { tag: 'div', class: 'invalid-feedback d-block mt-0' }
       ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
     end
   end
