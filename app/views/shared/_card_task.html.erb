@@ -24,11 +24,10 @@
           <%= task_state_with_icon(task.state) %>
         </a>
         <div class="dropdown-menu">
-          <% action_data = { remote: true, type: "xhrml", target: ".card-task-wrapper" } %>
-          <%= link_to [ @plan, task, task: { state: :pass } ], method: :patch, class: "dropdown-item small", data: action_data do %>
+          <%= link_to [ @plan, task, task: { state: :pass }, ok_url: request.fullpath ], method: :patch, class: "dropdown-item small" do %>
             <%= task_state_with_icon("pass") %>
           <% end %>
-          <%= link_to [ @plan, task, task: { state: :failure } ] , method: :patch, class: "dropdown-item small", data: action_data do %>
+          <%= link_to [ @plan, task, task: { state: :failure }, ok_url: request.fullpath ] , method: :patch, class: "dropdown-item small" do %>
             <%= task_state_with_icon("failure") %>
           <% end %>
         </div>

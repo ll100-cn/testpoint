@@ -28,14 +28,16 @@ module PageHelper
     link_to label, ok_url_or_default(default_url), options
   end
 
-  def task_state_text(task)
-    class_name = case task.state
-                 when "pass"
-                   "text-success"
-                 when "failure"
-                   "text-danger"
-                 end
+  def task_state_class_name(state)
+    case state
+    when "pass"
+      "text-success"
+    when "failure"
+      "text-danger"
+    end
+  end
 
-    content_tag :span, task.state_text, class: class_name
+  def task_state_text(task)
+    content_tag :span, task.state_text, class: task_state_class_name(task.state)
   end
 end
