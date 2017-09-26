@@ -4,7 +4,7 @@ class TasksController < ApplicationController
 
   def update
     @task.update(task_params)
-    respond_with @task
+    respond_with @task, location: ok_url_or_default([@task.plan])
   end
 
 protected

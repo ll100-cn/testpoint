@@ -2,6 +2,15 @@
   <li class="pl-4">
     <span class="text-muted">
       <span class="fa fa-fw fa-folder-o"></span> <%= component.name %>
+      <span>
+        <% test_cases = component.subtree.flat_map(&:test_cases) %>
+        <% tasks = @tasks_mapping.fetch_values(*test_cases).flatten.group_by(&:state) %>
+        <% Task.state.options.each do |key, value| %>
+          <small class="<%= task_state_class_name(value) %> ml-1">
+            <%= "#{key}: #{tasks.fetch(value, []).length}" %>
+          </small>
+        <% end %>
+      </span>
     </span>
     <ul class="list-unstyled">
       <%= render "components", key: component.id %>

@@ -19,7 +19,9 @@
     <% progress_bg_mapping = { "pass" => "bg-success", "failure" => "bg-danger" } %>
     <% @plans.each do |plan| %>
       <tr>
-        <td><%= plan.title %></td>
+        <td>
+          <%= link_to plan.title, action: :show, id: plan, ok_url: request.fullpath %>
+        </td>
         <td>
           <div class="progress">
             <% tasks_state_count = @tasks_count_mapping[plan.id] || {} %>
@@ -34,7 +36,6 @@
           </div>
         </td>
         <td>
-          <%= show_link action: :show, id: plan, ok_url: request.fullpath %>
           <%= edit_link action: :edit, id: plan, ok_url: request.fullpath %>
         </td>
       </tr>
