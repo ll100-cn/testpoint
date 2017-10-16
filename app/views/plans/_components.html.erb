@@ -4,7 +4,7 @@
       <span class="fa fa-fw fa-folder-o"></span> <%= component.name %>
       <span>
         <% test_cases = component.subtree.flat_map(&:test_cases) %>
-        <% tasks = @tasks_mapping.fetch_values(*test_cases).flatten.group_by(&:state) %>
+        <% tasks = @tasks_mapping.values_at(*test_cases).compact.flatten.group_by(&:state) %>
         <% Task.state.options.each do |key, value| %>
           <small class="<%= task_state_class_name(value) %> ml-1">
             <%= "#{key}: #{tasks.fetch(value, []).length}" %>
