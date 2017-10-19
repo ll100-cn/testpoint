@@ -20,6 +20,9 @@ class Task < ApplicationRecord
   belongs_to :plan
   belongs_to :platform
 
+  has_many :task_attachments
+  accepts_nested_attributes_for :task_attachments
+
   scope :with_platform, -> { joins(:platform).includes(:platform) }
   scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
 

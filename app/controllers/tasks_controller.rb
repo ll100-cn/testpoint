@@ -10,6 +10,6 @@ class TasksController < ApplicationController
 protected
 
   def task_params
-    params.fetch(:task, {}).permit(:state)
+    params.fetch(:task, {}).permit(:state, task_attachments_attributes: [:attachment_id, :content])
   end
 end

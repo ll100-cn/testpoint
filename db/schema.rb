@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017142738) do
+ActiveRecord::Schema.define(version: 20171018055910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,16 @@ ActiveRecord::Schema.define(version: 20171017142738) do
     t.bigint "test_case_id"
     t.index ["platform_id"], name: "index_platforms_test_cases_on_platform_id"
     t.index ["test_case_id"], name: "index_platforms_test_cases_on_test_case_id"
+  end
+
+  create_table "task_attachments", force: :cascade do |t|
+    t.bigint "task_id"
+    t.bigint "attachment_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachment_id"], name: "index_task_attachments_on_attachment_id"
+    t.index ["task_id"], name: "index_task_attachments_on_task_id"
   end
 
   create_table "tasks", force: :cascade do |t|
