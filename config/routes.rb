@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   resources :test_cases
   resources :plans do
-    resources :tasks
+    resources :tasks do
+      get :change_state, on: :member
+    end
   end
   resources :components
   resources :platforms

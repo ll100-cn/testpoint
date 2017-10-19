@@ -27,7 +27,7 @@
           <%= link_to [ @plan, task, task: { state: :pass }, ok_url: request.fullpath ], method: :patch, class: "dropdown-item small" do %>
             <%= task_state_with_icon("pass") %>
           <% end %>
-          <%= link_to [ @plan, task, task: { state: :failure }, ok_url: request.fullpath ] , method: :patch, class: "dropdown-item small" do %>
+          <%= link_to "" , data: { target: "#uploadAttachmentsModal", toggle: "modal", url: change_state_plan_task_path(@plan, task) }, class: "dropdown-item small" do %>
             <%= task_state_with_icon("failure") %>
           <% end %>
         </div>

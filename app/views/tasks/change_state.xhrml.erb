@@ -1,0 +1,22 @@
+<%= bootstrap_horizontal_form_for [@plan, @task], defaults: { content_html: { class: "col-12" } } do |f| %>
+  <%= f.hidden_field :state, value: :failure %>
+  <div class="modal-header">
+    <h5 class="modal-title"></h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    拖动文件到此
+    <%= f.simple_fields_for :task_attachments do |a| %>
+      <%= image_tag a.object.attachment.file.url, width: '100%', class: "mb-1" %>
+      <%= a.input :id, as: :hidden %>
+      <%= a.input :attachment_id, as: :hidden %>
+      <%= a.input :content, label: false, input_html: { rows: 5 } %>
+    <% end %>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

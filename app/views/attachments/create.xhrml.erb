@@ -1,0 +1,6 @@
+<% time = Time.now.to_i %>
+<div>
+  <%= image_tag @attachment.file.url, width: '100%', class: "mb-1" %>
+  <%= text_area_tag "task[task_attachments_attributes][#{time}][content]", "", class: "form-control" %>
+  <%= hidden_field_tag "task[task_attachments_attributes][#{time}][attachment_id]", @attachment.id %>
+</div>

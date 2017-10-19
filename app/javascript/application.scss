@@ -116,6 +116,10 @@ article {
   }
 }
 
+.hidden {
+  display: none !important;
+}
+
 .hidden-actions {
   .actions {
     display: none;
