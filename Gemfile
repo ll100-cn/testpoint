@@ -20,6 +20,7 @@ gem 'responders', '~> 2.4'
 # Models
 gem 'devise', '~> 4.3'
 gem 'cancancan', '~> 2.0'
+gem "carrierwave", '1.2.0'
 gem 'enumerize', '2.1.2'
 gem 'ancestry', '3.0.1'
 gem "ransack", "1.8.2", require: false

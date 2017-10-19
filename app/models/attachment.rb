@@ -9,4 +9,5 @@
 #
 
 class Attachment < ApplicationRecord
+  mount_uploader :file, BaseUploader
 end
