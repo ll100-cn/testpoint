@@ -30,6 +30,15 @@
           <%= link_to "" , data: { target: "#uploadAttachmentsModal", toggle: "modal", url: change_state_plan_task_path(@plan, task) }, class: "dropdown-item small" do %>
             <%= task_state_with_icon("failure") %>
           <% end %>
+          <% if task.state.failure? %>
+            <div class="dropdown-divider"></div>
+            <% issue = task.issue %>
+            <% if issue.present? %>
+              <%= link_to issue.title, [issue], class: "dropdown-item small text-primary" %>
+            <% else %>
+              <%= link_to "New issue", [:new, task, :issue], class: "dropdown-item small text-primary" %>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>

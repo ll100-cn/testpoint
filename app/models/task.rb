@@ -20,6 +20,7 @@ class Task < ApplicationRecord
   belongs_to :test_case
   belongs_to :plan
   belongs_to :platform
+  belongs_to :issue, optional: true
 
   has_many :task_attachments
   accepts_nested_attributes_for :task_attachments
