@@ -13,7 +13,7 @@
 class Issue < ApplicationRecord
   extend Enumerize
 
-  enumerize :state, in: [:open, :close], default: :open
+  enumerize :state, in: [:open, :closed, :solved], default: :open
 
   has_many :tasks
 

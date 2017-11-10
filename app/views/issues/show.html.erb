@@ -1,0 +1,29 @@
+<div class="page-header">
+  <div class="float-right">
+    <%= render "issue_actions", issue: @issue %>
+  </div>
+  <h2>
+    <%= @issue.title %>
+    <span class="badge badge-secondary small"><%= @issue.state.text %></span>
+  </h2>
+</div>
+
+<p>
+  <%= @issue.content %>
+</p>
+
+<div>
+  <% @issue.tasks.each do |task| %>
+    <% task.task_attachments.each do |task_attachment| %>
+      <% if (file = task_attachment.attachment.file) %>
+        <div class="mb-1">
+          <%= image_tag file.url, class: "img-thumbnail", size: "300x300" %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<hr>
+
+<%= cancel_link [Issue, ok_url: request.fullpath], class: "btn btn-link" %>

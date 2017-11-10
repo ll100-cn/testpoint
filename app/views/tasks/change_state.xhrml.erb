@@ -9,7 +9,7 @@
   <div class="modal-body">
     拖动文件到此
     <%= f.simple_fields_for :task_attachments do |a| %>
-      <%= image_tag a.object.attachment.file.url, width: '100%', class: "mb-1" %>
+      <%= image_tag a.object.attachment.file.url, width: "100%", class: "mb-1" %>
       <%= a.input :id, as: :hidden %>
       <%= a.input :attachment_id, as: :hidden %>
       <%= a.input :content, label: false, input_html: { rows: 5 } %>
