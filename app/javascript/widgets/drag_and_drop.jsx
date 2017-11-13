@@ -6,13 +6,13 @@ $(function() {
     event.stopPropagation()
   }).on('dragenter dragover', function(event) {
     const $targetArea = $(event.currentTarget)
-    $targetArea.css("color", "red")
+    $targetArea.find('#dropArea').removeClass("border-secondary").addClass("border-success")
   }).on('dragleave', function(event) {
     const $targetArea = $(event.currentTarget)
-    $targetArea.css("color", "black")
+    $targetArea.find('#dropArea').removeClass("border-success").addClass("border-secondary")
   }).on('drop', function(event) {
     const $targetArea = $(event.currentTarget)
-    $targetArea.css("color", "black")
+    $targetArea.find('#dropArea').removeClass("border-success").addClass("border-secondary")
 
     const requestParams = $targetArea.data()
     const files = event.originalEvent.dataTransfer.files

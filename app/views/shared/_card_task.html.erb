@@ -1,18 +1,33 @@
 <% task_dom_id = dom_id(task) %>
-<div class="card card-collapsed collapsed <%= task.state %>" data-toggle="collapse" data-target="#<%= task_dom_id %>">
+<div class="card card-collapsed collapsed <%= task.state %>">
   <div class="card-body">
-    <div class="card-title">
+    <div class="card-title" data-toggle="collapse" data-target="#<%= task_dom_id %>">
       <span><%= test_case.title %></span>
       <span class="badge badge-secondary"><%= task.platform.name %></span>
-      <% if test_case.content? %>
+      <% if test_case.content? || task.task_attachments.any? %>
         <% content_html = capture do %>
           <div id="<%= task_dom_id %>" class="collapse text-muted">
             <div class="py-2">
               <article class="alert alert-warning mb-0">
                 <div class="marginfix-bottom"><div class="inner">
                   <%=simple_format test_case.content %>
+                  <% task.task_attachments.each do |task_attachment| %>
+                    <div class="mb-1">
+                      <p><%= task_attachment.content %></p>
+                      <%= image_tag task_attachment.attachment.file.url, size: "300x300", class: "img-thumbnail" %>
+                    </div>
+                  <% end %>
                 </div></div>
               </article>
+              <div class="mt-2">
+                <% if task.state.failure? %>
+                  <% if (issue = task.issue) %>
+                    <%= link_to issue.title, [issue], class: "text-primary" %>
+                  <% else %>
+                    <%= link_to "New issue", [:new, task, :issue], class: "text-primary" %>
+                  <% end %>
+                <% end %>
+              </div>
             </div>
           </div>
         <% end %>
@@ -29,15 +44,6 @@
           <% end %>
           <%= link_to "" , data: { target: "#uploadAttachmentsModal", toggle: "modal", url: change_state_plan_task_path(@plan, task) }, class: "dropdown-item small" do %>
             <%= task_state_with_icon("failure") %>
-          <% end %>
-          <% if task.state.failure? %>
-            <div class="dropdown-divider"></div>
-            <% issue = task.issue %>
-            <% if issue.present? %>
-              <%= link_to issue.title, [issue], class: "dropdown-item small text-primary" %>
-            <% else %>
-              <%= link_to "New issue", [:new, task, :issue], class: "dropdown-item small text-primary" %>
-            <% end %>
           <% end %>
         </div>
       </div>
