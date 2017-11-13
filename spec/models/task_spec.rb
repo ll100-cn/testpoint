@@ -10,6 +10,7 @@
 #  updated_at   :datetime         not null
 #  platform_id  :integer
 #  issue_id     :integer
+#  message      :text
 #
 
 require 'rails_helper'
