@@ -5,7 +5,10 @@ Rails.application.routes.draw do
   resources :test_cases
   resources :plans do
     resources :tasks do
-      get :change_state, on: :member
+      member do
+        get :change_state
+        get :upload_attachment
+      end
     end
   end
   resources :issues

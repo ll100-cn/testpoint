@@ -10,9 +10,12 @@ class TasksController < ApplicationController
   def change_state
   end
 
+  def upload_attachment
+  end
+
 protected
 
   def task_params
-    params.fetch(:task, {}).permit(:state, task_attachments_attributes: [:id, :attachment_id, :content])
+    params.fetch(:task, {}).permit(:state, task_attachments_attributes: [:id, :attachment_id, :content, :_destroy])
   end
 end

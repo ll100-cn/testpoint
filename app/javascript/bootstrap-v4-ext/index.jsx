@@ -2,12 +2,11 @@ import $ from 'jquery'
 import './all.scss'
 
 $(document).on('content:loaded', function(event) {
-  $(event.target).on('click', '.card-title', function(event) {
-    const target = $(this).data('target')
-    if (event.target.nodeName !== 'A') {
-      event.preventDefault()
-      event.stopPropagation()
-      $(target).collapse('toggle')
-    }
+  $(event.target).on('click', '.remove-attachment', function(event) {
+    const $currentTarget = $(event.currentTarget)
+    const $attachment = $($currentTarget.data('target'))
+
+    $attachment.hide()
+    $attachment.find('.destroy-task-attachment').val("1")
   })
 })

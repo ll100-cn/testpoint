@@ -1,21 +1,13 @@
 module PlansHelper
-  def task_state_with_icon(state)
-    result = { text: state, className: "", icon: "" }
+  def task_state_with_icon(text)
+    text_sym = text.to_sym
+    icons = { pending: "fa fa-circle-o", pass: "fa fa-check", failure: "fa fa-times" }
+    class_names = { pending: "text-muted", pass: "text-success", failure: "text-danger" }
 
-    case state
-    when "pending"
-      result[:className] = "text-muted"
-      result[:icon] = "fa fa-circle-o"
-    when "pass"
-      result[:className] = "text-success"
-      result[:icon] = "fa fa-check"
-    when "failure"
-      result[:className] = "text-danger"
-      result[:icon] = "fa fa-times"
-    end
+    class_name = class_names[text_sym]
 
-    content_tag :span, class: result[:className] do
-      "#{result[:text].capitalize} <span class='#{result[:icon]}'></span>".html_safe
+    content_tag :span, class: class_name do
+      "#{text.capitalize} <span class='#{icons[text_sym]}'></span>".html_safe
     end
   end
 end

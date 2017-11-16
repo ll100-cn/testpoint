@@ -6,19 +6,19 @@ $(function() {
     event.stopPropagation()
   }).on('dragenter dragover', function(event) {
     const $targetArea = $(event.currentTarget)
-    $targetArea.find('#dropArea').removeClass("border-secondary").addClass("border-success")
+    $targetArea.find('#uploadAttachmentArea').removeClass('border-white bg-light').addClass('border-secondary')
   }).on('dragleave', function(event) {
     const $targetArea = $(event.currentTarget)
-    $targetArea.find('#dropArea').removeClass("border-success").addClass("border-secondary")
+    $targetArea.find('#uploadAttachmentArea').removeClass('border-secondary').addClass('border-white bg-light')
   }).on('drop', function(event) {
     const $targetArea = $(event.currentTarget)
-    $targetArea.find('#dropArea').removeClass("border-success").addClass("border-secondary")
+    $targetArea.find('#uploadAttachmentArea').removeClass('border-secondary').addClass('border-white bg-light')
 
     const requestParams = $targetArea.data()
     const files = event.originalEvent.dataTransfer.files
 
     if (files.length >= 1) {
-      uploadAttachment($targetArea.find('.modal-body'), files[0], requestParams)
+      uploadAttachment($targetArea.find('#uploadAttachmentArea'), files[0], requestParams)
     }
   })
 })
@@ -38,6 +38,6 @@ function uploadAttachment(target, file, { url, method }) {
     enctype: 'multipart/form-data',
     processData: false
   }).done(function(respond) {
-    target.append(respond)
+    target.before(respond)
   })
 }
