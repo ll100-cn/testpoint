@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170817073051) do
+ActiveRecord::Schema.define(version: 20171113075435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attachments", force: :cascade do |t|
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "components", force: :cascade do |t|
     t.string "name"
@@ -21,6 +27,14 @@ ActiveRecord::Schema.define(version: 20170817073051) do
     t.datetime "updated_at", null: false
     t.string "ancestry"
     t.index ["ancestry"], name: "index_components_on_ancestry"
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.string "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "plans", force: :cascade do |t|
@@ -42,6 +56,16 @@ ActiveRecord::Schema.define(version: 20170817073051) do
     t.index ["test_case_id"], name: "index_platforms_test_cases_on_test_case_id"
   end
 
+  create_table "task_attachments", force: :cascade do |t|
+    t.bigint "task_id"
+    t.bigint "attachment_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachment_id"], name: "index_task_attachments_on_attachment_id"
+    t.index ["task_id"], name: "index_task_attachments_on_task_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.bigint "test_case_id"
     t.bigint "plan_id"
@@ -49,6 +73,9 @@ ActiveRecord::Schema.define(version: 20170817073051) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "platform_id"
+    t.bigint "issue_id"
+    t.text "message"
+    t.index ["issue_id"], name: "index_tasks_on_issue_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["platform_id"], name: "index_tasks_on_platform_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"

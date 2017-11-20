@@ -1,38 +1,13 @@
-<% task_dom_id = dom_id(task) %>
-<div class="card card-collapsed collapsed <%= task.state %>" data-toggle="collapse" data-target="#<%= task_dom_id %>">
+<% data = { target: "#uploadAttachmentsModal", toggle: "modal", url: change_state_plan_task_path(@plan, task) } %>
+<%= content_tag :div, class: "card card-collapsed collapsed #{task.state}", data: data do %>
   <div class="card-body">
     <div class="card-title">
       <span><%= test_case.title %></span>
       <span class="badge badge-secondary"><%= task.platform.name %></span>
-      <% if test_case.content? %>
-        <% content_html = capture do %>
-          <div id="<%= task_dom_id %>" class="collapse text-muted">
-            <div class="py-2">
-              <article class="alert alert-warning mb-0">
-                <div class="marginfix-bottom"><div class="inner">
-                  <%=simple_format test_case.content %>
-                </div></div>
-              </article>
-            </div>
-          </div>
-        <% end %>
-        <span class="fa fa-fw fa-sticky-note-o text-muted"></span>
-      <% end %>
 
-      <div class="dropdown small ml-2">
-        <a class="dropdown-toggle" data-toggle="dropdown">
-          <%= task_state_with_icon(task.state) %>
-        </a>
-        <div class="dropdown-menu">
-          <%= link_to [ @plan, task, task: { state: :pass }, ok_url: request.fullpath ], method: :patch, class: "dropdown-item small" do %>
-            <%= task_state_with_icon("pass") %>
-          <% end %>
-          <%= link_to [ @plan, task, task: { state: :failure }, ok_url: request.fullpath ] , method: :patch, class: "dropdown-item small" do %>
-            <%= task_state_with_icon("failure") %>
-          <% end %>
-        </div>
+      <div class="small ml-2">
+        <%= task_state_with_icon(task.state) %>
       </div>
     </div>
-    <%= content_html %>
   </div>
-</div>
+<% end %>

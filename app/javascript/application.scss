@@ -116,6 +116,10 @@ article {
   }
 }
 
+.hidden {
+  display: none !important;
+}
+
 .hidden-actions {
   .actions {
     display: none;
@@ -125,5 +129,12 @@ article {
     .actions {
       display: inline-block;
     }
+  }
+}
+
+.task-attachment-item {
+  .remove-attachment {
+    padding-left: 5px;
+    margin-top: -5px;
   }
 }

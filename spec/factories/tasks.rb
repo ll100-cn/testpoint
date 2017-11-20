@@ -9,6 +9,8 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  platform_id  :integer
+#  issue_id     :integer
+#  message      :text
 #
 
 FactoryGirl.define do

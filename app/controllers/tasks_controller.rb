@@ -7,9 +7,15 @@ class TasksController < ApplicationController
     respond_with @task, location: ok_url_or_default([@task.plan])
   end
 
+  def change_state
+  end
+
+  def upload_attachment
+  end
+
 protected
 
   def task_params
-    params.fetch(:task, {}).permit(:state)
+    params.fetch(:task, {}).permit(:state, task_attachments_attributes: [:id, :attachment_id, :content, :_destroy])
   end
 end

@@ -13,9 +13,17 @@ RSpec.describe TasksController, type: :controller do
       it { expect(task.reload.state).to eq :pass }
     end
 
-    context "state failure" do
-      before { task_attributes[:state] = :failure }
-      it { expect(task.reload.state).to eq :failure }
+    context "state failure with attachment" do
+      let(:task_attachment) { build :task_attachment }
+      before {
+        task_attributes[:state] = :failure
+        task_attributes[:task_attachments_attributes] = [task_attachment.attributes]
+      }
+
+      it {
+        expect(task.reload.state).to eq :failure
+        expect(task.task_attachments.count).to eq 1
+      }
     end
   end
 end

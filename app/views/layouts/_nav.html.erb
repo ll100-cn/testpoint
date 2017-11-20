@@ -2,14 +2,17 @@
   <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
   <div class="navbar-nav-scroll">
     <%= fume_nav current do |n| %>
-    <ul class="navbar-nav flex-row">
-      <%= n.li_tag "cases", class: "nav-item" do %>
-      <%= link_to "Cases", [ ::TestCase ], class: "nav-link" %>
-      <% end %>
-      <%= n.li_tag "plans", class: "nav-item" do %>
-      <%= link_to "Plans", [ Plan ], class: "nav-link" %>
-      <% end %>
-    </ul>
+      <ul class="navbar-nav flex-row">
+        <%= n.li_tag "cases", class: "nav-item" do %>
+          <%= link_to "Cases", [::TestCase], class: "nav-link" %>
+        <% end %>
+        <%= n.li_tag "plans", class: "nav-item" do %>
+          <%= link_to "Plans", [Plan], class: "nav-link" %>
+        <% end %>
+        <%= n.li_tag "Issues", class: "nav-item" do %>
+          <%= link_to "Issues", [Issue], class: "nav-link" %>
+        <% end %>
+      </ul>
     <% end %>
   </div>
   <ul class="navbar-nav flex-row ml-md-auto">

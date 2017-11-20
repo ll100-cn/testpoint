@@ -4,8 +4,18 @@ Rails.application.routes.draw do
 
   resources :test_cases
   resources :plans do
-    resources :tasks
+    resources :tasks do
+      member do
+        get :change_state
+        get :upload_attachment
+      end
+    end
+  end
+  resources :issues
+  resources :tasks do
+    resources :issues
   end
   resources :components
   resources :platforms
+  resources :attachments
 end

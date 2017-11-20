@@ -1,0 +1,37 @@
+<div class="page-header">
+  <h2><%= t "views.page.index", model_name: h(Issue) %></h2>
+</div>
+
+<table class="table">
+  <colgroup>
+    <col width="20%"/>
+    <col width="40%"/>
+    <col width="20%"/>
+    <col width="20%"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th><%= Issue.human_attribute_name(:title) %></th>
+      <th><%= Issue.human_attribute_name(:content) %></th>
+      <th><%= Issue.human_attribute_name(:state) %></th>
+      <th><%= t "views.page.actions" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @issues.each do |issue| %>
+      <tr>
+        <td><%= issue.title %></td>
+        <td><%= issue.content %></td>
+        <td><%= issue.state.text %></td>
+        <td>
+          <%= show_link action: :show, id: issue, ok_url: request.fullpath %>
+          <%= render "issue_actions", issue: issue %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<nav class="table-pagination">
+  <%= paginate @issues %>
+</nav>
