@@ -19,7 +19,11 @@ class PlansController < ApplicationController
   end
 
   def create
-    test_case_ids = Component.where(id: params[:component_ids]).flat_map(&:test_case_ids)
+    test_cases_scope = TestCase
+    test_cases_scope = test_cases_scope.joins(:component).where(components: { id: params[:component_ids] }) if params[:component_ids].present?
+    test_cases_scope = test_cases_scope.joins(:platforms).where(platforms: { id: params[:platform_ids] }) if params[:platform_ids].present?
+    test_case_ids = test_cases_scope.ids
+
     @plan.generate(test_case_ids: test_case_ids || TestCase.ids)
     respond_with @plan, location: ok_url_or_default([Plan])
   end
