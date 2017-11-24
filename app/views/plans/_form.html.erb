@@ -2,6 +2,8 @@
   <%= f.input :title %>
 
   <% if plan.new_record? %>
+    <%= f.input :platform_ids, collection: Platform.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
+
     <% @components_mapping = Component.all.group_by(&:parent_id) %>
     <%= f.input :component_ids do %>
       <ul class="list-unstyled pt-1">

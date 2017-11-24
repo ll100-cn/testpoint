@@ -14,6 +14,8 @@ class Plan < ApplicationRecord
   has_many :components, through: :test_cases
   validates :title, presence: true
 
+  attr_accessor :platform_ids
+
   def generate(params)
     test_cases = TestCase.where(id: params[:test_case_ids])
     test_cases.each do |test_case|
