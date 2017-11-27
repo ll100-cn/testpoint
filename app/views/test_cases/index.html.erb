@@ -22,7 +22,8 @@
         <li class="hidden-actions">
           <% if value %>
             <span class="float-right actions">
-              <%= edit_link edit_platform_path(value) %>
+              <%= edit_link edit_platform_path(value, ok_url: request.fullpath) %>
+              <%= destroy_link platform_path(value, ok_url: request.fullpath) %>
             </span>
           <% end %>
           <%= n.apply_content value do |active_class| %>
