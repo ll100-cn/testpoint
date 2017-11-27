@@ -19,7 +19,7 @@ class ComponentsController < ApplicationController
   end
 
   def destroy
-    @component.destroy
+    @component.archive
     respond_with @component, location: ok_url_or_default([TestCase])
   end
 

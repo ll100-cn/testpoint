@@ -3,7 +3,7 @@
 <% @tasks_mapping = task_scope.group_by(&:test_case) %>
 <% @test_cases_mapping = @tasks_mapping.keys.group_by(&:component) %>
 <% component_ids = @test_cases_mapping.keys.flat_map(&:ancestor_ids_with_self).uniq %>
-<% @components_mapping = Component.where(id: component_ids).group_by(&:parent_id) %>
+<% @components_mapping = Component.available.where(id: component_ids).group_by(&:parent_id) %>
 
 <div class="page-header">
   <h3><%= @plan.title %></h3>

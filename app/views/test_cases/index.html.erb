@@ -9,7 +9,7 @@
 </div>
 
 <% @test_cases_mapping = @test_cases.group_by(&:component) %>
-<% @components_mapping = Component.ranked.group_by(&:parent_id) %>
+<% @components_mapping = Component.available.ranked.group_by(&:parent_id) %>
 <ul class="list-unstyled">
   <%= render "components", key: nil %>
 </ul>
