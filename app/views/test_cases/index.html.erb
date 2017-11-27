@@ -18,7 +18,7 @@
   <h5>Platform</h5>
   <%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
     <ul class="list-unstyled">
-      <% ([["All", nil]] + Platform.all.map { |p| [p.name, p.id] }).each do |key, value| %>
+      <% ([["All", nil]] + Platform.all.available.map { |p| [p.name, p.id] }).each do |key, value| %>
         <li class="hidden-actions">
           <% if value %>
             <span class="float-right actions">

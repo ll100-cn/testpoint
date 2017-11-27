@@ -22,6 +22,6 @@ RSpec.describe PlatformsController, type: :controller do
 
   describe "DELETE destroy" do
     action(skip: true) { delete :destroy, params: { id: platform.id } }
-    it { expect { do_action }.to change { Platform.count }.by(-1) }
+    it { expect { do_action }.to change { Platform.archived.count }.by(1) }
   end
 end

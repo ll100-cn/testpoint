@@ -17,7 +17,7 @@ class PlatformsController < ApplicationController
   end
 
   def destroy
-    @platform.destroy
+    @platform.archive
     respond_with @platform, location: ok_url_or_default([TestCase])
   end
 
