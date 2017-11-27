@@ -29,4 +29,9 @@ RSpec.describe PlansController, type: :controller do
     action { get :show, params: { id: plan.id } }
     it { is_expected.to respond_with :success }
   end
+
+  describe "DELETE destroy" do
+    action(skip: true) { delete :destroy, params: { id: plan.id } }
+    it { expect { do_action }.to change { Plan.archived.count }.by(1) }
+  end
 end

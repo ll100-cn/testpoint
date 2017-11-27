@@ -8,6 +8,7 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  component_id :integer
+#  archived     :boolean          default(FALSE)
 #
 
 class TestCase < ApplicationRecord
@@ -18,5 +19,11 @@ class TestCase < ApplicationRecord
 
   validates :title, :component_id, :platform_ids, presence: true
 
+  scope :available, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
   scope :with_component, -> { joins(:component).includes(:component) }
+
+  def archive
+    update(archived: true)
+  end
 end

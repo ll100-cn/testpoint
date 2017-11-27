@@ -4,7 +4,7 @@ class PlansController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @plans = @plans.page(params[:page])
+    @plans = @plans.available.page(params[:page])
     @tasks_count_mapping = Task.joins(:plan).merge(@plans)
                                .select(:plan_id, :state, "count(1) AS count")
                                .group(:plan_id, :state)
@@ -42,6 +42,11 @@ class PlansController < ApplicationController
     @tasks = @q.result
 
     respond_with @plan, location: ok_url_or_default(action: :show)
+  end
+
+  def destroy
+    @plan.archive
+    respond_with @plan, location: ok_url_or_default([Plan])
   end
 
 protected

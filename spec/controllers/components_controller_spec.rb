@@ -27,6 +27,6 @@ RSpec.describe ComponentsController, type: :controller do
 
   describe "DELETE destroy" do
     action(skip: true) { delete :destroy, params: { id: component.id } }
-    it { expect { do_action }.to change { Component.count }.by(-1) }
+    it { expect { do_action }.to change { Component.archived.count }.by(1) }
   end
 end

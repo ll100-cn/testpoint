@@ -9,7 +9,7 @@
 </div>
 
 <% @test_cases_mapping = @test_cases.group_by(&:component) %>
-<% @components_mapping = Component.ranked.group_by(&:parent_id) %>
+<% @components_mapping = Component.available.ranked.group_by(&:parent_id) %>
 <ul class="list-unstyled">
   <%= render "components", key: nil %>
 </ul>
@@ -18,11 +18,12 @@
   <h5>Platform</h5>
   <%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
     <ul class="list-unstyled">
-      <% ([["All", nil]] + Platform.all.map { |p| [p.name, p.id] }).each do |key, value| %>
+      <% ([["All", nil]] + Platform.all.available.map { |p| [p.name, p.id] }).each do |key, value| %>
         <li class="hidden-actions">
           <% if value %>
             <span class="float-right actions">
-              <%= edit_link edit_platform_path(value) %>
+              <%= edit_link edit_platform_path(value, ok_url: request.fullpath) %>
+              <%= destroy_link platform_path(value, ok_url: request.fullpath) %>
             </span>
           <% end %>
           <%= n.apply_content value do |active_class| %>

@@ -8,6 +8,7 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  component_id :integer
+#  archived     :boolean          default(FALSE)
 #
 
 FactoryGirl.define do

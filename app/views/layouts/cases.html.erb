@@ -13,7 +13,7 @@
     <div id="tp-contianer" class="d-flex align-items-stretch">
       <div id="tp-sidebar" class="col-12 col-md-3 col-xl-2 bg-light">
         <h5>Components</h5>
-        <% components_mapping = Component.ranked.group_by(&:parent_id) %>
+        <% components_mapping = Component.available.ranked.group_by(&:parent_id) %>
         <%= fume_nav @component.try(:id), active_class: "" do |n| %>
           <ul class="treeview">
             <%= n.apply_content nil do |cls| %>

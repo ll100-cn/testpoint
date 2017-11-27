@@ -9,7 +9,7 @@ class TestCasesController < ApplicationController
     @default_cases_url_options = request.query_parameters
     @test_cases = @test_cases.where(component_id: @component.subtree) if @component
     @test_cases = @test_cases.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
-    @test_cases = @test_cases.joins(:platforms).includes(:platforms)
+    @test_cases = @test_cases.available.joins(:platforms).includes(:platforms)
   end
 
   def new
@@ -29,6 +29,11 @@ class TestCasesController < ApplicationController
   def update
     @test_case.update(test_case_params)
     respond_with @test_case, action: :edit, location: -> { ok_url_or_default([TestCase]) }
+  end
+
+  def destroy
+    @test_case.archive
+    respond_with @test_case, location: ok_url_or_default([TestCase])
   end
 
 protected
