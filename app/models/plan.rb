@@ -16,6 +16,9 @@ class Plan < ApplicationRecord
 
   attr_accessor :platform_ids
 
+  scope :available, -> { where(archived: false) }
+  scope :archived, -> { where(archived: true) }
+
   def generate(params)
     test_cases = TestCase.available.where(id: params[:test_case_ids])
     test_cases.each do |test_case|
@@ -25,5 +28,9 @@ class Plan < ApplicationRecord
     end
 
     save
+  end
+
+  def archive
+    update(archived: true)
   end
 end
