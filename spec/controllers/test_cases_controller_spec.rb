@@ -39,4 +39,9 @@ RSpec.describe TestCasesController, type: :controller do
     action { get :show, params: { id: test_case.id } }
     it { is_expected.to respond_with :success }
   end
+
+  describe "DELETE destroy" do
+    action(skip: true) { delete :destroy, params: { id: test_case.id } }
+    it { expect { do_action }.to change { TestCase.archived.count }.by(1) }
+  end
 end

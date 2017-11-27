@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171127024345) do
+ActiveRecord::Schema.define(version: 20171127025946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20171127024345) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "component_id"
+    t.boolean "archived", default: false
     t.index ["component_id"], name: "index_test_cases_on_component_id"
   end
 
