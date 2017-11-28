@@ -39,6 +39,17 @@ module BootstrapV4Helper
     }
   end
 
+  def bootstrap_inline_form_for(*args, &block)
+    options = {
+      wrapper: 'inline_form',
+      wrapper_mappings: {
+        radio_buttons: :inline_radio
+      },
+      html: { class: "form-inline" },
+    }.deep_merge(args.extract_options!)
+    simple_form_for(*args, options, &block)
+  end
+
   def ransack_form_for(*args, &block)
     options = {
       wrapper: 'inline_form',

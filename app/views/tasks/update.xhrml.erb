@@ -1,1 +1,11 @@
-<%= render "shared/card_task.html", test_case: @task.test_case, task: @task %>
+<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+  Issues
+</button>
+<div class="dropdown-menu">
+  <% if @task.issue_id.nil? %>
+    <%= new_button Issue, [:new, @task, :issue], class: "dropdown-item" %>
+  <% end %>
+  <% relate_data = { remote: true, target: "#relate-issue", type: :xhrml } %>
+  <% link_text = @task.issue_id? ? "Issue: #{@task.issue_id}" : "Relate" %>
+  <%= link_to link_text, [:relate, @plan, @task], data: relate_data, class: "dropdown-item" %>
+</div>

@@ -26,10 +26,19 @@ class Task < ApplicationRecord
   has_many :task_attachments
   accepts_nested_attributes_for :task_attachments, allow_destroy: true
 
+  validate :issue_must_exist, if: -> { issue_id.present? }
+
+  scope :ranked, -> { order(:created_at) }
   scope :with_platform, -> { joins(:platform).includes(:platform) }
   scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
 
   def completed?
     !pending?
+  end
+
+  def issue_must_exist
+    if Issue.where(id: issue_id).none?
+      errors.add(:issue_id, :invalid)
+    end
   end
 end
