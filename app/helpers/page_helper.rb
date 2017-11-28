@@ -40,4 +40,9 @@ module PageHelper
   def task_state_text(task)
     content_tag :span, task.state_text, class: task_state_class_name(task.state)
   end
+
+  def issue_state_class_name(state, type = "")
+    mappings = { "open" => "info", "closed" => "primary", "solved" => "success" }
+    type.present? ? "#{type} #{type}-#{mappings[state]}" : mappings[type]
+  end
 end

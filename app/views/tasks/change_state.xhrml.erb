@@ -15,6 +15,19 @@
   </div>
 </div>
 <div class="modal-footer">
+  <div id="relate-issue" class="btn-group mr-auto">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      Issues
+    </button>
+    <div class="dropdown-menu">
+      <% if @task.issue_id.nil? %>
+        <%= new_button Issue, [:new, @task, :issue], class: "dropdown-item" %>
+      <% end %>
+      <% relate_data = { remote: true, target: "#relate-issue", type: :xhrml } %>
+      <% link_text = @task.issue_id? ? "Issue: #{@task.issue_id}" : "Relate" %>
+      <%= link_to link_text, [:relate, @plan, @task], data: relate_data, class: "dropdown-item" %>
+    </div>
+  </div>
   <% data = { remote: true, target: "#uploadAttachmentsModal", type: :xhrml } %>
   <%= link_to "Pass", [@plan, @task, task: { state: :pass }], method: :patch, class: "btn btn-success" %>
   <%= link_to "Failure", upload_attachment_plan_task_path(@plan, @task), data: data, class: "btn btn-danger" %>

@@ -128,6 +128,7 @@ SimpleForm.setup do |config|
   end
 
   config.wrappers :inline_form, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
+    b.use :bootstrap_v4
     b.use :html5
     b.use :placeholder
     b.optional :maxlength

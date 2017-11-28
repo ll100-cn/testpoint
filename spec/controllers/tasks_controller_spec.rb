@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe TasksController, type: :controller do
-  describe "PUT update" do
-    let(:task) { create :task }
-    let(:plan) { task.plan }
-    let(:task_attributes) { {} }
+  let(:task) { create :task }
+  let(:plan) { task.plan }
+  let(:task_attributes) { {} }
 
+  describe "PUT update" do
     action { put :update, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
 
     context "state pass" do
@@ -25,5 +25,43 @@ RSpec.describe TasksController, type: :controller do
         expect(task.task_attachments.count).to eq 1
       }
     end
+
+    context "relate issue" do
+      context "success" do
+        let(:issue) { create :issue }
+        before { task_attributes[:issue_id] = issue.id }
+
+        it { expect(task.reload.issue).to eq issue }
+      end
+
+      context "when issue_id invalid" do
+        before {
+          Issue.destroy_all
+          task_attributes[:issue_id] = 1
+        }
+
+        it { expect(assigns(:task).errors[:issue_id].count).to eq 1 }
+      end
+    end
+  end
+
+  describe "GET change_state" do
+    action { get :change_state, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    it { is_expected.to respond_with(:success) }
+  end
+
+  describe "GET upload_attachment" do
+    action { get :upload_attachment, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    it { is_expected.to respond_with(:success) }
+  end
+
+  describe "GET edit" do
+    action { get :edit, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    it { is_expected.to respond_with(:success) }
+  end
+
+  describe "GET relate" do
+    action { get :edit, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    it { is_expected.to respond_with(:success) }
   end
 end
