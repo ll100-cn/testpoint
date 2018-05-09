@@ -31,12 +31,14 @@
 
 # Webpacker
 /public/packs
+/public/packs-test
+yarn-debug.log*
+.yarn-integrity
 
 # Custom
 /.byebug_history
 /spec/examples.txt
 /config/deploy/*.rb
 /docker-compose.yml
-/public/packs-test/
 /public/uploads/
 /.idea
