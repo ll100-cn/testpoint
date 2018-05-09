@@ -12,7 +12,7 @@ gem 'rails', '~> 5.1.2'
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
-gem 'dotenv-rails', '~> 2.2.1'
+gem 'dotenv-rails', '2.4.0'
 
 # Controllers
 gem 'responders', '~> 2.4'
@@ -20,15 +20,15 @@ gem 'responders', '~> 2.4'
 # Models
 gem 'devise', '~> 4.3'
 gem 'cancancan', '~> 2.0'
-gem "carrierwave", '1.2.0'
-gem 'enumerize', '2.1.2'
-gem 'ancestry', '3.0.1'
-gem "ransack", "1.8.2", require: false
+gem "carrierwave", '1.2.2'
+gem 'enumerize', '2.2.2'
+gem 'ancestry', '3.0.2'
+gem "ransack", "1.8.8", require: false
 
 # Views
 gem 'simple_form', '~> 3.5'
 gem 'kaminari', '~> 1.0', '>= 1.0.1'
-gem 'fume-nav', '0.1.2'
+gem 'fume-nav', '0.1.3'
 
 # Assets
 gem 'sass-rails', '~> 5.0'
@@ -49,7 +49,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
+  gem 'capybara', '3.0.3'
   gem 'selenium-webdriver'
   gem 'pry-rails', '~> 0.3.6'
 
@@ -72,8 +72,8 @@ end
 group :test do
   gem 'faker', '~> 1.8', '>= 1.8.2'
   gem "rails-controller-testing"
-  gem "rspec-do_action", "0.0.5"
-  gem "shoulda-matchers", "3.1.1"
+  gem "rspec-do_action", "0.0.6"
+  gem "shoulda-matchers", "3.1.2"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
