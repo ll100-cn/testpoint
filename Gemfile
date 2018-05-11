@@ -51,7 +51,7 @@ group :development, :test do
 
   gem 'pry-rails', '~> 0.3.6'
   gem "annotate"
-  gem 'factory_girl_rails', '~> 4.8'
+  gem 'factory_bot_rails', '~> 4.8'
   gem 'rspec-rails', '~> 3.6'
 end
 
