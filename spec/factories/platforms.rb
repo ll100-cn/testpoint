@@ -9,7 +9,7 @@
 #  archived   :boolean          default(FALSE)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :platform do
     name "platform name"
   end

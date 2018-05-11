@@ -13,7 +13,7 @@
 #  message      :text
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :task do
     plan { create :plan }
     test_case { create :test_case }
