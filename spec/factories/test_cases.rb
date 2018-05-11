@@ -11,7 +11,7 @@
 #  archived     :boolean          default(FALSE)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :test_case do
     title "user sign in"
     content "input username and password"

@@ -10,7 +10,7 @@
 #  archived   :boolean          default(FALSE)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :component do
     name "Component Name"
   end

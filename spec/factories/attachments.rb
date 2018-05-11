@@ -8,7 +8,7 @@
 #  updated_at :datetime         not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :attachment do
     file { ResourceHelper.upload_file("avatar.png") }
   end
