@@ -19,12 +19,10 @@ function SelectTodayPlugin (pluginConfig) {
         if (fp.config.noCalendar || fp.isMobile) return {}
         return Object.assign({
             onReady: function onReady () {
-                // 创建元素
                 btnContainer = fp._createElement('div', 'flatpickr-confirm ' + 'visible ' + config.theme + 'Theme')
                 btnClear = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.clearText)
                 btnToday = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.todayText)
 
-                // 功能实现
                 btnToday.addEventListener('click', function () {
                     fp.setDate(fp.now)
                 })
@@ -34,7 +32,6 @@ function SelectTodayPlugin (pluginConfig) {
                     fp.close()
                 })
 
-                // add to calendarContainer
                 btnContainer.appendChild(btnClear)
                 btnContainer.appendChild(btnToday)
                 fp.calendarContainer.appendChild(btnContainer)
@@ -42,7 +39,6 @@ function SelectTodayPlugin (pluginConfig) {
             onChange: function onChange (_, dateStr) {
                 var showCondition = fp.config.enableTime || fp.config.mode === 'multiple'
                 if (dateStr && !fp.config.inline && showCondition) {
-                    // 判断confirm是不是存在，存在则appendchild
                     var nodes = fp.calendarContainer.childNodes
                     console.log(nodes)
                     for (var i = 0; i < nodes.length ; i++) {
@@ -61,12 +57,7 @@ function SelectTodayPlugin (pluginConfig) {
 }
 
 $(document).on('turbolinks:load', function() {
-    $("#plan_start_time").flatpickr({
-        enableTime: true,
-        plugins: [ new SelectTodayPlugin(), new confirmDatePlugin() ]
-    });
-
-    $("#plan_end_time").flatpickr({
+    $("#plan_start_at").flatpickr({
         enableTime: true,
         plugins: [ new SelectTodayPlugin(), new confirmDatePlugin() ]
     });
