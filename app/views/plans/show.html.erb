@@ -7,6 +7,8 @@
 
 <div class="page-header">
   <h3><%= @plan.title %></h3>
+  <p>Start_time: <%= @plan.start_time %></p>
+  <p>End_time: <%= @plan.end_time %></p>
 </div>
 <ul class="list-unstyled">
   <% if @components_mapping.empty? %>
