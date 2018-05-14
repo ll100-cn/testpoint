@@ -4,6 +4,7 @@ import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate'
 import 'flatpickr/dist/flatpickr.css'
 import 'flatpickr/dist/plugins/confirmDate/confirmDate.css'
 
+
 var defaultConfig = {
     todayText: 'today',
     clearText: 'clear',
@@ -19,7 +20,7 @@ function SelectTodayPlugin (pluginConfig) {
         if (fp.config.noCalendar || fp.isMobile) return {}
         return Object.assign({
             onReady: function onReady () {
-                btnContainer = fp._createElement('div', 'flatpickr-confirm ' + 'visible ' + config.theme + 'Theme')
+                btnContainer = fp._createElement('div', 'flatpickr-selectdate ')
                 btnClear = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.clearText)
                 btnToday = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.todayText)
 
