@@ -138,3 +138,14 @@ article {
     margin-top: -5px;
   }
 }
+
+.flatpickr-btn {
+  height: 20px;
+  flex-grow: 1;
+  border: 0px;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+}
