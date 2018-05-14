@@ -60,8 +60,7 @@ function SelectTodayPlugin (pluginConfig) {
     }
 }
 
-$(function() {
-
+$(document).on('turbolinks:load', function() {
     $("#plan_start_time").flatpickr({
         enableTime: true,
         plugins: [ new SelectTodayPlugin(), new confirmDatePlugin() ]
@@ -71,4 +70,4 @@ $(function() {
         enableTime: true,
         plugins: [ new SelectTodayPlugin(), new confirmDatePlugin() ]
     });
-})
+});
