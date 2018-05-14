@@ -8,6 +8,7 @@ import 'flatpickr/dist/plugins/confirmDate/confirmDate.css'
 var defaultConfig = {
     todayText: 'today',
     clearText: 'clear',
+    confirmText: 'OK',
     theme: 'light'
 }
 
@@ -20,9 +21,15 @@ function SelectTodayPlugin (pluginConfig) {
         if (fp.config.noCalendar || fp.isMobile) return {}
         return Object.assign({
             onReady: function onReady () {
-                btnContainer = fp._createElement('div', 'flatpickr-selectdate ')
+
+                btnContainer = fp._createElement('div', 'btn-container')
                 btnClear = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.clearText)
                 btnToday = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.todayText)
+
+                btnContainer.appendChild(btnClear)
+                btnContainer.appendChild(btnToday)
+                fp.calendarContainer.appendChild(btnContainer)
+
 
                 btnToday.addEventListener('click', function () {
                     fp.setDate(fp.now)
@@ -33,23 +40,21 @@ function SelectTodayPlugin (pluginConfig) {
                     fp.close()
                 })
 
-                btnContainer.appendChild(btnClear)
-                btnContainer.appendChild(btnToday)
-                fp.calendarContainer.appendChild(btnContainer)
-            },
-            onChange: function onChange (_, dateStr) {
-                var showCondition = fp.config.enableTime || fp.config.mode === 'multiple'
-                if (dateStr && !fp.config.inline && showCondition) {
+                var plugins = fp.config.plugins
+                if (plugins.toString().indexOf('flatpickr-confirm')) {
                     var nodes = fp.calendarContainer.childNodes
-                    console.log(nodes)
-                    for (var i = 0; i < nodes.length ; i++) {
-                        if (nodes[i].className === 'flatpickr-confirm lightTheme visible') {
-                            console.log(nodes[i])
+                    for ( var i = 0; i < nodes.length ; i++) {
+                        console.log(nodes[i].className)
+                        if (nodes[i].className === 'flatpickr-confirm  lightTheme') {
                             var btnConfirm = nodes[i]
+                            console.log(i)
                             btnConfirm.classList.remove('flatpickr-confirm')
                             btnConfirm.classList.add('flatpickr-btn')
                             btnContainer.appendChild(btnConfirm)
                         }
+                    }
+                    if ( btnContainer.children.length === 2 ) {
+                        alert("confirmDatePlugin should be put after this plugin")
                     }
                 }
             }
@@ -58,8 +63,10 @@ function SelectTodayPlugin (pluginConfig) {
 }
 
 $(document).on('turbolinks:load', function() {
-    $("#plan_start_at").flatpickr({
-        enableTime: true,
-        plugins: [ new SelectTodayPlugin(), new confirmDatePlugin() ]
-    });
-});
+    $(".timepicker").each(function() {
+        $(this).flatpickr({
+            enableTime: true,
+            plugins: [ new SelectTodayPlugin(), new confirmDatePlugin() ]
+        })
+    })
+})
