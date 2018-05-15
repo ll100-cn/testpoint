@@ -3,12 +3,16 @@ import flatpickr from 'flatpickr'
 import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate'
 import 'flatpickr/dist/flatpickr.css'
 import 'flatpickr/dist/plugins/confirmDate/confirmDate.css'
+import 'flatpickr/dist/l10n'
+import 'widgets/flatpickr/style'
+// import { English } from 'flatpickr/dist/l10n/default'
+// import { Thailand }  from 'flatpickr/dist/l10n/th'
+import { Russian }  from 'flatpickr/dist/l10n/ru'
 
 
 var defaultConfig = {
     todayText: 'today',
     clearText: 'clear',
-    confirmText: 'OK',
     theme: 'light'
 }
 
@@ -19,12 +23,14 @@ function SelectTodayPlugin (pluginConfig) {
     var btnClear
     return function (fp) {
         if (fp.config.noCalendar || fp.isMobile) return {}
-        return Object.assign({
+        return {
             onReady: function onReady () {
 
-                btnContainer = fp._createElement('div', 'btn-container')
-                btnClear = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.clearText)
-                btnToday = fp._createElement('div', 'flatpickr-btn ' + config.theme + 'Theme', config.todayText)
+                console.log(fp.config)
+
+                btnContainer = fp._createElement('div', 'flatpickr-btn-container ' + config.theme + 'Theme')
+                btnClear = fp._createElement('div', 'flatpickr-btn', config.clearText)
+                btnToday = fp._createElement('div', 'flatpickr-btn', config.todayText)
 
                 btnContainer.appendChild(btnClear)
                 btnContainer.appendChild(btnToday)
@@ -44,11 +50,8 @@ function SelectTodayPlugin (pluginConfig) {
                 if (plugins.toString().indexOf('flatpickr-confirm')) {
                     var nodes = fp.calendarContainer.childNodes
                     for ( var i = 0; i < nodes.length ; i++) {
-                        console.log(nodes[i].className)
                         if (nodes[i].className === 'flatpickr-confirm  lightTheme') {
                             var btnConfirm = nodes[i]
-                            console.log(i)
-                            btnConfirm.classList.remove('flatpickr-confirm')
                             btnConfirm.classList.add('flatpickr-btn')
                             btnContainer.appendChild(btnConfirm)
                         }
@@ -58,7 +61,7 @@ function SelectTodayPlugin (pluginConfig) {
                     }
                 }
             }
-        })
+        }
     }
 }
 
@@ -66,6 +69,7 @@ $(document).on('turbolinks:load', function() {
     $(".timepicker").each(function() {
         $(this).flatpickr({
             enableTime: true,
+            locale: Russian,
             plugins: [ new SelectTodayPlugin(), new confirmDatePlugin() ]
         })
     })

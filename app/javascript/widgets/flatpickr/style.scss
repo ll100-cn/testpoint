@@ -1,15 +1,7 @@
-.btn-container {
+.flatpickr-btn-container {
   height: 40px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
   align-items: center;
   cursor: pointer;
   background: rgba(0, 0, 0, .06);
@@ -20,6 +12,7 @@
   flex-grow: 1;
   border: 0px;
   font-size: 14px;
-  cursor: pointer;
+  visibility: visible;
   outline: none;
+  background: rgba(0, 0, 0, 0);
 }
