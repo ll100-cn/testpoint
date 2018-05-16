@@ -52,6 +52,6 @@ class PlansController < ApplicationController
 protected
 
   def plan_params
-    params.fetch(:plan, {}).permit(:title)
+    params.fetch(:plan, {}).permit(:title, :start_at)
   end
 end

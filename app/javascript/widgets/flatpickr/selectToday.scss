@@ -1,0 +1,22 @@
+.flatpickr-btn-container {
+  display: flex;
+  background: rgba(0, 0, 0, .06);
+
+  .flatpickr-confirm {
+    flex: 1;
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+  }
+}
+
+.flatpickr-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 40px;
+  flex: 1;
+}
