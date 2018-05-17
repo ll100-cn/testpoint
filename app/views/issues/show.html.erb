@@ -20,8 +20,8 @@
           <div class="mb-3">
             <div class="media">
               <% if (file = task_attachment.attachment.file) %>
-                <%= link_to file.url, target: "_blank" do %>
-                  <%= image_tag file.url, class: "img-thumbnail mr-3", size: "100x100" %>
+                <%= link_to url_for(file), target: "_blank" do %>
+                  <%= image_tag url_for(file), class: "img-thumbnail mr-3", size: "100x100" %>
                 <% end %>
               <% end %>
               <div class="media-body">
