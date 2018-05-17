@@ -5,11 +5,7 @@ class DataMigrateToStorage < ActiveRecord::Migration[5.2]
       unless ActiveStorage::Attachment.all.map(&:record_id).include?(a.id)
         files = Dir[Rails.root.join('public', 'uploads', 'attachment','file', a.id.to_s, '*')]
         if files.size == 1
-          if files.first.split('.').last == "jpg"
-            content_type = "image/jpeg"
-          else
-            content_type = "image/#{files.first.split('.').last}"
-          end
+          content_type = "image/#{files.first.split('.').last}"
           byte_size = File.open(files.first).size
           checksum = compute_checksum(File.open(files.first))
           key = ActiveStorage::Blob.generate_unique_secure_token
