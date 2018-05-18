@@ -14,21 +14,22 @@ $(function() {
     const $targetArea = $(event.currentTarget)
     $targetArea.find('#uploadAttachmentArea').removeClass('border-secondary').addClass('border-white bg-light')
 
+    const requestParams = $targetArea.data()
     const files = event.originalEvent.dataTransfer.files
 
     if (files.length >= 1) {
-      uploadAttachment($targetArea.find('#uploadAttachmentArea'), files[0])
+      uploadAttachment($targetArea.find('#uploadAttachmentArea'), files[0], requestParams)
     }
   })
 })
 
-function uploadAttachment(target, file) {
+function uploadAttachment(target, file, { url, method }) {
   const formData = new FormData()
   formData.append('attachment[file]', file)
 
   $.ajax({
-    url: '/attachments',
-    method: 'POST',
+    url,
+    method,
     dataType: 'html',
     data: formData,
     async: false,
