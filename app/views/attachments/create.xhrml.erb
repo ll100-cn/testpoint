@@ -1,6 +1,6 @@
 <% time = Time.now.to_i %>
 <div>
-  <%= image_tag url_for(@attachment.file), width: "64x64", class: "float-left mb-1" %>
+  <%= image_tag url_for(@attachment.file), size: "64x64", class: "float-left mb-1" %>
   <div class="form-group row">
     <div class="form-content col-12">
       <%= text_area_tag "task[task_attachments_attributes][#{time}][content]", "", class: "form-control", rows: 5 %>
