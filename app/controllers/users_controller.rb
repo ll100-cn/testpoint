@@ -3,11 +3,15 @@ class UsersController < ApplicationController
   before_action { @navbar = "Users" }
 
   def index
-    @users = @users.page(params[:page])
+    @users = @users.page(params[:page]).order("id")
   end
 
   def new
-    @user = User.new
+  end
+
+  def create
+    @user.save
+    respond_with @user, location: ok_url_or_default([User])
   end
 
   def show
@@ -17,18 +21,19 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-      flash[:notice] = "修改成功"
-      redirect_to edit_user_path
-    else
-      render "edit"
-    end
+    @user.update(user_params)
+    respond_with @user, location: ok_url_or_default([User])
+  end
+
+  def destroy
+    @user.delete
+    respond_with @user, location: ok_url_or_default([User])
   end
 
   protected
 
   def user_params
-    params.fetch(:user).permit(:time_zone, :profile_attributes => [:id, :legal_name, :birthday, :location, :education, :occupation, :bio, :speciality])
+    params.fetch(:user).permit(:email, :password, :password_confirmation)
   end
 
 end
