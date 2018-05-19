@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   resources :components
   resources :platforms
   resources :attachments
+  resources :users
 end
