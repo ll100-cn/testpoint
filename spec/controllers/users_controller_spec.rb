@@ -34,6 +34,6 @@ RSpec.describe UsersController, type: :controller do
     action(skip: true) { delete :destroy, params: { id: user.id } }
     it { expect { do_action }.to change { User.count }.by(-1) }
   end
-
 end
+
 
