@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h2><%=t "views.page.edit", model_name: h(::TestCase) %></h2>
+  <h2><%=t "views.page.edit", model_name: (::TestCase) %></h2>
 </div>
 
 <%= render "form", test_case: @test_case %>
