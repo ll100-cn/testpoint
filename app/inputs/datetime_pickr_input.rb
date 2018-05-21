@@ -3,17 +3,19 @@ class DatetimePickrInput < SimpleForm::Inputs::Base
   def input
     template.content_tag(:div, class: 'input-group datetime-picker', data: { locale: I18n.locale.to_s.split("-").first }) do
       template.concat @builder.text_field(attribute_name, input_html_options)
-      template.concat span_calendar
+      template.concat calendar_icon
     end
   end
 
   def input_html_options
-    super.deep_merge(data: { input: true })
+    super.deep_merge(data: { input: true }, class: 'form-control')
   end
 
-  def span_calendar
-    template.content_tag(:a, class: 'input-group-addon', data: { toggle: true }) do
-      template.concat icon_calendar
+  def calendar_icon
+    template.content_tag(:div, class: 'input-group-append') do
+      template.content_tag(:a, class: 'input-group-text', data: { toggle: true }) do
+        template.concat icon_calendar
+      end
     end
   end
 
