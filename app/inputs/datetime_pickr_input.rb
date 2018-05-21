@@ -9,7 +9,7 @@ class DatetimePickrInput < SimpleForm::Inputs::Base
 
   def input_html_options
     # super.deep_merge(data: { input: true }, style: 'border: 1px solid #c3c3c3;border-radius: 3px;')
-    super.deep_merge(data: { input: true }, class:'form-control' )
+    super.deep_merge(data: { input: true }, class: 'form-control')
   end
 
   def append
