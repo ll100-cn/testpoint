@@ -9,6 +9,7 @@ fetch(:linked_files).concat %w[
 fetch(:linked_dirs).concat %w[
   public/packs
   public/uploads
+  storage
 ]
 
 set :bundle_flags, ""
