@@ -15,6 +15,7 @@ $(document).on('turbolinks:load', function() {
         $(this).flatpickr({
             enableTime: true,
             wrap: true,
+            allowInput: true,
             plugins: [ new selectTodayPlugin(), new confirmDatePlugin() ]
         })
     })
