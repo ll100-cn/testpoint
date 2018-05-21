@@ -2,6 +2,7 @@
   "name": "testpoint",
   "private": true,
   "dependencies": {
+    "@rails/webpacker": "3.5",
     "bootstrap": "4.1.0",
     "flatpickr": "^4.4.6",
     "font-awesome": "^4.7.0",
@@ -12,7 +13,6 @@
     "turbolinks": "^5.0.3"
   },
   "devDependencies": {
-    "@rails/webpacker": "3.5",
     "webpack-dev-server": "2.11.2"
   }
 }
