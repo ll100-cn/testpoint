@@ -31,10 +31,11 @@ class UsersController < ApplicationController
     respond_with @user, location: -> { ok_url_or_default([User]) }
   end
 
-  protected
+protected
 
   def user_params
     params.fetch(:user, {}).permit(:email, :password, :password_confirmation)
   end
 
 end
+
