@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h2><%= t "views.page.new", model_name: @platform.model_name.human %></h2>
+  <h2><%=t "views.page.new", model_name: h(Platform) %></h2>
 </div>
 
 <%= render "form", platform: @platform %>

@@ -1,6 +1,6 @@
 <div class="page-header">
   <%= destroy_link [ @platform ], class: "btn btn-outline-danger btn-sm float-right" %>
-  <h2><%= t "views.page.edit", model_name: @platform.model_name.human %></h2>
+  <h2><%=t "views.page.edit", model_name: h(Platform) %></h2>
 </div>
 
 <%= render "form", platform: @platform %>
