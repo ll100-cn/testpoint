@@ -1,0 +1,37 @@
+<div class="page-header d-flex">
+  <h2><%=t "views.page.index", model_name: h(@users) %></h2>
+  <div class="ml-3 mt-1 actions">
+    <%= new_button User, action: :new, class: "btn btn-primary btn-sm"%>
+  </div>
+</div>
+
+<table class="table">
+  <colgroup>
+    <col width="20%"/>
+    <col width="40%"/>
+    <col width="40%"/>
+  </colgroup>
+  <thead>
+  <tr>
+    <th><%= sort_link(@q, :id)%></th>
+    <th><%= User.human_attribute_name(:email) %></th>
+    <th><%=t "views.page.actions" %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to user.id, user %></td>
+        <td><%= user.email %></td>
+        <td>
+          <%= edit_link [:edit, user, ok_url: request.fullpath] %>
+          <%= destroy_link [user, ok_url: request.fullpath] %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<nav class="table-pagination">
+  <%= paginate @users %>
+</nav>

@@ -2,7 +2,7 @@
     defaults: { label_html: { class: "col-sm-3" }, content_html: { class: "col-sm-9" } },
     data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
   <div class="modal-header">
-    <h5 class="modal-title"><%= t "views.page.#{action}", model_name: @test_case.model_name.human %></h5>
+    <h5 class="modal-title"><%=t "views.page.#{action}", model_name: h(@test_case) %></h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
