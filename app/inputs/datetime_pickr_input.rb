@@ -16,6 +16,7 @@ class DatetimePickrInput < SimpleForm::Inputs::Base
       template.content_tag(:a, class: 'input-group-text', data: { toggle: true }) do
         template.concat icon_calendar
       end
+    end
   end
 
   def icon_calendar
