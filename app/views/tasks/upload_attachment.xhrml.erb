@@ -19,7 +19,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
               <div class="media">
-                <%= image_tag attachment.file.url, width: "64x64", class: "rounded mr-2" %>
+                <%= image_tag url_for(attachment.file), size: "64x64", class: "rounded mr-2" %>
                 <div class="media-body">
                   <%= a.text_area :content, class: "form-control", rows: 3 %>
                 </div>
