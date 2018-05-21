@@ -35,4 +35,3 @@ RSpec.describe UsersController, type: :controller do
     it { expect { do_action }.to change { User.count }.by(-1) }
   end
 end
-
