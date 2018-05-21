@@ -3,7 +3,8 @@ class UsersController < ApplicationController
   before_action { @navbar = "Users" }
 
   def index
-    @users = @users.page(params[:page]).order("id")
+    @q = User.ransack(params[:q])
+    @users = @q.result.page(params[:page])
   end
 
   def new
@@ -11,7 +12,7 @@ class UsersController < ApplicationController
 
   def create
     @user.save
-    respond_with @user, location: ok_url_or_default([User])
+    respond_with @user, location: -> { ok_url_or_default([User]) }
   end
 
   def show
@@ -22,12 +23,12 @@ class UsersController < ApplicationController
 
   def update
     @user.update(user_params)
-    respond_with @user, location: ok_url_or_default([User])
+    respond_with @user, location: -> { ok_url_or_default([User]) }
   end
 
   def destroy
     @user.delete
-    respond_with @user, location: ok_url_or_default([User])
+    respond_with @user, location: -> { ok_url_or_default([User]) }
   end
 
   protected

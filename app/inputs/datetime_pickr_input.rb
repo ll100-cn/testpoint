@@ -11,11 +11,17 @@ class DatetimePickrInput < SimpleForm::Inputs::Base
     super.deep_merge(data: { input: true }, class: 'form-control')
   end
 
+<<<<<<< 6fc857b5978809280aa481c0a9bb18d7ec3fba2b
   def calendar_icon
     template.content_tag(:div, class: 'input-group-append') do
       template.content_tag(:a, class: 'input-group-text', data: { toggle: true }) do
         template.concat icon_calendar
       end
+=======
+  def span_calendar
+    template.content_tag(:a, class: 'input-group-text', id: 'basic-addon2', data: { toggle: true }) do
+      template.concat icon_calendar
+>>>>>>> using sork_link
     end
   end
 
