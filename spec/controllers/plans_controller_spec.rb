@@ -4,10 +4,20 @@ RSpec.describe PlansController, type: :controller do
   let!(:plan) { create :plan, title: "user sign in" }
 
   describe "GET index" do
-    let(:task1) { create :task, state: "pending", plan_id: plan.id }
-    let(:task2) { create :task, state: "pass", plan_id: plan.id }
+    # let!(:plan1) { create :plan, title: "for index" }
+    # let(:task1) { create :task, state: "failure", plan_id: plan1.id }
+    # let(:task2) { create :task, state: "pending", plan_id: plan1.id }
+    # tasks_mapping = Task.joins(:plan).merge(Plan.all)
+    #                     .select(:plan_id, :state, "count(1) AS count")
+    #                     .group(:plan_id, :state)
+    #                     .each_with_object({}) do |task, result|
+    #   result[task.plan_id] ||= {}
+    #   result[task.plan_id][task.state] = task.count
+    # end
+    # result = { "pending"=>1, "failure"=>1 }
     action { get :index }
     it {
+      # expect(tasks_mapping[plan1.id]).to eq(result)
       is_expected.to respond_with :success
     }
   end
@@ -39,5 +49,3 @@ RSpec.describe PlansController, type: :controller do
     it { expect { do_action }.to change { Plan.archived.count }.by(1) }
   end
 end
-
-

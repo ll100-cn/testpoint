@@ -12,6 +12,7 @@ class PlansController < ApplicationController
       result[task.plan_id] ||= {}
       result[task.plan_id][task.state] = task.count
     end
+    # @tasks_count_mapping = Task.tasks_count_mapping(@plans)
   end
 
   def new

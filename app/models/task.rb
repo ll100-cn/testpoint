@@ -33,8 +33,11 @@ class Task < ApplicationRecord
   scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
 
   def completed?
-    !(self.state == "pending")
-    # !pending?
+    !pending?
+  end
+
+  def pending?
+    state == "pending"
   end
 
   def issue_must_exist
@@ -42,4 +45,12 @@ class Task < ApplicationRecord
       errors.add(:issue_id, :invalid)
     end
   end
+
+  # def self.tasks_count_mapping(plan)
+  #   tasks = Task.joins(:plan).merge(plan).select(:plan_id, :state, "count(1) AS count").group(:plan_id, :state)
+  #   tasks.each_with_object({}) do |task, result|
+  #     result[task.plan_id] ||= {}
+  #     result[task.plan_id][task.state] = task.count
+  #   end
+  # end
 end
