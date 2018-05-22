@@ -34,7 +34,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '3.5.3'
 gem 'coffee-rails', '~> 4.2'
 
-
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -78,6 +77,7 @@ group :test do
   gem "rails-controller-testing"
   gem "rspec-do_action", "0.0.6"
   gem "shoulda-matchers", "3.1.2"
+  gem 'simplecov', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
