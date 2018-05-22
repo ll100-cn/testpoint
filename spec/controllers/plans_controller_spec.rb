@@ -4,8 +4,12 @@ RSpec.describe PlansController, type: :controller do
   let!(:plan) { create :plan, title: "user sign in" }
 
   describe "GET index" do
+    let(:task1) { create :task, state: "pending", plan_id: plan.id }
+    let(:task2) { create :task, state: "pass", plan_id: plan.id }
     action { get :index }
-    it { is_expected.to respond_with :success }
+    it {
+      is_expected.to respond_with :success
+    }
   end
 
   describe "GET new" do
@@ -35,3 +39,5 @@ RSpec.describe PlansController, type: :controller do
     it { expect { do_action }.to change { Plan.archived.count }.by(1) }
   end
 end
+
+

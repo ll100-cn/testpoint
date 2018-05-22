@@ -33,7 +33,8 @@ class Task < ApplicationRecord
   scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
 
   def completed?
-    !pending?
+    !(self.state == "pending")
+    # !pending?
   end
 
   def issue_must_exist
