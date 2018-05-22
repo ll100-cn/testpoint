@@ -12,6 +12,8 @@
 
 FactoryBot.define do
   factory :issue do
-    
+    title "issue1"
+    content "content of issue1"
+    state "open"
   end
 end
