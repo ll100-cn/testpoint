@@ -9,22 +9,23 @@ fetch(:linked_files).concat %w[
 fetch(:linked_dirs).concat %w[
   public/packs
   public/uploads
+  storage
 ]
 
 set :bundle_flags, ""
 
-module YarnBeforePrecompile
-  def execute(*args)
-    options = args.extract_options!
-    name = args.shift
-    if name.to_s == "rake" && args.first == "assets:precompile"
-      super("bin/yarn", "install")
-    end
-
-    super(name, *args, options)
-  end
-end
-SSHKit::Backend::Netssh.prepend(YarnBeforePrecompile)
+# module YarnBeforePrecompile
+#   def execute(*args)
+#     options = args.extract_options!
+#     name = args.shift
+#     if name.to_s == "rake" && args.first == "assets:precompile"
+#       super("bin/yarn", "install")
+#     end
+#
+#     super(name, *args, options)
+#   end
+# end
+# SSHKit::Backend::Netssh.prepend(YarnBeforePrecompile)
 
 namespace :deploy do
   desc "rake db:seed"
