@@ -34,6 +34,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '3.5.3'
 gem 'coffee-rails', '~> 4.2'
 
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
