@@ -13,10 +13,10 @@ module PageHelper
     link_to label, url, options
   end
 
-  def show_link(url, options = {})
-    label = t("views.action.show")
-    link_to label, url, options
-  end
+  # def show_link(url, options = {})
+  #   label = t("views.action.show")
+  #   link_to label, url, options
+  # end
 
   def destroy_link(url, options = {})
     label = t("views.action.destroy")
@@ -37,9 +37,9 @@ module PageHelper
     end
   end
 
-  def task_state_text(task)
-    content_tag :span, task.state_text, class: task_state_class_name(task.state)
-  end
+  # def task_state_text(task)
+  #   content_tag :span, task.state_text, class: task_state_class_name(task.state)
+  # end
 
   def issue_state_class_name(state, type = "")
     mappings = { "open" => "info", "closed" => "primary", "solved" => "success" }
