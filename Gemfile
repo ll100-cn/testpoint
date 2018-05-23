@@ -79,6 +79,7 @@ group :test do
   gem "rspec-do_action", "0.0.6"
   gem "shoulda-matchers", "3.1.2"
   gem 'simplecov', require: false
+  gem 'coveralls', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
