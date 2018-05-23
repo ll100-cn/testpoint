@@ -1,0 +1,87 @@
+#inherit_from: .rubocop_todo.yml
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+    - node_modules/**/*
+    - bin/*
+    - db/schema.rb
+
+
+Bundler/OrderedGems:
+  Enabled: false
+
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: false
+
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
+Layout/SpaceInsideArrayLiteralBrackets:
+#  EnforcedStyle: compact
+  Enabled: false
+
+
+Metrics/BlockLength:
+#  Max: 150
+  Exclude:
+    - config/initializers/*.rb
+    - spec/**/*_spec.rb
+
+Metrics/MethodLength:
+#  Max: 40
+  Exclude:
+    - db/migrate/*.rb
+
+Metrics/LineLength:
+  Max: 160
+
+Metrics/AbcSize:
+  Max: 20
+
+
+Rails/ApplicationRecord:
+  Exclude:
+    - db/migrate/*.rb
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - db/migrate/*.rb
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Exclude:
+    - spec/**/*_spec.rb
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

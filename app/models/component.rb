@@ -13,7 +13,7 @@
 class Component < ApplicationRecord
   has_ancestry
 
-  has_many :test_cases
+  has_many :test_cases, dependent: :destroy
 
   validates :name, presence: true
 

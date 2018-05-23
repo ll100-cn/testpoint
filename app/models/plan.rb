@@ -9,7 +9,7 @@
 #
 
 class Plan < ApplicationRecord
-  has_many :tasks
+  has_many :tasks, dependent: :destroy
   has_many :test_cases, through: :tasks
   has_many :components, through: :test_cases
   validates :title, presence: true

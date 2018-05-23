@@ -31,5 +31,4 @@ RSpec.describe IssuesController, type: :controller do
     action { get :show, params: { id: issue.id } }
     it { is_expected.to respond_with :success }
   end
-
 end

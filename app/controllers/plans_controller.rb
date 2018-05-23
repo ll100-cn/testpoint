@@ -5,7 +5,7 @@ class PlansController < ApplicationController
 
   def index
     @plans = @plans.available.page(params[:page])
-    @tasks_count_mapping = Task.group(:plan_id, :state).count()
+    @tasks_count_mapping = Task.group(:plan_id, :state).count
   end
 
   def new

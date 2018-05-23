@@ -6,7 +6,7 @@ module BootstrapV4Helper
       wrapper_mappings: {
         boolean: :vertical_boolean
       },
-      html: { class: "form-vertical" },
+      html: { class: "form-vertical" }
     }.deep_merge(args.extract_options!)
 
     simple_form_for(*args, options, &block)
@@ -45,7 +45,7 @@ module BootstrapV4Helper
       wrapper_mappings: {
         radio_buttons: :inline_radio
       },
-      html: { class: "form-inline" },
+      html: { class: "form-inline" }
     }.deep_merge(args.extract_options!)
     simple_form_for(*args, options, &block)
   end
