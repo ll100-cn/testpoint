@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe TasksController, type: :controller do
-  let(:task) { create :task }
-  let(:plan) { task.plan }
+  let(:plan) { create :plan }
+  let(:task) { plan.tasks.first }
   let(:task_attributes) { {} }
 
   describe "PUT update" do

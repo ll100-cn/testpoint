@@ -1,11 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe TestCasesController, type: :controller do
-  let!(:test_case) { create :test_case }
+  let(:platform) { create :platform }
+  let!(:test_case) { create :test_case, platforms: [ platform ] }
 
   describe "GET index" do
-    action { get :index }
-    it { is_expected.to respond_with :success }
+    let(:params) { Hash.new }
+    action { get :index, params: params }
+
+    context "without params" do
+      it { is_expected.to respond_with :success }
+    end
+
+    context "with platform" do
+      let(:params) { { platform_id: platform.id } }
+      it { is_expected.to respond_with :success }
+    end
   end
 
   describe "GET new" do

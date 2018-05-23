@@ -10,7 +10,7 @@
   </colgroup>
   <thead>
     <tr>
-      <th><%= ::TestCase.human_attribute_name(:title) %></th>
+      <th><%=h ::TestCase, :title %></th>
       <th>进度</th>
       <th><%=t "views.page.actions" %></th>
     </tr>
@@ -24,11 +24,10 @@
         </td>
         <td>
           <div class="progress">
-            <% tasks_state_count = @tasks_count_mapping[plan.id] || {} %>
-            <% tasks_count = tasks_state_count.sum(&:last) %>
+            <% tasks_count = @tasks_count_mapping.sum { |key, value| key.first == plan.id ? value : 0 } %>
             <div class="progress-bar" style="width: 0%"></div>
             <% Task.state.values.each do |state| %>
-              <% count = tasks_state_count[state] || 0 %>
+              <% count = @tasks_count_mapping[[plan.id, state]] || 0 %>
               <% if count.nonzero? && (bar_bg = progress_bg_mapping[state]) %>
                 <div class="progress-bar <%= bar_bg %>" style="width: <%= 100.0 * count / tasks_count %>%"></div>
               <% end %>

@@ -32,10 +32,6 @@ class Task < ApplicationRecord
   scope :with_platform, -> { joins(:platform).includes(:platform) }
   scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
 
-  def completed?
-    !pending?
-  end
-
   def issue_must_exist
     if Issue.where(id: issue_id).none?
       errors.add(:issue_id, :invalid)

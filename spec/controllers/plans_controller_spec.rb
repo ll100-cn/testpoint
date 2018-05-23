@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe PlansController, type: :controller do
-  let!(:plan) { create :plan, title: "user sign in" }
+  let!(:plan) { create :plan }
 
   describe "GET index" do
+    let!(:test_case) { create :test_case }
+    let!(:task) { create :task, test_case_id: test_case.id, plan_id: plan.id }
     action { get :index }
     it { is_expected.to respond_with :success }
   end

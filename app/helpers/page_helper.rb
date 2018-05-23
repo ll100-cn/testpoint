@@ -13,11 +13,6 @@ module PageHelper
     link_to label, url, options
   end
 
-  def show_link(url, options = {})
-    label = t("views.action.show")
-    link_to label, url, options
-  end
-
   def destroy_link(url, options = {})
     label = t("views.action.destroy")
     link_to label, url, { method: :delete, data: { confirm: "Are you sure?" } }.merge(options)
@@ -35,10 +30,6 @@ module PageHelper
     when "failure"
       "text-danger"
     end
-  end
-
-  def task_state_text(task)
-    content_tag :span, task.state_text, class: task_state_class_name(task.state)
   end
 
   def issue_state_class_name(state, type = "")

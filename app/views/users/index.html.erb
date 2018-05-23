@@ -14,7 +14,7 @@
   <thead>
   <tr>
     <th><%= sort_link(@q, :id)%></th>
-    <th><%= User.human_attribute_name(:email) %></th>
+    <th><%=h User, :email %></th>
     <th><%=t "views.page.actions" %></th>
   </tr>
   </thead>

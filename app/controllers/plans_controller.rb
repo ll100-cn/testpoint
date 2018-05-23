@@ -5,13 +5,7 @@ class PlansController < ApplicationController
 
   def index
     @plans = @plans.available.page(params[:page])
-    @tasks_count_mapping = Task.joins(:plan).merge(@plans)
-                               .select(:plan_id, :state, "count(1) AS count")
-                               .group(:plan_id, :state)
-                               .each_with_object({}) do |task, result|
-      result[task.plan_id] ||= {}
-      result[task.plan_id][task.state] = task.count
-    end
+    @tasks_count_mapping = Task.group(:plan_id, :state).count()
   end
 
   def new
