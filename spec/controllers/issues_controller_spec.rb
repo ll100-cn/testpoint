@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe IssuesController, type: :controller do
+  let(:plan) { create :plan }
+  let(:task) { plan.tasks.first }
   let(:issue) { create :issue }
-  let(:task) { create :task }
 
   describe "GET index" do
     action { get :index }

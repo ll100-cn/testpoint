@@ -15,7 +15,6 @@
 
 FactoryBot.define do
   factory :task do
-    plan { create :plan }
     test_case { create :test_case }
     platform { create :platform }
   end

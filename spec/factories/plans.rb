@@ -10,6 +10,7 @@
 
 FactoryBot.define do
   factory :plan do
-    title "Plan #{Date.current}"
+    sequence(:title) { |n| "Plan #{n}" }
+    tasks { build_list :task, 2 }
   end
 end

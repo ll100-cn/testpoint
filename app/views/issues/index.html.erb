@@ -11,9 +11,9 @@
   </colgroup>
   <thead>
     <tr>
-      <th><%= Issue.human_attribute_name(:title) %></th>
-      <th><%= Issue.human_attribute_name(:content) %></th>
-      <th><%= Issue.human_attribute_name(:state) %></th>
+      <th><%=h Issue, :title %></th>
+      <th><%=h Issue, :content %></th>
+      <th><%=h Issue, :state %></th>
     </tr>
   </thead>
   <tbody>

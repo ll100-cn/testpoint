@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PlansController, type: :controller do
-  let!(:plan) { create :plan, title: "user sign in" }
+  let!(:plan) { create :plan }
 
   describe "GET index" do
     let!(:test_case) { create :test_case }

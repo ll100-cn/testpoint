@@ -6,9 +6,6 @@ class PlansController < ApplicationController
   def index
     @plans = @plans.available.page(params[:page])
     @tasks_count_mapping = Task.group(:plan_id, :state).count()
-    @tasks_count_mapping.each_with_object({}) do |(key, count), result|
-      result.deep_merge!(key.first => { key.last => count })
-    end
   end
 
   def new
