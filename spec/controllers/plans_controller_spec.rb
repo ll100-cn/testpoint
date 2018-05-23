@@ -4,8 +4,8 @@ RSpec.describe PlansController, type: :controller do
   let!(:plan) { create :plan, title: "user sign in" }
 
   describe "GET index" do
-    let!(:task1) { create :task, plan_id: plan.id }
-    let!(:task2) { create :task, plan_id: plan.id }
+    let!(:test_case) { create :test_case }
+    let!(:task) { create :task, test_case_id: test_case.id, plan_id: plan.id }
     action { get :index }
     it { is_expected.to respond_with :success }
   end
