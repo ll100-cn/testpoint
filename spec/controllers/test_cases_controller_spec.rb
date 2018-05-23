@@ -5,7 +5,7 @@ RSpec.describe TestCasesController, type: :controller do
   let!(:test_case) { create :test_case, platforms: [ platform ] }
 
   describe "GET index" do
-    let(:params) { Hash.new }
+    let(:params) { {} }
     action { get :index, params: params }
 
     context "without params" do

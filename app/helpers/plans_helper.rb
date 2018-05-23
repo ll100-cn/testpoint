@@ -7,7 +7,10 @@ module PlansHelper
     class_name = class_names[text_sym]
 
     content_tag :span, class: class_name do
-      "#{text.capitalize} <span class='#{icons[text_sym]}'></span>".html_safe
+      safe_join([
+        text.capitalize,
+        content_tag(:span, class: icons[text_sym])
+      ], ' ')
     end
   end
 end

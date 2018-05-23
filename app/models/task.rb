@@ -23,7 +23,7 @@ class Task < ApplicationRecord
   belongs_to :platform
   belongs_to :issue, optional: true
 
-  has_many :task_attachments
+  has_many :task_attachments, dependent: :destroy
   accepts_nested_attributes_for :task_attachments, allow_destroy: true
 
   validate :issue_must_exist, if: -> { issue_id.present? }
@@ -33,8 +33,6 @@ class Task < ApplicationRecord
   scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
 
   def issue_must_exist
-    if Issue.where(id: issue_id).none?
-      errors.add(:issue_id, :invalid)
-    end
+    errors.add(:issue_id, :invalid) if Issue.where(id: issue_id).none?
   end
 end

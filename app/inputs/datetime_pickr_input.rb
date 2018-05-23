@@ -1,5 +1,4 @@
 class DatetimePickrInput < SimpleForm::Inputs::Base
-
   def input(_wrapper_options)
     template.content_tag(:div, class: 'input-group datetime-picker', data: { locale: I18n.locale.to_s.split("-").first }) do
       template.concat @builder.text_field(attribute_name, input_html_options)
@@ -20,7 +19,6 @@ class DatetimePickrInput < SimpleForm::Inputs::Base
   end
 
   def icon_calendar
-    "<i class='fa fa-calendar' aria-hidden='true'></i>".html_safe
+    content_tag(:i, "", class: 'fa fa-calendar', aria_hidden: true)
   end
-
 end

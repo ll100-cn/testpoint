@@ -14,13 +14,13 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "POST create" do
-    let(:attributes) { { email:  Faker::Internet.email , password: "123456", password_confirmation: "123456"} }
+    let(:attributes) { { email: Faker::Internet.email, password: "123456", password_confirmation: "123456" } }
     action { post :create, params: { user: attributes } }
     it { is_expected.to respond_with :redirect }
   end
 
   describe "PUT update" do
-    let(:attributes) { { password: "123456", password_confirmation: "123456"} }
+    let(:attributes) { { password: "123456", password_confirmation: "123456" } }
     action { put :update, params: { id: user.id, plan: attributes } }
     it { is_expected.to respond_with :redirect }
   end
