@@ -5,15 +5,7 @@ class PlansController < ApplicationController
 
   def index
     @plans = @plans.available.page(params[:page])
-    # @tasks_count_mapping = Task.joins(:plan).merge(@plans)
-    #                            .select(:plan_id, :state, "count(1) AS count")
-    #                            .group(:plan_id, :state)
-    #                            .each_with_object({}) do |task, result|
-    #   result[task.plan_id] ||= {}
-    #   result[task.plan_id][task.state] = task.count
-    # end
     @tasks_count_mapping = Task.group(:plan_id, :state).count()
-    byebug
     @tasks_count_mapping.each_with_object({}) do |(key, count), result|
       result.deep_merge!(key.first => { key.last => count })
     end
@@ -30,7 +22,6 @@ class PlansController < ApplicationController
     test_case_ids = test_cases_scope.ids
 
     @plan.generate(test_case_ids: test_case_ids || TestCase.ids)
-    byebug
     respond_with @plan, location: ok_url_or_default([Plan])
   end
 
