@@ -1,0 +1,7 @@
+zh-CN:
+  enumerize:
+    task:
+      state:
+        pending: "等待"
+        pass: "通过"
+        failure: "失败"
