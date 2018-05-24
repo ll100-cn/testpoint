@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   respond_to :html
 
   before_action :adjust_format_for_xhr_html
+  before_action :set_raven_context
 
 protected
   def adjust_format_for_xhr_html
@@ -15,4 +16,9 @@ protected
     params[:ok_url] || default
   end
   helper_method :ok_url_or_default
+
+  def set_raven_context
+    Raven.user_context(id: current_user&.id)
+    Raven.extra_context(params: params.to_unsafe_h, url: request.url)
+  end
 end

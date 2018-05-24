@@ -21,6 +21,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Libaray
 gem 'dotenv-rails', '2.4.0'
 gem 'rubocop', require: false
+gem 'sentry-raven', '2.7.3'
 
 # Controllers
 gem 'responders', '~> 2.4'
