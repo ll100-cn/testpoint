@@ -1,19 +1,19 @@
 <nav class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-dark sticky-top tp-navbar">
-  <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
+  <%= link_to t('test_point'), root_path, class: "navbar-brand" %>
   <div class="navbar-nav-scroll">
     <%= fume_nav current do |n| %>
       <ul class="navbar-nav flex-row">
         <%= n.li_tag "cases", class: "nav-item" do %>
-          <%= link_to "Cases", [::TestCase], class: "nav-link" %>
+          <%= link_to t('cases'), [::TestCase], class: "nav-link" %>
         <% end %>
         <%= n.li_tag "plans", class: "nav-item" do %>
-          <%= link_to "Plans", [Plan], class: "nav-link" %>
+          <%= link_to t('plans'), [Plan], class: "nav-link" %>
         <% end %>
         <%= n.li_tag "Issues", class: "nav-item" do %>
-          <%= link_to "Issues", [Issue], class: "nav-link" %>
+          <%= link_to t('issues'), [Issue], class: "nav-link" %>
         <% end %>
         <%= n.li_tag "Users", class: "nav-item" do %>
-          <%= link_to "Users", [User], class: "nav-link" %>
+          <%= link_to t('users'), [User], class: "nav-link" %>
         <% end %>
       </ul>
     <% end %>
@@ -40,11 +40,11 @@
     <li class="nav-item dropdown">
       <%= link_to current_user.email, "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } %>
       <div class="dropdown-menu dropdown-menu-right">
-        <%= link_to "sign out", destroy_user_session_path, class: "dropdown-item", method: :delete %>
+        <%= link_to t('sign_out'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
       </div>
     </li>
     <% else %>
-      <li class="nav-item"><%= link_to "Log in", new_user_session_path %></li>
+      <li class="nav-item"><%= link_to t('log_in'), new_user_session_path, class: "nav-link" %></li>
     <% end %>
   </ul>
 </nav>

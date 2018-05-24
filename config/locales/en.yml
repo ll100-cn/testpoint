@@ -43,5 +43,13 @@ en:
       edit: "Edit"
       show: "Show"
       cancel: "Cancel"
+#--------- navbar---------
+  test_point: "Testpoint"
+  cases: "Cases"
+  plans: "Plans"
+  issues: "Issues"
+  users: "Users"
   language_switch: "English"
+  log_in: "Log in"
+  sign_out: "sign out"
 

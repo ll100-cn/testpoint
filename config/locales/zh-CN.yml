@@ -14,7 +14,18 @@ zh-CN:
       cancel: "取消"
   activerecord:
       attributes:
-        testcase:
+        plan:
           title: "标题"
+          start_at: "开始时间"
           content: "内容"
+#--------- navbar---------
+  test_point: "Testpoint"
+  cases: "案例"
+  plans: "计划"
+  issues: "问题"
+  users: "用户"
   language_switch: "中文版"
+  log_in: "登录"
+  sign_out: "退出"
+
+
