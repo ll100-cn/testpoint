@@ -8,7 +8,7 @@ module PlansHelper
 
     content_tag :span, class: class_name do
       safe_join([
-        t(text, :scope => "task.state" ).capitalize,
+        t(text, scope: "task.state".to_sym).capitalize,
         content_tag(:span, "", class: icons[text_sym])
       ], ' ')
     end
