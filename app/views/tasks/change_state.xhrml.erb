@@ -10,25 +10,25 @@
       <div class="alert alert-info">
         <%= @task.test_case.content %>
       </div>
-      <p>Current state: <%= @task.state.text %></p>
+      <p><%=h Task, :state %>: <%= @task.state.text %></p>
     </div>
   </div>
 </div>
 <div class="modal-footer">
   <div id="relate-issue" class="btn-group mr-auto">
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-      Issues
+      <%=h Issue %>
     </button>
     <div class="dropdown-menu">
       <% if @task.issue_id.nil? %>
         <%= new_button Issue, [:new, @task, :issue], class: "dropdown-item" %>
       <% end %>
       <% relate_data = { remote: true, target: "#relate-issue", type: :xhrml } %>
-      <% link_text = @task.issue_id? ? "Issue: #{@task.issue_id}" : "Relate" %>
+      <% link_text = @task.issue_id? ? t('views.label.issue_id', id: @task.issue_id) : t('views.action.relate') %>
       <%= link_to link_text, [:relate, @plan, @task], data: relate_data, class: "dropdown-item" %>
     </div>
   </div>
   <% data = { remote: true, target: "#uploadAttachmentsModal", type: :xhrml } %>
-  <%= link_to "Pass", [@plan, @task, task: { state: :pass }], method: :patch, class: "btn btn-success" %>
-  <%= link_to "Failure", upload_attachment_plan_task_path(@plan, @task), data: data, class: "btn btn-danger" %>
+  <%= link_to t('task.state.pass'), [@plan, @task, task: { state: :pass }], method: :patch, class: "btn btn-success" %>
+  <%= link_to t('task.state.failure'), upload_attachment_plan_task_path(@plan, @task), data: data, class: "btn btn-danger" %>
 </div>

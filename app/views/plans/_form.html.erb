@@ -1,13 +1,13 @@
 <%= bootstrap_horizontal_form_for plan do |f| %>
   <%= f.input :title %>
 
-  <%= f.input :start_at, as: :datetime_pickr, label: "Start at" %>
+  <%= f.input :start_at, as: :datetime_pickr, label: h(Plan, :start_at) %>
 
   <% if plan.new_record? %>
-    <%= f.input :platform_ids, collection: Platform.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
+    <%= f.input :platform_ids, label: t('views.label.platforms'), collection: Platform.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
 
     <% @components_mapping = Component.available.group_by(&:parent_id) %>
-    <%= f.input :component_ids do %>
+    <%= f.input :component_ids, label: t('views.label.components') do %>
       <ul class="list-unstyled pt-1">
         <%= render "component_check_boxes", key: nil %>
       </ul>

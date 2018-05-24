@@ -43,18 +43,27 @@ en:
       edit: "Edit"
       show: "Show"
       cancel: "Cancel"
-
-#--------- navbar---------
-  test_point: "Testpoint"
-  cases: "Cases"
-  plans: "Plans"
-  issues: "Issues"
-  users: "Users"
-  language_switch: "English"
-  log_in: "Log in"
-  sign_out: "sign out"
-
-#--------- devise ---------
-  email: "email"
-  password: "password"
-  remember_me: "remember_me"
+      close: "Close"
+      destroy: "Destroy"
+      save: "Save"
+      relate: "Relate"
+    navbar:
+      test_point: "Testpoint"
+      cases: "Cases"
+      plans: "Plans"
+      issues: "Issues"
+      users: "Users"
+      language_switch: "English"
+    devise:
+      login: "Log in"
+      signout: "sign out"
+    component:
+      parent: "Parent"
+    label:
+      platforms: "Platform ids"
+      components: "Component ids"
+      all: "All"
+      issue_id: "Issue: %{id}"
+      no_message: "no message"
+    upload:
+      attachment: "upload attachment"

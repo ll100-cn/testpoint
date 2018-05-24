@@ -15,10 +15,10 @@
 </ul>
 
 <% content_for :sidebar do %>
-  <h5>Platform</h5>
+  <h5><%=h Platform %></h5>
   <%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
     <ul class="list-unstyled">
-      <% ([["All", nil]] + Platform.all.available.map { |p| [p.name, p.id] }).each do |key, value| %>
+      <% ([[t('views.label.all'), nil]] + Platform.all.available.map { |p| [p.name, p.id] }).each do |key, value| %>
         <li class="hidden-actions">
           <% if value %>
             <span class="float-right actions">
@@ -34,7 +34,7 @@
         </li>
       <% end %>
       <li>
-        <span class="fa fa-fw"></span><%= link_to "New Platform", [ :new, :platform, ok_url: request.fullpath ], class: "text-muted" %>
+        <span class="fa fa-fw"></span><%= link_to t('views.page.new', model_name: h(Platform)), [ :new, :platform, ok_url: request.fullpath ], class: "text-muted" %>
       </li>
     </ul>
   <% end %>

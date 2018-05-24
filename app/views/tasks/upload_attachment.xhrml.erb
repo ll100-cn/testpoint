@@ -31,12 +31,12 @@
           </div>
         <% end %>
         <div id="uploadAttachmentArea" class="border border-white text-center bg-light py-2">
-          upload attachment
+          <%=t('views.upload.attachment')%>
         </div>
         <hr>
         <div class="text-right mb-2">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <%= f.submit "Save", class: "btn btn-primary" %>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><%=t('views.action.cancel') %></button>
+          <%= f.submit t('views.action.save'), class: "btn btn-primary" %>
         </div>
       <% end %>
     </div>
