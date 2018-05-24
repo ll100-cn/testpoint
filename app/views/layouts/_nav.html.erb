@@ -18,7 +18,24 @@
       </ul>
     <% end %>
   </div>
-  <ul class="navbar-nav flex-row ml-md-auto">
+
+    <ul class="navbar-nav flex-row ml-md-auto">
+      <!--switch language-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= t('language_switch') %>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-item dropdown-menu-right">
+            <% if I18n.locale.to_s == 'en' %>
+              <%= link_to "中文版", :controller => controller_name, :action => action_name, :locale => "zh-CN" %>
+            <% elsif I18n.locale.to_s == 'zh-CN' %>
+              <%= link_to "English", :controller => controller_name, :action => action_name, :locale => "en" %>
+            <% end %>
+          </div>
+        </div>
+      </li>
+
     <% if user_signed_in? %>
     <li class="nav-item dropdown">
       <%= link_to current_user.email, "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } %>
@@ -26,6 +43,8 @@
         <%= link_to "sign out", destroy_user_session_path, class: "dropdown-item", method: :delete %>
       </div>
     </li>
+    <% else %>
+      <li class="nav-item"><%= link_to "Log in", new_user_session_path %></li>
     <% end %>
   </ul>
 </nav>
