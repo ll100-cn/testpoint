@@ -23,7 +23,7 @@
         <td><%= issue.content %></td>
         <td>
           <span class="<%= issue_state_class_name(issue.state, :badge) %>">
-          <%= issue.state.text %>
+          <%= t(issue.state.text.downcase, :scope => "issue.state") %>
           </span>
         </td>
       </tr>
