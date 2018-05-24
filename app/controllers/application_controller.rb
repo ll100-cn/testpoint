@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   respond_to :html
 
   before_action :adjust_format_for_xhr_html
-  # before_action :set_raven_context
+  before_action :set_raven_context
   before_action :set_locale
 
 protected

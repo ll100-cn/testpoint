@@ -12,12 +12,6 @@ zh-CN:
       edit: "修改"
       show: "查看"
       cancel: "取消"
-  activerecord:
-      attributes:
-        plan:
-          title: "标题"
-          start_at: "开始时间"
-          content: "内容"
 #--------- navbar---------
   test_point: "Testpoint"
   cases: "案例"
@@ -28,4 +22,43 @@ zh-CN:
   log_in: "登录"
   sign_out: "退出"
 
+#--------- devise ---------
+  email: "邮箱"
+  password: "密码"
+  remember_me: "记住我"
 
+#--------- model ---------
+  activerecord:
+      attributes:
+        plan:
+          title: "标题"
+          start_at: "开始时间"
+          archived: "是否存档"
+        attachment:
+          file: "文件"
+        component:
+          name: "组件名称"
+          ancestry: "父组件"
+          archived: "是否存档"
+        issue:
+          title: "标题"
+          content: "内容"
+          state: "状态"
+        platform:
+          name: "名称"
+          archived: "是否存档"
+        task_attachment:
+          content: "内容"
+        task:
+          state: "状态"
+          message: "信息"
+        test_case:
+          title: "标题"
+          content: "内容"
+          archived: "是否存档"
+        user:
+          email: "邮箱"
+
+#--------- others in pages ---------
+  no_message: "没有信息"
+  cancel: "取消"

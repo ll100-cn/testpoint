@@ -43,6 +43,7 @@ en:
       edit: "Edit"
       show: "Show"
       cancel: "Cancel"
+
 #--------- navbar---------
   test_point: "Testpoint"
   cases: "Cases"
@@ -53,3 +54,7 @@ en:
   log_in: "Log in"
   sign_out: "sign out"
 
+#--------- devise ---------
+  email: "email"
+  password: "password"
+  remember_me: "remember_me"

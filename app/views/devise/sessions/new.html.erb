@@ -2,19 +2,19 @@
   <div class="col-sm-10 col-md-7 col-lg-6">
     <div class="card">
       <div class="card-header h4">
-        Log in
+        <%=t('log_in') %>
       </div>
       <div class="card-body">
         <%= bootstrap_vertical_form_for resource, url: session_path(resource_name) do |f| %>
-          <%= f.input :email %>
-          <%= f.input :password %>
+          <%= f.input :email, label: t('email') %>
+          <%= f.input :password, label: t('password') %>
 
           <% if devise_mapping.rememberable? -%>
-            <%= f.input :remember_me, as: :boolean %>
+            <%= f.input :remember_me, label: t('remember_me'), as: :boolean %>
           <% end -%>
 
           <div class="actions">
-            <%= f.submit "Log in", class: "btn btn-primary" %>
+            <%= f.submit t('log_in'), class: "btn btn-primary" %>
           </div>
         <% end %>
 
