@@ -18,7 +18,7 @@ zh-CN:
       relate: 关联
       login: 登录
       logout: 退出
-      upload_attachment: 上传附件
+      upload_attachment: 上传
     navbar:
       cases: 案例
       plans: 计划

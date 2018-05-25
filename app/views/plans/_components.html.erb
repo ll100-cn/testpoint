@@ -6,7 +6,7 @@
         <% test_cases = component.subtree.flat_map(&:test_cases) %>
         <% tasks = @tasks_mapping.values_at(*test_cases).compact.flatten.group_by(&:state) %>
         <% Task.state.options.each do |key, value| %>
-          <small class="text-<%= task_state_style(value) %> ml-1">
+          <small class="<%= task_state_class_name(value) %> ml-1">
             <%= "#{key}: #{tasks.fetch(value, []).length}" %>
           </small>
         <% end %>

@@ -24,7 +24,7 @@
         <%= new_button Issue, [:new, @task, :issue], class: "dropdown-item" %>
       <% end %>
       <% relate_data = { remote: true, target: "#relate-issue", type: :xhrml } %>
-      <% link_text = @task.issue_id? ? "#{h(Task, :issue_id)}: #{@task.issue_id}" : action_label 'relate' %>
+      <% link_text = @task.issue_id? ? "#{h(Task, :issue_id)}: #{@task.issue_id}" : action_label('relate') %>
       <%= link_to link_text, [:relate, @plan, @task], data: relate_data, class: "dropdown-item" %>
     </div>
   </div>

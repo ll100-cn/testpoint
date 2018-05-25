@@ -48,7 +48,7 @@ en:
       save: Save
       relate: Relate
       login: Log in
-      logout: Sign out
+      logout: Log out
       upload_attachment: Upload attachment
     navbar:
       cases: Cases

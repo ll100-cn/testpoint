@@ -27,12 +27,12 @@ module PageHelper
     cancel_link(default_url, { class: "btn btn-secondary" }.merge(options))
   end
 
-  def task_state_style(state)
+  def task_state_class_name(state)
     case state
     when "pass"
-      "success"
+      "text-success"
     when "failure"
-      "danger"
+      "text-danger"
     end
   end
 
