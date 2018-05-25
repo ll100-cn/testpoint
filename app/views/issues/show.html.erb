@@ -44,3 +44,25 @@
     <%= cancel_button Issue %>
   </div>
 </div>
+
+<!-- comments -->
+<hr>
+
+<div class="row">
+  <div class="col-sm-2 text-right">
+    <h5><%= h Comment %></h5>
+  </div>
+  <div class="col-sm-8">
+    <%= render :partial => "comments/form", :locals => {:issue => @issue } %>
+    <hr>
+    <% if @comments.present? %>
+      <div id="comments_list">
+        <% @comments.each do |comment| %>
+            <%= render :partial => "comments/comments", :locals => { :comment => comment }%>
+        <% end %>
+      </div>
+    <% end %>
+    <hr>
+  </div>
+</div>
+

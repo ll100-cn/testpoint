@@ -18,6 +18,7 @@ class IssuesController < ApplicationController
   end
 
   def show
+    @comments = @issue.comments.all
   end
 
   def update
