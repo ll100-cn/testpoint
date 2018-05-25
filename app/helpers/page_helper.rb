@@ -4,22 +4,22 @@ module PageHelper
   end
 
   def new_button(model, url, options = {})
-    label = t("views.action.new", model_name: h(model))
+    label = action_label(:new, model_name: h(model))
     link_to label, url, { class: "btn btn-primary" }.merge(options)
   end
 
   def edit_link(url, options = {})
-    label = t("views.action.edit")
+    label = action_label(:edit)
     link_to label, url, options
   end
 
   def destroy_link(url, options = {})
-    label = t("views.action.destroy")
+    label = action_label(:destroy)
     link_to label, url, { method: :delete, data: { confirm: "Are you sure?" } }.merge(options)
   end
 
   def cancel_link(default_url, options = {})
-    label = t("views.action.cancel")
+    label = action_label(:cancel)
     link_to label, ok_url_or_default(default_url), options
   end
 
@@ -39,9 +39,5 @@ module PageHelper
   def issue_state_class_name(state, type = "")
     mappings = { "open" => "info", "closed" => "primary", "solved" => "success" }
     type.present? ? "#{type} #{type}-#{mappings[state]}" : mappings[type]
-  end
-
-  def action_label(action)
-    t("views.action.#{action}")
   end
 end

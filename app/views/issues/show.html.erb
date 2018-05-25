@@ -14,7 +14,7 @@
     </div>
 
     <div class="col-sm-8">
-      <p class="p-4 bg-light"><%= task.message || t('views.lable.no_message') %></p>
+      <p class="p-4 bg-light"><%= task.message || page_i18n(:no_message) %></p>
       <div>
         <% task.task_attachments.each do |task_attachment| %>
           <div class="mb-3">
