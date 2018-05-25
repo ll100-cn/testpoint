@@ -1,8 +1,7 @@
 <div class="page-header">
   <p>
     <span class="h2"><%= @issue.title %></span>
-    <!--<span class="<%= issue_state_class_name(@issue.state, :badge) %>"><%= @issue.state.text %></span>-->
-    <span class="<%= issue_state_class_name(@issue.state, :badge) %>"><%=t(@issue.state, :scope => "issue.state") %></span>
+    <span class="<%= issue_state_class_name(@issue.state, :badge) %>"><%=t(@issue.state, scope: "issue.state".to_sym) %></span>
   </p>
 </div>
 
