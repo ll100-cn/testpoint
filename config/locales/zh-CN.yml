@@ -83,7 +83,7 @@ zh-CN:
 #--------- attribute value ---------
   issue:
     state:
-      open: "开放中"
+      open: "待处理"
       closed: "已关闭"
       solved: "已解决"
   task:

@@ -1,7 +1,7 @@
 <div class="page-header">
   <p>
     <span class="h2"><%= @issue.title %></span>
-    <span class="<%= issue_state_class_name(@issue.state, :badge) %>"><%=t(@issue.state, scope: "issue.state".to_sym) %></span>
+    <span class="<%= issue_state_class_name(@issue.state, :badge) %>"><%= @issue.state.text %></span>
   </p>
 </div>
 
@@ -39,7 +39,7 @@
 <div class="row">
   <div class="col-sm-10 ml-auto">
     <% Issue.state.options.each do |(text, value)| %>
-      <%= link_to t(text.downcase, :scope => "issue.state"), [@issue, issue: { state: value.to_sym }], method: :patch, class: issue_state_class_name(value, :btn) %>
+      <%= link_to text, [@issue, issue: { state: value.to_sym }], method: :patch, class: issue_state_class_name(value, :btn) %>
     <% end %>
     <%= link_to t('views.action.cancel'), url_for(Issue), class: "btn btn-secondary" %>
   </div>
