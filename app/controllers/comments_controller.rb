@@ -3,7 +3,6 @@ class CommentsController < ApplicationController
   before_action :set_issue, only: [:new, :create]
 
   def new
-    @comment = Comment.new
   end
 
   def create
@@ -22,6 +21,7 @@ protected
   end
 
   def set_issue
+    @issue = Issue.find(params[:issue_id])
     @comment.issue = @issue
   end
 end
