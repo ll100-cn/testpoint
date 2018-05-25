@@ -40,4 +40,8 @@ module PageHelper
     mappings = { "open" => "info", "closed" => "primary", "solved" => "success" }
     type.present? ? "#{type} #{type}-#{mappings[state]}" : mappings[type]
   end
+
+  def action_label(action)
+    t("views.action.#{action}")
+  end
 end

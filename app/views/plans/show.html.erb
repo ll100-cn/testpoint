@@ -26,7 +26,7 @@
 </ul>
 
 <% content_for :sidebar do %>
-  <h5><%=t('activerecord.attributes.task.state') %></h5>
+  <h5><%=h Task, :state %></h5>
   <%= fume_nav params.dig(:q, :state_eq), active_class: "text-dark" do |n| %>
     <ul class="list-unstyled">
       <% ([[t('views.label.all'), nil]] + Task.state.options).each do |key, value| %>

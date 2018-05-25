@@ -49,6 +49,7 @@ en:
       relate: "Relate"
       login: "Log in"
       logout: "Log out"
+      upload_attachment: "Upload attachment"
     navbar:
       cases: "Cases"
       plans: "Plans"

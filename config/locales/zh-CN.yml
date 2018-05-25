@@ -18,6 +18,7 @@ zh-CN:
       relate: "关联"
       login: "登录"
       logout: "退出"
+      upload_attachment: "上传附件"
     navbar:
       cases: "案例"
       plans: "计划"
@@ -26,5 +27,3 @@ zh-CN:
     label:
       all: "全部"
       no_message: "没有信息"
-    upload:
-      attachment: "上传附件"

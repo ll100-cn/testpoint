@@ -1,7 +1,7 @@
 <%= bootstrap_horizontal_form_for plan do |f| %>
   <%= f.input :title %>
 
-  <%= f.input :start_at, as: :datetime_pickr, label: h(Plan, :start_at) %>
+  <%= f.input :start_at, as: :datetime_pickr %>
 
   <% if plan.new_record? %>
     <%= f.input :platform_ids, collection: Platform.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
