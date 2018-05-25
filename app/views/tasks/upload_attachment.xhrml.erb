@@ -31,11 +31,11 @@
           </div>
         <% end %>
         <div id="uploadAttachmentArea" class="border border-white text-center bg-light py-2">
-          <%=action_label('upload_attachment')%>
+          <%=action_label 'upload_attachment' %>
         </div>
         <hr>
         <div class="text-right mb-2">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal"><%=action_label('cancel') %></button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><%=action_label 'cancel' %></button>
           <%= f.submit action_label('save'), class: "btn btn-primary" %>
         </div>
       <% end %>
