@@ -1,7 +1,7 @@
 <%= bootstrap_horizontal_form_for component do |f| %>
   <%= f.input :name %>
   <% without_ids = f.object.new_record? ? nil : f.object.subtree %>
-  <%= f.input :parent_id, label: t('views.component.parent'), collection: Component.available.where.not(id: without_ids).ranked %>
+  <%= f.input :parent_id, collection: Component.available.where.not(id: without_ids).ranked %>
 
   <hr>
 

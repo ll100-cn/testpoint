@@ -22,13 +22,13 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails', '2.4.0'
 gem 'rubocop', require: false
 gem 'sentry-raven', '2.7.3'
-gem 'devise-i18n', '1.6.2'
 
 # Controllers
 gem 'responders', '~> 2.4'
 
 # Models
 gem 'devise', '~> 4.3'
+gem 'devise-i18n', '1.6.2'
 gem 'cancancan', '~> 2.0'
 gem "carrierwave", '1.2.2'
 gem 'enumerize', '2.2.2'
