@@ -25,6 +25,7 @@ zh-CN:
         archived: 是否存档
         parent_id: 父组件
       issue:
+        id: "问题: %{issue_id}"
         title: 标题
         content: 内容
         state: 状态
@@ -40,6 +41,8 @@ zh-CN:
         title: 标题
         content: 内容
         archived: 是否存档
+        platform_ids: 平台
+        component_id: 组件
       user:
         email: 邮箱
         password: 密码

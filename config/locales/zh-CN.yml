@@ -11,27 +11,20 @@ zh-CN:
       new: "新增 %{model_name}"
       edit: "修改"
       show: "查看"
-      cancel: "取消"
       close: "关闭"
+      cancel: "取消"
       destroy: "删除"
       save: "保存"
       relate: "关联"
+      login: "登录"
+      logout: "退出"
     navbar:
-      test_point: "Testpoint"
       cases: "案例"
       plans: "计划"
       issues: "问题"
       users: "用户"
-    devise:
-      login: "登录"
-      signout: "退出"
-    component:
-      parent: "父组件"
     label:
-      platforms: "平台"
-      components: "组件"
       all: "全部"
-      issue_id: "问题: %{id}"
       no_message: "没有信息"
     upload:
       attachment: "上传附件"

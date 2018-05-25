@@ -42,35 +42,20 @@ en:
       new: "New %{model_name}"
       edit: "Edit"
       show: "Show"
-      cancel: "Cancel"
       close: "Close"
+      cancel: "Cancel"
       destroy: "Destroy"
       save: "Save"
       relate: "Relate"
+      login: "Log in"
+      logout: "Log out"
     navbar:
-      test_point: "Testpoint"
       cases: "Cases"
       plans: "Plans"
       issues: "Issues"
       users: "Users"
-      language_switch: "English"
-    devise:
-      login: "Log in"
-      signout: "sign out"
-    component:
-      parent: "Parent"
     label:
-      platforms: "Platform ids"
-      components: "Component ids"
       all: "All"
-      issue_id: "Issue: %{id}"
       no_message: "no message"
     upload:
       attachment: "upload attachment"
-
-#--------- attribute value ---------
-  task:
-    state:
-      pending: "pending"
-      pass: "pass"
-      failure: "failure"

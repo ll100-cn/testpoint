@@ -1,4 +1,4 @@
 <%= f.input :title %>
 <%= f.input :content, input_html: { rows: 5 } %>
-<%= f.input :component_id, label: t('views.label.components'), collection: Component.available %>
-<%= f.input :platform_ids, label: t('views.label.platforms'), collection: Platform.available, as: :check_boxes %>
+<%= f.input :component_id, collection: Component.available %>
+<%= f.input :platform_ids, collection: Platform.available, as: :check_boxes %>

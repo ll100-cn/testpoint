@@ -23,6 +23,10 @@ module PageHelper
     link_to label, ok_url_or_default(default_url), options
   end
 
+  def cancel_button(default_url, options = {})
+    cancel_link(default_url, { class: "btn btn-secondary" }.merge(options))
+  end
+
   def task_state_class_name(state)
     case state
     when "pass"

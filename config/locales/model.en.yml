@@ -1,0 +1,5 @@
+en:
+  activerecord:
+    attributes:
+      issue:
+        id: "Issue: %{issue_id}"

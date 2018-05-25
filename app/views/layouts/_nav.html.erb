@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-dark sticky-top tp-navbar">
-  <%= link_to t('views.navbar.test_point'), root_path, class: "navbar-brand" %>
+  <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
   <div class="navbar-nav-scroll">
     <%= fume_nav current do |n| %>
       <ul class="navbar-nav flex-row">
@@ -19,16 +19,16 @@
     <% end %>
   </div>
 
-    <ul class="navbar-nav flex-row ml-md-auto">
+  <ul class="navbar-nav flex-row ml-md-auto">
     <% if user_signed_in? %>
-    <li class="nav-item dropdown">
-      <%= link_to current_user.email, "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } %>
-      <div class="dropdown-menu dropdown-menu-right">
-        <%= link_to t('views.devise.signout'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
-      </div>
-    </li>
+      <li class="nav-item dropdown">
+         <%= link_to current_user.email, "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } %>
+        <div class="dropdown-menu dropdown-menu-right">
+          <%= link_to t('views.action.logout'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
+        </div>
+      </li>
     <% else %>
-      <li class="nav-item"><%= link_to t('views.devise.login'), new_user_session_path, class: "nav-link" %></li>
+      <li class="nav-item"><%= link_to t('views.action.login'), new_user_session_path, class: "nav-link" %></li>
     <% end %>
   </ul>
 </nav>
