@@ -16,6 +16,7 @@ class Issue < ApplicationRecord
   enumerize :state, in: [:open, :closed, :solved], default: :open
 
   has_many :tasks, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
   def default_title
     tasks.map do |task|

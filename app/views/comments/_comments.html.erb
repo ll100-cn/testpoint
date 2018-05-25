@@ -1,0 +1,19 @@
+<div id="comment-<%= comment.id %>" class="reviews" style="text-align: left;">
+  <div class="row">
+    <div class="col-md-9 review-user-info">
+      <%= comment.user.email %>
+    </div>
+    <div class="col-md-3">
+      <%= comment.created_at %>
+    </div>
+  </div>
+  <div class="review-comment">
+    <%= comment.content %>
+  </div>
+
+  <% if current_user == comment.user %>
+      <div class="pull-right">
+        <%= destroy_link [comment, ok_url: request.fullpath], class: "small", :remote => true %>
+      </div>
+  <% end %>
+</div>
