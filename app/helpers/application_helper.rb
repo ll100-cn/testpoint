@@ -7,4 +7,8 @@ module ApplicationHelper
     end
   end
   alias h human
+
+  def page_i18n(key, options = {})
+    I18n.t("views.page.#{key}", options)
+  end
 end
