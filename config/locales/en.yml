@@ -37,26 +37,24 @@ en:
       edit: "Edit %{model_name}"
       show: "Show %{model_name}"
       destroy: "Destroy %{model_name}"
-      actions: "Actions"
+      actions: Actions
     action:
       new: "New %{model_name}"
-      edit: "Edit"
-      show: "Show"
-      close: "Close"
-      cancel: "Cancel"
-      destroy: "Destroy"
-      save: "Save"
-      relate: "Relate"
-      login: "Log in"
-      logout: "Log out"
-      upload_attachment: "Upload attachment"
+      edit: Edit
+      show: Show
+      close: Close
+      cancel: Cancel
+      destroy: Destroy
+      save: Save
+      relate: Relate
+      login: Log in
+      logout: Sign out
+      upload_attachment: Upload attachment
     navbar:
-      cases: "Cases"
-      plans: "Plans"
-      issues: "Issues"
-      users: "Users"
+      cases: Cases
+      plans: Plans
+      issues: Issues
+      users: Users
     label:
-      all: "All"
-      no_message: "no message"
-    upload:
-      attachment: "upload attachment"
+      all: All
+      no_message: no message

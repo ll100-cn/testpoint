@@ -2,11 +2,11 @@ zh-CN:
   enumerize:
     task:
       state:
-        pending: "等待"
-        pass: "通过"
-        failure: "失败"
+        pending: 等待
+        pass: 通过
+        failure: 失败
     issue:
       state:
-        open: "待处理"
-        closed: "已关闭"
-        solved: "已解决"
+        open: 待处理
+        closed: 已关闭
+        solved: 已解决

@@ -2,6 +2,11 @@ en:
   enumerize:
     task:
       state:
-        pending: "Pending"
-        pass: "Pass"
-        failure: "Failure"
+        pending: Pending
+        pass: Pass
+        failure: Failure
+    issue:
+      state:
+        open: open
+        closed: closed
+        solved: solved
