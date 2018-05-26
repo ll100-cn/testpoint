@@ -1,9 +1,6 @@
 class CommentsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_issue, only: [:new, :create]
-
-  def new
-  end
+  before_action :set_issue, only: [:create]
 
   def create
     @comment.user = current_user
