@@ -2,7 +2,7 @@
     defaults: { label_html: { class: "col-sm-3" }, content_html: { class: "col-sm-9" } },
     data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
   <div class="modal-header">
-    <h5 class="modal-title"><%=page_i18n action, model_name: h(@test_case) %></h5>
+    <h5 class="modal-title"><%= page_i18n action, model_name: h(@test_case) %></h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -12,6 +12,6 @@
   </div>
   <div class="modal-footer">
     <%= f.submit class: "btn btn-primary" %>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_label('close') %></button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_label :close %></button>
   </div>
 <% end %>

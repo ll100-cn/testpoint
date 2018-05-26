@@ -55,7 +55,8 @@ en:
       tasks:
         upload_attachment:
           upload: Upload attachment
-        relate: Relate
+        change_state:
+          relate: Relate
     navbar:
       cases: Cases
       plans: Plans

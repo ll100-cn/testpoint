@@ -24,7 +24,8 @@ zh-CN:
       tasks:
         upload_attachment:
           upload:  上传
-        relate: 关联
+        change_state:
+          relate: 关联
     navbar:
       cases: 案例
       plans: 计划
