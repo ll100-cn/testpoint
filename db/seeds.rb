@@ -7,6 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 User.where(email: "testpoint@gmail.com").first_or_create do |u|
+  u.username = "testpoint"
   u.password = u.password_confirmation = "testpoint"
 end
 

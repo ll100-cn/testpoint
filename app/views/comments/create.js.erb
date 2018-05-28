@@ -1,4 +1,0 @@
-<% if @comment.valid? %>
-$("#comments_list").prepend("<%=j render :partial => "comments", :locals => {:comment => @comment } %>");
-$("#comment_content").val("");
-<% end %>

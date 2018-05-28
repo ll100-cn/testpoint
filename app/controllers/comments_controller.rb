@@ -1,14 +1,13 @@
 class CommentsController < ApplicationController
   load_and_authorize_resource
   before_action :set_issue, only: [:create]
+  layout false
 
   def create
     @comment.user = current_user
-    @comment.save
-  end
-
-  def destroy
-    @comment.destroy
+    respond_to do |format|
+      format.html if @comment.save
+    end
   end
 
 protected

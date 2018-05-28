@@ -16,11 +16,9 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user.username = @user.display_user_name
   end
 
   def edit
-    @user.username = @user.display_user_name
   end
 
   def update

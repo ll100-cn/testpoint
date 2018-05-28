@@ -24,18 +24,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :rememberable, :trackable, :validatable
 
   has_many :comments, dependent: :destroy
+  validates :username, presence: true
 
-  after_validation :generate_username, on: :create
-
-  def display_user_name
-    if self.username.present?
-      self.username
-    else
-      self.email.split('@').first
-    end
-  end
-
-  def generate_username
-    self.username = self.email.split('@').first if self.username.blank?
-  end
 end
