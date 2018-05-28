@@ -11,11 +11,6 @@
   </div>
   <div class="card-body">
     <%= simple_format(comment.content) %>
-    <% if current_user && current_user == comment.user %>
-        <div class="pull-right">
-          <%= link_to action_i18n('delete'), issue_comment_path(@issue, comment), method: :delete,  class: "small", :remote => true %>
-        </div>
-    <% end %>
   </div>
 </div>
 <br />

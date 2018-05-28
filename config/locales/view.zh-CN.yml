@@ -28,12 +28,6 @@ zh-CN:
           relate: 关联
         relate:
           relate: 关联
-      issues:
-        show:
-          delete: 删除
-      comments:
-        create:
-          delete: 删除
     navbar:
       cases: 案例
       plans: 计划
