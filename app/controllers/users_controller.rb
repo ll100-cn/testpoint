@@ -16,9 +16,11 @@ class UsersController < ApplicationController
   end
 
   def show
+    @user.username = @user.display_user_name
   end
 
   def edit
+    @user.username = @user.display_user_name
   end
 
   def update
@@ -34,6 +36,6 @@ class UsersController < ApplicationController
 protected
 
   def user_params
-    params.fetch(:user, {}).permit(:email, :password, :password_confirmation)
+    params.fetch(:user, {}).permit(:username, :email, :password, :password_confirmation)
   end
 end

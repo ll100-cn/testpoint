@@ -25,7 +25,17 @@ class User < ApplicationRecord
 
   has_many :comments, dependent: :destroy
 
+  after_validation :generate_username, on: :create
+
   def display_user_name
-    self.email.split('@').first
+    if self.username.present?
+      self.username
+    else
+      self.email.split('@').first
+    end
+  end
+
+  def generate_username
+    self.username = self.email.split('@').first if self.username.blank?
   end
 end

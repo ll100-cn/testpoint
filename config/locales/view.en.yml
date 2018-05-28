@@ -39,6 +39,7 @@ en:
         show: "Show %{model_name}"
         actions: Actions
         all: All
+        profile: Profile
       issues:
         show:
           no_message: no message
@@ -59,12 +60,6 @@ en:
           relate: Relate
         relate:
           relate: Relate
-      issues:
-        show:
-          delete: delete
-      comment:
-        create:
-          delete: 删除
     navbar:
       cases: Cases
       plans: Plans

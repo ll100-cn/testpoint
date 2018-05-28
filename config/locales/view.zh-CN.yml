@@ -8,6 +8,7 @@ zh-CN:
         show: "查看%{model_name}"
         actions: 操作
         all: 全部
+        profile: 个人中心
       issues:
         show:
           no_message: 没有信息

@@ -1,5 +1,20 @@
 <div class="page-header">
   <h2><%= page_i18n :show, model_name: h(@user) %></h2>
   <br />
-  <p><%=t('activerecord.attributes.user.email')%>: <%= @user.email %></p>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <br />
+    <%= bootstrap_horizontal_form_for @user do |f| %>
+        <%= f.input :email, readonly: true %>
+        <%= f.input :username %>
+        <hr>
+        <%= f.actions_content do %>
+            <%= ok_url_tag %>
+            <%= f.submit class: "btn btn-primary" %>
+            <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
+        <% end %>
+    <% end %>
+  </div>
 </div>
