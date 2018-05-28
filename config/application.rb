@@ -24,5 +24,7 @@ module Testpoint
       g.test_framework :rspec, view_specs: false
     end
     config.filter_parameters << :password
+
+    config.time_zone = "Beijing"
   end
 end
