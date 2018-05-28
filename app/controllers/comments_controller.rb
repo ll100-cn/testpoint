@@ -2,12 +2,12 @@ class CommentsController < ApplicationController
   load_and_authorize_resource
   before_action :set_issue, only: [:create]
   layout false
+  respond_to :html
 
   def create
     @comment.user = current_user
-    respond_to do |format|
-      format.html if @comment.save
-    end
+    @comment.save
+    respond_with @comment
   end
 
 protected
