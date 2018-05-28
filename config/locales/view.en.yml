@@ -57,6 +57,14 @@ en:
           upload: Upload attachment
         change_state:
           relate: Relate
+        relate:
+          relate: Relate
+      issues:
+        show:
+          delete: delete
+      comment:
+        create:
+          delete: 删除
     navbar:
       cases: Cases
       plans: Plans

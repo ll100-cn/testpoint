@@ -10,6 +10,7 @@ zh-CN:
       task: 任务
       test_case: 测试任务
       user: 用户
+      comment: 评论
     attributes:
       plan:
         title: 标题
@@ -47,3 +48,5 @@ zh-CN:
         email: 邮箱
         password: 密码
         password_confirmation: 密码确认
+      comment:
+        content: 评论内容
