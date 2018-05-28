@@ -4,22 +4,22 @@ module PageHelper
   end
 
   def new_button(model, url, options = {})
-    label = action_label(:new, model_name: h(model))
+    label = action_i18n(:new, model_name: h(model))
     link_to label, url, { class: "btn btn-primary" }.merge(options)
   end
 
   def edit_link(url, options = {})
-    label = action_label(:edit)
+    label = action_i18n(:edit)
     link_to label, url, options
   end
 
   def destroy_link(url, options = {})
-    label = action_label(:destroy)
+    label = action_i18n(:destroy)
     link_to label, url, { method: :delete, data: { confirm: "Are you sure?" } }.merge(options)
   end
 
   def cancel_link(default_url, options = {})
-    label = action_label(:cancel)
+    label = action_i18n(:cancel)
     link_to label, ok_url_or_default(default_url), options
   end
 

@@ -2,7 +2,7 @@
   <div class="col-sm-10 col-md-7 col-lg-6">
     <div class="card">
       <div class="card-header h4">
-        <%= action_label :login %>
+        <%= action_i18n :login %>
       </div>
       <div class="card-body">
         <%= bootstrap_vertical_form_for resource, url: session_path(resource_name) do |f| %>
@@ -14,7 +14,7 @@
           <% end %>
 
           <div class="actions">
-            <%= f.submit action_label('login'), class: "btn btn-primary" %>
+            <%= f.submit action_i18n('login'), class: "btn btn-primary" %>
           </div>
         <% end %>
 

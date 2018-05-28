@@ -12,7 +12,7 @@ module ApplicationHelper
     i18n_lookup(key, :"views.page", options)
   end
 
-  def action_label(key, options = {})
+  def action_i18n(key, options = {})
     i18n_lookup(key, :"views.action", options)
   end
 
