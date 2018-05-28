@@ -1,6 +1,6 @@
 <div class="page-header">
   <%= destroy_link [ @component ], class: "btn btn-outline-danger btn-sm float-right" %>
-  <h2><%=t "views.page.edit", model_name: h(@component) %></h2>
+  <h2><%= page_i18n :edit, model_name: h(@component) %></h2>
 </div>
 
 <%= render "form", component: @component %>

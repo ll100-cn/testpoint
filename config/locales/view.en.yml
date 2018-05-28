@@ -32,14 +32,33 @@
 en:
   views:
     page:
-      index: "%{model_name} List"
-      new: "New %{model_name}"
-      edit: "Edit %{model_name}"
-      show: "Show %{model_name}"
-      destroy: "Destroy %{model_name}"
-      actions: "Actions"
+      defaults:
+        index: "%{model_name} List"
+        new: "New %{model_name}"
+        edit: "Edit %{model_name}"
+        show: "Show %{model_name}"
+        actions: Actions
+        all: All
+      issues:
+        show:
+          no_message: no message
     action:
-      new: "New %{model_name}"
-      edit: "Edit"
-      show: "Show"
-      cancel: "Cancel"
+      defaults:
+        new: "New %{model_name}"
+        edit: Edit
+        show: Show
+        close: Close
+        cancel: Cancel
+        destroy: Destroy
+        login: Log in
+        logout: Log out
+      tasks:
+        upload_attachment:
+          upload: Upload attachment
+        change_state:
+          relate: Relate
+    navbar:
+      cases: Cases
+      plans: Plans
+      issues: Issues
+      users: Users

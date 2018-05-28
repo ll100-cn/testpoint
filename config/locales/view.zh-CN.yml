@@ -1,0 +1,33 @@
+zh-CN:
+  views:
+    page:
+      defaults:
+        index: "%{model_name}列表"
+        new: "新增%{model_name}"
+        edit: "修改%{model_name}"
+        show: "查看%{model_name}"
+        actions: 操作
+        all: 全部
+      issues:
+        show:
+          no_message: 没有信息
+    action:
+      defaults:
+        new: "新增%{model_name}"
+        edit: 修改
+        show: 查看
+        close: 关闭
+        cancel: 取消
+        destroy: 删除
+        login: 登录
+        logout: 退出
+      tasks:
+        upload_attachment:
+          upload:  上传
+        change_state:
+          relate: 关联
+    navbar:
+      cases: 案例
+      plans: 计划
+      issues: 问题
+      users: 用户

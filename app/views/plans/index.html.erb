@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h2><%=t "views.page.index", model_name: h(@plans) %></h2>
+  <h2><%= page_i18n :index, model_name: h(@plans) %></h2>
 </div>
 
 <table class="table">
@@ -12,7 +12,7 @@
     <tr>
       <th><%=h ::TestCase, :title %></th>
       <th>进度</th>
-      <th><%=t "views.page.actions" %></th>
+      <th><%= page_i18n :actions %></th>
     </tr>
   </thead>
   <tbody>

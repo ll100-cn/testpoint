@@ -31,12 +31,12 @@
           </div>
         <% end %>
         <div id="uploadAttachmentArea" class="border border-white text-center bg-light py-2">
-          upload attachment
+          <%= action_i18n :upload %>
         </div>
         <hr>
         <div class="text-right mb-2">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <%= f.submit "Save", class: "btn btn-primary" %>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :cancel %></button>
+          <%= f.submit class: "btn btn-primary" %>
         </div>
       <% end %>
     </div>

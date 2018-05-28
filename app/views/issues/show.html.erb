@@ -14,7 +14,7 @@
     </div>
 
     <div class="col-sm-8">
-      <p class="p-4 bg-light"><%= task.message || "no message" %></p>
+      <p class="p-4 bg-light"><%= task.message || page_i18n(:no_message) %></p>
       <div>
         <% task.task_attachments.each do |task_attachment| %>
           <div class="mb-3">
@@ -41,6 +41,6 @@
     <% Issue.state.options.each do |(text, value)| %>
       <%= link_to text, [@issue, issue: { state: value.to_sym }], method: :patch, class: issue_state_class_name(value, :btn) %>
     <% end %>
-    <%= link_to "Cancel", url_for(Issue), class: "btn btn-secondary" %>
+    <%= cancel_button Issue %>
   </div>
 </div>

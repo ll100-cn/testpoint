@@ -1,6 +1,6 @@
 module PlansHelper
-  def task_state_with_icon(text)
-    text_sym = text.to_sym
+  def task_state_with_icon(state)
+    text_sym = state.to_sym
     icons = { pending: "fa fa-circle-o", pass: "fa fa-check", failure: "fa fa-times" }
     class_names = { pending: "text-muted", pass: "text-success", failure: "text-danger" }
 
@@ -8,8 +8,8 @@ module PlansHelper
 
     content_tag :span, class: class_name do
       safe_join([
-        text.capitalize,
-        content_tag(:span, class: icons[text_sym])
+        state.text,
+        content_tag(:span, "", class: icons[text_sym])
       ], ' ')
     end
   end

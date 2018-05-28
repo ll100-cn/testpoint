@@ -7,7 +7,7 @@
 
 <div class="page-header">
   <h3><%= @plan.title %></h3>
-  <p>Start_at: <%= @plan.start_at %></p>
+  <p><%=h Plan, :start_at %>: <%= @plan.start_at %></p>
 
 </div>
 <ul class="list-unstyled">
@@ -26,10 +26,10 @@
 </ul>
 
 <% content_for :sidebar do %>
-  <h5>State</h5>
+  <h5><%=h Task, :state %></h5>
   <%= fume_nav params.dig(:q, :state_eq), active_class: "text-dark" do |n| %>
     <ul class="list-unstyled">
-      <% ([["All", nil]] + Task.state.options).each do |key, value| %>
+      <% ([[page_i18n(:all), nil]] + Task.state.options).each do |key, value| %>
         <li>
           <%= n.apply_content value do |active_class| %>
             <%= link_to [@plan, q: { state_eq: value }], class: active_class do %>

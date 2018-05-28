@@ -7,4 +7,20 @@ module ApplicationHelper
     end
   end
   alias h human
+
+  def page_i18n(key, options = {})
+    i18n_lookup(key, :"views.page", options)
+  end
+
+  def action_i18n(key, options = {})
+    i18n_lookup(key, :"views.action", options)
+  end
+
+  def i18n_lookup(key, namespace, options = {})
+    lookups = []
+    lookups << :"#{params[:controller]}.#{params[:action]}.#{key}"
+    lookups << :"#{params[:controller]}.defaults.#{key}"
+    lookups << :"defaults.#{key}"
+    I18n.t(lookups.shift, { scope: namespace, default: lookups }.merge(options))
+  end
 end
