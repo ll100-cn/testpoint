@@ -2,9 +2,7 @@
   <div class="card-header">
     <div class="row">
       <div class="col-md-9">
-        <% if comment.user.username.present? %>
-          <%= comment.user.username %>
-        <% end %>
+        <%= comment.user.username %>
       </div>
       <div class="col-md-3">
         <%= comment.created_at.strftime("%F %T") %>

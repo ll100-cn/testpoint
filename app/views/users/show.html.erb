@@ -1,11 +1,9 @@
 <div class="page-header">
   <h2><%= page_i18n :show, model_name: h(@user) %></h2>
-  <br />
 </div>
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    <br />
     <%= bootstrap_horizontal_form_for @user do |f| %>
         <%= f.input :email, readonly: true %>
         <%= f.input :username %>
