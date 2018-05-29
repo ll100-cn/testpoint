@@ -18,7 +18,6 @@ class IssuesController < ApplicationController
   end
 
   def show
-    @comments = @issue.comments.recent
   end
 
   def update

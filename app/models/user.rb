@@ -22,7 +22,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # :registerable, :recoverable
   devise :database_authenticatable, :rememberable, :trackable, :validatable
-
   has_many :comments, dependent: :destroy
+
   validates :username, presence: true
 end

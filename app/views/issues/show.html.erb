@@ -52,15 +52,14 @@
     <h5><%= h Comment %></h5>
   </div>
   <div class="col-sm-8">
-    <%= render :partial => "comments/form", :locals => {:issue => @issue } %>
+    <%= render "comments/form", issue: @issue %>
     <hr>
     <div id="comments_list">
-      <% if @comments.present? %>
-        <% @comments.each do |comment| %>
-            <%= render :partial => "comments/comments", :locals => { :comment => comment }%>
+      <% if @issue.comments.present? %>
+        <% @issue.comments.recent.each do |comment| %>
+            <%= render "comments/comments", comment: comment %>
         <% end %>
       <% end %>
     </div>
   </div>
 </div>
-

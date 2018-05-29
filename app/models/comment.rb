@@ -1,7 +1,8 @@
 class Comment < ApplicationRecord
-  validates :content, presence: true
   belongs_to :user
   belongs_to :issue
+
+  validates :content, presence: true
 
   scope :recent, -> { order("created_at DESC") }
 end
