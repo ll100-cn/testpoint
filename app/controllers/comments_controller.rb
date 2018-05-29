@@ -6,7 +6,6 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @comment.issue = @issue
     @comment.user = current_user
     @comment.save
     redirect_to issue_path(@issue)
