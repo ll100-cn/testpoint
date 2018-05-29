@@ -54,12 +54,10 @@ en:
         login: Log in
         logout: Log out
       tasks:
+        defaults:
+          relate: Relate
         upload_attachment:
           upload: Upload attachment
-        change_state:
-          relate: Relate
-        relate:
-          relate: Relate
     navbar:
       cases: Cases
       plans: Plans

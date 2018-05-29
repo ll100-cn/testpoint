@@ -23,12 +23,10 @@ zh-CN:
         login: 登录
         logout: 退出
       tasks:
+        defaults:
+          relate: 关联
         upload_attachment:
           upload:  上传
-        change_state:
-          relate: 关联
-        relate:
-          relate: 关联
     navbar:
       cases: 案例
       plans: 计划
