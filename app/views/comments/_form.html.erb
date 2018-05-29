@@ -1,13 +1,11 @@
-<div class="contain">
-  <div class="row">
-    <div class="col-md-12">
-      <%= bootstrap_horizontal_form_for [issue, issue.comments.new] do |f| %>
-          <%= f.input :content %>
-          <%= f.actions_content do %>
-              <%= ok_url_tag %>
-              <%= f.submit class: "btn btn-primary" %>
-          <% end %>
-      <% end %>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    <%= bootstrap_horizontal_form_for [issue, issue.comments.new] do |f| %>
+        <%= f.input :content %>
+        <%= f.actions_content do %>
+            <%= ok_url_tag %>
+            <%= f.submit class: "btn btn-primary" %>
+        <% end %>
+    <% end %>
   </div>
 </div>
