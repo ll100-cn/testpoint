@@ -25,4 +25,11 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
 
   validates :name, presence: true
+
+  has_one_attached :avatar
+
+  def avatar_url
+    gravatar_id = Digest::MD5.hexdigest(user.email.downcase)
+    "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=200"
+  end
 end

@@ -22,4 +22,7 @@ Rails.application.routes.draw do
   resources :platforms
   resources :attachments
   resources :users
+  namespace :account do
+    resource :user
+  end
 end
