@@ -23,6 +23,10 @@ Rails.application.routes.draw do
   resources :attachments
   resources :users
   namespace :account do
-    resource :user
+    resource :user do
+      member do
+        patch :update_password
+      end
+    end
   end
 end

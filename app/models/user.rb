@@ -29,7 +29,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   def avatar_url
-    gravatar_id = Digest::MD5.hexdigest(user.email.downcase)
+    gravatar_id = Digest::MD5.hexdigest(self.email.downcase)
     "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=200"
   end
 end
