@@ -55,10 +55,8 @@
     <%= render "comments/form", issue: @issue %>
     <hr>
     <div id="comments_list">
-      <% if @issue.comments.present? %>
-        <% @issue.comments.recent.each do |comment| %>
-            <%= render "comments/comments", comment: comment %>
-        <% end %>
+      <% @issue.comments.recent.each do |comment| %>
+          <%= render "comments/comments", comment: comment %>
       <% end %>
     </div>
   </div>
