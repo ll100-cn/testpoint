@@ -14,7 +14,7 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "POST create" do
-    let(:attributes) { { email: Faker::Internet.email, username: "user", password: "123456", password_confirmation: "123456" } }
+    let(:attributes) { { email: Faker::Internet.email, name: "user", password: "123456", password_confirmation: "123456" } }
     action { post :create, params: { user: attributes } }
     it { is_expected.to respond_with :redirect }
   end

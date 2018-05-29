@@ -15,7 +15,7 @@
   <thead>
   <tr>
     <th><%= sort_link(@q, :id)%></th>
-    <th><%=h User, :username %></th>
+    <th><%=h User, :name %></th>
     <th><%=h User, :email %></th>
     <th><%= page_i18n :actions %></th>
   </tr>
@@ -24,7 +24,7 @@
   <% @users.each do |user| %>
       <tr>
         <td><%= link_to user.id, user %></td>
-        <td><%= user.username %></td>
+        <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td>
           <%= edit_link [:edit, user, ok_url: request.fullpath] %>

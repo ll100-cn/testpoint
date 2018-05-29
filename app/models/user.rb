@@ -24,5 +24,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :rememberable, :trackable, :validatable
   has_many :comments, dependent: :destroy
 
-  validates :username, presence: true
+  validates :name, presence: true
 end
