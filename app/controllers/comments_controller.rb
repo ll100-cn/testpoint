@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
-  load_and_authorize_resource
   load_and_authorize_resource :issue
+  load_and_authorize_resource through: :issue
 
   def new
   end
