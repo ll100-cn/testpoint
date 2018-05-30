@@ -23,8 +23,13 @@ class User < ApplicationRecord
   # :registerable, :recoverable
   devise :database_authenticatable, :rememberable, :trackable, :validatable
   has_many :comments, dependent: :destroy
+  attr_writer :current_password
 
   validates :name, presence: true
+
+  def password_required?
+    new_record? || password.present? || password_confirmation.present?
+  end
 
   def avatar_url(size = 200)
     gravatar_id = Digest::MD5.hexdigest(self.email.downcase)

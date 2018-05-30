@@ -1,24 +1,25 @@
 class ProfilesController < ApplicationController
-  load_and_authorize_resource :user, parent: false
-  before_action -> { @profile = current_user }
+  before_action -> { @user = User.find(current_user.id) }
+  authorize_resource :user, parent: false
 
   def show
   end
 
   def update
-    @profile.update(user_params)
-    redirect_to profile_path, notice: t('.success')
-  end
-
-  def update_password
-    @profile.update_with_password(user_params)
-    bypass_sign_in(@profile)
-    redirect_to root_path, notice: t('.success')
+    if user_params.values_at(*password_param_names).any?(&:present?)
+      @user.update_with_password(user_params)
+    else
+      @user.update(user_params)
+    end
+    respond_with @user, action: :show, location: -> { profile_path }
   end
 
 protected
-
   def user_params
-    params.fetch(:user, {}).permit(:name, :current_password, :password, :password_confirmation)
+    params.fetch(:user, {}).permit(:email, :name, *password_param_names)
+  end
+
+  def password_param_names
+    [ :current_password, :password, :password_confirmation ]
   end
 end

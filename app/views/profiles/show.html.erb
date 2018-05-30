@@ -2,27 +2,20 @@
   <h2><%= page_i18n('profile') %></h2>
 </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-4">
-      <h3><%=h User, :avatar %></h3>
-      <hr>
-      <%= image_tag(@profile.avatar_url) %>
-    </div>
-    <div class="col-md-8">
-      <h3><%= page_i18n('profile') %></h3>
-      <hr>
-      <p><strong><%=h User, :email %>:</strong></p>
-      <p><%= @profile.email %></p>
-      <%= bootstrap_horizontal_form_for @profile, url: { action: :update } do |f| %>
-        <label><strong><%=h User, :name %>:</strong></label>
-        <%= f.input :name, label: false %>
+<%= bootstrap_horizontal_form_for @user, url: { action: :update } do |f| %>
+  <%= f.input :email %>
+  <%= f.input :name %>
+  <%= f.input :avatar do %>
+    <%= image_tag f.object.avatar_url, width: 100 %>
+    <%= edit_link 'https://gravatar.com', target: "_blank" %>
+  <% end %>
 
-        <%= f.actions_content do %>
-            <%= ok_url_tag %>
-            <%= f.submit class: "btn btn-primary" %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-</div>
+  <%= f.input :current_password %>
+  <%= f.input :password %>
+  <%= f.input :password_confirmation %>
+  <%= f.actions_content do %>
+    <%= ok_url_tag %>
+    <%= f.submit class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+

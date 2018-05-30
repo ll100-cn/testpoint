@@ -46,7 +46,6 @@ zh-CN:
         component_id: 组件
       user:
         name: 姓名
-        avatar: 头像
         email: 邮箱
         password: 密码
         password_confirmation: 密码确认

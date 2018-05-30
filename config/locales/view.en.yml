@@ -40,7 +40,6 @@ en:
         actions: Actions
         all: All
         profile: Profile
-        update_password: Update Password
       issues:
         show:
           no_message: no message

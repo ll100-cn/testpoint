@@ -22,9 +22,5 @@ Rails.application.routes.draw do
   resources :platforms
   resources :attachments
   resources :users
-  resource :profile do
-    member do
-      patch :update_password
-    end
-  end
+  resource :profile
 end
