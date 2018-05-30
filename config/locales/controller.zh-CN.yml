@@ -1,7 +1,6 @@
 zh-CN:
-  account:
-    users:
-      update:
-        success: 个人信息更新成功
-      update_password:
-        success: 密码更新成功
+  profiles:
+    update:
+      success: 个人信息更新成功
+    update_password:
+      success: 密码更新成功

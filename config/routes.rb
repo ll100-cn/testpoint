@@ -22,11 +22,9 @@ Rails.application.routes.draw do
   resources :platforms
   resources :attachments
   resources :users
-  namespace :account do
-    resource :user do
-      member do
-        patch :update_password
-      end
+  resource :profile do
+    member do
+      patch :update_password
     end
   end
 end

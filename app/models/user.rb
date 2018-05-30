@@ -26,10 +26,8 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  has_one_attached :avatar
-
-  def avatar_url
+  def avatar_url(size = 200)
     gravatar_id = Digest::MD5.hexdigest(self.email.downcase)
-    "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=200"
+    "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
   end
 end
