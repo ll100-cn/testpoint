@@ -1,0 +1,7 @@
+en:
+  account:
+    users:
+      update:
+        success: Your profile has been updated successfully
+      update_password:
+        success: Your password has been updated successfully

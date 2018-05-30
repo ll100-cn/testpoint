@@ -12,7 +12,7 @@ class Account::UsersController < ApplicationController
   def update
     @user = current_user
     if @user.update(user_params)
-      redirect_to account_user_path, alert: "更新资料成功"
+      redirect_to account_user_path, notice: t('.success')
     else
       render :edit
     end
@@ -22,7 +22,7 @@ class Account::UsersController < ApplicationController
     @user = current_user
     if @user.update_with_password(user_params)
       bypass_sign_in(@user)
-      redirect_to root_path, alert: "密码更新成功"
+      redirect_to root_path, notice: t('.success')
     else
       render :edit
     end
@@ -31,6 +31,6 @@ class Account::UsersController < ApplicationController
 protected
 
   def user_params
-    params.fetch(:user, {}).permit(:avatar, :name, :current_password, :password, :password_confirmation)
+    params.fetch(:user, {}).permit(:name, :current_password, :password, :password_confirmation)
   end
 end

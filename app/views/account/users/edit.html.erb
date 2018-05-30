@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h2>更改密码</h2>
+  <h2><%= page_i18n('update_password') %></h2>
 </div>
 
 <%= bootstrap_horizontal_form_for [:account, current_user], :url => { :action => "update_password" } do |f| %>

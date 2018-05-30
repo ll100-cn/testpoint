@@ -1,35 +1,36 @@
 <div class="page-header">
-  <h2><%=h User %></h2>
+  <h2><%= page_i18n('profile') %></h2>
 </div>
 
-<%= bootstrap_horizontal_form_for [:account, current_user] do |f| %>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <%=h User, :avatar %>
-        <hr>
-        <% if current_user.avatar.attached? %>
-          <%= link_to url_for(current_user.avatar), target: "_blank" do %>
-              <%= image_tag url_for(current_user.avatar), class: "img-thumbnail mr-3", size: "200x200" %>
-          <% end %>
-        <% else %>
-          <%= image_tag(current_user.avatar_url) %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h3><%=h User, :avatar %></h3>
+      <hr>
+      <% if current_user.avatar.attached? %>
+        <%= link_to url_for(current_user.avatar), target: "_blank" do %>
+            <%= image_tag url_for(current_user.avatar), class: "img-thumbnail mr-3", size: "200x200" %>
         <% end %>
-        <br>
-
-        <%= f.file_field :avatar %>
-      </div>
-      <div class="col-md-8">
-        <%=h User %>-<%= current_user.email %>
-        <hr>
-        <%= f.input :name %>
+      <% else %>
+        <%= image_tag(current_user.avatar_url) %>
+      <% end %>
+    </div>
+    <div class="col-md-8">
+      <h3><%= page_i18n('profile') %></h3>
+      <hr>
+      <p><strong><%=h User, :email %>:</strong></p>
+      <p><%= current_user.email %></p>
+      <%= bootstrap_horizontal_form_for [:account, current_user] do |f| %>
+        <label><strong><%=h User, :name %>:</strong></label>
+        <%= f.input :name, label: false %>
 
         <%= f.actions_content do %>
             <%= ok_url_tag %>
             <%= f.submit class: "btn btn-primary" %>
         <% end %>
-      </div>
+      <% end %>
     </div>
   </div>
-<% end %>
+</div>
+
 
