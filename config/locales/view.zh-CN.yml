@@ -8,6 +8,7 @@ zh-CN:
         show: "查看%{model_name}"
         actions: 操作
         all: 全部
+        profile: 个人中心
       issues:
         show:
           no_message: 没有信息
@@ -22,10 +23,10 @@ zh-CN:
         login: 登录
         logout: 退出
       tasks:
+        defaults:
+          relate: 关联
         upload_attachment:
           upload:  上传
-        change_state:
-          relate: 关联
     navbar:
       cases: 案例
       plans: 计划

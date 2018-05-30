@@ -1,0 +1,16 @@
+<div id="comment-<%= comment.id %>" class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-9">
+        <%= comment.user.name %>
+      </div>
+      <div class="col-md-3">
+        <%= comment.created_at %>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <%= simple_format(comment.content) %>
+  </div>
+</div>
+<br>

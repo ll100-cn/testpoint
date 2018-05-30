@@ -12,7 +12,9 @@ Rails.application.routes.draw do
       end
     end
   end
-  resources :issues
+  resources :issues do
+    resources :comments
+  end
   resources :tasks do
     resources :issues
   end

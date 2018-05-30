@@ -39,6 +39,7 @@ en:
         show: "Show %{model_name}"
         actions: Actions
         all: All
+        profile: Profile
       issues:
         show:
           no_message: no message
@@ -53,10 +54,10 @@ en:
         login: Log in
         logout: Log out
       tasks:
+        defaults:
+          relate: Relate
         upload_attachment:
           upload: Upload attachment
-        change_state:
-          relate: Relate
     navbar:
       cases: Cases
       plans: Plans
