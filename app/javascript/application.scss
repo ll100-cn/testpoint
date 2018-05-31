@@ -138,3 +138,16 @@ article {
     margin-top: -5px;
   }
 }
+
+.no-margin-bottom {
+  overflow: hidden;
+  padding-bottom: 1px;
+  margin-bottom: -1px;
+
+  > *:last-child {
+    bottom: -300px;
+    margin-bottom: 300px;
+    margin-top: -300px;
+    position: relative;
+  }
+}

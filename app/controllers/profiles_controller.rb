@@ -11,7 +11,7 @@ class ProfilesController < ApplicationController
     else
       @user.update(user_params)
     end
-    respond_with @user, action: :show, location: -> { profile_path }
+    respond_with @user, action: :show, location: ok_url_or_default(action: :show)
   end
 
 protected
@@ -20,6 +20,6 @@ protected
   end
 
   def password_param_names
-    [ :current_password, :password, :password_confirmation ]
+    [:current_password, :password, :password_confirmation]
   end
 end

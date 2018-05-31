@@ -47,17 +47,8 @@
 
 <hr>
 
-<div class="row">
-  <div class="col-sm-2 text-right">
-    <h5><%=h Comment %></h5>
-  </div>
-  <div class="col-sm-8">
-    <%= render "comments/form", issue: @issue %>
-    <hr>
-    <div id="comments_list">
-      <% @issue.comments.recent.each do |comment| %>
-          <%= render "comments/comments", comment: comment %>
-      <% end %>
-    </div>
-  </div>
-</div>
+<% @issue.comments.history.each do |comment| %>
+  <%= render "comments/comments", comment: comment %>
+<% end %>
+
+<%= render "comments/form", issue: @issue %>
