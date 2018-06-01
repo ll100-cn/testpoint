@@ -43,6 +43,9 @@ en:
       issues:
         show:
           no_message: no message
+      profiles:
+        show:
+          avatar: Avatar
     action:
       defaults:
         new: "New %{model_name}"

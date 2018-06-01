@@ -12,6 +12,9 @@ zh-CN:
       issues:
         show:
           no_message: 没有信息
+      profiles:
+        show:
+          avatar: 头像
     action:
       defaults:
         new: "新增%{model_name}"
