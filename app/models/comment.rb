@@ -5,4 +5,5 @@ class Comment < ApplicationRecord
   validates :content, presence: true
 
   scope :recent, -> { order("created_at DESC") }
+  scope :history, -> { order("created_at ASC") }
 end

@@ -1,16 +1,16 @@
-<div id="comment-<%= comment.id %>" class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-md-9">
-        <%= comment.user.name %>
-      </div>
-      <div class="col-md-3">
-        <%= comment.created_at %>
+<div class="d-flex align-items-start mb-4">
+  <%= image_tag comment.user.avatar_url, width: 60, class: "rounded-circle" %>
+  <div class="col pr-0">
+    <div class="card">
+      <div class="card-header">
+         <strong><%= comment.user.name %></strong>
+         <span class="text-muted float-right"><%= time_ago_in_words(comment.created_at) %></span>
+       </div>
+      <div class="card-body">
+        <div class="no-margin-bottom">
+          <%= simple_format(comment.content) %>
+        </div>
       </div>
     </div>
   </div>
-  <div class="card-body">
-    <%= simple_format(comment.content) %>
-  </div>
 </div>
-<br>

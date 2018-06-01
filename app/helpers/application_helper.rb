@@ -23,4 +23,10 @@ module ApplicationHelper
     lookups << :"defaults.#{key}"
     I18n.t(lookups.shift, { scope: namespace, default: lookups }.merge(options))
   end
+
+  def request_for_ok_url
+    {}.tap do |result|
+      result[:ok_url] = request.fullpath if request.get?
+    end
+  end
 end

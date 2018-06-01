@@ -28,6 +28,7 @@ RSpec.describe IssuesController, type: :controller do
   end
 
   describe "GET show" do
+    login_user
     action { get :show, params: { id: issue.id } }
     it { is_expected.to respond_with :success }
   end

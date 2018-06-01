@@ -22,4 +22,5 @@ Rails.application.routes.draw do
   resources :platforms
   resources :attachments
   resources :users
+  resource :profile
 end
