@@ -1,8 +1,5 @@
-<div class="page-header d-flex">
-  <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
-  <div class="ml-3 mt-1 actions">
-    <%= index_button Label, [ :labels ], class: "btn btn-outline-primary btn-sm" %>
-  </div>
+<div class="page-header">
+  <h2><%=label_with_color(@label) %></h2>
 </div>
 
 <table class="table">
@@ -13,15 +10,15 @@
     <col width="20%"/>
   </colgroup>
   <thead>
-    <tr>
-      <th><%=h Issue, :title %></th>
-      <th><%=h Issue, :content %></th>
-      <th><%=h Issue, :comments %></th>
-      <th><%=h Issue, :state %></th>
-    </tr>
+  <tr>
+    <th><%=h Issue, :title %></th>
+    <th><%=h Issue, :content %></th>
+    <th><%=h Issue, :comments %></th>
+    <th><%=h Issue, :state %></th>
+  </tr>
   </thead>
   <tbody>
-    <% @issues.each do |issue| %>
+  <% @label.issues.each do |issue| %>
       <tr>
         <td><%= link_to issue.title, issue %></td>
         <td><%= issue.content %></td>
@@ -32,10 +29,6 @@
           </span>
         </td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
-
-<nav class="table-pagination">
-  <%= paginate @issues %>
-</nav>

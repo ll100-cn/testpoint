@@ -1,0 +1,40 @@
+<div class="page-header d-flex">
+  <h2><%= page_i18n :index, model_name: h(@labels) %></h2>
+  <div class="ml-3 mt-1 actions">
+    <%= new_button Label, [:new, :label], class: "btn btn-outline-primary btn-sm" %>
+  </div>
+</div>
+
+<table class="table">
+  <colgroup>
+    <col width="20%"/>
+    <col width="30%"/>
+    <col width="20%"/>
+    <col width="30%"/>
+  </colgroup>
+  <thead>
+  <tr>
+    <th><%=h Label, :name %></th>
+    <th><%=h Label, :description %></th>
+    <th><%=h Label, :issues %></th>
+    <th><%= page_i18n :actions %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @labels.each do |label| %>
+      <tr>
+        <td><%= link_to label_with_color(label), label %></td>
+        <td><%= label.description %></td>
+        <td><%= label.issues.count %></td>
+        <td>
+          <%= edit_link [:edit, label, ok_url: request.fullpath ] %>
+          <%= destroy_link [label, ok_url: request.fullpath ]%>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<nav class="table-pagination">
+  <%= paginate @labels %>
+</nav>

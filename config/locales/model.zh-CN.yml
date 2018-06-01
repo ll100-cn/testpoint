@@ -11,6 +11,7 @@ zh-CN:
       test_case: 测试任务
       user: 用户
       comment: 评论
+      label: 标签
     attributes:
       plan:
         title: 标题
@@ -29,6 +30,7 @@ zh-CN:
         title: 标题
         content: 内容
         state: 状态
+        comments: 评论数
       platform:
         name: 名称
         archived: 是否存档
@@ -51,3 +53,8 @@ zh-CN:
         password_confirmation: 密码确认
       comment:
         content: 评论内容
+      label:
+        name: 标题
+        description: 描述
+        color: 颜色
+        issues: 问题

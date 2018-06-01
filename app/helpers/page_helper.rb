@@ -3,6 +3,11 @@ module PageHelper
     hidden_field_tag "ok_url", params[:ok_url] if params[:ok_url].present?
   end
 
+  def index_button(model, url, options = {})
+    label = page_i18n(:index, model_name: h(model))
+    link_to label, url, options
+  end
+
   def new_button(model, url, options = {})
     label = action_i18n(:new, model_name: h(model))
     link_to label, url, { class: "btn btn-primary" }.merge(options)
@@ -25,6 +30,12 @@ module PageHelper
 
   def cancel_button(default_url, options = {})
     cancel_link(default_url, { class: "btn btn-secondary" }.merge(options))
+  end
+
+  def label_with_color(label)
+    content_tag :span, class: "btn text-white", style: "background-color:" + label.color do
+      safe_join([label.name], ' ')
+    end
   end
 
   def task_state_class_name(state)
