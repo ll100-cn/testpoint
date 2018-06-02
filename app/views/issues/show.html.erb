@@ -32,6 +32,16 @@
         <% end %>
       </div>
     </div>
+
+    <div class="col-sm-2">
+      <%= link_to h(Label), "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#add_label", url: add_label_issue_path(@issue, ok_url: request.fullpath) } %>
+      <br>
+      <% if @issue.labels.count > 0 %>
+        <% @issue.labels.each do |label| %>
+          <%=issue_label(label) %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
   <hr>
 <% end %>
@@ -47,8 +57,19 @@
 
 <hr>
 
-<% @issue.comments.history.each do |comment| %>
-  <%= render "comments/comments", comment: comment %>
-<% end %>
+<div class="row">
+  <div class="col-sm-8 offset-sm-2">
+    <% @issue.comments.history.each do |comment| %>
+        <%= render "comments/comments", comment: comment %>
+    <% end %>
 
-<%= render "comments/form", issue: @issue %>
+    <%= render "comments/form", issue: @issue %>
+  </div>
+</div>
+
+<div id="add_label" class="modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
