@@ -6,6 +6,8 @@ RSpec.describe IssuesController, type: :controller do
   let(:issue) { create :issue }
 
   describe "GET index" do
+    let!(:label) { create :label }
+    let!(:issue) { create :issue, label_ids: [label.id] }
     action { get :index }
     it { is_expected.to respond_with :success }
   end
@@ -31,5 +33,10 @@ RSpec.describe IssuesController, type: :controller do
     login_user
     action { get :show, params: { id: issue.id } }
     it { is_expected.to respond_with :success }
+  end
+
+  describe "GET add_label" do
+    action { get :add_label, params: { id: issue.id, format: :xhrml } }
+    it { is_expected.to respond_with(:success) }
   end
 end
