@@ -1,0 +1,11 @@
+<div class="page-header">
+  <h2><%= @milestone.title %></h2>
+</div>
+
+<table class="table">
+  <tbody>
+    <% @milestone.issues.each do |issue| %>
+      <%= link_to issue.title, issue %>
+    <% end %>
+  </tbody>
+</table>

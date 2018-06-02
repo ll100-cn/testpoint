@@ -35,6 +35,13 @@
         <% end %>
       </div>
     </div>
+    <div class="col-sm-2">
+      <%= link_to h(Milestone), "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#add_milestone", url: add_milestone_issue_path(@issue, ok_url: request.fullpath) } %>
+      <br>
+      <% if @issue.milestone %>
+        <p><%= @issue.milestone.title %></p>
+      <% end %>
+    </div>
   </div>
   <hr>
 <% end %>
@@ -55,3 +62,10 @@
 <% end %>
 
 <%= render "comments/form", issue: @issue %>
+
+<div id="add_milestone" class="modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>

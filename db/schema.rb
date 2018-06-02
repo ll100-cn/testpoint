@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
-ActiveRecord::Schema.define(version: 2018_06_01_015930) do
+ActiveRecord::Schema.define(version: 2018_06_02_073937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,32 @@ ActiveRecord::Schema.define(version: 2018_06_01_015930) do
     t.string "title"
     t.text "content"
     t.string "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "milestone_id"
+  end
+
+  create_table "issues_labels", force: :cascade do |t|
+    t.bigint "issue_id"
+    t.bigint "label_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issue_id"], name: "index_issues_labels_on_issue_id"
+    t.index ["label_id"], name: "index_issues_labels_on_label_id"
+  end
+
+  create_table "labels", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "milestones", force: :cascade do |t|
+    t.string "title"
+    t.datetime "due_date"
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

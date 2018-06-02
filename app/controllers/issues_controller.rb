@@ -29,10 +29,13 @@ class IssuesController < ApplicationController
     respond_with @issue, location: ok_url_or_default(action: :show)
   end
 
+  def add_milestone
+  end
+
 protected
 
   def issue_params
-    params.fetch(:issue, {}).permit(:title, :content, :state, label_ids: [])
+    params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, label_ids: [])
   end
 
   def set_tasks
