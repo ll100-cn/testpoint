@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2018_06_02_073937) do
+ActiveRecord::Schema.define(version: 2018_06_03_072823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,24 +67,8 @@ ActiveRecord::Schema.define(version: 2018_06_02_073937) do
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "milestone_id"
-  end
-
-  create_table "issues_labels", force: :cascade do |t|
-    t.bigint "issue_id"
-    t.bigint "label_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["issue_id"], name: "index_issues_labels_on_issue_id"
-    t.index ["label_id"], name: "index_issues_labels_on_label_id"
-  end
-
-  create_table "labels", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.string "color"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "milestone_id"
+    t.index ["milestone_id"], name: "index_issues_on_milestone_id"
   end
 
   create_table "milestones", force: :cascade do |t|
@@ -190,8 +173,7 @@ ActiveRecord::Schema.define(version: 2018_06_02_073937) do
 
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "users"
-  add_foreign_key "issues_labels", "issues"
-  add_foreign_key "issues_labels", "labels"
+  add_foreign_key "issues", "milestones"
   add_foreign_key "platforms_test_cases", "platforms"
   add_foreign_key "platforms_test_cases", "test_cases"
   add_foreign_key "tasks", "platforms"

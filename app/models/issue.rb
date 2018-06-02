@@ -19,7 +19,7 @@ class Issue < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :issues_labels, dependent: :destroy
   has_many :labels, through: :issues_labels
-  belongs_to :milestone
+  belongs_to :milestone, :optional => true
 
   scope :with_labels, -> { includes(:labels) }
 
