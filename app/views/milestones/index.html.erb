@@ -9,14 +9,16 @@
   <colgroup>
     <col width="20%"/>
     <col width="20%"/>
-    <col width="30%"/>
-    <col width="30%"/>
+    <col width="20%"/>
+    <col width="20%"/>
+    <col width="20%"/>
   </colgroup>
   <thead>
   <tr>
     <th><%=h Milestone, :title %></th>
     <th><%=h Milestone, :description %></th>
-    <th><%=h Milestone, :due_date %></th>
+    <th><%=h Milestone, :start_time %></th>
+    <th><%=h Milestone, :end_time %></th>
     <th><%= page_i18n :actions %></th>
   </tr>
   </thead>
@@ -25,7 +27,8 @@
       <tr>
         <td><%= link_to milestone.title, milestone %></td>
         <td><%= milestone.description %></td>
-        <td><%= milestone.due_date %></td>
+        <td><%= milestone.start_time %></td>
+        <td><%= milestone.end_time %></td>
         <td>
           <%= edit_link [:edit, milestone, ok_url: request.fullpath ] %>
           <%= destroy_link [milestone, ok_url: request.fullpath ]%>

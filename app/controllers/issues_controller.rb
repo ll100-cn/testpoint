@@ -29,9 +29,6 @@ class IssuesController < ApplicationController
     respond_with @issue, location: ok_url_or_default(action: :show)
   end
 
-  def add_milestone
-  end
-
 protected
 
   def issue_params

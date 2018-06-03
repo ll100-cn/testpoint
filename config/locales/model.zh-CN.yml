@@ -32,6 +32,7 @@ zh-CN:
         content: 内容
         state: 状态
         label_ids: 标签
+        milestone_id: 里程碑
       platform:
         name: 名称
         archived: 是否存档
@@ -62,4 +63,5 @@ zh-CN:
       milestone:
         title: 标题
         description: 描述
-        due_date: 截止日期
+        start_time: 开始时间
+        end_time: 截止时间

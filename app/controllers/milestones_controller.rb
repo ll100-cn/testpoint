@@ -31,6 +31,6 @@ class MilestonesController < ApplicationController
 protected
 
   def milestone_params
-    params.fetch(:milestone, {}).permit(:title, :due_date, :description)
+    params.fetch(:milestone, {}).permit(:title, :start_time, :end_time, :description)
   end
 end
