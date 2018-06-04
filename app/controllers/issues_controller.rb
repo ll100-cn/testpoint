@@ -10,6 +10,7 @@ class IssuesController < ApplicationController
   end
 
   def new
+    @issue.title = @issue.default_title
   end
 
   def create
@@ -20,12 +21,12 @@ class IssuesController < ApplicationController
   def show
   end
 
+  def edit
+  end
+
   def update
     @issue.update(issue_params)
     respond_with @component, location: ok_url_or_default([Issue])
-  end
-
-  def add_label
   end
 
 protected

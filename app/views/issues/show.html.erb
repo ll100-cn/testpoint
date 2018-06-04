@@ -1,8 +1,11 @@
-<div class="page-header">
+<div class="page-header d-flex">
   <p>
     <span class="h2"><%= @issue.title %></span>
     <span class="<%= issue_state_class_name(@issue.state, :badge) %>"><%= @issue.state.text %></span>
   </p>
+  <div class="ml-3 mt-1 actions ml-auto">
+    <%= edit_link [:edit, @issue] %>
+  </div>
 </div>
 
 <% @issue.tasks.ranked.each do |task| %>
@@ -33,13 +36,6 @@
       </div>
     </div>
 
-    <div class="col-sm-2">
-      <%= link_to h(Label), "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#add_label", url: add_label_issue_path(@issue, ok_url: request.fullpath) } %>
-      <br>
-      <% @issue.labels.each do |label| %>
-        <%= issue_label(label) %>
-      <% end %>
-    </div>
   </div>
   <hr>
 <% end %>

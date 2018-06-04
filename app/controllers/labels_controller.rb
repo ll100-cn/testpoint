@@ -1,6 +1,8 @@
 class LabelsController < ApplicationController
   load_and_authorize_resource
 
+  before_action { @navbar = "Labels" }
+
   def index
     @labels = @labels.page(params[:page])
   end

@@ -14,9 +14,6 @@ Rails.application.routes.draw do
   end
   resources :issues do
     resources :comments
-    member do
-      get :add_label
-    end
   end
   resources :tasks do
     resources :issues
