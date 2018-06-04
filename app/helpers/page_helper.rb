@@ -34,7 +34,7 @@ module PageHelper
   end
 
   def issue_label(label)
-    content_tag :span, class: "btn btn-sm mt-1 text-white text-left", style: "background-color:" + label.color do
+    content_tag :span, class: "btn btn-sm mt-1 text-white", style: "background-color:" + label.color do
       safe_join([label.name], ' ')
     end
   end

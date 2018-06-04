@@ -6,11 +6,11 @@ class IssuesController < ApplicationController
   before_action :set_tasks, only: [:new, :create]
 
   def index
-    @issues = @issues.includes(:labels).page(params[:page])
+    @issues = @issues.with_labels.page(params[:page])
   end
 
   def new
-    @issue.title = @issue.default_title
+    @issue.title ||= @issue.default_title
   end
 
   def create
@@ -26,7 +26,7 @@ class IssuesController < ApplicationController
 
   def update
     @issue.update(issue_params)
-    respond_with @issue, location: ok_url_or_default([Issue])
+    respond_with @issue, location: ok_url_or_default(action: :show)
   end
 
 protected
