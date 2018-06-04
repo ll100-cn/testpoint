@@ -1,18 +1,35 @@
 <div class="page-header">
   <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
+  <div class="ml-3 actions">
+    <%= link_to h(Label), labels_path %>
+    <%= link_to h(Milestone), milestones_path %>
+  </div>
+</div>
+
+<div class="d-flex">
+  <%= backend_search_form_for @q do |f| %>
+    <%= f.input :labels_id_eq, label: h(Label), collection: Label.all.map {|l| [l.name, l.id]}, input_html: { class: 'select2.field' } %>
+    <%= f.input :milestone_id_eq, label: h(Milestone), collection: Milestone.all.map {|m| [m.title, m.id]}, input_html: { class: 'select2.field' } %>
+    <%= f.submit class: "btn btn-outline-primary btn-sm" %>
+  <% end %>
 </div>
 
 <table class="table">
   <colgroup>
-    <col width="40%"/>
-    <col width="40%"/>
+    <col width="15%"/>
+    <col width="30%"/>
+    <col width="15%"/>
+    <col width="10%"/>
     <col width="20%"/>
+    <col width="10%"/>
   </colgroup>
-  <thead>
     <tr>
-      <th><%=h Issue, :title %></th>
-      <th><%=h Issue, :content %></th>
-      <th><%=h Issue, :state %></th>
+      <th><%= sort_link(@q, :title)%></th>
+      <th><%= sort_link(@q, :label_ids)%></th>
+      <th><%= sort_link(@q, :milestone_id)%></th>
+      <th><%= sort_link(@q, :user_id)%></th>
+      <th><%= sort_link(@q, :created_at)%></th>
+      <th><%= sort_link(@q, :state)%></th>
     </tr>
   </thead>
   <tbody>
@@ -20,13 +37,21 @@
       <tr>
         <td>
           <%= link_to issue.title, issue %>
+        </td>
+        <td>
           <% issue.labels.each do |label| %>
               <%= issue_label(label) %>
           <% end %>
         </td>
-        <td><%= issue.content %></td>
         <td>
-          <span class="<%= issue_state_class_name(issue.state, :badge) %>">
+          <% if issue.milestone %>
+            <%= issue.milestone.title %>
+          <% end %>
+        </td>
+        <td><%= issue.user.name %></td>
+        <td><%= issue.created_at.strftime("%F %T") %></td>
+        <td>
+          <span class="<%= issue_state_class_name(issue.state, :text) %>">
           <%= issue.state.text %>
           </span>
         </td>

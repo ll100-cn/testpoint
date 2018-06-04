@@ -50,6 +50,26 @@ module BootstrapV4Helper
     simple_form_for(*args, options, &block)
   end
 
+  def apply_bootstrap_inline_form_options!(options)
+    options.deep_merge!(
+        {
+            wrapper: 'inline_form',
+            wrapper_mappings: {
+                boolean: :inline_boolean
+            },
+            html: { class: "form-inline" }
+        }.deep_merge(options)
+    )
+    options[:defaults] = bootstrap_inline_form_defaults.deep_merge(options[:defaults] || {})
+  end
+
+  def bootstrap_inline_form_defaults
+    {
+        wrapper_html: { class: "mb-2 mr-sm-3" },
+        label_html: { class: "sr-only" }
+    }
+  end
+
   class BootstrapHorizontalBuilder < SimpleForm::FormBuilder
     def actions_content(options = {}, &block)
       input :to_s, { wrapper: :horizontal_offset_content, wrapper_html: { class: "form-actions" } }.merge(options), &block

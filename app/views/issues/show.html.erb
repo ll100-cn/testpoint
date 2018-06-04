@@ -1,57 +1,91 @@
-<div class="page-header d-flex">
-  <p>
-    <span class="h2"><%= @issue.title %></span>
-    <span class="<%= issue_state_class_name(@issue.state, :badge) %>"><%= @issue.state.text %></span>
-  </p>
-  <div class="ml-3 mt-1 actions ml-auto">
+<div class="page-header">
+  <h2><%= @issue.title %></h2>
+  <div class="actions ml-auto">
     <%= edit_link [:edit, @issue] %>
   </div>
 </div>
 
-<% @issue.tasks.ranked.each do |task| %>
+<div class="container">
   <div class="row">
-    <div class="col-sm-2 text-right">
-      <h5><%= task.test_case.title %></h5>
-      <div><%= task_state_with_icon(task.state) %></div>
-      <div class="badge badge-secondary"><%= task.platform.name %></div>
-    </div>
-
-    <div class="col-sm-8">
-      <p class="p-4 bg-light"><%= task.message || page_i18n(:no_message) %></p>
-      <div>
-        <% task.task_attachments.each do |task_attachment| %>
-          <div class="mb-3">
-            <div class="media">
-              <% if (file = task_attachment.attachment.file) %>
-                <%= link_to url_for(file), target: "_blank" do %>
-                  <%= image_tag url_for(file), class: "img-thumbnail mr-3", size: "100x100" %>
-                <% end %>
-              <% end %>
-              <div class="media-body">
-                <%= simple_format task_attachment.content %>
+    <div class="col-sm-9">
+      <div class="d-flex align-items-start">
+        <%= image_tag @issue.user.avatar_url, width: 60, class: "rounded-circle" %>
+        <div class="col pr-0">
+          <div class="card">
+            <div class="card-header">
+              <%= @issue.user.name %>
+              <span class="text-muted float-right"><%= time_ago_in_words(@issue.created_at) %></span>
+            </div>
+            <div class="card-body">
+              <div class="no-margin-bottom">
+                <%= simple_format(@issue.content) %>
               </div>
             </div>
           </div>
-        <% end %>
+        </div>
       </div>
+
+      <div class="d-flex mb-4 border-bottom" style="padding-left: 60px;">
+        <div class="col">
+          <div class="border-left ml-4 p-4 pr-0">
+            <div class="no-margin-bottom">
+              <% @issue.tasks.ranked.each do |task| %>
+                  <p>
+                    <%= link_to "##{task.id}", "#" %>
+                    <%= task.test_case.title %>
+                    <span class="badge badge-secondary mx-2"><%= task.platform.name %></span>
+                    <span class="mr-2"><%= task_state_with_icon(task.state) %></span>
+                    <span class="text-muted"><%= time_ago_in_words(task.created_at) %></span>
+                  </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% @issue.comments.history.each do |comment| %>
+        <%= render "comments/comments", comment: comment %>
+      <% end %>
+
+      <%= render "comments/form", issue: @issue %>
+    </div>
+    <div class="col-sm-3">
+      <h5><%=h Issue, :created_at %></h5>
+      <span><%=l @issue.created_at, format: :long %></span>
+      <hr>
+
+      <h5><%=h Issue, :state %></h5>
+      <span class="<%= issue_state_class_name(@issue.state, :text) %>">
+        <%= @issue.state.text %>
+      </span>
+      <hr>
+
+      <div class="d-flex">
+        <span class="h5"><%=h Label %></span>
+        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+      </div>
+      <% @issue.labels.each do |label| %>
+        <span class="badge w-100 mb-1 text-white text-left" style="background-color: <%= label.color%>">
+          <%=label.name %>
+        </span>
+      <% end %>
+      <hr>
+
+      <div class="d-flex">
+        <span class="h5"><%=h Milestone %></span>
+        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+      </div>
+      <% if @issue.milestone %>
+        <div class="d-flex align-items-center">
+          <div class="progress flex-1">
+          <% total = @issue.milestone.issues.count %>
+            <% finished_issue = @issue.milestone.issues.where(state: "solved").count %>
+            <div class="progress-bar bg-success" style="width: <%= 100 * finished_issue / total %>%"></div>
+            <span class="progress-text"><%= @issue.milestone.title %></span>
+          </div>
+          <span class="badge text-right"><%= 100 * finished_issue / total %>%</span>
+        </div>
+      <% end %>
     </div>
   </div>
-  <hr>
-<% end %>
-
-<div class="row">
-  <div class="col-sm-10 ml-auto">
-    <% Issue.state.options.each do |(text, value)| %>
-      <%= link_to text, [@issue, issue: { state: value.to_sym }], method: :patch, class: issue_state_class_name(value, :btn) %>
-    <% end %>
-    <%= cancel_button Issue %>
-  </div>
 </div>
-
-<hr>
-
-<% @issue.comments.history.each do |comment| %>
-  <%= render "comments/comments", comment: comment %>
-<% end %>
-
-<%= render "comments/form", issue: @issue %>

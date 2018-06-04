@@ -7,13 +7,10 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import 'font-awesome/scss/font-awesome.scss'
-import '../components/vendor'
+import '../vendor'
+import '../bootstrap-ext'
 
-import '../bootstrap-v4'
-
-import '../application.scss'
-import '../bootstrap-v4-ext'
+import '../components/font-awesome'
 
 import '../components/turbolinks'
 import '../components/xhrml'
@@ -21,3 +18,5 @@ import '../components/modal'
 import '../components/drag_and_drop'
 import '../components/flatpickr'
 import '../components/select2'
+
+import '../pages'

@@ -6,6 +6,7 @@
 #  title      :string
 #  content    :text
 #  state      :string
+#  user_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
@@ -20,6 +21,7 @@ class Issue < ApplicationRecord
   has_many :issues_labels, dependent: :destroy
   has_many :labels, through: :issues_labels
   belongs_to :milestone, optional: true
+  belongs_to :user
 
   scope :with_labels, -> { includes(:labels) }
 
@@ -28,9 +30,5 @@ class Issue < ApplicationRecord
       test_case = task.test_case
       "#{test_case.component.name}-#{test_case.title}"
     end.join(" ")
-  end
-
-  def content
-    tasks.flat_map(&:task_attachments).flat_map(&:content).join("\r\n")
   end
 end

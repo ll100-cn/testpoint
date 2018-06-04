@@ -8,6 +8,11 @@ module PageHelper
     link_to label, url, { class: "btn btn-primary" }.merge(options)
   end
 
+  def new_link(model, url, options = {})
+    label = action_i18n(:new, model_name: h(model))
+    link_to label, url, options
+  end
+
   def edit_link(url, options = {})
     label = action_i18n(:edit)
     link_to label, url, options
@@ -34,7 +39,7 @@ module PageHelper
   end
 
   def issue_label(label)
-    content_tag :span, class: "btn btn-sm mt-1 text-white", style: "background-color:" + label.color do
+    content_tag :span, class: "badge mt-1 text-white", style: "background-color:" + label.color do
       safe_join([label.name], ' ')
     end
   end
@@ -49,7 +54,7 @@ module PageHelper
   end
 
   def issue_state_class_name(state, type = "")
-    mappings = { "open" => "info", "closed" => "primary", "solved" => "success" }
+    mappings = { "open" => "info", "closed" => "secondary", "solved" => "success" }
     type.present? ? "#{type} #{type}-#{mappings[state]}" : mappings[type]
   end
 end
