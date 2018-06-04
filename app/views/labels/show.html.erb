@@ -4,16 +4,14 @@
 
 <table class="table">
   <colgroup>
-    <col width="20%"/>
+    <col width="30%"/>
     <col width="40%"/>
-    <col width="20%"/>
-    <col width="20%"/>
+    <col width="30%"/>
   </colgroup>
   <thead>
   <tr>
     <th><%=h Issue, :title %></th>
     <th><%=h Issue, :content %></th>
-    <th><%=h Issue, :comments %></th>
     <th><%=h Issue, :state %></th>
   </tr>
   </thead>
@@ -22,7 +20,6 @@
       <tr>
         <td><%= link_to issue.title, issue %></td>
         <td><%= issue.content %></td>
-        <td><%= issue.comments.count %></td>
         <td>
           <span class="<%= issue_state_class_name(issue.state, :badge) %>">
           <%= issue.state.text %>

@@ -22,18 +22,18 @@ $(function() {
   };
 
   $(document).on({
-    'ajax:before'(event) {
+    'ajax:before': function(event) {
       const $element = $(event.target);
       if ($element.data('type') !== 'xhrml') { return; }
 
       $element.data('type', 'html');
       $element.data('xhrml', true);
     },
-    'ajax:success'(event, data) {
+    'ajax:success': function(event, data) {
       const $element = $(event.target);
       handleResponse($element, data);
     },
-    'ajax:error'(event, xhr) {
+    'ajax:error': function(event, xhr) {
       const $element = $(event.target);
       handleResponse($element, xhr.responseText);
     }

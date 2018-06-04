@@ -7,24 +7,17 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import $ from 'jquery'
-window.$ = $
-
-import {} from 'jquery-ujs'
-
-import Turbolinks from 'turbolinks'
-Turbolinks.start()
-
 import 'font-awesome/scss/font-awesome.scss'
+import '../components/vendor'
 
 import '../bootstrap-v4'
 
 import '../application.scss'
 import '../bootstrap-v4-ext'
 
-import '../widgets/turbolinks'
-import '../widgets/xhrml'
-import '../widgets/modal'
-import '../widgets/drag_and_drop'
-import '../widgets/flatpickr'
-import '../widgets/select2'
+import '../components/turbolinks'
+import '../components/xhrml'
+import '../components/modal'
+import '../components/drag_and_drop'
+import '../components/flatpickr'
+import '../components/select2'

@@ -34,9 +34,4 @@ RSpec.describe IssuesController, type: :controller do
     action { get :show, params: { id: issue.id } }
     it { is_expected.to respond_with :success }
   end
-
-  describe "GET add_label" do
-    action { get :add_label, params: { id: issue.id, format: :xhrml } }
-    it { is_expected.to respond_with(:success) }
-  end
 end

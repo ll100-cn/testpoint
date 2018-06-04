@@ -30,7 +30,6 @@ zh-CN:
         title: 标题
         content: 内容
         state: 状态
-        comments: 评论数
         label_ids: 标签
       platform:
         name: 名称

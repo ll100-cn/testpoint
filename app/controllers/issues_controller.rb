@@ -26,7 +26,7 @@ class IssuesController < ApplicationController
 
   def update
     @issue.update(issue_params)
-    respond_with @component, location: ok_url_or_default([Issue])
+    respond_with @issue, location: ok_url_or_default([Issue])
   end
 
 protected
