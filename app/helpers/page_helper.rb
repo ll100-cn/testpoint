@@ -27,6 +27,18 @@ module PageHelper
     cancel_link(default_url, { class: "btn btn-secondary" }.merge(options))
   end
 
+  def label_with_color(label)
+    content_tag :span, class: "btn text-white", style: "background-color:" + label.color do
+      safe_join([label.name], ' ')
+    end
+  end
+
+  def issue_label(label)
+    content_tag :span, class: "btn btn-sm mt-1 text-white", style: "background-color:" + label.color do
+      safe_join([label.name], ' ')
+    end
+  end
+
   def task_state_class_name(state)
     case state
     when "pass"

@@ -17,6 +17,10 @@ class Issue < ApplicationRecord
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :issues_labels, dependent: :destroy
+  has_many :labels, through: :issues_labels
+
+  scope :with_labels, -> { includes(:labels) }
 
   def default_title
     tasks.map do |task|

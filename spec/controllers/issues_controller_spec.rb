@@ -6,6 +6,8 @@ RSpec.describe IssuesController, type: :controller do
   let(:issue) { create :issue }
 
   describe "GET index" do
+    let!(:label) { create :label }
+    let!(:issue) { create :issue, label_ids: [label.id] }
     action { get :index }
     it { is_expected.to respond_with :success }
   end

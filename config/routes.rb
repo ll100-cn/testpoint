@@ -23,4 +23,5 @@ Rails.application.routes.draw do
   resources :attachments
   resources :users
   resource :profile
+  resources :labels
 end

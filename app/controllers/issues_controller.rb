@@ -6,10 +6,11 @@ class IssuesController < ApplicationController
   before_action :set_tasks, only: [:new, :create]
 
   def index
-    @issues = @issues.page(params[:page])
+    @issues = @issues.with_labels.page(params[:page])
   end
 
   def new
+    @issue.title ||= @issue.default_title
   end
 
   def create
@@ -20,15 +21,18 @@ class IssuesController < ApplicationController
   def show
   end
 
+  def edit
+  end
+
   def update
     @issue.update(issue_params)
-    respond_with @component, location: ok_url_or_default([Issue])
+    respond_with @issue, location: ok_url_or_default(action: :show)
   end
 
 protected
 
   def issue_params
-    params.fetch(:issue, {}).permit(:title, :content, :state)
+    params.fetch(:issue, {}).permit(:title, :content, :state, label_ids: [])
   end
 
   def set_tasks
