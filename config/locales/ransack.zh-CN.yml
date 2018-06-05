@@ -1,0 +1,6 @@
+zh-CN:
+  ransack:
+    attributes:
+      issue:
+        milestone_id_eq: 里程碑
+        labels_id_eq: 标签

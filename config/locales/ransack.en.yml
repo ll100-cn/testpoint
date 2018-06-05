@@ -1,5 +1,6 @@
-end:
+en:
   ransack:
     attributes:
-      task:
-        state_eq: State eq
+      issue:
+        milestone_id_eq: milestone
+        labels_id_eq: label
