@@ -25,7 +25,7 @@
       <th><%= sort_link(@q, :title)%></th>
       <th><%= sort_link(@q, :label_ids)%></th>
       <th><%= sort_link(@q, :milestone_id)%></th>
-      <th><%= sort_link(@q, :user_id)%></th>
+      <th><%= sort_link(@q, :creator_id)%></th>
       <th><%= sort_link(@q, :created_at)%></th>
       <th><%= sort_link(@q, :state)%></th>
     </tr>
@@ -46,7 +46,7 @@
             <%= issue.milestone.title %>
           <% end %>
         </td>
-        <td><%= issue.user.name %></td>
+        <td><%= issue.creator.name %></td>
         <td><%=l issue.created_at, format: :long %></td>
         <td>
           <span class="<%= issue_state_class_name(issue.state, :text) %>">

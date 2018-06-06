@@ -34,8 +34,9 @@ zh-CN:
         label_ids: 标签
         milestone_id: 里程碑
         comments: 评论
-        user_id: 创建人
         created_at: 创建时间
+        creator_id: 创建人
+        assignee_id: 受理人
       platform:
         name: 名称
         archived: 是否存档

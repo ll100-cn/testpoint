@@ -21,7 +21,8 @@ class Issue < ApplicationRecord
   has_many :issues_labels, dependent: :destroy
   has_many :labels, through: :issues_labels
   belongs_to :milestone, optional: true
-  belongs_to :user
+  belongs_to :creator, class_name: 'User'
+  belongs_to :assignee, class_name: 'User', optional: true
 
   scope :with_labels, -> { includes(:labels) }
 

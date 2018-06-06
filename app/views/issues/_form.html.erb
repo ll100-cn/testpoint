@@ -3,10 +3,10 @@
     <%= f.input :content, input_html: { rows: 10 } %>
     <%= f.input :label_ids, collection: Label.all.map{ |l| [l.name, l.id] }, input_html: { multiple: true, class: "select2-field" } %>
     <%= f.input :milestone_id, collection: Milestone.all.map{ |m| [m.title, m.id] }, input_html: { class: "select2-field" } %>
-
+    <%= f.input :assignee_id, collection: User.all.map{ |u| [u.name, u.id] }, input_html: { class: "select2-field" } %>
     <%= f.actions_content do %>
-        <%= ok_url_tag %>
-        <%= f.submit class: "btn btn-primary" %>
-        <%= cancel_link [task, issue], class: "btn btn-secondary" %>
+      <%= ok_url_tag %>
+      <%= f.submit class: "btn btn-primary" %>
+      <%= cancel_link [task, issue], class: "btn btn-secondary" %>
     <% end %>
 <% end %>

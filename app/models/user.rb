@@ -23,7 +23,8 @@ class User < ApplicationRecord
   # :registerable, :recoverable
   devise :database_authenticatable, :rememberable, :trackable, :validatable
   has_many :comments, dependent: :destroy
-  has_many :issues, dependent: :nullify
+  has_many :created_issues, class_name: 'Issue', foreign_key: 'creator_id'
+  has_many :assigned_issues, class_name: 'Issue', foreign_key: 'assignee_id'
   attr_writer :current_password
 
   validates :name, presence: true
