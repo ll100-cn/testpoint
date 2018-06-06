@@ -24,4 +24,5 @@ Rails.application.routes.draw do
   resources :users
   resource :profile
   resources :labels
+  resources :milestones
 end

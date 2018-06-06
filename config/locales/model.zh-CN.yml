@@ -12,6 +12,7 @@ zh-CN:
       user: 用户
       comment: 评论
       label: 标签
+      milestone: 里程碑
     attributes:
       plan:
         title: 标题
@@ -31,6 +32,10 @@ zh-CN:
         content: 内容
         state: 状态
         label_ids: 标签
+        milestone_id: 里程碑
+        comments: 评论
+        user_id: 创建人
+        created_at: 创建时间
       platform:
         name: 名称
         archived: 是否存档
@@ -58,3 +63,8 @@ zh-CN:
         description: 描述
         color: 颜色
         issues: 问题
+      milestone:
+        title: 标题
+        description: 描述
+        start_time: 开始时间
+        end_time: 截止时间

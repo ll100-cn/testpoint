@@ -1,7 +1,6 @@
-<% flash_classes = { alert: "danger", notice: "success", warning: "warning"}.freeze %>
 <% if flash.any? %>
   <% flash.to_hash.each do |key, value| %>
-    <div class="alert alert-dismissable alert-<%= flash_classes.fetch(key.to_sym) %>">
+    <div class="alert alert-dismissable alert-<%= bootstrap_flash_class_for(key) %>">
       <button class="close" data-dismiss="alert">x</button>
       <%= value %>
     </div>

@@ -1,0 +1,12 @@
+<%= bootstrap_horizontal_form_for milestone do |f| %>
+  <%= f.input :title %>
+  <%= f.input :start_time, as: :datetime_pickr %>
+  <%= f.input :end_time, as: :datetime_pickr %>
+  <%= f.input :description %>
+
+  <%= f.actions_content do %>
+    <%= ok_url_tag %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
+  <% end %>
+<% end %>

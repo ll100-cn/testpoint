@@ -1,4 +1,4 @@
-@import './bootstrap-v4/variables';
+@import '../bootstrap-ext/variables';
 
 // ========================
 // Layouts
@@ -26,7 +26,14 @@
 // ------------------------
 .page-header {
   margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: flex-end;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0;
+  }
 
   .actions {
     a + a {
@@ -107,18 +114,16 @@ article {
   }
 }
 
-.marginfix-bottom {
+.fixed-bottom {
   overflow: hidden;
   margin-bottom: -100px;
+  position: relative;
 
   > .inner {
     margin-bottom: 100px;
   }
 }
 
-.hidden {
-  display: none !important;
-}
 
 .hidden-actions {
   .actions {
@@ -137,21 +142,4 @@ article {
     padding-left: 5px;
     margin-top: -5px;
   }
-}
-
-.no-margin-bottom {
-  overflow: hidden;
-  padding-bottom: 1px;
-  margin-bottom: -1px;
-
-  > *:last-child {
-    bottom: -300px;
-    margin-bottom: 300px;
-    margin-top: -300px;
-    position: relative;
-  }
-}
-
-.select2-container {
-  width: 100% !important;
 }

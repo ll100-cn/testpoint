@@ -1,5 +1,5 @@
+import './style.scss'
 import $ from 'jquery'
-import './all.scss'
 
 function removeAttachment(event) {
   const $currentTarget = $(event.currentTarget)

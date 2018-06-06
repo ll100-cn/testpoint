@@ -6,7 +6,8 @@ class IssuesController < ApplicationController
   before_action :set_tasks, only: [:new, :create]
 
   def index
-    @issues = @issues.with_labels.page(params[:page])
+    @q = Issue.ransack(params[:q])
+    @issues = @q.result.with_labels.page(params[:page])
   end
 
   def new
@@ -14,6 +15,7 @@ class IssuesController < ApplicationController
   end
 
   def create
+    @issue.user = current_user
     @issue.save
     respond_with @component, location: ok_url_or_default([@task.plan])
   end
@@ -32,7 +34,7 @@ class IssuesController < ApplicationController
 protected
 
   def issue_params
-    params.fetch(:issue, {}).permit(:title, :content, :state, label_ids: [])
+    params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, label_ids: [])
   end
 
   def set_tasks
