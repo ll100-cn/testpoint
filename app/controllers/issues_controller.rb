@@ -8,6 +8,9 @@ class IssuesController < ApplicationController
   def index
     @q = Issue.ransack(params[:q])
     @issues = @q.result.with_labels.page(params[:page])
+    if params[:state].present? && Issue.state.values.include?(params[:state])
+      @issues = @issues.by_state(params[:state])
+    end
   end
 
   def new

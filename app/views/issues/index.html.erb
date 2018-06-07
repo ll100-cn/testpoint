@@ -2,15 +2,23 @@
   <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
   <div class="ml-3 actions">
     <%= link_to h(Label), labels_path %>
-    <%= link_to h(Milestone), milestones_path %>
   </div>
 </div>
 
-<%= backend_search_form_for @q do |f| %>
-  <%= f.input :labels_id_eq, collection: Label.all.map {|l| [l.name, l.id]}, input_html: { class: 'select2.field' } %>
-  <%= f.input :milestone_id_eq, collection: Milestone.all.map {|m| [m.title, m.id]}, input_html: { class: 'select2.field' } %>
-  <%= f.submit class: "btn btn-outline-primary btn-sm mb-2" %>
-<% end %>
+<div class="d-flex">
+  <%= backend_search_form_for @q do |f| %>
+      <%= f.input :labels_id_eq, collection: Label.all.map {|l| [l.name, l.id]}, input_html: { class: 'select2.field' } %>
+      <%= f.input :milestone_id_eq, collection: Milestone.all.map {|m| [m.title, m.id]}, input_html: { class: 'select2.field' } %>
+      <%= f.submit class: "btn btn-outline-primary btn-sm mb-2" %>
+  <% end %>
+
+  <div class="btn-group ml-4 mb-3" role="group">
+    <%= link_to page_i18n(:all), issues_path, :class => "btn btn-light #{(params[:state].blank?) ? "active" : ""}" %>
+    <% Issue.state.values.each do |s| %>
+      <%= link_to s.text, issues_path(issue_filters(:state => s)), :class => "btn btn-light #{( params[:state] == s) ? "active" : ""}" %>
+    <% end %>
+  </div>
+</div>
 
 <table class="table">
   <colgroup>

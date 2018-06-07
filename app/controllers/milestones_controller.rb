@@ -1,4 +1,5 @@
 class MilestonesController < ApplicationController
+  before_action { @navbar = "milestones" }
   load_and_authorize_resource
 
   def index

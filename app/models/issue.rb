@@ -25,6 +25,7 @@ class Issue < ApplicationRecord
   belongs_to :assignee, class_name: 'User', optional: true
 
   scope :with_labels, -> { includes(:labels) }
+  scope :by_state, ->(s) { where(state: s) }
 
   def default_title
     tasks.map do |task|
@@ -32,4 +33,5 @@ class Issue < ApplicationRecord
       "#{test_case.component.name}-#{test_case.title}"
     end.join(" ")
   end
+
 end

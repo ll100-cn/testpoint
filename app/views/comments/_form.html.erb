@@ -12,9 +12,6 @@
           </div>
         </div>
         <div class="card-footer text-right bg-transparent">
-          <% Issue.state.options.each do |(text, value)| %>
-            <%= link_to text, [@issue, issue: { state: value.to_sym }], method: :patch, class: issue_state_class_name(value, :btn) %>
-          <% end %>
           <%= ok_url_tag %>
           <%= f.submit class: "btn btn-primary" %>
         </div>
