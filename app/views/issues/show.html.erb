@@ -56,23 +56,13 @@
       <span><%=l @issue.created_at, format: :long %></span>
       <hr>
 
-
-      <h5><%=h Issue, :state %></h5>
-      <div class="d-flex justify-content-between">
-        <span class="<%= issue_state_class_name(@issue.state, :text)%> mb-2"><%= @issue.state.text %></span>
+      <div class="d-flex">
+        <span class="h5"><%=h Issue, :state %></span>
         <% if current_user && current_user == @issue.assignee %>
-          <div class="dropdown">
-            <button class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              更新状态
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" style="min-width: 5rem;">
-              <% Issue.state.options.each do |(text, value)| %>
-                  <%= link_to text, [@issue, issue: { state: value.to_sym }], method: :patch, class: "dropdown-item" %>
-              <% end %>
-            </div>
-          </div>
+          <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), change_state_issue_path(@issue))%></span>
         <% end %>
       </div>
+      <span class="<%= issue_state_class_name(@issue.state, :text)%> mb-2"><%= @issue.state.text %></span>
       <hr>
 
       <div class="d-flex">

@@ -18,5 +18,6 @@ import '../components/modal'
 import '../components/drag_and_drop'
 import '../components/flatpickr'
 import '../components/select2'
+import '../components/simplemde'
 
 import '../pages'

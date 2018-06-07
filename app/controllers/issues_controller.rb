@@ -29,6 +29,9 @@ class IssuesController < ApplicationController
   def edit
   end
 
+  def change_state
+  end
+
   def update
     @issue.update(issue_params)
     respond_with @issue, location: ok_url_or_default(action: :show)

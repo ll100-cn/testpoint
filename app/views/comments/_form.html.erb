@@ -5,10 +5,27 @@
       <div class="card-header">
         <strong><%= current_user.name %></strong>
       </div>
+
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" id="write-tab" data-toggle="tab" href="#write" role="tab" aria-controls="write" aria-selected="true">Write</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="preview-tab" data-toggle="tab" href="#preview" role="tab" aria-controls="preview" aria-selected="true">Preview</a>
+        </li>
+      </ul>
+
       <%= bootstrap_vertical_form_for [issue, issue.comments.new] do |f| %>
         <div class="card-body">
           <div class="no-margin-bottom">
-            <%= f.input :content, input_html: { rows: 5 } %>
+            <div class="tab-content">
+              <div id="write" class="tab-pane fade show active" aria-labelledby="write-tab">
+                <%= f.input :content, input_html: { id: 'markdown-field' } %>
+              </div>
+              <div id="preview" class="tab-pane fade" aria-labelledby="preview-tab" >
+                <div class="CodeMirror-scroll" id="comment-preview"></div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="card-footer text-right bg-transparent">
