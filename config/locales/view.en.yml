@@ -61,6 +61,9 @@ en:
           relate: Relate
         upload_attachment:
           upload: Upload attachment
+      issues:
+        show:
+          upload: Upload attachment
     navbar:
       cases: Cases
       plans: Plans

@@ -49,7 +49,7 @@
         <%= render "comments/comments", comment: comment %>
       <% end %>
 
-      <%= render "comments/form", issue: @issue %>
+      <%= render file: "comments/_form.xhrml.erb" %>
     </div>
     <div class="col-sm-3">
       <h5><%=h Issue, :created_at %></h5>

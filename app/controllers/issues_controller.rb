@@ -4,6 +4,7 @@ class IssuesController < ApplicationController
 
   before_action { @navbar = "Issues" }
   before_action :set_tasks, only: [:new, :create]
+  before_action :assignee?, only: :change_state
 
   def index
     @q = Issue.ransack(params[:q])
@@ -45,5 +46,11 @@ protected
 
   def set_tasks
     @issue.tasks = [@task]
+  end
+
+  def assignee?
+    unless current_user.is_assignee?(@issue)
+      redirect_to issue_path(@issue), alert: "no permission"
+    end
   end
 end

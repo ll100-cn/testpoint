@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   load_and_authorize_resource :plan
-  load_and_authorize_resource throght: :plan
+  load_and_authorize_resource through: :plan
 
   def edit
   end
@@ -22,6 +22,6 @@ class TasksController < ApplicationController
 protected
 
   def task_params
-    params.fetch(:task, {}).permit(:state, :issue_id, :message, task_attachments_attributes: [:id, :attachment_id, :content, :_destroy])
+    params.fetch(:task, {}).permit(:state, :issue_id, :message, attachments_attributes: [:id, :file, :title, :_destroy])
   end
 end

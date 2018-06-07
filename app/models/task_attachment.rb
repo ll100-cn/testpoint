@@ -11,6 +11,6 @@
 #
 
 class TaskAttachment < ApplicationRecord
-  belongs_to :task
-  belongs_to :attachment
+  # belongs_to :task
+  # belongs_to :attachment
 end

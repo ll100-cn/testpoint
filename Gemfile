@@ -23,6 +23,7 @@ gem 'dotenv-rails', '2.4.0'
 gem 'rubocop', require: false
 gem 'sentry-raven', '2.7.3'
 gem 'hashie', '3.5.7'
+gem 'redcarpet', '3.4.0'
 
 # Controllers
 gem 'responders', '~> 2.4'

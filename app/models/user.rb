@@ -37,4 +37,8 @@ class User < ApplicationRecord
     gravatar_id = Digest::MD5.hexdigest(self.email.downcase)
     "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
   end
+
+  def is_assignee?(issue)
+    self.assigned_issues.include?(issue)
+  end
 end
