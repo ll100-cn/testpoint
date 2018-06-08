@@ -22,6 +22,7 @@ zh-CN:
         component_ids: 组件
       attachment:
         file: 文件
+        title: 描述
       component:
         name: 组件名称
         ancestry: 父组件

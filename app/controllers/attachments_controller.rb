@@ -1,6 +1,6 @@
 class AttachmentsController < ApplicationController
   load_and_authorize_resource
-  before_action :load_attachmentable, only: :create
+  # before_action :load_attachmentable, only: :create
 
   def create
     @attachment.save

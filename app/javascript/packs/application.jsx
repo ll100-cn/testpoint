@@ -19,5 +19,6 @@ import '../components/drag_and_drop'
 import '../components/flatpickr'
 import '../components/select2'
 import '../components/simplemde'
+import '../components/stimulus'
 
 import '../pages'

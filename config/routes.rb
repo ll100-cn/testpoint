@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   resources :test_cases
   resources :plans do
     resources :tasks do
-      resources :attachments
       member do
         get :change_state
         get :upload_attachment
@@ -15,7 +14,6 @@ Rails.application.routes.draw do
   end
   resources :issues do
     resources :comments do
-      resources :attachments
     end
     member do
       get :change_state
@@ -27,6 +25,7 @@ Rails.application.routes.draw do
   end
   resources :components
   resources :platforms
+  resources :attachments
   resources :users
   resource :profile
   resources :labels

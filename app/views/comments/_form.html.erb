@@ -5,16 +5,18 @@
       <div class="card-header">
         <strong><%= current_user.name %></strong>
       </div>
-      <%= bootstrap_vertical_form_for [@issue, @issue.comments.new] do |f| %>
+      <%= bootstrap_vertical_form_for [issue, issue.comments.new] do |f| %>
         <div class="card-body">
           <div class="no-margin-bottom">
-            <div class="tab-content">
-              <%= f.input :content, input_html: { class: 'markdown-field' } %>
-            </div>
+            <%= f.input :content, input_html: { class: 'markdown-field' } %>
+            <%= content_tag :div, class: "border", data: { controller: "attachment", url: attachments_url, name: 'attachment[file]' } do %>
+              <span>Upload</span>
+              <div data-target="attachment.container">
+              </div>
+            <% end %>
           </div>
         </div>
         <div class="card-footer text-right bg-transparent">
-          <%= render "attachments/form", f: f %>
           <%= ok_url_tag %>
           <%= f.submit class: "btn btn-primary" %>
         </div>
