@@ -58,9 +58,7 @@
 
       <div class="d-flex">
         <span class="h5"><%=h Issue, :state %></span>
-        <% if current_user && current_user == @issue.assignee %>
-          <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), change_state_issue_path(@issue))%></span>
-        <% end %>
+        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
       </div>
       <span class="<%= issue_state_class_name(@issue.state, :text)%> mb-2"><%= @issue.state.text %></span>
       <hr>

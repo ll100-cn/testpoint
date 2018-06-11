@@ -1,19 +1,26 @@
 class AttachmentsController < ApplicationController
   load_and_authorize_resource
-  # before_action :load_attachmentable, only: :create
 
   def create
     @attachment.save
+    @blob = ActiveStorage::Blob.find(@attachment.file.attachment.blob_id)
     respond_with @attachment
   end
 
-protected
-
-  def load_attachmentable
-    resource, id = request.path.split('/')[-3, 2]
-    @attachmentable = resource.singularize.classify.constantize.find(id)
-    @attachment = @attachmentable.attachments.new
+  def edit
   end
+
+  def update
+    @attachment.update(attachment_params)
+    respond_with @attachment, location: -> { ok_url_or_default([Issue]) }
+  end
+
+  def destroy
+    @attachment.delete
+    respond_with @attachment, location: -> { ok_url_or_default([Issue]) }
+  end
+
+protected
 
   def attachment_params
     params.fetch(:attachment, {}).permit(:file, :title)

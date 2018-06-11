@@ -21,11 +21,10 @@ class Issue < ApplicationRecord
   has_many :issues_labels, dependent: :destroy
   has_many :labels, through: :issues_labels
   belongs_to :milestone, optional: true
-  belongs_to :creator, class_name: 'User'
-  belongs_to :assignee, class_name: 'User', optional: true
+  belongs_to :creator, class_name: User.to_s
+  belongs_to :assignee, class_name: User.to_s, optional: true
 
   scope :with_labels, -> { includes(:labels) }
-  scope :by_state, ->(s) { where(state: s) }
 
   def default_title
     tasks.map do |task|
@@ -33,5 +32,4 @@ class Issue < ApplicationRecord
       "#{test_case.component.name}-#{test_case.title}"
     end.join(" ")
   end
-
 end

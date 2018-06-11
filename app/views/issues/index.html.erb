@@ -5,19 +5,21 @@
   </div>
 </div>
 
-<div class="d-flex">
+<div class="d-flex align-items-center justify-content-between">
   <%= backend_search_form_for @q do |f| %>
       <%= f.input :labels_id_eq, collection: Label.all.map {|l| [l.name, l.id]}, input_html: { class: 'select2.field' } %>
       <%= f.input :milestone_id_eq, collection: Milestone.all.map {|m| [m.title, m.id]}, input_html: { class: 'select2.field' } %>
       <%= f.submit class: "btn btn-outline-primary btn-sm mb-2" %>
   <% end %>
 
-  <div class="btn-group ml-4 mb-3" role="group">
-    <%= link_to page_i18n(:all), issues_path, :class => "btn btn-light #{(params[:state].blank?) ? "active" : ""}" %>
-    <% Issue.state.values.each do |s| %>
-      <%= link_to s.text, issues_path(issue_filters(:state => s)), :class => "btn btn-light #{( params[:state] == s) ? "active" : ""}" %>
-    <% end %>
-  </div>
+  <%= fume_nav @q.state_eq do |n| %>
+    <div class="btn-group btn-group-sm mb-2 ml-2" role="group">
+      <%= n.link_to nil, page_i18n(:all), current_url(q: { state_eq: nil }), class: "btn btn-outline-primary" %>
+      <% Issue.state.values.each do |value| %>
+        <%= n.link_to value, value.text, current_url(q: { state_eq: value }), class: "btn btn-outline-primary" %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 
 <table class="table">

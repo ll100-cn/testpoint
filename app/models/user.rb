@@ -23,8 +23,8 @@ class User < ApplicationRecord
   # :registerable, :recoverable
   devise :database_authenticatable, :rememberable, :trackable, :validatable
   has_many :comments, dependent: :destroy
-  has_many :created_issues, class_name: 'Issue', foreign_key: 'creator_id'
-  has_many :assigned_issues, class_name: 'Issue', foreign_key: 'assignee_id'
+  has_many :created_issues, class_name: Issue.to_s, foreign_key: 'creator_id', dependent: :destroy, inverse_of: true
+  has_many :assigned_issues, class_name: Issue.to_s, foreign_key: 'assignee_id', dependent: :destroy, inverse_of: true
   attr_writer :current_password
 
   validates :name, presence: true
@@ -36,9 +36,5 @@ class User < ApplicationRecord
   def avatar_url(size = 200)
     gravatar_id = Digest::MD5.hexdigest(self.email.downcase)
     "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
-  end
-
-  def is_assignee?(issue)
-    self.assigned_issues.include?(issue)
   end
 end

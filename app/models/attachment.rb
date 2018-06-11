@@ -12,4 +12,5 @@ class Attachment < ApplicationRecord
   belongs_to :attachmentable, polymorphic: true, optional: true
 
   has_one_attached :file
+  # validates_presence_of :title
 end

@@ -20,5 +20,7 @@ import '../components/flatpickr'
 import '../components/select2'
 import '../components/simplemde'
 import '../components/stimulus'
+import '../components/clipboard'
+import '../components/load-image'
 
 import '../pages'

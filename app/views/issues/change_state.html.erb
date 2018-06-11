@@ -1,8 +1,0 @@
-<%= bootstrap_horizontal_form_for @issue, url: { action: :update }  do |f| %>
-    <%= f.input :state, collection: Issue.state.options, input_html: { class: "select2-field" } %>
-    <%= f.actions_content do %>
-        <%= ok_url_tag %>
-        <%= f.submit class: "btn btn-primary" %>
-        <%= cancel_link @issue, class: "btn btn-secondary" %>
-    <% end %>
-<% end %>

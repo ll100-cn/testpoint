@@ -26,7 +26,7 @@ Layout/SpaceInsideArrayLiteralBrackets:
 
 
 Metrics/BlockLength:
-#  Max: 150
+  Max: 30
   Exclude:
     - config/initializers/*.rb
     - spec/**/*_spec.rb
@@ -56,6 +56,10 @@ Rails/SkipsModelValidations:
 
 Rails/HasAndBelongsToMany:
   Enabled: false
+
+Rails/OutputSafety:
+  Exclude:
+    - app/helpers/application_helper.rb
 
 
 Style/StringLiterals:

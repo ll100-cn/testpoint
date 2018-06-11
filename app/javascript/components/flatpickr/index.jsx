@@ -10,8 +10,8 @@ import 'flatpickr/dist/plugins/confirmDate/confirmDate.css'
 import SelectTodayPlugin from './selectToday'
 import './selectToday.scss'
 
-$(document).on('turbolinks:load', function() {
-  $('.datetime-picker').each(function() {
+$(document).on('content:loaded', function(event) {
+  $(event.target).find('.datetime-picker').each(function() {
     $(this).flatpickr({
       enableTime: true,
       wrap: true,

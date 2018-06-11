@@ -18,7 +18,7 @@
   <% else %>
     <%= render "components", key: nil %>
 
-    <%= content_tag :div, id: "uploadAttachmentsModal", class: "modal fade", data: { method: "POST" } do %>
+    <%= content_tag :div, id: "uploadAttachmentsModal", class: "modal fade", data: { method: "POST", url: attachments_path } do %>
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
         </div>

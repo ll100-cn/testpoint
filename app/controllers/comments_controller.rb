@@ -3,7 +3,6 @@ class CommentsController < ApplicationController
   load_and_authorize_resource through: :issue
 
   def new
-    @comment.attachments.build
   end
 
   def create

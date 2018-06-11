@@ -38,8 +38,7 @@ module ApplicationHelper
                                        autolink: true,
                                        tables: true,
                                        underline: true,
-                                       highlight: true
-    )
-   markdown.render(text).html_safe
+                                       highlight: true)
+    markdown.render(text).html_safe
   end
 end

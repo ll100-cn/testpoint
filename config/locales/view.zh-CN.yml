@@ -30,9 +30,6 @@ zh-CN:
           relate: 关联
         upload_attachment:
           upload:  上传
-      issues:
-        show:
-          upload: 上传图片
     navbar:
       cases: 案例
       plans: 计划

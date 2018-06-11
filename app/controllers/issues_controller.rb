@@ -1,17 +1,13 @@
 class IssuesController < ApplicationController
-  load_and_authorize_resource
   load_and_authorize_resource :task
+  load_and_authorize_resource
 
   before_action { @navbar = "Issues" }
   before_action :set_tasks, only: [:new, :create]
-  before_action :assignee?, only: :change_state
 
   def index
     @q = Issue.ransack(params[:q])
     @issues = @q.result.with_labels.page(params[:page])
-    if params[:state].present? && Issue.state.values.include?(params[:state])
-      @issues = @issues.by_state(params[:state])
-    end
   end
 
   def new
@@ -30,9 +26,6 @@ class IssuesController < ApplicationController
   def edit
   end
 
-  def change_state
-  end
-
   def update
     @issue.update(issue_params)
     respond_with @issue, location: ok_url_or_default(action: :show)
@@ -46,11 +39,5 @@ protected
 
   def set_tasks
     @issue.tasks = [@task]
-  end
-
-  def assignee?
-    unless current_user.is_assignee?(@issue)
-      redirect_to issue_path(@issue), alert: "no permission"
-    end
   end
 end
