@@ -7,19 +7,6 @@ class AttachmentsController < ApplicationController
     respond_with @attachment
   end
 
-  def edit
-  end
-
-  def update
-    @attachment.update(attachment_params)
-    respond_with @attachment, location: -> { ok_url_or_default([Issue]) }
-  end
-
-  def destroy
-    @attachment.delete
-    respond_with @attachment, location: -> { ok_url_or_default([Issue]) }
-  end
-
 protected
 
   def attachment_params

@@ -1,37 +1,4 @@
 <% file = @attachment.file %>
-<!--<div class="border bg-light p-2 mt-2">-->
-  <!--<div class="row" style="line-height: normal;">-->
-    <!--<div class="col-3 p-0 ml-3">-->
-      <!--<div class="image-border embed-responsive embed-responsive-1by1">-->
-        <!--<div class="embed-responsive-item embed-responsive-item d-flex align-items-center justify-content-center">-->
-          <!--<%= image_tag url_for(file), style: "max-height: 100%;" %>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<div class="col">-->
-      <!--<div class="d-flex">-->
-        <!--<p class="mt-2"><%= @blob.filename.to_s %></p>-->
-        <!--<div class="ml-auto mt-2">-->
-          <!--<%= content_tag :div, id: "editAttachmentModal", class: "modal fade", data: { method: "POST" } do %>-->
-            <!--<div class="modal-dialog">-->
-              <!--<div class="modal-content">-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--<% end %>-->
-          <!--<% data = { remote: true, target: "#editAttachmentModal", toggle: "modal", type: :xhrml } %>-->
-          <!--<%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_attachment_path(@attachment), data: data)%>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<p class="float-left mt-1"><%= number_to_human_size(@blob.byte_size, precision: 2) %></p>-->
-      <!--<p>-->
-        <!--<%= link_to polymorphic_url(@attachment.file), class: "clipboard float-right mt-1" do %>-->
-          <!--<span class="fa fa-clipboard"></span>-->
-        <!--<% end %>-->
-      <!--</p>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
-
 <div class="media border bg-light p-2 align-items-center">
   <div class="mr-2" style="width: 3rem">
     <div class="embed-responsive embed-responsive-1by1">

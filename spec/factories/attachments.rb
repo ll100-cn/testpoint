@@ -11,5 +11,6 @@
 FactoryBot.define do
   factory :attachment do
     file { ResourceHelper.upload_file("avatar.png") }
+    title "this is a title"
   end
 end

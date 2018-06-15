@@ -13,15 +13,10 @@ Rails.application.routes.draw do
     end
   end
   resources :issues do
-    resources :comments do
-    end
-    member do
-      get :change_state
-    end
+    resources :comments
   end
   resources :tasks do
-    resources :issues do
-    end
+    resources :issues
   end
   resources :components
   resources :platforms

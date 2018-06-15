@@ -1,4 +1,5 @@
 class Comment < ApplicationRecord
+  include MarkdownConvertor
   belongs_to :user
   belongs_to :issue
   has_many :attachments, as: :attachmentable, dependent: :destroy

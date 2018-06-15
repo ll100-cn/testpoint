@@ -23,7 +23,6 @@ gem 'dotenv-rails', '2.4.0'
 gem 'rubocop', require: false
 gem 'sentry-raven', '2.7.3'
 gem 'hashie', '3.5.7'
-gem 'redcarpet', '3.4.0'
 
 # Controllers
 gem 'responders', '~> 2.4'
@@ -42,6 +41,7 @@ gem 'simple_form', '4.0.1'
 gem 'kaminari', '~> 1.0', '>= 1.0.1'
 gem 'fume-nav', '0.1.3'
 gem 'jbuilder', '~> 2.5'
+gem 'kramdown', '1.17.0'
 
 # Assets
 gem 'sass-rails', '~> 5.0'
