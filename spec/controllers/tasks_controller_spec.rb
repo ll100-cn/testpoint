@@ -17,7 +17,6 @@ RSpec.describe TasksController, type: :controller do
       let!(:attachment) { create :attachment, attachmentable_id: task.id, attachmentable_type: "Task" }
 
       before {
-        attachment.file.attach(io: File.open(Rails.root.join('spec', 'resources', 'avatar.png')), filename: 'avatar.png', content_type: 'image/png')
         task_attributes[:state] = :failure
       }
 

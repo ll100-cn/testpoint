@@ -10,7 +10,9 @@
 
 FactoryBot.define do
   factory :attachment do
-    file { ResourceHelper.upload_file("avatar.png") }
     title "this is a title"
+    after(:build) do |attachment|
+      attachment.file.attach(io: File.open(Rails.root.join("spec", "resources", "avatar.png")), filename: 'avatar.png', content_type: "image/png")
+    end
   end
 end
