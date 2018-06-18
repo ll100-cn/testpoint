@@ -21,14 +21,14 @@
     </button>
     <div class="dropdown-menu">
       <% if @task.issue_id.nil? %>
-        <%= new_button Issue, [:new, @task, :issue], class: "dropdown-item" %>
+        <%= new_button Issue, [:new, @project, @task, :issue], class: "dropdown-item" %>
       <% end %>
       <% relate_data = { remote: true, target: "#relate-issue", type: :xhrml } %>
       <% link_text = @task.issue_id? ? "#{h(Task, :issue_id)}: #{@task.issue_id}" : action_i18n('relate') %>
-      <%= link_to link_text, [:relate, @plan, @task], data: relate_data, class: "dropdown-item" %>
+      <%= link_to link_text, [:relate, @project, @plan, @task], data: relate_data, class: "dropdown-item" %>
     </div>
   </div>
   <% data = { remote: true, target: "#uploadAttachmentsModal", type: :xhrml } %>
-  <%= link_to Task.state.find_value(:pass).text, [@plan, @task, task: { state: :pass }], method: :patch, class: "btn btn-success" %>
-  <%= link_to Task.state.find_value(:failure).text, upload_attachment_plan_task_path(@plan, @task), data: data, class: "btn btn-danger" %>
+  <%= link_to Task.state.find_value(:pass).text, [@project, @plan, @task, task: { state: :pass }], method: :patch, class: "btn btn-success" %>
+  <%= link_to Task.state.find_value(:failure).text, upload_attachment_project_plan_task_path(@project, @plan, @task), data: data, class: "btn btn-danger" %>
 </div>

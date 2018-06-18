@@ -23,8 +23,8 @@
         <span class="fa fa-fw fa-sticky-note-o text-muted"></span>
       <% end %>
 
-      <%= edit_link "#", class: "small", data: { toggle: "modal", target: "#test_case_modal", url: edit_test_case_path(test_case, ok_url: request.fullpath) } %>
-      <%= destroy_link [test_case, ok_url: request.fullpath], class: "small" %>
+      <%= edit_link "#", class: "small", data: { toggle: "modal", target: "#test_case_modal", url: edit_project_test_case_path(@project, test_case, ok_url: request.fullpath) } %>
+      <%= destroy_link [@project, test_case, ok_url: request.fullpath], class: "small" %>
     </div>
     <%= content_html %>
   </div>

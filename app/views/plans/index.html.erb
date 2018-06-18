@@ -35,8 +35,8 @@
           </div>
         </td>
         <td>
-          <%= edit_link [:edit, plan, ok_url: request.fullpath] %>
-          <%= destroy_link [plan, ok_url: request.fullpath] %>
+          <%= edit_link [:edit, @project, plan, ok_url: request.fullpath] %>
+          <%= destroy_link [@project, plan, ok_url: request.fullpath] %>
         </td>
       </tr>
     <% end %>

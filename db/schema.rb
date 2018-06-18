@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
 ActiveRecord::Schema.define(version: 2018_06_07_082829) do
+=======
+ActiveRecord::Schema.define(version: 2018_06_19_030026) do
+>>>>>>> add project
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,7 +67,9 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.datetime "updated_at", null: false
     t.string "ancestry"
     t.boolean "archived", default: false
+    t.bigint "project_id"
     t.index ["ancestry"], name: "index_components_on_ancestry"
+    t.index ["project_id"], name: "index_components_on_project_id"
   end
 
   create_table "issues", force: :cascade do |t|
@@ -75,9 +81,17 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.bigint "milestone_id"
     t.bigint "creator_id"
     t.bigint "assignee_id"
+<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["creator_id"], name: "index_issues_on_creator_id"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"
+=======
+    t.bigint "project_id"
+    t.index ["assignee_id"], name: "index_issues_on_assignee_id"
+    t.index ["creator_id"], name: "index_issues_on_creator_id"
+    t.index ["milestone_id"], name: "index_issues_on_milestone_id"
+    t.index ["project_id"], name: "index_issues_on_project_id"
+>>>>>>> add project
   end
 
   create_table "issues_labels", force: :cascade do |t|
@@ -95,6 +109,8 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.string "color"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_labels_on_project_id"
   end
 
   create_table "milestones", force: :cascade do |t|
@@ -104,6 +120,8 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "start_time"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_milestones_on_project_id"
   end
 
   create_table "plans", force: :cascade do |t|
@@ -112,6 +130,8 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.datetime "start_at"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_plans_on_project_id"
   end
 
   create_table "platforms", force: :cascade do |t|
@@ -119,6 +139,8 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
   create_table "platforms_test_cases", id: false, force: :cascade do |t|
@@ -126,6 +148,12 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.bigint "test_case_id"
     t.index ["platform_id"], name: "index_platforms_test_cases_on_platform_id"
     t.index ["test_case_id"], name: "index_platforms_test_cases_on_test_case_id"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "task_attachments", force: :cascade do |t|
@@ -147,9 +175,11 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.bigint "platform_id"
     t.bigint "issue_id"
     t.text "message"
+    t.bigint "project_id"
     t.index ["issue_id"], name: "index_tasks_on_issue_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["platform_id"], name: "index_tasks_on_platform_id"
+    t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
   end
 
@@ -160,7 +190,9 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
     t.datetime "updated_at", null: false
     t.bigint "component_id"
     t.boolean "archived", default: false
+    t.bigint "project_id"
     t.index ["component_id"], name: "index_test_cases_on_component_id"
+    t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -183,10 +215,21 @@ ActiveRecord::Schema.define(version: 2018_06_07_082829) do
 
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "users"
+  add_foreign_key "components", "projects"
   add_foreign_key "issues", "milestones"
+<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
+=======
+  add_foreign_key "issues", "projects"
+>>>>>>> add project
   add_foreign_key "issues_labels", "issues"
   add_foreign_key "issues_labels", "labels"
+  add_foreign_key "labels", "projects"
+  add_foreign_key "milestones", "projects"
+  add_foreign_key "plans", "projects"
+  add_foreign_key "platforms", "projects"
   add_foreign_key "platforms_test_cases", "platforms"
   add_foreign_key "platforms_test_cases", "test_cases"
   add_foreign_key "tasks", "platforms"
+  add_foreign_key "tasks", "projects"
+  add_foreign_key "test_cases", "projects"
 end

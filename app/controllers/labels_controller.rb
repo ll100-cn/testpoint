@@ -1,5 +1,6 @@
 class LabelsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :project
+  load_and_authorize_resource through: :project
 
   before_action { @navbar = "Labels" }
 
@@ -13,7 +14,7 @@ class LabelsController < ApplicationController
 
   def create
     @label.save
-    respond_with @label, location: ok_url_or_default([Label])
+    respond_with @label, location: ok_url_or_default([@project, Label])
   end
 
   def show
@@ -24,12 +25,12 @@ class LabelsController < ApplicationController
 
   def update
     @label.update(label_params)
-    respond_with @label, location: ok_url_or_default([Label])
+    respond_with @label, location: ok_url_or_default([@project, Label])
   end
 
   def destroy
     @label.delete
-    respond_with @label, location: ok_url_or_default([Label])
+    respond_with @label, location: ok_url_or_default([@project, Label])
   end
 
 protected

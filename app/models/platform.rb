@@ -12,6 +12,8 @@
 class Platform < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_and_belongs_to_many :test_cases
+  belongs_to :project
+
   validates :name, presence: true
 
   scope :available, -> { where(archived: false) }

@@ -1,4 +1,4 @@
-<%= bootstrap_horizontal_form_for milestone do |f| %>
+<%= bootstrap_horizontal_form_for [project, milestone] do |f| %>
   <%= f.input :title %>
   <%= f.input :start_time, as: :datetime_pickr %>
   <%= f.input :end_time, as: :datetime_pickr %>

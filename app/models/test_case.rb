@@ -14,6 +14,7 @@
 class TestCase < ApplicationRecord
   belongs_to :component
   has_and_belongs_to_many :platforms
+  belongs_to :project
 
   cleanup_column :title, :content
 

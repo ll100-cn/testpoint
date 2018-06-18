@@ -1,13 +1,13 @@
-<%= bootstrap_horizontal_form_for component do |f| %>
+<%= bootstrap_horizontal_form_for [project, component] do |f| %>
   <%= f.input :name %>
   <% without_ids = f.object.new_record? ? nil : f.object.subtree %>
-  <%= f.input :parent_id, collection: Component.available.where.not(id: without_ids).ranked %>
+  <%= f.input :parent_id, collection: project.components.available.where.not(id: without_ids).ranked %>
 
   <hr>
 
   <%= f.actions_content do %>
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link [ ::TestCase, component_id: component.id ], class: "btn btn-link" %>
+    <%= cancel_link [project, ::TestCase, component_id: component.id ], class: "btn btn-link" %>
   <% end %>
 <% end %>

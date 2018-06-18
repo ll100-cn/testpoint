@@ -23,6 +23,7 @@ class Issue < ApplicationRecord
   belongs_to :milestone, optional: true
   belongs_to :creator, class_name: User.to_s
   belongs_to :assignee, class_name: User.to_s, optional: true
+  belongs_to :project
 
   scope :with_labels, -> { includes(:labels) }
 

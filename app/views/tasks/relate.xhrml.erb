@@ -1,6 +1,6 @@
 <% data = { target: "#relate-issue", type: :xhrml } %>
-<%= bootstrap_inline_form_for @task, url: [@plan, @task], html: { remote: true, data: data } do |f| %>
+<%= bootstrap_inline_form_for @task, url: [@project, @plan, @task], html: { remote: true, data: data } do |f| %>
   <%= f.input :issue_id %>
   <%= f.submit action_i18n('relate'), class: "btn btn-primary ml-2" %>
-  <%= link_to action_i18n('cancel'), [@plan, @task], data: data, remote: true, method: :patch, class: "btn btn-secondary ml-2" %>
+  <%= link_to action_i18n('cancel'), [@project, @plan, @task], data: data, remote: true, method: :patch, class: "btn btn-secondary ml-2" %>
 <% end %>

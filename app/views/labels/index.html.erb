@@ -1,7 +1,7 @@
 <div class="page-header">
   <h2><%= page_i18n :index, model_name: h(@labels) %></h2>
   <div class="actions ml-auto">
-    <%= new_link Label, [:new, :label] %>
+    <%= new_link Label, [:new, @project, :label] %>
   </div>
 </div>
 
@@ -22,15 +22,15 @@
   </thead>
   <tbody>
   <% @labels.each do |label| %>
-      <tr>
-        <td><%= link_to label_with_color(label), label %></td>
-        <td><%= label.description %></td>
-        <td><%= label.issues.count %></td>
-        <td>
-          <%= edit_link [:edit, label, ok_url: request.fullpath ] %>
-          <%= destroy_link [label, ok_url: request.fullpath ]%>
-        </td>
-      </tr>
+    <tr>
+      <td><%= link_to label_with_color(label), [@project, label] %></td>
+      <td><%= label.description %></td>
+      <td><%= label.issues.count %></td>
+      <td>
+        <%= edit_link [:edit, @project, label, ok_url: request.fullpath ] %>
+        <%= destroy_link [@project, label, ok_url: request.fullpath ]%>
+      </td>
+    </tr>
   <% end %>
   </tbody>
 </table>

@@ -1,5 +1,6 @@
 class ComponentsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :project
+  load_and_authorize_resource through: :project
 
   def new
     @component.parent_id = params[:parent_id].presence
@@ -7,7 +8,7 @@ class ComponentsController < ApplicationController
 
   def create
     @component.save
-    respond_with @component, location: ok_url_or_default([TestCase])
+    respond_with @component, location: ok_url_or_default([@project, TestCase])
   end
 
   def edit
@@ -15,12 +16,12 @@ class ComponentsController < ApplicationController
 
   def update
     @component.update(component_params)
-    respond_with @component, location: ok_url_or_default([TestCase])
+    respond_with @component, location: ok_url_or_default([@project, TestCase])
   end
 
   def destroy
     @component.archive
-    respond_with @component, location: ok_url_or_default([TestCase])
+    respond_with @component, location: ok_url_or_default([@project, TestCase])
   end
 
 protected

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testpoint</title>
+    <%= csrf_meta_tags %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= render "layouts/nav_extend", current: @navbar %>
+    <%= render "layouts/flash" %>
+  <div id="tp-main" class="container-fluid">
+    <%= yield %>
+  </div>
+  </body>
+</html>

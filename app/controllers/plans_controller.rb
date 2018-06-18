@@ -1,7 +1,8 @@
 class PlansController < ApplicationController
   layout "sidebar", only: [:show]
   before_action { @navbar = "plans" }
-  load_and_authorize_resource
+  load_and_authorize_resource :project
+  load_and_authorize_resource through: :project
 
   def index
     @plans = @plans.available.page(params[:page])
@@ -18,8 +19,8 @@ class PlansController < ApplicationController
     test_cases_scope = test_cases_scope.joins(:platforms).where(platforms: { id: params[:platform_ids] }) if params[:platform_ids].present?
     test_case_ids = test_cases_scope.ids
 
-    @plan.generate(test_case_ids: test_case_ids || TestCase.ids)
-    respond_with @plan, location: ok_url_or_default([Plan])
+    @plan.generate(test_case_ids: test_case_ids || TestCase.ids, project_id: params[:project_id])
+    respond_with @plan, location: ok_url_or_default([@project, Plan])
   end
 
   def edit
@@ -27,7 +28,7 @@ class PlansController < ApplicationController
 
   def update
     @plan.update(plan_params)
-    respond_with @plan, location: ok_url_or_default([Plan])
+    respond_with @plan, location: ok_url_or_default([@project, Plan])
   end
 
   def show
@@ -40,7 +41,7 @@ class PlansController < ApplicationController
 
   def destroy
     @plan.archive
-    respond_with @plan, location: ok_url_or_default([Plan])
+    respond_with @plan, location: ok_url_or_default([@project, Plan])
   end
 
 protected

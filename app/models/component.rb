@@ -14,6 +14,7 @@ class Component < ApplicationRecord
   has_ancestry
 
   has_many :test_cases, dependent: :destroy
+  belongs_to :project
 
   validates :name, presence: true
 

@@ -3,9 +3,11 @@ class TestCasesController < ApplicationController
   before_action { @navbar = "cases" }
   load_and_authorize_resource :component
   load_and_authorize_resource :platform
-  load_and_authorize_resource
+  load_and_authorize_resource :project
+  load_and_authorize_resource through: :project
 
   def index
+    @test_cases = @project.test_cases
     @default_cases_url_options = request.query_parameters
     @test_cases = @test_cases.where(component_id: @component.subtree) if @component
     @test_cases = @test_cases.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
@@ -17,7 +19,7 @@ class TestCasesController < ApplicationController
 
   def create
     @test_case.save
-    respond_with @test_case, location: ok_url_or_default([TestCase])
+    respond_with @test_case, location: ok_url_or_default([@project, TestCase])
   end
 
   def show
@@ -28,12 +30,12 @@ class TestCasesController < ApplicationController
 
   def update
     @test_case.update(test_case_params)
-    respond_with @test_case, action: :edit, location: -> { ok_url_or_default([TestCase]) }
+    respond_with @test_case, action: :edit, location: -> { ok_url_or_default([@project, TestCase]) }
   end
 
   def destroy
     @test_case.archive
-    respond_with @test_case, location: ok_url_or_default([TestCase])
+    respond_with @test_case, location: ok_url_or_default([@project, TestCase])
   end
 
 protected

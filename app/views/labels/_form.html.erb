@@ -1,4 +1,4 @@
-<%= bootstrap_horizontal_form_for label do |f| %>
+<%= bootstrap_horizontal_form_for [project, label] do |f| %>
   <%= f.input :name %>
   <%= f.input :description %>
   <%= f.input :color, as: :color_picker %>

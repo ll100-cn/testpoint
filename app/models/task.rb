@@ -22,6 +22,7 @@ class Task < ApplicationRecord
   belongs_to :plan
   belongs_to :platform
   belongs_to :issue, optional: true
+  belongs_to :project
 
   has_many :attachments, as: :attachmentable, dependent: :destroy
   accepts_nested_attributes_for :attachments, allow_destroy: true

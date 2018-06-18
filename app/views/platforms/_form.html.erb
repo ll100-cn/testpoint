@@ -1,4 +1,4 @@
-<%= bootstrap_horizontal_form_for platform do |f| %>
+<%= bootstrap_horizontal_form_for [project, platform] do |f| %>
   <%= f.input :name %>
 
   <hr>
@@ -6,6 +6,6 @@
   <%= f.actions_content do %>
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link [ ::TestCase ], class: "btn btn-link" %>
+    <%= cancel_link [project, ::TestCase ], class: "btn btn-link" %>
   <% end %>
 <% end %>

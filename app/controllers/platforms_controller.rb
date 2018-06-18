@@ -1,24 +1,24 @@
 class PlatformsController < ApplicationController
-  # layout "cases"
-  load_and_authorize_resource
+  load_and_authorize_resource :project
+  load_and_authorize_resource through: :project
 
   def new
   end
 
   def create
     @platform.save
-    respond_with @platform, location: ok_url_or_default([TestCase])
+    respond_with @platform, location: ok_url_or_default([@project, TestCase])
   end
 
   def update
     @platform.update(platform_params)
 
-    respond_with @platform, location: ok_url_or_default([TestCase])
+    respond_with @platform, location: ok_url_or_default([@project, TestCase])
   end
 
   def destroy
     @platform.archive
-    respond_with @platform, location: ok_url_or_default([TestCase])
+    respond_with @platform, location: ok_url_or_default([@project, TestCase])
   end
 
 protected

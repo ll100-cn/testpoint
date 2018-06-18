@@ -18,7 +18,7 @@
   <% else %>
     <%= render "components", key: nil %>
 
-    <%= content_tag :div, id: "uploadAttachmentsModal", class: "modal fade", data: { method: "POST", url: attachments_path } do %>
+    <%= content_tag :div, id: "uploadAttachmentsModal", class: "modal fade", data: { method: "POST", url: project_attachments_path(@project) } do %>
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
         </div>
@@ -34,7 +34,7 @@
       <% ([[page_i18n(:all), nil]] + Task.state.options).each do |key, value| %>
         <li>
           <%= n.apply_content value do |active_class| %>
-            <%= link_to [@plan, q: { state_eq: value }], class: active_class do %>
+            <%= link_to [@project, @plan, q: { state_eq: value }], class: active_class do %>
               <span class="fa fa-fw <%= 'fa-angle-right' if active_class %>"></span><%= key %>
             <% end %>
           <% end %>

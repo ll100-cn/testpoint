@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <%= bootstrap_vertical_form_for [@plan, @task], html: { id: "uploadAttachmentForm" } do |f| %>
+      <%= bootstrap_vertical_form_for [@project, @plan, @task], html: { id: "uploadAttachmentForm" } do |f| %>
         <%= f.input :state, as: :hidden, input_html: { value: :failure } %>
         <%= f.input :message, input_html: { rows: 5 } %>
         <%= f.simple_fields_for :attachments do |a| %>

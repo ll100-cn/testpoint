@@ -13,6 +13,7 @@ zh-CN:
       comment: 评论
       label: 标签
       milestone: 里程碑
+      project: 项目
     attributes:
       plan:
         title: 标题
@@ -70,3 +71,6 @@ zh-CN:
         description: 描述
         start_time: 开始时间
         end_time: 截止时间
+      project:
+        name: 项目名称
+        created_at: 创建时间
