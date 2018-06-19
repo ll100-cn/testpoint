@@ -1,5 +1,4 @@
 class MilestonesController < ApplicationController
-<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
   before_action { @navbar = "milestones" }
   load_and_authorize_resource :project
   load_and_authorize_resource through: :project

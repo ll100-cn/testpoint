@@ -35,8 +35,12 @@
           </div>
         </td>
         <td>
-          <%= edit_link [:edit, @project, plan, ok_url: request.fullpath] %>
-          <%= destroy_link [@project, plan, ok_url: request.fullpath] %>
+          <% if can? :update, plan %>
+            <%= edit_link [:edit, @project, plan, ok_url: request.fullpath] %>
+          <% end %>
+          <% if can? :destroy, plan %>
+            <%= destroy_link [@project, plan, ok_url: request.fullpath] %>
+          <% end %>
         </td>
       </tr>
     <% end %>
@@ -48,7 +52,8 @@
 </nav>
 
 <hr>
-
-<div class="page-actions">
-  <%= new_button Plan, action: :new %>
-</div>
+<% if can? :create, Plan %>
+  <div class="page-actions">
+    <%= new_button Plan, action: :new %>
+  </div>
+<% end %>

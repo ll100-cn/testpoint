@@ -13,5 +13,6 @@
 FactoryBot.define do
   factory :component do
     name "Component Name"
+    project
   end
 end

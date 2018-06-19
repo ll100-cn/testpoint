@@ -28,7 +28,6 @@ class Plan < ApplicationRecord
         tasks.new(test_case_id: test_case.id, platform_id: platform_id, project_id: params[:project_id])
       end
     end
-
     save
   end
 

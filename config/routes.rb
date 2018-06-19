@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users, path: ""
-  root 'main#root'
+  get '/', to: redirect('/projects'), as: :root
 
   resources :projects do
     resources :test_cases
@@ -21,12 +21,15 @@ Rails.application.routes.draw do
     end
     resources :components
     resources :platforms
-    resources :attachments
-    resources :users
+    resources :members
     resources :labels
     resources :milestones
+    member do
+      post :remove_member
+    end
   end
 
+  resources :users
+  resources :attachments
   resource :profile
-
 end

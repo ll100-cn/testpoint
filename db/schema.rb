@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
-ActiveRecord::Schema.define(version: 2018_06_07_082829) do
-=======
-ActiveRecord::Schema.define(version: 2018_06_19_030026) do
->>>>>>> add project
+ActiveRecord::Schema.define(version: 2018_06_20_022102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,17 +77,11 @@ ActiveRecord::Schema.define(version: 2018_06_19_030026) do
     t.bigint "milestone_id"
     t.bigint "creator_id"
     t.bigint "assignee_id"
-<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
-    t.index ["assignee_id"], name: "index_issues_on_assignee_id"
-    t.index ["creator_id"], name: "index_issues_on_creator_id"
-    t.index ["milestone_id"], name: "index_issues_on_milestone_id"
-=======
     t.bigint "project_id"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["creator_id"], name: "index_issues_on_creator_id"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
->>>>>>> add project
   end
 
   create_table "issues_labels", force: :cascade do |t|
@@ -156,6 +146,15 @@ ActiveRecord::Schema.define(version: 2018_06_19_030026) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "projects_users", force: :cascade do |t|
+    t.bigint "project_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_projects_users_on_project_id"
+    t.index ["user_id"], name: "index_projects_users_on_user_id"
+  end
+
   create_table "task_attachments", force: :cascade do |t|
     t.bigint "task_id"
     t.bigint "attachment_id"
@@ -209,6 +208,7 @@ ActiveRecord::Schema.define(version: 2018_06_19_030026) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.string "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -217,10 +217,7 @@ ActiveRecord::Schema.define(version: 2018_06_19_030026) do
   add_foreign_key "comments", "users"
   add_foreign_key "components", "projects"
   add_foreign_key "issues", "milestones"
-<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
-=======
   add_foreign_key "issues", "projects"
->>>>>>> add project
   add_foreign_key "issues_labels", "issues"
   add_foreign_key "issues_labels", "labels"
   add_foreign_key "labels", "projects"
@@ -229,6 +226,8 @@ ActiveRecord::Schema.define(version: 2018_06_19_030026) do
   add_foreign_key "platforms", "projects"
   add_foreign_key "platforms_test_cases", "platforms"
   add_foreign_key "platforms_test_cases", "test_cases"
+  add_foreign_key "projects_users", "projects"
+  add_foreign_key "projects_users", "users"
   add_foreign_key "tasks", "platforms"
   add_foreign_key "tasks", "projects"
   add_foreign_key "test_cases", "projects"

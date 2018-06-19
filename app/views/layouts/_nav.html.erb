@@ -1,5 +1,17 @@
 <nav class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-dark sticky-top tp-navbar">
   <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
+  <div class="dropdown">
+    <button class="btn btn-sm dropdown-toggle text-white border-0" data-toggle="dropdown" style="background: transparent;">
+      <%= @project.name %>
+    </button>
+    <div class="dropdown-menu" style="min-width: 3px;">
+      <% Project.all.each do |project| %>
+        <% if can? :update, project %>
+          <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
   <div class="navbar-nav-scroll">
     <%= fume_nav current do |n| %>
       <ul class="navbar-nav">
@@ -13,7 +25,7 @@
           <%= link_to t('views.navbar.issues'), [@project, Issue], class: "nav-link" %>
         <% end %>
         <%= n.li_tag "Users", class: "nav-item" do %>
-          <%= link_to t('views.navbar.users'), [@project, User], class: "nav-link" %>
+            <%= link_to t('views.navbar.members'), [@project, :members], class: "nav-link" %>
         <% end %>
         <%= n.li_tag "Milestones", class: "nav-item" do %>
           <%= link_to t('views.navbar.milestones'), [@project, Milestone], class: "nav-link" %>
@@ -24,18 +36,18 @@
 
   <ul class="navbar-nav ml-md-auto">
     <% if user_signed_in? %>
-        <li class="nav-item dropdown">
-          <%= link_to "#", class: "nav-link dropdown-toggle py-0", data: { toggle: "dropdown" } do %>
-              <%= image_tag current_user.avatar_url, height: 25, class: "rounded-circle" %>
-              <%= current_user.name %>
-          <% end %>
-          <div class="dropdown-menu dropdown-menu-right">
-            <%= link_to page_i18n('profile'), profile_path(request_for_ok_url), class: "dropdown-item" %>
-            <%= link_to action_i18n('logout'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
-          </div>
-        </li>
+      <li class="nav-item dropdown">
+        <%= link_to "#", class: "nav-link dropdown-toggle py-0", data: { toggle: "dropdown" } do %>
+          <%= image_tag current_user.avatar_url, height: 25, class: "rounded-circle" %>
+          <%= current_user.name %>
+        <% end %>
+        <div class="dropdown-menu dropdown-menu-right">
+          <%= link_to page_i18n('profile'), profile_path(request_for_ok_url), class: "dropdown-item" %>
+          <%= link_to action_i18n('logout'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
+        </div>
+      </li>
     <% else %>
-        <li class="nav-item"><%= link_to action_i18n('login'), new_user_session_path, class: "nav-link" %></li>
+      <li class="nav-item"><%= link_to action_i18n('login'), new_user_session_path, class: "nav-link" %></li>
     <% end %>
   </ul>
 </nav>

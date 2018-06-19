@@ -14,10 +14,11 @@ RSpec.describe BootstrapHelper do
   end
 
   describe "#bootstrap_horizontal_form_for" do
+    let(:project) { create :project }
     let(:issue) { Issue.new }
-    let(:milestone) { create :milestone }
+    let(:milestone) { create :milestone, project: project }
     let(:html) {
-      helper.bootstrap_horizontal_form_for issue do |f|
+      helper.bootstrap_horizontal_form_for [project, issue] do |f|
         f.input :milestone_id, collection: [ milestone ], as: :radio_buttons, wrapper: :horizontal_collection
       end
     }

@@ -1,8 +1,10 @@
 <div class="page-header">
   <h2><%= @issue.title %></h2>
-  <div class="actions ml-auto">
-    <%= edit_link [:edit, @issue] %>
-  </div>
+  <% if can? :update, @issue %>
+    <div class="actions ml-auto">
+      <%= edit_link [:edit, @project, @issue] %>
+    </div>
+  <% end %>
 </div>
 
 <div class="container">
@@ -47,7 +49,9 @@
         <%= render "comments/comments", comment: comment %>
       <% end %>
 
-      <%= render "comments/form", issue: @issue %>
+      <% if can? :create, Comment %>
+        <%= render "comments/form", issue: @issue %>
+      <% end %>
     </div>
     <div class="col-sm-3">
       <h5><%=h Issue, :created_at %></h5>
@@ -56,14 +60,18 @@
 
       <div class="d-flex">
         <span class="h5"><%=h Issue, :state %></span>
-        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+        <% if can? :update, @issue %>
+          <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_project_issue_path(@project, @issue))%></span>
+        <% end %>
       </div>
       <span class="<%= issue_state_class_name(@issue.state, :text)%> mb-2"><%= @issue.state.text %></span>
       <hr>
 
       <div class="d-flex">
         <span class="h5"><%=h Issue, :assignee_id %></span>
-        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+        <% if can? :update, @issue %>
+          <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_project_issue_path(@project, @issue))%></span>
+        <% end %>
       </div>
       <% if @issue.assignee %>
         <%= image_tag current_user.avatar_url, height: 20, class: "rounded-circle" %>
@@ -73,7 +81,9 @@
 
       <div class="d-flex">
         <span class="h5"><%=h Label %></span>
-        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+        <% if can? :update, @issue %>
+          <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_project_issue_path(@project, @issue))%></span>
+        <% end %>
       </div>
       <% @issue.labels.each do |label| %>
         <span class="badge w-100 mb-1 text-white text-left" style="background-color: <%= label.color%>">
@@ -84,7 +94,9 @@
 
       <div class="d-flex">
         <span class="h5"><%=h Milestone %></span>
-        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+        <% if can? :update, @issue %>
+          <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_project_issue_path(@project, @issue))%></span>
+        <% end %>
       </div>
       <% if @issue.milestone %>
         <div class="d-flex align-items-center">

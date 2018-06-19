@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   load_and_authorize_resource :plan
-  load_and_authorize_resource throght: :plan
+  load_and_authorize_resource through: :plan
   load_and_authorize_resource :project
   load_and_authorize_resource through: :project
 

@@ -12,5 +12,6 @@
 FactoryBot.define do
   factory :platform do
     name "platform name"
+    project
   end
 end

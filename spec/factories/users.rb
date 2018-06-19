@@ -23,5 +23,17 @@ FactoryBot.define do
     name { Faker::Name.name }
     password "password"
     password_confirmation "password"
+
+    trait :admin do
+      role "admin"
+    end
+
+    trait :member do
+      role "member"
+    end
+
+    trait :vistor do
+      role "vistor"
+    end
   end
 end

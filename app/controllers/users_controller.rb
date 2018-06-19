@@ -1,9 +1,6 @@
 class UsersController < ApplicationController
-  load_and_authorize_resource :project
-  load_and_authorize_resource through: :project
-
-  before_action { @navbar = "Users" }
-
+  load_and_authorize_resource
+  layout "frontend"
   def index
     @q = User.ransack(params[:q])
     @users = @q.result.page(params[:page])
@@ -36,6 +33,6 @@ class UsersController < ApplicationController
 protected
 
   def user_params
-    params.fetch(:user, {}).permit(:name, :email, :password, :password_confirmation)
+    params.fetch(:user, {}).permit(:name, :email, :password, :password_confirmation, :role)
   end
 end

@@ -3,5 +3,6 @@ FactoryBot.define do
     name "label1"
     description "content of label1"
     color "#ace0ef"
+    project
   end
 end

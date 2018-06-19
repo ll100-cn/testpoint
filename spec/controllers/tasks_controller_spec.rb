@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe TasksController, type: :controller do
-  let(:plan) { create :plan }
+  let!(:project) { create :project }
+  let(:plan) { create :plan, project: project }
   let(:task) { plan.tasks.first }
   let(:task_attributes) { {} }
+  login_admin
 
   describe "PUT update" do
-    action { put :update, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { put :update, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
 
     context "state pass" do
       before { task_attributes[:state] = :pass }
@@ -28,7 +30,8 @@ RSpec.describe TasksController, type: :controller do
 
     context "relate issue" do
       context "success" do
-        let(:issue) { create :issue }
+        let(:project) { create :project }
+        let(:issue) { create :issue, project: project }
         before { task_attributes[:issue_id] = issue.id }
 
         it { expect(task.reload.issue).to eq issue }
@@ -46,22 +49,22 @@ RSpec.describe TasksController, type: :controller do
   end
 
   describe "GET change_state" do
-    action { get :change_state, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { get :change_state, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
     it { is_expected.to respond_with(:success) }
   end
 
   describe "GET upload_attachment" do
-    action { get :upload_attachment, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { get :upload_attachment, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
     it { is_expected.to respond_with(:success) }
   end
 
   describe "GET edit" do
-    action { get :edit, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
     it { is_expected.to respond_with(:success) }
   end
 
   describe "GET relate" do
-    action { get :edit, params: { plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
     it { is_expected.to respond_with(:success) }
   end
 end

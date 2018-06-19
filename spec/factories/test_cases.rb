@@ -17,5 +17,6 @@ FactoryBot.define do
     content "input username and password"
     component { create :component }
     platforms { create_list :platform, 1 }
+    project
   end
 end

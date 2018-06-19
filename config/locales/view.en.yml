@@ -40,6 +40,9 @@ en:
         actions: Actions
         all: All
         profile: Profile
+        backend: Backend
+        projects: Projects
+        users: Users
       issues:
         show:
           no_message: no message
@@ -65,6 +68,6 @@ en:
       cases: Cases
       plans: Plans
       issues: Issues
-      users: Users
+      members: Members
       milestones: Milestones
-      projects: Projects
+

@@ -59,6 +59,8 @@ zh-CN:
         email: 邮箱
         password: 密码
         password_confirmation: 密码确认
+        participated_projects: 参与的项目
+        role: 角色
       comment:
         content: 评论内容
       label:
@@ -74,3 +76,5 @@ zh-CN:
       project:
         name: 项目名称
         created_at: 创建时间
+        member_ids: 项目成员
+        members: 项目成员

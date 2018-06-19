@@ -19,11 +19,7 @@ class IssuesController < ApplicationController
   def create
     @issue.creator = current_user
     @issue.save
-<<<<<<< 26e97bcced77583c0ffc1a5dc9ce253a43709a5d
-    respond_with @issue, location: ok_url_or_default([@task.plan])
-=======
-    respond_with @component, location: ok_url_or_default([@project, @task.plan])
->>>>>>> add project
+    respond_with @issue, location: ok_url_or_default([@project, @task.plan])
   end
 
   def show

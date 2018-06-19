@@ -1,9 +1,6 @@
 class ProjectsController < ApplicationController
-  before_action { @navbar = "project" }
   load_and_authorize_resource
-
-  layout "project", only: [:index, :new, :edit]
-
+  layout "frontend", only: [:index, :new, :edit]
   def index
     @projects = @projects.page(params[:page])
   end
@@ -13,7 +10,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project.save
-    respond_with @project, location: ok_url_or_default([Project])
+    respond_with @project, location: ok_url_or_default(Project)
   end
 
   def edit
@@ -21,25 +18,28 @@ class ProjectsController < ApplicationController
 
   def update
     @project.update(project_params)
-    respond_with @project, location: ok_url_or_default([Project])
+    @project.change_member_role
+    respond_with @project, location: ok_url_or_default(Project)
   end
 
   def show
-    @test_cases = @project.test_cases
-    @plans = @project.plans
-    @issues = @project.issues
-    @components = @project.components
-    @platforms = @project.platforms
+    @members = @project.members.page(params[:page])
   end
 
   def destroy
-    @project.destroy
-    respond_with @project, location: ok_url_or_default([Project])
+    @project.delete
+    respond_with @project, location: ok_url_or_default(Project)
+  end
+
+  def remove_member
+    @user = User.find(params[:user_id])
+    @project.remove_member(@user)
+    respond_with @project, location: ok_url_or_default([@project, :members])
   end
 
 protected
 
   def project_params
-    params.fetch(:project, {}).permit(:name)
+    params.fetch(:project, {}).permit(:name, member_ids: [])
   end
 end

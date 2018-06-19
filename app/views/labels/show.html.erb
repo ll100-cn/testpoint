@@ -18,7 +18,7 @@
   <tbody>
   <% @label.issues.each do |issue| %>
       <tr>
-        <td><%= link_to issue.title, issue %></td>
+        <td><%= link_to issue.title, [@project, issue] %></td>
         <td><%= issue.content %></td>
         <td>
           <span class="<%= issue_state_class_name(issue.state, :badge) %>">

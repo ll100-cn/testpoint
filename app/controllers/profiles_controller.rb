@@ -1,6 +1,7 @@
 class ProfilesController < ApplicationController
   before_action -> { @user = User.find(current_user.id) }
   authorize_resource :user, parent: false, singleton: true
+  layout "frontend"
 
   def show
   end

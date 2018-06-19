@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
   def create
     @comment.user = current_user
     @comment.save
-    redirect_to issue_path(@issue)
+    respond_with @comment, location: ok_url_or_default([@project, @issue])
   end
 
 protected

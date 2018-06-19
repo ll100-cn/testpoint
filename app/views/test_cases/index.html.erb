@@ -3,8 +3,12 @@
     <%= page_i18n :index, model_name: h(@test_cases) %>
   </h2>
   <div class="ml-3 mt-1 actions">
-    <%= new_button ::TestCase, "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath) } %>
-    <%= new_button Component, [ :new, @project, :component ], class: "btn btn-outline-primary btn-sm" %>
+    <% if can? :create, ::TestCase %>
+      <%= new_button ::TestCase, "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath) } %>
+    <% end %>
+    <% if can? :create, Component %>
+      <%= new_button Component, [ :new, @project, :component ], class: "btn btn-outline-primary btn-sm" %>
+    <% end %>
   </div>
 </div>
 
@@ -22,8 +26,12 @@
         <li class="hidden-actions">
           <% if value %>
             <span class="float-right actions">
-              <%= edit_link edit_project_platform_path(@project, value, ok_url: request.fullpath) %>
-              <%= destroy_link project_platform_path(@project, value, ok_url: request.fullpath) %>
+              <% if can? :update, Platform %>
+                <%= edit_link edit_project_platform_path(@project, value, ok_url: request.fullpath) %>
+              <% end %>
+              <% if can? :destroy, Platform %>
+                <%= destroy_link project_platform_path(@project, value, ok_url: request.fullpath) %>
+              <% end %>
             </span>
           <% end %>
           <%= n.apply_content value do |active_class| %>
@@ -34,7 +42,9 @@
         </li>
       <% end %>
       <li>
-        <span class="fa fa-fw"></span><%= link_to page_i18n(:new, model_name: h(Platform)), [ :new, @project, :platform, ok_url: request.fullpath ], class: "text-muted" %>
+        <% if can? :create, Platform %>
+          <span class="fa fa-fw"></span><%= link_to page_i18n(:new, model_name: h(Platform)), [ :new, @project, :platform, ok_url: request.fullpath ], class: "text-muted" %>
+        <% end %>
       </li>
     </ul>
   <% end %>
