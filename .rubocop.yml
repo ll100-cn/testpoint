@@ -57,6 +57,9 @@ Rails/SkipsModelValidations:
 Rails/HasAndBelongsToMany:
   Enabled: false
 
+Rails/BulkChangeTable:
+  Enabled: false
+
 
 Style/StringLiterals:
   Enabled: false

@@ -36,8 +36,8 @@ module BackendHelper
   #   url_for(s.url_options)
   # end
   #
-  # def current_url(attributes = {})
-  #   options = params.permit!.to_h.deep_merge(attributes)
-  #   url_for(options)
-  # end
+  def current_url(attributes = {})
+    options = params.permit!.to_h.deep_merge(attributes)
+    url_for(options)
+  end
 end

@@ -20,7 +20,7 @@ RSpec.describe IssuesController, type: :controller do
   describe "POST create" do
     let(:attributes) { { title: "issue create", content: "content for issue" } }
     action { post :create, params: { issue: attributes, task_id: task.id } }
-    it { is_expected.to respond_with :redirect }
+    it { is_expected.to respond_with :success }
   end
 
   describe "PUT update" do
@@ -31,7 +31,15 @@ RSpec.describe IssuesController, type: :controller do
 
   describe "GET show" do
     login_user
-    action { get :show, params: { id: issue.id } }
-    it { is_expected.to respond_with :success }
+    context "without comments" do
+      action { get :show, params: { id: issue.id } }
+      it { is_expected.to respond_with :success }
+    end
+
+    context "with comments" do
+      let!(:comment) { create :comment, content: "<p>this is a comment</p>", issue: issue }
+      action { get :show, params: { id: issue.id } }
+      it { is_expected.to respond_with :success }
+    end
   end
 end

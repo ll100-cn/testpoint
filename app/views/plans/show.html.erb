@@ -7,9 +7,11 @@
 
 <div class="page-header">
   <h3><%= @plan.title %></h3>
-  <p><%=h Plan, :start_at %>: <%= @plan.start_at %></p>
-
+  <div class="ml-3 actions">
+    <span><%=@plan.start_at %></span>
+  </div>
 </div>
+
 <ul class="list-unstyled">
   <% if @components_mapping.empty? %>
     Empty

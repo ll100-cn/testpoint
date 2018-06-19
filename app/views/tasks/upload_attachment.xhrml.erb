@@ -10,23 +10,22 @@
       <%= bootstrap_vertical_form_for [@plan, @task], html: { id: "uploadAttachmentForm" } do |f| %>
         <%= f.input :state, as: :hidden, input_html: { value: :failure } %>
         <%= f.input :message, input_html: { rows: 5 } %>
-        <%= f.simple_fields_for :task_attachments do |a| %>
-          <% attachment = a.object.attachment %>
+        <%= f.simple_fields_for :attachments do |a| %>
+          <% attachment = a.object %>
           <% attachment_dom_id = dom_id(attachment) %>
           <div id="<%= attachment_dom_id %>" class="task-attachment-item">
-            <%= a.input :content, label: false do %>
+            <%= a.input :title, label: false do %>
               <button type="button" class="close small remove-attachment" aria-label="Close" data-target="#<%= attachment_dom_id %>">
                 <span aria-hidden="true">&times;</span>
               </button>
               <div class="media">
                 <%= image_tag url_for(attachment.file), size: "64x64", class: "rounded mr-2" %>
                 <div class="media-body">
-                  <%= a.text_area :content, class: "form-control", rows: 3 %>
+                  <%= a.text_area :title, class: "form-control", rows: 3 %>
                 </div>
               </div>
             <% end %>
             <%= a.input :id, as: :hidden %>
-            <%= a.input :attachment_id, as: :hidden %>
             <%= a.input :_destroy, as: :hidden, input_html: { class: "destroy-task-attachment" } %>
           </div>
         <% end %>

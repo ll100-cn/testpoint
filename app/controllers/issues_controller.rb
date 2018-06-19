@@ -1,6 +1,6 @@
 class IssuesController < ApplicationController
-  load_and_authorize_resource
   load_and_authorize_resource :task
+  load_and_authorize_resource
 
   before_action { @navbar = "Issues" }
   before_action :set_tasks, only: [:new, :create]
@@ -15,9 +15,9 @@ class IssuesController < ApplicationController
   end
 
   def create
-    @issue.user = current_user
+    @issue.creator = current_user
     @issue.save
-    respond_with @component, location: ok_url_or_default([@task.plan])
+    respond_with @issue, location: ok_url_or_default([@task.plan])
   end
 
   def show
@@ -34,7 +34,7 @@ class IssuesController < ApplicationController
 protected
 
   def issue_params
-    params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, label_ids: [])
+    params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, :assignee_id, label_ids: [])
   end
 
   def set_tasks

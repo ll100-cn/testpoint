@@ -9,11 +9,11 @@
   <div class="row">
     <div class="col-sm-9">
       <div class="d-flex align-items-start">
-        <%= image_tag @issue.user.avatar_url, width: 60, class: "rounded-circle" %>
+        <%= image_tag @issue.creator.avatar_url, width: 60, class: "rounded-circle" %>
         <div class="col pr-0">
           <div class="card">
             <div class="card-header">
-              <%= @issue.user.name %>
+              <%= @issue.creator.name %>
               <span class="text-muted float-right"><%= time_ago_in_words(@issue.created_at) %></span>
             </div>
             <div class="card-body">
@@ -54,10 +54,21 @@
       <span><%=l @issue.created_at, format: :long %></span>
       <hr>
 
-      <h5><%=h Issue, :state %></h5>
-      <span class="<%= issue_state_class_name(@issue.state, :text) %>">
-        <%= @issue.state.text %>
-      </span>
+      <div class="d-flex">
+        <span class="h5"><%=h Issue, :state %></span>
+        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+      </div>
+      <span class="<%= issue_state_class_name(@issue.state, :text)%> mb-2"><%= @issue.state.text %></span>
+      <hr>
+
+      <div class="d-flex">
+        <span class="h5"><%=h Issue, :assignee_id %></span>
+        <span class="ml-auto"><%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_issue_path(@issue))%></span>
+      </div>
+      <% if @issue.assignee %>
+        <%= image_tag current_user.avatar_url, height: 20, class: "rounded-circle" %>
+        <span class="badge mb-1"><%=@issue.assignee.name %></span>
+      <% end %>
       <hr>
 
       <div class="d-flex">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_04_125200) do
+ActiveRecord::Schema.define(version: 2018_06_07_082829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,11 @@ ActiveRecord::Schema.define(version: 2018_06_04_125200) do
     t.string "file"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "title"
+    t.bigint "attachmentable_id"
+    t.string "attachmentable_type"
+    t.index ["attachmentable_id"], name: "index_attachments_on_attachmentable_id"
+    t.index ["attachmentable_type"], name: "index_attachments_on_attachmentable_type"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -68,9 +73,11 @@ ActiveRecord::Schema.define(version: 2018_06_04_125200) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "milestone_id"
-    t.bigint "user_id"
+    t.bigint "creator_id"
+    t.bigint "assignee_id"
+    t.index ["assignee_id"], name: "index_issues_on_assignee_id"
+    t.index ["creator_id"], name: "index_issues_on_creator_id"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"
-    t.index ["user_id"], name: "index_issues_on_user_id"
   end
 
   create_table "issues_labels", force: :cascade do |t|
@@ -177,7 +184,6 @@ ActiveRecord::Schema.define(version: 2018_06_04_125200) do
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "users"
   add_foreign_key "issues", "milestones"
-  add_foreign_key "issues", "users"
   add_foreign_key "issues_labels", "issues"
   add_foreign_key "issues_labels", "labels"
   add_foreign_key "platforms_test_cases", "platforms"

@@ -41,6 +41,7 @@ gem 'simple_form', '4.0.1'
 gem 'kaminari', '~> 1.0', '>= 1.0.1'
 gem 'fume-nav', '0.1.3'
 gem 'jbuilder', '~> 2.5'
+gem 'kramdown', '1.17.0'
 
 # Assets
 gem 'sass-rails', '~> 5.0'

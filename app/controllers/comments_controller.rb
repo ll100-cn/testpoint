@@ -14,6 +14,6 @@ class CommentsController < ApplicationController
 protected
 
   def comment_params
-    params.fetch(:comment, {}).permit(:content)
+    params.fetch(:comment, {}).permit(:content, attachments_attributes: [:id, :title, :file, :_destroy])
   end
 end
