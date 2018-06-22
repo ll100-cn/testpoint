@@ -29,4 +29,13 @@ module ApplicationHelper
       result[:ok_url] = request.fullpath if request.get?
     end
   end
+
+  # def current_project
+  #   path = request.original_fullpath
+  #   if path.include?("projects") && path.split('/').length != 2 && path.split('/').last != 'new'
+  #     Project.find(path.split('/').third)
+  #   else
+  #     nil
+  #   end
+  # end
 end

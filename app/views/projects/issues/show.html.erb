@@ -46,11 +46,11 @@
       </div>
 
       <% @issue.comments.history.each do |comment| %>
-        <%= render "comments/comments", comment: comment %>
+        <%= render "projects/comments/comments", comment: comment %>
       <% end %>
 
       <% if can? :create, Comment %>
-        <%= render "comments/form", issue: @issue %>
+        <%= render "projects/comments/form", issue: @issue %>
       <% end %>
     </div>
     <div class="col-sm-3">

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ComponentsController, type: :controller do
+RSpec.describe Projects::ComponentsController, type: :controller do
   let!(:project) { create :project }
   let!(:component) { create :component, project: project }
   login_admin

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe LabelsController, type: :controller do
+RSpec.describe Projects::LabelsController, type: :controller do
   let!(:project) { create :project }
   let!(:label) { create :label, project: project }
   login_admin

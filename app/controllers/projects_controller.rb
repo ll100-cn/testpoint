@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
   load_and_authorize_resource
-  layout "frontend", only: [:index, :new, :edit]
   def index
     @projects = @projects.page(params[:page])
   end
@@ -23,7 +22,8 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @members = @project.members.page(params[:page])
+    @users = @project.members.page(params[:page])
+    redirect_to project_test_cases_path(@project)
   end
 
   def destroy
@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
   def remove_member
     @user = User.find(params[:user_id])
     @project.remove_member(@user)
-    respond_with @project, location: ok_url_or_default([@project, :members])
+    respond_with @project, location: ok_url_or_default([@project, :users])
   end
 
 protected

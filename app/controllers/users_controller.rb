@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  layout "frontend"
   def index
     @q = User.ransack(params[:q])
     @users = @q.result.page(params[:page])

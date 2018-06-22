@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PlansController, type: :controller do
+RSpec.describe Projects::PlansController, type: :controller do
   let!(:project) { create :project }
   let!(:plan) { create :plan, project: project }
   let!(:test_case) { create :test_case, project: project }

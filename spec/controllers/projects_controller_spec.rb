@@ -34,7 +34,7 @@ RSpec.describe ProjectsController, type: :controller do
 
   describe "GET show" do
     action { get :show, params: { id: project.id } }
-    it { is_expected.to respond_with :success }
+    it { is_expected.to respond_with :redirect }
   end
 
   describe "DELETE destroy" do

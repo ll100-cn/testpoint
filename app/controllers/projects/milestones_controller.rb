@@ -1,6 +1,7 @@
-class MilestonesController < ApplicationController
-  before_action { @navbar = "milestones" }
-  load_and_authorize_resource :project
+class Projects::MilestonesController < BaseProjectController
+  before_action { @navbar = "Milestones" }
+  before_action -> { @project = current_project }
+  authorize_resource :project
   load_and_authorize_resource through: :project
 
   def index

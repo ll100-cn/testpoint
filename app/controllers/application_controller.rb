@@ -7,8 +7,6 @@ class ApplicationController < ActionController::Base
   before_action :adjust_format_for_xhr_html
   before_action :set_raven_context
 
-  layout :layout_by_resource
-
 protected
   def adjust_format_for_xhr_html
     request.format = :xhrml if request.format.to_sym == :html && (request.xhr? || params[:xhr])
@@ -24,7 +22,8 @@ protected
     Raven.extra_context(params: params.to_unsafe_h, url: request.url)
   end
 
-  def layout_by_resource
-    devise_controller? ? 'frontend' : 'application'
+  def current_project
+    nil
   end
+  helper_method :current_project
 end

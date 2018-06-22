@@ -1,5 +1,6 @@
-class ComponentsController < ApplicationController
-  load_and_authorize_resource :project
+class Projects::ComponentsController < BaseProjectController
+  before_action -> { @project = current_project }
+  authorize_resource :project
   load_and_authorize_resource through: :project
 
   def new

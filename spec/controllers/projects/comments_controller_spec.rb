@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CommentsController, type: :controller do
+RSpec.describe Projects::CommentsController, type: :controller do
   let!(:project) { create :project }
   let!(:issue) { create :issue, project: project }
   let!(:user) { create :user }

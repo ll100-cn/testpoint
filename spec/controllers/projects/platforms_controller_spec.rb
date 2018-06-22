@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PlatformsController, type: :controller do
+RSpec.describe Projects::PlatformsController, type: :controller do
   let!(:project) { create :project }
   let!(:platform) { create :platform, project: project }
   login_admin

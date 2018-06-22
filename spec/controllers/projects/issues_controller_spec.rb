@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe IssuesController, type: :controller do
+RSpec.describe Projects::IssuesController, type: :controller do
   let!(:project) { create :project }
   let(:plan) { create :plan }
   let(:task) { plan.tasks.first }

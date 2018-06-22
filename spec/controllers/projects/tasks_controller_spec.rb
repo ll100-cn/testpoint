@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TasksController, type: :controller do
+RSpec.describe Projects::TasksController, type: :controller do
   let!(:project) { create :project }
   let(:plan) { create :plan, project: project }
   let(:task) { plan.tasks.first }

@@ -1,9 +1,10 @@
-class TestCasesController < ApplicationController
+class Projects::TestCasesController < BaseProjectController
   layout "sidebar", only: [:index]
   before_action { @navbar = "cases" }
+  before_action -> { @project = current_project }
+  authorize_resource :project
   load_and_authorize_resource :component
   load_and_authorize_resource :platform
-  load_and_authorize_resource :project
   load_and_authorize_resource through: :project
 
   def index

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe MembersController, type: :controller do
+RSpec.describe Projects::UsersController, type: :controller do
   let!(:user1) { create :user }
   let!(:user2) { create :user }
   let!(:project) { create :project, members: [user1, user2] }

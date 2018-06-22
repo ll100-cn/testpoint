@@ -1,10 +1,10 @@
-class IssuesController < ApplicationController
-  load_and_authorize_resource :project
+class Projects::IssuesController < BaseProjectController
+  before_action { @navbar = "Issues" }
+  before_action -> { @project = current_project }
+  authorize_resource :project
   load_and_authorize_resource through: :project
 
   load_and_authorize_resource :task
-
-  before_action { @navbar = "Issues" }
   before_action :set_tasks, only: [:new, :create]
 
   def index

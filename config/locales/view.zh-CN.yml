@@ -37,7 +37,7 @@ zh-CN:
       cases: 案例
       plans: 计划
       issues: 问题
-      members: 成员
+      users: 成员
       milestones: 里程碑
     pagination:
       first: 第一页

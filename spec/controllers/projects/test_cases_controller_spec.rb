@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TestCasesController, type: :controller do
+RSpec.describe Projects::TestCasesController, type: :controller do
   let!(:project) { create :project }
   let(:platform) { create :platform, project: project }
   let!(:test_case) { create :test_case, platforms: [ platform ], project: project }

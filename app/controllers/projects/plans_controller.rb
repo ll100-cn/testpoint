@@ -1,7 +1,8 @@
-class PlansController < ApplicationController
+class Projects::PlansController < BaseProjectController
   layout "sidebar", only: [:show]
   before_action { @navbar = "plans" }
-  load_and_authorize_resource :project
+  before_action -> { @project = current_project }
+  authorize_resource :project
   load_and_authorize_resource through: :project
 
   def index

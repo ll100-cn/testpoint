@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe MilestonesController, type: :controller do
+RSpec.describe Projects::MilestonesController, type: :controller do
   let!(:project) { create :project }
   let!(:milestone) { create :milestone, project: project }
   login_admin
