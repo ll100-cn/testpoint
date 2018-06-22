@@ -1,10 +1,8 @@
-<%= bootstrap_horizontal_form_for [project, label] do |f| %>
-  <%= f.input :name %>
-  <%= f.input :description %>
-  <%= f.input :color, as: :color_picker %>
-  <%= f.actions_content do %>
-    <%= ok_url_tag %>
-    <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
-  <% end %>
+<%= f.input :name %>
+<%= f.input :description %>
+<%= f.input :color, as: :color_picker %>
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
 <% end %>

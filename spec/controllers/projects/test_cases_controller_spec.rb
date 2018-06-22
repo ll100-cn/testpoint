@@ -4,7 +4,6 @@ RSpec.describe Projects::TestCasesController, type: :controller do
   let!(:project) { create :project }
   let(:platform) { create :platform, project: project }
   let!(:test_case) { create :test_case, platforms: [ platform ], project: project }
-  login_admin
 
   describe "GET index" do
     let(:params) { { project_id: project.id } }

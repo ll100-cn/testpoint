@@ -12,6 +12,19 @@
 
 FactoryBot.define do
   factory :member do
-    
+    project
+    user
+
+    trait :owner do
+      role "owner"
+    end
+
+    trait :admin do
+      role "admin"
+    end
+
+    trait :member do
+      role "member"
+    end
   end
 end

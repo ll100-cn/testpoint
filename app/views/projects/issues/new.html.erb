@@ -2,4 +2,11 @@
   <h2><%= page_i18n :new, model_name: h(@issue) %></h2>
 </div>
 
-<%= render "form", issue: @issue, task: @task, project: @project %>
+<%= bootstrap_horizontal_form_for @issue, url: [@project, @task, @issue] do |f| %>
+  <%= render "form", f: f %>
+  <%= f.actions_content do %>
+    <%= ok_url_tag %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= cancel_link [@project, @task, @issue], class: "btn btn-secondary" %>
+  <% end %>
+<% end %>

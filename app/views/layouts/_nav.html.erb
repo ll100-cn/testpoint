@@ -7,9 +7,7 @@
       </button>
       <div class="dropdown-menu" style="min-width: 3px;">
         <% Project.all.each do |project| %>
-          <% if can? :update, project %>
-            <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
-          <% end %>
+          <%= link_to project.name, project_path(project), class: "small dropdown-item" if can? :update, project %>
         <% end %>
       </div>
     </div>
@@ -25,8 +23,8 @@
           <%= n.li_tag "Issues", class: "nav-item" do %>
             <%= link_to t('views.navbar.issues'), [current_project, Issue], class: "nav-link" %>
           <% end %>
-          <%= n.li_tag "Users", class: "nav-item" do %>
-              <%= link_to t('views.navbar.users'), [current_project, User], class: "nav-link" %>
+          <%= n.li_tag "Members", class: "nav-item" do %>
+            <%= link_to t('views.navbar.members'), [current_project, Member], class: "nav-link" %>
           <% end %>
           <%= n.li_tag "Milestones", class: "nav-item" do %>
             <%= link_to t('views.navbar.milestones'), [current_project, Milestone], class: "nav-link" %>

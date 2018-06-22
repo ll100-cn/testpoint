@@ -10,8 +10,8 @@ zh-CN:
         open: 待处理
         closed: 已关闭
         solved: 已解决
-    user:
+    member:
       role:
+        owner: 负责人
         admin: 管理员
         member: 项目成员
-        visitor: 访客

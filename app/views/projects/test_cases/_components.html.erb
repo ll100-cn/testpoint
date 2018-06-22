@@ -3,12 +3,8 @@
     <div class="text-muted hidden-actions">
       <span class="fa fa-fw fa-folder-o"></span> <%= component.name %>
       <span class="actions ml-1">
-        <% if can? :update, component %>
-          <%= edit_link [:edit, @project, component, ok_url: request.fullpath] %>
-        <% end %>
-        <% if can? :destroy, component %>
-          <%= destroy_link [@project, component, ok_url: request.fullpath] %>
-        <% end %>
+        <%= edit_link [:edit, @project, component, ok_url: request.fullpath] if can? :update, component %>
+        <%= destroy_link [@project, component, ok_url: request.fullpath] if can? :destroy, component %>
       </span>
     </div>
     <ul class="list-unstyled">

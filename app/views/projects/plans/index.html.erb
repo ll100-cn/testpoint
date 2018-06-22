@@ -4,9 +4,9 @@
 
 <table class="table">
   <colgroup>
-    <col width="20%"/>
-    <col width="60%"/>
-    <col width="20%"/>
+    <col width="20%">
+    <col width="60%">
+    <col>
   </colgroup>
   <thead>
     <tr>
@@ -35,12 +35,8 @@
           </div>
         </td>
         <td>
-          <% if can? :update, plan %>
-            <%= edit_link [:edit, @project, plan, ok_url: request.fullpath] %>
-          <% end %>
-          <% if can? :destroy, plan %>
-            <%= destroy_link [@project, plan, ok_url: request.fullpath] %>
-          <% end %>
+          <%= edit_link [:edit, @project, plan, ok_url: request.fullpath] if can? :update, plan %>
+          <%= destroy_link [@project, plan, ok_url: request.fullpath] if can? :destroy, plan %>
         </td>
       </tr>
     <% end %>
@@ -52,8 +48,6 @@
 </nav>
 
 <hr>
-<% if can? :create, Plan %>
-  <div class="page-actions">
-    <%= new_button Plan, action: :new %>
-  </div>
-<% end %>
+<div class="page-actions">
+  <%= new_button Plan, action: :new if can? :create, Plan %>
+</div>

@@ -22,12 +22,9 @@ Rails.application.routes.draw do
       end
       resources :components
       resources :platforms
-      resources :users
       resources :labels
       resources :milestones
-    end
-    member do
-      post :remove_member
+      resources :members
     end
   end
 

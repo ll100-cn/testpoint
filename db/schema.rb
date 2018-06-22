@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_22_055034) do
+ActiveRecord::Schema.define(version: 2018_06_22_072149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,11 +184,9 @@ ActiveRecord::Schema.define(version: 2018_06_22_055034) do
     t.bigint "platform_id"
     t.bigint "issue_id"
     t.text "message"
-    t.bigint "project_id"
     t.index ["issue_id"], name: "index_tasks_on_issue_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["platform_id"], name: "index_tasks_on_platform_id"
-    t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
   end
 
@@ -218,7 +216,6 @@ ActiveRecord::Schema.define(version: 2018_06_22_055034) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.string "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -239,6 +236,5 @@ ActiveRecord::Schema.define(version: 2018_06_22_055034) do
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
   add_foreign_key "tasks", "platforms"
-  add_foreign_key "tasks", "projects"
   add_foreign_key "test_cases", "projects"
 end

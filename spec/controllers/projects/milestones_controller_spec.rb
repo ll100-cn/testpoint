@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Projects::MilestonesController, type: :controller do
   let!(:project) { create :project }
   let!(:milestone) { create :milestone, project: project }
-  login_admin
 
   describe "GET index" do
     action { get :index, params: { project_id: project.id } }

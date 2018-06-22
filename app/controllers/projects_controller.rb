@@ -8,6 +8,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
+    @project.assign_attributes(members_attributes: [ { role: "owner", project: @project, user: current_user } ])
     @project.save
     respond_with @project, location: ok_url_or_default(Project)
   end
@@ -17,7 +18,6 @@ class ProjectsController < ApplicationController
 
   def update
     @project.update(project_params)
-    @project.change_member_role
     respond_with @project, location: ok_url_or_default(Project)
   end
 
@@ -31,15 +31,9 @@ class ProjectsController < ApplicationController
     respond_with @project, location: ok_url_or_default(Project)
   end
 
-  def remove_member
-    @user = User.find(params[:user_id])
-    @project.remove_member(@user)
-    respond_with @project, location: ok_url_or_default([@project, :users])
-  end
-
 protected
 
   def project_params
-    params.fetch(:project, {}).permit(:name, member_ids: [])
+    params.fetch(:project, {}).permit(:name, user_ids: [])
   end
 end

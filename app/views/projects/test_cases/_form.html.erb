@@ -1,11 +1,9 @@
-<%= bootstrap_horizontal_form_for [@project, test_case] do |f| %>
-  <%= render "inputs.html", f: f %>
+<%= render "inputs.html", f: f %>
 
-  <hr>
+<hr>
 
-  <%= f.actions_content do %>
-    <%= ok_url_tag %>
-    <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_button url_for(action: :index) %>
-  <% end %>
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_button url_for(action: :index) %>
 <% end %>

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ProjectsController, type: :controller do
   let!(:user) { create :user }
   let!(:project) { create :project }
-  login_admin
+  login_user
 
   describe "GET index" do
     action { get :index }
@@ -40,11 +40,5 @@ RSpec.describe ProjectsController, type: :controller do
   describe "DELETE destroy" do
     action(skip: true) { delete :destroy, params: { id: project.id } }
     it { expect { do_action }.to change { Project.count }.by(-1) }
-  end
-
-  describe "Post remove_member" do
-    let!(:project) { create :project, members: [user] }
-    action { post :remove_member, params: { id: project.id, user_id: user.id } }
-    it { is_expected.to respond_with :redirect }
   end
 end

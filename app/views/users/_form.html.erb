@@ -1,13 +1,10 @@
-<%= bootstrap_horizontal_form_for user do |f| %>
-    <%= f.input :name %>
-    <%= f.input :email %>
-    <%= f.input :password %>
-    <%= f.input :password_confirmation %>
-    <%= f.input :role, collection: User.role.options, input_html: { class: 'select2-field' } %>
-    <hr>
-    <%= f.actions_content do %>
-        <%= ok_url_tag %>
-        <%= f.submit class: "btn btn-primary" %>
-        <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
-    <% end %>
+<%= f.input :name %>
+<%= f.input :email %>
+<%= f.input :password %>
+<%= f.input :password_confirmation %>
+<hr>
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
 <% end %>

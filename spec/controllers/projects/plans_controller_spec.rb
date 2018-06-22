@@ -4,8 +4,7 @@ RSpec.describe Projects::PlansController, type: :controller do
   let!(:project) { create :project }
   let!(:plan) { create :plan, project: project }
   let!(:test_case) { create :test_case, project: project }
-  let!(:task) { create :task, test_case: test_case, plan: plan, project: project }
-  login_admin
+  let!(:task) { create :task, test_case: test_case, plan: plan }
 
   describe "GET index" do
     action { get :index, params: { project_id: project.id } }

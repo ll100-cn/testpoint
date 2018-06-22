@@ -9,10 +9,10 @@
 
 <table class="table">
   <colgroup>
-    <col width="20%"/>
-    <col width="30%"/>
-    <col width="20%"/>
-    <col width="30%"/>
+    <col width="20%">
+    <col width="30%">
+    <col width="20%">
+    <col>
   </colgroup>
   <thead>
   <tr>
@@ -23,21 +23,17 @@
   </tr>
   </thead>
   <tbody>
-  <% @labels.each do |label| %>
-    <tr>
-      <td><%= link_to label_with_color(label), [@project, label] %></td>
-      <td><%= label.description %></td>
-      <td><%= label.issues.count %></td>
-      <td>
-        <% if can? :update, label %>
-          <%= edit_link [:edit, @project, label, ok_url: request.fullpath ] %>
-        <% end %>
-        <% if can? :destroy, label %>
-          <%= destroy_link [@project, label, ok_url: request.fullpath ]%>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
+    <% @labels.each do |label| %>
+      <tr>
+        <td><%= link_to label_with_color(label), [@project, label] %></td>
+        <td><%= label.description %></td>
+        <td><%= label.issues.count %></td>
+        <td>
+          <%= edit_link [:edit, @project, label, ok_url: request.fullpath ] if can? :update, label %>
+          <%= destroy_link [@project, label, ok_url: request.fullpath ] if can? :destroy, label %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 

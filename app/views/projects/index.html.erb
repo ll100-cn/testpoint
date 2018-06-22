@@ -1,58 +1,47 @@
 <% if can? :read, Project %>
-<nav>
-  <div class="nav nav-tabs">
-    <a class="nav-item nav-link active" href="<%= projects_path %>"><%=h Project %></a>
-    <% if can? :manage, User %>
-      <a class="nav-item nav-link" href="<%= users_path %>"><%=h User %></a>
-    <% end %>
-  </div>
-</nav>
-<div class="tab-content mt-4">
-  <div class="tab-pane show active" role="tabpanel" aria-labelledby="nav-home-tab">
-    <div class="page-header">
-      <h2><%= page_i18n :index, model_name: h(@projects) %></h2>
-      <% if can? :create, Project %>
-        <div class="actions ml-auto">
-          <%= new_link Project, [:new, :project] %>
-        </div>
-      <% end %>
+  <nav>
+    <div class="nav nav-tabs">
+      <%= link_to h(Project), projects_path, class: "nav-item nav-link active" %>
+      <%= link_to h(User), users_path, class: "nav-item nav-link" if can? :manage, User %>
     </div>
-    <table class="table">
-      <colgroup>
-        <col width="20%"/>
-        <col width="40%"/>
-        <col width="20%"/>
-        <col width="20%"/>
-      </colgroup>
-      <thead>
-      <tr>
-        <th><%=h Project, :name %></th>
-        <th><%=h Project, :members %></th>
-        <th><%=h Project, :created_at %></th>
-        <th><%= page_i18n :actions %></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @projects.each do |project| %>
-          <tr>
-            <td><%= link_to project.name, project %></td>
-            <td><%= truncate(project.members.map(&:name).join(", "), length: 30) %></td>
-            <td><%=l project.created_at, format: :long %></td>
-            <td>
-              <% if can? :update, project %>
-                <%= edit_link [:edit, project, ok_url: request.fullpath] %>
-              <% end %>
-              <% if can? :destroy, project %>
-                <%= destroy_link [project, ok_url: request.fullpath] %>
-              <% end %>
-            </td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <nav class="table-pagination">
-      <%= paginate @projects %>
-    </nav>
+  </nav>
+  <div class="tab-content mt-4">
+    <div class="tab-pane show active" role="tabpanel" aria-labelledby="nav-home-tab">
+      <div class="page-header">
+        <h2><%= page_i18n :index, model_name: h(@projects) %></h2>
+        <div class="actions ml-auto">
+          <%= new_link Project, [:new, :project] if can? :create, Project %>
+        </div>
+      </div>
+      <table class="table">
+        <colgroup>
+          <col width="20%">
+          <col width="40%">
+          <col>
+        </colgroup>
+        <thead>
+        <tr>
+          <th><%=h Project, :name %></th>
+          <th><%=h Project, :created_at %></th>
+          <th><%= page_i18n :actions %></th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @projects.each do |project| %>
+            <tr>
+              <td><%= link_to project.name, project %></td>
+              <td><%=l project.created_at, format: :long %></td>
+              <td>
+                <%= edit_link [:edit, project, ok_url: request.fullpath] if can? :update, project %>
+                <%= destroy_link [project, ok_url: request.fullpath] if can? :destroy, project %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <nav class="table-pagination">
+        <%= paginate @projects %>
+      </nav>
+    </div>
   </div>
-</div>
 <% end %>

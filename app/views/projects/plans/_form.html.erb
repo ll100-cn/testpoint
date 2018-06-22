@@ -1,24 +1,23 @@
-<%= bootstrap_horizontal_form_for [project, plan] do |f| %>
-  <%= f.input :title %>
+<%= f.input :title %>
 
-  <%= f.input :start_at, as: :datetime_pickr %>
+<%= f.input :start_at, as: :datetime_pickr %>
 
-  <% if plan.new_record? %>
-    <%= f.input :platform_ids, collection: project.platforms.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
+<% if f.object.new_record? %>
+  <%= f.input :platform_ids, collection: f.object.project.platforms.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
 
-    <% @components_mapping = project.components.available.group_by(&:parent_id) %>
-    <%= f.input :component_ids do %>
-      <ul class="list-unstyled pt-1">
-        <%= render "component_check_boxes", key: nil %>
-      </ul>
-    <% end %>
-  <% end %>
-
-  <hr>
-
-  <%= f.actions_content do %>
-    <%= ok_url_tag %>
-    <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
+  <% @components_mapping = f.object.project.components.available.group_by(&:parent_id) %>
+  <%= f.input :component_ids do %>
+    <ul class="list-unstyled pt-1">
+      <%= render "component_check_boxes", key: nil %>
+    </ul>
   <% end %>
 <% end %>
+
+<hr>
+
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
+<% end %>
+

@@ -18,6 +18,5 @@ FactoryBot.define do
   factory :task do
     test_case { create :test_case }
     platform { create :platform }
-    project
   end
 end

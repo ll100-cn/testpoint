@@ -8,12 +8,13 @@ zh-CN:
       platform: 平台
       task_attachment: 任务附件
       task: 任务
-      test_case: 测试任务
+      test_case: 测试用例
       user: 用户
       comment: 评论
       label: 标签
       milestone: 里程碑
       project: 项目
+      member: 成员
     attributes:
       plan:
         title: 标题
@@ -59,8 +60,6 @@ zh-CN:
         email: 邮箱
         password: 密码
         password_confirmation: 密码确认
-        participated_projects: 参与的项目
-        role: 角色
       comment:
         content: 评论内容
       label:
@@ -76,5 +75,6 @@ zh-CN:
       project:
         name: 项目名称
         created_at: 创建时间
-        member_ids: 项目成员
-        members: 项目成员
+      member:
+        role: 角色
+        user_id: 用户

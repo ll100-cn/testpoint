@@ -20,7 +20,7 @@ class Projects::PlansController < BaseProjectController
     test_cases_scope = test_cases_scope.joins(:platforms).where(platforms: { id: params[:platform_ids] }) if params[:platform_ids].present?
     test_case_ids = test_cases_scope.ids
 
-    @plan.generate(test_case_ids: test_case_ids || TestCase.ids, project_id: params[:project_id])
+    @plan.generate(test_case_ids: test_case_ids || TestCase.ids)
     respond_with @plan, location: ok_url_or_default([@project, Plan])
   end
 

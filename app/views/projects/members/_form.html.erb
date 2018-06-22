@@ -1,0 +1,8 @@
+<%= f.input :user_id, collection: User.without_project(f.object.project), input_html: { class: 'select2-field' } %>
+<%= f.input :role, collection: Member.role.options, input_html: { class: 'select2-field' } %>
+
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
+<% end %>

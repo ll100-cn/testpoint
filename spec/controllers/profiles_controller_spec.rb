@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ProfilesController, type: :controller do
-  login_admin
+  login_user
 
   describe "GET show" do
     action { get :show }

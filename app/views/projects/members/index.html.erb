@@ -1,0 +1,43 @@
+<div class="page-header">
+  <h2><%= h Project, :members %></h2>
+    <div class="actions ml-auto">
+      <%= new_link Member, [:new, @project, :member] if can? :create, Member %>
+    </div>
+</div>
+
+<table class="table">
+  <colgroup>
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    <col>
+  </colgroup>
+  <thead>
+  <tr>
+    <th><%= sort_link @q, :id %></th>
+    <th><%= sort_link @q, :user_name %></th>
+    <th><%= sort_link @q, :user_email %></th>
+    <th><%= sort_link @q, :role %></th>
+    <th><%=page_i18n :actions %></th>
+  </tr>
+  </thead>
+  <tbody>
+    <% @members.each do |member| %>
+      <tr>
+        <td><%= member.id %></td>
+        <td><%= member.user.name %></td>
+        <td><%= member.user.email %></td>
+        <td><%= member.role_text %></td>
+        <td>
+          <%= edit_link [:edit, @project, member] if can? :update, member %>
+          <%= destroy_link [@project, member, ok_url: request.fullpath] if (can? :destroy, member) && (member.role != "owner") %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<nav class="table-pagination">
+  <%= paginate @members %>
+</nav>

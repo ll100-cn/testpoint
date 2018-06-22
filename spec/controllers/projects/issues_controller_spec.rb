@@ -5,7 +5,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
   let(:plan) { create :plan }
   let(:task) { plan.tasks.first }
   let(:issue) { create :issue, project: project }
-  login_admin
+  login_user
 
   describe "GET index" do
     let!(:label) { create :label }

@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Projects::ComponentsController, type: :controller do
   let!(:project) { create :project }
   let!(:component) { create :component, project: project }
-  login_admin
 
   describe "GET new" do
     action { get :new, params: { project_id: project.id } }

@@ -9,11 +9,11 @@
 
 <table class="table">
   <colgroup>
-    <col width="20%"/>
-    <col width="20%"/>
-    <col width="20%"/>
-    <col width="20%"/>
-    <col width="20%"/>
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    <col width="20%">
+    <col>
   </colgroup>
   <thead>
   <tr>
@@ -25,22 +25,18 @@
   </tr>
   </thead>
   <tbody>
-  <% @milestones.each do |milestone| %>
+    <% @milestones.each do |milestone| %>
       <tr>
         <td><%= link_to milestone.title, [@project, milestone] %></td>
         <td><%= milestone.description %></td>
         <td><%=l milestone.start_time, format: :long %></td>
         <td><%=l milestone.end_time, format: :long  %></td>
         <td>
-          <% if can? :update, milestone %>
-            <%= edit_link [:edit, @project, milestone, ok_url: request.fullpath ] %>
-          <% end %>
-          <% if can? :destroy, milestone %>
-            <%= destroy_link [@project, milestone, ok_url: request.fullpath ]%>
-          <% end %>
+          <%= edit_link [:edit, @project, milestone, ok_url: request.fullpath ] if can? :update, milestone %>
+          <%= destroy_link [@project, milestone, ok_url: request.fullpath ] if can? :destroy, milestone %>
         </td>
       </tr>
-  <% end %>
+    <% end %>
   </tbody>
 </table>
 

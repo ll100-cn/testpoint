@@ -10,9 +10,10 @@
 #  updated_at :datetime         not null
 #
 
-
 class Member < ApplicationRecord
   enumerize :role, in: [:owner, :admin, :member], default: :member
   belongs_to :user
   belongs_to :project
+
+  validates :user_id, uniqueness: { scope: :project_id }
 end

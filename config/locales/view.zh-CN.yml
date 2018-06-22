@@ -9,9 +9,6 @@ zh-CN:
         actions: 操作
         all: 全部
         profile: 个人中心
-        backend: 后台管理
-        projects: 项目管理
-        users: 用户管理
       issues:
         show:
           no_message: 没有信息
@@ -28,8 +25,8 @@ zh-CN:
         destroy: 删除
         login: 登录
         logout: 退出
-      tasks:
-        defaults:
+      projects/tasks:
+        change_state:
           relate: 关联
         upload_attachment:
           upload:  上传
@@ -37,7 +34,7 @@ zh-CN:
       cases: 案例
       plans: 计划
       issues: 问题
-      users: 成员
+      members: 成员
       milestones: 里程碑
     pagination:
       first: 第一页

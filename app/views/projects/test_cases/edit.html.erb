@@ -2,4 +2,6 @@
   <h2><%= page_i18n :edit, model_name: h(@test_case) %></h2>
 </div>
 
-<%= render "form", test_case: @test_case %>
+<%= bootstrap_horizontal_form_for [@project, @test_case] do |f| %>
+  <%= render "form", f: f %>
+<% end %>

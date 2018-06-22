@@ -1,9 +1,7 @@
-<%= bootstrap_horizontal_form_for project do |f| %>
-    <%= f.input :name %>
-    <%= f.input :member_ids, collection: User.all.map{ |u| [u.name, u.id]}, input_html: { multiple: true, class: 'select2-field'} %>
-    <%= f.actions_content do %>
-        <%= ok_url_tag %>
-        <%= f.submit class: "btn btn-primary" %>
-        <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
-    <% end %>
+<%= f.input :name %>
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
 <% end %>
+
