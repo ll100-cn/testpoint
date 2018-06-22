@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id         :bigint(8)        not null, primary key
+#  name       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Project < ApplicationRecord
   has_many :test_cases, dependent: :destroy
   has_many :tasks, dependent: :destroy
@@ -9,8 +19,7 @@ class Project < ApplicationRecord
   has_many :platforms, dependent: :destroy
   has_many :components, dependent: :destroy
 
-  has_many :projects_users, dependent: :destroy
-  has_many :members, through: :projects_users, source: :user
+  has_many :members, dependent: :destroy
 
   def remove_member(user)
     members.delete(user) if members.include?(user)

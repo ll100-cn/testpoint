@@ -2,18 +2,19 @@
 #
 # Table name: issues
 #
-#  id         :integer          not null, primary key
-#  title      :string
-#  content    :text
-#  state      :string
-#  user_id    :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :bigint(8)        not null, primary key
+#  title        :string
+#  content      :text
+#  state        :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  milestone_id :bigint(8)
+#  creator_id   :bigint(8)
+#  assignee_id  :bigint(8)
+#  project_id   :bigint(8)
 #
 
 class Issue < ApplicationRecord
-  extend Enumerize
-
   enumerize :state, in: [:open, :closed, :solved], default: :open
 
   has_many :tasks, dependent: :destroy

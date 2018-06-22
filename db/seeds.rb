@@ -6,10 +6,15 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.where(email: "testpoint@gmail.com").first_or_create do |u|
+user = User.first_or_create! do |u|
+  u.email = "testpoint@gmail.com"
   u.name = "testpoint"
   u.password = u.password_confirmation = "testpoint"
 end
 
-Component.where(name: "Default Component").first_or_create if Component.none?
-Platform.where(name: "Default Platform").first_or_create if Platform.none?
+if Project.none?
+  project = Project.create!(name: "Default Project")
+  Component.create!(name: "Default Component", project: project)
+  Platform.create!(name: "Default Platform", project: project)
+  Member.create!(role: "owner", project: project, user: user)
+end

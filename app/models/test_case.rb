@@ -2,13 +2,14 @@
 #
 # Table name: test_cases
 #
-#  id           :integer          not null, primary key
+#  id           :bigint(8)        not null, primary key
 #  title        :string
 #  content      :text
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  component_id :integer
+#  component_id :bigint(8)
 #  archived     :boolean          default(FALSE)
+#  project_id   :bigint(8)
 #
 
 class TestCase < ApplicationRecord
