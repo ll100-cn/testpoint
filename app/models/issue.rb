@@ -26,6 +26,10 @@ class Issue < ApplicationRecord
   belongs_to :assignee, class_name: User.to_s, optional: true
   belongs_to :project
 
+  has_many :issue_attachments, dependent: :destroy
+  accepts_nested_attributes_for :issue_attachments, allow_destroy: true
+  has_many :attachments, as: :attachmentable, through: :issue_attachments, dependent: :destroy
+
   scope :with_labels, -> { includes(:labels) }
 
   def default_title
@@ -33,5 +37,9 @@ class Issue < ApplicationRecord
       test_case = task.test_case
       "#{test_case.component.name}-#{test_case.title}"
     end.join(" ")
+  end
+
+  def default_content
+    tasks.map(&:message).join(" ")
   end
 end

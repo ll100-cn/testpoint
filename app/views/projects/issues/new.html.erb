@@ -2,11 +2,26 @@
   <h2><%= page_i18n :new, model_name: h(@issue) %></h2>
 </div>
 
-<%= bootstrap_horizontal_form_for @issue, url: [@project, @task, @issue] do |f| %>
-  <%= render "form", f: f %>
-  <%= f.actions_content do %>
+<div class="row">
+  <div class="col-sm-2 text-right">
+    <h5><%= @task.test_case.title %></h5>
+  </div>
+  <div class="col">
+    <div><%= task_state_with_icon(@task.state) %></div>
+    <div class="badge badge-secondary"><%= @task.platform.name %></div>
+  </div>
+</div>
+
+<hr>
+
+<div class="container">
+  <%= bootstrap_vertical_form_for @issue, url: [@project, @task, @issue] do |f| %>
+    <%= f.input :title %>
+    <%= f.input :content, input_html: { class: 'markdown-field' } %>
+    <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+    <hr>
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
     <%= cancel_link [@project, @task, @issue], class: "btn btn-secondary" %>
   <% end %>
-<% end %>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_22_072149) do
+ActiveRecord::Schema.define(version: 2018_06_25_130249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,15 @@ ActiveRecord::Schema.define(version: 2018_06_22_072149) do
     t.index ["attachmentable_type"], name: "index_attachments_on_attachmentable_type"
   end
 
+  create_table "comment_attachments", force: :cascade do |t|
+    t.bigint "comment_id"
+    t.bigint "attachment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachment_id"], name: "index_comment_attachments_on_attachment_id"
+    t.index ["comment_id"], name: "index_comment_attachments_on_comment_id"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
@@ -66,6 +75,13 @@ ActiveRecord::Schema.define(version: 2018_06_22_072149) do
     t.bigint "project_id"
     t.index ["ancestry"], name: "index_components_on_ancestry"
     t.index ["project_id"], name: "index_components_on_project_id"
+  end
+
+  create_table "issue_attachment", force: :cascade do |t|
+    t.bigint "issue_id"
+    t.bigint "attachment_id"
+    t.index ["attachment_id"], name: "index_issue_attachment_on_attachment_id"
+    t.index ["issue_id"], name: "index_issue_attachment_on_issue_id"
   end
 
   create_table "issues", force: :cascade do |t|
@@ -168,7 +184,6 @@ ActiveRecord::Schema.define(version: 2018_06_22_072149) do
   create_table "task_attachments", force: :cascade do |t|
     t.bigint "task_id"
     t.bigint "attachment_id"
-    t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["attachment_id"], name: "index_task_attachments_on_attachment_id"
@@ -223,6 +238,8 @@ ActiveRecord::Schema.define(version: 2018_06_22_072149) do
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "users"
   add_foreign_key "components", "projects"
+  add_foreign_key "issue_attachment", "attachments"
+  add_foreign_key "issue_attachment", "issues"
   add_foreign_key "issues", "milestones"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues_labels", "issues"

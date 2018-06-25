@@ -9,8 +9,7 @@
 #  updated_at    :datetime         not null
 #
 
-FactoryBot.define do
-  factory :task_attachment do
-    attachment
-  end
+class TaskAttachment < ApplicationRecord
+  belongs_to :attachment
+  belongs_to :task
 end

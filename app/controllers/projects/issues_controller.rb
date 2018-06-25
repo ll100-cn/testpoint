@@ -14,6 +14,7 @@ class Projects::IssuesController < BaseProjectController
 
   def new
     @issue.title ||= @issue.default_title
+    @issue.content ||= @issue.default_content
   end
 
   def create
@@ -36,7 +37,8 @@ class Projects::IssuesController < BaseProjectController
 protected
 
   def issue_params
-    params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, :assignee_id, label_ids: [])
+    params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, :assignee_id,
+                                    label_ids: [], issue_attachments_attributes: [:id, :attachment_id, :_destroy])
   end
 
   def set_tasks

@@ -11,7 +11,6 @@
 #  platform_id  :bigint(8)
 #  issue_id     :bigint(8)
 #  message      :text
-#  project_id   :bigint(8)
 #
 
 class Task < ApplicationRecord
@@ -22,8 +21,9 @@ class Task < ApplicationRecord
   belongs_to :platform
   belongs_to :issue, optional: true
 
-  has_many :attachments, as: :attachmentable, dependent: :destroy
-  accepts_nested_attributes_for :attachments, allow_destroy: true
+  has_many :task_attachments, dependent: :destroy
+  accepts_nested_attributes_for :task_attachments, allow_destroy: true
+  has_many :attachments, as: :attachmentable, through: :task_attachments, dependent: :destroy
 
   validate :issue_must_exist, if: -> { issue_id.present? }
 

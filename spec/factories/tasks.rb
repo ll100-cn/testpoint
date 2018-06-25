@@ -11,7 +11,6 @@
 #  platform_id  :bigint(8)
 #  issue_id     :bigint(8)
 #  message      :text
-#  project_id   :bigint(8)
 #
 
 FactoryBot.define do

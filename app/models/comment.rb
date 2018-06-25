@@ -14,8 +14,10 @@ class Comment < ApplicationRecord
   include MarkdownConvertor
   belongs_to :user
   belongs_to :issue
-  has_many :attachments, as: :attachmentable, dependent: :destroy
-  accepts_nested_attributes_for :attachments, allow_destroy: true
+
+  has_many :comment_attachments, dependent: :destroy
+  accepts_nested_attributes_for :comment_attachments, allow_destroy: true
+  has_many :attachments, as: :attachmentable, through: :comment_attachments, dependent: :destroy
 
   validates :content, presence: true
 
