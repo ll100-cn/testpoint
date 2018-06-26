@@ -1,3 +1,7 @@
+<%= f.input :title %>
+<%= f.input :content, input_html: { class: 'markdown-field' } %>
+<%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+<hr>
 <%= f.input :state, collection: Issue.state.options, input_html: { class: "select2-field" } %>
 <%= f.input :label_ids, collection: f.object.project.labels.all.map{ |l| [l.name, l.id] }, input_html: { multiple: true, class: "select2-field" } %>
 <%= f.input :milestone_id, collection: f.object.project.milestones.all.map{ |m| [m.title, m.id] }, input_html: { class: "select2-field" } %>

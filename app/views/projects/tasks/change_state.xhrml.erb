@@ -11,6 +11,17 @@
         <%= @task.test_case.content %>
       </div>
       <p><%=h Task, :state %>: <%= @task.state.text %></p>
+      <% if @task.state == "failure" %>
+        <p><%= h Task, :message %>: <%= @task.markdown_to_html(@task.message).html_safe %></p>
+        <p><%= h Task, :attachments %>: </p>
+        <div class="row">
+          <% @task.attachments.each do |attachment| %>
+            <div class="col-lg-6 p-0 pr-2 mb-2">
+              <%= render "attachments/form.html.erb", attachment: attachment %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -14,6 +14,7 @@
 #
 
 class Task < ApplicationRecord
+  include MarkdownConvertor
   enumerize :state, in: [ :pending, :pass, :failure ], default: :pending
 
   belongs_to :test_case

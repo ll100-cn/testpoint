@@ -49,6 +49,7 @@ zh-CN:
         message: 信息
         state: 状态
         issue_id: 问题
+        attachments: 附件
       test_case:
         title: 标题
         content: 内容

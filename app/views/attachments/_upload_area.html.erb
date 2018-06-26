@@ -26,13 +26,11 @@
 <% end %>
 <%= content_tag :div, class: "upload-area pt-2 pl-2", data: { controller: "attachment", url: attachments_url, name: 'attachment[file]', template: template } do %>
   <div class="d-flex flex-wrap upload-container" data-target="attachment.container">
-    <% if attachments %>
-     <% attachments.each do |attachment| %>
-       <div class="col-lg-6 p-0 pr-2 mb-2">
-         <%= render "attachments/form.html.erb", attachment: attachment %>
-       </div>
-     <% end %>
-    <% end %>
+   <% attachments.each do |attachment| %>
+     <div class="col-lg-6 p-0 pr-2 mb-2">
+       <%= render "attachments/form.html.erb", attachment: attachment %>
+     </div>
+   <% end %>
   </div>
   <div class="text-muted small text-right mr-2 mb-2 lh-100">
     拖拽上传 或者

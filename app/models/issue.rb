@@ -15,6 +15,7 @@
 #
 
 class Issue < ApplicationRecord
+  include MarkdownConvertor
   enumerize :state, in: [:open, :closed, :solved], default: :open
 
   has_many :tasks, dependent: :destroy

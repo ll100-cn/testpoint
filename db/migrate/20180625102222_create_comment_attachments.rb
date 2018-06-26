@@ -5,5 +5,6 @@ class CreateCommentAttachments < ActiveRecord::Migration[5.2]
       t.belongs_to :attachment
       t.timestamps
     end
+    remove_column :task_attachments, :content, :text
   end
 end

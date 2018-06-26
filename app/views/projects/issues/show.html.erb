@@ -18,7 +18,7 @@
             </div>
             <div class="card-body">
               <div class="no-margin-bottom">
-                <%= simple_format(@issue.content) %>
+                <%= @issue.markdown_to_html(@issue.content).html_safe %>
               </div>
             </div>
           </div>
@@ -27,16 +27,10 @@
 
       <div class="d-flex mb-4 border-bottom" style="padding-left: 60px;">
         <div class="col">
-          <div class="border-left ml-4 p-4 pr-0">
+          <div class="border-left ml-4 p-3 pr-0">
             <div class="no-margin-bottom">
               <% @issue.tasks.ranked.each do |task| %>
-                  <p>
-                    <%= link_to "##{task.id}", "#" %>
-                    <%= task.test_case.title %>
-                    <span class="badge badge-secondary mx-2"><%= task.platform.name %></span>
-                    <span class="mr-2"><%= task_state_with_icon(task.state) %></span>
-                    <span class="text-muted"><%= time_ago_in_words(task.created_at) %></span>
-                  </p>
+                <%= render "shared/card_issue_task", task: task %>
               <% end %>
             </div>
           </div>
