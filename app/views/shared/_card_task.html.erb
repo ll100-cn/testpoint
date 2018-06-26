@@ -1,4 +1,4 @@
-<% data = { target: "#uploadAttachmentsModal", toggle: "modal", url: change_state_plan_task_path(@plan, task) } %>
+<% data = { target: "#uploadAttachmentsModal", toggle: "modal", url: change_state_project_plan_task_path(@project, @plan, task) } %>
 <%= content_tag :div, class: "card card-collapsed collapsed #{task.state}", data: data do %>
   <div class="card-body">
     <div class="card-title">

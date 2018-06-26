@@ -1,8 +1,7 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
-
-  scope :where_exists, ->(scope) { where("EXISTS (?)", scope.select("1")) }
-  scope :where_not_exists, ->(scope) { where.not("EXISTS (?)", scope.select("1")) }
+  extend Enumerize
+  include SqlScopes
 
   def self.cleanup_column(*args)
     options = { strip: true, presence: true }.merge(args.extract_options!)

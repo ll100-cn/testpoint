@@ -1,0 +1,7 @@
+<div class="page-header">
+  <h2><%= page_i18n :new, model_name: h(@plan) %></h2>
+</div>
+
+<%= bootstrap_horizontal_form_for [@project, @plan] do |f| %>
+  <%= render "form", f: f %>
+<% end %>

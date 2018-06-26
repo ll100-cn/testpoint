@@ -1,0 +1,22 @@
+<div class="d-flex align-items-start mb-4">
+  <%= image_tag current_user.avatar_url, width: 60, class: "rounded-circle" %>
+  <div class="col pr-0">
+    <div class="card">
+      <div class="card-header">
+        <strong><%= current_user.name %></strong>
+      </div>
+      <%= bootstrap_vertical_form_for [@project, issue, issue.comments.new] do |f| %>
+        <div class="card-body">
+          <div class="no-margin-bottom">
+            <%= f.input :content, input_html: { class: 'markdown-field' } %>
+            <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+          </div>
+        </div>
+        <div class="card-footer text-right bg-transparent">
+          <%= ok_url_tag %>
+          <%= f.submit class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

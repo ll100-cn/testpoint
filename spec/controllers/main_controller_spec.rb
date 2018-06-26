@@ -6,7 +6,7 @@ RSpec.describe MainController, type: :controller do
 
     context "when sign in" do
       login_user
-      it { is_expected.to respond_with :success }
+      it { is_expected.to respond_with :redirect }
     end
 
     context "when not sign in" do

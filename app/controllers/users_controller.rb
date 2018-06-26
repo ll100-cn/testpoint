@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  before_action { @navbar = "Users" }
-
   def index
     @q = User.ransack(params[:q])
     @users = @q.result.page(params[:page])

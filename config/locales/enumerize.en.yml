@@ -10,3 +10,8 @@ en:
         open: open
         closed: closed
         solved: solved
+    member:
+      role:
+        owner: owner
+        admin: admin
+        member: member

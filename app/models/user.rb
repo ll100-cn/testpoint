@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                     :integer          not null, primary key
+#  id                     :bigint(8)        not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  reset_password_token   :string
@@ -15,6 +15,7 @@
 #  last_sign_in_ip        :inet
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  name                   :string
 #
 
 class User < ApplicationRecord
@@ -22,12 +23,17 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # :registerable, :recoverable
   devise :database_authenticatable, :rememberable, :trackable, :validatable
+
   has_many :comments, dependent: :destroy
   has_many :created_issues, class_name: Issue.to_s, foreign_key: 'creator_id', dependent: :destroy, inverse_of: true
   has_many :assigned_issues, class_name: Issue.to_s, foreign_key: 'assignee_id', dependent: :destroy, inverse_of: true
+  has_many :members, dependent: :destroy
+  has_many :projects, through: :members
   attr_writer :current_password
 
   validates :name, presence: true
+
+  scope :without_project, ->(project) { where_not_exists(Member.where(project_id: project.id).where_table(:user)) }
 
   def password_required?
     new_record? || password.present? || password_confirmation.present?

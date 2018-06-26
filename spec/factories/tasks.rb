@@ -2,14 +2,14 @@
 #
 # Table name: tasks
 #
-#  id           :integer          not null, primary key
-#  test_case_id :integer
-#  plan_id      :integer
+#  id           :bigint(8)        not null, primary key
+#  test_case_id :bigint(8)
+#  plan_id      :bigint(8)
 #  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  platform_id  :integer
-#  issue_id     :integer
+#  platform_id  :bigint(8)
+#  issue_id     :bigint(8)
 #  message      :text
 #
 

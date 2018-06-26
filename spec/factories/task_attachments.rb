@@ -2,10 +2,9 @@
 #
 # Table name: task_attachments
 #
-#  id            :integer          not null, primary key
-#  task_id       :integer
-#  attachment_id :integer
-#  content       :text
+#  id            :bigint(8)        not null, primary key
+#  task_id       :bigint(8)
+#  attachment_id :bigint(8)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #

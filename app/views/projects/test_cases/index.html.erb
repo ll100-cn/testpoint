@@ -1,0 +1,48 @@
+<div class="page-header">
+  <h2>
+    <%= page_i18n :index, model_name: h(@test_cases) %>
+  </h2>
+  <div class="ml-3 mt-1 actions">
+    <%= new_button ::TestCase, "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath) } if can? :create, ::TestCase %>
+    <%= new_button Component, [ :new, @project, :component ], class: "btn btn-outline-primary btn-sm" if can? :create, Component %>
+  </div>
+</div>
+
+<% @test_cases_mapping = @test_cases.group_by(&:component) %>
+<% @components_mapping = @project.components.ranked.group_by(&:parent_id) %>
+<ul class="list-unstyled">
+  <%= render "components", key: nil %>
+</ul>
+
+<% content_for :sidebar do %>
+  <h5><%=h Platform %></h5>
+  <%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
+    <ul class="list-unstyled">
+      <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
+        <li class="hidden-actions">
+          <% if value %>
+            <span class="float-right actions">
+              <%= edit_link edit_project_platform_path(@project, value, ok_url: request.fullpath) if can? :update, Platform %>
+              <%= destroy_link project_platform_path(@project, value, ok_url: request.fullpath) if can? :destroy, Platform %>
+            </span>
+          <% end %>
+          <%= n.apply_content value do |active_class| %>
+            <%= link_to [@project, ::TestCase, platform_id: value], class: active_class do %>
+              <span class="fa fa-fw <%= 'fa-angle-right' if active_class %>"></span><%= key %>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+      <li>
+        <span class="fa fa-fw"></span><%= link_to page_i18n(:new, model_name: h(Platform)), [ :new, @project, :platform, ok_url: request.fullpath ], class: "text-muted" if can? :create, Platform %>
+      </li>
+    </ul>
+  <% end %>
+<% end %>
+
+<div id="test_case_modal" class="modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
