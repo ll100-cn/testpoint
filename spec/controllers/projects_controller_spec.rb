@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ProjectsController, type: :controller do
   let!(:user) { create :user }
   let!(:project) { create :project }
-  login_user
+  login_superadmin
 
   describe "GET index" do
     action { get :index }

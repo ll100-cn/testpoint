@@ -6,4 +6,12 @@ module ControllerMacros
       sign_in user
     end
   end
+
+  def login_superadmin
+    before(:each) do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      superadmin = FactoryBot.create(:user, :superadmin)
+      sign_in superadmin
+    end
+  end
 end

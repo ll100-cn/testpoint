@@ -1,4 +1,4 @@
-class AttachmentsController < BaseProjectController
+class AttachmentsController < ApplicationController
   load_and_authorize_resource
 
   def create
@@ -8,7 +8,6 @@ class AttachmentsController < BaseProjectController
   end
 
 protected
-
   def attachment_params
     params.fetch(:attachment, {}).permit(:file, :title)
   end

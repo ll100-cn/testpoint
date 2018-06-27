@@ -30,7 +30,6 @@ class Projects::MembersController < BaseProjectController
   end
 
 protected
-
   def member_params
     params.fetch(:member, {}).permit(:role, :user_id)
   end

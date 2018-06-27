@@ -4,4 +4,10 @@
 
 <%= bootstrap_horizontal_form_for @project do |f| %>
   <%= render "form", f: f  %>
+
+  <%= f.actions_content do %>
+    <%= ok_url_tag %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
+  <% end %>
 <% end %>

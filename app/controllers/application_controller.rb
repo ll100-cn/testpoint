@@ -26,4 +26,8 @@ protected
     nil
   end
   helper_method :current_project
+
+  def current_ability
+    @current_ability ||= Ability.new { |a| a.apply_user_permissons(current_user) }
+  end
 end

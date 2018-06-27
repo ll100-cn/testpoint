@@ -6,6 +6,9 @@
     <%= new_button ::TestCase, "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath) } if can? :create, ::TestCase %>
     <%= new_button Component, [ :new, @project, :component ], class: "btn btn-outline-primary btn-sm" if can? :create, Component %>
   </div>
+  <div class="actions ml-auto">
+    <%= edit_link [:edit, @project ] if can? :edit, @project %>
+  </div>
 </div>
 
 <% @test_cases_mapping = @test_cases.group_by(&:component) %>

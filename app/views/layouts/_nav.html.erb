@@ -6,8 +6,8 @@
         <%= current_project.name %>
       </button>
       <div class="dropdown-menu" style="min-width: 3px;">
-        <% Project.all.each do |project| %>
-          <%= link_to project.name, project_path(project), class: "small dropdown-item" if can? :update, project %>
+        <% current_user.projects.each do |project| %>
+          <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
         <% end %>
       </div>
     </div>

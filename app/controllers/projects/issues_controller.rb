@@ -35,7 +35,6 @@ class Projects::IssuesController < BaseProjectController
   end
 
 protected
-
   def issue_params
     params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, :assignee_id,
                                     label_ids: [], issue_attachments_attributes: [:id, :attachment_id, :_destroy])

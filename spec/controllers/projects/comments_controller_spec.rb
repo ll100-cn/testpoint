@@ -5,9 +5,9 @@ RSpec.describe Projects::CommentsController, type: :controller do
   let!(:issue) { create :issue, project: project }
   let!(:user) { create :user }
   let!(:comment) { create :comment, issue: issue, user: user }
+  login_superadmin
 
   describe "POST create" do
-    login_user
     let(:attributes) { { content: "comment create" } }
     action { post :create, params: { comment: attributes, issue_id: issue.id, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
