@@ -28,6 +28,8 @@ zh-CN:
       projects/tasks:
         change_state:
           relate: 关联
+        relate:
+          relate: 关联
         upload_attachment:
           upload:  上传
     navbar:

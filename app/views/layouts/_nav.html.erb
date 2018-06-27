@@ -6,7 +6,12 @@
         <%= current_project.name %>
       </button>
       <div class="dropdown-menu" style="min-width: 3px;">
-        <% current_user.projects.each do |project| %>
+        <% if current_user.superadmin? %>
+          <% projects = Project.all %>
+        <% else %>
+          <% projects = current_user.projects %>
+        <% end %>
+        <% projects.each do |project| %>
           <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
         <% end %>
       </div>

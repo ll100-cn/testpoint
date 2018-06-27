@@ -5,7 +5,7 @@ class Ability
     block.(self)
   end
 
-  def apply_user_permissons(user)
+  def apply_user_permissions(user)
     return unless user
 
     if user.superadmin?
@@ -19,7 +19,7 @@ class Ability
     can :manage, Attachment
   end
 
-  def apply_member_permissons(member)
+  def apply_member_permissions(member)
     return unless member
 
     if member.role.owner?

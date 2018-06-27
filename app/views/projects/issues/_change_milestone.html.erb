@@ -1,0 +1,30 @@
+<% form = capture do %>
+  <div>
+    <%= form_tag project_issue_path(project, issue), remote: true,
+                 method: "patch",
+                 class: "form-inline",
+                 authenticity_token: true,
+                 data: { type: "xhrml", target: ".change-issue-milestone-area" } do %>
+      <div class="form-group-sm">
+        <%= select_tag 'issue[milestone_id]', options_for_select(project.milestones.map{ |m| [m.title, m.id] }), class: "select2-field", style: "width: 10em;" %>
+      </div>
+      <%= link_to action_i18n(:cancel), "javascript:void(0)", data: { action: "click->inline-edit#restore" }, class: "small text-muted ml-1" %>
+      <%= submit_tag action_i18n(:confirm), class: "btn btn-sm ml-1 btn-primary" %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= content_tag "div", class: "position-right", data: { controller: "inline-edit", template: form } do %>
+  <div class="d-flex align-items-center">
+    <% if issue.milestone %>
+      <div class="progress flex-1">
+        <% total = issue.milestone.issues.count %>
+        <% finished_issue = issue.milestone.issues.where(state: "solved").count %>
+        <div class="progress-bar bg-success" style="width: <%= 100 * finished_issue / total %>%"></div>
+        <span class="progress-text"><%= issue.milestone.title %></span>
+      </div>
+      <span class="badge text-right"><%= 100 * finished_issue / total %>%</span>
+    <% end %>
+    <span><%= link_to content_tag(:i, '',class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "ml-2 float-right" %></span>
+  </div>
+<% end %>

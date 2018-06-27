@@ -1,0 +1,7 @@
+<%= content_tag "div", data: { controller: "inline-edit", template: template } do %>
+  <div class="d-flex">
+    <span class="h5"><%=h Issue, attribute_name %></span>
+    <span class="ml-auto"><%= link_to(content_tag(:i, '', class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }) %></span>
+  </div>
+  <%= yield %>
+<% end %>

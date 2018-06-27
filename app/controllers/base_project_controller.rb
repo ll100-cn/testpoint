@@ -8,6 +8,6 @@ class BaseProjectController < ApplicationController
   end
 
   def current_ability
-    super.tap { |a| a.apply_member_permissons(current_member) }
+    super.tap { |a| a.apply_member_permissions(current_member) }
   end
 end
