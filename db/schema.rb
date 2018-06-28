@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(version: 2018_06_27_013810) do
 
   create_table "comment_attachments", force: :cascade do |t|
     t.bigint "comment_id"
+    t.bigint "attachment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "attachment_id"
     t.index ["attachment_id"], name: "index_comment_attachments_on_attachment_id"
     t.index ["comment_id"], name: "index_comment_attachments_on_comment_id"
   end

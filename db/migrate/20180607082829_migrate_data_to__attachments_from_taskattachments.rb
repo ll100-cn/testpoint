@@ -12,7 +12,7 @@ class MigrateDataToAttachmentsFromTaskattachments < ActiveRecord::Migration[5.2]
   end
 
   def data_migration(attachment)
-    return if TaskAttachment.where.not(attachment_id: attachment.id).exists?
+    return unless TaskAttachment.where(attachment_id: attachment.id).exists?
     task_attachment = TaskAttachment.find_by(attachment_id: attachment.id)
     attachment.update(attachmentable_id: task_attachment.task_id, attachmentable_type: "Task", title: task_attachment.content)
   end
