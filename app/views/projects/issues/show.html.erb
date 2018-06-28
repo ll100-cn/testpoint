@@ -85,9 +85,7 @@
 
       <%= render layout: "attribute_info", locals: { template: form, attribute_name: :label_ids } do %>
         <% @issue.labels.each do |label| %>
-          <span class="badge mb-1 w-100 text-white text-left" style="background-color: <%= label.color%>">
-            <%=label.name %>
-          </span>
+          <%= label_tag label, label.name, class: "mb-1 d-block text-left" %>
         <% end %>
       <% end %>
 

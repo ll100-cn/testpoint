@@ -25,7 +25,11 @@
   <tbody>
     <% @labels.each do |label| %>
       <tr>
-        <td><%= link_to label_with_color(label), [@project, label] %></td>
+        <td>
+          <%= link_to [@project, label] do %>
+            <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
+          <% end %>
+        </td>
         <td><%= label.description %></td>
         <td><%= label.issues.count %></td>
         <td>
