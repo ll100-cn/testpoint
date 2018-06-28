@@ -15,7 +15,6 @@ class Projects::CommentsController < BaseProjectController
   end
 
 protected
-
   def comment_params
     params.fetch(:comment, {}).permit(:content, comment_attachments_attributes: [:id, :attachment_id, :_destroy])
   end

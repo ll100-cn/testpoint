@@ -13,3 +13,7 @@ en:
     profiles:
       update:
         notice: profile has been updated successfully.
+    projects:
+      issues:
+        update:
+          notice: ''

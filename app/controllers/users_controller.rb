@@ -30,7 +30,6 @@ class UsersController < ApplicationController
   end
 
 protected
-
   def user_params
     params.fetch(:user, {}).permit(:name, :email, :password, :password_confirmation)
   end

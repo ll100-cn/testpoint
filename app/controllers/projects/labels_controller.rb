@@ -33,7 +33,6 @@ class Projects::LabelsController < BaseProjectController
   end
 
 protected
-
   def label_params
     params.fetch(:label, {}).permit(:name, :description, :color)
   end

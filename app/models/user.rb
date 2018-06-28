@@ -16,6 +16,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  name                   :string
+#  superadmin             :boolean          default(FALSE)
 #
 
 class User < ApplicationRecord

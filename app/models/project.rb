@@ -19,4 +19,5 @@ class Project < ApplicationRecord
 
   has_many :members, dependent: :destroy
   accepts_nested_attributes_for :members
+  has_many :users, through: :members
 end

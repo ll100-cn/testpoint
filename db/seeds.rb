@@ -10,6 +10,7 @@ user = User.first_or_create! do |u|
   u.email = "testpoint@gmail.com"
   u.name = "testpoint"
   u.password = u.password_confirmation = "testpoint"
+  u.superadmin = true
 end
 
 if Project.none?

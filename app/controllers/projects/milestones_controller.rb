@@ -31,8 +31,8 @@ class Projects::MilestonesController < BaseProjectController
     @milestone.destroy
     respond_with @milestone, location: ok_url_or_default([@project, Milestone])
   end
-protected
 
+protected
   def milestone_params
     params.fetch(:milestone, {}).permit(:title, :start_time, :end_time, :description)
   end

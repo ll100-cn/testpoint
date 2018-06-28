@@ -46,7 +46,6 @@ class Projects::PlansController < BaseProjectController
   end
 
 protected
-
   def plan_params
     params.fetch(:plan, {}).permit(:title, :start_at)
   end

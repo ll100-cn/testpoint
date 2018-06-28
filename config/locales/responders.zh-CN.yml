@@ -13,3 +13,7 @@ zh-CN:
     profiles:
       update:
         notice: 资料更新成功!
+    projects:
+      issues:
+        update:
+          notice: ''

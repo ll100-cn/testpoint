@@ -5,6 +5,7 @@ RSpec.describe Projects::TasksController, type: :controller do
   let(:plan) { create :plan, project: project }
   let(:task) { plan.tasks.first }
   let(:task_attributes) { {} }
+  login_superadmin
 
   describe "PUT update" do
     action { put :update, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }

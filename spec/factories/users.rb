@@ -16,6 +16,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  name                   :string
+#  superadmin             :boolean          default(FALSE)
 #
 
 FactoryBot.define do
@@ -24,5 +25,9 @@ FactoryBot.define do
     name { Faker::Name.name }
     password "password"
     password_confirmation "password"
+
+    trait :superadmin do
+      superadmin true
+    end
   end
 end

@@ -4,6 +4,7 @@ RSpec.describe Projects::MembersController, type: :controller do
   let!(:user) { create :user }
   let!(:project) { create :project }
   let!(:member) { create :member, :admin, project: project, user: user }
+  login_superadmin
 
   describe "GET index" do
     action { get :index, params: { project_id: project.id } }

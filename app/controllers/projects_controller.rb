@@ -1,5 +1,6 @@
-class ProjectsController < ApplicationController
+class ProjectsController < BaseProjectController
   load_and_authorize_resource
+
   def index
     @projects = @projects.page(params[:page])
   end
@@ -32,8 +33,11 @@ class ProjectsController < ApplicationController
   end
 
 protected
-
   def project_params
     params.fetch(:project, {}).permit(:name, user_ids: [])
+  end
+
+  def current_project
+    @project unless @project&.new_record?
   end
 end

@@ -40,7 +40,6 @@ class Projects::TestCasesController < BaseProjectController
   end
 
 protected
-
   def test_case_params
     params.fetch(:test_case, {}).permit(:title, :content, :component_id, platform_ids: [])
   end

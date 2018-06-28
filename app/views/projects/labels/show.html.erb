@@ -1,7 +1,6 @@
 <div class="page-header">
-  <h2><%=label_with_color(@label) %></h2>
+  <h2><%= label_tag @label, nil, class: "badge-circle mr-2" %><%= @label.name %></h2>
 </div>
-
 <table class="table">
   <colgroup>
     <col width="30%">
@@ -17,15 +16,15 @@
   </thead>
   <tbody>
   <% @label.issues.each do |issue| %>
-      <tr>
-        <td><%= link_to issue.title, [@project, issue] %></td>
-        <td><%= issue.content %></td>
-        <td>
-          <span class="<%= issue_state_class_name(issue.state, :badge) %>">
-          <%= issue.state.text %>
-          </span>
-        </td>
-      </tr>
+    <tr>
+      <td><%= link_to issue.title, [@project, issue] %></td>
+      <td><%= issue.content %></td>
+      <td>
+        <span class="<%= issue_state_class_name(issue.state, :badge) %>">
+        <%= issue.state.text %>
+        </span>
+      </td>
+    </tr>
   <% end %>
   </tbody>
 </table>

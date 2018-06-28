@@ -32,16 +32,11 @@ module PageHelper
     cancel_link(default_url, { class: "btn btn-secondary" }.merge(options))
   end
 
-  def label_with_color(label)
-    content_tag :span, class: "btn text-white", style: "background-color:" + label.color do
-      safe_join([label.name], ' ')
-    end
-  end
-
-  def issue_label(label)
-    content_tag :span, class: "badge mt-1 text-white", style: "background-color:" + label.color do
-      safe_join([label.name], ' ')
-    end
+  def label_tag(label, *args, &block)
+    options = args.extract_options!
+    options[:class] = "badge text-white #{options[:class]}"
+    options[:style] = "background-color: #{label&.color || '#6c757d'}; #{options[:style]}"
+    content_tag(:span, *args, options, &block)
   end
 
   def task_state_class_name(state)

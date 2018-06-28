@@ -6,6 +6,6 @@ import './select2.scss'
 
 $(document).on('content:loaded', function(event) {
   $(event.target).find('.select2-field').each(function() {
-    this.select2()
+    $(this).select2()
   })
 })

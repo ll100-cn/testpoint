@@ -26,7 +26,6 @@ class Projects::ComponentsController < BaseProjectController
   end
 
 protected
-
   def component_params
     params.fetch(:component, {}).permit(:name, :parent_id)
   end
