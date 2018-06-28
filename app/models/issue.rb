@@ -15,6 +15,7 @@
 #
 
 class Issue < ApplicationRecord
+  paginates_per 10
   include MarkdownConvertor
   enumerize :state, in: [:open, :closed, :solved], default: :open
 

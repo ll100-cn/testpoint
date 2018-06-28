@@ -43,8 +43,6 @@ zh-CN:
       platform:
         name: 名称
         archived: 是否存档
-      task_attachment:
-        content: 内容
       task:
         message: 信息
         state: 状态
