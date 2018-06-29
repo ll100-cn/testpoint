@@ -30,6 +30,8 @@ class DataMigrationOnProject < ActiveRecord::Migration[5.2]
   end
 
   def change
+    return unless User.order(:id).first
+    owner = User.order(:id).first
     project = Project.first_or_create! do |p|
       p.name = "Default Project"
     end
@@ -40,7 +42,6 @@ class DataMigrationOnProject < ActiveRecord::Migration[5.2]
     Issue.where(project_id: nil).update_all(project_id: project.id)
     Label.where(project_id: nil).update_all(project_id: project.id)
     Milestone.where(project_id: nil).update_all(project_id: project.id)
-    owner = User.order(:id).first
     Member.create!(role: "owner", project_id: project.id, user_id: owner.id)
     User.order(:id).where.not(id: owner.id).find_each do |user|
       Member.create!(role: "member", project_id: project.id, user_id: user.id)
