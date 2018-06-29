@@ -20,6 +20,8 @@ class Projects::TasksController < BaseProjectController
   end
 
   def relate
+    @q = @project.issues.not_closed.ransack(params[:q])
+    @issues = @q.result.with_labels.page(params[:page])
   end
 
 protected

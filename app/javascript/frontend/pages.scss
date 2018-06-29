@@ -1,0 +1,23 @@
+.page-header {
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: flex-end;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0;
+  }
+
+  .actions {
+    a + a {
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+.page-content {
+  img {
+    max-width: 100%;
+  }
+}

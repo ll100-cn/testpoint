@@ -22,4 +22,4 @@ import '../components/stimulus'
 import '../components/clipboard'
 import '../components/load-image'
 
-import '../pages'
+import '../frontend'

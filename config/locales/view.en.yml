@@ -59,6 +59,8 @@ en:
       projects/tasks:
         change_state:
           relate: Relate
+        update:
+          relate: Relate
         upload_attachment:
           upload: Upload attachment
     navbar:

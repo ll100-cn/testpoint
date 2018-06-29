@@ -12,32 +12,16 @@
       </div>
       <p><%=h Task, :state %>: <%= @task.state.text %></p>
       <% if @task.state == "failure" %>
-        <p><%= h Task, :message %>: <%= @task.markdown_to_html(@task.message).html_safe %></p>
-        <p><%= h Task, :attachments %>: </p>
-        <div class="row">
-          <% @task.attachments.each do |attachment| %>
-            <div class="col-lg-6 p-0 pr-2 mb-2">
-              <%= render "attachments/form.html.erb", attachment: attachment %>
-            </div>
-          <% end %>
-        </div>
+        <p><%= h Task, :message %>: </p>
+        <%= render "shared/page_content.html.erb", content: @task.message %>
+        <%= render "shared/attachments_box.html.erb", attachmentable: @task %>
       <% end %>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-  <div id="relate-issue" class="btn-group mr-auto">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-      <%=h Issue %>
-    </button>
-    <div class="dropdown-menu">
-      <% if @task.issue_id.nil? %>
-        <%= new_button Issue, [:new, @project, @task, :issue], class: "dropdown-item" %>
-      <% end %>
-      <% relate_data = { remote: true, target: "#relate-issue", type: :xhrml } %>
-      <% link_text = @task.issue_id? ? "#{h(Task, :issue_id)}: #{@task.issue_id}" : action_i18n('relate') %>
-      <%= link_to link_text, [:relate, @project, @plan, @task], data: relate_data, class: "dropdown-item" %>
-    </div>
+  <div class="mr-auto">
+    <%= link_to action_i18n('relate'), [:relate, @project, @plan, @task], class: "btn btn-primary" %>
   </div>
   <% data = { remote: true, target: "#uploadAttachmentsModal", type: :xhrml } %>
   <%= link_to Task.state.find_value(:pass).text, [@project, @plan, @task, task: { state: :pass }], method: :patch, class: "btn btn-success" %>

@@ -11,7 +11,6 @@
 #
 
 class Comment < ApplicationRecord
-  include MarkdownConvertor
   belongs_to :user
   belongs_to :issue
 

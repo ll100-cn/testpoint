@@ -1,0 +1,60 @@
+<div class="page-header">
+  <h2><%= page_i18n :index, model_name: h(Issue) %></h2>
+  <div class="actions ml-auto">
+    <%= new_link Issue, [:new, @project, @task, :issue, request_for_ok_url] if can? :create, Issue %>
+  </div>
+</div>
+
+<%= backend_search_form_for @q, url: relate_project_plan_task_path(@project, @plan, @task) do |f| %>
+  <%= f.input :title_cont, label: false, placeholder: "search...." %>
+  <%= f.submit class: "btn btn-outline-success mb-2" %>
+<% end %>
+
+<table class="table">
+  <colgroup>
+    <col width="40%">
+    <col width="20%">
+    <col width="20%">
+    <col width="10%">
+    <col>
+  </colgroup>
+  <tr>
+    <th><%=h Issue, :title %></th>
+    <th><%=h Issue, :state %></th>
+    <th><%=h Issue, :label_ids %></th>
+    <th><%=h Issue, :milestone_id %></th>
+    <th><%= page_i18n :actions %></th>
+  </tr>
+  </thead>
+  <tbody>
+    <% @issues.each do |issue| %>
+      <tr>
+        <td>
+          <%= link_to issue.title, [@project, issue] %>
+        </td>
+        <td>
+          <span class="<%= issue_state_class_name(issue.state, :text) %>">
+          <%= issue.state.text %>
+          </span>
+        </td>
+        <td>
+          <% issue.labels.each do |label| %>
+            <%= label_tag(label, label.name) %>
+          <% end %>
+        </td>
+        <td>
+          <% if issue.milestone %>
+            <%= issue.milestone.title %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to action_i18n(:relate), [@project, @plan, @task, task: { issue_id: issue.id }], method: :patch %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<nav class="table-pagination">
+  <%= paginate @issues %>
+</nav>

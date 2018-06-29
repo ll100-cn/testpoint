@@ -5,6 +5,7 @@ RSpec.describe Projects::TasksController, type: :controller do
   let(:plan) { create :plan, project: project }
   let(:task) { plan.tasks.first }
   let(:task_attributes) { {} }
+  let(:issue) { create :issue, title: "it is a issue", project: project }
   login_superadmin
 
   describe "PUT update" do
@@ -27,24 +28,24 @@ RSpec.describe Projects::TasksController, type: :controller do
         expect(task.task_attachments.count).to eq 1
       }
     end
+  end
 
-    context "relate issue" do
-      context "success" do
-        let(:project) { create :project }
-        let(:issue) { create :issue, project: project }
-        before { task_attributes[:issue_id] = issue.id }
+  describe "relate issue" do
+    action { put :update, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes } }
+    context "success" do
+      let(:project) { create :project }
+      let(:issue) { create :issue, project: project }
+      before { task_attributes[:issue_id] = issue.id }
 
-        it { expect(task.reload.issue).to eq issue }
-      end
+      it { expect(task.reload.issue).to eq issue }
+    end
 
-      context "when issue_id invalid" do
-        before {
-          Issue.destroy_all
-          task_attributes[:issue_id] = 1
-        }
-
-        it { expect(assigns(:task).errors[:issue_id].count).to eq 1 }
-      end
+    context "when issue_id invalid" do
+      before {
+        Issue.destroy_all
+        task_attributes[:issue_id] = 1
+      }
+      it { expect(assigns(:task).errors[:issue_id].count).to eq 1 }
     end
   end
 
@@ -59,12 +60,13 @@ RSpec.describe Projects::TasksController, type: :controller do
   end
 
   describe "GET edit" do
-    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes } }
+
     it { is_expected.to respond_with(:success) }
   end
 
   describe "GET relate" do
-    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { get :relate, params: { project_id: project.id, plan_id: plan, id: task, q: { title_cont: "issue" } } }
     it { is_expected.to respond_with(:success) }
   end
 end

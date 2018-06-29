@@ -18,7 +18,8 @@
             </div>
             <div class="card-body">
               <div class="no-margin-bottom">
-                <%= @issue.markdown_to_html(@issue.content).html_safe %>
+                <%= render "shared/page_content", content: @issue.content %>
+                <%= render "shared/attachments_box", attachmentable: @issue %>
               </div>
             </div>
           </div>

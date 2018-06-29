@@ -1,4 +1,4 @@
-<%= render "form.html.erb", attachment: @attachment %>
+<%= render "info.html.erb", attachment: @attachment %>
 <% time = Time.now.to_i %>
 <%= hidden_field_tag "task[task_attachments_attributes][#{time + @attachment.id}][attachment_id]", @attachment.id %>
 <%= hidden_field_tag "issue[issue_attachments_attributes][#{time + @attachment.id}][attachment_id]", @attachment.id %>
