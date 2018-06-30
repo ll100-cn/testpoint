@@ -10,7 +10,7 @@ Rails.application.routes.draw do
           member do
             get :change_state
             get :upload_attachment
-            get :relate
+            get :related_issues
           end
         end
       end

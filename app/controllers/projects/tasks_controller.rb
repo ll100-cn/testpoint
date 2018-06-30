@@ -19,7 +19,7 @@ class Projects::TasksController < BaseProjectController
   def upload_attachment
   end
 
-  def relate
+  def related_issues
     @q = @project.issues.not_closed.ransack(params[:q])
     @issues = @q.result.with_labels.page(params[:page])
   end

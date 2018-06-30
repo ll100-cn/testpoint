@@ -28,10 +28,7 @@ RSpec.describe Projects::TasksController, type: :controller do
         expect(task.task_attachments.count).to eq 1
       }
     end
-  end
 
-  describe "relate issue" do
-    action { put :update, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes } }
     context "success" do
       let(:project) { create :project }
       let(:issue) { create :issue, project: project }
@@ -60,13 +57,17 @@ RSpec.describe Projects::TasksController, type: :controller do
   end
 
   describe "GET edit" do
-    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes } }
-
+    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
     it { is_expected.to respond_with(:success) }
   end
 
   describe "GET relate" do
-    action { get :relate, params: { project_id: project.id, plan_id: plan, id: task, q: { title_cont: "issue" } } }
+    action { get :related_issues, params: { project_id: project.id, plan_id: plan, id: task } }
+    it { is_expected.to respond_with(:success) }
+  end
+
+  describe "GET search result" do
+    action { get :related_issues, params: { project_id: project.id, plan_id: plan, id: task, q: { title_cont: "issue" } } }
     it { is_expected.to respond_with(:success) }
   end
 end

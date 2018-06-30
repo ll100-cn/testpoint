@@ -21,7 +21,11 @@
 </div>
 <div class="modal-footer">
   <div class="mr-auto">
-    <%= link_to action_i18n('relate'), [:relate, @project, @plan, @task], class: "btn btn-primary" %>
+    <% if @task.issue_id.nil? %>
+      <%= link_to action_i18n('relate'), [:related_issues, @project, @plan, @task], class: "btn btn-primary" %>
+    <% else %>
+      <%= link_to "#{h(Task, :issue_id)}: #{@task.issue_id}", [:related_issues, @project, @plan, @task], class: "btn btn-primary" %>
+    <% end %>
   </div>
   <% data = { remote: true, target: "#uploadAttachmentsModal", type: :xhrml } %>
   <%= link_to Task.state.find_value(:pass).text, [@project, @plan, @task, task: { state: :pass }], method: :patch, class: "btn btn-success" %>

@@ -1,3 +1,11 @@
+<% form = capture do %>
+  <%= bootstrap_inline_form_for attachment, defaults: { label: false, input_html: { class: "form-control-sm" }, wrapper_html: { class: "mb-2" } } do |f| %>
+    <%= f.input :title %>
+    <%= f.submit class: "btn btn-xs mr-1 btn-primary" %>
+    <%= link_to action_i18n(:cancel), "javascript:void(0)", data: { action: "click->inline-edit#restore" }, class: "btn btn-xs text-muted" %>
+  <% end %>
+<% end %>
+
 <% file = attachment.file %>
 <% blob = ActiveStorage::Blob.find(file.attachment.blob_id) %>
 <div class="media border bg-light p-2 align-items-center">
@@ -13,10 +21,15 @@
     </div>
   </div>
   <div class="media-body d-flex flex-column">
-    <div class="d-flex justify-content-between align-items-center">
-      <h4 class="mb-0"><%= blob.filename.to_s %></h4>
-      <%= link_to(content_tag(:i, '',class: 'fa fa-pencil-square-o'), edit_attachment_path(attachment))%>
-    </div>
+    <%= content_tag "div", data: { controller: "inline-edit", template: form } do %>
+      <div class="d-flex justify-content-between align-items-center">
+        <h4 class="mb-0"><%= blob.filename.to_s %></h4>
+        <% if attachment.title %>
+          <span class="text-secondary ml-1"><%= attachment.title %></span>
+         <% end %>
+        <span class="ml-auto"><%= link_to(content_tag(:i, '', class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }) %></span>
+      </div>
+    <% end %>
     <div class="small">
       <span class="text-secondary mr-1"><%= number_to_human_size(blob.byte_size, precision: 2, locale: 'en') %></span>
       <%= link_to polymorphic_url(file), class: "clipboard" do %>

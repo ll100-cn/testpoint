@@ -17,24 +17,24 @@ module BackendHelper
     }
   end
 
-  class SearchLink < Ransack::Helpers::FormHelper::SortLink
-    attr_writer :search_params
+  # class SearchLink < Ransack::Helpers::FormHelper::SortLink
+  #   attr_writer :search_params
+  #
+  #   def search_params
+  #     @search_params ||= super
+  #   end
+  #
+  #   def sort_params
+  #     @search.sorts
+  #   end
+  # end
 
-    def search_params
-      @search_params ||= super
-    end
-
-    def sort_params
-      @search.sorts
-    end
-  end
-
-  def search_url(search, attributes = {})
-    s = SearchLink.new(search, {}, [], params)
-    s.search_params = s.search_params.merge(attributes)
-
-    url_for(s.url_options)
-  end
+  # def search_url(search, attributes = {})
+  #   s = SearchLink.new(search, {}, [], params)
+  #   s.search_params = s.search_params.merge(attributes)
+  #
+  #   url_for(s.url_options)
+  # end
 
   def current_url(attributes = {})
     options = params.permit!.to_h.deep_merge(attributes)

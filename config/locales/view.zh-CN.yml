@@ -30,7 +30,7 @@ zh-CN:
           relate: 关联
         update:
           relate: 关联
-        relate:
+        related_issues:
           relate: 关联
         upload_attachment:
           upload:  上传

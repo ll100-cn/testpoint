@@ -5,7 +5,7 @@
   </div>
 </div>
 
-<%= backend_search_form_for @q, url: relate_project_plan_task_path(@project, @plan, @task) do |f| %>
+<%= backend_search_form_for @q, url: related_issues_project_plan_task_path(@project, @plan, @task) do |f| %>
   <%= f.input :title_cont, label: false, placeholder: "search...." %>
   <%= f.submit class: "btn btn-outline-success mb-2" %>
 <% end %>
