@@ -14,14 +14,13 @@ class Projects::TasksController < BaseProjectController
   end
 
   def change_state
+    @related_issues = @project.issues.left_outer_joins(:tasks).where(tasks: { test_case_id: @task.test_case.id }).records
   end
 
   def upload_attachment
   end
 
   def related_issues
-    @q = @project.issues.not_closed.ransack(params[:q])
-    @issues = @q.result.with_labels.page(params[:page])
   end
 
 protected

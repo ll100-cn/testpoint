@@ -29,20 +29,22 @@ RSpec.describe Projects::TasksController, type: :controller do
       }
     end
 
-    context "success" do
-      let(:project) { create :project }
-      let(:issue) { create :issue, project: project }
-      before { task_attributes[:issue_id] = issue.id }
+    context "relate issue" do
+      context "success" do
+        let(:project) { create :project }
+        let(:issue) { create :issue, project: project }
+        before { task_attributes[:issue_id] = issue.id }
 
-      it { expect(task.reload.issue).to eq issue }
-    end
+        it { expect(task.reload.issue).to eq issue }
+      end
 
-    context "when issue_id invalid" do
-      before {
-        Issue.destroy_all
-        task_attributes[:issue_id] = 1
-      }
-      it { expect(assigns(:task).errors[:issue_id].count).to eq 1 }
+      context "when issue_id invalid" do
+        before {
+          Issue.destroy_all
+          task_attributes[:issue_id] = 1
+        }
+        it { expect(assigns(:task).errors[:issue_id].count).to eq 1 }
+      end
     end
   end
 
@@ -63,11 +65,6 @@ RSpec.describe Projects::TasksController, type: :controller do
 
   describe "GET relate" do
     action { get :related_issues, params: { project_id: project.id, plan_id: plan, id: task } }
-    it { is_expected.to respond_with(:success) }
-  end
-
-  describe "GET search result" do
-    action { get :related_issues, params: { project_id: project.id, plan_id: plan, id: task, q: { title_cont: "issue" } } }
     it { is_expected.to respond_with(:success) }
   end
 end

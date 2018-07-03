@@ -13,9 +13,12 @@ class AttachmentsController < ApplicationController
   def edit
   end
 
+  def show
+  end
+
   def update
     @attachment.update(attachment_params)
-    redirect_back(fallback_location: root_path)
+    respond_with @attachment
   end
 
 protected

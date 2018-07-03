@@ -31,7 +31,7 @@ class Issue < ApplicationRecord
   has_many :attachments, as: :attachmentable, through: :issue_attachments, dependent: :destroy
 
   scope :with_labels, -> { includes(:labels) }
-  scope :not_closed, -> { where("state= ? or state = ?", "open", "solved") }
+  scope :opened, -> { where(state: "open") }
 
   def default_title
     tasks.map do |task|

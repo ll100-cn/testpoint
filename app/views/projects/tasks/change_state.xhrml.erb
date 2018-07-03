@@ -22,9 +22,26 @@
 <div class="modal-footer">
   <div class="mr-auto">
     <% if @task.issue_id.nil? %>
-      <%= link_to action_i18n('relate'), [:related_issues, @project, @plan, @task], class: "btn btn-primary" %>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= action_i18n('relate') %>
+        </button>
+        <div class="dropdown-menu">
+          <% @related_issues.each do |issue| %>
+            <%= link_to "#{h(Task, :issue_id)} #{}: #{issue.id}", [@project, @plan, @task, task: { issue_id: issue.id }], method: :patch, class: "dropdown-item small" %>
+          <% end %>
+          <%= link_to action_i18n('more'), project_issues_url(@project, { q: { state_eq: "open" }, related_task: @task.id }), class: "dropdown-item small" %>
+        </div>
+      </div>
     <% else %>
-      <%= link_to "#{h(Task, :issue_id)}: #{@task.issue_id}", [:related_issues, @project, @plan, @task], class: "btn btn-primary" %>
+      <div class="btn-group">
+        <%= link_to "#{h(Task, :issue_id)} #{}: #{@task.issue_id}", project_issue_path(@project, @task.issue_id), class: "btn btn-primary" %>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <%= link_to action_i18n('cancel_relate'), [@project, @plan, @task, task: { issue_id: nil }], method: :patch, class: "dropdown-item small text-muted" %>
+        </div>
+      </div>
     <% end %>
   </div>
   <% data = { remote: true, target: "#uploadAttachmentsModal", type: :xhrml } %>

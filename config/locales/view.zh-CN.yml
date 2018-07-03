@@ -25,12 +25,14 @@ zh-CN:
         destroy: 删除
         login: 登录
         logout: 退出
+        more: 查看更多
+        update: 更新
       projects/tasks:
         change_state:
           relate: 关联
-        update:
-          relate: 关联
-        related_issues:
+          cancel_relate: 取消关联
+      projects/issues:
+        index:
           relate: 关联
         upload_attachment:
           upload:  上传

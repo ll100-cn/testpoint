@@ -10,8 +10,15 @@ RSpec.describe Projects::IssuesController, type: :controller do
   describe "GET index" do
     let!(:label) { create :label }
     let!(:issue) { create :issue, label_ids: [label.id], project: project }
-    action { get :index, params: { project_id: project.id } }
-    it { is_expected.to respond_with :success }
+    context "without task" do
+      action { get :index, params: { project_id: project.id } }
+      it { is_expected.to respond_with :success }
+    end
+
+    context "with related_task" do
+      action { get :index, params: { project_id: project.id, related_task: task.id } }
+      it { is_expected.to respond_with :success }
+    end
   end
 
   describe "GET new" do

@@ -1,0 +1,21 @@
+<% file = @attachment.file %>
+<div class="media border bg-light p-2 align-items-center">
+  <div class="mr-2" style="width: 3rem">
+    <div class="embed-responsive embed-responsive-1by1">
+      <div class="embed-responsive-item embed-responsive-item d-flex align-items-center justify-content-center">
+        <% if @attachment.image? %>
+          <%= image_tag url_for(file), class: "h-100" %>
+        <% else %>
+          <%= image_tag 'file.png', class: "h-100" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="media-body d-flex flex-column">
+    <%= bootstrap_inline_form_for @attachment, defaults: { label: false }, data: { remote: true, type: "xhrml", target: ".media", replace: true } do |f| %>
+      <%= f.input :title, as: :string, input_html: { class: "w-100 form-control-sm" }, wrapper_html: { class: "flex-1 flex-column" } %>
+      <%= f.submit action_i18n('update'), class: "btn btn-xs ml-2 btn-primary" %>
+      <%= cancel_link url_for(action: :show), class: "ml-1 btn btn-xs text-muted", data: { remote: true, type: "xhrml", target: ".media", replace: true }%>
+    <% end %>
+  </div>
+</div>

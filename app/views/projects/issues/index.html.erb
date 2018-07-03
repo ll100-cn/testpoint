@@ -1,9 +1,23 @@
-<div class="page-header">
-  <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
-  <div class="ml-3 actions">
-    <%= link_to h(Label), project_labels_path(@project) %>
+<% if @task %>
+  <div class="page-header">
+    <h3><%= @task.test_case.title %></h3>
+    <div class="ml-2">
+      <%= task_state_with_icon(@task.state) %>
+      <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
+    </div>
+    <div class="actions ml-auto">
+      <%= new_link Issue, [:new, @project, @task, :issue] if can? :create, Issue %>
+    </div>
   </div>
-</div>
+<% else %>
+   <div class="page-header">
+     <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
+     <div class="ml-3 actions">
+       <%= link_to h(Label), project_labels_path(@project) %>
+     </div>
+   </div>
+<% end %>
+
 
 <div class="d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center mb-2">
@@ -56,8 +70,8 @@
 
 <table class="table">
   <colgroup>
+    <col width="20%">
     <col width="15%">
-    <col width="30%">
     <col width="15%">
     <col width="10%">
     <col width="20%">
@@ -95,6 +109,11 @@
           <%= issue.state.text %>
           </span>
         </td>
+        <% if @task %>
+        <td>
+          <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
+        </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
