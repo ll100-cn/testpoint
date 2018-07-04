@@ -1,4 +1,6 @@
 import './style.scss'
+import './pages.scss'
+import './attachments.scss'
 import $ from 'jquery'
 
 function removeAttachment(event) {

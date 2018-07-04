@@ -1,4 +1,6 @@
+require 'kramdown'
 module PageHelper
+  extend ActiveSupport::Concern
   def ok_url_tag
     hidden_field_tag "ok_url", params[:ok_url] if params[:ok_url].present?
   end
@@ -51,5 +53,15 @@ module PageHelper
   def issue_state_class_name(state, type = "")
     mappings = { "open" => "info", "closed" => "secondary", "solved" => "success" }
     type.present? ? "#{type} #{type}-#{mappings[state]}" : mappings[type]
+  end
+
+  def markdown_to_html(markdown, math_engine = "mathjax_node_png")
+    return "" if markdown.blank?
+    Kramdown::Document.new(
+      markdown.strip,
+      auto_ids: false,
+      math_engine: math_engine,
+      smart_quotes: %w[apos apos quot quot]
+    ).to_html.html_safe
   end
 end

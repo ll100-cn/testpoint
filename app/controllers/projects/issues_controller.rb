@@ -10,6 +10,9 @@ class Projects::IssuesController < BaseProjectController
   def index
     @q = @project.issues.ransack(params[:q])
     @issues = @q.result.with_labels.page(params[:page])
+    if params[:related_task]
+      @task = Task.find(params[:related_task])
+    end
   end
 
   def new
@@ -20,6 +23,7 @@ class Projects::IssuesController < BaseProjectController
   def create
     @issue.creator = current_user
     @issue.save
+    @task.update(issue_id: @issue.id)
     respond_with @issue, location: ok_url_or_default([@project, @task.plan])
   end
 

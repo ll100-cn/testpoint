@@ -5,6 +5,7 @@ RSpec.describe Projects::TasksController, type: :controller do
   let(:plan) { create :plan, project: project }
   let(:task) { plan.tasks.first }
   let(:task_attributes) { {} }
+  let(:issue) { create :issue, title: "it is a issue", project: project }
   login_superadmin
 
   describe "PUT update" do
@@ -42,7 +43,6 @@ RSpec.describe Projects::TasksController, type: :controller do
           Issue.destroy_all
           task_attributes[:issue_id] = 1
         }
-
         it { expect(assigns(:task).errors[:issue_id].count).to eq 1 }
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe Projects::TasksController, type: :controller do
   end
 
   describe "GET relate" do
-    action { get :edit, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+    action { get :related_issues, params: { project_id: project.id, plan_id: plan, id: task } }
     it { is_expected.to respond_with(:success) }
   end
 end

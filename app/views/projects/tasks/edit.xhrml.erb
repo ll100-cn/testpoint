@@ -1,1 +1,12 @@
-<%= render file: "projects/tasks/relate.xhrml.erb" %>
+<div class="page-header">
+  <h2><%= page_i18n :edit, model_name: h(@task) %></h2>
+</div>
+
+<div class="container">
+  <%= bootstrap_vertical_form_for @task, url: [@project, @task] do |f| %>
+    <%= f.input :message %>
+    <%= ok_url_tag %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= cancel_link [@project, @task], class: "btn btn-secondary" %>
+  <% end %>
+</div>

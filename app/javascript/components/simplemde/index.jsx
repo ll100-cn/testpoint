@@ -2,6 +2,7 @@ import $ from 'jquery'
 import SimpleMDE from 'simplemde'
 import 'simplemde/debug/simplemde.css'
 import marked from 'marked'
+import './style.scss'
 
 $(document).on('content:loaded', function(event) {
   $(event.target).find('.markdown-field').each(function() {

@@ -15,7 +15,6 @@
 #
 
 class Issue < ApplicationRecord
-  include MarkdownConvertor
   enumerize :state, in: [:open, :closed, :solved], default: :open
 
   has_many :tasks, dependent: :destroy
@@ -32,6 +31,7 @@ class Issue < ApplicationRecord
   has_many :attachments, as: :attachmentable, through: :issue_attachments, dependent: :destroy
 
   scope :with_labels, -> { includes(:labels) }
+  scope :opened, -> { where(state: "open") }
 
   def default_title
     tasks.map do |task|
