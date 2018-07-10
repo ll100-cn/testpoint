@@ -1,6 +1,8 @@
 <div class="page-header">
-  <%= destroy_link [ @project, @platform ], class: "btn btn-outline-danger btn-sm float-right" %>
   <h2><%= page_i18n :edit, model_name: h(@platform) %></h2>
+  <div class="actions ml-auto">
+    <%= destroy_link [ @project, @platform ], class: "btn btn-outline-danger btn-sm" if can? :delete, @platform %>
+  </div>
 </div>
 
 <%= bootstrap_horizontal_form_for [@project, @platform] do |f| %>

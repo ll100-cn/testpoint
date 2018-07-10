@@ -21,5 +21,6 @@ import '../components/simplemde'
 import '../components/stimulus'
 import '../components/clipboard'
 import '../components/load-image'
+import '../components/rails-nested-form'
 
 import '../frontend'
