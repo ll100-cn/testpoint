@@ -15,7 +15,7 @@ $(function() {
       $target = $element.closest(target)
     }
 
-    if ($element.data("replace")) {
+    if ($element.data('replace')) {
       const $data = $(data)
       $target.replaceWith($data)
       $data.trigger('xhrml:success')
