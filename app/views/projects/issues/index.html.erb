@@ -1,23 +1,20 @@
-<% if @task %>
-  <div class="page-header">
+<div class="page-header">
+  <% if @task %>
     <h3><%= @task.test_case.title %></h3>
     <div class="ml-2">
       <%= task_state_with_icon(@task.state) %>
       <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
     </div>
-    <div class="actions ml-auto">
-      <%= new_link Issue, [:new, @project, @task, :issue] if can? :create, Issue %>
+  <% else %>
+    <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
+    <div class="ml-3 actions">
+      <%= link_to "管理标签", project_labels_path(@project) %>
     </div>
+  <% end %>
+  <div class="actions ml-auto">
+    <%= new_link Issue, [:new, @project, @task, :issue] if can? :create, Issue %>
   </div>
-<% else %>
-   <div class="page-header">
-     <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
-     <div class="ml-3 actions">
-       <%= link_to h(Label), project_labels_path(@project) %>
-     </div>
-   </div>
-<% end %>
-
+</div>
 
 <div class="d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center mb-2">
@@ -68,6 +65,21 @@
   <% end %>
 </div>
 
+<ul class="nav nav-tabs mt-3">
+  <% issues = @q.result.with_labels.page(params[:page]) %>
+ <%= fume_nav params[:filter] do |n| %>
+   <li class="nav-item">
+     <%= n.link_to "all", "全部 (#{issues.count})", current_url(filter: "all"), class: "nav-item nav-link #{ 'active' if params[:filter].nil?}" %>
+   </li>
+   <li class="nav-item">
+    <%= n.link_to "assigned", "我受理的 (#{issues.assigned_issues(current_user).count})", current_url(filter: "assigned"), class: "nav-item nav-link" %>
+   </li>
+   <li class="nav-item">
+     <%= n.link_to "created", "我创建的 (#{issues.created_issues(current_user).count})", current_url(filter: "created"), class: "nav-item nav-link" %>
+   </li>
+  <% end %>
+</ul>
+
 <table class="table">
   <colgroup>
     <col width="20%">
@@ -81,9 +93,9 @@
       <th><%= sort_link(@q, :title)%></th>
       <th><%= sort_link(@q, :label_ids)%></th>
       <th><%= sort_link(@q, :milestone_id)%></th>
+      <th><%= sort_link(@q, :state)%></th>
       <th><%= sort_link(@q, :creator_id)%></th>
       <th><%= sort_link(@q, :created_at)%></th>
-      <th><%= sort_link(@q, :state)%></th>
     </tr>
   </thead>
   <tbody>
@@ -102,13 +114,13 @@
             <%= issue.milestone.title %>
           <% end %>
         </td>
-        <td><%= issue.creator.name %></td>
-        <td><%=l issue.created_at, format: :long %></td>
         <td>
           <span class="<%= issue_state_class_name(issue.state, :text) %>">
           <%= issue.state.text %>
           </span>
         </td>
+        <td><%= issue.creator.name %></td>
+        <td><%=l issue.created_at, format: :long %></td>
         <% if @task %>
         <td>
           <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>

@@ -51,7 +51,7 @@ module PageHelper
   end
 
   def issue_state_class_name(state, type = "")
-    mappings = { "open" => "info", "closed" => "secondary", "solved" => "success" }
+    mappings = { "open" => "info", "closed" => "secondary", "solved" => "success", "processing" => "primary" }
     type.present? ? "#{type} #{type}-#{mappings[state]}" : mappings[type]
   end
 

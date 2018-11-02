@@ -10,6 +10,7 @@ zh-CN:
         open: 待处理
         closed: 已关闭
         solved: 已解决
+        processing: 处理中
     member:
       role:
         owner: 负责人

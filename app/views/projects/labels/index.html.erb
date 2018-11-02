@@ -1,5 +1,8 @@
 <div class="page-header">
   <h2><%= page_i18n :index, model_name: h(@labels) %></h2>
+  <div class="ml-3 actions">
+    <%= link_to "返回问题列表", [ @project, Issue ] %>
+  </div>
   <% if can? :create, Label %>
     <div class="actions ml-auto">
       <%= new_link Label, [:new, @project, :label] %>

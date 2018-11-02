@@ -15,7 +15,7 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [:open, :closed, :solved], default: :open
+  enumerize :state, in: [:open, :processing, :closed, :solved], default: :open
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -32,6 +32,8 @@ class Issue < ApplicationRecord
 
   scope :with_labels, -> { includes(:labels) }
   scope :opened, -> { where(state: "open") }
+  scope :created_issues, ->(user) { where(creator_id: user.id) }
+  scope :assigned_issues, ->(user) { where(assignee_id: user.id) }
 
   def default_title
     tasks.map do |task|

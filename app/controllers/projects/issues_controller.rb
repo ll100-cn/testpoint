@@ -13,6 +13,14 @@ class Projects::IssuesController < BaseProjectController
     if params[:related_task]
       @task = Task.find(params[:related_task])
     end
+
+    if params[:filter] == "created"
+      @issues = @issues.created_issues(current_user)
+    end
+
+    if params[:filter] == "assigned"
+      @issues = @issues.assigned_issues(current_user)
+    end
   end
 
   def new
