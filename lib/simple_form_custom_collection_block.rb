@@ -3,7 +3,7 @@ module SimpleFormCustomCollectionBlock
     attr_accessor :label_block
 
     def text(*)
-      label_block.call(self)
+      label_block.(self)
     end
   end
 

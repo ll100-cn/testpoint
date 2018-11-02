@@ -30,6 +30,7 @@ Metrics/BlockLength:
   Exclude:
     - config/initializers/*.rb
     - spec/**/*_spec.rb
+    - config/routes.rb
 
 Metrics/MethodLength:
   Max: 20
@@ -40,7 +41,11 @@ Metrics/LineLength:
   Max: 160
 
 Metrics/AbcSize:
-  Max: 20
+  Max: 50
+
+
+Performance/RedundantBlockCall:
+  Enabled: false
 
 
 Rails/ApplicationRecord:
@@ -73,15 +78,24 @@ Style/EmptyMethod:
 Style/GuardClause:
   Enabled: false
 
+Style/IfUnlessModifier:
+  Enabled: false
+
 Style/RedundantSelf:
   Enabled: false
 
 Style/Lambda:
   Enabled: false
 
+Style/LambdaCall:
+  EnforcedStyle: braces
+
 Style/BlockDelimiters:
   Exclude:
     - spec/**/*_spec.rb
+
+Style/ClassAndModuleChildren:
+ Enabled: false
 
 Style/SymbolArray:
   Enabled: false

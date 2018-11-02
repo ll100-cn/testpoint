@@ -4,6 +4,6 @@ class GenerateSuperadmin < ActiveRecord::Migration[5.2]
 
   def change
     user = User.first
-    user.update!(superadmin: true) if user
+    user&.update!(superadmin: true)
   end
 end

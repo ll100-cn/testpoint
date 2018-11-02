@@ -1,33 +1,14 @@
 class DataMigrationOnProject < ActiveRecord::Migration[5.2]
-  class Project < ActiveRecord::Base
-  end
-
-  class User < ActiveRecord::Base
-  end
-
-  class Member < ActiveRecord::Base
-  end
-
-  class Component < ActiveRecord::Base
-  end
-
-  class Platform < ActiveRecord::Base
-  end
-
-  class TestCase < ActiveRecord::Base
-  end
-
-  class Plan < ActiveRecord::Base
-  end
-
-  class Issue < ActiveRecord::Base
-  end
-
-  class Label < ActiveRecord::Base
-  end
-
-  class Milestone < ActiveRecord::Base
-  end
+  class Project < ActiveRecord::Base; end
+  class User < ActiveRecord::Base; end
+  class Member < ActiveRecord::Base; end
+  class Component < ActiveRecord::Base; end
+  class Platform < ActiveRecord::Base; end
+  class TestCase < ActiveRecord::Base; end
+  class Plan < ActiveRecord::Base; end
+  class Issue < ActiveRecord::Base; end
+  class Label < ActiveRecord::Base; end
+  class Milestone < ActiveRecord::Base; end
 
   def change
     return unless User.order(:id).first
