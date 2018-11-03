@@ -4,8 +4,7 @@ class Projects::IssuesController < BaseProjectController
   authorize_resource :project
   load_and_authorize_resource through: :project
 
-  load_and_authorize_resource :task
-  before_action :set_tasks, only: [:new, :create]
+  helper_method :issue_params_names
 
   def index
     @q = @project.issues.ransack(params[:q])
@@ -24,15 +23,19 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def new
+    @task = Task.find(params[:task_id]) if params[:task_id]
+    @issue.creator ||= current_user
+    @issue.tasks = [ @task ] if @task
     @issue.title ||= @issue.default_title
     @issue.content ||= @issue.default_content
   end
 
   def create
-    @issue.creator = current_user
+    @task = Task.find(params[:task_id]) if params[:task_id]
+    @issue.creator ||= current_user
+    @issue.tasks = [ @task ] if @task
     @issue.save
-    @task.update(issue_id: @issue.id)
-    respond_with @issue, location: ok_url_or_default([@project, @task.plan])
+    respond_with @issue, location: ok_url_or_default(action: :index)
   end
 
   def show
@@ -48,11 +51,13 @@ class Projects::IssuesController < BaseProjectController
 
 protected
   def issue_params
-    params.fetch(:issue, {}).permit(:title, :content, :state, :milestone_id, :assignee_id,
-                                    label_ids: [], issue_attachments_attributes: [:id, :attachment_id, :_destroy])
+    params.fetch(:issue, {}).permit(*issue_params_names)
   end
 
-  def set_tasks
-    @issue.tasks = [@task]
+  def issue_params_names
+    names = [ :title, :content, :state, :milestone_id, :assignee_id,
+             label_ids: [], issue_attachments_attributes: [:id, :attachment_id, :_destroy] ]
+    names += [ :creator_id ] if can? :critical, Issue
+    names
   end
 end

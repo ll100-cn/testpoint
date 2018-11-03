@@ -29,12 +29,14 @@ class Ability
 
     if member.role.admin?
       can [:read, :update], member.project
+      can :critical, Issue, project_id: member.project.id
       can :manage, [ TestCase, Plan, Issue, Member, Milestone, Platform, Component, Task, Label, Comment ]
     end
 
     if member.role.member?
       can :read, member.project
       can :manage, [ TestCase, Plan, Issue, Milestone, Platform, Component, Task, Label, Comment ]
+      cannot :critical, Issue
       can :read, Member
     end
   end

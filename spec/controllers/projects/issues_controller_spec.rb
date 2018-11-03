@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Projects::IssuesController, type: :controller do
   let!(:project) { create :project }
-  let(:plan) { create :plan }
+  let(:plan) { create :plan, project: project }
   let(:task) { plan.tasks.first }
   let(:issue) { create :issue, project: project }
   login_superadmin
@@ -19,6 +19,16 @@ RSpec.describe Projects::IssuesController, type: :controller do
       action { get :index, params: { project_id: project.id, related_task: task.id } }
       it { is_expected.to respond_with :success }
     end
+
+    context "filter by created" do
+      action { get :index, params: { project_id: project.id, filter: "assigned" } }
+      it { is_expected.to respond_with :success }
+    end
+
+    context "filter by assigned" do
+      action { get :index, params: { project_id: project.id, filter: "created" } }
+      it { is_expected.to respond_with :success }
+    end
   end
 
   describe "GET new" do
@@ -29,7 +39,18 @@ RSpec.describe Projects::IssuesController, type: :controller do
   describe "POST create" do
     let(:attributes) { { title: "issue create", content: "content for issue" } }
     action { post :create, params: { issue: attributes, task_id: task.id, project_id: project.id } }
-    it { is_expected.to respond_with :redirect }
+
+    context "assignee other members as creator" do
+      let!(:user) { create :user }
+      let!(:member) { create :member, project: project, user: user }
+      before { attributes[:creator_id] = user.id }
+
+      it { is_expected.to respond_with :redirect }
+    end
+
+    context "admin creat the issue" do
+      it { is_expected.to respond_with :redirect }
+    end
   end
 
   describe "PUT update" do

@@ -11,7 +11,8 @@ module BootstrapHelper
       wrapper_mappings: {
         boolean: :vertical_boolean
       },
-      html: { class: "form-vertical" }
+      html: { class: "form-vertical" },
+      builder: BootstrapVerticalBuilder
     }.deep_merge(args.extract_options!)
 
     args + [ options ]
@@ -76,6 +77,20 @@ module BootstrapHelper
   class BootstrapHorizontalBuilder < SimpleForm::FormBuilder
     def actions_content(options = {}, &block)
       input :to_s, { label: false, wrapper_html: { class: "form-actions" } }.merge(options), &block
+    end
+  end
+
+  class BootstrapVerticalBuilder < SimpleForm::FormBuilder
+    def input(attribute_name, options = {}, &block)
+      if (permit_for = self.options[:permit_for])
+        unless options.key?(:disabled)
+          options[:disabled] = permit_for.none? do |item|
+            item.is_a?(Hash) ? item.key?(attribute_name) : item == attribute_name
+          end
+        end
+      end
+
+      super(attribute_name, options, &block)
     end
   end
 

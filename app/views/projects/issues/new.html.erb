@@ -1,16 +1,22 @@
-<div class="page-header">
-  <h3><%= @task.test_case.title %></h3>
-  <div class="ml-2">
-    <%= task_state_with_icon(@task.state) %>
-    <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
+<% if @task %>
+  <div class="page-header">
+    <h3><%= @task.test_case.title %></h3>
+    <div class="ml-2">
+      <%= task_state_with_icon(@task.state) %>
+      <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
+    </div>
   </div>
-</div>
-
-<h4 class="mb-5"><%= page_i18n :new, model_name: h(@issue) %></h4>
+  <h4 class="mb-5"><%= page_i18n :new, model_name: h(@issue) %></h4>
+<% else %>
+  <div class="page-header">
+    <h2><%= page_i18n :new, model_name: h(@issue) %></h2>
+  </div>
+<% end %>
 
 <div class="container">
-  <%= bootstrap_vertical_form_for @issue, url: [@project, @task, @issue] do |f| %>
+  <%= bootstrap_vertical_form_for [ @project, @task, @issue ], permit_for: issue_params_names do |f| %>
     <%= f.input :title %>
+    <%= f.input :creator_id, collection: @project.members.map { |u| [u.user.name, u.user_id] }, input_html: { class: "select2-field" } %>
     <%= f.input :content, input_html: { class: 'markdown-field' } %>
     <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
     <hr>
