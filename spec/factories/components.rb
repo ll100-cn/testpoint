@@ -13,7 +13,7 @@
 
 FactoryBot.define do
   factory :component do
-    name "Component Name"
+    name { "Component Name" }
     project
   end
 end

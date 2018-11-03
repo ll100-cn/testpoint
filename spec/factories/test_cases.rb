@@ -14,8 +14,8 @@
 
 FactoryBot.define do
   factory :test_case do
-    title "user sign in"
-    content "input username and password"
+    title { "user sign in" }
+    content { "input username and password" }
     component { create :component }
     platforms { create_list :platform, 1 }
     project

@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
+
   def index
-    @q = User.ransack(params[:q])
+    @q = @users.search(params[:q])
     @users = @q.result.page(params[:page])
   end
 

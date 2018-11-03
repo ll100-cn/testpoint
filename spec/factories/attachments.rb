@@ -13,7 +13,7 @@
 
 FactoryBot.define do
   factory :attachment do
-    title "this is a title"
+    title { "this is a avatar" }
     after(:build) do |attachment|
       attachment.file.attach(io: File.open(Rails.root.join("spec", "resources", "avatar.png")), filename: 'avatar.png', content_type: "image/png")
     end

@@ -16,9 +16,9 @@
 
 FactoryBot.define do
   factory :issue do
-    title "issue1"
-    content "content of issue1"
-    state "open"
+    title { "issue1" }
+    content { "content of issue1" }
+    state { "open" }
     creator { create :user }
   end
 end

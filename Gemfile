@@ -34,7 +34,7 @@ gem 'cancancan', '~> 2.0'
 gem "carrierwave", '1.2.2'
 gem 'enumerize', '2.2.2'
 gem 'ancestry', '3.0.2'
-gem "ransack", "1.8.8", require: false
+gem "ransack", "2.1.0", require: false
 
 # Views
 gem 'simple_form', '4.0.1'

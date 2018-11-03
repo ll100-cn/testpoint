@@ -16,15 +16,15 @@ FactoryBot.define do
     user
 
     trait :owner do
-      role "owner"
+      role { "owner" }
     end
 
     trait :admin do
-      role "admin"
+      role { "admin" }
     end
 
     trait :member do
-      role "member"
+      role { "member" }
     end
   end
 end

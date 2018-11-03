@@ -10,6 +10,6 @@
 
 FactoryBot.define do
   factory :project do
-    name "My project"
+    name { "My project" }
   end
 end

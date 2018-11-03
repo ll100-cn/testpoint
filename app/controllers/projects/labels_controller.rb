@@ -28,7 +28,7 @@ class Projects::LabelsController < BaseProjectController
   end
 
   def destroy
-    @label.delete
+    @label.destroy
     respond_with @label, location: ok_url_or_default([@project, Label])
   end
 

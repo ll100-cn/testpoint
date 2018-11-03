@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Projects::LabelsController, type: :controller do
   let!(:project) { create :project }
   let!(:label) { create :label, project: project }
+  let!(:issue) { create :issue, project: project }
+  let!(:issue_label) { create :issues_label, issue_id: issue.id, label_id: label.id }
   login_superadmin
 
   describe "GET index" do
