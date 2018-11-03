@@ -1,7 +1,3 @@
-<div class="page-header">
-  <h2><%= page_i18n :edit, model_name: h(@issue) %></h2>
-</div>
-
 <div class="container">
   <%= bootstrap_vertical_form_for @issue, url: [@project, @task, @issue] do |f| %>
     <%= render "form", f: f %>

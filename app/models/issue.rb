@@ -30,6 +30,8 @@ class Issue < ApplicationRecord
   accepts_nested_attributes_for :issue_attachments, allow_destroy: true
   has_many :attachments, as: :attachmentable, through: :issue_attachments, dependent: :destroy
 
+  validates :title, presence: true
+
   scope :with_labels, -> { includes(:labels) }
   scope :opened, -> { where(state: "open") }
   scope :created_issues, ->(user) { where(creator_id: user.id) }
