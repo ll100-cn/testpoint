@@ -8,6 +8,8 @@ class Projects::IssuesController < BaseProjectController
 
   def index
     @q = @project.issues.ransack(params[:q])
+    @q.sorts = "created_at desc" if @q.sorts.empty?
+
     @issues = @q.result.with_labels.page(params[:page])
     if params[:related_task]
       @task = Task.find(params[:related_task])
@@ -45,6 +47,7 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def update
+    @issue.last_updated_at = Time.current
     @issue.update(issue_params)
     respond_with @issue, location: ok_url_or_default(action: :show)
   end

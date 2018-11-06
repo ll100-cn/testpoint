@@ -14,6 +14,15 @@ class Projects::CommentsController < BaseProjectController
     respond_with @comment, location: ok_url_or_default([@project, @issue])
   end
 
+  def edit
+  end
+
+  def update
+    @comment.last_updated_at = Time.current
+    @comment.update(comment_params)
+    respond_with @issue, location: ok_url_or_default(action: :show)
+  end
+
 protected
   def comment_params
     params.fetch(:comment, {}).permit(:content, comment_attachments_attributes: [:id, :attachment_id, :_destroy])

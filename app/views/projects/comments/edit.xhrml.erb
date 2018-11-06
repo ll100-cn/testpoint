@@ -1,0 +1,10 @@
+<div class="container">
+  <%= bootstrap_vertical_form_for @comment, url: [@project, @issue, @comment] do |f| %>
+    <%= f.input :content, input_html: { class: 'markdown-field' } %>
+    <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+    <hr>
+    <%= ok_url_tag %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= cancel_link [@project, @issue, @comment], class: "btn btn-secondary" %>
+  <% end %>
+</div>

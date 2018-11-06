@@ -22,3 +22,9 @@
 .lh-100 {
   line-height: 100%;
 }
+
+.dropdown-no-arrow {
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
