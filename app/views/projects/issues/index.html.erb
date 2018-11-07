@@ -17,16 +17,22 @@
 </div>
 
 <ul class="nav nav-tabs mb-3">
-  <% issues = @q.result.with_labels.page(params[:page]) %>
- <%= fume_nav params[:filter] do |n| %>
+ <%= fume_nav params[:filter] || "all" do |n| %>
+   <% issues_scope = @issues_scope.state_filter("opening") %>
    <li class="nav-item">
-     <%= n.link_to "all", "全部 (#{issues.count})", current_url(filter: "all"), class: "nav-item nav-link #{ 'active' if params[:filter].nil?}" %>
+     <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
+       全部 (<%= issues_scope.count %>)
+     <% end %>
    </li>
    <li class="nav-item">
-    <%= n.link_to "assigned", "我受理的 (#{issues.assigned_issues(current_user).count})", current_url(filter: "assigned"), class: "nav-item nav-link" %>
+    <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
+      我受理的 (<%= issues_scope.assigned_issues(current_user).count %>)
+    <% end %>
    </li>
    <li class="nav-item">
-     <%= n.link_to "created", "我创建的 (#{issues.created_issues(current_user).count})", current_url(filter: "created"), class: "nav-item nav-link" %>
+     <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
+       我创建的 (<%= issues_scope.created_issues(current_user).count %>)
+     <% end %>
    </li>
   <% end %>
 </ul>
@@ -70,14 +76,33 @@
     <% end %>
   </div>
 
-  <%= fume_nav @q.state_eq do |n| %>
-    <div class="btn-group btn-group-sm mb-2 ml-2" role="group">
-      <%= n.link_to nil, page_i18n(:all), current_url(q: { state_eq: nil }), class: "btn btn-outline-primary" %>
-      <% Issue.state.values.each do |value| %>
-        <%= n.link_to value, value.text, current_url(q: { state_eq: value }), class: "btn btn-outline-primary" %>
-      <% end %>
-    </div>
-  <% end %>
+  <div class="mb-2">
+    <% state_names = Hash[Issue.state.options(except: [:resolved, :closed])].invert.merge("opening" => "未解决", "all" => "全部") %>
+    <% state_filter = [@q.state_filter].flatten.first %>
+    <%= fume_nav state_filter do |n| %>
+      <div class="btn-group btn-group-sm ml-2" role="group">
+        <% opening_states = [ "opening", "pending", "processing" ] %>
+        <% if opening_states.include?(state_filter) %>
+          <div class="btn btn-outline-primary active"><%= state_names[state_filter] %></div>
+        <% else %>
+          <%= link_to state_names[opening_states.first], current_url(q: { state_filter: opening_states.first }), class: "btn btn-outline-primary" %>
+        <% end %>
+        <div class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="sr-only">Toggle Dropdown</span>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+          <% opening_states.each do |value| %>
+            <%= n.link_to value, state_names[value], current_url(q: { state_filter: value }), class: "small dropdown-item" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="btn-group ml-1">
+        <% Issue.state.options(only: [:resolved, :closed]).each do |text, value| %>
+          <%= n.link_to value, text, current_url(q: { state_filter: value }), class: "btn btn-sm btn-outline-primary" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 <table class="table">

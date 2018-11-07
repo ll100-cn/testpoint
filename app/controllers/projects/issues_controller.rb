@@ -7,8 +7,10 @@ class Projects::IssuesController < BaseProjectController
   helper_method :issue_params_names
 
   def index
+    @issues_scope = @issues
     @q = @project.issues.ransack(params[:q])
     @q.sorts = "created_at desc" if @q.sorts.empty?
+    @q.state_filter = "opening" if @q.state_filter.blank?
 
     @issues = @q.result.with_labels.page(params[:page])
     if params[:related_task]
