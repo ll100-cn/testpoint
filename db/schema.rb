@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_02_070913) do
+ActiveRecord::Schema.define(version: 2018_11_07_015338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(version: 2018_11_02_070913) do
   end
 
   create_table "attachments", force: :cascade do |t|
-    t.string "file"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "title"
@@ -63,6 +62,7 @@ ActiveRecord::Schema.define(version: 2018_11_02_070913) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "issue_id"
+    t.datetime "last_updated_at"
     t.index ["issue_id"], name: "index_comments_on_issue_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2018_11_02_070913) do
     t.bigint "creator_id"
     t.bigint "assignee_id"
     t.bigint "project_id"
+    t.datetime "last_updated_at"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["creator_id"], name: "index_issues_on_creator_id"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"

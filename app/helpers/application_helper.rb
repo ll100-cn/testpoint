@@ -29,4 +29,11 @@ module ApplicationHelper
       result[:ok_url] = request.fullpath if request.get?
     end
   end
+
+  def apply_ok_url(args)
+    options = args.extract_options!
+    options[:ok_url] = request.fullpath if request.get?
+    url_for(args + [ options ])
+  end
+
 end

@@ -3,10 +3,20 @@
   <div class="col pr-0">
     <div class="card">
       <div class="card-header">
-         <%= comment.user.name %>
-         <span class="text-muted float-right"><%= time_ago_in_words(comment.created_at) %></span>
-       </div>
-      <div class="card-body">
+        <%= comment.user.name %>
+        <span class="ml-1 small text-muted"><%= time_ago_in_words(comment.created_at) %></span>
+        <span class="ml-1 small text-muted"><%="最后编辑于#{time_ago_in_words(comment.last_updated_at)}前" if comment.last_updated_at %></span>
+        <div class="dropdown float-right dropdown-no-arrow">
+          <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+            <% data = { type: "xhrml", remote: true, target: "#comment#{comment.id}_content" } %>
+            <%= link_to "编辑", apply_ok_url([ :edit, comment.issue.project, comment.issue, comment ]), class: "small dropdown-item", data: data if can? :edit, comment %>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" id="comment<%= comment.id %>_content">
         <div class="no-margin-bottom">
           <%= render "shared/page_content", content: comment.content %>
           <%= render "shared/attachments_box", attachmentable: comment %>

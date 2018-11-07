@@ -2,16 +2,17 @@
 #
 # Table name: issues
 #
-#  id           :bigint(8)        not null, primary key
-#  title        :string
-#  content      :text
-#  state        :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  milestone_id :bigint(8)
-#  creator_id   :bigint(8)
-#  assignee_id  :bigint(8)
-#  project_id   :bigint(8)
+#  id              :bigint(8)        not null, primary key
+#  title           :string
+#  content         :text
+#  state           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  milestone_id    :bigint(8)
+#  creator_id      :bigint(8)
+#  assignee_id     :bigint(8)
+#  project_id      :bigint(8)
+#  last_updated_at :datetime
 #
 
 class Issue < ApplicationRecord
@@ -30,8 +31,10 @@ class Issue < ApplicationRecord
   accepts_nested_attributes_for :issue_attachments, allow_destroy: true
   has_many :attachments, as: :attachmentable, through: :issue_attachments, dependent: :destroy
 
+  validates :title, presence: true
+
   scope :with_labels, -> { includes(:labels) }
-  scope :opened, -> { where(state: "open") }
+  scope :opened, -> { where(state: [ "open", "processing" ]) }
   scope :created_issues, ->(user) { where(creator_id: user.id) }
   scope :assigned_issues, ->(user) { where(assignee_id: user.id) }
 
