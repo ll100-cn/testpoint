@@ -22,6 +22,8 @@ class Issue < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :issues_labels, dependent: :destroy
   has_many :labels, through: :issues_labels
+  has_many :subscriptions, dependent: :destroy
+  has_many :subscribed_users, through: :subscriptions, source: :user
   belongs_to :milestone, optional: true
   belongs_to :creator, class_name: User.to_s
   belongs_to :assignee, class_name: User.to_s, optional: true
@@ -33,11 +35,10 @@ class Issue < ApplicationRecord
 
   validates :title, presence: true
 
-  before_save :update_edited_at, if: -> { will_save_change_to_content? && !new_record? }
-
   scope :with_labels, -> { includes(:labels) }
   scope :created_issues, ->(user) { where(creator_id: user.id) }
   scope :assigned_issues, ->(user) { where(assignee_id: user.id) }
+  scope :subscribed_issues, ->(user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }
   scope :state_filter, ->(text) {
     case text
     when "opening"
@@ -64,7 +65,9 @@ class Issue < ApplicationRecord
    [ :state_filter ]
  end
 
- def update_edited_at
-   self.last_edited_at = Time.current
+ def update_with_editor(params, member)
+   assign_attributes(params)
+   self.last_edited_at = Time.current if will_save_change_to_content?
+   self.save
  end
 end

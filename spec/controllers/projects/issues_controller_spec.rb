@@ -5,7 +5,8 @@ RSpec.describe Projects::IssuesController, type: :controller do
   let(:plan) { create :plan, project: project }
   let(:task) { plan.tasks.first }
   let(:issue) { create :issue, project: project }
-  login_superadmin
+  let(:superadmin) { create :user, :superadmin }
+  before { sign_in superadmin }
 
   describe "GET index" do
     let!(:label) { create :label }
@@ -31,6 +32,12 @@ RSpec.describe Projects::IssuesController, type: :controller do
 
     context "filter by assigned" do
       before { attributes[:filter] = "created" }
+
+      it { is_expected.to respond_with :success }
+    end
+
+    context "filter by subscribed" do
+      before { attributes[:filter] = "subscribed" }
 
       it { is_expected.to respond_with :success }
     end

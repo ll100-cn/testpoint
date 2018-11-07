@@ -34,6 +34,11 @@
        我创建的 (<%= issues_scope.created_issues(current_user).count %>)
      <% end %>
    </li>
+   <li class="nav-item">
+     <%= n.link_to "subscribed", project_issues_url(@project, @issue, filter: "subscribed"), class: "nav-item nav-link" do %>
+       我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
+     <% end %>
+   </li>
   <% end %>
 </ul>
 

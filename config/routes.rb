@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       end
       resources :issues do
         resources :comments
+        resources :subscriptions
       end
       resources :tasks do
         resources :issues

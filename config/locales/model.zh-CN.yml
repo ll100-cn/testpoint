@@ -15,6 +15,7 @@ zh-CN:
       milestone: 里程碑
       project: 项目
       member: 成员
+      subscription: 订阅
     attributes:
       plan:
         title: 标题

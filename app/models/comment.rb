@@ -21,12 +21,12 @@ class Comment < ApplicationRecord
 
   validates :content, presence: true
 
-  before_save :update_edited_at, if: -> { will_save_change_to_content? && !new_record? }
-
   scope :recent, -> { order("created_at DESC") }
   scope :history, -> { order("created_at ASC") }
 
-  def update_edited_at
-    self.last_edited_at = Time.current
+  def update_with_editor(params, member)
+    assign_attributes(params)
+    self.last_edited_at = Time.current if will_save_change_to_content?
+    self.save
   end
 end
