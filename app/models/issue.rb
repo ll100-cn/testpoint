@@ -2,17 +2,17 @@
 #
 # Table name: issues
 #
-#  id              :bigint(8)        not null, primary key
-#  title           :string
-#  content         :text
-#  state           :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  milestone_id    :bigint(8)
-#  creator_id      :bigint(8)
-#  assignee_id     :bigint(8)
-#  project_id      :bigint(8)
-#  last_updated_at :datetime
+#  id             :bigint(8)        not null, primary key
+#  title          :string
+#  content        :text
+#  state          :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  milestone_id   :bigint(8)
+#  creator_id     :bigint(8)
+#  assignee_id    :bigint(8)
+#  project_id     :bigint(8)
+#  last_edited_at :datetime
 #
 
 class Issue < ApplicationRecord
@@ -32,6 +32,8 @@ class Issue < ApplicationRecord
   has_many :attachments, as: :attachmentable, through: :issue_attachments, dependent: :destroy
 
   validates :title, presence: true
+
+  before_save :update_edited_at, if: -> { will_save_change_to_content? && !new_record? }
 
   scope :with_labels, -> { includes(:labels) }
   scope :created_issues, ->(user) { where(creator_id: user.id) }
@@ -60,5 +62,9 @@ class Issue < ApplicationRecord
 
   def self.ransackable_scopes(auth_object = nil)
    [ :state_filter ]
+ end
+
+ def update_edited_at
+   self.last_edited_at = Time.current
  end
 end

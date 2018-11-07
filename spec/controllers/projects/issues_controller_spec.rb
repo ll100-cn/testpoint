@@ -10,24 +10,48 @@ RSpec.describe Projects::IssuesController, type: :controller do
   describe "GET index" do
     let!(:label) { create :label }
     let!(:issue) { create :issue, label_ids: [label.id], project: project }
+    let!(:attributes) { { project_id: project.id } }
+    action { get :index, params: attributes }
+
     context "without task" do
-      action { get :index, params: { project_id: project.id } }
       it { is_expected.to respond_with :success }
     end
 
     context "with related_task" do
-      action { get :index, params: { project_id: project.id, related_task: task.id } }
+      before { attributes[:related_task] = task.id }
+
       it { is_expected.to respond_with :success }
     end
 
     context "filter by created" do
-      action { get :index, params: { project_id: project.id, filter: "assigned" } }
+      before { attributes[:filter] = "assigned" }
+
       it { is_expected.to respond_with :success }
     end
 
     context "filter by assigned" do
-      action { get :index, params: { project_id: project.id, filter: "created" } }
+      before { attributes[:filter] = "created" }
+
       it { is_expected.to respond_with :success }
+    end
+
+    context "filter by states" do
+      context "filter opending issues" do
+        before { attributes[:q] = { "state_filter" => "opening" } }
+
+        it { is_expected.to respond_with :success }
+      end
+      context "filter all issues" do
+        before { attributes[:q] = { "state_filter" => "all" } }
+
+        it { is_expected.to respond_with :success }
+      end
+
+      context "filter closed issues" do
+        before { attributes[:q] = { "state_filter" => "closed" } }
+
+        it { is_expected.to respond_with :success }
+      end
     end
   end
 
@@ -54,7 +78,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
   end
 
   describe "PUT update" do
-    let(:attributes) { { title: "issue update" } }
+    let(:attributes) { { title: "issue update", content: "hello" } }
     action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
   end

@@ -18,7 +18,6 @@ class Projects::CommentsController < BaseProjectController
   end
 
   def update
-    @comment.last_updated_at = Time.current
     @comment.update(comment_params)
     respond_with @issue, location: ok_url_or_default(action: :show)
   end

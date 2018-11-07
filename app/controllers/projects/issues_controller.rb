@@ -49,7 +49,6 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def update
-    @issue.last_updated_at = Time.current
     @issue.update(issue_params)
     respond_with @issue, location: ok_url_or_default(action: :show)
   end

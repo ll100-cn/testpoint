@@ -2,13 +2,13 @@
 #
 # Table name: comments
 #
-#  id              :bigint(8)        not null, primary key
-#  content         :text
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  user_id         :bigint(8)
-#  issue_id        :bigint(8)
-#  last_updated_at :datetime
+#  id             :bigint(8)        not null, primary key
+#  content        :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  user_id        :bigint(8)
+#  issue_id       :bigint(8)
+#  last_edited_at :datetime
 #
 
 class Comment < ApplicationRecord
@@ -21,6 +21,12 @@ class Comment < ApplicationRecord
 
   validates :content, presence: true
 
+  before_save :update_edited_at, if: -> { will_save_change_to_content? && !new_record? }
+
   scope :recent, -> { order("created_at DESC") }
   scope :history, -> { order("created_at ASC") }
+
+  def update_edited_at
+    self.last_edited_at = Time.current
+  end
 end
