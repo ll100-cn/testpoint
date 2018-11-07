@@ -16,7 +16,7 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [:open, :processing, :closed, :solved], default: :open
+  enumerize :state, in: [:pending, :processing, :closed, :resolved], default: :pending
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -34,9 +34,18 @@ class Issue < ApplicationRecord
   validates :title, presence: true
 
   scope :with_labels, -> { includes(:labels) }
-  scope :opened, -> { where(state: [ "open", "processing" ]) }
   scope :created_issues, ->(user) { where(creator_id: user.id) }
   scope :assigned_issues, ->(user) { where(assignee_id: user.id) }
+  scope :state_filter, ->(text) {
+    case text
+    when "opening"
+      where(state: [ "pending", "processing" ])
+    when "all"
+      self
+    else
+      where(state: text)
+    end
+  }
 
   def default_title
     tasks.map do |task|
@@ -48,4 +57,8 @@ class Issue < ApplicationRecord
   def default_content
     tasks.map(&:message).join(" ")
   end
+
+  def self.ransackable_scopes(auth_object = nil)
+   [ :state_filter ]
+ end
 end
