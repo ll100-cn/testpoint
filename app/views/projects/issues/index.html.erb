@@ -149,7 +149,7 @@
             <%= issue.state.text %>
           </span>
         </td>
-        <td><%= issue.creator.name %></td>
+        <td><%= issue.creator.smart_name %></td>
         <td><%=l issue.created_at, format: :long %></td>
         <% if @task %>
         <td>

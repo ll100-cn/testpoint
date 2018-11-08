@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_07_081451) do
+ActiveRecord::Schema.define(version: 2018_11_08_082119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,11 +94,15 @@ ActiveRecord::Schema.define(version: 2018_11_07_081451) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "milestone_id"
-    t.bigint "creator_id"
-    t.bigint "assignee_id"
+    t.bigint "bak_creator_id"
+    t.bigint "bak_assignee_id"
     t.bigint "project_id"
     t.datetime "last_edited_at"
+    t.bigint "creator_id"
+    t.bigint "assignee_id"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
+    t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
+    t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
     t.index ["creator_id"], name: "index_issues_on_creator_id"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
@@ -129,6 +133,7 @@ ActiveRecord::Schema.define(version: 2018_11_07_081451) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "nickname"
     t.index ["project_id"], name: "index_members_on_project_id"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
@@ -252,6 +257,8 @@ ActiveRecord::Schema.define(version: 2018_11_07_081451) do
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "users"
   add_foreign_key "components", "projects"
+  add_foreign_key "issues", "members", column: "assignee_id"
+  add_foreign_key "issues", "members", column: "creator_id"
   add_foreign_key "issues", "milestones"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues_labels", "issues"

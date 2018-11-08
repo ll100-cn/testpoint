@@ -3,11 +3,9 @@
 </div>
 
 <%= bootstrap_horizontal_form_for [@project, @member] do |f| %>
-  <%= f.input :role, collection: Member.role.options, input_html: { class: 'select2-field' } %>
-
-  <%= f.actions_content do %>
-    <%= ok_url_tag %>
-    <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link url_for(action: :index), class: "btn btn-link" %>
+  <%= f.input :email do %>
+    <div class="form-control-plaintext"><%= f.object.user.email %></div>
   <% end %>
+  <%= f.input :nickname %>
+  <%= render "form", f: f %>
 <% end %>

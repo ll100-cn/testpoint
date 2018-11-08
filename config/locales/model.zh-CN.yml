@@ -78,3 +78,6 @@ zh-CN:
       member:
         role: 角色
         user_id: 用户
+        email: 邮箱
+        nickname: 昵称
+        name: 用户名

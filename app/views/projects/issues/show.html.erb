@@ -6,7 +6,8 @@
   <div class="row">
     <div class="col-sm-9">
       <div class="d-flex align-items-start">
-        <%= image_tag @issue.creator.avatar_url, width: 60, class: "rounded-circle" %>
+        <% user = @issue.creator.user %>
+        <%= image_tag user.avatar_url, width: 60, class: "rounded-circle" %>
         <div class="col pr-0">
           <div class="card">
             <%= render "shared/card_header", issue: @issue, creator: @issue.creator, project: @project %>
@@ -62,14 +63,15 @@
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :creator_id } do |f| %>
           <% disabled = cannot? :critical, @issue %>
-          <%= f.input :creator_id, collection: @project.members.map{ |u| [u.user.name, u.user_id] }, disabled: disabled %>
+          <%= f.input :creator_id, collection: @project.members, label_method: :smart_name, disabled: disabled %>
         <% end %>
       <% end %>
 
       <%= render layout: "attribute_info", locals: { template: form, attribute_name: :creator_id } do %>
         <% if @issue.creator %>
-          <%= image_tag @issue.creator.avatar_url, height: 20, class: "rounded-circle" %>
-          <span class="badge mb-1"><%=@issue.creator.name %></span>
+          <% user = @issue.creator.user %>
+          <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
+          <span class="badge mb-1"><%= @issue.creator.smart_name %></span>
         <% end %>
       <% end %>
 
@@ -77,14 +79,15 @@
 
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :assignee_id } do |f| %>
-          <%= f.input :assignee_id, collection: User.all.map{ |u| [u.name, u.id] } %>
+          <%= f.input :assignee_id, collection: @project.members, label_method: :smart_name  %>
         <% end %>
       <% end %>
 
       <%= render layout: "attribute_info", locals: { template: form, attribute_name: :assignee_id } do %>
         <% if @issue.assignee %>
-          <%= image_tag current_user.avatar_url, height: 20, class: "rounded-circle" %>
-          <span class="badge mb-1"><%=@issue.assignee.name %></span>
+          <% user = @issue.assignee.user %>
+          <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
+          <span class="badge mb-1"><%=@issue.assignee.smart_name %></span>
         <% end %>
       <% end %>
 

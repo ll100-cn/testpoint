@@ -31,5 +31,9 @@ Rails.application.routes.draw do
 
   resources :users
   resources :attachments
-  resource :profile
+
+  namespace :profiles do
+    resource :basic
+    resources :projects
+  end
 end

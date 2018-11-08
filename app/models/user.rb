@@ -33,9 +33,7 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   attr_writer :current_password
 
-  validates :name, presence: true
-
-  scope :without_project, ->(project) { where_not_exists(Member.where(project_id: project.id).where_table(:user)) }
+  validates :name, presence: true, length: { minimum: 2 }
 
   def password_required?
     new_record? || password.present? || password_confirmation.present?

@@ -1,5 +1,6 @@
-<%= f.input :user_id, collection: User.without_project(f.object.project), input_html: { class: 'select2-field' } %>
-<%= f.input :role, collection: Member.role.options, input_html: { class: 'select2-field' } %>
+<%= f.input :role, collection: Member.role.options %>
+
+<hr>
 
 <%= f.actions_content do %>
   <%= ok_url_tag %>

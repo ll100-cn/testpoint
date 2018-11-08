@@ -12,7 +12,7 @@ class Projects::MembersController < BaseProjectController
   end
 
   def create
-    @member.save
+    @member.submit
     respond_with @member, location: -> { ok_url_or_default([@project, Member]) }
   end
 
@@ -31,6 +31,6 @@ class Projects::MembersController < BaseProjectController
 
 protected
   def member_params
-    params.fetch(:member, {}).permit(:role, :user_id)
+    params.fetch(:member, {}).permit(:role, :email, :name)
   end
 end

@@ -33,7 +33,7 @@ class Projects::IssuesController < BaseProjectController
 
   def new
     @task = Task.find(params[:task_id]) if params[:task_id]
-    @issue.creator ||= current_user
+    @issue.creator ||= current_member
     @issue.tasks = [ @task ] if @task
     @issue.title ||= @issue.default_title
     @issue.content ||= @issue.default_content
@@ -41,7 +41,7 @@ class Projects::IssuesController < BaseProjectController
 
   def create
     @task = Task.find(params[:task_id]) if params[:task_id]
-    @issue.creator ||= current_user
+    @issue.creator ||= current_member
     @issue.tasks = [ @task ] if @task
     @issue.subscribed_users = [ @user ]
     @issue.save
