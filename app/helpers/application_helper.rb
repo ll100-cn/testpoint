@@ -36,7 +36,7 @@ module ApplicationHelper
     url_for(args + [ options ])
   end
 
-  def pass_ok_url(args)
+  def relay_ok_url(args)
     options = args.extract_options!
     options[:ok_url] = params[:ok_url] if params[:ok_url]
     url_for(args + [ options ])

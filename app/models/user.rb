@@ -35,8 +35,6 @@ class User < ApplicationRecord
 
   validates :name, presence: true, length: { minimum: 2 }
 
-  scope :without_project, ->(project) { where_not_exists(Member.where(project_id: project.id).where_table(:user)) }
-
   def password_required?
     new_record? || password.present? || password_confirmation.present?
   end

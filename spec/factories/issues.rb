@@ -20,6 +20,6 @@ FactoryBot.define do
     title { "issue1" }
     content { "content of issue1" }
     state { "pending" }
-    creator { create :user }
+    creator { create :member }
   end
 end

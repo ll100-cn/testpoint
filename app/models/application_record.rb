@@ -2,7 +2,6 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
   extend Enumerize
   include SqlScopes
-  include CleanupColumn
 
   def self.cleanup_column(*args)
     options = { strip: true, presence: true }.merge(args.extract_options!)

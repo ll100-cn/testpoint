@@ -13,7 +13,6 @@ class Projects::MembersController < BaseProjectController
 
   def create
     @member.submit
-    # binding.pry
     respond_with @member, location: -> { ok_url_or_default([@project, Member]) }
   end
 

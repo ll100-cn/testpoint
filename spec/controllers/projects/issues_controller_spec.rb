@@ -6,6 +6,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
   let(:task) { plan.tasks.first }
   let(:issue) { create :issue, project: project }
   let(:superadmin) { create :user, :superadmin }
+  let(:member) { create :member, project: project, user: superadmin }
   before { sign_in superadmin }
 
   describe "GET index" do
@@ -74,13 +75,13 @@ RSpec.describe Projects::IssuesController, type: :controller do
     context "assignee other members as creator" do
       let!(:user) { create :user }
       let!(:member) { create :member, project: project, user: user }
-      before { attributes[:creator_id] = user.id }
+      before { attributes[:creator_id] = member.id }
 
       it { is_expected.to respond_with :redirect }
     end
 
     context "admin creat the issue" do
-      it { is_expected.to respond_with :redirect }
+      it { is_expected.to respond_with :success }
     end
   end
 
