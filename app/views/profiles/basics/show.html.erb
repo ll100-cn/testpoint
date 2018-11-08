@@ -1,9 +1,9 @@
-<div class="page-header">
-  <h2><%= page_i18n('profile') %></h2>
-</div>
+<%= render "profiles/header", current: "basic", user: @user %>
 
 <%= bootstrap_horizontal_form_for @user, url: { action: :update } do |f| %>
-  <%= f.input :email %>
+  <%= f.input :email do %>
+    <div class="form-control-plaintext"><%= f.object.email %></div>
+  <% end %>
   <%= f.input :name %>
   <%= f.input page_i18n('avatar') do %>
     <%= image_tag f.object.avatar_url, width: 100 %>

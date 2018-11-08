@@ -1,4 +1,4 @@
-class ProfilesController < ApplicationController
+class Profiles::BasicsController < ApplicationController
   before_action -> { @user = User.find(current_user.id) }
   before_action -> { authorize! :manage, :profile }
 
@@ -16,7 +16,7 @@ class ProfilesController < ApplicationController
 
 protected
   def user_params
-    params.fetch(:user, {}).permit(:email, :name, *password_param_names)
+    params.fetch(:user, {}).permit(:name, *password_param_names)
   end
 
   def password_param_names

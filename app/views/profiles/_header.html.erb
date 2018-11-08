@@ -1,0 +1,12 @@
+<div class="page-header">
+  <h2><%= page_i18n('profile') %></h2>
+</div>
+
+<%= fume_nav current do |n| %>
+  <div class="nav nav-tabs page-nav">
+    <%= n.link_to "basic", "基本信息", pass_ok_url([ :profiles, :basic ]), class: "nav-link nav-item" %>
+    <% user.projects.each do |project| %>
+      <%= n.link_to project.id, project.name, pass_ok_url([ :profiles, project ]), class: "nav-link nav-item" %>
+    <% end %>
+  </div>
+<% end %>
