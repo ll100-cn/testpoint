@@ -2,13 +2,13 @@
 #
 # Table name: comments
 #
-#  id              :bigint(8)        not null, primary key
-#  content         :text
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  user_id         :bigint(8)
-#  issue_id        :bigint(8)
-#  last_updated_at :datetime
+#  id             :bigint(8)        not null, primary key
+#  content        :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  user_id        :bigint(8)
+#  issue_id       :bigint(8)
+#  last_edited_at :datetime
 #
 
 FactoryBot.define do

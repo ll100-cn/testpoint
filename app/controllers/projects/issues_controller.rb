@@ -1,6 +1,7 @@
 class Projects::IssuesController < BaseProjectController
   before_action { @navbar = "Issues" }
   before_action -> { @project = current_project }
+  before_action -> { @user = current_user }
   authorize_resource :project
   load_and_authorize_resource through: :project
 
@@ -24,6 +25,10 @@ class Projects::IssuesController < BaseProjectController
     if params[:filter] == "assigned"
       @issues = @issues.assigned_issues(current_user)
     end
+
+    if params[:filter] == "subscribed"
+      @issues = @issues.subscribed_issues(current_user)
+    end
   end
 
   def new
@@ -38,6 +43,7 @@ class Projects::IssuesController < BaseProjectController
     @task = Task.find(params[:task_id]) if params[:task_id]
     @issue.creator ||= current_user
     @issue.tasks = [ @task ] if @task
+    @issue.subscribed_users = [ @user ]
     @issue.save
     respond_with @issue, location: ok_url_or_default(action: :index)
   end
@@ -49,8 +55,7 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def update
-    @issue.last_updated_at = Time.current
-    @issue.update(issue_params)
+    @issue.update_with_editor(issue_params, current_member)
     respond_with @issue, location: ok_url_or_default(action: :show)
   end
 

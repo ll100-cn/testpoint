@@ -1,11 +1,8 @@
 <div class="page-header">
   <h2><%= @issue.title %></h2>
-  <div class="actions ml-auto">
-    <%= edit_link [:edit, @project, @issue] if can? :update, @issue %>
-  </div>
 </div>
 
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-sm-9">
       <div class="d-flex align-items-start">
@@ -126,6 +123,22 @@
           </div>
         <% end %>
       <% end %>
+
+      <hr>
+
+      <div class="d-flex flex-column">
+        <div class="h5"><%=h Subscription %></div>
+        <div class="mt-1" id="issue_<%= @issue.id%>_user_<%= current_user.id %>">
+          <% data = { remote: true, type: "xhrml", target: "#issue_#{@issue.id}_user_#{current_user.id}" } %>
+          <% if current_user && current_user.subscribed?(@issue) %>
+            <% @subscription = current_user.subscriptions.where(issue_id: @issue.id).take! %>
+            <%= link_to "取消订阅",  [@project, @issue, @subscription], method: :delete, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
+          <% else %>
+           <%= link_to "订阅", [@project, @issue, Subscription], method: :post, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
+          <% end %>
+          <%= render "projects/subscriptions/subscribed_users.html", issue: @issue %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

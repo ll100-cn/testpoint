@@ -30,6 +30,7 @@ class User < ApplicationRecord
   has_many :assigned_issues, class_name: Issue.to_s, foreign_key: 'assignee_id', dependent: :destroy, inverse_of: true
   has_many :members, dependent: :destroy
   has_many :projects, through: :members
+  has_many :subscriptions, dependent: :destroy
   attr_writer :current_password
 
   validates :name, presence: true
@@ -43,5 +44,9 @@ class User < ApplicationRecord
   def avatar_url(size = 200)
     gravatar_id = Digest::MD5.hexdigest(self.email.downcase)
     "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
+  end
+
+  def subscribed?(issue)
+    Subscription.where(user_id: self.id, issue_id: issue.id).present?
   end
 end

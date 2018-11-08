@@ -2,13 +2,13 @@
 #
 # Table name: comments
 #
-#  id              :bigint(8)        not null, primary key
-#  content         :text
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  user_id         :bigint(8)
-#  issue_id        :bigint(8)
-#  last_updated_at :datetime
+#  id             :bigint(8)        not null, primary key
+#  content        :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  user_id        :bigint(8)
+#  issue_id       :bigint(8)
+#  last_edited_at :datetime
 #
 
 class Comment < ApplicationRecord
@@ -23,4 +23,10 @@ class Comment < ApplicationRecord
 
   scope :recent, -> { order("created_at DESC") }
   scope :history, -> { order("created_at ASC") }
+
+  def update_with_editor(params, member)
+    assign_attributes(params)
+    self.last_edited_at = Time.current if will_save_change_to_content?
+    self.save
+  end
 end

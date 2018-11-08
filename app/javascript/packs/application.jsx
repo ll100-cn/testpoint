@@ -22,5 +22,6 @@ import '../components/stimulus'
 import '../components/clipboard'
 import '../components/load-image'
 import '../components/rails-nested-form'
+import '../components/tooltip'
 
 import '../frontend'
