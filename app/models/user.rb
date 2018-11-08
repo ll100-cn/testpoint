@@ -33,7 +33,7 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   attr_writer :current_password
 
-  validates :name, presence: true
+  validates :name, presence: true, length: { minimum: 2 }
 
   scope :without_project, ->(project) { where_not_exists(Member.where(project_id: project.id).where_table(:user)) }
 

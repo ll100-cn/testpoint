@@ -16,7 +16,7 @@
   <thead>
   <tr>
     <th><%= sort_link @q, :id %></th>
-    <th><%= sort_link @q, :user_name %></th>
+    <th><%=h Member, :name %></th>
     <th><%= sort_link @q, :user_email %></th>
     <th><%= sort_link @q, :role %></th>
     <th><%=page_i18n :actions %></th>
@@ -26,7 +26,7 @@
     <% @members.each do |member| %>
       <tr>
         <td><%= member.id %></td>
-        <td><%= member.user.name %></td>
+        <td><%= member.smart_name %></td>
         <td><%= member.user.email %></td>
         <td><%= member.role_text %></td>
         <td>
