@@ -16,10 +16,12 @@
 <div class="container">
   <%= bootstrap_vertical_form_for [ @project, @task, @issue ], permit_for: issue_params_names do |f| %>
     <%= f.input :title %>
-    <%= f.input :creator_id, collection: @project.members.map { |u| [u.user.name, u.user_id] }, input_html: { class: "select2-field" } %>
+    <%= f.input :creator_id, collection: @project.members.map { |u| [u.smart_name, u.user_id] }, input_html: { class: "select2-field" } %>
     <%= f.input :content, input_html: { class: 'markdown-field' } %>
     <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+
     <hr>
+
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
     <%= cancel_link [@project, @task, @issue], class: "btn btn-secondary" %>
