@@ -1,5 +1,5 @@
 <div class="card-header">
-  <%= creator.name %>
+  <%= creator.smart_name %>
   <span class="ml-1 small text-muted"><%= time_ago_in_words(issue.created_at) %></span>
   <span class="ml-1 small text-muted"><%="最后编辑于#{time_ago_in_words(issue.last_edited_at)}前" if issue.last_edited_at %></span>
   <div class="dropdown float-right dropdown-no-arrow">

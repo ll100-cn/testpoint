@@ -25,8 +25,8 @@ class Issue < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_users, through: :subscriptions, source: :user
   belongs_to :milestone, optional: true
-  belongs_to :creator, class_name: User.to_s
-  belongs_to :assignee, class_name: User.to_s, optional: true
+  belongs_to :creator, class_name: Member.to_s
+  belongs_to :assignee, class_name: Member.to_s, optional: true
   belongs_to :project
 
   has_many :issue_attachments, dependent: :destroy
