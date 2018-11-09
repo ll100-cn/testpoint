@@ -22,4 +22,10 @@ RSpec.describe AttachmentsController, type: :controller do
     action { post :update, params: { id: attachment.id, attachment: attributes } }
     it { is_expected.to respond_with :redirect }
   end
+
+  describe "DELETE destroy" do
+    action { delete :destroy, params: { id: attachment.id, format: :xhrml } }
+
+    it { is_expected.to respond_with :success }
+  end
 end

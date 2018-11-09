@@ -1,0 +1,5 @@
+<div id="issue<%= issue.id %>_comments">
+  <% issue.comments.history.each do |comment| %>
+    <%= render "projects/comments/comments.html", comment: comment %>
+  <% end %>
+</div>

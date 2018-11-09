@@ -26,12 +26,12 @@
    </li>
    <li class="nav-item">
     <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
-      我受理的 (<%= issues_scope.assigned_issues(current_user).count %>)
+      我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
     <% end %>
    </li>
    <li class="nav-item">
      <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
-       我创建的 (<%= issues_scope.created_issues(current_user).count %>)
+       我创建的 (<%= issues_scope.created_issues(current_member).count %>)
      <% end %>
    </li>
    <li class="nav-item">

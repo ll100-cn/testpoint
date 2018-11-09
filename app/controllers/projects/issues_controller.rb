@@ -19,11 +19,11 @@ class Projects::IssuesController < BaseProjectController
     end
 
     if params[:filter] == "created"
-      @issues = @issues.created_issues(current_user)
+      @issues = @issues.created_issues(current_member)
     end
 
     if params[:filter] == "assigned"
-      @issues = @issues.assigned_issues(current_user)
+      @issues = @issues.assigned_issues(current_member)
     end
 
     if params[:filter] == "subscribed"
@@ -65,8 +65,8 @@ protected
   end
 
   def issue_params_names
-    names = [ :title, :content, :state, :milestone_id, :assignee_id,
-             label_ids: [], issue_attachments_attributes: [:id, :attachment_id, :_destroy] ]
+    names = [ :title, :content, :state, :milestone_id, :assignee_id, attachment_ids: [],
+             label_ids: [] ]
     names += [ :creator_id ] if can? :critical, Issue
     names
   end

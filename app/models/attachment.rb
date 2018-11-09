@@ -15,7 +15,7 @@ class Attachment < ApplicationRecord
   belongs_to :attachmentable, polymorphic: true, optional: true
   has_one_attached :file
 
-  validates :title, presence: true, length: { maximum: 20 }, on: :update
+  validates :title, presence: true, length: { maximum: 20 }, on: :update, if: -> { will_save_change_to_title? }
 
   before_create :assign_title, :assign_content_type
 

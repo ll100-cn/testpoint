@@ -21,9 +21,7 @@ class Task < ApplicationRecord
   belongs_to :platform
   belongs_to :issue, optional: true
 
-  has_many :task_attachments, dependent: :destroy
-  accepts_nested_attributes_for :task_attachments, allow_destroy: true
-  has_many :attachments, as: :attachmentable, through: :task_attachments, dependent: :destroy
+  has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
 
   validate :issue_must_exist, if: -> { issue_id.present? }
 

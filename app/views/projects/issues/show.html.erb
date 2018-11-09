@@ -35,9 +35,7 @@
         </div>
       </div>
 
-      <% @issue.comments.history.each do |comment| %>
-        <%= render "projects/comments/comments", comment: comment %>
-      <% end %>
+      <%= render "projects/comments/comment_list.html", issue: @issue %>
 
       <%= render "projects/comments/form", issue: @issue if can? :create, Comment %>
 

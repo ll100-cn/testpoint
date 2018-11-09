@@ -29,15 +29,13 @@ class Issue < ApplicationRecord
   belongs_to :assignee, class_name: Member.to_s, optional: true
   belongs_to :project
 
-  has_many :issue_attachments, dependent: :destroy
-  accepts_nested_attributes_for :issue_attachments, allow_destroy: true
-  has_many :attachments, as: :attachmentable, through: :issue_attachments, dependent: :destroy
+  has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
 
   validates :title, presence: true
 
   scope :with_labels, -> { includes(:labels) }
-  scope :created_issues, ->(user) { where(creator_id: user.id) }
-  scope :assigned_issues, ->(user) { where(assignee_id: user.id) }
+  scope :created_issues, ->(member) { where(creator_id: member.id) }
+  scope :assigned_issues, ->(member) { where(assignee_id: member.id) }
   scope :subscribed_issues, ->(user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }
   scope :state_filter, ->(text) {
     case text
