@@ -1,15 +1,18 @@
 class Projects::SubscriptionsController < ApplicationController
-  load_and_authorize_resource :project
-  load_and_authorize_resource :issue, through: :project
-  load_resource :subscription
+  load_resource :project
+  load_resource :issue, through: :project
+  load_resource through: :current_user, find_by: :issue_id, id_param: :issue_id
   before_action -> { @user = current_user }
 
+
   def create
-    @subscription = Subscription.new(user_id: @user.id, issue_id: @issue.id)
+    @subscription.issue = @issue
     @subscription.save
+    respond_with @subscription
   end
 
   def destroy
     @subscription.destroy
+    respond_with @subscription
   end
 end

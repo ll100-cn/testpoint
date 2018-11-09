@@ -20,12 +20,16 @@ FactoryBot.define do
       role { "owner" }
     end
 
-    trait :admin do
-      role { "admin" }
+    trait :manager do
+      role { "manager" }
     end
 
-    trait :member do
-      role { "member" }
+    trait :developer do
+      role { "developer" }
+    end
+
+    trait :reporter do
+      role { "reporter" }
     end
   end
 end

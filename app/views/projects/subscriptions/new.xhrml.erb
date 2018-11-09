@@ -1,0 +1,4 @@
+<% data = { remote: true, type: "xhrml", target: "#issue_#{@issue.id}_user_#{@user.id}" } %>
+<%= link_to "订阅", [@project, @issue, :subscription], method: :post, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
+
+<%= render "projects/subscriptions/subscribed_users.html", issue: @issue %>

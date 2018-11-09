@@ -12,7 +12,7 @@
 #
 
 class Member < ApplicationRecord
-  enumerize :role, in: [:owner, :admin, :member], default: :member
+  enumerize :role, in: [:owner, :manager, :developer, :reporter], default: :developer
   belongs_to :user
   belongs_to :project
   attr_accessor :email, :name

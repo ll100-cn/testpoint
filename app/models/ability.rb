@@ -2,42 +2,59 @@ class Ability
   include CanCan::Ability
 
   def initialize(&block)
+    alias_action :update, :destroy, :to => :modify
     block.(self)
   end
 
   def apply_user_permissions(user)
     return unless user
-
-    if user.superadmin?
-      can :manage, :all
-      cannot :destroy, user
-      return
-    end
+    return apply_superadmin_permissions(user) if user.superadmin?
 
     can :read, Project, members: { user_id: user.id }
     can :manage, :profile
     can :manage, Attachment
   end
 
+  def apply_superadmin_permissions(user)
+    can :manage, :all
+    cannot :destroy, user
+  end
+
   def apply_member_permissions(member)
     return unless member
+    return if member.user.superadmin?
 
-    if member.role.owner?
-      can :manage, member.project
-      can :manage, [ TestCase, Plan, Issue, Member, Milestone, Platform, Component, Task, Label, Comment ]
-    end
+    apply_reporter_permissions(member) if member.role.reporter?
+    apply_developer_permissions(member) if member.role.developer?
+    apply_manager_permissions(member) if member.role.manager?
+    apply_owner_permissions(member) if member.role.owner?
+  end
 
-    if member.role.admin?
-      can [:read, :update], member.project
-      can :critical, Issue, project_id: member.project.id
-      can :manage, [ TestCase, Plan, Issue, Member, Milestone, Platform, Component, Task, Label, Comment ]
-    end
+  def apply_reporter_permissions(member)
+    can [:read, :create], Issue
+    can :update, Issue, creator_id: member.id
+    can :update, Issue, assignee_id: member.id
+    can [:read, :create], Comment
+    can :update, Comment, user_id: member.user.id
+  end
 
-    if member.role.member?
-      can :read, member.project
-      can :manage, [ TestCase, Plan, Issue, Milestone, Platform, Component, Task, Label, Comment ]
-      cannot :critical, Issue
-      can :read, Member
+  def apply_developer_permissions(member)
+    apply_reporter_permissions(member)
+    can :manage, [ TestCase, Plan, Platform, Component, Task ]
+  end
+
+  def apply_manager_permissions(member)
+    apply_developer_permissions(member)
+    can :update, member.project
+    can :manage, Issue
+    can :read, Member
+    can :modify, Member, Member.where.not(role: "owner") do |member|
+      !member.role.owner?
     end
+  end
+
+  def apply_owner_permissions(member)
+    apply_manager_permissions(member)
+    can :manage, Member
   end
 end

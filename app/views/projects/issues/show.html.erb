@@ -54,7 +54,7 @@
         <% end %>
       <% end %>
 
-      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :state } do %>
+      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :state, issue: @issue } do %>
         <span class="<%= issue_state_class_name(@issue.state, :text)%>"><%= @issue.state.text %></span>
       <% end %>
 
@@ -67,7 +67,7 @@
         <% end %>
       <% end %>
 
-      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :creator_id } do %>
+      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :creator_id, issue: @issue } do %>
         <% if @issue.creator %>
           <% user = @issue.creator.user %>
           <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
@@ -83,7 +83,7 @@
         <% end %>
       <% end %>
 
-      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :assignee_id } do %>
+      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :assignee_id, issue: @issue } do %>
         <% if @issue.assignee %>
           <% user = @issue.assignee.user %>
           <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
@@ -99,7 +99,7 @@
         <% end %>
       <% end %>
 
-      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :label_ids } do %>
+      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :label_ids, issue: @issue } do %>
         <% @issue.labels.each do |label| %>
           <%= label_tag label, label.name, class: "mb-1 d-block text-left" %>
         <% end %>
@@ -113,7 +113,7 @@
         <% end %>
       <% end %>
 
-      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :milestone_id } do %>
+      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :milestone_id, issue: @issue } do %>
         <% if @issue.milestone %>
           <div class="d-flex align-items-center">
             <div class="progress flex-1">
@@ -133,13 +133,11 @@
         <div class="h5"><%=h Subscription %></div>
         <div class="mt-1" id="issue_<%= @issue.id%>_user_<%= current_user.id %>">
           <% data = { remote: true, type: "xhrml", target: "#issue_#{@issue.id}_user_#{current_user.id}" } %>
-          <% if current_user && current_user.subscribed?(@issue) %>
-            <% @subscription = current_user.subscriptions.where(issue_id: @issue.id).take! %>
-            <%= link_to "取消订阅",  [@project, @issue, @subscription], method: :delete, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
+          <% if current_user.subscribed?(@issue) %>
+            <%= render file: "projects/subscriptions/show.xhrml" %>
           <% else %>
-           <%= link_to "订阅", [@project, @issue, Subscription], method: :post, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
+            <%= render file: "projects/subscriptions/new.xhrml" %>
           <% end %>
-          <%= render "projects/subscriptions/subscribed_users.html", issue: @issue %>
         </div>
       </div>
     </div>

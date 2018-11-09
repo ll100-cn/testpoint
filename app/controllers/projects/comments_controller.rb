@@ -3,7 +3,6 @@ class Projects::CommentsController < BaseProjectController
   authorize_resource :project
   load_and_authorize_resource :issue
   load_and_authorize_resource through: :issue
-  load_and_authorize_resource through: :project
 
   def new
   end

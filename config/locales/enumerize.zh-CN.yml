@@ -14,5 +14,6 @@ zh-CN:
     member:
       role:
         owner: 负责人
-        admin: 管理员
-        member: 项目成员
+        manager: 管理员
+        developer: 开发人员
+        reporter: 报告人

@@ -31,7 +31,7 @@
         <td><%= member.role_text %></td>
         <td>
           <%= edit_link [:edit, @project, member] if can? :update, member %>
-          <%= destroy_link [@project, member, ok_url: request.fullpath] if (can? :destroy, member) && (member.role != "owner") %>
+          <%= destroy_link [@project, member, ok_url: request.fullpath] if can? :destroy, member %>
         </td>
       </tr>
     <% end %>
