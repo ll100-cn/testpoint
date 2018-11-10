@@ -3,70 +3,114 @@ require 'cancan/matchers'
 
 RSpec.describe Ability, type: :model do
   describe "#apply_user_permissions" do
-    context "superadmin" do
-      let!(:superadmin) { create :user, :superadmin }
+    context "member" do
       let!(:project) { create :project }
-      subject(:ability) { Ability.new { |a| a.apply_user_permissions(superadmin) } }
-      it {
-        is_expected.to be_able_to(:manage, :all)
-        is_expected.not_to be_able_to(:destroy, superadmin)
-      }
+      let!(:user) { create :user }
+      let!(:member) { create :member, user: user, project: project }
+      subject(:ability) { Ability.new { |a| a.apply_user_permissions(user) } }
+
+      it {  is_expected.to be_able_to(:read, project)
+            is_expected.to be_able_to(:manage, Attachment) }
     end
 
-    context "not superadmin but a member of a project" do
-      let!(:user) { create :user }
+    context "visitor" do
+      let!(:visitor) { create :user }
       let!(:project) { create :project }
-      let!(:member) { create :member, project: project, user: user, role: "member" }
-      subject(:ability) { Ability.new { |a| a.apply_user_permissions(user) } }
-      it {
-        is_expected.to be_able_to(:read, project)
-        is_expected.to be_able_to(:manage, Attachment)
-        is_expected.to be_able_to(:manage, :profile)
-      }
-    end
+      subject(:ability) { Ability.new { |a| a.apply_user_permissions(visitor) } }
 
-    context "neither superadmin nor member of a project" do
-      let!(:user) { create :user }
-      let!(:project) { create :project }
-      subject(:ability) { Ability.new { |a| a.apply_user_permissions(user) } }
-      it {
-        is_expected.not_to be_able_to(:read, project)
-        is_expected.to be_able_to(:manage, Attachment)
-        is_expected.to be_able_to(:manage, :profile)
-      }
+      it { is_expected.to be_able_to(:manage, :profile)
+           is_expected.not_to be_able_to(:read, project) }
     end
   end
 
+  describe "#apply_superadmin_permissions" do
+    let!(:superadmin) { create :user, :superadmin }
+    let!(:project) { create :project }
+    subject(:ability) { Ability.new { |a| a.apply_superadmin_permissions(superadmin) } }
+
+    it {  is_expected.to be_able_to(:manage, :all)
+          is_expected.not_to be_able_to(:destroy, superadmin) }
+  end
+
   describe "#apply_member_permissions" do
-    context "owner" do
-      let!(:project) { create :project }
-      let!(:member) { create :member, :owner, project: project }
-      subject(:ability) { Ability.new { |a| a.apply_member_permissions(member) } }
-      it {
-        is_expected.to be_able_to(:manage, project)
-        is_expected.to be_able_to(:manage, TestCase, Plan, Issue, Member, Milestone, Platform, Component, Task, Label, Comment)
-      }
+    let(:member) { nil }
+    subject(:ability) { Ability.new { |a| a.apply_member_permissions(member) } }
+
+    context "anonymous" do
+      it { is_expected.not_to be_blank }
     end
 
-    context "admin" do
-      let!(:project) { create :project }
-      let!(:member) { create :member, :admin, project: project }
-      subject(:ability) { Ability.new { |a| a.apply_member_permissions(member) } }
-      it {
-        is_expected.to be_able_to([:read, :update], project)
-        is_expected.to be_able_to(:manage, TestCase, Plan, Issue, Member, Milestone, Platform, Component, Task, Label, Comment)
-      }
+    context "when superadmin" do
+      let(:user) { create :user, :superadmin }
+      let!(:member) { create :member, user: user }
+
+      it { is_expected.not_to be_blank }
     end
 
-    context "member" do
-      let!(:project) { create :project }
-      let!(:member) { create :member, :member, project: project }
-      subject(:ability) { Ability.new { |a| a.apply_member_permissions(member) } }
-      it {
-        is_expected.to be_able_to(:read, project)
-        is_expected.to be_able_to(:manage, TestCase, Plan, Issue, Milestone, Platform, Component, Task, Label, Comment)
-        is_expected.to be_able_to(:read, Member)
-      }
+    context "when reporter" do
+      let!(:member) { create :member, :reporter }
+
+      it { is_expected.not_to be_blank }
     end
+
+    context "when developer" do
+      let!(:member) { create :member, :developer }
+
+      it { is_expected.not_to be_blank }
+    end
+
+    context "when manager" do
+      let!(:member) { create :member, :manager }
+
+      it { is_expected.not_to be_blank }
+    end
+
+    context "when owner" do
+      let!(:member) { create :member, :owner }
+
+      it { is_expected.not_to be_blank }
+    end
+  end
+
+  describe "#apply_reporter_permissions" do
+    let!(:project) { create :project }
+    let!(:reporter) { create :member, :reporter, project: project }
+    let!(:issue) { create :issue, project: project, creator_id: reporter.id }
+    let!(:attachment) { create :attachment, attachmentable: issue }
+
+    subject(:ability) { Ability.new { |a| a.apply_reporter_permissions(reporter) } }
+
+    it {  is_expected.to be_able_to([:read, :create], Issue, Comment, Attachment)
+          is_expected.to be_able_to(:update, Issue.new(creator_id: reporter.id))
+          is_expected.to be_able_to(:update, Issue.new(assignee_id: reporter.id))
+          is_expected.to be_able_to(:update, Comment.new(user_id: reporter.user.id)) }
+  end
+
+  describe "#apply_developer_permissions" do
+    let!(:project) { create :project }
+    let!(:developer) { create :member, :developer, project: project }
+    subject(:ability) { Ability.new { |a| a.apply_developer_permissions(developer) } }
+
+    it { is_expected.to be_able_to(:manage, TestCase, Plan, Platform, Component, Task) }
+  end
+
+  describe "#apply_manager_permissions" do
+    let!(:project) { create :project }
+    let!(:manager) { create :member, :manager, project: project }
+    subject(:ability) { Ability.new { |a| a.apply_manager_permissions(manager) } }
+
+    it {  is_expected.to be_able_to(:update, project)
+          is_expected.to be_able_to(:manage, Issue)
+          is_expected.to be_able_to(:read, Member)
+          is_expected.to be_able_to(:modify, Member.new(project: project, role: "developer"))
+          is_expected.not_to be_able_to(:modify, Member.new(project: project, role: "owner")) }
+  end
+
+  describe "#apply_owner_permissions" do
+    let!(:owner) { create :member, :owner }
+    let!(:project) { create :project }
+    subject(:ability) { Ability.new { |a| a.apply_owner_permissions(owner) } }
+
+    it { is_expected.to be_able_to(:manager, Member) }
   end
 end

@@ -45,6 +45,6 @@ class User < ApplicationRecord
   end
 
   def subscribed?(issue)
-    Subscription.where(user_id: self.id, issue_id: issue.id).present?
+    subscriptions.exists?(issue_id: issue)
   end
 end

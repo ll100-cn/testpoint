@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Projects::MembersController, type: :controller do
   let!(:user) { create :user }
   let!(:project) { create :project }
-  let!(:member) { create :member, :admin, project: project, user: user }
+  let!(:member) { create :member, :manager, project: project, user: user }
   login_superadmin
 
   describe "GET index" do
@@ -18,7 +18,7 @@ RSpec.describe Projects::MembersController, type: :controller do
 
   describe "POST create" do
     let!(:user) { create :user }
-    let(:attributes) { { role: "member", name: "hello", email: user.email } }
+    let(:attributes) { { role: "developer", name: "hello", email: user.email } }
 
     context "when member exists" do
       action { post :create, params: { member: attributes, project_id: project.id } }
@@ -30,7 +30,7 @@ RSpec.describe Projects::MembersController, type: :controller do
       before { attributes[:email] = "testpoint@gmail.com" }
       action { post :create, params: { member: attributes, project_id: project.id } }
 
-      it { is_expected.to respond_with :redirect }
+      it { is_expected.to respond_with :success }
     end
 
     context "when name is invalid" do

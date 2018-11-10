@@ -2,13 +2,15 @@
   <%= creator.smart_name %>
   <span class="ml-1 small text-muted"><%= time_ago_in_words(issue.created_at) %></span>
   <span class="ml-1 small text-muted"><%="最后编辑于#{time_ago_in_words(issue.last_edited_at)}前" if issue.last_edited_at %></span>
-  <div class="dropdown float-right dropdown-no-arrow">
-    <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
-      <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-    </button>
-    <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
-      <% data = { target: "#issue#{issue.id}_content", type: "xhrml", remote: true } %>
-      <%= link_to "编辑", apply_ok_url([ :edit, project, issue ]), class: "small dropdown-item", data: data if can? :edit, issue %>
+  <% if can? :edit, issue %>
+    <div class="dropdown float-right dropdown-no-arrow">
+      <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
+        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+        <% data = { target: "#issue#{issue.id}_content", type: "xhrml", remote: true } %>
+        <%= link_to "编辑", apply_ok_url([ :edit, project, issue ]), class: "small dropdown-item", data: data %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>

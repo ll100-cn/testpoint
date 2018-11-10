@@ -1,5 +1,5 @@
 class AttachmentsController < ApplicationController
-  load_and_authorize_resource
+  load_resource
 
   def new
   end
