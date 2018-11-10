@@ -21,6 +21,10 @@ class AttachmentsController < ApplicationController
     respond_with @attachment
   end
 
+  def destroy
+    @attachment.destroy
+  end
+
 protected
   def attachment_params
     params.fetch(:attachment, {}).permit(:file, :title)

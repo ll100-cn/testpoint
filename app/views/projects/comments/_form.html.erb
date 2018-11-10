@@ -9,7 +9,7 @@
         <div class="card-body">
           <div class="no-margin-bottom">
             <%= f.input :content, input_html: { class: 'markdown-field' } %>
-            <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+            <%= render "attachments/upload_area.html", attachments: f.object.attachments %>
           </div>
         </div>
         <div class="card-footer text-right bg-transparent">

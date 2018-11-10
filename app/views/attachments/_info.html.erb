@@ -20,18 +20,20 @@
   </div>
 
   <div class="media-body d-flex flex-column">
-    <div class="d-flex justify-content-between align-items-center">
-      <h4 class="mb-0"><%= attachment.title %></h4>
-      <span class="ml-auto">
-        <%= link_to edit_attachment_path(attachment), data: { remote: true, type: "xhrml", target: ".media", replace: true } do %>
-          <span class="fa fa-pencil-square-o"></span>
-        <% end if can? :edit, attachment.attachmentable %>
-      </span>
+    <div class="d-flex align-items-center">
+      <h4 class="mb-0 d-inline-block"><%= attachment.title %></h4>
+      <%= link_to edit_attachment_path(attachment), class: "text-muted mr-auto ml-2", data: { remote: true, type: "xhrml", target: ".media", replace: true } do %>
+        <span class="fa fa-pencil-square-o"></span>
+      <% end %>
     </div>
-    <div class="small">
+    <div class="small d-flex">
       <span class="text-secondary mr-1"><%= number_to_human_size(blob.byte_size, precision: 2, locale: 'en') %></span>
       <%= link_to polymorphic_url(file), class: "clipboard" do %>
-        <span class="fa fa-link text-muted small"></span>
+        <span class="fa fa-link text-muted"></span>
+      <% end %>
+      <% data = { remote: true, type: "xhrml", target: ".media", replace: true, confirm: "确认删除附件?" } %>
+      <%= link_to apply_ok_url([ attachment ]), method: :delete, data: data, class: "text-muted ml-auto" do %>
+        <span class="fa fa-trash-o"></span>
       <% end %>
     </div>
   </div>

@@ -18,11 +18,16 @@ class Projects::CommentsController < BaseProjectController
 
   def update
     @comment.update_with_editor(comment_params, current_member)
-    respond_with @issue, location: ok_url_or_default(action: :show)
+    respond_with @comment, location: ok_url_or_default([@project, @issue])
+  end
+
+  def destroy
+    @comment.destroy
+    respond_with @comment, location: ok_url_or_default([@project, @issue])
   end
 
 protected
   def comment_params
-    params.fetch(:comment, {}).permit(:content, comment_attachments_attributes: [:id, :attachment_id, :_destroy])
+    params.fetch(:comment, {}).permit(:content, attachment_ids: [])
   end
 end

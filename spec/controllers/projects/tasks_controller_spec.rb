@@ -17,15 +17,15 @@ RSpec.describe Projects::TasksController, type: :controller do
     end
 
     context "state failure with attachment" do
-      let(:task_attachment) { build :task_attachment }
+      let(:attachment) { create :attachment }
       before {
         task_attributes[:state] = :failure
-        task_attributes[:task_attachments_attributes] = [task_attachment.attributes]
+        task_attributes[:attachment_ids] = [ attachment.id ]
       }
 
       it {
         expect(task.reload.state).to eq :failure
-        expect(task.task_attachments.count).to eq 1
+        expect(task.attachments.count).to eq 1
       }
     end
 

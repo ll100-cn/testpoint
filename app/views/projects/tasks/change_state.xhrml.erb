@@ -7,9 +7,9 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-10 mx-auto">
-      <div class="alert alert-info">
-        <%= @task.test_case.content %>
-      </div>
+      <% if (content = @task.test_case.content) %>
+        <div class="alert alert-info"><%= content %></div>
+      <% end %>
       <p><%=h Task, :state %>: <%= @task.state.text %></p>
       <% if @task.state == "failure" %>
         <p><%= h Task, :message %>: </p>

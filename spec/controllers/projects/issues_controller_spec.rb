@@ -6,7 +6,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
   let(:task) { plan.tasks.first }
   let(:issue) { create :issue, project: project }
   let(:superadmin) { create :user, :superadmin }
-  let(:member) { create :member, project: project, user: superadmin }
+  let!(:member) { create :member, project: project, user: superadmin }
   before { sign_in superadmin }
 
   describe "GET index" do
@@ -81,7 +81,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
     end
 
     context "admin creat the issue" do
-      it { is_expected.to respond_with :success }
+      it { is_expected.to respond_with :redirect }
     end
   end
 
