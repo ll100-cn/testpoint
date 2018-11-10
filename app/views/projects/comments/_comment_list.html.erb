@@ -1,5 +1,9 @@
 <div id="issue<%= issue.id %>_comments">
-  <% issue.comments.history.each do |comment| %>
-    <%= render "projects/comments/comments.html", comment: comment %>
+  <% (@issue.activities + @issue.comments).sort_by(&:created_at).each do |record| %>
+    <% if record.is_a?(Comment) %>
+      <%= render "projects/issues/card_comment.html", comment: record %>
+    <% elsif record.is_a?(IssueActivity) %>
+      <%= render "projects/issues/card_activity.html", activity: record %>
+    <% end %>
   <% end %>
 </div>

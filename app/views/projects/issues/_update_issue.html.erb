@@ -28,7 +28,7 @@
 <%= content_tag "div", class: "position-right", data: { controller: "inline-edit", template: form } do %>
 
   <% if type == "state" %>
-    <span class="<%= issue_state_class_name(issue.state, :text)%>"><%= issue.state.text %></span>
+    <span class="text-issue-<%= issue.state %>"><%= issue.state.text %></span>
     <span><%= link_to content_tag(:i, '',class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
   <% end %>
 

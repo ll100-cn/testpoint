@@ -30,7 +30,7 @@
           <% @related_issues.each do |issue| %>
             <%= link_to "#{h(Task, :issue_id)} #{}: #{issue.id}", [@project, @plan, @task, task: { issue_id: issue.id }], method: :patch, class: "dropdown-item small" %>
           <% end %>
-          <%= link_to action_i18n('more'), project_issues_url(@project, { q: { state_eq: "open" }, related_task: @task.id }), class: "dropdown-item small" %>
+          <%= link_to action_i18n('more'), project_issues_url(@project, { q: { state_filter: "opening" }, related_task: @task.id }), class: "dropdown-item small" %>
         </div>
       </div>
     <% else %>

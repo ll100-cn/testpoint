@@ -1,4 +1,4 @@
-class Projects::SubscriptionsController < ApplicationController
+class Projects::SubscriptionsController < BaseProjectController
   load_resource :project
   load_resource :issue, through: :project
   load_resource through: :current_user, find_by: :issue_id, id_param: :issue_id

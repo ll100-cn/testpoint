@@ -1,0 +1,31 @@
+<div class="issue-comment">
+  <div class="d-flex align-items-start">
+    <%= image_tag comment.user.avatar_url, class: "rounded-circle avatar" %>
+    <div class="card flex-grow-1">
+      <div class="card-header">
+        <%= comment.user.name %>
+        <span class="ml-1 small text-muted"><%= time_ago_in_words(comment.created_at) %></span>
+        <span class="ml-1 small text-muted"><%="最后编辑于#{time_ago_in_words(comment.last_edited_at)}前" if comment.last_edited_at %></span>
+        <% if can? :modify, comment %>
+        <div class="dropdown float-right dropdown-no-arrow">
+          <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+            <% data = { type: "xhrml", remote: true, target: "#comment#{comment.id}_content" } %>
+            <%= edit_link apply_ok_url([ :edit, comment.issue.project, comment.issue, comment ]), class: "small dropdown-item", data: data if can? :edit, comment %>
+            <% data = data.merge({ target: "#issue#{comment.issue_id}_comments", confirm: "确认删除评论？" }) %>
+            <%= destroy_link apply_ok_url([comment.issue.project, comment.issue, comment ]), method: :delete, class: "small dropdown-item", data: data if can? :destroy, comment %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <div class="card-body" id="comment<%= comment.id %>_content">
+        <div class="no-margin-bottom">
+          <%= render "shared/page_content.html", content: comment.content %>
+          <%= render "shared/attachments_box.html", attachmentable: comment %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

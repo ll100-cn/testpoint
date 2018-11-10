@@ -1,0 +1,16 @@
+<div class="issue-task">
+  <% task_dom_id = dom_id(task) %>
+  <span><%= "##{task.id}" %></span>
+  <span><%= task.test_case.title %></span>
+  <span class="badge badge-secondary mx-2"><%= task.platform.name %></span>
+  <span class="mr-2"><%= task_state_with_icon(task.state) %></span>
+  <span class="text-muted"><%= time_ago_in_words(task.created_at) %></span>
+  <a href="javascript:void(0)" class="small" data-target="#<%= task_dom_id %>" data-toggle="collapse">展开</a>
+
+  <div id="<%= task_dom_id %>" class="collapse text-muted">
+    <div class="ml-3 mt-3 no-margin-bottom">
+      <%= render "shared/page_content", content: task.message %>
+      <%= render "shared/attachments_box", attachmentable: task %>
+    </div>
+  </div>
+</div>
