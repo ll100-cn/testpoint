@@ -1,0 +1,5 @@
+<span class="text-info"><%=h Issue, activity.property.to_sym %></span>
+<span>从</span>
+<span class="text-primary"><%= Member.find(activity.before_value).smart_name %></span>
+<span>修改为</span>
+<span class="text-primary"><%= Member.find(activity.after_value).smart_name %></span>

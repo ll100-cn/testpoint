@@ -86,9 +86,25 @@ RSpec.describe Projects::IssuesController, type: :controller do
   end
 
   describe "PUT update" do
-    let(:attributes) { { title: "issue update", content: "hello" } }
-    action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
-    it { is_expected.to respond_with :redirect }
+    context "update with valid attributes" do
+      let(:attributes) { { title: "issue update", content: "hello" } }
+      action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
+
+      it { is_expected.to respond_with :redirect }
+    end
+
+    context "update with invalid attributes" do
+      let(:attributes) { { title: "", content: "hello" } }
+      action(skip: true) { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
+      it { expect{ do_action }.to raise_error }
+    end
+
+    context "update with state to generate activities" do
+      let(:attributes) { { state: "closed" } }
+      action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
+
+      it { is_expected.to respond_with :redirect }
+    end
   end
 
   describe "GET show" do
@@ -99,6 +115,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
 
     context "with comments" do
       let!(:comment) { create :comment, content: "<p>this is a comment</p>", issue: issue }
+      before { issue.update(state: "processing") }
       action { get :show, params: { id: issue.id, project_id: project.id } }
       it { is_expected.to respond_with :success }
     end

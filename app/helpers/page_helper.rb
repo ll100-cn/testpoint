@@ -50,11 +50,6 @@ module PageHelper
     end
   end
 
-  def issue_state_class_name(state, type = "")
-    mappings = { "open" => "info", "closed" => "secondary", "solved" => "success", "processing" => "primary" }
-    type.present? ? "#{type} #{type}-#{mappings[state]}" : mappings[type]
-  end
-
   def markdown_to_html(markdown, math_engine = "mathjax_node_png")
     return "" if markdown.blank?
     Kramdown::Document.new(

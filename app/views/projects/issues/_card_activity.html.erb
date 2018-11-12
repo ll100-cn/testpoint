@@ -1,0 +1,7 @@
+<div class="issue-activity">
+  <% user = activity.member.user %>
+  <span><%= image_tag user.avatar_url, class: "rounded-circle avatar" %></span>
+  <span><%= activity.member.smart_name %> 将</span>
+  <%= render "projects/issues/activity/#{activity.property}.html", activity: activity %>
+  <span class="small text-muted"><%= time_ago_in_words(activity.created_at) %></span>
+</div>
