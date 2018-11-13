@@ -1,0 +1,27 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-sm-10 col-md-7 col-lg-6 col-xl-5">
+    <div class="card">
+      <h3 class="card-header"><%= t(".sign_in", scope: "devise") %></h3>
+      <%= bootstrap_vertical_form_for resource, url: session_path(resource_name) do |f| %>
+        <div class="card-body">
+          <div class="no-margin-bottom">
+            <%= f.input :email %>
+            <%= f.input :password %>
+
+            <% if devise_mapping.rememberable? -%>
+              <%= f.input :remember_me, as: :boolean %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex align-items-center">
+          <div class="actions mr-auto">
+            <%= f.submit t(".sign_in", scope: "devise"), class: "btn btn-primary" %>
+          </div>
+
+          <%= link_to t("forgot_your_password", scope: "devise.shared.links"), new_reset_password_path, class: "text-muted" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

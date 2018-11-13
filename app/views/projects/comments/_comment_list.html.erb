@@ -1,4 +1,4 @@
-<div id="issue<%= issue.id %>_comments">
+<div class= "issue-comments" id="issue_comments">
   <% (@issue.activities + @issue.comments).sort_by(&:created_at).each do |record| %>
     <% if record.is_a?(Comment) %>
       <%= render "projects/issues/card_comment.html", comment: record %>

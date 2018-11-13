@@ -17,13 +17,18 @@
 #  updated_at             :datetime         not null
 #  name                   :string
 #  superadmin             :boolean          default(FALSE)
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  unconfirmed_email      :string
 #
 
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # :registerable, :recoverable
-  devise :database_authenticatable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :rememberable, :trackable, :validatable, :recoverable, :confirmable,
+         reconfirmable: false
 
   has_many :comments, dependent: :destroy
   has_many :created_issues, class_name: Issue.to_s, foreign_key: 'creator_id', dependent: :destroy, inverse_of: true
@@ -34,6 +39,8 @@ class User < ApplicationRecord
   attr_writer :current_password
 
   validates :name, presence: true, length: { minimum: 2 }
+
+  after_initialize :skip_confirmation_notification!
 
   def password_required?
     new_record? || password.present? || password_confirmation.present?
@@ -47,4 +54,14 @@ class User < ApplicationRecord
   def subscribed?(issue)
     subscriptions.exists?(issue_id: issue)
   end
+
+  def send_activation_instructions
+    token = set_reset_password_token
+    send_devise_notification(:activation_instructions, token, {})
+  end
+
+  def devise_mailer
+    UserMailer
+  end
+
 end

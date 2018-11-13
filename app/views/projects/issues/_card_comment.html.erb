@@ -14,7 +14,7 @@
           <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
             <% data = { type: "xhrml", remote: true, target: "#comment#{comment.id}_content" } %>
             <%= edit_link apply_ok_url([ :edit, comment.issue.project, comment.issue, comment ]), class: "small dropdown-item", data: data if can? :edit, comment %>
-            <% data = data.merge({ target: "#issue#{comment.issue_id}_comments", confirm: "确认删除评论？" }) %>
+            <% data = data.merge({ target: "#issue_comments", confirm: "确认删除评论？" }) %>
             <%= destroy_link apply_ok_url([comment.issue.project, comment.issue, comment ]), method: :delete, class: "small dropdown-item", data: data if can? :destroy, comment %>
           </div>
         </div>

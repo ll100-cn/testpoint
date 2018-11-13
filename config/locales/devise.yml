@@ -1,0 +1,9 @@
+zh-CN:
+  devise:
+    mailer:
+      activation_instructions:
+        subject: "激活账户"
+    passwords:
+      edit:
+        change_your_password: "请设置您的密码"
+        change_my_password: "设置我的密码"

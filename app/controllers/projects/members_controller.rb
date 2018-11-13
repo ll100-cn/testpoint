@@ -3,6 +3,7 @@ class Projects::MembersController < BaseProjectController
   before_action -> { @project = current_project }
   authorize_resource :project
   load_and_authorize_resource through: :project
+
   def index
     @q = @project.members.ransack(params[:q])
     @members = @q.result.page(params[:page])
@@ -12,7 +13,11 @@ class Projects::MembersController < BaseProjectController
   end
 
   def create
-    @member.submit
+    if @member.submit
+      @user = @member.user
+      @user.send_activation_instructions unless @user.confirmed?
+    end
+
     respond_with @member, location: -> { ok_url_or_default([@project, Member]) }
   end
 
@@ -31,6 +36,6 @@ class Projects::MembersController < BaseProjectController
 
 protected
   def member_params
-    params.fetch(:member, {}).permit(:role, :email, :nickname)
+    params.fetch(:member, {}).permit(:role, :email, :name)
   end
 end

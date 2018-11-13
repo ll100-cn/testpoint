@@ -17,6 +17,10 @@
 #  updated_at             :datetime         not null
 #  name                   :string
 #  superadmin             :boolean          default(FALSE)
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  unconfirmed_email      :string
 #
 
 FactoryBot.define do
@@ -25,6 +29,7 @@ FactoryBot.define do
     name { Faker::Name.name }
     password { "password" }
     password_confirmation { "password" }
+    confirmed_at { 1.month.ago }
 
     trait :superadmin do
       superadmin { true }
