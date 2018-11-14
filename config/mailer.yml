@@ -8,4 +8,4 @@ test:
 
 production:
   default_url_options:
-    host: "example.com"
+    host: "exmail.qq.com"
