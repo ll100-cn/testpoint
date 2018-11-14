@@ -10,7 +10,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user.save
+    @user.password = SecureRandom.hex(4)
+    @user.password_confirmation = @user.password
+    @user.send_activation_instructions unless @user.confirmed? if @user.save
+
     respond_with @user, location: -> { ok_url_or_default([User]) }
   end
 
@@ -32,6 +35,6 @@ class UsersController < ApplicationController
 
 protected
   def user_params
-    params.fetch(:user, {}).permit(:name, :email, :password, :password_confirmation)
+    params.fetch(:user, {}).permit(:name, :email)
   end
 end
