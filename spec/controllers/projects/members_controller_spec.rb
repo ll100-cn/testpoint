@@ -30,7 +30,7 @@ RSpec.describe Projects::MembersController, type: :controller do
       before { attributes[:email] = "testpoint@gmail.com" }
       action { post :create, params: { member: attributes, project_id: project.id } }
 
-      it { is_expected.to respond_with :success }
+      it { is_expected.to respond_with :redirect }
     end
 
     context "when name is invalid" do

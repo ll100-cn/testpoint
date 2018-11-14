@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
-  devise_for :users, path: ""
+  devise_for :users, path: "", controllers: {
+    sessions: "sessions"
+  }, skip: [ :confirmations, :passwords ]
+
+
+  devise_scope :user do
+    resource :reset_password
+  end
+
   root 'main#root'
 
   resources :projects do

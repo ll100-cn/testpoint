@@ -16,19 +16,8 @@
   }
 }
 
-.issue-comment + .issue-comment, .issue-content + .issue-comment {
+.issue-comment + .issue-comment, .issue-comments + .issue-comment, .issue-content + .issue-comments {
   &:before {
-    content: " ";
-    display: block;
-    height: 1.5rem;
-    border-left: 1px solid $border-color;
-    margin-left: 60px + 15px + 20px;
-    width: 100%;
-  }
-}
-
-.issue-timeline {
-  &:after {
     content: " ";
     display: block;
     height: 1.5rem;
