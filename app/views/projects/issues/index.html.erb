@@ -8,7 +8,7 @@
   <% else %>
     <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
     <div class="ml-3 actions">
-      <%= link_to h(Label), project_labels_path(@project) %>
+      <%= link_to h(Label), project_labels_path(@project) if can? :read, Label %>
     </div>
   <% end %>
   <div class="actions ml-auto">
@@ -116,7 +116,8 @@
     <col width="15%">
     <col width="15%">
     <col width="10%">
-    <col width="20%">
+    <col width="10%">
+    <col width="10%">
     <col>
   </colgroup>
     <tr>
@@ -125,6 +126,7 @@
       <th><%= sort_link(@q, :milestone_id)%></th>
       <th><%= sort_link(@q, :state)%></th>
       <th><%= sort_link(@q, :creator_id)%></th>
+      <th><%= sort_link(@q, :assignee_id)%></th>
       <th><%= sort_link(@q, :created_at)%></th>
     </tr>
   </thead>
@@ -150,6 +152,7 @@
           </span>
         </td>
         <td><%= issue.creator.smart_name %></td>
+        <td><%= issue.assignee&.smart_name %></td>
         <td><%=l issue.created_at, format: :long %></td>
         <% if @task %>
         <td>
