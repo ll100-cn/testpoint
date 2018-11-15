@@ -3,6 +3,7 @@ set :deploy_to, "/home/app/www"
 
 fetch(:linked_files).concat %w[
   config/env
+  config/mailer.yml
   tmp/restart.txt
 ]
 
