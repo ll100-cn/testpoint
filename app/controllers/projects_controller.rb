@@ -24,7 +24,7 @@ class ProjectsController < BaseProjectController
 
   def show
     @users = @project.members.page(params[:page])
-    redirect_to project_test_cases_path(@project)
+    redirect_to project_issues_path(@project)
   end
 
   def destroy
