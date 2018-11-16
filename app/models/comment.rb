@@ -9,6 +9,7 @@
 #  user_id        :bigint(8)
 #  issue_id       :bigint(8)
 #  last_edited_at :datetime
+#  collapsed      :boolean          default(FALSE)
 #
 
 class Comment < ApplicationRecord
@@ -26,5 +27,13 @@ class Comment < ApplicationRecord
     assign_attributes(params)
     self.last_edited_at = Time.current if will_save_change_to_content?
     self.save
+  end
+
+  def unfold
+    update(collapsed: true)
+  end
+
+  def fold
+    update(collapsed: false)
   end
 end

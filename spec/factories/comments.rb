@@ -9,6 +9,7 @@
 #  user_id        :bigint(8)
 #  issue_id       :bigint(8)
 #  last_edited_at :datetime
+#  collapsed      :boolean          default(FALSE)
 #
 
 FactoryBot.define do

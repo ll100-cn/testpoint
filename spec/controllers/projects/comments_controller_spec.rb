@@ -24,4 +24,20 @@ RSpec.describe Projects::CommentsController, type: :controller do
 
     it { is_expected.to respond_with :redirect }
   end
+
+  describe "GET unfold" do
+    before { comment.update(collapsed: false) }
+    action { get :unfold, params: { project_id: project.id, issue_id: issue.id, id: comment.id, format: :xhrml } }
+
+    it { is_expected.to respond_with :success
+         expect(comment.reload.collapsed).to be_truthy }
+  end
+
+  describe "GET fold" do
+    before { comment.update(collapsed: true) }
+    action { get :fold, params: { project_id: project.id, issue_id: issue.id, id: comment.id, format: :xhrml } }
+
+    it { is_expected.to respond_with :success
+         expect(comment.reload.collapsed).to be_falsy }
+  end
 end

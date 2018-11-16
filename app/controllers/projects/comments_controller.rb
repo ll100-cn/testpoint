@@ -26,6 +26,16 @@ class Projects::CommentsController < BaseProjectController
     respond_with @comment, location: ok_url_or_default([@project, @issue])
   end
 
+  def unfold
+    @comment.unfold
+    respond_with @comment
+  end
+
+  def fold
+    @comment.fold
+    respond_with @comment
+  end
+
 protected
   def comment_params
     params.fetch(:comment, {}).permit(:content, attachment_ids: [])

@@ -7,22 +7,42 @@
   }
 }
 
-.issue-activity, .issue-task {
+.issue-activity, .issue-task, .issue-overview {
   border-left: 1px solid $border-color;
   margin-left: 60px + 15px + 20px;
   padding: 0.75rem 1rem;
-  .avatar {
+  > .avatar {
     width: 25px;
   }
 }
 
-.issue-comment + .issue-comment, .issue-comments + .issue-comment, .issue-content + .issue-comments {
+.issue-overview {
+  padding: 0;
+  .overview {
+    padding-left: 1rem;
+  }
+  .issue-comment {
+    margin-left: -60px - 15px - 20px;
+  }
+}
+
+.issue-comment + .issue-comment,
+.issue-content + .issue-comment {
   &:before {
     content: " ";
     display: block;
     height: 1.5rem;
     border-left: 1px solid $border-color;
     margin-left: 60px + 15px + 20px;
+    width: 100%;
+  }
+}
+
+.issue-content + .issue-overview {
+  &:before {
+    content: " ";
+    display: block;
+    height: 1.5rem;
     width: 100%;
   }
 }
