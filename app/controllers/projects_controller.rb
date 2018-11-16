@@ -1,5 +1,6 @@
 class ProjectsController < BaseProjectController
-  load_and_authorize_resource
+  before_action -> { @user = current_user }
+  load_and_authorize_resource through: :user
 
   def index
     @projects = @projects.page(params[:page])

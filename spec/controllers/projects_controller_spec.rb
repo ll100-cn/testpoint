@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ProjectsController, type: :controller do
-  let!(:user) { create :user }
+  let!(:user) { create :user, :superadmin }
   let!(:project) { create :project }
-  login_superadmin
+  let!(:member) { create :member, user: user, project: project }
+  before { sign_in user }
 
   describe "GET index" do
     action { get :index }
