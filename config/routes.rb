@@ -30,6 +30,7 @@ Rails.application.routes.draw do
           end
         end
         resource :subscription
+        resources :issue_relationships
       end
       resources :tasks do
         resources :issues

@@ -1,0 +1,19 @@
+<div class="issue-relationship d-flex align-items-center">
+  <% user = issue_relationship.member.user %>
+  <%= image_tag user.avatar_url, class: "rounded-circle avatar" %>
+  <span class="mx-1"><%= issue_relationship.member.smart_name %> 将</span>
+  <%= render "projects/issues/relationship/#{issue_relationship.category}.html", issue_relationship: issue_relationship, issue: issue %>
+  <span class="small text-muted ml-1"><%= time_ago_in_words(issue_relationship.created_at) %>前</span>
+
+  <% if can? :delete, issue_relationship %>
+    <div class="ml-2 dropdown dropdown-no-arrow">
+      <a href="javascript:void(0)" class="text-muted dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" style="min-width: auto;">
+        <% data = { confirm: "确定删除问题的关联？" } %>
+        <%= destroy_link apply_ok_url([ issue.project, issue_relationship.source ,issue_relationship ]), data: data, class: "small dropdown-item" %>
+      </div>
+    </div>
+  <% end %>
+</div>

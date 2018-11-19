@@ -1,5 +1,6 @@
 <div class="page-header">
   <h2><%= @issue.title %></h2>
+  <div class="small text-primary ml-1">#<%= @issue.id %></div>
   <div class="ml-auto actions">
     <%= edit_link apply_ok_url([:edit, @project, @issue]) if can? :edit, @issue %>
   </div>
@@ -136,3 +137,6 @@
     </div>
   </div>
 </div>
+
+<%= content_tag :div, id: "duplicate-issue", class: "modal", role: "dialog" do %>
+<% end %>

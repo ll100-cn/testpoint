@@ -15,3 +15,7 @@ en:
         owner: owner
         admin: admin
         member: member
+    issue_relationship:
+      category:
+        duplicated: duplicated
+        reference: reference
