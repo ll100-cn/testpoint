@@ -23,7 +23,12 @@ Rails.application.routes.draw do
         end
       end
       resources :issues do
-        resources :comments
+        resources :comments do
+          member do
+            get :unfold
+            get :fold
+          end
+        end
         resource :subscription
       end
       resources :tasks do

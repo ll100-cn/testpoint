@@ -1,9 +1,12 @@
-<div class= "issue-comments" id="issue_comments">
-  <% (@issue.activities + @issue.comments).sort_by(&:created_at).each do |record| %>
-    <% if record.is_a?(Comment) %>
-      <%= render "projects/issues/card_comment.html", comment: record %>
-    <% elsif record.is_a?(IssueActivity) %>
-      <%= render "projects/issues/card_activity.html", activity: record %>
+<% (@issue.activities + @issue.comments).sort_by(&:created_at).each do |record| %>
+  <% if record.is_a?(Comment) %>
+    <% @comment = record %>
+    <% if record.collapsed? %>
+      <%= render file: "projects/comments/unfold.xhrml" %>
+    <% else %>
+    <%= render "projects/issues/card_comment.html", comment: record %>
     <% end %>
+  <% elsif record.is_a?(IssueActivity) %>
+    <%= render "projects/issues/card_activity.html", activity: record %>
   <% end %>
-</div>
+<% end %>

@@ -41,6 +41,7 @@ class Ability
   def apply_developer_permissions(member)
     apply_reporter_permissions(member)
     can :manage, [ TestCase, Plan, Platform, Component, Task ]
+    can [ :fold, :unfold ], Comment
   end
 
   def apply_manager_permissions(member)
