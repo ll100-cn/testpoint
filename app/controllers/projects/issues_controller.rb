@@ -43,7 +43,6 @@ class Projects::IssuesController < BaseProjectController
     @task = Task.find(params[:task_id]) if params[:task_id]
     @issue.creator ||= current_member
     @issue.tasks = [ @task ] if @task
-    @issue.subscribed_users = [ @user ]
     @issue.save
     respond_with @issue, location: ok_url_or_default(action: :index)
   end

@@ -85,6 +85,12 @@ RSpec.describe Projects::IssuesController, type: :controller do
     end
   end
 
+  describe "GET edit" do
+    action { get :edit, params: { project_id: project.id, id: issue.id } }
+
+    it { is_expected.to respond_with :success }
+  end
+
   describe "PUT update" do
     context "update with valid attributes" do
       let(:attributes) { { title: "issue update", content: "hello" } }
@@ -94,9 +100,10 @@ RSpec.describe Projects::IssuesController, type: :controller do
     end
 
     context "update with invalid attributes" do
-      let(:attributes) { { title: "", content: "hello" } }
-      action(skip: true) { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
-      it { expect{ do_action }.to raise_error }
+      let!(:attributes) { { title: "" } }
+      action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
+
+      it { expect(issue.title).not_to be_empty }
     end
 
     context "update with state to generate activities" do
