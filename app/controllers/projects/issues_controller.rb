@@ -1,7 +1,6 @@
 class Projects::IssuesController < BaseProjectController
   before_action { @navbar = "Issues" }
   before_action -> { @project = current_project }
-  before_action -> { @user = current_user }
   authorize_resource :project
   load_and_authorize_resource through: :project
 
@@ -43,7 +42,9 @@ class Projects::IssuesController < BaseProjectController
     @task = Task.find(params[:task_id]) if params[:task_id]
     @issue.creator ||= current_member
     @issue.tasks = [ @task ] if @task
-    @issue.save
+    if @issue.save
+      @issue.deliver_changed_notification(current_member)
+    end
     respond_with @issue, location: ok_url_or_default(action: :index)
   end
 
@@ -54,7 +55,10 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def update
-    @issue.update_with_editor(issue_params, current_member)
+    if @issue.update_with_editor(issue_params, current_member)
+      @issue.deliver_changed_notification(current_member)
+    end
+
     respond_with @issue, location: ok_url_or_default(action: :show)
   end
 

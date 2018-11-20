@@ -1,0 +1,7 @@
+<p>您好：</p>
+<p>
+  <strong><%= @changer.smart_name %></strong> 在
+  <strong><%=l @issue.updated_at, format: :long %></strong> 时
+  修改了您订阅的 <strong><%= @issue.title %></strong>。
+</p>
+<p><%= link_to "点击查看详情", [@issue.project, @issue] %></p>

@@ -7,12 +7,18 @@ class Projects::IssueRelationshipsController < BaseProjectController
   end
 
   def create
-    @issue_relationship.submit(current_member)
+    if @issue_relationship.submit(current_member)
+      @issue_relationship.source.deliver_changed_notification(current_member)
+      @issue_relationship.target.deliver_changed_notification(current_member)
+    end
     respond_with @issue_relationship, location: ok_url_or_default([@project, @issue])
   end
 
   def destroy
-    @issue_relationship.destroy
+    if @issue_relationship.destroy
+      @issue_relationship.source.deliver_changed_notification(current_member)
+      @issue_relationship.target.deliver_changed_notification(current_member)
+    end
     respond_with @issue_relationship, location: ok_url_or_default([@project, @issue])
   end
 

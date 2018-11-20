@@ -125,8 +125,7 @@
 
       <div class="d-flex flex-column">
         <div class="h5"><%=h Subscription %></div>
-        <div class="mt-1" id="issue_<%= @issue.id%>_user_<%= current_user.id %>">
-          <% data = { remote: true, type: "xhrml", target: "#issue_#{@issue.id}_user_#{current_user.id}" } %>
+        <div class="mt-1">
           <% if current_user.subscribed?(@issue) %>
             <%= render file: "projects/subscriptions/show.xhrml" %>
           <% else %>
