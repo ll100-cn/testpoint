@@ -7,12 +7,13 @@
   }
 }
 
-.issue-activity, .issue-task, .issue-overview {
+.issue-activity, .issue-task, .issue-overview, .issue-relationship {
   border-left: 1px solid $border-color;
   margin-left: 60px + 15px + 20px;
   padding: 0.75rem 1rem;
   > .avatar {
     width: 25px;
+    height: 25px;
   }
 }
 

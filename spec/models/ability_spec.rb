@@ -91,7 +91,8 @@ RSpec.describe Ability, type: :model do
     let!(:developer) { create :member, :developer, project: project }
     subject(:ability) { Ability.new { |a| a.apply_developer_permissions(developer) } }
 
-    it { is_expected.to be_able_to(:manage, TestCase, Plan, Platform, Component, Task) }
+    it { is_expected.to be_able_to(:manage, TestCase, Plan, Platform, Component, Task)
+         is_expected.to be_able_to([:read, :create], IssueRelationship) }
   end
 
   describe "#apply_manager_permissions" do
@@ -100,7 +101,7 @@ RSpec.describe Ability, type: :model do
     subject(:ability) { Ability.new { |a| a.apply_manager_permissions(manager) } }
 
     it {  is_expected.to be_able_to(:update, project)
-          is_expected.to be_able_to(:manage, Issue)
+          is_expected.to be_able_to(:manage, Issue, IssueRelationship)
           is_expected.to be_able_to(:read, Member)
           is_expected.to be_able_to(:modify, Member.new(project: project, role: "developer"))
           is_expected.not_to be_able_to(:modify, Member.new(project: project, role: "owner")) }

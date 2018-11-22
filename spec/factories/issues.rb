@@ -19,6 +19,7 @@
 
 FactoryBot.define do
   factory :issue do
+    project
     title { "issue1" }
     content { "content of issue1" }
     state { "pending" }

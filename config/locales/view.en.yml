@@ -67,6 +67,9 @@ en:
           relate: Relate
         upload_attachment:
           upload: Upload attachment
+        show:
+          reference: reference
+          duplicate: duplicate
     navbar:
       cases: Cases
       plans: Plans

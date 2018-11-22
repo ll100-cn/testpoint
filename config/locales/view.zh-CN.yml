@@ -36,6 +36,9 @@ zh-CN:
           relate: 关联
         upload_attachment:
           upload:  上传
+        show:
+          reference: 相关问题
+          duplicate: 重复问题
     navbar:
       cases: 案例
       plans: 计划

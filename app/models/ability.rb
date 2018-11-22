@@ -42,12 +42,14 @@ class Ability
     apply_reporter_permissions(member)
     can :manage, [ TestCase, Plan, Platform, Component, Task ]
     can [ :fold, :unfold ], Comment
+    can [ :read, :create ], IssueRelationship
   end
 
   def apply_manager_permissions(member)
     apply_developer_permissions(member)
     can :update, member.project
     can :manage, Issue
+    can :manage, IssueRelationship
     can :read, Member
     can :modify, Member, Member.where.not(role: "owner") do |member|
       !member.role.owner?

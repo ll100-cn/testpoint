@@ -17,3 +17,7 @@ zh-CN:
         manager: 管理员
         developer: 开发人员
         reporter: 报告人
+    issue_relationship:
+      category:
+        duplicated: 问题重复
+        reference: 问题相关

@@ -1,4 +1,4 @@
-<% (@issue.activities + @issue.comments).sort_by(&:created_at).each do |record| %>
+<% (@issue.activities + @issue.comments + @issue.source_relationships + @issue.target_relationships).sort_by(&:created_at).each do |record| %>
   <% if record.is_a?(Comment) %>
     <% @comment = record %>
     <% if record.collapsed? %>
@@ -8,5 +8,7 @@
     <% end %>
   <% elsif record.is_a?(IssueActivity) %>
     <%= render "projects/issues/card_activity.html", activity: record %>
+  <% elsif record.is_a?(IssueRelationship) %>
+    <%= render "projects/issues/card_relationship.html", issue_relationship: record, issue: issue %>
   <% end %>
 <% end %>
