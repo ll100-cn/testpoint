@@ -88,4 +88,18 @@ class Issue < ApplicationRecord
      activity.save!
    end
  end
+
+ def deliver_changed_notification(changer)
+   recevier_ids = [
+     self.creator.user_id,
+     self.assignee&.user_id,
+     self.subscribed_user_ids
+   ].flatten.compact.uniq
+
+   recevier_ids.delete(changer.user_id)
+
+   recevier_ids.each do |receiver_id|
+     IssueMailer.changed_notification(self, changer, receiver_id).deliver_now
+   end
+ end
 end
