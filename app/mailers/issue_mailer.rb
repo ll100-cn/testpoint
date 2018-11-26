@@ -1,4 +1,5 @@
 class IssueMailer < ApplicationMailer
+  default from: ENV["DEVISE_MAILER_SENDER"]
 
   def changed_notification(issue, changer, recevier_id)
     @issue = issue
