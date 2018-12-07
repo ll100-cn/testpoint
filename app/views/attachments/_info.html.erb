@@ -31,7 +31,7 @@
       <%= link_to polymorphic_url(file), class: "clipboard" do %>
         <span class="fa fa-link text-muted"></span>
       <% end %>
-      <% data = { remote: true, type: "xhrml", target: ".media", replace: true, confirm: "确认删除附件?" } %>
+      <% data = { remote: true, type: "xhrml", target: ".col-lg-6", replace: true, confirm: "确认删除附件?" } %>
       <%= link_to apply_ok_url([ attachment ]), method: :delete, data: data, class: "text-muted ml-auto" do %>
         <span class="fa fa-trash-o"></span>
       <% end %>
