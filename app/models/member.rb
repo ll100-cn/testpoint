@@ -22,6 +22,8 @@ class Member < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :project_id }
 
+  scope :chief, -> { where(role: [ "owner", "manager" ]) }
+
   def submit
     password = SecureRandom.hex(4)
     user = User.where(email: email).first_or_initialize(name: name, password: password, password_confirmation: password)

@@ -89,13 +89,15 @@ class Issue < ApplicationRecord
    end
  end
 
- def deliver_changed_notification(changer)
+ def deliver_changed_notification(changer, with_chief: false)
    recevier_ids = [
      self.creator.user_id,
      self.assignee&.user_id,
      self.subscribed_user_ids
-   ].flatten.compact.uniq
+   ]
 
+   recevier_ids += self.project.members.chief.pluck(:user_id) if with_chief
+   recevier_ids = recevier_ids.flatten.compact.uniq
    recevier_ids.delete(changer.user_id)
 
    recevier_ids.each do |receiver_id|
