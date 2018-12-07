@@ -45,7 +45,7 @@ class Projects::IssuesController < BaseProjectController
     @issue.creator ||= current_member
     @issue.tasks = [ @task ] if @task
     if @issue.save
-      @issue.deliver_changed_notification(current_member)
+      @issue.deliver_changed_notification(current_member, with_chief: true)
     end
     respond_with @issue, location: ok_url_or_default(action: :index)
   end
