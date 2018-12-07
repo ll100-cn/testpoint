@@ -6,7 +6,8 @@ RSpec.describe Projects::IssuesController, type: :controller do
   let(:task) { plan.tasks.first }
   let(:issue) { create :issue, project: project }
   let(:superadmin) { create :user, :superadmin }
-  let!(:member) { create :member, project: project, user: superadmin }
+  let!(:owner) { create :member, :owner, project: project, user: superadmin }
+  let!(:manager) { create :member, :manager, project: project }
   before { sign_in superadmin }
 
   describe "GET index" do
