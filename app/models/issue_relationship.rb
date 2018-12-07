@@ -26,6 +26,7 @@ class IssueRelationship < ApplicationRecord
       success &&= duplicated_submit
       raise ActiveRecord::Rollback unless success
     end
+    true
   end
 
   def duplicated_submit

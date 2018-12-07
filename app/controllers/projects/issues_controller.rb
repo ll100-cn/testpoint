@@ -7,27 +7,29 @@ class Projects::IssuesController < BaseProjectController
   helper_method :issue_params_names
 
   def index
-    @issues_scope = @issues
-    @q = @project.issues.ransack(params[:q])
+    @q = @issues.ransack(params[:q])
     @q.sorts = "created_at desc" if @q.sorts.empty?
     @q.state_filter = "opening" if @q.state_filter.blank?
+    @issues_scope = @q.result
 
-    @issues = @q.result.with_labels.page(params[:page])
     if params[:related_task]
       @task = Task.find(params[:related_task])
     end
 
     if params[:filter] == "created"
-      @issues = @issues.created_issues(current_member)
+      @issues_scope = @issues_scope.created_issues(current_member)
     end
 
     if params[:filter] == "assigned"
-      @issues = @issues.assigned_issues(current_member)
+      @issues_scope = @issues_scope.assigned_issues(current_member)
     end
 
     if params[:filter] == "subscribed"
-      @issues = @issues.subscribed_issues(current_user)
+      @issues_scope = @issues_scope.subscribed_issues(current_user)
     end
+
+    @issues_state_counts = @issues_scope.unscope(:order, where: :state).group(:state).count
+    @issues = @issues_scope.with_labels.page(params[:page])
   end
 
   def new
