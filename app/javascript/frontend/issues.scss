@@ -24,6 +24,14 @@
   }
   .issue-comment {
     margin-left: -60px - 15px - 20px;
+      &:after {
+        content: " ";
+        display: block;
+        height: 1.5rem;
+        border-left: 1px solid $border-color;
+        margin-left: 60px + 15px + 20px;
+        width: 100%;
+      }
   }
 }
 
