@@ -36,6 +36,6 @@ class Projects::MembersController < BaseProjectController
 
 protected
   def member_params
-    params.fetch(:member, {}).permit(:role, :email, :name)
+    params.fetch(:member, {}).permit(:role, :email, :name, :nickname)
   end
 end
