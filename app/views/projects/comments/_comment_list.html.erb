@@ -4,7 +4,9 @@
     <% if record.collapsed? %>
       <%= render file: "projects/comments/unfold.xhrml" %>
     <% else %>
-    <%= render "projects/issues/card_comment.html", comment: record %>
+    <div class="issue-comment">
+      <%= render "projects/issues/card_comment.html", comment: record %>
+    </div>
     <% end %>
   <% elsif record.is_a?(IssueActivity) %>
     <%= render "projects/issues/card_activity.html", activity: record %>
