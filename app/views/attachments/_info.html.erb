@@ -2,20 +2,32 @@
 <% blob = file.blob %>
 <div class="media border bg-light p-2 align-items-center">
   <div class="mr-2" style="width: 3rem">
+    <% attachmentable = attachment.attachmentable %>
+    <% fancybox_options = attachmentable ? { fancybox: dom_id(attachmentable) } : {} %>
     <% if attachment.image? %>
-      <%= link_to url_for(file) , target: :blank do %>
+      <%= link_to url_for(file), target: "_blank", data: fancybox_options do %>
         <div class="embed-responsive embed-responsive-1by1">
           <div class="embed-responsive-item d-flex align-items-center justify-content-center">
             <%= image_tag url_for(file), class: "h-100" %>
           </div>
         </div>
       <% end %>
-    <% else %>
-      <div class="embed-responsive embed-responsive-1by1">
-        <div class="embed-responsive-item d-flex align-items-center justify-content-center">
-          <%= image_tag 'file.png', class: "h-100" %>
+    <% elsif attachment.video? %>
+      <%= link_to url_for(file), target: "_blank", data: fancybox_options do %>
+        <div class="embed-responsive embed-responsive-1by1">
+          <div class="embed-responsive-item d-flex align-items-center justify-content-center">
+            <%= image_tag file.preview(resize: '100'), class: "h-100" %>
+          </div>
         </div>
-      </div>
+      <% end %>
+    <% else %>
+      <%= link_to url_for(file), class: "h-100", target: "_blank" do %>
+        <div class="embed-responsive embed-responsive-1by1">
+          <div class="embed-responsive-item d-flex align-items-center justify-content-center">
+            <%= image_tag 'file.png', class: "h-100" %>
+          </div>
+        </div>
+      <% end %>
     <% end %>
   </div>
 

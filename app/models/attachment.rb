@@ -28,6 +28,10 @@ class Attachment < ApplicationRecord
   end
 
   def image?
-    self.content_type.start_with?("image/")
+    file.image?
+  end
+
+  def video?
+    file.video? && content_type.include?('mp4')
   end
 end

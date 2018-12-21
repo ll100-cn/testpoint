@@ -23,5 +23,6 @@ import '../components/clipboard'
 import '../components/load-image'
 import '../components/rails-nested-form'
 import '../components/tooltip'
+import '../components/fancybox'
 
 import '../frontend'
