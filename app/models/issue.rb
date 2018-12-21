@@ -18,7 +18,7 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [:pending, :processing, :closed, :resolved], default: :pending
+  enumerize :state, in: [:pending, :processing, :processed, :closed, :resolved], default: :pending
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
