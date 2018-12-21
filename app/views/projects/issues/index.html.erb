@@ -102,7 +102,7 @@
         </div>
       </div>
       <div class="btn-group ml-1">
-        <% Issue.state.options(only: [:resolved, :closed]).each do |text, value| %>
+        <% Issue.state.options(only: [:processed, :resolved, :closed]).each do |text, value| %>
           <%= n.link_to value, "#{text}(#{@issues_state_counts[value] || 0})", current_url(q: { state_filter: value }), class: "btn btn-sm btn-outline-primary" %>
         <% end %>
       </div>

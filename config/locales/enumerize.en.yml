@@ -7,9 +7,11 @@ en:
         failure: Failure
     issue:
       state:
-        open: open
         closed: closed
         solved: solved
+        pending: pending
+        processing: processing
+        processed: processed
     member:
       role:
         owner: owner
