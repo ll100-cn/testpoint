@@ -15,6 +15,7 @@
 #  last_edited_at  :datetime
 #  creator_id      :bigint(8)
 #  assignee_id     :bigint(8)
+#  state_at        :datetime
 #
 
 class Issue < ApplicationRecord
@@ -36,6 +37,8 @@ class Issue < ApplicationRecord
   has_many :target_relationships, class_name: IssueRelationship.to_s, foreign_key: :target_id, dependent: :destroy
 
   validates :title, presence: true
+
+  before_save :ensure_state_at, if: -> { will_save_change_to_state? }
 
   scope :with_labels, -> { includes(:labels) }
   scope :created_issues, ->(member) { where(creator_id: member.id) }
@@ -103,5 +106,9 @@ class Issue < ApplicationRecord
    recevier_ids.each do |receiver_id|
      IssueMailer.changed_notification(self, changer, receiver_id).deliver_now
    end
+ end
+
+ def ensure_state_at
+   self.state_at = Time.current
  end
 end
