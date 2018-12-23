@@ -15,6 +15,7 @@
 #  last_edited_at  :datetime
 #  creator_id      :bigint(8)
 #  assignee_id     :bigint(8)
+#  state_at        :datetime
 #
 
 FactoryBot.define do
