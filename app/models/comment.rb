@@ -20,6 +20,8 @@ class Comment < ApplicationRecord
 
   validates :content, presence: true
 
+  after_create :update_issue_last_edited_at
+
   scope :recent, -> { order("created_at DESC") }
   scope :history, -> { order("created_at ASC") }
 
@@ -35,5 +37,9 @@ class Comment < ApplicationRecord
 
   def fold
     update(collapsed: false)
+  end
+
+  def update_issue_last_edited_at
+    issue.update_attribute(:last_edited_at, Time.current)
   end
 end

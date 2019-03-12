@@ -76,3 +76,6 @@ en:
       issues: Issues
       members: Members
       milestones: Milestones
+  time:
+    formats:
+      simple: '%Y/%m/%d %H:%M'

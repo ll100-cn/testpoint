@@ -1,6 +1,6 @@
 <div class="page-header">
-  <h2><%= @issue.title %></h2>
-  <div class="small text-primary ml-1">#<%= @issue.id %></div>
+  <h2 class="mr-1"><%= @issue.title %></h2>
+  <div class="text-primary">#<%= @issue.id %></div>
   <div class="ml-auto actions">
     <%= edit_link apply_ok_url([:edit, @project, @issue]) if can? :edit, @issue %>
   </div>
