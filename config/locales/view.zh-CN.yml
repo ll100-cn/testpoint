@@ -45,3 +45,6 @@ zh-CN:
       issues: 问题
       members: 成员
       milestones: 里程碑
+  time:
+    formats:
+      simple: '%Y/%m/%d %H:%M'
