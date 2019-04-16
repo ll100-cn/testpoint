@@ -4,6 +4,8 @@ set :deploy_to, "/home/app/www"
 fetch(:linked_files).concat %w[
   config/env
   config/mailer.yml
+  config/redis.yml
+  config/sidekiq.yml
   tmp/restart.txt
 ]
 

@@ -104,7 +104,7 @@ class Issue < ApplicationRecord
    recevier_ids.delete(changer.user_id)
 
    recevier_ids.each do |receiver_id|
-     IssueMailer.changed_notification(self, changer, receiver_id).deliver_now
+     IssueMailer.changed_notification(self, changer, receiver_id).deliver_later
    end
  end
 
