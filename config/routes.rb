@@ -1,3 +1,6 @@
+require 'sidekiq/web'
+Sidekiq::Web.set :sessions, false
+
 Rails.application.routes.draw do
   devise_for :users, path: "", controllers: {
     sessions: "sessions"
@@ -6,6 +9,10 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     resource :reset_password
+  end
+
+  authenticate :user, ->(u) { u.superadmin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   root 'main#root'
