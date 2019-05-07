@@ -1,0 +1,8 @@
+development:
+  url: "redis://localhost"
+
+test:
+  url: "redis://localhost/15"
+
+production:
+  url: "redis://localhost"
