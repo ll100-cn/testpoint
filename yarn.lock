@@ -941,9 +941,9 @@ bootstrap-colorpicker@^2.5.2:
   dependencies:
     jquery ">=1.10"
 
-bootstrap@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.0.tgz#110b05c31a236d56dbc9adcda6dd16f53738a28a"
+bootstrap@4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.3.1.tgz#280ca8f610504d99d7b6b4bfc4b68cec601704ac"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3474,7 +3474,7 @@ lg-autoplay@^1.0.4:
 
 lg-fullscreen@^1.0.1:
   version "1.0.1"
-  resolved "http://registry.npmjs.org/lg-fullscreen/-/lg-fullscreen-1.0.1.tgz#6207ca819d91e1b6fa6b6d37705e269bc01d2f53"
+  resolved "https://registry.npmjs.org/lg-fullscreen/-/lg-fullscreen-1.0.1.tgz#6207ca819d91e1b6fa6b6d37705e269bc01d2f53"
   dependencies:
     jquery ">=1.7.0"
 
