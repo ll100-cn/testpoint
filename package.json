@@ -19,7 +19,7 @@
     "lg-thumbnail": "^1.1.0",
     "lg-video": "^1.2.2",
     "lg-zoom": "^1.1.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "marked": "^0.4.0",
     "numbro": "^2.1.0",
     "popper.js": "^1.14.3",
