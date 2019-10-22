@@ -128,9 +128,9 @@
         <div class="h5"><%=h Subscription %></div>
         <div class="mt-1">
           <% if current_user.subscribed?(@issue) %>
-            <%= render file: "projects/subscriptions/show.xhrml" %>
+            <%= render template: "projects/subscriptions/show.xhrml" %>
           <% else %>
-            <%= render file: "projects/subscriptions/new.xhrml" %>
+            <%= render template: "projects/subscriptions/new.xhrml" %>
           <% end %>
         </div>
       </div>
