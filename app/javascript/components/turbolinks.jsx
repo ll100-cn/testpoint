@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
-import Turbolinks from 'turbolinks';
+require("turbolinks").start()
+
 
 $(document).on('turbolinks:load', function(event) {
   const $element = $(event.target);

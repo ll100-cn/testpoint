@@ -34,7 +34,7 @@ class Projects::PlansController < BaseProjectController
 
   def show
     @tasks = @plan.tasks
-    @q = @tasks.search(params[:q])
+    @q = @tasks.ransack(params[:q])
     @tasks = @q.result
 
     respond_with @plan, location: ok_url_or_default(action: :show)

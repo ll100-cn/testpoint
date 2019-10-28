@@ -2,7 +2,7 @@
   <% if record.is_a?(Comment) %>
     <% @comment = record %>
     <% if record.collapsed? %>
-      <%= render file: "projects/comments/unfold.xhrml" %>
+      <%= render template: "projects/comments/unfold.xhrml" %>
     <% else %>
     <div class="issue-comment">
       <%= render "projects/issues/card_comment.html", comment: record %>
