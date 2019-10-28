@@ -83,7 +83,7 @@ RSpec.describe Ability, type: :model do
     it {  is_expected.to be_able_to([:read, :create], Issue, Comment, Attachment)
           is_expected.to be_able_to(:update, Issue.new(creator_id: reporter.id))
           is_expected.to be_able_to(:update, Issue.new(assignee_id: reporter.id))
-          is_expected.to be_able_to(:update, Comment.new(user_id: reporter.user.id)) }
+          is_expected.to be_able_to(:update, Comment.new(member_id: reporter.id)) }
   end
 
   describe "#apply_developer_permissions" do
