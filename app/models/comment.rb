@@ -13,7 +13,7 @@
 #
 
 class Comment < ApplicationRecord
-  belongs_to :user
+  belongs_to :member
   belongs_to :issue
 
   has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
