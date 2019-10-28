@@ -11,6 +11,7 @@ user = User.first_or_create! do |u|
   u.name = "testpoint"
   u.password = u.password_confirmation = "testpoint"
   u.superadmin = true
+  u.skip_confirmation!
 end
 
 if Project.none?
