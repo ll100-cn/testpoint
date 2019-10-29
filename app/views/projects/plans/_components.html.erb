@@ -17,7 +17,7 @@
       <% (@test_cases_mapping[component] || []).each do |test_case| %>
         <% @tasks_mapping[test_case].each do |task| %>
           <li class="pl-4 mb-2 card-task-wrapper">
-            <%= render "shared/card_task", test_case: test_case, task: task %>
+            <%= render "shared/card_task", test_case: task.finished? ? task.test_case_when_finishing : test_case, task: task %>
           </li>
         <% end %>
       <% end %>

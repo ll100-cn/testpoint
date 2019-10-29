@@ -32,4 +32,16 @@ class Task < ApplicationRecord
   def issue_must_exist
     errors.add(:issue_id, :invalid) if Issue.where(id: issue_id).none?
   end
+
+  def test_case_when_finishing
+    test_case.paper_trail.version_at(test_case_version)
+  end
+
+  def finished?
+    ["pass", "failure"].include? state
+  end
+
+  def changed_after_finish?
+    !test_case.paper_trail.version_at(test_case_version).version.nil?
+  end
 end

@@ -13,6 +13,7 @@
 #
 
 class TestCase < ApplicationRecord
+  has_paper_trail
   belongs_to :component
   has_and_belongs_to_many :platforms
   belongs_to :project

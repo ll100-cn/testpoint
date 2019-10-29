@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_29_015256) do
+ActiveRecord::Schema.define(version: 2019_10_29_063547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_015256) do
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.index ["ancestry"], name: "index_components_on_ancestry"
+    t.index ["archived"], name: "index_components_on_archived"
     t.index ["project_id"], name: "index_components_on_project_id"
   end
 
@@ -103,10 +104,10 @@ ActiveRecord::Schema.define(version: 2019_10_29_015256) do
   create_table "issue_relationships", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "source_id"
-    t.string "category"
     t.bigint "member_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_issue_relationships_on_member_id"
     t.index ["source_id"], name: "index_issue_relationships_on_source_id"
     t.index ["target_id"], name: "index_issue_relationships_on_target_id"
@@ -182,6 +183,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_015256) do
     t.boolean "archived", default: false
     t.datetime "start_at"
     t.bigint "project_id"
+    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["project_id"], name: "index_plans_on_project_id"
   end
 
@@ -191,6 +193,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_015256) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
@@ -243,6 +246,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_015256) do
     t.bigint "platform_id"
     t.bigint "issue_id"
     t.text "message"
+    t.datetime "test_case_version"
     t.index ["issue_id"], name: "index_tasks_on_issue_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["platform_id"], name: "index_tasks_on_platform_id"
@@ -257,6 +261,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_015256) do
     t.bigint "component_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.index ["archived"], name: "index_test_cases_on_archived"
     t.index ["component_id"], name: "index_test_cases_on_component_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
@@ -280,6 +285,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_015256) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
