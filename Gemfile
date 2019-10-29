@@ -35,6 +35,8 @@ gem "carrierwave", "2.0.2"
 gem 'enumerize', "2.3.1"
 gem 'ancestry', "3.0.7"
 gem 'ransack', "2.3.0", require: false
+gem 'paper_trail-association_tracking', "2.0.0"
+gem 'paper_trail', "10.3.1"
 
 # Views
 gem 'simple_form', "5.0.1"
