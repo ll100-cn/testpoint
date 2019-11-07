@@ -2,19 +2,19 @@
 #
 # Table name: issues
 #
-#  id              :bigint(8)        not null, primary key
+#  id              :bigint           not null, primary key
 #  title           :string
 #  content         :text
 #  state           :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  milestone_id    :bigint(8)
-#  bak_creator_id  :bigint(8)
-#  bak_assignee_id :bigint(8)
-#  project_id      :bigint(8)
+#  milestone_id    :bigint
+#  bak_creator_id  :bigint
+#  bak_assignee_id :bigint
+#  project_id      :bigint
 #  last_edited_at  :datetime
-#  creator_id      :bigint(8)
-#  assignee_id     :bigint(8)
+#  creator_id      :bigint
+#  assignee_id     :bigint
 #  state_at        :datetime
 #
 

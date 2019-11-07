@@ -2,13 +2,13 @@
 #
 # Table name: issue_relationships
 #
-#  id         :bigint(8)        not null, primary key
-#  target_id  :bigint(8)
-#  source_id  :bigint(8)
+#  id         :bigint           not null, primary key
+#  target_id  :bigint
+#  source_id  :bigint
+#  member_id  :bigint
 #  category   :string
-#  member_id  :bigint(8)
-#  created_at :datetime
-#  updated_at :datetime
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 class IssueRelationship < ApplicationRecord
