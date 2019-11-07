@@ -7,6 +7,7 @@ zh-CN:
         edit: "修改%{model_name}"
         show: "查看%{model_name}"
         actions: 操作
+        progress: 进度
         all: 全部
         profile: 个人中心
       issues:
