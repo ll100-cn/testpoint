@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       resources :tasks do
         resources :issues
       end
-      resources :components
+      resources :folders
       resources :platforms
       resources :labels
       resources :milestones

@@ -4,17 +4,17 @@
   </h2>
   <div class="ml-3 mt-1 actions">
     <%= new_button ::TestCase, "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath) } if can? :create, ::TestCase %>
-    <%= new_button Component, [ :new, @project, :component ], class: "btn btn-outline-primary btn-sm" if can? :create, Component %>
+    <%= new_button Folder, [ :new, @project, :folder ], class: "btn btn-outline-primary btn-sm" if can? :create, Folder %>
   </div>
   <div class="actions ml-auto">
     <%= edit_link [:edit, @project ] if can? :edit, @project %>
   </div>
 </div>
 
-<% @test_cases_mapping = @test_cases.group_by(&:component) %>
-<% @components_mapping = @project.components.ranked.group_by(&:parent_id) %>
+<% @test_cases_mapping = @test_cases.group_by(&:folder) %>
+<% @folders_mapping = @project.folders.ranked.group_by(&:parent_id) %>
 <ul class="list-unstyled">
-  <%= render "components", key: nil %>
+  <%= render "folders", key: nil %>
 </ul>
 
 <% content_for :sidebar do %>

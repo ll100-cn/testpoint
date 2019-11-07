@@ -26,10 +26,10 @@ RSpec.describe Projects::TestCasesController, type: :controller do
   end
 
   describe "POST create" do
-    let(:component) { create :component, project: project }
+    let(:folder) { create :folder, project: project }
     let(:platform) { create :platform, project: project }
     let(:attributes) { { title: "user change password", content: "input password and password_confirmation" } }
-    action { post :create, params: { test_case: attributes.merge(component_id: component.id, platform_ids: [platform.id]), project_id: project.id } }
+    action { post :create, params: { test_case: attributes.merge(folder_id: folder.id, platform_ids: [platform.id]), project_id: project.id } }
 
     context "success" do
       it { is_expected.to respond_with :redirect }

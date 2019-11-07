@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_29_063547) do
+ActiveRecord::Schema.define(version: 2019_10_29_100026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,16 +68,16 @@ ActiveRecord::Schema.define(version: 2019_10_29_063547) do
     t.index ["member_id"], name: "index_comments_on_member_id"
   end
 
-  create_table "components", force: :cascade do |t|
+  create_table "folders", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "ancestry"
     t.boolean "archived", default: false
-    t.bigint "project_id"
-    t.index ["ancestry"], name: "index_components_on_ancestry"
-    t.index ["archived"], name: "index_components_on_archived"
-    t.index ["project_id"], name: "index_components_on_project_id"
+    t.bigint "project_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ancestry"], name: "index_folders_on_ancestry"
+    t.index ["archived"], name: "index_folders_on_archived"
+    t.index ["project_id"], name: "index_folders_on_project_id"
   end
 
   create_table "issue_activities", force: :cascade do |t|
@@ -258,11 +258,11 @@ ActiveRecord::Schema.define(version: 2019_10_29_063547) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "component_id"
+    t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.index ["archived"], name: "index_test_cases_on_archived"
-    t.index ["component_id"], name: "index_test_cases_on_component_id"
+    t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
 
@@ -313,7 +313,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_063547) do
 
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "members"
-  add_foreign_key "components", "projects"
+  add_foreign_key "folders", "projects"
   add_foreign_key "issue_relationships", "issues", column: "source_id"
   add_foreign_key "issue_relationships", "issues", column: "target_id"
   add_foreign_key "issue_relationships", "members"

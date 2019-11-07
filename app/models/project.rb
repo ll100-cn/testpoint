@@ -15,7 +15,7 @@ class Project < ApplicationRecord
   has_many :labels, dependent: :destroy
   has_many :milestones, dependent: :destroy
   has_many :platforms, dependent: :destroy
-  has_many :components, dependent: :destroy
+  has_many :folders, dependent: :destroy
 
   has_many :members, dependent: :destroy
   accepts_nested_attributes_for :members

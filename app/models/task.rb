@@ -27,7 +27,7 @@ class Task < ApplicationRecord
 
   scope :ranked, -> { order(:created_at) }
   scope :with_platform, -> { joins(:platform).includes(:platform) }
-  scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
+  scope :with_test_case, -> { joins(test_case: :folder).includes(test_case: :folder) }
 
   def issue_must_exist
     errors.add(:issue_id, :invalid) if Issue.where(id: issue_id).none?

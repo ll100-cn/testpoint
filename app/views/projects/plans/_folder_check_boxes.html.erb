@@ -1,0 +1,14 @@
+<% (@folders_mapping[key] || []).each do |folder| %>
+  <li class="<%= 'pl-4' unless key.nil? %>">
+    <div class="form-check">
+      <label class="form-check-label">
+        <input class="form-check-input" name="folder_ids[]" type="checkbox" value="<%= folder.id %>"/>
+        <%= folder.name %>
+      </label>
+    </div>
+
+    <ul class="list-unstyled">
+      <%= render "folder_check_boxes", key: folder.id %>
+    </ul>
+  </li>
+<% end %>

@@ -58,7 +58,7 @@ class Issue < ApplicationRecord
   def default_title
     tasks.map do |task|
       test_case = task.test_case
-      "#{test_case.component.name}-#{test_case.title}"
+      "#{test_case.folder.name}-#{test_case.title}"
     end.join(" ")
   end
 

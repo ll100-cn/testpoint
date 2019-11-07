@@ -3,14 +3,14 @@ class Projects::TestCasesController < BaseProjectController
   before_action { @navbar = "cases" }
   before_action -> { @project = current_project }
   authorize_resource :project
-  load_and_authorize_resource :component
+  load_and_authorize_resource :folder
   load_and_authorize_resource :platform
   load_and_authorize_resource through: :project
 
   def index
     @test_cases = @project.test_cases
     @default_cases_url_options = request.query_parameters
-    @test_cases = @test_cases.where(component_id: @component.subtree) if @component
+    @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
     @test_cases = @test_cases.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
     @test_cases = @test_cases.available.joins(:platforms).includes(:platforms)
   end
@@ -41,6 +41,6 @@ class Projects::TestCasesController < BaseProjectController
 
 protected
   def test_case_params
-    params.fetch(:test_case, {}).permit(:title, :content, :component_id, platform_ids: [])
+    params.fetch(:test_case, {}).permit(:title, :content, :folder_id, platform_ids: [])
   end
 end

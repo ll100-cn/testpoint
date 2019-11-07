@@ -1,9 +1,9 @@
 <% task_scope = @tasks.with_test_case.with_platform %>
 
 <% @tasks_mapping = task_scope.group_by(&:test_case) %>
-<% @test_cases_mapping = @tasks_mapping.keys.group_by(&:component) %>
-<% component_ids = @test_cases_mapping.keys.flat_map(&:ancestor_ids_with_self).uniq %>
-<% @components_mapping = Component.available.where(id: component_ids).group_by(&:parent_id) %>
+<% @test_cases_mapping = @tasks_mapping.keys.group_by(&:folder) %>
+<% folder_ids = @test_cases_mapping.keys.flat_map(&:ancestor_ids_with_self).uniq %>
+<% @folders_mapping = Folder.available.where(id: folder_ids).group_by(&:parent_id) %>
 
 <div class="page-header">
   <h3><%= @plan.title %></h3>
@@ -13,10 +13,10 @@
 </div>
 
 <ul class="list-unstyled">
-  <% if @components_mapping.empty? %>
+  <% if @folders_mapping.empty? %>
     Empty
   <% else %>
-    <%= render "components", key: nil %>
+    <%= render "folders", key: nil %>
 
     <%= content_tag :div, id: "uploadAttachmentsModal", class: "modal fade", data: { method: "POST", url: attachments_path } do %>
       <div class="modal-dialog modal-lg">
