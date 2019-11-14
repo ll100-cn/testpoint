@@ -1,0 +1,19 @@
+<% (@folders_mapping[key] || []).each do |folder| %>
+  <li class="pl-4">
+    <div class="text-muted hidden-actions">
+      <span class="fa fa-fw fa-folder-o"></span> <%= folder.name %>
+      <span class="actions ml-1">
+        <%= edit_link [:edit, @project, folder, ok_url: request.fullpath] if can? :update, folder %>
+        <%= destroy_link [@project, folder, ok_url: request.fullpath] if can? :destroy, folder %>
+      </span>
+    </div>
+    <ul class="list-unstyled">
+      <%= render "folders", key: folder.id %>
+      <% (@test_cases_mapping[folder] || []).each do |test_case| %>
+        <li class="pl-4 mb-2 card-task-wrapper">
+          <%= render "shared/card_test_case", test_case: test_case %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+<% end %>

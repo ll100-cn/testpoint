@@ -2,15 +2,16 @@
 #
 # Table name: tasks
 #
-#  id           :bigint(8)        not null, primary key
-#  test_case_id :bigint(8)
-#  plan_id      :bigint(8)
-#  state        :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  platform_id  :bigint(8)
-#  issue_id     :bigint(8)
-#  message      :text
+#  id                :bigint           not null, primary key
+#  test_case_id      :bigint
+#  plan_id           :bigint
+#  state             :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  platform_id       :bigint
+#  issue_id          :bigint
+#  message           :text
+#  test_case_version :datetime
 #
 
 class Task < ApplicationRecord
@@ -27,9 +28,21 @@ class Task < ApplicationRecord
 
   scope :ranked, -> { order(:created_at) }
   scope :with_platform, -> { joins(:platform).includes(:platform) }
-  scope :with_test_case, -> { joins(test_case: :component).includes(test_case: :component) }
+  scope :with_test_case, -> { joins(test_case: :folder).includes(test_case: :folder) }
 
   def issue_must_exist
     errors.add(:issue_id, :invalid) if Issue.where(id: issue_id).none?
+  end
+
+  def test_case_when_finishing
+    test_case.paper_trail.version_at(test_case_version)
+  end
+
+  def finished?
+    ["pass", "failure"].include? state
+  end
+
+  def changed_after_finish?
+    !test_case.paper_trail.version_at(test_case_version).version.nil?
   end
 end

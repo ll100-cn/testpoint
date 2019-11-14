@@ -2,12 +2,12 @@
 #
 # Table name: platforms
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  archived   :boolean          default(FALSE)
-#  project_id :bigint(8)
+#  project_id :bigint
 #
 
 class Platform < ApplicationRecord

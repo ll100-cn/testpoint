@@ -25,6 +25,6 @@ class Projects::TasksController < BaseProjectController
 
 protected
   def task_params
-    params.fetch(:task, {}).permit(:state, :issue_id, :message, attachment_ids: [])
+    params.fetch(:task, {}).permit(:state, :test_case_version, :issue_id, :message, attachment_ids: [])
   end
 end

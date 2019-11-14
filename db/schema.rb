@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_24_033112) do
+ActiveRecord::Schema.define(version: 2019_10_29_100026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,15 +68,16 @@ ActiveRecord::Schema.define(version: 2019_10_24_033112) do
     t.index ["member_id"], name: "index_comments_on_member_id"
   end
 
-  create_table "components", force: :cascade do |t|
+  create_table "folders", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "ancestry"
     t.boolean "archived", default: false
-    t.bigint "project_id"
-    t.index ["ancestry"], name: "index_components_on_ancestry"
-    t.index ["project_id"], name: "index_components_on_project_id"
+    t.bigint "project_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ancestry"], name: "index_folders_on_ancestry"
+    t.index ["archived"], name: "index_folders_on_archived"
+    t.index ["project_id"], name: "index_folders_on_project_id"
   end
 
   create_table "issue_activities", force: :cascade do |t|
@@ -103,10 +104,10 @@ ActiveRecord::Schema.define(version: 2019_10_24_033112) do
   create_table "issue_relationships", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "source_id"
-    t.string "category"
     t.bigint "member_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_issue_relationships_on_member_id"
     t.index ["source_id"], name: "index_issue_relationships_on_source_id"
     t.index ["target_id"], name: "index_issue_relationships_on_target_id"
@@ -182,6 +183,7 @@ ActiveRecord::Schema.define(version: 2019_10_24_033112) do
     t.boolean "archived", default: false
     t.datetime "start_at"
     t.bigint "project_id"
+    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["project_id"], name: "index_plans_on_project_id"
   end
 
@@ -191,6 +193,7 @@ ActiveRecord::Schema.define(version: 2019_10_24_033112) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
@@ -243,6 +246,7 @@ ActiveRecord::Schema.define(version: 2019_10_24_033112) do
     t.bigint "platform_id"
     t.bigint "issue_id"
     t.text "message"
+    t.datetime "test_case_version"
     t.index ["issue_id"], name: "index_tasks_on_issue_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["platform_id"], name: "index_tasks_on_platform_id"
@@ -254,10 +258,11 @@ ActiveRecord::Schema.define(version: 2019_10_24_033112) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "component_id"
+    t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
-    t.index ["component_id"], name: "index_test_cases_on_component_id"
+    t.index ["archived"], name: "index_test_cases_on_archived"
+    t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
 
@@ -280,13 +285,35 @@ ActiveRecord::Schema.define(version: 2019_10_24_033112) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "version_associations", force: :cascade do |t|
+    t.integer "version_id"
+    t.string "foreign_key_name", null: false
+    t.integer "foreign_key_id"
+    t.string "foreign_type"
+    t.index ["foreign_key_name", "foreign_key_id", "foreign_type"], name: "index_version_associations_on_foreign_key"
+    t.index ["version_id"], name: "index_version_associations_on_version_id"
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.integer "transaction_id"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+    t.index ["transaction_id"], name: "index_versions_on_transaction_id"
+  end
+
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "members"
-  add_foreign_key "components", "projects"
+  add_foreign_key "folders", "projects"
   add_foreign_key "issue_relationships", "issues", column: "source_id"
   add_foreign_key "issue_relationships", "issues", column: "target_id"
   add_foreign_key "issue_relationships", "members"

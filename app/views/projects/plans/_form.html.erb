@@ -5,10 +5,10 @@
 <% if f.object.new_record? %>
   <%= f.input :platform_ids, collection: f.object.project.platforms.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
 
-  <% @components_mapping = f.object.project.components.available.group_by(&:parent_id) %>
-  <%= f.input :component_ids do %>
+  <% @folders_mapping = f.object.project.folders.available.group_by(&:parent_id) %>
+  <%= f.input :folder_ids do %>
     <ul class="list-unstyled pt-1">
-      <%= render "component_check_boxes", key: nil %>
+      <%= render "folder_check_boxes", key: nil %>
     </ul>
   <% end %>
 <% end %>

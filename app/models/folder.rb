@@ -1,17 +1,17 @@
 # == Schema Information
 #
-# Table name: components
+# Table name: folders
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
 #  ancestry   :string
 #  archived   :boolean          default(FALSE)
-#  project_id :bigint(8)
+#  project_id :bigint           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
-class Component < ApplicationRecord
+class Folder < ApplicationRecord
   has_ancestry
 
   has_many :test_cases, dependent: :destroy

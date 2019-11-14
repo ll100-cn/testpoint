@@ -16,7 +16,7 @@ class Projects::PlansController < BaseProjectController
 
   def create
     test_cases_scope = TestCase
-    test_cases_scope = test_cases_scope.joins(:component).where(components: { id: params[:component_ids] }) if params[:component_ids].present?
+    test_cases_scope = test_cases_scope.joins(:folder).where(folders: { id: params[:folder_ids] }) if params[:folder_ids].present?
     test_cases_scope = test_cases_scope.joins(:platforms).where(platforms: { id: params[:platform_ids] }) if params[:platform_ids].present?
     test_case_ids = test_cases_scope.ids
 

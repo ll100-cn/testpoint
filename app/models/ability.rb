@@ -37,7 +37,7 @@ class Ability
     apply_reporter_permissions(member)
     can [:fold, :unfold],       Comment
     can [:read, :create],       IssueRelationship
-    can :manage,                [TestCase, Plan, Platform, Component, Task]
+    can :manage,                [TestCase, Plan, Platform, Folder, Task]
   end
 
   def apply_manager_permissions(member)
