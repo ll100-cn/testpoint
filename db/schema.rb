@@ -104,10 +104,10 @@ ActiveRecord::Schema.define(version: 2019_10_29_100026) do
   create_table "issue_relationships", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "source_id"
-    t.bigint "member_id"
     t.string "category"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["member_id"], name: "index_issue_relationships_on_member_id"
     t.index ["source_id"], name: "index_issue_relationships_on_source_id"
     t.index ["target_id"], name: "index_issue_relationships_on_target_id"
@@ -183,7 +183,6 @@ ActiveRecord::Schema.define(version: 2019_10_29_100026) do
     t.boolean "archived", default: false
     t.datetime "start_at"
     t.bigint "project_id"
-    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["project_id"], name: "index_plans_on_project_id"
   end
 
@@ -193,7 +192,6 @@ ActiveRecord::Schema.define(version: 2019_10_29_100026) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
-    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
@@ -261,7 +259,6 @@ ActiveRecord::Schema.define(version: 2019_10_29_100026) do
     t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
-    t.index ["archived"], name: "index_test_cases_on_archived"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
@@ -285,7 +282,6 @@ ActiveRecord::Schema.define(version: 2019_10_29_100026) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
-    t.index ["confirmation_token"], name: "index_users_on_confirmation_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

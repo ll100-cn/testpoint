@@ -1,0 +1,54 @@
+//
+// Main Stylesheet
+//
+
+
+
+@import "config-ext";
+
+////////////////////////////////////////////////////////////////
+///////////// DO NOT MODIFY BELOW INCLUDE ORDER ////////////////
+////////////////////////////////////////////////////////////////
+
+// 1: Include global config
+@import "~@vendor/keen/theme/demo6/src/assets/sass/config";
+
+
+// 2: Include layout config
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/config";
+
+// 3: Bootstrap framework includes
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/frameworks/bootstrap/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/frameworks/bootstrap/bootstrap.scss";
+
+@import "../bootstrap-ext/treeview.scss";
+@import "../bootstrap-ext/utilities.scss";
+@import "../bootstrap-ext/progress.scss";
+@import "../bootstrap-ext/btn.scss";
+@import "../bootstrap-ext/badge.scss";
+
+
+// 4: Components include
+@import "./include";
+
+////////////////////////////////////////////////////////////////
+///////////// DO NOT MODIFY ABOVE INCLUDE ORDER ////////////////
+////////////////////////////////////////////////////////////////
+//
+// // 5: Layout config
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/mobile-header/config";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/aside/config";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/footer/config";
+//
+// // 6: Layout includes
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/base/base";
+//
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/mobile-header/mobile-header";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/aside/aside";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/aside/primary";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/aside/secondary";
+//
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/content/content";
+//
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/footer/footer";

@@ -1,4 +1,4 @@
-@import "~font-awesome/scss/variables";
+@import "~@vendor/fontawesome-pro-web/scss/variables";
 
 .treeview, .treeview-subtree {
   list-style: none;
@@ -48,11 +48,11 @@
     }
 
     .icon::before {
-      content: $fa-var-minus-square-o;
+      content: $fa-var-minus-square;
     }
 
     &.collapsed .icon::before {
-      content: $fa-var-plus-square-o;
+      content: $fa-var-plus-square;
     }
   }
 }

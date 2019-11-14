@@ -1,0 +1,129 @@
+//
+// Global Components And 3rd-party Plugin Customizations
+//
+
+
+
+// 3rd-party plugins customizations
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/perfect-scrollbar";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/blockui";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/fullcalendar";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-datepicker";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-datetimepicker";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-timepicker";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-daterangepicker";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-touchspin";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-maxlength";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-select";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/typeahead";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/nouislider";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/fontawesome5";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/summernote";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-markdown";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/dropzone";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/recaptcha";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/toastr";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/gmaps";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/sweetalert2";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/bootstrap-session-timeout";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/datatables";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/jquery-repeater";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/duallistbox";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/uppy";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/jstree";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/quill";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/tagify";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/tinymce";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/ckeditor";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/plugins/select2";
+
+// Base components
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/page-loader";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/container";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/page-loader";
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/normalize";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/animations";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/helpers";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/mixins/grid";
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/grid";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/portlet";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/datatable";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/scrolltop";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/form";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/input-icon";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/checkbox";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/radio";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/switch";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/option";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/avatar";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/spinner";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/loader";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/pulse";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/base/dialog";
+
+// General components
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/grid-nav-v2";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/grid-nav";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/head";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/list";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/nav";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/notification-v2";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/notification";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/scroll";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/notes";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/slider";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/timeline";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/user-card-v2";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/user-card-v3";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/user-card-v4";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/user-card";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/pagination";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/media";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/general/iconbox";
+
+// Layout components
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/layout/demo-panel";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/layout/offcanvas-panel";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/layout/quick-search";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/layout/sticky-toolbar";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/layout/subheader";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/layout/app";
+
+// Typography components
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/badge";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/code";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/demo";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/divider";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/heading";
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/link";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/section";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/typography/separator";
+
+// Widget components
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-1";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-2";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-3";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-4";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-5";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-6";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-7";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-9";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-10";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-11";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-12";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-13";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-14";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-15";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-16";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-17";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-18";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-19";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-20";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-21";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-22";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/dashboard/widget-23";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/general/general-1";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/general/general-2";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/general/general-3";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/general/general-4";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/components/widgets/general/profile";
