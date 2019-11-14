@@ -1,27 +1,68 @@
-<div class="row justify-content-center mt-5">
-  <div class="col-sm-10 col-md-7 col-lg-6 col-xl-5">
-    <div class="card">
-      <h3 class="card-header"><%= t(".sign_in", scope: "devise") %></h3>
-      <%= bootstrap_vertical_form_for resource, url: session_path(resource_name) do |f| %>
-        <div class="card-body">
-          <div class="no-margin-bottom">
-            <%= f.input :email %>
-            <%= f.input :password %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testpoint</title>
+    <%= csrf_meta_tags %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
 
-            <% if devise_mapping.rememberable? -%>
-              <%= f.input :remember_me, as: :boolean %>
-            <% end %>
+  <body class="kt-demo-panel--right kt-header-mobile--fixed kt-page-content-white kt-subheader--enabled kt-aside--secondary-enabled kt-offcanvas-panel--left kt-aside--left kt-page--loading">
+	<div class="kt-grid kt-grid--ver kt-grid--root">
+		<div class="kt-grid__item   kt-grid__item--fluid kt-grid  kt-grid kt-grid--hor kt-login-v2" id="kt_login_v2">
+			<div class="kt-grid__item  kt-grid--hor">
+        <div class="kt-login-v2__head">
+          <h5>TESTPOINT</h5>
+        </div>
+			</div>
+			<div class="kt-grid__item  kt-grid  kt-grid--ver  kt-grid__item--fluid">
+				<div class="kt-login-v2__body">
+					<div class="kt-login-v2__wrapper">
+						<div class="kt-login-v2__container">
+							<div class="kt-login-v2__title">
+								<h3><%= t(".sign_in", scope: "devise") %></h3>
+							</div>
+              <%= bootstrap_vertical_form_for resource, url: session_path(resource_name), html: { class: "kt-login-v2__form kt-form" } do |f| %>
+                    <% if flash.any? %>
+                      <% flash.to_hash.each do |key, value| %>
+                        <% if value.present? %>
+
+
+                          <div class="alert alert-bold alert-solid-<%= bootstrap_flash_class_for(key) %> fade show" role="alert">
+                            <div class="alert-text"><%= value %></div>
+                            <div class="alert-close">
+                              <a href="javascript:void(0)" data-dismiss="alert">
+                                <i class="fal fa-times"></i>
+                              </a>
+                            </div>
+                          </div>
+
+
+                         <% end %>
+                      <% end %>
+                    <% end %>
+
+                    <%= f.input :email, label: false, placeholder: "邮箱" %>
+                    <%= f.input :password, label: false, placeholder: "密码" %>
+                    <div class="kt-login-v2__actions">
+                      <%= link_to t("forgot_your_password", scope: "devise.shared.links"), new_reset_password_path, class: "kt-link kt-link--brand" %>
+                      <%= f.submit t(".sign_in", scope: "devise"), class: "btn btn-brand btn-elevate btn-pill" %>
+                    </div>
+              <% end %>
+						</div>
+					</div>
+					<div class="kt-login-v2__image">
+						<img src="<%= asset_pack_path 'media/images/bg_icon.svg'%>" alt="">
+					</div>
+				</div>
+			</div>
+      <div class="kt-grid__item">
+        <div class="kt-login-v2__footer">
+          <div class="kt-login-v2__info">
+            <a href="#" class="kt-link">&copy; 2019 Testpoint</a>
           </div>
         </div>
-
-        <div class="card-footer d-flex align-items-center">
-          <div class="actions mr-auto">
-            <%= f.submit t(".sign_in", scope: "devise"), class: "btn btn-primary" %>
-          </div>
-
-          <%= link_to t("forgot_your_password", scope: "devise.shared.links"), new_reset_password_path, class: "text-muted" %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div>
+      </div>
+		</div>
+	</div>
+</body>
