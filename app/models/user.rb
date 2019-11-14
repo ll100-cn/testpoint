@@ -30,7 +30,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :rememberable, :trackable, :validatable, :recoverable, :confirmable,
          reconfirmable: false
 
-  has_many :comments, dependent: :destroy
   has_many :created_issues, class_name: Issue.to_s, foreign_key: 'creator_id', dependent: :destroy, inverse_of: true
   has_many :assigned_issues, class_name: Issue.to_s, foreign_key: 'assignee_id', dependent: :destroy, inverse_of: true
   has_many :members, dependent: :destroy
