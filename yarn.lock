@@ -798,6 +798,14 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
+"@vendor/fontawesome-pro-web@https://token:9d4aa7a88bcb1e65@dev.ll100.com/repo/fontawesome-pro-5.11.2-web.tar.gz":
+  version "0.0.0"
+  resolved "https://token:9d4aa7a88bcb1e65@dev.ll100.com/repo/fontawesome-pro-5.11.2-web.tar.gz#eb1effe357eb54094b3278831f79eeda9ac55ea5"
+
+"@vendor/keen@https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen_v1.4.4.tar.gz":
+  version "0.0.0"
+  resolved "https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen_v1.4.4.tar.gz#47b47cd810b2d0184e3530e53e8ed5e32f3b6227"
+
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.8.5.tgz#51b1c5fe6576a34953bf4b253df9f0d490d9e359"
@@ -3281,11 +3289,6 @@ follow-redirects@^1.0.0:
   integrity sha512-CRcPzsSIbXyVDl0QI01muNDu69S8trU4jArW9LpOt2WtC6LyUJetcIrmfHsRBx7/Jb6GHJUiuqyYxPooFfNt6A==
   dependencies:
     debug "^3.0.0"
-
-font-awesome@^4.7.0:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
-  integrity sha1-j6jPBBGhoxr9B7BtKQK7n8gVoTM=
 
 for-in@^1.0.2:
   version "1.0.2"
