@@ -17,10 +17,9 @@ class Projects::PlansController < BaseProjectController
   def create
     test_cases_scope = TestCase
     test_cases_scope = test_cases_scope.joins(:folder).where(folders: { id: params[:folder_ids] }) if params[:folder_ids].present?
-    test_cases_scope = test_cases_scope.joins(:platforms).where(platforms: { id: params[:platform_ids] }) if params[:platform_ids].present?
     test_case_ids = test_cases_scope.ids
 
-    @plan.generate(test_case_ids: test_case_ids || TestCase.ids)
+    @plan.generate(test_case_ids: test_case_ids || TestCase.ids, platform_ids: params[:platform_ids] || Platform.ids)
     respond_with @plan, location: ok_url_or_default([@project, Plan])
   end
 

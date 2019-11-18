@@ -26,9 +26,12 @@ class Plan < ApplicationRecord
 
   def generate(params)
     test_cases = TestCase.available.where(id: params[:test_case_ids])
-    test_cases.each do |test_case|
-      test_case.platform_ids.each do |platform_id|
-        tasks.new(test_case_id: test_case.id, platform_id: platform_id)
+    platforms = Platform.available.where(id: params[:platform_ids])
+    platforms.each do |platform|
+      test_cases.each do |test_case|
+        if test_case.platforms.exists? platform.id
+          tasks.new(test_case_id: test_case.id, platform: platform)
+        end
       end
     end
 
