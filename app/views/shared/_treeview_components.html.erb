@@ -1,7 +1,7 @@
 <% (@folders_mapping[key] || []).each do |folder| %>
   <li class="pl-4">
     <span class="text-muted">
-      <span class="fa fa-fw fa-folder-o"></span> <%= folder.name %>
+      <span class="fal fa-fw fal-folder"></span> <%= folder.name %>
     </span>
     <ul class="list-unstyled">
       <%= render "folders", key: folder.id %>

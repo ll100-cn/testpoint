@@ -2,16 +2,14 @@
   <% flash.to_hash.each do |key, value| %>
     <% if value.present? %>
 
-
       <div class="alert alert-<%= bootstrap_flash_class_for(key) %> fade show m-3" role="alert">
-  			<div class="alert-text"><%= value %></div>
-  			<div class="alert-close">
-  				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  					<span aria-hidden="true"><i class="fa fa-close"></i></span>
-  				</button>
-  			</div>
-  		</div>
-
+        <div class="alert-text"><%= value %></div>
+        <div class="alert-close">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+          </button>
+        </div>
+      </div>
 
      <% end %>
   <% end %>

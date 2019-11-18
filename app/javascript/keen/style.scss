@@ -20,7 +20,7 @@
 // 3: Bootstrap framework includes
 @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/frameworks/bootstrap/variables";
 @import "~bootstrap/scss/bootstrap";
-@import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/frameworks/bootstrap/bootstrap.scss";
+@import "./bootstrap.scss";
 
 @import "../bootstrap-ext/treeview.scss";
 @import "../bootstrap-ext/utilities.scss";

@@ -1,7 +1,7 @@
 <% (@folders_mapping[key] || []).each do |folder| %>
   <li class="pl-4">
     <div class="text-muted hidden-actions">
-      <span class="fa fa-fw fa-folder-o"></span> <%= folder.name %>
+      <i class="fal fa-fw fa-folder"></i> <%= folder.name %>
       <span class="actions ml-1">
         <%= edit_link [:edit, @project, folder, ok_url: request.fullpath] if can? :update, folder %>
         <%= destroy_link [@project, folder, ok_url: request.fullpath] if can? :destroy, folder %>
