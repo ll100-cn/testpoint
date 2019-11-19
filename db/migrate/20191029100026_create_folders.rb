@@ -1,6 +1,7 @@
 class CreateFolders < ActiveRecord::Migration[6.0]
   class Folder < ActiveRecord::Base; end
-  class Folder < ActiveRecord::Base; end
+  class Component < ActiveRecord::Base; end
+
   def change
     create_table :folders do |t|
       t.string :name
@@ -12,7 +13,7 @@ class CreateFolders < ActiveRecord::Migration[6.0]
     end
     add_index :folders, :ancestry
 
-    Folder.all.each do |c|
+    Component.all.each do |c|
       f = Folder.new
       f.name = c.name
       f.ancestry = c.ancestry
