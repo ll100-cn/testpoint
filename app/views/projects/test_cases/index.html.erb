@@ -7,14 +7,11 @@
   </div>
 </div>
 
-<% @test_cases_mapping = @test_cases.group_by(&:folder) %>
-<% @folders_mapping = @project.folders.available.ranked.group_by(&:parent_id) %>
-
 <%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
   <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
     <%= n.apply_content value do |active_class| %>
-      <%= link_to [@project, ::TestCase, platform_id: value], class: active_class do %>
-        <button type="button" class="btn btn-xs btn-pill" style="background-color: <%= calc_color_hex(key) %>; color: white"><%= key %></button>
+      <%= link_to [@project, ::TestCase, platform_id: value, folder_id: @folder], class: active_class do %>
+        <button type="button" class="btn btn-xs btn-pill <%= 'disabled' unless @platform&.name == key %>" style="background-color: <%= calc_color_hex(key) %>; color: white"><%= key %></button>
       <% end %>
     <% end %>
   <% end %>
@@ -48,6 +45,7 @@
 </table>
 
 <% content_for :sidebar do %>
+  <% @folders_mapping = @folders.group_by(&:parent_id) %>
   <div class="d-flex justify-content-between">
     <h5><%= h Folder %></h5>
     <div class="actions">
