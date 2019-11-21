@@ -44,6 +44,7 @@ gem 'kaminari', "1.1.1"
 gem 'fume-nav', "0.1.3"
 gem 'jbuilder', '2.9.1'
 gem 'kramdown', "2.1.0"
+gem 'rgb', '0.1.0'
 
 # Assets
 gem 'sass-rails', '5.1.0'

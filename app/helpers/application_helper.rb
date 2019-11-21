@@ -41,4 +41,11 @@ module ApplicationHelper
     options[:ok_url] = params[:ok_url] if params[:ok_url]
     url_for(args + [ options ])
   end
+
+  def calc_color_hex(content)
+    hex = "#" + Digest::MD5.hexdigest(content.to_s)[0, 6]
+    color = RGB::Color.from_rgb_hex(hex)
+    color.l = 0.1 + 0.4 * color.l
+    color.to_rgb_hex
+  end
 end

@@ -2,45 +2,66 @@
   <h2>
     <%= page_i18n :index, model_name: h(@test_cases) %>
   </h2>
-  <div class="ml-3 mt-1 actions">
-    <%= new_button ::TestCase, "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath) } if can? :create, ::TestCase %>
-    <%= new_button Folder, [ :new, @project, :folder ], class: "btn btn-outline-primary btn-sm" if can? :create, Folder %>
-  </div>
   <div class="actions ml-auto">
-    <%= edit_link [:edit, @project ] if can? :edit, @project %>
+    <%= new_button ::TestCase, "#", class: "btn btn-outline-primary btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath) } if can? :create, ::TestCase %>
   </div>
 </div>
 
 <% @test_cases_mapping = @test_cases.group_by(&:folder) %>
-<% @folders_mapping = @project.folders.ranked.group_by(&:parent_id) %>
-<ul class="list-unstyled">
-  <%= render "folders", key: nil %>
-</ul>
+<% @folders_mapping = @project.folders.available.ranked.group_by(&:parent_id) %>
+
+<%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
+  <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
+    <%= n.apply_content value do |active_class| %>
+      <%= link_to [@project, ::TestCase, platform_id: value], class: active_class do %>
+        <button type="button" class="btn btn-xs btn-pill" style="background-color: <%= calc_color_hex(key) %>; color: white"><%= key %></button>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<hr>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col"><%= h Platform, "name" %></th>
+      <th scope="col"><%= h Platform %></th>
+      <th scope="col">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @test_cases.each do |test_case| %>
+      <tr>
+        <td><%= test_case.title %></td>
+        <td>
+          <% test_case.platforms.each do |platform| %>
+            <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
+          <% end %>
+        </td>
+        <td>
+          <%= edit_link "#", class: "small", data: { toggle: "modal", target: "#test_case_modal", url: edit_project_test_case_path(@project, test_case, ok_url: request.fullpath) } if can? :update, test_case %>
+          <%= destroy_link [@project, test_case, ok_url: request.fullpath], class: "small" if can? :destroy, test_case %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <% content_for :sidebar do %>
-  <h5><%=h Platform %></h5>
-  <%= fume_nav params[:platform_id], active_class: "text-dark" do |n| %>
-    <ul class="list-unstyled">
-      <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
-        <li class="hidden-actions">
-          <% if value %>
-            <span class="float-right actions">
-              <%= edit_link edit_project_platform_path(@project, value, ok_url: request.fullpath) if can? :update, Platform %>
-              <%= destroy_link project_platform_path(@project, value, ok_url: request.fullpath) if can? :destroy, Platform %>
-            </span>
-          <% end %>
-          <%= n.apply_content value do |active_class| %>
-            <%= link_to [@project, ::TestCase, platform_id: value], class: active_class do %>
-              <span class="fa fa-fw <%= 'fa-angle-right' if active_class %>"></span><%= key %>
-            <% end %>
-          <% end %>
-        </li>
-      <% end %>
-      <li>
-        <span class="fa fa-fw"></span><%= link_to page_i18n(:new, model_name: h(Platform)), [ :new, @project, :platform, ok_url: request.fullpath ], class: "text-muted" if can? :create, Platform %>
-      </li>
+  <div class="d-flex justify-content-between">
+    <h5><%= h Folder %></h5>
+    <div class="actions">
+      <%= link_to [:new, @project, :folder] do %>
+        <i class="far fa-plus"></i>
+      <% end if can? :new, Folder %>
+    </div>
+  </div>
+
+  <div id="folder-tree" class="treeview">
+    <ul>
+      <%= render "folders", key: nil %>
     </ul>
-  <% end %>
+  </div>
 <% end %>
 
 <div id="test_case_modal" class="modal">
@@ -49,3 +70,25 @@
     </div>
   </div>
 </div>
+
+<script>
+// var folderTree = function () {
+//     $('#folder-tree').jstree({
+//         "core" : {
+//             "themes" : {
+//                 "responsive": false
+//             }
+//         },
+//         "types" : {
+//             "default" : {
+//                 "icon" : "far fa-folder"
+//             },
+//         },
+//         "plugins": ["types"]
+//     }).bind("select_node.jstree", function (e, data) {
+//         var href = data.node.a_attr.href;
+//         Turbolinks.visit(href, { action: "replace" });
+//    })
+// }
+// folderTree();
+</script>

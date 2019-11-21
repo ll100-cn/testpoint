@@ -31,4 +31,13 @@ class Platform < ApplicationRecord
   def to_label
     " #{name}"
   end
+
+  def color
+    {
+      "iOS" => "danger",
+      "Android" => "success",
+      "Web" => "info",
+      "微信公众号" => "success"
+    }.fetch(name)
+  end
 end

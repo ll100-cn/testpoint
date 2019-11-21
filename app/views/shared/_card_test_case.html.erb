@@ -1,10 +1,10 @@
 <% test_case_dom_id = dom_id(test_case) %>
-<div class="card card-collapsed collapsed" data-target="#<%= test_case_dom_id %>" data-toggle="collapse">
+<div class="card card-collapsed collapsed m-2" data-target="#<%= test_case_dom_id %>" data-toggle="collapse">
   <div class="card-body">
     <div class="card-title">
       <span><%= test_case.title %></span>
       <% test_case.platforms.each do |platform| %>
-        <span class="badge badge-secondary"><%= platform.name %></span>
+        <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
       <% end %>
       <% if test_case.content? %>
         <% content_html = capture do %>

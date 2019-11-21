@@ -1,0 +1,109 @@
+@import '../../bootstrap-ext/variables.scss';
+
+$tv-toggler-width: 1.1em;
+$tv-toggler-height: 1.1em;
+$tv-item-height: 1.5em;
+$tv-item-left: 1.6em;
+
+.treeview {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding-left: $tv-item-left;
+    position: relative;
+
+    .item {
+      display: flex;
+      position: relative;
+      z-index: 2;
+    }
+
+    a.active {
+      background-color: lighten($primary, 38%);
+      border: 1px solid $primary;
+      margin: -1px;
+      padding-left: 5px;
+      margin-left: -6px;
+    }
+
+    &:before, &:after {
+      content: " ";
+      width: 1px;
+      position: absolute;
+      left: $tv-toggler-width / 2;
+      background: $border-color;
+    }
+
+    &:before {
+      height: $tv-item-height / 2 + 0.25em;
+      top: -0.25em;
+    }
+
+    &:after {
+      top: $tv-item-height / 2;
+      bottom: 0;
+    }
+
+    &:last-child:after {
+      display: none;
+    }
+
+    &.has-children {
+      &:before {
+        height: $tv-item-height / 2 - $tv-toggler-height / 2 + 0.25em;
+      }
+      &:after {
+        top: $tv-item-height / 2 + $tv-toggler-height / 2;
+      }
+    }
+    .line {
+      content: " ";
+      position: absolute;
+      left: $tv-toggler-width / 2;
+      top: $tv-item-height / 2;
+      height: 1px;
+      background: $border-color;
+      width: $tv-item-left - $tv-toggler-width / 2 - 0.2em;
+    }
+    &.has-children {
+      > .line {
+        width: $tv-item-left - $tv-toggler-width - 0.2em;
+        left: $tv-toggler-width;
+      }
+    }
+  }
+
+  .toggler {
+    line-height: 1;
+    width: $tv-toggler-width;
+    position: absolute;
+    top: ($tv-item-height - 1em) / 2;
+    left: 1px;
+    text-align: center;
+    z-index: 10;
+
+    .fa-plus-square:before {
+      content: "\f146";
+    }
+  }
+
+  .toggler ~ .item {
+    .fa-folder:before {
+      content: "\f07c"
+    }
+  }
+  .collapsed {
+    .fa-plus-square:before {
+      content: "\f0fe";
+    }
+  }
+  .collapsed ~ .item {
+    .fa-folder:before {
+      content: "\f07b"
+    }
+  }
+}
