@@ -20,7 +20,7 @@
       <%= fume_nav current do |n| %>
         <ul class="navbar-nav">
           <%= n.li_tag "cases", class: "nav-item" do %>
-            <%= link_to t('views.navbar.cases'), [current_project, ::TestCase], class: "nav-link" if can? :read, TestCase %>
+            <%= link_to t('views.navbar.cases'), [current_project, ::TestCase], class: "nav-link" if can? :read, ::TestCase %>
           <% end %>
           <%= n.li_tag "plans", class: "nav-item" do %>
             <%= link_to t('views.navbar.plans'), [current_project, Plan], class: "nav-link" if can? :read, Plan %>
