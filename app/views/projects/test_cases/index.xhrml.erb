@@ -1,0 +1,66 @@
+<div class="card m-3 flex-1">
+  <div class="card-header bg-white pb-0">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-brand nav-tabs-bold mb-0" style="border-color:transparent;">
+      <%= fume_nav params[:platform_id] do |n| %>
+        <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
+          <%= n.apply_content value do |active_class| %>
+            <li class="nav-item">
+              <%= link_to [@project, ::TestCase, platform_id: value, folder_id: @folder], class: "nav-link #{active_class}" do %>
+                <%= key %>
+              <% end %>
+            </li>
+          <% end %>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+  <div class="card-body py-0">
+    <div id="tp-contianer" class="d-flex align-items-stretch h-100">
+      <div id="tp-sidebar" class="col-12 col-md-3 col-xl-2 sidebar border-right">
+        <% @folders_mapping = @folders.group_by(&:parent_id) %>
+        <div class="d-flex justify-content-between">
+          <h5><%= h Folder %></h5>
+          <div class="actions">
+            <%= link_to [:new, @project, :folder] do %>
+              <i class="far fa-plus"></i>
+            <% end if can? :new, Folder %>
+          </div>
+        </div>
+
+        <div id="folder-tree" class="treeview">
+          <ul>
+            <%= render "folders.html", key: nil %>
+          </ul>
+        </div>
+      </div>
+
+      <div id="tp-main" class="col-12 col-md-9 col-xl-10">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"><%= h Platform, "name" %></th>
+              <th scope="col"><%= h Platform %></th>
+              <th scope="col">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @test_cases.each do |test_case| %>
+              <tr>
+                <td><%= test_case.title %></td>
+                <td>
+                  <% test_case.platforms.each do |platform| %>
+                    <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= edit_link "#", class: "small", data: { toggle: "modal", target: "#test_case_modal", url: edit_project_test_case_path(@project, test_case, ok_url: request.fullpath) } if can? :update, test_case %>
+                  <%= destroy_link [@project, test_case, ok_url: request.fullpath], class: "small" if can? :destroy, test_case %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

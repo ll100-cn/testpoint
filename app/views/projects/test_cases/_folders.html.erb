@@ -14,7 +14,7 @@
       <div class="item">
         <span class="text-center d-inline-block">
         </span>
-        <%= link_to [@project, ::TestCase, folder_id: folder.id, platform_id: @platform], class: "flex-1 rounded #{folder == @folder ? 'text-body' : 'text-muted'} #{'active' if folder == @folder}" do %>
+        <%= link_to [@project, ::TestCase, folder_id: folder.id, platform_id: @platform], class: "flex-1 rounded #{folder == @folder ? 'text-body' : 'text-muted'} #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: ".card-body #tp-main", replace: true }  do %>
           <i class="fal fa-folder mr-2"></i><%= folder.name %>（<%= @folder_test_cases_counts[folder.id] %>）
         <% end %>
         <% if @folder == folder && (can? :edit, folder) %>
@@ -24,7 +24,7 @@
         <% end %>
       </div>
       <ul id="treeview-<%= folder.id %>-container" class="collapse <%= 'show' if open %>">
-        <%= render 'folders', key: folder.id %>
+        <%= render 'folders.html', key: folder.id %>
       </ul>
     </li>
   <% end %>
