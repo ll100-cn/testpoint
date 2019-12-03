@@ -29,6 +29,6 @@ RSpec.describe Projects::FoldersController, type: :controller do
 
   describe "DELETE destroy" do
     action(skip: true) { delete :destroy, params: { id: folder.id, project_id: project.id } }
-    it { expect { do_action }.to change { Folder.archived.count }.by(1) }
+    it { expect { do_action }.to change { Folder.count }.by(-1) }
   end
 end

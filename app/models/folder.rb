@@ -14,21 +14,14 @@
 class Folder < ApplicationRecord
   has_ancestry
 
-  has_many :test_cases, dependent: :destroy
+  has_many :test_cases, dependent: :restrict_with_error
   belongs_to :project
 
   validates :name, presence: true
 
   scope :available, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
-
-  def archive
-    update(archived: true)
-  end
-
-  def self.ranked
-    order(:name).sort_by { |c| c.ancestor_ids + [c.id] }
-  end
+  scope :ranked, -> { order(:name) }
 
   def to_label
     "　" * ancestor_ids.size + name

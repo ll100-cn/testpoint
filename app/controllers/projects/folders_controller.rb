@@ -21,12 +21,12 @@ class Projects::FoldersController < BaseProjectController
   end
 
   def destroy
-    @folder.archive
+    @folder.destroy
     respond_with @folder, location: ok_url_or_default([@project, TestCase])
   end
 
 protected
   def folder_params
-    params.fetch(:folder, {}).permit(:name, :parent_id)
+    params.fetch(:folder, {}).permit(:name, :parent_id, :archived)
   end
 end
