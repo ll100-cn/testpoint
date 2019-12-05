@@ -29,10 +29,8 @@ $tv-item-left: 1.6em;
     }
 
     .item > a.active {
-      background-color: lighten($primary, 38%);
-    }
-    .item > a:hover {
-      background-color: lighten($primary, 38%);
+      @include button-variant($primary, $primary);
+      // background-color: $primary;
     }
 
     &:before, &:after {
@@ -110,5 +108,18 @@ $tv-item-left: 1.6em;
     .fa-folder:before {
       content: "\f07b"
     }
+  }
+}
+
+.treeview-link {
+  color: $text-muted;
+  border: 1px solid transparent;
+}
+
+.treeview-active-actions {
+  display: none;
+
+  .active ~ & {
+    display: block;
   }
 }
