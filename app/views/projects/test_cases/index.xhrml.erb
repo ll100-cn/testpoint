@@ -38,7 +38,14 @@
 
   <div id="folder-tree" class="treeview" data-controller="activable">
     <ul>
-      <%= render "folders.html", key: nil %>
+      <%= render "shared/folders.html", key: nil do |folder| %>
+        <%= link_to [@project, ::TestCase, folder_id: folder.id, platform_id: @platform], class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main table", replace: true, action: "activable#active" }  do %>
+          <i class="fal fa-folder mr-2"></i><%= folder.name %>（<%= @folder_test_cases_counts[folder.id] %>）
+        <% end %>
+        <%= link_to [ :edit, @project, folder ], class: "text-muted ml-2 treeview-active-actions" do %>
+          <i class="fal fa-pencil"></i>
+        <% end %>
+      <% end %>
     </ul>
   </div>
 </div>
