@@ -12,12 +12,12 @@
       <% end %>
       <span class="line"></span>
       <div class="item">
-        <%= link_to [@project, @plan, folder_id: folder.id, platform_id: @platform], class: "flex-1 rounded #{folder == @folder ? 'text-body' : 'text-muted'} #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main .test_cases-cards", replace: true, action: "activable#active" }  do %>
-          <i class="fal fa-folder mr-2"></i><%= folder.name %>
-        <% end %>
+        <%= yield folder %>
       </div>
       <ul id="treeview-<%= folder.id %>-container" class="collapse <%= 'show' if open %>">
-        <%= render 'folders.html', key: folder.id %>
+        <%= render 'shared/folders.html', key: folder.id do |folder| %>
+          <%= yield folder %>
+        <% end %>
       </ul>
     </li>
   <% end %>
