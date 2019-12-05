@@ -78,6 +78,8 @@ group :development do
   gem 'spring-watcher-listen', '2.0.1'
 
   gem 'capsum', '1.1.2', require: false
+  gem 'ed25519'
+  gem 'bcrypt_pbkdf'
 end
 
 group :test do
