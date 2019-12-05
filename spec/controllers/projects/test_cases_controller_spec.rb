@@ -20,11 +20,6 @@ RSpec.describe Projects::TestCasesController, type: :controller do
     end
   end
 
-  describe "GET new" do
-    action { get :new, params: { project_id: project.id } }
-    it { is_expected.to respond_with :success }
-  end
-
   describe "POST create" do
     let(:folder) { create :folder, project: project }
     let(:platform) { create :platform, project: project }
@@ -33,11 +28,6 @@ RSpec.describe Projects::TestCasesController, type: :controller do
 
     context "success" do
       it { is_expected.to respond_with :redirect }
-    end
-
-    context "invalid" do
-      before { attributes[:title] = "" }
-      it { is_expected.to render_template :new }
     end
   end
 

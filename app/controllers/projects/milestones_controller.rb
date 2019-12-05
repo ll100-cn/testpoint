@@ -1,4 +1,5 @@
 class Projects::MilestonesController < BaseProjectController
+  layout 'card-full-height', only: [:index]
   before_action { @navbar = "Milestones" }
   before_action -> { @project = current_project }
   authorize_resource :project

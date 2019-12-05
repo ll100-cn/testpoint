@@ -1,10 +1,10 @@
 <% data = { target: "#uploadAttachmentsModal", toggle: "modal", url: change_state_project_plan_task_path(@project, @plan, task) } %>
-<%= content_tag :div, class: "card card-collapsed collapsed #{task.state}", data: data do %>
+<%= content_tag :div, class: "card card-collapsed collapsed my-2", data: data do %>
   <div class="card-body">
-    <div class="card-title">
-      <span><%= test_case.title %></span>
-      <span class="badge badge-secondary"><%= task.platform.name %></span>
-      <div class="small ml-2">
+    <div class="card-title d-flex">
+      <span class="badge badge-secondary mr-2" style="width:70px"><%= task.platform.name %></span>
+      <span><%= task.test_case.title %></span>
+      <div class="small ml-auto">
         <%= task_state_with_icon(task.state) %>
       </div>
     </div>

@@ -12,11 +12,6 @@ RSpec.describe Projects::PlansController, type: :controller do
     it { is_expected.to respond_with :success }
   end
 
-  describe "GET new" do
-    action { get :new, params: { project_id: project.id } }
-    it { is_expected.to respond_with :success }
-  end
-
   describe "POST create" do
     let(:attributes) { { title: "user change password" } }
     action { post :create, params: { plan: attributes, project_id: project.id } }

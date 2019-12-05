@@ -1,12 +1,17 @@
-<div class="page-header">
+<% content_for :header do %>
   <h2><%= page_i18n :index, model_name: h(@plans) %></h2>
-</div>
+  <%= new_link Plan, "#", data: { toggle: "modal", target: "#plan_modal", url: new_project_plan_path(@project, @plan, ok_url: request.fullpath) } if can? :create, Plan %>
+<% end %>
+
+
+
+
 
 <table class="table">
   <colgroup>
+    <col width="40%">
+    <col width="40%">
     <col width="20%">
-    <col width="60%">
-    <col>
   </colgroup>
   <thead>
     <tr>
@@ -47,7 +52,10 @@
   <%= paginate @plans %>
 </nav>
 
-<hr>
-<div class="page-actions">
-  <%= new_button Plan, action: :new if can? :create, Plan %>
+
+<div id="plan_modal" class="modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    </div>
+  </div>
 </div>

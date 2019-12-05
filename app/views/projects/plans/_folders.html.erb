@@ -1,26 +1,24 @@
-<% (@folders_mapping[key] || []).each do |folder| %>
-  <li class="pl-4">
-    <span class="text-muted">
-      <span class="fa fa-fw fa-folder-o"></span> <%= folder.name %>
-      <span>
-        <% test_cases = folder.subtree.flat_map(&:test_cases) %>
-        <% tasks = @tasks_mapping.values_at(*test_cases).compact.flatten.group_by(&:state) %>
-        <% Task.state.options.each do |key, value| %>
-          <small class="<%= task_state_class_name(value) %> ml-1">
-            <%= "#{key}: #{tasks.fetch(value, []).length}" %>
-          </small>
-        <% end %>
-      </span>
-    </span>
-    <ul class="list-unstyled">
-      <%= render "folders", key: folder.id %>
-      <% (@test_cases_mapping[folder] || []).each do |test_case| %>
-        <% @tasks_mapping[test_case].each do |task| %>
-          <li class="pl-4 mb-2 card-task-wrapper">
-            <%= render "shared/card_task", test_case: task.finished? ? task.test_case_when_finishing : test_case, task: task %>
-          </li>
-        <% end %>
+<% unless @folders_mapping[key].nil? %>
+  <% (@folders_mapping[key] || []).each do |folder| %>
+    <% children = @folders_mapping[folder.id] || [] %>
+    <% open = (@folder&.ancestor_ids_with_self || []).include?(folder.id) && children.any? %>
+    <li class="<%= 'has-children' if children.any? %>">
+      <% if children.any? %>
+        <a data-toggle="collapse" data-target="#treeview-<%= folder.id %>-container" class="toggler text-muted <%= 'collapsed' if !open %>">
+          <i class="fal fa-plus-square"></i>
+        </a>
+      <% else %>
+        <span class=""></span>
       <% end %>
-    </ul>
-  </li>
+      <span class="line"></span>
+      <div class="item">
+        <%= link_to [@project, @plan, folder_id: folder.id, platform_id: @platform], class: "flex-1 rounded #{folder == @folder ? 'text-body' : 'text-muted'} #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main .test_cases-cards", replace: true, action: "activable#active" }  do %>
+          <i class="fal fa-folder mr-2"></i><%= folder.name %>
+        <% end %>
+      </div>
+      <ul id="treeview-<%= folder.id %>-container" class="collapse <%= 'show' if open %>">
+        <%= render 'folders.html', key: folder.id %>
+      </ul>
+    </li>
+  <% end %>
 <% end %>

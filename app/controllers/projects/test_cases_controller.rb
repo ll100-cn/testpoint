@@ -1,5 +1,5 @@
 class Projects::TestCasesController < BaseProjectController
-  layout "sidebar", only: [:index]
+  layout 'card-full-height', only: [:index]
   before_action { @navbar = "cases" }
   before_action -> { @project = current_project }
   authorize_resource :project
@@ -8,15 +8,15 @@ class Projects::TestCasesController < BaseProjectController
   load_and_authorize_resource through: :project
 
   def index
-    base_test_cases_scope = @test_cases
-    base_test_cases_scope = base_test_cases_scope.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
     @default_cases_url_options = request.query_parameters
-    @test_cases = base_test_cases_scope.where(folder_id: @folder.subtree) if @folder
-    @test_cases = @test_cases.available.joins(:platforms).includes(:platforms)
+    @test_cases = @test_cases.available
+    @test_cases = @test_cases.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
+    @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
+    @test_cases = @test_cases.page(params[:page])
 
     @folders = @project.folders.available.ranked
 
-    test_cases_counts = base_test_cases_scope.group(:folder_id).count
+    test_cases_counts = @test_cases.group(:folder_id).count
     @folder_test_cases_counts = @folders.each_with_object({}) do |folder, result|
       count = test_cases_counts[folder.id] || 0
       result.merge!(folder.ancestor_ids_with_self.product([count]).to_h) { |key, old, new| old + new }
