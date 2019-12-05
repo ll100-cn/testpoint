@@ -1,3 +1,5 @@
 <li class="page-item">
-  <%= link_to_unless current_page.last?, raw(t 'views.pagination.next'), url, rel: 'next', remote: remote, class: 'page-link' %>
+  <%= link_to url, rel: 'next', remote: remote, class: 'page-link' do %>
+    <i class="fal fa-angle-right"></i>
+  <% end unless current_page.last? %>
 </li>

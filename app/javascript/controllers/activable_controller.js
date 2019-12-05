@@ -3,8 +3,12 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   active(event) {
-    const item = $(event.target)
-    $(this.element).find(".active").not(item).removeClass('active')
-    item.addClass('active')
+    const folderItem = $(event.target)
+    $(this.element).find(".active").not(folderItem).removeClass("active")
+    folderItem.addClass("active")
+
+    const pencilItem = folderItem.next()
+    $(this.element).find(".ml-2").addClass("d-none")
+    pencilItem.removeClass("d-none")
   }
 }

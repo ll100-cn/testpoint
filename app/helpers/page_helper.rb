@@ -7,7 +7,7 @@ module PageHelper
 
   def new_button(model, url, options = {})
     label = action_i18n(:new, model_name: h(model))
-    link_to label, url, { class: "btn btn-primary" }.merge(options)
+    link_to label, url, { class: "btn btn-primary btn-sm" }.merge(options)
   end
 
   def new_link(model, url, options = {})
