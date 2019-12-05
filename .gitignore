@@ -40,7 +40,6 @@ yarn-debug.log*
 /Gemfile.lock
 /.byebug_history
 /spec/examples.txt
-/config/deploy/*.rb
 /docker-compose.yml
 /public/uploads/
 /.idea
