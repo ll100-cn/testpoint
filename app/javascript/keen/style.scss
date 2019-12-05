@@ -1,24 +1,21 @@
 //
 // Main Stylesheet
 //
-
-
-
-@import "config-ext";
+@import "../bootstrap.variables";
 
 ////////////////////////////////////////////////////////////////
 ///////////// DO NOT MODIFY BELOW INCLUDE ORDER ////////////////
 ////////////////////////////////////////////////////////////////
 
 // 1: Include global config
-@import "~@vendor/keen/theme/demo6/src/assets/sass/config";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/config";
 
 
 // 2: Include layout config
-@import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/config";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/config";
 
 // 3: Bootstrap framework includes
-@import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/frameworks/bootstrap/variables";
+// @import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/frameworks/bootstrap/variables";
 @import "~bootstrap/scss/bootstrap";
 @import "./bootstrap.scss";
 

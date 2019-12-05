@@ -1,0 +1,18 @@
+$kt-font-size: (
+    size: (
+        desktop: 16x,
+        tablet: 16px,
+        mobile: 16px
+    ),
+    weight: 400
+);
+
+// 1: Include global config
+@import "~@vendor/keen/theme/demo6/src/assets/sass/config";
+
+
+// 2: Include layout config
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/layout/config";
+
+// 3: Bootstrap framework includes
+@import "~@vendor/keen/theme/demo6/src/assets/sass/global/integration/frameworks/bootstrap/variables";
