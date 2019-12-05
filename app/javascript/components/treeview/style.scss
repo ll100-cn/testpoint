@@ -22,13 +22,15 @@ $tv-item-left: 1.6em;
       z-index: 2;
     }
 
-    a.active {
-      background-color: lighten($primary, 38%);
+    .item > a {
       margin: -1px;
       padding-left: 5px;
       margin-left: -6px;
     }
 
+    .item > a.active {
+      background-color: lighten($primary, 38%);
+    }
     &:before, &:after {
       content: " ";
       width: 1px;
