@@ -31,6 +31,10 @@ $tv-item-left: 1.6em;
     .item > a.active {
       background-color: lighten($primary, 38%);
     }
+    .item > a:hover {
+      background-color: lighten($primary, 38%);
+    }
+
     &:before, &:after {
       content: " ";
       width: 1px;
