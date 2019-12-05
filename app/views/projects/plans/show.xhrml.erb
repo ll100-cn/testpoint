@@ -1,0 +1,67 @@
+<% content_for :header do %>
+  <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-brand nav-tabs-bold mb-0" style="border-color:transparent;">
+    <%= fume_nav params[:platform_id] do |n| %>
+      <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
+        <%= n.apply_content value do |active_class| %>
+          <li class="nav-item">
+            <%= link_to [@project, @plan, platform_id: value, folder_id: @folder], class: "nav-link #{active_class}" do %>
+              <%= key %>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+
+
+
+
+
+<div class="col-12 col-md-3 col-xl-2 border-right py-3">
+  <% @folders_mapping = @folders.group_by(&:parent_id) %>
+  <div class="d-flex">
+    <h5><%= link_to [@project, @plan, platform_id: @platform], class: "flex-1 rounded #{'active' if @folder == nil }", data: { remote: true, type: "xhrml", target: ".card-body #tp-main", replace: true, action: "activable#active" }  do %>
+      <%=h Folder %>
+    <% end %></h5>
+  </div>
+
+  <div id="folder-tree" class="treeview" data-controller="activable">
+    <ul>
+      <%= render "folders.html", key: nil %>
+    </ul>
+  </div>
+</div>
+
+<div class="col-12 col-md-9 col-xl-10">
+  <div id="tp-main">
+    <div class="d-flex">
+      <div class="btn-group">
+        <%= fume_nav params.dig(:q, :state_eq) do |n| %>
+          <% ([[page_i18n(:all), nil]] + Task.state.options).each do |key, value| %>
+            <%= n.apply_content value do |active_class| %>
+              <%= link_to key, [@project, @plan, q: { state_eq: value }], class: "btn btn-sm btn-outline-primary #{active_class}" %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <h5 class="ml-auto"><%= @plan.title %></h5>
+    </div>
+
+    <hr>
+    <div class="test_cases-cards">
+      <% @tasks.each do |task| %>
+        <%= render 'shared/card_task.html', task: task %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<div id="uploadAttachmentsModal" class="modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
