@@ -1,9 +1,11 @@
-<div class="page-header">
+<div class="card-header bg-white">
   <h2><%= page_i18n :new, model_name: h(@member) %></h2>
 </div>
 
-<%= bootstrap_horizontal_form_for [ @project, @member ] do |f| %>
-  <%= f.input :email %>
-  <%= f.input :name %>
-  <%= render "form", f: f %>
-<% end %>
+<div class="card-body">
+  <%= bootstrap_horizontal_form_for [ @project, @member ] do |f| %>
+    <%= f.input :email %>
+    <%= f.input :name %>
+    <%= render "form", f: f %>
+  <% end %>
+</div>

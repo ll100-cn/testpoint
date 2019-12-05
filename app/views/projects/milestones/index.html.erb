@@ -1,11 +1,11 @@
-<div class="page-header">
+<% content_for :header do %>
   <h2><%= page_i18n :index, model_name: h(@milestones) %></h2>
   <% if can? :create, Milestone %>
     <div class="actions ml-auto">
       <%= new_link Milestone, [:new, @project, :milestone] %>
     </div>
   <% end %>
-</div>
+<% end %>
 
 <table class="table">
   <colgroup>

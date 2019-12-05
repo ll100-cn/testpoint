@@ -1,4 +1,5 @@
 class Projects::MembersController < BaseProjectController
+  layout 'card-full-height', only: [:index]
   before_action { @navbar = "Members" }
   before_action -> { @project = current_project }
   authorize_resource :project

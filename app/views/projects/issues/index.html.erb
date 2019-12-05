@@ -1,175 +1,183 @@
-<div class="page-header">
-  <% if @task %>
-    <h3><%= @task.test_case.title %></h3>
-    <div class="ml-2">
-      <%= task_state_with_icon(@task.state) %>
-      <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
-    </div>
-  <% else %>
-    <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
-    <div class="ml-3 actions">
-      <%= link_to h(Label), project_labels_path(@project) if can? :read, Label %>
-    </div>
-  <% end %>
-  <div class="actions ml-auto">
-    <%= new_link Issue, [:new, @project, @task, :issue] if can? :create, Issue %>
-  </div>
-</div>
-
-<ul class="nav nav-tabs mb-3">
- <%= fume_nav params[:filter] || "all" do |n| %>
-   <% issues_scope = @project.issues.state_filter("opening") %>
-   <li class="nav-item">
-     <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
-       全部 (<%= issues_scope.count %>)
-     <% end %>
-   </li>
-   <li class="nav-item">
-    <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
-      我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
+<div class="card m-3 flex-1">
+  <div class="card-header bg-white d-flex">
+    <% if @task %>
+      <h3><%= @task.test_case.title %></h3>
+      <div class="ml-2">
+        <%= task_state_with_icon(@task.state) %>
+        <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
+      </div>
+    <% else %>
+      <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
+      <div class="ml-3 actions">
+        <%= link_to h(Label), project_labels_path(@project) if can? :read, Label %>
+      </div>
     <% end %>
-   </li>
-   <li class="nav-item">
-     <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
-       我创建的 (<%= issues_scope.created_issues(current_member).count %>)
-     <% end %>
-   </li>
-   <li class="nav-item">
-     <%= n.link_to "subscribed", project_issues_url(@project, @issue, filter: "subscribed"), class: "nav-item nav-link" do %>
-       我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
-     <% end %>
-   </li>
-  <% end %>
-</ul>
+    <div class="actions ml-auto">
+      <%= new_link Issue, [:new, @project, @task, :issue] if can? :create, Issue %>
+    </div>
+  </div>
 
-<div class="d-flex align-items-center justify-content-between">
-  <div class="d-flex align-items-center mb-2">
-    <span class="mr-2"><%=h Issue, :label_ids %></span>
-    <% label = Label.where(id: @q.labels_id_eq).take %>
-    <%= fume_nav label&.id do |n| %>
-      <div class="dropdown">
-        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-          <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label&.name || page_i18n(:all) %>
-        </button>
-        <div class="dropdown-menu">
-          <%= n.link_to nil, current_url(q: { labels_id_eq: nil }), class: "dropdown-item" do %>
-            <%= label_tag nil, nil, class: "badge-circle mr-2" %><%= page_i18n(:all) %>
-          <% end %>
-          <% @project.labels.each do |label| %>
-            <%= n.link_to label.id, current_url(q: { labels_id_eq: label.id }), class: "dropdown-item" do %>
-              <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
+
+
+
+
+  <div class="card-body">
+    <ul class="nav nav-tabs mb-3">
+     <%= fume_nav params[:filter] || "all" do |n| %>
+       <% issues_scope = @project.issues.state_filter("opening") %>
+       <li class="nav-item">
+         <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
+           全部 (<%= issues_scope.count %>)
+         <% end %>
+       </li>
+       <li class="nav-item">
+        <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
+          我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
+        <% end %>
+       </li>
+       <li class="nav-item">
+         <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
+           我创建的 (<%= issues_scope.created_issues(current_member).count %>)
+         <% end %>
+       </li>
+       <li class="nav-item">
+         <%= n.link_to "subscribed", project_issues_url(@project, @issue, filter: "subscribed"), class: "nav-item nav-link" do %>
+           我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
+         <% end %>
+       </li>
+      <% end %>
+    </ul>
+
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mb-2">
+        <span class="mr-2"><%=h Issue, :label_ids %></span>
+        <% label = Label.where(id: @q.labels_id_eq).take %>
+        <%= fume_nav label&.id do |n| %>
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+              <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label&.name || page_i18n(:all) %>
+            </button>
+            <div class="dropdown-menu">
+              <%= n.link_to nil, current_url(q: { labels_id_eq: nil }), class: "dropdown-item" do %>
+                <%= label_tag nil, nil, class: "badge-circle mr-2" %><%= page_i18n(:all) %>
+              <% end %>
+              <% @project.labels.each do |label| %>
+                <%= n.link_to label.id, current_url(q: { labels_id_eq: label.id }), class: "dropdown-item" do %>
+                  <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <span class="ml-2 mr-2"><%=h Issue, :milestone_id %></span>
+        <% milestone = Milestone.where(id: @q.milestone_id_eq).take %>
+        <%= fume_nav milestone&.id do |n| %>
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+              <%= milestone&.title || page_i18n(:all) %>
+            </button>
+            <div class="dropdown-menu">
+              <%= n.link_to nil, page_i18n(:all), current_url(q: { milestone_id_eq: nil }), class: "small dropdown-item" %>
+              <% @project.milestones.each do |milestone| %>
+                <%= n.link_to milestone.id, milestone.title, current_url(q: { milestone_id_eq: milestone.id }), class: "small dropdown-item" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="mb-2">
+        <% state_names = Hash[Issue.state.options(except: [:resolved, :closed])].invert.merge("opening" => "未解决", "all" => "全部") %>
+        <% state_filter = [@q.state_filter].flatten.first %>
+        <%= fume_nav state_filter do |n| %>
+          <div class="btn-group btn-group-sm ml-2" role="group">
+            <% opening_states = [ "opening", "pending", "processing" ] %>
+            <% if opening_states.include?(state_filter) %>
+              <div class="btn btn-outline-primary active"><%= state_names[state_filter] %></div>
+            <% else %>
+              <%= link_to state_names[opening_states.first], current_url(q: { state_filter: opening_states.first }), class: "btn btn-outline-primary" %>
             <% end %>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-
-    <span class="ml-2 mr-2"><%=h Issue, :milestone_id %></span>
-    <% milestone = Milestone.where(id: @q.milestone_id_eq).take %>
-    <%= fume_nav milestone&.id do |n| %>
-      <div class="dropdown">
-        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-          <%= milestone&.title || page_i18n(:all) %>
-        </button>
-        <div class="dropdown-menu">
-          <%= n.link_to nil, page_i18n(:all), current_url(q: { milestone_id_eq: nil }), class: "small dropdown-item" %>
-          <% @project.milestones.each do |milestone| %>
-            <%= n.link_to milestone.id, milestone.title, current_url(q: { milestone_id_eq: milestone.id }), class: "small dropdown-item" %>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="mb-2">
-    <% state_names = Hash[Issue.state.options(except: [:resolved, :closed])].invert.merge("opening" => "未解决", "all" => "全部") %>
-    <% state_filter = [@q.state_filter].flatten.first %>
-    <%= fume_nav state_filter do |n| %>
-      <div class="btn-group btn-group-sm ml-2" role="group">
-        <% opening_states = [ "opening", "pending", "processing" ] %>
-        <% if opening_states.include?(state_filter) %>
-          <div class="btn btn-outline-primary active"><%= state_names[state_filter] %></div>
-        <% else %>
-          <%= link_to state_names[opening_states.first], current_url(q: { state_filter: opening_states.first }), class: "btn btn-outline-primary" %>
-        <% end %>
-        <div class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="sr-only">Toggle Dropdown</span>
-        </div>
-        <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
-          <% opening_states.each do |value| %>
-            <%= n.link_to value, state_names[value], current_url(q: { state_filter: value }), class: "small dropdown-item" %>
-          <% end %>
-        </div>
-      </div>
-      <div class="btn-group ml-1">
-        <% Issue.state.options(only: [:processed, :resolved, :closed]).each do |text, value| %>
-          <%= n.link_to value, "#{text}(#{@issues_state_counts[value] || 0})", current_url(q: { state_filter: value }), class: "btn btn-sm btn-outline-primary" %>
+            <div class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="sr-only">Toggle Dropdown</span>
+            </div>
+            <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+              <% opening_states.each do |value| %>
+                <%= n.link_to value, state_names[value], current_url(q: { state_filter: value }), class: "small dropdown-item" %>
+              <% end %>
+            </div>
+          </div>
+          <div class="btn-group ml-1">
+            <% Issue.state.options(only: [:processed, :resolved, :closed]).each do |text, value| %>
+              <%= n.link_to value, "#{text}(#{@issues_state_counts[value] || 0})", current_url(q: { state_filter: value }), class: "btn btn-sm btn-outline-primary" %>
+            <% end %>
+          </div>
         <% end %>
       </div>
-    <% end %>
+    </div>
+
+    <table class="table">
+      <colgroup>
+        <col width="5%">
+        <col width="20%">
+        <col width="10%">
+        <col width="15%">
+        <col width="10%">
+        <col width="10%">
+        <col width="10%">
+        <col>
+        <col>
+      </colgroup>
+        <tr>
+          <th><%= sort_link(@q, :id)%></th>
+          <th><%= sort_link(@q, :title)%></th>
+          <th><%= sort_link(@q, :label_ids)%></th>
+          <th><%= sort_link(@q, :milestone_id)%></th>
+          <th><%= sort_link(@q, :state)%></th>
+          <th><%= sort_link(@q, :creator_id)%></th>
+          <th><%= sort_link(@q, :assignee_id)%></th>
+          <th><%= sort_link(@q, :state_at)%></th>
+          <th><%= sort_link(@q, :last_edited_at)%></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @issues.each do |issue| %>
+          <tr class="<%= 'block-discard' if issue.state.closed? %>">
+            <td><%= issue.id %></td>
+            <td>
+              <%= link_to issue.title, [@project, issue] %>
+            </td>
+            <td>
+              <% issue.labels.each do |label| %>
+                <%= label_tag(label, label.name) %>
+              <% end %>
+            </td>
+            <td>
+              <% if issue.milestone %>
+                <%= issue.milestone.title %>
+              <% end %>
+            </td>
+            <td>
+              <span class="text-issue-<%= issue.state %>">
+                <%= issue.state.text %>
+              </span>
+            </td>
+            <td><%= issue.creator.smart_name %></td>
+            <td><%= issue.assignee&.smart_name %></td>
+            <td><%=l issue.state_at, format: :simple %></td>
+            <% if @task %>
+            <td>
+              <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
+            </td>
+            <% end %>
+            <td><%=l issue.last_edited_at, format: :simple if issue.last_edited_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <nav class="table-pagination">
+      <%= paginate @issues %>
+    </nav>
   </div>
 </div>
-
-<table class="table">
-  <colgroup>
-    <col width="5%">
-    <col width="20%">
-    <col width="10%">
-    <col width="15%">
-    <col width="10%">
-    <col width="10%">
-    <col width="10%">
-    <col>
-    <col>
-  </colgroup>
-    <tr>
-      <th><%= sort_link(@q, :id)%></th>
-      <th><%= sort_link(@q, :title)%></th>
-      <th><%= sort_link(@q, :label_ids)%></th>
-      <th><%= sort_link(@q, :milestone_id)%></th>
-      <th><%= sort_link(@q, :state)%></th>
-      <th><%= sort_link(@q, :creator_id)%></th>
-      <th><%= sort_link(@q, :assignee_id)%></th>
-      <th><%= sort_link(@q, :state_at)%></th>
-      <th><%= sort_link(@q, :last_edited_at)%></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @issues.each do |issue| %>
-      <tr class="<%= 'block-discard' if issue.state.closed? %>">
-        <td><%= issue.id %></td>
-        <td>
-          <%= link_to issue.title, [@project, issue] %>
-        </td>
-        <td>
-          <% issue.labels.each do |label| %>
-            <%= label_tag(label, label.name) %>
-          <% end %>
-        </td>
-        <td>
-          <% if issue.milestone %>
-            <%= issue.milestone.title %>
-          <% end %>
-        </td>
-        <td>
-          <span class="text-issue-<%= issue.state %>">
-            <%= issue.state.text %>
-          </span>
-        </td>
-        <td><%= issue.creator.smart_name %></td>
-        <td><%= issue.assignee&.smart_name %></td>
-        <td><%=l issue.state_at, format: :simple %></td>
-        <% if @task %>
-        <td>
-          <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
-        </td>
-        <% end %>
-        <td><%=l issue.last_edited_at, format: :simple if issue.last_edited_at %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<nav class="table-pagination">
-  <%= paginate @issues %>
-</nav>

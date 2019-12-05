@@ -12,13 +12,15 @@
     <%= render "layouts/nav", current: @navbar %>
     <%= render "layouts/flash" %>
 
-    <%= yield %>
+    <div class="card m-3">
+      <div class="card-header bg-white pb-0">
+        <%= yield :header %>
+      </div>
 
-    <div id="test_case_modal" class="modal">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-        </div>
+      <div class="card-body">
+        <%= yield %>
       </div>
     </div>
+
   </body>
 </html>

@@ -1,5 +1,5 @@
 class Projects::PlansController < BaseProjectController
-  layout "sidebar", only: [:show]
+  layout 'card-full-height', only: [:index, :show]
   before_action { @navbar = "plans" }
   before_action -> { @project = current_project }
   authorize_resource :project

@@ -8,11 +8,19 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body class="full-height">
+  <body class="full-height bg-light">
     <%= render "layouts/nav", current: @navbar %>
     <%= render "layouts/flash" %>
 
-    <%= yield %>
+    <div class="card m-3 flex-1">
+      <div class="card-header bg-white pb-0 d-flex justify-content-between">
+        <%= yield :header %>
+      </div>
+
+      <div class="card-body p-0 d-flex align-items-stretch">
+        <%= yield %>
+      </div>
+    </div>
 
   </body>
 </html>
