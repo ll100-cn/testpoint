@@ -14,6 +14,10 @@
         <% projects.each do |project| %>
           <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
         <% end %>
+
+        <div class="dropdown-divider"></div>
+
+        <%= link_to page_i18n(:index, model_name: h(Project)), projects_path, class: "small dropdown-item" %>
       </div>
     </div>
     <div class="navbar-nav-scroll">
