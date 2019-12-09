@@ -2,14 +2,13 @@
 #
 # Table name: milestones
 #
-#  id          :bigint           not null, primary key
-#  title       :string
-#  end_time    :datetime
-#  description :text
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  start_time  :datetime
-#  project_id  :bigint
+#  id           :bigint           not null, primary key
+#  title        :string
+#  description  :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  project_id   :bigint
+#  published_at :datetime
 #
 
 class Milestone < ApplicationRecord

@@ -16,7 +16,7 @@ RSpec.describe Projects::MilestonesController, type: :controller do
   end
 
   describe "POST create" do
-    let(:attributes) { { title: "milestone2", description: "description for milestone1", start_time: 2.days.from_now, end_time: 10.days.from_now } }
+    let(:attributes) { { title: "milestone2", description: "description for milestone1", published_at: 10.days.from_now } }
     action { post :create, params: { milestone: attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
   end
