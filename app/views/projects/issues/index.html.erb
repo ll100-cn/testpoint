@@ -117,6 +117,7 @@
     </div>
 
     <table class="table">
+      <caption><%= page_i18n :count, number: @issues.total_count, model_name: h(@issues) %></caption>
       <colgroup>
         <col width="5%">
         <col width="20%">
@@ -128,6 +129,7 @@
         <col>
         <col>
       </colgroup>
+      <thead>
         <tr>
           <th><%= sort_link(@q, :id)%></th>
           <th><%= sort_link(@q, :title)%></th>

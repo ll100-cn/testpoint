@@ -9,6 +9,7 @@ zh-CN:
         actions: 操作
         progress: 进度
         all: 全部
+        count: "总共 %{number} 个 %{model_name}"
         profile: 个人中心
       issues:
         show:

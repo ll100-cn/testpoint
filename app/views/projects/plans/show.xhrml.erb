@@ -58,6 +58,7 @@
       <% @tasks.each do |task| %>
         <%= render 'shared/card_task.html', task: task %>
       <% end %>
+      <%= page_i18n :count, number: @tasks.count, model_name: h(@tasks) %>
     </div>
   </div>
 </div>
