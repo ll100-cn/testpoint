@@ -40,7 +40,7 @@
           </div>
         </td>
         <td>
-          <%= edit_link [:edit, @project, plan, ok_url: request.fullpath] if can? :update, plan %>
+          <%= edit_link "#", data: { toggle: "modal", target: "#plan_modal", url: edit_project_plan_path(@project, plan, ok_url: request.fullpath) } if can? :update, plan %>
           <%= destroy_link [@project, plan, ok_url: request.fullpath] if can? :destroy, plan %>
         </td>
       </tr>

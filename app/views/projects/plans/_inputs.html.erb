@@ -1,5 +1,6 @@
 <%= f.input :title %>
 <%= f.input :start_at, as: :datetime_pickr %>
+
 <% if f.object.new_record? %>
   <%= f.input :platform_ids, collection: f.object.project.platforms.all, as: :check_boxes, input_html: { name: "platform_ids[]" } %>
 
