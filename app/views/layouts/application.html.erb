@@ -11,8 +11,9 @@
   <body class="full-height">
     <%= render "layouts/nav", current: @navbar %>
     <%= render "layouts/flash" %>
-
-    <%= yield %>
+    <div class="m-3">
+      <%= yield %>
+    </div>
 
   </body>
 </html>

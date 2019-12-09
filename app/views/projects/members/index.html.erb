@@ -1,5 +1,5 @@
 <% content_for :header do %>
-  <h2><%= h Project, :members %></h2>
+  <h2><%= page_i18n :index, model_name: h(Member) %></h2>
   <div class="actions ml-auto">
     <%= new_link Member, [:new, @project, :member] if can? :create, Member %>
   </div>
