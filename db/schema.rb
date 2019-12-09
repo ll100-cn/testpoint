@@ -167,12 +167,12 @@ ActiveRecord::Schema.define(version: 2019_10_29_100026) do
 
   create_table "milestones", force: :cascade do |t|
     t.string "title"
-    t.datetime "end_time"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "start_time"
     t.bigint "project_id"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.index ["project_id"], name: "index_milestones_on_project_id"
   end
 

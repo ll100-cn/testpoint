@@ -12,15 +12,13 @@
     <col width="20%">
     <col width="20%">
     <col width="20%">
-    <col width="20%">
     <col>
   </colgroup>
   <thead>
   <tr>
     <th><%=h Milestone, :title %></th>
     <th><%=h Milestone, :description %></th>
-    <th><%=h Milestone, :start_time %></th>
-    <th><%=h Milestone, :end_time %></th>
+    <th><%=h Milestone, :published_at %></th>
     <th><%= page_i18n :actions %></th>
   </tr>
   </thead>
@@ -29,8 +27,7 @@
       <tr>
         <td><%= link_to milestone.title, [@project, milestone] %></td>
         <td><%= milestone.description %></td>
-        <td><%=l milestone.start_time, format: :long %></td>
-        <td><%=l milestone.end_time, format: :long  %></td>
+        <td><%=l milestone.published_at, format: :long %></td>
         <td>
           <%= edit_link [:edit, @project, milestone, ok_url: request.fullpath ] if can? :update, milestone %>
           <%= destroy_link [@project, milestone, ok_url: request.fullpath ] if can? :destroy, milestone %>
