@@ -44,7 +44,7 @@
         <%= fume_nav params.dig(:q, :state_eq) do |n| %>
           <% ([[page_i18n(:all), nil]] + Task.state.options).each do |key, value| %>
             <%= n.apply_content value do |active_class| %>
-              <%= link_to key, [@project, @plan, q: { state_eq: value }], class: "btn btn-sm btn-outline-primary #{active_class}" %>
+              <%= link_to key, [@project, @plan, q: { state_eq: value }, platform_id: @platform ], class: "btn btn-sm btn-outline-primary #{active_class}" %>
             <% end %>
           <% end %>
         <% end %>
@@ -58,6 +58,7 @@
       <% @tasks.each do |task| %>
         <%= render 'shared/card_task.html', task: task %>
       <% end %>
+      <%= page_i18n :count, number: @tasks.count, model_name: h(@tasks) %>
     </div>
   </div>
 </div>

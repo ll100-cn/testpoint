@@ -53,6 +53,7 @@
 <div class="col-12 col-md-9 col-xl-10">
   <div id="tp-main">
     <table class="table">
+      <caption><%= page_i18n :count, number: @test_cases.total_count, model_name: h(@test_cases) %></caption>
       <thead>
         <tr>
           <th scope="col"><%= h Platform, "name" %></th>
