@@ -3,8 +3,7 @@
   <div class="card flex-grow-1">
     <div class="card-header">
       <%= comment.member.smart_name %>
-      <span class="ml-1 small text-muted"><%= time_ago_in_words(comment.created_at) %></span>
-      <span class="ml-1 small text-muted"><%="最后编辑于#{time_ago_in_words(comment.last_edited_at)}前" if comment.last_edited_at %></span>
+      <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(comment) %></span>
       <div class="dropdown float-right dropdown-no-arrow">
         <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
           <i class="fa fa-ellipsis-h" aria-hidden="true"></i>

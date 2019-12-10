@@ -59,4 +59,12 @@ module PageHelper
       smart_quotes: %w[apos apos quot quot]
     ).to_html.html_safe
   end
+
+  def create_or_edit_time_in_words(model)
+    if model.last_edited_at
+      "#{time_ago_in_words(model.last_edited_at)}前修改"
+    else
+      "#{time_ago_in_words(model.created_at)}前创建"
+    end
+  end
 end
