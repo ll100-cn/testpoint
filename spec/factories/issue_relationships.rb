@@ -5,10 +5,10 @@
 #  id         :bigint           not null, primary key
 #  target_id  :bigint
 #  source_id  :bigint
-#  member_id  :bigint
 #  category   :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  member_id  :bigint
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 FactoryBot.define do

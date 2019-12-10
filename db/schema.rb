@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_29_100026) do
+ActiveRecord::Schema.define(version: 2019_12_09_072048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,12 +167,11 @@ ActiveRecord::Schema.define(version: 2019_10_29_100026) do
 
   create_table "milestones", force: :cascade do |t|
     t.string "title"
-    t.datetime "end_time"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "start_time"
     t.bigint "project_id"
+    t.datetime "published_at"
     t.index ["project_id"], name: "index_milestones_on_project_id"
   end
 
