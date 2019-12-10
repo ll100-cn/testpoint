@@ -25,7 +25,7 @@
     <% @milestones.each do |milestone| %>
       <tr>
         <td><%= link_to milestone.title, [@project, milestone] %></td>
-        <td><%=l milestone.published_at, format: :long %></td>
+        <td><%=l milestone.published_at, format: :long if milestone.published_at? %></td>
         <td>
           <%= edit_link [:edit, @project, milestone, ok_url: request.fullpath ] if can? :update, milestone %>
           <%= destroy_link [@project, milestone, ok_url: request.fullpath ] if can? :destroy, milestone %>
