@@ -18,6 +18,8 @@ class Projects::MilestonesController < BaseProjectController
   end
 
   def show
+    @q = @milestone.issues.ransack(params[:q])
+    @issues = @q.result.with_labels.page(params[:page])
   end
 
   def edit

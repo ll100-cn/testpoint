@@ -1,6 +1,6 @@
 <%= f.input :title %>
 <%= f.input :published_at, as: :datetime_pickr %>
-<%= f.input :description %>
+<%= f.input :description, input_html: { class: 'markdown-field' } %>
 
 <hr>
 

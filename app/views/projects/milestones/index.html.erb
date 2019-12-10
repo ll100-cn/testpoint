@@ -17,7 +17,6 @@
   <thead>
   <tr>
     <th><%=h Milestone, :title %></th>
-    <th><%=h Milestone, :description %></th>
     <th><%=h Milestone, :published_at %></th>
     <th><%= page_i18n :actions %></th>
   </tr>
@@ -26,7 +25,6 @@
     <% @milestones.each do |milestone| %>
       <tr>
         <td><%= link_to milestone.title, [@project, milestone] %></td>
-        <td><%= milestone.description %></td>
         <td><%=l milestone.published_at, format: :long %></td>
         <td>
           <%= edit_link [:edit, @project, milestone, ok_url: request.fullpath ] if can? :update, milestone %>
