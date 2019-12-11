@@ -16,7 +16,7 @@ end
 
 if Project.none?
   project = Project.create!(name: "Default Project")
-  Component.create!(name: "Default Component", project: project)
+  Folder.create!(name: "学生", project: project)
   Platform.create!(name: "Default Platform", project: project)
   Member.create!(role: "owner", project: project, user: user)
 end
