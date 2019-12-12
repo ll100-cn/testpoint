@@ -52,6 +52,7 @@ zh-CN:
         state: 状态
         issue_id: 问题
         attachments: 附件
+        platform_id: 平台
       test_case:
         title: 标题
         content: 内容

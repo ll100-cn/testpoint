@@ -1,75 +1,88 @@
-<% content_for :header do %>
-  <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-brand nav-tabs-bold mb-0" style="border-color:transparent;">
-    <%= fume_nav params[:platform_id] do |n| %>
-      <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
-        <%= n.apply_content value do |active_class| %>
-          <li class="nav-item">
-            <%= link_to [@project, @plan, platform_id: value, folder_id: @folder], class: "nav-link #{active_class}" do %>
-              <%= key %>
-            <% end %>
-          </li>
-        <% end %>
-      <% end %>
+<div class="card app-card-main">
+  <div class="card-header bg-white d-flex">
+
+    <%= fume_nav @platform&.id do |n| %>
+      <div class="dropdown">
+        <%=h Task, :platform_id %>：
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+          <%= @platform&.name || page_i18n(:all) %>
+        </button>
+        <div class="dropdown-menu">
+          <%= n.link_to nil, page_i18n(:all), current_url(platform_id: nil), class: "dropdown-item" %>
+          <% @project.platforms.each do |platform| %>
+            <%= n.link_to platform.id, platform.name, current_url(platform_id: platform), class: "dropdown-item" %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-  </ul>
-<% end %>
 
 
 
 
-
-<div class="col-12 col-md-3 col-xl-2 border-right py-3">
-  <% @folders_mapping = @folders.group_by(&:parent_id) %>
-  <div class="d-flex">
-    <h5><%= link_to [@project, @plan, platform_id: @platform], class: "flex-1 rounded #{'active' if @folder == nil }", data: { remote: true, type: "xhrml", target: ".card-body #tp-main", replace: true, action: "activable#active" }  do %>
-      <%=h Folder %>
-    <% end %></h5>
+    <%= fume_nav @q.state_eq do |n| %>
+      <div class="dropdown ml-3">
+        <%=h Task, :state %>：
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+          <%= Task.state.find_value(@q.state_eq)&.text || page_i18n(:all) %>
+        </button>
+        <div class="dropdown-menu" >
+          <%= n.link_to nil, page_i18n(:all), current_url(q: { state_eq: nil }), class: "dropdown-item" %>
+          <% Task.state.options.each do |(text, value)| %>
+            <%= n.link_to value, text, current_url(q: { state_eq: value }), class: "dropdown-item" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
-  <div id="folder-tree" class="treeview" data-controller="activable">
-    <ul>
-      <%= render "shared/folders.html", key: nil do |folder| %>
-        <%= link_to [@project, @plan, folder_id: folder.id, platform_id: @platform], class: "treeview-link flex-1 rounded #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main .test_cases-cards", replace: true, action: "activable#active" }  do %>
-          <i class="fal fa-folder mr-2"></i><%= folder.name %>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
-</div>
 
-<div class="col-12 col-md-9 col-xl-10">
-  <div id="tp-main">
-    <div class="d-flex">
-      <div class="btn-group">
-        <%= fume_nav params.dig(:q, :state_eq) do |n| %>
-          <% ([[page_i18n(:all), nil]] + Task.state.options).each do |key, value| %>
-            <%= n.apply_content value do |active_class| %>
-              <%= link_to key, [@project, @plan, q: { state_eq: value }, platform_id: @platform ], class: "btn btn-sm btn-outline-primary #{active_class}" %>
+  <div class="card-body p-0 d-flex align-items-stretch">
+    <div class="col-12 col-md-3 col-xl-2 border-right py-3">
+      <% @folders_mapping = @folders.group_by(&:parent_id) %>
+      <div class="d-flex">
+        <h5><%= link_to [@project, @plan, platform_id: @platform], class: "flex-1 rounded #{'active' if @folder == nil }", data: { remote: true, type: "xhrml", target: ".card-body #tp-main", replace: true, action: "activable#active" }  do %>
+          <%=h Folder %>
+        <% end %></h5>
+      </div>
+
+      <div id="folder-tree" class="treeview" data-controller="activable">
+        <ul>
+          <%= render "shared/folders.html", key: nil do |folder| %>
+            <%= link_to current_url(folder_id: folder), class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main .test_cases-cards", action: "activable#active" }  do %>
+              <i class="fal fa-folder mr-2"></i><%= folder.name %>（<%= @folder_tasks_counts[folder.id] %>）
             <% end %>
           <% end %>
-        <% end %>
-      </div>
-
-      <h5 class="ml-auto"><%= @plan.title %></h5>
-    </div>
-
-    <hr>
-    <div class="test_cases-cards">
-      <% @tasks.each do |task| %>
-        <%= render 'shared/card_task.html', task: task %>
-      <% end %>
-      <%= page_i18n :count, number: @tasks.count, model_name: h(@tasks) %>
-    </div>
-  </div>
-</div>
-
-
-<div id="uploadAttachmentsModal" class="modal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="d-flex justify-content-center">
-        <div class="spinner-border p-5 m-5" role="status"></div>
+        </ul>
       </div>
     </div>
+
+    <div class="col-12 col-md-9 col-xl-10">
+      <div id="tp-main">
+        <div class="d-flex">
+
+          <h5 class="ml-auto"><%= @plan.title %></h5>
+        </div>
+
+        <hr>
+        <div class="test_cases-cards">
+          <% @tasks.each do |task| %>
+            <%= render 'shared/card_task.html', task: task %>
+          <% end %>
+          <%= page_i18n :count, number: @tasks.count, model_name: h(@tasks) %>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="uploadAttachmentsModal" class="modal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border p-5 m-5" role="status"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

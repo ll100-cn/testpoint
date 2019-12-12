@@ -48,4 +48,9 @@ module ApplicationHelper
     color.l = 0.1 + 0.4 * color.l
     color.to_rgb_hex
   end
+
+  def current_url(attributes = {})
+    options = request.query_parameters.deep_merge(attributes)
+    url_for(options)
+  end
 end
