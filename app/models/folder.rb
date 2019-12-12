@@ -30,4 +30,11 @@ class Folder < ApplicationRecord
   def ancestor_ids_with_self
     [id] + ancestor_ids
   end
+
+  def self.descendants_with_self_counts(collection, resources_counts)
+    collection.each_with_object({}) do |folder, result|
+      count = resources_counts[folder.id] || 0
+      result.merge!(folder.ancestor_ids_with_self.product([count]).to_h) { |key, old, new| old + new }
+    end
+  end
 end
