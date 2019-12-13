@@ -31,6 +31,8 @@ function findContainer(element, container, target) {
 function findContent(data, container, target) {
   if (!target) {
     return $(data)
+  } else if ($(data).has(container)) {
+    return $(data).find(target)
   } else {
     return $(data).find(container).find(target)
   }
