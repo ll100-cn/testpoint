@@ -30,6 +30,9 @@ zh-CN:
         more: 查看更多
         update: 更新
       projects/tasks:
+        update:
+          relate: 关联
+          cancel_relate: 取消关联      
         change_state:
           relate: 关联
           cancel_relate: 取消关联

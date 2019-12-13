@@ -66,7 +66,7 @@
         <hr>
         <div class="test_cases-cards">
           <% @tasks.each do |task| %>
-            <%= render 'shared/card_task.html', task: task %>
+            <%= render 'projects/tasks/row.html', task: task %>
           <% end %>
           <%= page_i18n :count, number: @tasks.count, model_name: h(@tasks) %>
         </div>
@@ -74,7 +74,7 @@
     </div>
 
 
-    <div id="uploadAttachmentsModal" class="modal">
+    <div id="task-info-modal" class="modal">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="d-flex justify-content-center">

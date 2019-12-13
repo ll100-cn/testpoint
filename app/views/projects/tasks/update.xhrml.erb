@@ -1,11 +1,6 @@
-<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-  <%=h Issue %>
-</button>
-<div class="dropdown-menu">
-  <% if @task.issue_id.nil? %>
-    <%= new_button Issue, [:new, @project, @task, :issue], class: "dropdown-item" %>
-  <% end %>
-  <% relate_data = { remote: true, target: "#relate-issue", type: :xhrml } %>
-  <% link_text = @task.issue_id? ? "#{h(Task, :issue_id)}: #{@task.issue_id}" : action_i18n('relate') %>
-  <%= link_to link_text, [:related_issues, @project, @plan, @task], data: relate_data, class: "dropdown-item" %>
-</div>
+<%= render template: 'projects/tasks/change_state.xhrml' %>
+
+
+<script>
+$(".<%= dom_id @task, 'on' %>").click()
+</script>
