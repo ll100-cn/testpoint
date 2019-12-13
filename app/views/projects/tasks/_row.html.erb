@@ -1,0 +1,12 @@
+<%= content_tag :div, class: "card mb-2" do %>
+  <div class="card-body d-flex align-items-center py-2 px-2">
+    <span class="badge badge-secondary mr-2" style="width:70px"><%= task.platform.name %></span>
+    <span><%= task.test_case.title %></span>
+    <div class="small ml-auto">
+      <%= task_state_with_icon(task.state) %>
+    </div>
+
+    <%= link_to "", "#", class: "stretched-link", data: { target: "#task-info-modal", toggle: "modal", url: change_state_project_plan_task_path(@project, @plan, task) } %>
+    <%= link_to 'refresh-self', [ :row, @project, @plan, task ], class: "d-none #{dom_id task, 'on'}", data: { remote: true, type: :xhrml, target: '.card .card-body' } %>
+  </div>
+<% end %>

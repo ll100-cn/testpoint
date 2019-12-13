@@ -1,10 +1,10 @@
 class Projects::PlansController < BaseProjectController
-  layout 'card-full-height', only: [:index, :show]
+  layout 'card-full-height', only: [:index]
   before_action { @navbar = "plans" }
   before_action -> { @project = current_project }
   authorize_resource :project
-  load_and_authorize_resource :folder
-  load_and_authorize_resource :platform
+  load_and_authorize_resource :folder, through: :project
+  load_and_authorize_resource :platform, through: :project
   load_and_authorize_resource through: :project
 
   def index
@@ -32,13 +32,17 @@ class Projects::PlansController < BaseProjectController
   end
 
   def show
-    @tasks = @plan.tasks
-    @tasks = @tasks.where(platform: @platform) if @platform
-    @tasks = @tasks.joins(:test_case).where(test_cases: { folder: @folder.subtree }) if @folder
-    @tasks = @tasks.ransack(params[:q]).result
+    tasks_scope = @plan.tasks.joins(:test_case)
+    tasks_scope = tasks_scope.where(platform: @platform) if @platform
+    tasks_scope = tasks_scope.joins(:test_case).where(test_cases: { folder_id: @folder.subtree }) if @folder
 
-    @folders = @project.folders.available.ranked
-    respond_with @plan, location: ok_url_or_default(action: :show)
+    @q = tasks_scope.ransack(params[:q])
+    tasks_scope = @q.result
+    @tasks = tasks_scope
+
+    @folders = @project.folders.ranked
+    @folder_tasks_counts = Folder.descendants_with_self_counts(@folders, tasks_scope.group("test_cases.folder_id").count)
+    @folders = @folders.find_all { |folder| @folder_tasks_counts[folder.id] > 0 }
   end
 
   def destroy

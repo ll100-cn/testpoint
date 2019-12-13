@@ -8,10 +8,11 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body class="full-height">
+  <body class="singleton">
     <%= render "layouts/nav", current: @navbar %>
     <%= render "layouts/flash" %>
-    <div class="m-3">
+
+    <div class="app-container d-flex flex-column">
       <%= yield %>
     </div>
 

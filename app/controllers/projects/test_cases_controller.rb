@@ -17,10 +17,7 @@ class Projects::TestCasesController < BaseProjectController
     @folders = @project.folders.available.ranked
 
     test_cases_counts = @test_cases.group(:folder_id).count
-    @folder_test_cases_counts = @folders.each_with_object({}) do |folder, result|
-      count = test_cases_counts[folder.id] || 0
-      result.merge!(folder.ancestor_ids_with_self.product([count]).to_h) { |key, old, new| old + new }
-    end
+    @folder_test_cases_counts = Folder.descendants_with_self_counts(@folders, test_cases_counts)
   end
 
   def new

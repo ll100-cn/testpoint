@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       resources :plans do
         resources :tasks do
           member do
+            get :row
             get :change_state
             get :upload_attachment
             get :related_issues

@@ -7,6 +7,23 @@
   padding: 1rem;
 }
 
+.singleton {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $light;
+}
+
+.app-container {
+  padding: 1rem;
+  flex: 1;
+}
+
+.app-card-main {
+  flex: 1;
+  margin-bottom: 0;
+}
+
 .full-height {
   height: 100vh;
   display: flex;
