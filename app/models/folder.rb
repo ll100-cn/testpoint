@@ -21,7 +21,7 @@ class Folder < ApplicationRecord
 
   scope :available, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
-  scope :ranked, -> { order(:name) }
+  scope :ranked, -> { order("CONCAT(ancestry, id)") }
 
   def to_label
     "　" * ancestor_ids.size + name
