@@ -1,5 +1,5 @@
 <% content_for :header do %>
-  <h2><%= page_i18n :index, model_name: h(@plans) %></h2>
+  <h2><%= title(page_i18n :index, model_name: h(@plans)) %></h2>
   <%= new_link Plan, "#", data: { toggle: "modal", target: "#plan_modal", url: new_project_plan_path(@project, @plan, ok_url: request.fullpath) } if can? :create, Plan %>
 <% end %>
 

@@ -7,7 +7,7 @@
         <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
       </div>
     <% else %>
-      <h2><%= page_i18n :index, model_name: h(@issues) %></h2>
+      <h2><%= title(page_i18n :index, model_name: h(@issues)) %></h2>
       <div class="ml-3 actions">
         <%= link_to h(Label), project_labels_path(@project) if can? :read, Label %>
       </div>

@@ -1,5 +1,5 @@
 <div class="page-header justify-content-between">
-  <h2><%= @milestone.title %></h2>
+  <h2><%= title(@milestone.title) %></h2>
   <small><%= @milestone.published_at? ? "发布于 #{l @milestone.published_at, format: :long}" : "未确定发布日期" %></small>
 </div>
 

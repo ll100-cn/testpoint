@@ -67,4 +67,9 @@ module PageHelper
       "#{time_ago_in_words(model.created_at)}前创建"
     end
   end
+
+  def title(value)
+    content_for :title, value
+    value
+  end
 end
