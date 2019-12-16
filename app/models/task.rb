@@ -25,6 +25,7 @@ class Task < ApplicationRecord
   has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
 
   validate :issue_must_exist, if: -> { issue_id.present? }
+  validates :message, presence: true, if: -> { state.failure? }
 
   scope :ranked, -> { order(:created_at) }
   scope :with_platform, -> { joins(:platform).includes(:platform) }

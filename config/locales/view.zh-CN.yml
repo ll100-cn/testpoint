@@ -33,7 +33,7 @@ zh-CN:
         update:
           relate: 关联
           cancel_relate: 取消关联
-        change_state:
+        show:
           relate: 关联
           cancel_relate: 取消关联
       projects/issues:

@@ -59,7 +59,7 @@ en:
         more: More
         update: Update
       projects/tasks:
-        change_state:
+        show:
           relate: Relate
           cancel_relate: Remove association
       projects/issues:

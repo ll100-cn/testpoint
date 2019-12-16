@@ -1,12 +1,18 @@
-<div class="page-header">
-  <h2><%= page_i18n :edit, model_name: h(@task) %></h2>
+<div class="modal-header">
+  <h5 class="modal-title"><%= @task.test_case.title %></h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
-
-<div class="container">
-  <%= bootstrap_vertical_form_for @task, url: [@project, @task] do |f| %>
-    <%= f.input :message %>
-    <%= ok_url_tag %>
-    <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link [@project, @task], class: "btn btn-secondary" %>
+<div class="modal-body">
+  <%= bootstrap_vertical_form_for [@project, @plan, @task], data: { remote: true, type: 'xhrml', target: ".modal-content" } do |f| %>
+    <%= f.input :state, collection: Task.state.options %>
+    <%= f.input :message, input_html: { class: 'markdown-field' } %>
+    <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+    <hr>
+    <div class="text-right mb-2">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :cancel %></button>
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
   <% end %>
 </div>
