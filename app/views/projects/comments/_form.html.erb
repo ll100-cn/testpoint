@@ -4,21 +4,21 @@
     <div class="card flex-grow-1">
       <div class="card-header">
         <strong><%= current_member.smart_name %></strong>
-        <% if (can? :create, Comment) && !@issue.state.closed? %>
+        <% if (can? :create, Comment) && !issue.state.closed? %>
           <div class="dropdown float-right dropdown-no-arrow">
             <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
               <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right" style="min-width: auto;">
               <% data = { toggle: "modal", target: "#duplicate-issue", remote: true, type: "xhrml" } %>
-              <%= link_to action_i18n('reference'), apply_ok_url([ :new, @project, @issue, :issue_relationship, issue_relationship: { category: "reference" }]), data: data, class: "small dropdown-item" %>
-              <%= link_to action_i18n('duplicate'), apply_ok_url([ :new, @project, @issue, :issue_relationship, issue_relationship: { category: "duplicated" }]), data: data, class: "small dropdown-item" %>
+              <%= link_to action_i18n('reference'), apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "reference" }]), data: data, class: "small dropdown-item" %>
+              <%= link_to action_i18n('duplicate'), apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "duplicated" }]), data: data, class: "small dropdown-item" %>
             </div>
           </div>
         <% end %>
       </div>
 
-      <%= bootstrap_vertical_form_for [@project, issue, issue.comments.new] do |f| %>
+      <%= bootstrap_vertical_form_for [@project, issue, @comment || issue.comments.new], data: { remote: true, type: "xhrml", target: ".issue-comment" } do |f| %>
         <div class="card-body">
           <div class="no-margin-bottom">
             <%= f.input :content, input_html: { class: 'markdown-field' } %>

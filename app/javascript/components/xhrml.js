@@ -1,5 +1,6 @@
 // SNIP: 9d6557d3936d0c8700fdedde9eec3026 | xhrml.jsx
 // CHANGELOG:
+//  - 2019-12-16 新增自动判断是否 replace container, 不建议使用 replace
 //  - 2019-11-25 支持 target 嵌套
 //  - 2018-07-04 添加 replace 属性, 决定是否替换容器
 //  - 2018-05-25 优化代码风格
@@ -41,8 +42,12 @@ function findContent(data, container, target) {
 function replaceContent($element, data, container, target) {
   const $container = findContainer($element, container, target)
   const $data = findContent(data, container, target)
+  let replacement = false
+  replacement = replacement || $element.data('replace')
+  replacement = replacement || ($data.has(container) && !target)
+  replacement = replacement || target
 
-  if ($element.data('replace') || target) {
+  if (replacement) {
     $container.replaceWith($data)
     return $data
   } else {

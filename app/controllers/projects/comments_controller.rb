@@ -10,7 +10,7 @@ class Projects::CommentsController < BaseProjectController
   def create
     @comment.member = current_member
     @comment.save
-    respond_with @comment, location: ok_url_or_default([@project, @issue])
+    respond_with @comment, location: ok_url_or_default([@project, @issue, @comment])
   end
 
   def edit
