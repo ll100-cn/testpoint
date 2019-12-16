@@ -32,7 +32,7 @@ function findContainer(element, container, target) {
 function findContent(data, container, target) {
   if (!target) {
     return $(data)
-  } else if ($(data).has(container)) {
+  } else if ($(data).is(container)) {
     return $(data).find(target)
   } else {
     return $(data).find(container).find(target)
@@ -44,7 +44,7 @@ function replaceContent($element, data, container, target) {
   const $data = findContent(data, container, target)
   let replacement = false
   replacement = replacement || $element.data('replace')
-  replacement = replacement || ($data.has(container) && !target)
+  replacement = replacement || ($data.is(container) && !target)
   replacement = replacement || target
 
   if (replacement) {

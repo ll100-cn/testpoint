@@ -20,6 +20,7 @@ RSpec.describe Projects::TasksController, type: :controller do
       let(:attachment) { create :attachment }
       before {
         task_attributes[:state] = :failure
+        task_attributes[:message] = "failure detail"
         task_attributes[:attachment_ids] = [ attachment.id ]
       }
 
@@ -48,8 +49,8 @@ RSpec.describe Projects::TasksController, type: :controller do
     end
   end
 
-  describe "GET change_state" do
-    action { get :change_state, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
+  describe "GET show" do
+    action { get :show, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
     it { is_expected.to respond_with(:success) }
   end
 
