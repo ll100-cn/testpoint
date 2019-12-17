@@ -53,4 +53,16 @@ module ApplicationHelper
     options = request.query_parameters.deep_merge(attributes)
     url_for(options)
   end
+
+  def sort_folders(folders)
+    mapping = folders.group_by(&:parent_id)
+    traverse = ->(mapping, key, result) {
+      (mapping[key] || []).each do |child|
+        result << child
+        traverse.(mapping, child.id, result)
+      end
+      result
+    }
+    traverse.(mapping, nil, [])
+  end
 end
