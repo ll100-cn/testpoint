@@ -25,6 +25,7 @@ class ProjectsController < BaseProjectController
 
   def show
     @users = @project.members.page(params[:page])
+    cookies[:last_login_project] = @project.id
     redirect_to project_issues_path(@project)
   end
 
