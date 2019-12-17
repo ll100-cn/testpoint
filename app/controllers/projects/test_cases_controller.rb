@@ -14,7 +14,7 @@ class Projects::TestCasesController < BaseProjectController
     @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
     @test_cases = @test_cases.page(params[:page])
 
-    @folders = @project.folders.available.ranked
+    @folders = @project.folders.ranked
 
     test_cases_counts = test_cases_scope.group(:folder_id).count
     @folder_test_cases_counts = Folder.descendants_with_self_counts(@folders, test_cases_counts)

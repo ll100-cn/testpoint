@@ -43,7 +43,9 @@ Rails.application.routes.draw do
       resources :tasks do
         resources :issues
       end
-      resources :folders
+      resources :folders do
+        patch :archive, on: :member
+      end
       resources :platforms
       resources :labels
       resources :milestones

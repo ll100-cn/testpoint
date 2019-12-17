@@ -25,8 +25,20 @@ class Projects::FoldersController < BaseProjectController
     respond_with @folder, location: ok_url_or_default([@project, TestCase])
   end
 
+  def archive
+    @folder.archive
+    respond_with @folder, location: ok_url_or_default([@project, TestCase])
+  end
+
 protected
   def folder_params
-    params.fetch(:folder, {}).permit(:name, :parent_id, :archived)
+    params.fetch(:folder, {}).permit(*permit_attributes)
   end
+
+  def permit_attributes
+    result = [:name, :archived]
+    result << :parent_id unless @folder.archived_root?
+    result
+  end
+  helper_method :permit_attributes
 end

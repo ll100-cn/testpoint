@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_09_072048) do
+ActiveRecord::Schema.define(version: 2019_12_17_081804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,12 +71,11 @@ ActiveRecord::Schema.define(version: 2019_12_09_072048) do
   create_table "folders", force: :cascade do |t|
     t.string "name"
     t.string "ancestry"
-    t.boolean "archived", default: false
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "syscode"
     t.index ["ancestry"], name: "index_folders_on_ancestry"
-    t.index ["archived"], name: "index_folders_on_archived"
     t.index ["project_id"], name: "index_folders_on_project_id"
   end
 

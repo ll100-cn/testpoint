@@ -1,6 +1,6 @@
 <%= f.input :name %>
 <% without_ids = f.object.new_record? ? nil : f.object.subtree %>
-<%= f.input :parent_id, collection: f.object.project.folders.available.where.not(id: without_ids).ranked %>
+<%= f.input :parent_id, collection: f.object.project.folders.available.where.not(id: without_ids).ranked if permit_attributes.include?(:parent_id) %>
 
 <hr>
 
