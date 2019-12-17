@@ -10,9 +10,17 @@
       <% if @task.finished? && @task.changed_after_finish? %>
         <div class="alert alert-danger">当前查看的为历史版本，本案例在完成测试后又发生了更改</div>
       <% end %>
+
       <% if (content = @task.test_case_when_finishing.content) %>
-        <div class="alert alert-info"><%= content %></div>
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="no-margin-bottom">
+              <%= markdown_to_html(content) %>
+            </div>
+          </div>
+        </div>
       <% end %>
+
       <p><%=h Task, :state %>: <%= @task.state.text %></p>
       <% if @task.state == "failure" %>
         <p><%= h Task, :message %>: </p>
