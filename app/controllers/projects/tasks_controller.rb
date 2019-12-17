@@ -15,7 +15,7 @@ class Projects::TasksController < BaseProjectController
   def update
     @task.update(task_params)
     @related_issues = @project.issues.left_outer_joins(:tasks).where(tasks: { test_case_id: @task.test_case.id }).records
-    respond_with @task
+    respond_with @task, location: -> { ok_url_or_default [ @project, @plan ] }
   end
 
   def show
