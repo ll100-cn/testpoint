@@ -47,9 +47,9 @@
       </div>
     <% end %>
   </div>
-  <% data = { remote: true, target: "#uploadAttachmentsModal", type: :xhrml } %>
+  <% data = {  } %>
   <%= link_to Task.state.find_value(:pass).text, [@project, @plan, @task, task: { state: :pass, test_case_version: DateTime.now }], method: :patch,
               class: "btn btn-success", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
-  <%= link_to Task.state.find_value(:failure).text, upload_attachment_project_plan_task_path(@project, @plan, @task), data: data, class: "btn btn-danger" %>
-
+  <%= link_to Task.state.find_value(:failure).text, edit_project_plan_task_path(@project, @plan, @task, task: { state: "failure" }),
+              class: "btn btn-danger", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
 </div>

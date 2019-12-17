@@ -9,14 +9,16 @@ class Projects::TasksController < BaseProjectController
   end
 
   def edit
+    @task.assign_attributes(task_params)
   end
 
   def update
     @task.update(task_params)
     @related_issues = @project.issues.left_outer_joins(:tasks).where(tasks: { test_case_id: @task.test_case.id }).records
+    respond_with @task
   end
 
-  def change_state
+  def show
     @related_issues = @project.issues.left_outer_joins(:tasks).where(tasks: { test_case_id: @task.test_case.id }).records
   end
 
