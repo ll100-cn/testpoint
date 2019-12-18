@@ -27,7 +27,6 @@ class Folder < ApplicationRecord
             AND roots.id::TEXT = SPLIT_PART(folders.ancestry, '/', 1)
         ))") }
 
-  scope :archived, -> { where(archived: true) }
   scope :ranked, -> { order("syscode NULLS FIRST").order(Arel.sql("CONCAT(ancestry, id)")) }
 
   def to_label

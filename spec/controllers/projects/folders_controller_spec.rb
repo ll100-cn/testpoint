@@ -22,11 +22,6 @@ RSpec.describe Projects::FoldersController, type: :controller do
     it { is_expected.to respond_with :redirect }
   end
 
-  describe "GET show" do
-    action { get :show, params: { id: folder.id, project_id: project.id } }
-    it { is_expected.to respond_with :success }
-  end
-
   describe "DELETE destroy" do
     action(skip: true) { delete :destroy, params: { id: folder.id, project_id: project.id } }
     it { expect { do_action }.to change { Folder.count }.by(-1) }

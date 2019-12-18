@@ -1,5 +1,6 @@
 <div class="card app-card-main">
   <div class="card-header bg-white d-flex">
+    <h4 class="mr-auto my-auto"><%= title(@plan.title) %></h4>
 
     <%= fume_nav @platform&.id do |n| %>
       <div class="dropdown">
@@ -15,9 +16,6 @@
         </div>
       </div>
     <% end %>
-
-
-
 
     <%= fume_nav @q.state_eq do |n| %>
       <div class="dropdown ml-3">
@@ -58,17 +56,10 @@
 
     <div class="col-12 col-md-9 col-xl-10">
       <div id="tp-main">
-        <div class="d-flex">
-
-          <h5 class="ml-auto"><%= title(@plan.title) %></h5>
-        </div>
-
-        <hr>
         <div class="test_cases-cards">
           <% @tasks.each do |task| %>
             <%= render 'projects/tasks/row.html', task: task %>
           <% end %>
-          <%= page_i18n :count, number: @tasks.count, model_name: h(@tasks) %>
         </div>
       </div>
     </div>
