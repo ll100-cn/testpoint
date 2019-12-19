@@ -13,7 +13,6 @@ class Projects::TestCasesController < BaseProjectController
     test_cases_scope = @test_cases
     test_cases_scope = @test_cases.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
     @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
-    @test_cases = @test_cases.page(params[:page])
 
     @folders = @project.folders.ranked
 
