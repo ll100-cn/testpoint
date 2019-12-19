@@ -21,7 +21,7 @@
         </div>
       <% end %>
 
-      <p><%=h Task, :state %>: <%= @task.state.text %></p>
+      <p><%=h Task, :state %>: <span class="badge badge-<%= { :pending => "warning" , :pass => "success", :failure => "danger" }.fetch(@task.state.to_sym) %>"><%= @task.state.text %></span></p>
       <% if @task.state == "failure" %>
         <p><%= h Task, :message %>: </p>
         <%= render "shared/page_content.html.erb", content: @task.message %>
