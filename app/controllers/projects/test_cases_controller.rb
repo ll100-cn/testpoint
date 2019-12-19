@@ -9,8 +9,9 @@ class Projects::TestCasesController < BaseProjectController
 
   def index
     @default_cases_url_options = request.query_parameters
-    test_cases_scope = @test_cases.available
-    test_cases_scope = test_cases_scope.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
+    @test_cases = @test_cases.available
+    test_cases_scope = @test_cases
+    test_cases_scope = @test_cases.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
     @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
     @test_cases = @test_cases.page(params[:page])
 
