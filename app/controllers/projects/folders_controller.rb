@@ -37,7 +37,7 @@ protected
 
   def permit_attributes
     result = [:name, :archived]
-    result << :parent_id unless @folder.archived_root?
+    result << :parent_id unless @folder&.archived_root?
     result
   end
   helper_method :permit_attributes

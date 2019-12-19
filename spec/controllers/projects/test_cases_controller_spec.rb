@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe Projects::TestCasesController, type: :controller do
   let!(:project) { create :project }
   let(:platform) { create :platform, project: project }
-  let!(:test_case) { create :test_case, platforms: [ platform ], project: project }
+  let(:folder) { create :folder, project: project }
+  let!(:test_case) { create :test_case, platforms: [ platform ], project: project, folder: folder }
   login_superadmin
 
   describe "GET index" do
@@ -35,11 +36,6 @@ RSpec.describe Projects::TestCasesController, type: :controller do
     let(:attributes) { { title: "user sign out" } }
     action { put :update, params: { id: test_case.id, test_case: attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
-  end
-
-  describe "GET show" do
-    action { get :show, params: { id: test_case.id, project_id: project.id } }
-    it { is_expected.to respond_with :success }
   end
 
   describe "DELETE destroy" do
