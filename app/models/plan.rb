@@ -23,6 +23,7 @@ class Plan < ApplicationRecord
 
   scope :available, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
+  scope :ranked, -> { order(:created_at).reverse_order }
 
   def generate(params)
     test_cases = TestCase.available.where(id: params[:test_case_ids])

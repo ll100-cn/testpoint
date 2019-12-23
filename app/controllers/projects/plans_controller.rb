@@ -8,7 +8,7 @@ class Projects::PlansController < BaseProjectController
   load_and_authorize_resource through: :project
 
   def index
-    @plans = @plans.available.page(params[:page])
+    @plans = @plans.available.page(params[:page]).ranked
     @tasks_count_mapping = Task.group(:plan_id, :state).count
   end
 
