@@ -58,7 +58,6 @@
         <tr>
           <th scope="col"><%= h Platform, "name" %></th>
           <th scope="col"><%= h Platform %></th>
-          <th scope="col">操作</th>
         </tr>
       </thead>
       <tbody>
@@ -69,10 +68,6 @@
               <% test_case.platforms.each do |platform| %>
                  <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
               <% end %>
-            </td>
-            <td>
-              <%= edit_link "#", class: "small", data: { toggle: "modal", target: "#test_case_modal", url: apply_ok_url([ :edit, @project, test_case ]) } if can? :update, test_case %>
-              <%= destroy_link [@project, test_case], class: "small" if can? :destroy, test_case %>
             </td>
           </tr>
         <% end %>
