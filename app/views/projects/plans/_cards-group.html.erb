@@ -6,11 +6,11 @@
         <h4 class="card-title">
           <%= plan.title %>
         </h4>
-        <p><%= "#{time_ago_in_words(plan.created_at)}前创建" %></p>
+        <p><%= tasks_count %> 个任务</p>
       </div>
 
       <div class="card-footer d-flex justify-content-between align-items-end bg-white">
-        <small><%= tasks_count %> 个任务</small>
+        <small><%= "#{time_ago_in_words(plan.created_at)}前创建" %></small>
         <%= link_to "进入测试", project_plan_path(@project, plan), class: "btn btn-outline-primary btn-sm py-1 stretched-link ml-auto" %>
       </div>
 

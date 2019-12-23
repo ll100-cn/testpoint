@@ -31,7 +31,7 @@ class Projects::TestCasesController < BaseProjectController
     respond_with @test_case, location: -> { ok_url_or_default([@project, TestCase]) }
   end
 
-  def edit
+  def show
   end
 
   def update
