@@ -23,6 +23,9 @@ class Projects::TestCasesController < BaseProjectController
   def new
   end
 
+  def show
+  end
+
   def create
     @test_case.save
     respond_with @test_case, location: -> { ok_url_or_default([@project, TestCase]) }

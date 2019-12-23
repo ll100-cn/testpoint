@@ -64,7 +64,7 @@
       <tbody>
         <% @test_cases.each do |test_case| %>
           <tr>
-            <td><%= test_case.title %></td>
+            <td><%= link_to test_case.title, "", data: { toggle: "modal", target: "#test_case_modal", url: apply_ok_url([ @project, test_case ]) } %></td>
             <td>
               <% test_case.platforms.each do |platform| %>
                  <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
