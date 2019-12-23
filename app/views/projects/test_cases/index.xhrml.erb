@@ -54,7 +54,6 @@
 <div class="col-12 col-md-9 col-xl-10">
   <div id="tp-main">
     <table class="table">
-      <caption><%= page_i18n :count, number: @test_cases.total_count, model_name: h(@test_cases) %></caption>
       <thead>
         <tr>
           <th scope="col"><%= h Platform, "name" %></th>
@@ -79,10 +78,6 @@
         <% end %>
       </tbody>
     </table>
-
-    <nav class="table-pagination">
-      <%= paginate @test_cases %>
-    </nav>
 
     <%= new_button ::TestCase, "#", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :create, ::TestCase %>
   </div>
