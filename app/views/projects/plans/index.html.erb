@@ -1,59 +1,20 @@
-<% content_for :header do %>
+<div class="page-header justify-content-between">
   <h2><%= title(page_i18n :index, model_name: h(@plans)) %></h2>
-  <%= new_link Plan, "#", data: { toggle: "modal", target: "#plan_modal", url: new_project_plan_path(@project, @plan, ok_url: request.fullpath) } if can? :create, Plan %>
-<% end %>
+  <%= link_to "", data: { remote: true, toggle: "modal", target: "#newPlanModal", url: new_project_plan_path(@project, @plan) } do %>
+    <%= action_i18n(:new, model_name: h(Plan)) %>
+  <% end if can? :create, Plan %>
+</div>
+
+
+<p>近期计划</p>
+<%= render 'cards-group', plans: @plans.where(created_at: 1.week.ago..Time.now) %>
+
+<p>更早的计划</p>
+<%= render 'cards-group', plans: @plans.where(created_at:  Time.at(0)..1.week.ago)%>
 
 
 
-
-
-<table class="table">
-  <colgroup>
-    <col width="40%">
-    <col width="40%">
-    <col width="20%">
-  </colgroup>
-  <thead>
-    <tr>
-      <th><%=h ::TestCase, :title %></th>
-      <th><%= page_i18n :progress %></th>
-      <th><%= page_i18n :actions %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% progress_bg_mapping = { "pass" => "bg-success", "failure" => "bg-danger" } %>
-    <% @plans.each do |plan| %>
-      <tr>
-        <td>
-          <%= link_to plan.title, action: :show, id: plan, ok_url: request.fullpath %>
-        </td>
-        <td>
-          <div class="progress">
-            <% tasks_count = @tasks_count_mapping.sum { |key, value| key.first == plan.id ? value : 0 } %>
-            <div class="progress-bar" style="width: 0%"></div>
-            <% Task.state.values.each do |state| %>
-              <% count = @tasks_count_mapping[[plan.id, state]] || 0 %>
-              <% if count.nonzero? && (bar_bg = progress_bg_mapping[state]) %>
-                <div class="progress-bar <%= bar_bg %>" style="width: <%= 100.0 * count / tasks_count %>%"></div>
-              <% end %>
-            <% end %>
-          </div>
-        </td>
-        <td>
-          <%= edit_link "#", data: { toggle: "modal", target: "#plan_modal", url: edit_project_plan_path(@project, plan, ok_url: request.fullpath) } if can? :update, plan %>
-          <%= destroy_link [@project, plan, ok_url: request.fullpath] if can? :destroy, plan %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<nav class="table-pagination">
-  <%= paginate @plans %>
-</nav>
-
-
-<div id="plan_modal" class="modal">
+<div id="newPlanModal" class="modal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="d-flex justify-content-center">

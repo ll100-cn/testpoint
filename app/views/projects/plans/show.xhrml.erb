@@ -1,6 +1,13 @@
+<div class="page-header justify-content-between">
+  <h2><%= title(@plan.title) %></h2>
+  <%= link_to edit_project_plan_path(@project, @plan) do %>
+    设置
+  <% end %>
+</div>
+
 <div class="card app-card-main">
   <div class="card-header bg-white d-flex">
-    <h4 class="mr-auto my-auto"><%= title(@plan.title) %></h4>
+    <h4 class="mr-auto my-auto"><%= page_i18n :index, model_name: h(@tasks) %></h4>
 
     <%= fume_nav @platform&.id do |n| %>
       <div class="dropdown">

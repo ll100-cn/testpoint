@@ -1,5 +1,4 @@
 class Projects::PlansController < BaseProjectController
-  layout 'card-full-height', only: [:index]
   before_action { @navbar = "plans" }
   before_action -> { @project = current_project }
   authorize_resource :project
@@ -28,7 +27,7 @@ class Projects::PlansController < BaseProjectController
 
   def update
     @plan.update(plan_params)
-    respond_with @plan, location: ok_url_or_default([@project, Plan])
+    respond_with @plan, location: ok_url_or_default([@project, @plan])
   end
 
   def show
