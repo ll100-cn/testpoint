@@ -1,6 +1,5 @@
 class Projects::TestCasesController < BaseProjectController
   layout 'card-full-height', only: [:index]
-  before_action { @navbar = "cases" }
   load_and_authorize_resource :project
   load_and_authorize_resource :folder
   load_and_authorize_resource :platform
