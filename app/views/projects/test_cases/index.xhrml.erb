@@ -1,82 +1,87 @@
 <% title t('views.navbar.cases') %>
-<% content_for :header do %>
-  <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-brand nav-tabs-bold mb-0" style="border-color:transparent;">
-    <%= fume_nav params[:platform_id] do |n| %>
-      <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
-        <%= n.apply_content value do |active_class| %>
-          <li class="nav-item">
-            <%= link_to [@project, ::TestCase, platform_id: value, folder_id: @folder], class: "nav-link #{active_class}" do %>
-              <%= key %>
-            <% end %>
-          </li>
-        <% end %>
-      <% end %>
-    <% end %>
-  </ul>
-  <h5 class="my-auto">
-    <%= link_to new_project_platform_path(@project) do %>
-      <i class="fal fa-plus"></i>
-    <% end if can? :new, Platform %>
-  </h5>
-<% end %>
 
-
-
-
-
-<div class="col-12 col-md-3 col-xl-2 border-right py-3">
-  <% @folders_mapping = @folders.group_by(&:parent_id) %>
-  <div class="d-flex">
-    <h5><%= link_to current_url(platform_id: @platform), class: "flex-1 rounded #{'active' if @folder == nil }", data: { remote: true, type: "xhrml", target: "#tp-main .table", action: "activable#active" }  do %>
-      <%=h Folder %>
-    <% end %></h5>
-    <div class="actions ml-auto">
-      <%= link_to [:new, @project, :folder] do %>
-        <i class="fal fa-plus"></i>
-      <% end if can? :new, Folder %>
-    </div>
-  </div>
-
-  <div id="folder-tree" class="treeview" data-controller="activable">
-    <ul>
-      <%= render "shared/folders.html", key: nil do |folder| %>
-        <%= link_to current_url(folder_id: folder.id), class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main table", action: "activable#active" }  do %>
-          <i class="fal fa-folder mr-2"></i><%= folder.name %>（<%= @folder_test_cases_counts[folder.id] %>）
-        <% end %>
-        <%= link_to [ :edit, @project, folder ], class: "text-muted ml-2 treeview-active-actions" do %>
-          <i class="fal fa-pencil"></i>
+<div class="card app-card-main">
+  <div class="card-header bg-white pb-0 d-flex">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-brand nav-tabs-bold mb-0" style="border-color:transparent;">
+      <%= fume_nav params[:platform_id] do |n| %>
+        <% ([[page_i18n(:all), nil]] + @project.platforms.map { |p| [p.name, p.id] }).each do |key, value| %>
+          <%= n.apply_content value do |active_class| %>
+            <li class="nav-item">
+              <%= link_to [@project, ::TestCase, platform_id: value, folder_id: @folder], class: "nav-link #{active_class}" do %>
+                <%= key %>
+              <% end %>
+            </li>
+          <% end %>
         <% end %>
       <% end %>
     </ul>
+    <h5 class="actions ml-auto my-auto">
+      <%= link_to new_project_platform_path(@project) do %>
+        <i class="fal fa-plus"></i>
+      <% end if can? :new, Platform %>
+    </h5>
   </div>
+
+  <div class="card-body d-flex">
+    <div class="col-12 col-md-3 col-xl-2 border-right py-3">
+      <% @folders_mapping = @folders.group_by(&:parent_id) %>
+      <div class="d-flex">
+        <h5><%= link_to current_url(platform_id: @platform), class: "flex-1 rounded #{'active' if @folder == nil }", data: { remote: true, type: "xhrml", target: "#tp-main .table", action: "activable#active" }  do %>
+          <%=h Folder %>
+        <% end %></h5>
+        <div class="actions ml-auto">
+          <%= link_to [:new, @project, :folder] do %>
+            <i class="fal fa-plus"></i>
+          <% end if can? :new, Folder %>
+        </div>
+      </div>
+
+      <div id="folder-tree" class="treeview" data-controller="activable">
+        <ul>
+          <%= render "shared/folders.html", key: nil do |folder| %>
+            <%= link_to current_url(folder_id: folder.id), class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main table", action: "activable#active" }  do %>
+              <i class="fal fa-folder mr-2"></i><%= folder.name %>（<%= @folder_test_cases_counts[folder.id] %>）
+            <% end %>
+            <%= link_to [ :edit, @project, folder ], class: "text-muted ml-2 treeview-active-actions" do %>
+              <i class="fal fa-pencil"></i>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-9 col-xl-10">
+      <div id="tp-main">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"><%= h Platform, "name" %></th>
+              <th scope="col"><%= h Platform %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @test_cases.each do |test_case| %>
+              <tr>
+                <td><%= link_to test_case.title, "", data: { toggle: "modal", target: "#test_case_modal", url: apply_ok_url([ @project, test_case ]) } %></td>
+                <td>
+                  <% test_case.platforms.each do |platform| %>
+                     <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <%= new_button ::TestCase, "#", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :create, ::TestCase %>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
-<div class="col-12 col-md-9 col-xl-10">
-  <div id="tp-main">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col"><%= h Platform, "name" %></th>
-          <th scope="col"><%= h Platform %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @test_cases.each do |test_case| %>
-          <tr>
-            <td><%= link_to test_case.title, "", data: { toggle: "modal", target: "#test_case_modal", url: apply_ok_url([ @project, test_case ]) } %></td>
-            <td>
-              <% test_case.platforms.each do |platform| %>
-                 <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
 
-    <%= new_button ::TestCase, "#", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :create, ::TestCase %>
-  </div>
-</div>
 
 <div id="test_case_modal" class="modal">
   <div class="modal-dialog modal-lg">
