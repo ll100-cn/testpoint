@@ -15,24 +15,20 @@
         <% end %>
       <% end %>
     </ul>
-    <h5 class="actions ml-auto my-auto">
-      <%= link_to new_project_platform_path(@project) do %>
-        <i class="fal fa-plus"></i>
-      <% end if can? :new, Platform %>
+    <h5 class="actions ml-auto">
+      <%= new_link [@project, :platform] %>
     </h5>
   </div>
 
   <div class="card-body d-flex">
     <div class="col-12 col-md-3 col-xl-2 border-right py-3">
       <% @folders_mapping = @folders.group_by(&:parent_id) %>
-      <div class="d-flex">
-        <h5><%= link_to current_url(platform_id: @platform), class: "flex-1 rounded #{'active' if @folder == nil }", data: { remote: true, type: "xhrml", target: "#tp-main .table", action: "activable#active" }  do %>
+      <div class="d-flex mb-2">
+        <h5 class="my-auto"><%= link_to current_url(platform_id: @platform), class: "", data: { remote: true, type: "xhrml", target: "#tp-main .table", action: "activable#active" }  do %>
           <%=h Folder %>
         <% end %></h5>
         <div class="actions ml-auto">
-          <%= link_to [:new, @project, :folder] do %>
-            <i class="fal fa-plus"></i>
-          <% end if can? :new, Folder %>
+          <small><%= new_link [@project, :folder] %></small>
         </div>
       </div>
 
@@ -73,7 +69,7 @@
           </tbody>
         </table>
 
-        <%= new_button ::TestCase, "#", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :create, ::TestCase %>
+        <%= new_button [@project, :test_case], class: "", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } %>
       </div>
     </div>
 

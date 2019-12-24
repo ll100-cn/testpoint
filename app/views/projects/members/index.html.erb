@@ -2,7 +2,7 @@
   <div class="card-header bg-white d-flex">
     <h2><%= title(page_i18n :index, model_name: h(Member)) %></h2>
     <div class="actions ml-auto">
-      <%= new_link Member, [:new, @project, :member] if can? :create, Member %>
+      <%= new_button [@project, :member], class: "btn-sm" %>
     </div>
   </div>
 
@@ -33,8 +33,8 @@
             <td><%= member.user.email %></td>
             <td><%= member.role_text %></td>
             <td>
-              <%= edit_link [:edit, @project, member] if can? :update, member %>
-              <%= destroy_link [@project, member, ok_url: request.fullpath] if can? :destroy, member %>
+              <%= edit_link [@project, member] %>
+              <%= destroy_link [@project, member] %>
             </td>
           </tr>
         <% end %>

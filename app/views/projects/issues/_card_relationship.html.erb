@@ -12,7 +12,7 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right" style="min-width: auto;">
         <% data = { confirm: "确定删除问题的关联？" } %>
-        <%= destroy_link apply_ok_url([ issue.project, issue_relationship.source ,issue_relationship ]), data: data, class: "small dropdown-item" %>
+        <%= destroy_button [issue.project, issue_relationship.source ,issue_relationship ], data: data, class: "small dropdown-item" %>
       </div>
     </div>
   <% end %>

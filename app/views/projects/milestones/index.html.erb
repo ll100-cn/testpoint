@@ -3,7 +3,7 @@
     <h2><%= title(page_i18n :index, model_name: h(@milestones)) %></h2>
 
     <div class="actions ml-auto">
-      <%= new_link Milestone, [:new, @project, :milestone] if can? :create, Milestone %>
+      <%= new_button [@project, :milestone], class: "btn-sm" %>
     </div>
   </div>
 
@@ -28,8 +28,8 @@
             <td><%= link_to milestone.title, [@project, milestone] %></td>
             <td><%=l milestone.published_at, format: :long if milestone.published_at? %></td>
             <td>
-              <%= edit_link [:edit, @project, milestone, ok_url: request.fullpath ] if can? :update, milestone %>
-              <%= destroy_link [@project, milestone, ok_url: request.fullpath ] if can? :destroy, milestone %>
+              <%= edit_link [@project, milestone] %>
+              <%= destroy_link [@project, milestone] %>
             </td>
           </tr>
         <% end %>

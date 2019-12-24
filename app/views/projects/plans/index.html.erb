@@ -1,8 +1,6 @@
 <div class="page-header justify-content-between">
   <h2><%= title(page_i18n :index, model_name: h(@plans)) %></h2>
-  <%= link_to "", data: { remote: true, toggle: "modal", target: "#newPlanModal", url: new_project_plan_path(@project, @plan) } do %>
-    <%= action_i18n(:new, model_name: h(Plan)) %>
-  <% end if can? :create, Plan %>
+  <%= new_button [@project, :plan], class: "btn-sm", data: { remote: true, toggle: "modal", target: "#newPlanModal", url: new_project_plan_path(@project, @plan) } %>
 </div>
 
 

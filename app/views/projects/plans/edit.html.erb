@@ -8,7 +8,7 @@
     <div class="card-footer bg-white">
       <div class="d-flex justify-content-between">
         <div>
-          <%= destroy_link [@project, @plan, ok_url: request.fullpath], class: "btn btn-outline-danger" if can? :destroy, @plan %>
+          <%= destroy_button [@project, @plan] %>
         </div>
         <div>
           <%= link_to action_i18n(:cancel), project_plan_path(@project, @plan), class: "btn btn-secondary" %>

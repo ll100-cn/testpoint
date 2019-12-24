@@ -9,7 +9,7 @@
     <div class="page-header">
       <h2><%= page_i18n :index, model_name: h(@users) %></h2>
       <div class="actions ml-auto">
-        <%= new_link User, [:new, :user] if can? :create, User %>
+        <%= new_button :user %>
       </div>
     </div>
 
@@ -35,8 +35,8 @@
             <td><%= user.name %></td>
             <td><%= user.email %></td>
             <td>
-              <%= edit_link [:edit, user, ok_url: request.fullpath] if can? :update, user %>
-              <%= destroy_link [user, ok_url: request.fullpath] if can? :destroy, user %>
+              <%= edit_button user %>
+              <%= destroy_button user %>
             </td>
           </tr>
         <% end %>
@@ -48,4 +48,3 @@
     </nav>
   </div>
 </div>
-
