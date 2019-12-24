@@ -38,8 +38,4 @@ protected
   def project_params
     params.fetch(:project, {}).permit(:name, user_ids: [])
   end
-
-  def current_project
-    @project unless @project&.new_record?
-  end
 end

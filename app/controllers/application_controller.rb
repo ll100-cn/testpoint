@@ -35,11 +35,6 @@ protected
   end
   helper_method :current_member
 
-  def current_project
-    nil
-  end
-  helper_method :current_project
-
   def current_ability
     @current_ability ||= Ability.new { |a| a.apply_user_permissions(current_user) }
   end

@@ -1,10 +1,6 @@
 class BaseProjectController < ApplicationController
-  def current_project
-    @current_project ||= Project.find(params[:project_id])
-  end
-
   def current_member
-    @current_member ||= current_project&.members&.where(user_id: current_user)&.take
+    @current_member ||= @project&.members&.where(user_id: current_user)&.take
   end
 
   def current_ability
