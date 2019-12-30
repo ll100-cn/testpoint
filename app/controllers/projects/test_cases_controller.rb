@@ -10,7 +10,8 @@ class Projects::TestCasesController < BaseProjectController
     test_cases_scope = test_cases_scope.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
     test_cases_counts = test_cases_scope.group(:folder_id).count
 
-    @test_cases = test_cases_scope.where(folder_id: @folder.subtree) if @folder
+    @test_case = test_cases_scope
+    @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
 
     @folders = @project.folders.ranked
     @folder_test_cases_counts = Folder.descendants_with_self_counts(@folders, test_cases_counts)
