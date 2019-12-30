@@ -1,7 +1,5 @@
 class Projects::PlansController < BaseProjectController
-  before_action { @navbar = "plans" }
-  before_action -> { @project = current_project }
-  authorize_resource :project
+  load_and_authorize_resource :project
   load_and_authorize_resource :folder, through: :project
   load_and_authorize_resource :platform, through: :project
   load_and_authorize_resource through: :project

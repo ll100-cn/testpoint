@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-dark sticky-top tp-navbar">
   <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
-  <% if current_project %>
+  <% if @project && !@project.new_record? %>
     <div class="dropdown">
       <button class="btn btn-sm dropdown-toggle text-white border-0" data-toggle="dropdown" style="background: transparent;">
-        <%= current_project.name %>
+        <%= @project.name %>
       </button>
       <div class="dropdown-menu" style="min-width: 3px;">
         <% if current_user.superadmin? %>
@@ -21,22 +21,22 @@
       </div>
     </div>
     <div class="navbar-nav-scroll">
-      <%= fume_nav current do |n| %>
+      <%= fume_nav controller_name do |n| %>
         <ul class="navbar-nav">
-          <%= n.li_tag "cases", class: "nav-item" do %>
-            <%= link_to t('views.navbar.cases'), [current_project, ::TestCase], class: "nav-link" if can? :read, ::TestCase %>
+          <%= n.li_tag "test_cases", class: "nav-item" do %>
+            <%= link_to t('views.navbar.cases'), [@project, ::TestCase], class: "nav-link" if can? :read, ::TestCase %>
           <% end %>
           <%= n.li_tag "plans", class: "nav-item" do %>
-            <%= link_to t('views.navbar.plans'), [current_project, Plan], class: "nav-link" if can? :read, Plan %>
+            <%= link_to t('views.navbar.plans'), [@project, Plan], class: "nav-link" if can? :read, Plan %>
           <% end %>
-          <%= n.li_tag "Issues", class: "nav-item" do %>
-            <%= link_to t('views.navbar.issues'), [current_project, Issue], class: "nav-link" if can? :read, Issue %>
+          <%= n.li_tag "issues", class: "nav-item" do %>
+            <%= link_to t('views.navbar.issues'), [@project, Issue], class: "nav-link" if can? :read, Issue %>
           <% end %>
-          <%= n.li_tag "Members", class: "nav-item" do %>
-            <%= link_to t('views.navbar.members'), [current_project, Member], class: "nav-link" if can? :read, Member %>
+          <%= n.li_tag "members", class: "nav-item" do %>
+            <%= link_to t('views.navbar.members'), [@project, Member], class: "nav-link" if can? :read, Member %>
           <% end %>
-          <%= n.li_tag "Milestones", class: "nav-item" do %>
-            <%= link_to t('views.navbar.milestones'), [current_project, Milestone], class: "nav-link" if can? :read, Milestone %>
+          <%= n.li_tag "milestones", class: "nav-item" do %>
+            <%= link_to t('views.navbar.milestones'), [@project, Milestone], class: "nav-link" if can? :read, Milestone %>
           <% end %>
         </ul>
       <% end %>

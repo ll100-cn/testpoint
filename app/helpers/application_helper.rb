@@ -1,5 +1,9 @@
 module ApplicationHelper
   def human(model, attribute_name = nil)
+    if model.is_a? Symbol
+      model = model.to_s.classify.constantize
+    end
+
     if attribute_name
       model.human_attribute_name(attribute_name)
     else

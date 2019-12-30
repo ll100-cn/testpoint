@@ -11,7 +11,7 @@
     <%= render "inputs.html", f: f %>
   </div>
   <div class="modal-footer">
-    <%= destroy_link [@project, @test_case], class: "btn btn-outline-danger mr-auto" if can? :destroy, @test_case %>
+    <%= destroy_button [@project, @test_case], class: "mr-auto" %>
     <%= f.submit class: "btn btn-primary" %>
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :close %></button>
   </div>

@@ -8,7 +8,7 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
         <% data = { target: "#issue#{issue.id}_content", type: "xhrml", remote: true } %>
-        <%= edit_link apply_ok_url([ :edit, project, issue ]), class: "small dropdown-item", data: data %>
+        <%= edit_button [project, issue], class: "small dropdown-item", data: data %>
       </div>
     </div>
   <% end %>

@@ -2,7 +2,7 @@
   <h2 class="mr-1"><%= title(@issue.title) %></h2>
   <div class="text-primary">#<%= @issue.id %></div>
   <div class="ml-auto actions">
-    <%= edit_link apply_ok_url([:edit, @project, @issue]) if can? :edit, @issue %>
+    <%= edit_button [@project, @issue] %>
   </div>
 </div>
 

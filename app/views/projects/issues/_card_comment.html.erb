@@ -10,9 +10,9 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
           <% data = { type: "xhrml", remote: true, target: "#comment#{comment.id}_content" } %>
-          <%= edit_link apply_ok_url([ :edit, comment.issue.project, comment.issue, comment ]), class: "small dropdown-item", data: data if can? :edit, comment %>
+          <%= edit_button [comment.issue.project, comment.issue, comment ], class: "small dropdown-item", data: data %>
           <% data = data.merge({ target: ".issue-comment", confirm: "确认删除评论？" }) %>
-          <%= destroy_link apply_ok_url([comment.issue.project, comment.issue, comment ]), method: :delete, class: "small dropdown-item", data: data if can? :destroy, comment %>
+          <%= destroy_button [comment.issue.project, comment.issue, comment ], class: "small dropdown-item", data: data %>
           <% if comment.collapsed? %>
             <%= link_to "显示", apply_ok_url([ :fold, comment.issue.project, comment.issue, comment ]), data: { type: "xhrml", remote: true, target: ".issue-overview", replace: true }, class: "small dropdown-item" %>
           <% else %>

@@ -7,7 +7,7 @@
   <%= f.input :name %>
   <%= f.input page_i18n('avatar') do %>
     <%= image_tag f.object.avatar_url, width: 100 %>
-    <%= edit_link 'https://gravatar.com', target: "_blank" %>
+    <%= link_to "修改", 'https://gravatar.com', target: "_blank" %>
   <% end %>
 
   <%= f.input :current_password %>
@@ -19,6 +19,6 @@
   <%= f.actions_content do %>
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link root_path, class: "btn btn-link" %>
+    <%= cancel_button root_path %>
   <% end %>
 <% end %>

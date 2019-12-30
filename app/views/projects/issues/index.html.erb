@@ -13,7 +13,7 @@
       </div>
     <% end %>
     <div class="actions ml-auto">
-      <%= new_link Issue, [:new, @project, @task, :issue] if can? :create, Issue %>
+      <%= new_button [@project, @task, :issue], class: "btn-sm" %>
     </div>
   </div>
 

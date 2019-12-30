@@ -3,6 +3,6 @@
     <%= render "form.html", f: f %>
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_link [@project, @issue], class: "btn btn-secondary" %>
+    <%= cancel_button [@project, @issue] %>
   <% end %>
 </div>

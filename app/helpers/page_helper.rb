@@ -5,34 +5,50 @@ module PageHelper
     hidden_field_tag "ok_url", params[:ok_url] if params[:ok_url].present?
   end
 
-  def new_button(model, url, options = {})
-    label = action_i18n(:new, model_name: h(model))
-    link_to label, url, { class: "btn btn-primary btn-sm" }.merge(options)
+  ### Resource CRUD links ###
+  # USAGE:
+  # new_link [@project, :plan]
+  # edit_link [@project, plan]
+  # cancel_link :projects
+  def new_link(models, options={})
+    build_link(models, :new, options)
   end
 
-  def new_link(model, url, options = {})
-    label = action_i18n(:new, model_name: h(model))
-    link_to label, url, options
+  def edit_link(models, options={})
+    build_link(models, :edit, options)
   end
 
-  def edit_link(url, options = {})
-    label = action_i18n(:edit)
-    link_to label, url, options
+  def destroy_link(models, options = {})
+    default_opts = { method: :delete, data: { confirm: "确定删除？" } }
+    build_link(models, :destroy, merge_css(default_opts, options))
   end
 
-  def destroy_link(url, options = {})
-    label = action_i18n(:destroy)
-    link_to label, url, { method: :delete, data: { confirm: "Are you sure?" } }.merge(options)
-  end
-
-  def cancel_link(default_url, options = {})
+  def cancel_link(url, options = {})
     label = action_i18n(:cancel)
-    link_to label, ok_url_or_default(default_url), options
+    link_to label, url, options
   end
 
-  def cancel_button(default_url, options = {})
-    cancel_link(default_url, { class: "btn btn-secondary" }.merge(options))
+  def new_button(models, options={})
+    default_opts =  { class: "btn btn-success" }
+    new_link(models, merge_css(default_opts, options))
   end
+
+  def edit_button(models, options={})
+    default_opts = { class: "btn btn-primary" }
+    edit_link(models, merge_css(default_opts, options))
+  end
+
+  def destroy_button(models, options = {})
+    default_opts = { class: "btn btn-danger" }
+    destroy_link(models, merge_css(default_opts, options))
+  end
+
+  def cancel_button(url, options = {})
+    default_opts = { class: "btn btn-secondary" }
+    cancel_link(url, merge_css(default_opts, options))
+  end
+
+
 
   def label_tag(label, *args, &block)
     options = args.extract_options!
@@ -68,8 +84,29 @@ module PageHelper
     end
   end
 
+  # Set brwoser title in head
   def title(value)
     content_for :title, value
     value
+  end
+
+
+
+protected
+  def build_link(models, action, options)
+    url_prefix = [:new, :edit].include?(action) ? action : nil
+    if models.is_a? Array
+      label = action_i18n(action, model_name: h(models[-1]))
+      url = [url_prefix, *models]
+      link_to label, url, options if can? action, models[-1]
+    else
+      label =action_i18n(action, model_name: h(models))
+      url = [url_prefix, models]
+      link_to label, url, options if can? action, models
+    end
+  end
+
+  def merge_css(old_options, new_options)
+    old_options.merge(new_options) { |key, old, new| [old, new].join(" ") }
   end
 end

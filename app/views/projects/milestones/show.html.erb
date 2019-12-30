@@ -7,7 +7,7 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between">
       <%= h Milestone, :description %>
-      <small><%= edit_link [:edit, @project, @milestone, ok_url: request.fullpath ] if can? :update, @milestone %></small>
+      <small><%= edit_button [@project, @milestone] %></small>
     </div>
     <div class="card-body">
       <div class="no-margin-bottom">

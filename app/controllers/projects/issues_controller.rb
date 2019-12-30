@@ -1,7 +1,5 @@
 class Projects::IssuesController < BaseProjectController
-  before_action { @navbar = "Issues" }
-  before_action -> { @project = current_project }
-  authorize_resource :project
+  load_and_authorize_resource :project
   load_and_authorize_resource through: :project
 
   helper_method :issue_params_names

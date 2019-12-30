@@ -1,51 +1,49 @@
-<% content_for :header do %>
-  <h2><%= title(page_i18n :index, model_name: h(Member)) %></h2>
-  <div class="actions ml-auto">
-    <%= new_link Member, [:new, @project, :member] if can? :create, Member %>
+<div class="card app-card-main">
+  <div class="card-header bg-white d-flex">
+    <h2><%= title(page_i18n :index, model_name: h(Member)) %></h2>
+    <div class="actions ml-auto">
+      <%= new_button [@project, :member], class: "btn-sm" %>
+    </div>
   </div>
-<% end %>
 
+  <div class="card-body">
+    <table class="table">
+      <caption><%= page_i18n :count, number: @members.total_count, model_name: h(@members) %></caption>
+      <colgroup>
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <col>
+      </colgroup>
+      <thead>
+      <tr>
+        <th><%= sort_link @q, :id %></th>
+        <th><%=h Member, :name %></th>
+        <th><%= sort_link @q, :user_email %></th>
+        <th><%= sort_link @q, :role %></th>
+        <th><%=page_i18n :actions %></th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @members.each do |member| %>
+          <tr>
+            <td><%= member.id %></td>
+            <td><%= member.smart_name %></td>
+            <td><%= member.user.email %></td>
+            <td><%= member.role_text %></td>
+            <td>
+              <%= edit_link [@project, member] %>
+              <%= destroy_link [@project, member] %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
+    <nav class="table-pagination">
+      <%= paginate @members %>
+    </nav>
+  </div>
 
-
-
-
-<div class="card-body">
-  <table class="table">
-    <caption><%= page_i18n :count, number: @members.total_count, model_name: h(@members) %></caption>
-    <colgroup>
-      <col width="20%">
-      <col width="20%">
-      <col width="20%">
-      <col width="20%">
-      <col>
-    </colgroup>
-    <thead>
-    <tr>
-      <th><%= sort_link @q, :id %></th>
-      <th><%=h Member, :name %></th>
-      <th><%= sort_link @q, :user_email %></th>
-      <th><%= sort_link @q, :role %></th>
-      <th><%=page_i18n :actions %></th>
-    </tr>
-    </thead>
-    <tbody>
-      <% @members.each do |member| %>
-        <tr>
-          <td><%= member.id %></td>
-          <td><%= member.smart_name %></td>
-          <td><%= member.user.email %></td>
-          <td><%= member.role_text %></td>
-          <td>
-            <%= edit_link [:edit, @project, member] if can? :update, member %>
-            <%= destroy_link [@project, member, ok_url: request.fullpath] if can? :destroy, member %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <nav class="table-pagination">
-    <%= paginate @members %>
-  </nav>
 </div>
