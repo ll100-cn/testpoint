@@ -17,6 +17,8 @@ class TestCase < ApplicationRecord
   belongs_to :folder
   has_and_belongs_to_many :platforms
   belongs_to :project
+  has_many :test_case_label_links, dependent: :destroy
+  has_many :labels, through: :test_case_label_links, source: :test_case_label
 
   cleanup_column :title, :content
 

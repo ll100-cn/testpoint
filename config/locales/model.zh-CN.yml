@@ -12,6 +12,7 @@ zh-CN:
       user: 用户
       comment: 评论
       label: 标签
+      test_case_label: 标签
       milestone: 里程碑
       project: 项目
       member: 成员
@@ -59,6 +60,7 @@ zh-CN:
         archived: 是否存档
         platform_ids: 平台
         component_id: 组件
+        label_ids: 标签
       user:
         name: 姓名
         email: 邮箱
@@ -71,6 +73,10 @@ zh-CN:
         description: 描述
         color: 颜色
         issues: 问题
+      test_case_label:
+        name: 标题
+        description: 描述
+        test_cases: 案例
       milestone:
         title: 标题
         description: 描述

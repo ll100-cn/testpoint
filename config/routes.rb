@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       end
       resources :platforms
       resources :labels
+      resources :test_case_labels
       resources :milestones
       resources :members
     end

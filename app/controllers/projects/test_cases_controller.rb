@@ -2,11 +2,13 @@ class Projects::TestCasesController < BaseProjectController
   load_and_authorize_resource :project
   load_and_authorize_resource :folder
   load_and_authorize_resource :platform
+  load_and_authorize_resource :test_case_label
   load_and_authorize_resource through: :project
 
   def index
     @default_cases_url_options = request.query_parameters
-    test_cases_scope = @test_cases.available
+    @q = @test_cases.available.ransack(params[:q])
+    test_cases_scope = @q.result
     test_cases_scope = test_cases_scope.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
     test_cases_counts = test_cases_scope.group(:folder_id).count
 
@@ -43,6 +45,6 @@ class Projects::TestCasesController < BaseProjectController
 
 protected
   def test_case_params
-    params.fetch(:test_case, {}).permit(:title, :content, :folder_id, platform_ids: [])
+    params.fetch(:test_case, {}).permit(:title, :content, :folder_id, platform_ids: [], label_ids: [])
   end
 end

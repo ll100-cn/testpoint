@@ -15,9 +15,35 @@
         <% end %>
       <% end %>
     </ul>
-    <h5 class="actions ml-auto">
-      <%= new_link [@project, :platform] %>
-    </h5>
+
+    <div class="d-flex ml-auto">
+      <h5 class="my-auto mx-2"><%=h ::TestCase, :label_ids %></h5>
+      <% label = TestCaseLabel.where(id: @q.labels_id_eq).take %>
+      <%= fume_nav label&.id do |n| %>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+            <%= label&.name || page_i18n(:all) %>
+          </button>
+          <div class="dropdown-menu">
+
+            <%= n.link_to nil, page_i18n(:all), current_url(q: { labels_id_eq: nil }), class: "dropdown-item" %>
+
+            <% @project.test_case_labels.each do |label| %>
+              <%= n.link_to label.id, current_url(q: { labels_id_eq: label.id }), class: "dropdown-item" do %>
+                <%= label.name %>
+              <% end %>
+            <% end %>
+            <div class="dropdown-divider"></div>
+            <%= link_to page_i18n(:index, model_name: h(TestCaseLabel)), "#", class: "dropdown-item", data: { remote: true, toggle: "modal", target: "#test_case_modal", url: project_test_case_labels_path(@project, ok_url: request.fullpath) } %>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+
+    <div class="actions ml-2">
+      <%= new_button [@project, :test_case], class: "btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :new, TestCase %>
+    </div>
   </div>
 
   <div class="card-body d-flex">
@@ -51,8 +77,9 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col"><%= h Platform, "name" %></th>
-              <th scope="col"><%= h Platform %></th>
+              <th scope="col"><%= h(::TestCase, :title) %></th>
+              <th scope="col"><%= h(::TestCase, :platform_ids) %></th>
+              <th scope="col"><%= h(::TestCase, :label_ids) %></th>
             </tr>
           </thead>
           <tbody>
@@ -64,12 +91,16 @@
                      <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
                   <% end %>
                 </td>
+                <td>
+                  <% test_case.labels.each do |label| %>
+                    <span class="badge badge-secondary"><%= label.name %></span>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
         </table>
 
-        <%= new_button [@project, :test_case], class: "", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :new, TestCase %>
       </div>
     </div>
 

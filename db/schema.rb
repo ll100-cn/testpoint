@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_17_081804) do
+ActiveRecord::Schema.define(version: 2019_12_30_064526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,6 +249,24 @@ ActiveRecord::Schema.define(version: 2019_12_17_081804) do
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
   end
 
+  create_table "test_case_label_links", force: :cascade do |t|
+    t.bigint "test_case_label_id", null: false
+    t.bigint "test_case_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["test_case_id"], name: "index_test_case_label_links_on_test_case_id"
+    t.index ["test_case_label_id"], name: "index_test_case_label_links_on_test_case_label_id"
+  end
+
+  create_table "test_case_labels", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.bigint "project_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_test_case_labels_on_project_id"
+  end
+
   create_table "test_cases", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -326,5 +344,8 @@ ActiveRecord::Schema.define(version: 2019_12_17_081804) do
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
   add_foreign_key "tasks", "platforms"
+  add_foreign_key "test_case_label_links", "test_case_labels"
+  add_foreign_key "test_case_label_links", "test_cases"
+  add_foreign_key "test_case_labels", "projects"
   add_foreign_key "test_cases", "projects"
 end
