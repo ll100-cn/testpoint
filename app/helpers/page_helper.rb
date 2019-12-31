@@ -96,14 +96,18 @@ protected
   def build_link(models, action, options)
     url_prefix = [:new, :edit].include?(action) ? action : nil
     if models.is_a? Array
-      label = action_i18n(action, model_name: h(models[-1]))
-      url = [url_prefix, *models]
-      link_to label, url, options if can? action, models[-1]
+      model = models[-1]
     else
-      label =action_i18n(action, model_name: h(models))
-      url = [url_prefix, models]
-      link_to label, url, options if can? action, models
+      model = models
     end
+
+    if model.is_a? Symbol
+      model = model.to_s.classify.constantize
+    end
+
+    label = action_i18n(action, model_name: h(model))
+    url = [url_prefix, *models]
+    link_to label, url, options
   end
 
   def merge_css(old_options, new_options)

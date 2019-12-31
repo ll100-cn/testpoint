@@ -7,7 +7,7 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between">
       <%= h Milestone, :description %>
-      <small><%= edit_button [@project, @milestone] %></small>
+      <small><%= edit_button [@project, @milestone] if can? :edit, @milestone %></small>
     </div>
     <div class="card-body">
       <div class="no-margin-bottom">

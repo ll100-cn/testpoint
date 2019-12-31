@@ -1,7 +1,7 @@
 <div class="page-header">
   <h2><%= page_i18n :edit, model_name: h(@platform) %></h2>
   <div class="actions ml-auto">
-    <%= destroy_button [@project, @platform] %>
+    <%= destroy_button [@project, @platform] if can? :destroy, @platform %>
   </div>
 </div>
 

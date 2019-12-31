@@ -2,7 +2,7 @@
   <div class="card-header bg-white d-flex">
     <h2><%= title(page_i18n :index, model_name: h(Member)) %></h2>
     <div class="actions ml-auto">
-      <%= new_button [@project, :member], class: "btn-sm" %>
+      <%= new_button [@project, :member], class: "btn-sm" if can? :new, Member %>
     </div>
   </div>
 

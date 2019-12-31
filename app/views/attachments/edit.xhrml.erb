@@ -15,7 +15,7 @@
     <%= bootstrap_inline_form_for @attachment, defaults: { label: false }, data: { remote: true, type: "xhrml", target: ".media", replace: true } do |f| %>
       <%= f.input :title, as: :string, input_html: { class: "w-100 form-control-sm" }, wrapper_html: { class: "flex-1 flex-column" } %>
       <%= f.submit action_i18n('update'), class: "btn btn-xs ml-2 btn-primary" %>
-      <%= cancel_button :attachment, data: { remote: true, type: "xhrml", target: ".media", replace: true }%>
+      <%= cancel_button :attachment, data: { remote: true, type: "xhrml", target: ".media", replace: true } %>
     <% end %>
   </div>
 </div>

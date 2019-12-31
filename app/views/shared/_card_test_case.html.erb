@@ -24,8 +24,8 @@
         <% end %>
         <span class="fa fa-fw fa-sticky-note-o text-muted"></span>
       <% end %>
-      <%= edit_button [@project, test_case] class: "small", data: { toggle: "modal", target: "#test_case_modal", url: edit_project_test_case_path(@project, test_case, ok_url: request.fullpath) } %>
-      <%= destroy_button [@project, test_case], class: "small" %>
+      <%= edit_button [@project, test_case] class: "small", data: { toggle: "modal", target: "#test_case_modal", url: edit_project_test_case_path(@project, test_case, ok_url: request.fullpath) } if can? :edit, test_case %>
+      <%= destroy_button [@project, test_case], class: "small" if can? :destroy, test_case %>
     </div>
     <%= content_html %>
   </div>

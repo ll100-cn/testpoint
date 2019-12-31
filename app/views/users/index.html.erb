@@ -9,7 +9,7 @@
     <div class="page-header">
       <h2><%= page_i18n :index, model_name: h(@users) %></h2>
       <div class="actions ml-auto">
-        <%= new_button :user %>
+        <%= new_button :user if can? :new, User %>
       </div>
     </div>
 
@@ -35,8 +35,8 @@
             <td><%= user.name %></td>
             <td><%= user.email %></td>
             <td>
-              <%= edit_button user %>
-              <%= destroy_button user %>
+              <%= edit_button user if can? :edit, user %>
+              <%= destroy_button user if can? :destroy, user %>
             </td>
           </tr>
         <% end %>

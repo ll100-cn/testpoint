@@ -69,7 +69,7 @@
           </tbody>
         </table>
 
-        <%= new_button [@project, :test_case], class: "", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } %>
+        <%= new_button [@project, :test_case], class: "", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, @test_case, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :new, TestCase %>
       </div>
     </div>
 

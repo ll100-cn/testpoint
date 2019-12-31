@@ -10,7 +10,7 @@
       <div class="page-header">
         <h2><%= page_i18n :index, model_name: h(@projects) %></h2>
         <div class="actions ml-auto">
-          <%= new_button :project %>
+          <%= new_button :project if can? :new, Project %>
         </div>
       </div>
       <table class="table">
@@ -32,8 +32,8 @@
               <td><%= link_to project.name, project %></td>
               <td><%=l project.created_at, format: :long %></td>
               <td>
-                <%= edit_button project %>
-                <%= destroy_button project %>
+                <%= edit_button project if can? :edit, project %>
+                <%= destroy_button project if can? :destroy, project %>
               </td>
             </tr>
           <% end %>

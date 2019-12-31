@@ -5,7 +5,7 @@
   </div>
   <% if can? :create, Label %>
     <div class="actions ml-auto">
-      <%= new_button [@project, :label], class: "btn-sm" %>
+      <%= new_button [@project, :label], class: "btn-sm" if can? :new, Label %>
     </div>
   <% end %>
 </div>

@@ -3,7 +3,7 @@
     <h2><%= title(page_i18n :index, model_name: h(@milestones)) %></h2>
 
     <div class="actions ml-auto">
-      <%= new_button [@project, :milestone], class: "btn-sm" %>
+      <%= new_button [@project, :milestone], class: "btn-sm" if can? :new, Milestone %>
     </div>
   </div>
 
