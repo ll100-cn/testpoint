@@ -25,6 +25,7 @@ zh-CN:
         archived: 是否存档
         platform_ids: 平台
         folder_ids: 文件夹
+        label_ids: 标签
       attachment:
         file: 文件
         title: 描述
@@ -93,3 +94,11 @@ zh-CN:
       issue_relationship:
         target_id: 关联的问题
         category: 关系类型
+  activemodel:
+    models:
+      test_case_filter: 过滤用例
+    attributes:
+      test_case_filter:
+        label_ids: 标签
+        platform_ids: 平台
+        folder_ids: 文件夹

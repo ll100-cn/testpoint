@@ -19,15 +19,14 @@ class Plan < ApplicationRecord
 
   validates :title, presence: true
 
-  attr_accessor :platform_ids
-
   scope :available, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
   scope :ranked, -> { order(:created_at).reverse_order }
 
-  def generate(params)
-    test_cases = TestCase.available.where(id: params[:test_case_ids])
-    platforms = Platform.available.where(id: params[:platform_ids])
+  def submit(test_case_filter)
+    test_cases = test_case_filter.build_test_cases_scope(project.test_cases.available)
+    platforms = project.platforms
+    platforms = platforms.where(id: test_case_filter.platform_ids) if test_case_filter.platform_ids.present?
     platforms.each do |platform|
       test_cases.each do |test_case|
         if test_case.platforms.exists? platform.id

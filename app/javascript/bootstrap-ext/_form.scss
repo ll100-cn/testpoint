@@ -1,0 +1,6 @@
+.form-group .close {
+  @include font-size($close-font-size);
+  font-weight: $close-font-weight;
+  position: relative;
+  z-index: 10;
+}

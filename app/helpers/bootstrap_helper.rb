@@ -9,7 +9,8 @@ module BootstrapHelper
       defaults: { boolean_label_class: "form-check-label" },
       wrapper: :vertical_form,
       wrapper_mappings: {
-        boolean: :vertical_boolean
+        boolean:       :vertical_boolean,
+        check_boxes:   :vertical_collection_inline
       },
       html: { class: "form-vertical" },
       builder: BootstrapVerticalBuilder
@@ -44,7 +45,7 @@ module BootstrapHelper
     {
       legend_tag_html: { class: "col-sm-2 text-right" },
       label_wrapper_html: { class: "col-sm-2 text-right" },
-      grid_wrapper_html: { class: "col" }
+      label_html: { class: "col-sm-2 text-right" },
     }
   end
 
@@ -54,23 +55,27 @@ module BootstrapHelper
     simple_form_for(*args, options, &block)
   end
 
-  def apply_bootstrap_inline_form_options!(options)
+  def apply_bootstrap_inline_form_options!(options = {})
     options.deep_merge!(
       {
         wrapper: 'inline_form',
         wrapper_mappings: {
-          boolean: :inline_boolean
+          boolean:       :inline_boolean,
+          check_boxes:   :inline_collection_inline
         },
-        html: { class: "form-inline" }
+        html: { class: "form-inline" },
+        builder: BootstrapVerticalBuilder
       }.deep_merge(options)
     )
     options[:defaults] = bootstrap_inline_form_defaults.deep_merge(options[:defaults] || {})
+    options
   end
 
   def bootstrap_inline_form_defaults
     {
-      wrapper_html: { class: "mb-2 mr-sm-3" },
-      label_html: { class: "sr-only" }
+      wrapper_html: { class: "mb-2 mr-sm-3 ml-0" },
+      label_html: { class: "" },
+      legend_tag_html: { class: "" }
     }
   end
 
@@ -92,6 +97,9 @@ module BootstrapHelper
 
       super(attribute_name, options, &block)
     end
+  end
+
+  class BootstrapInlineBuilder < SimpleForm::FormBuilder
   end
 
   def bootstrap_flash_class_for(type)

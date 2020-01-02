@@ -37,6 +37,7 @@ gem 'ancestry', "3.0.7"
 gem 'ransack', "2.3.0", require: false
 gem 'paper_trail-association_tracking', "2.0.0"
 gem 'paper_trail', "10.3.1"
+gem 'active_attr', "0.15.0"
 
 # Views
 gem 'simple_form', "5.0.1"

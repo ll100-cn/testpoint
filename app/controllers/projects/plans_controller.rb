@@ -14,9 +14,8 @@ class Projects::PlansController < BaseProjectController
   end
 
   def create
-    test_cases_scope = @project.test_cases.joins(:folder).where(folders: { id: params[:folder_ids] }) if params[:folder_ids].present?
-
-    @plan.generate(test_case_ids: test_cases_scope&.ids || TestCase.ids, platform_ids: params[:platform_ids] || Platform.ids)
+    @test_case_filter = TestCaseFilter.new(filter_params)
+    @plan.submit(@test_case_filter)
     respond_with @plan, location: ok_url_or_default([@project, Plan])
   end
 
@@ -50,5 +49,9 @@ class Projects::PlansController < BaseProjectController
 protected
   def plan_params
     params.fetch(:plan, {}).permit(:title, :start_at)
+  end
+
+  def filter_params
+    params.fetch(:test_case_filter, {}).permit(label_ids: [], platform_ids: [], folder_ids: [])
   end
 end

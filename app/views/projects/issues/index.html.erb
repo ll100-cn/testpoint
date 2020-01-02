@@ -53,15 +53,15 @@
         <%= fume_nav label&.id do |n| %>
           <div class="dropdown">
             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label&.name || page_i18n(:all) %>
+              <%= label_badge_tag label, nil, class: "badge-circle mr-2" %><%= label&.name || page_i18n(:all) %>
             </button>
             <div class="dropdown-menu">
               <%= n.link_to nil, current_url(q: { labels_id_eq: nil }), class: "dropdown-item" do %>
-                <%= label_tag nil, nil, class: "badge-circle mr-2" %><%= page_i18n(:all) %>
+                <%= label_badge_tag nil, nil, class: "badge-circle mr-2" %><%= page_i18n(:all) %>
               <% end %>
               <% @project.labels.each do |label| %>
                 <%= n.link_to label.id, current_url(q: { labels_id_eq: label.id }), class: "dropdown-item" do %>
-                  <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
+                  <%= label_badge_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
                 <% end %>
               <% end %>
             </div>
@@ -149,7 +149,7 @@
             </td>
             <td>
               <% issue.labels.each do |label| %>
-                <%= label_tag(label, label.name) %>
+                <%= label_badge_tag(label, label.name) %>
               <% end %>
             </td>
             <td>

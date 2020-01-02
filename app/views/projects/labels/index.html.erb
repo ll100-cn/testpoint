@@ -30,7 +30,7 @@
       <tr>
         <td>
           <%= link_to [@project, label] do %>
-            <%= label_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
+            <%= label_badge_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
           <% end %>
         </td>
         <td><%= label.description %></td>

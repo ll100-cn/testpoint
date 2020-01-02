@@ -28,7 +28,7 @@
           <td><%= label.test_cases.count %></td>
           <td>
             <%= edit_link [@project, label], data: { remote: true, type: :xhrml, target: ".modal-content" } %>
-            <%= destroy_link [@project, label] %>
+            <%= destroy_link [@project, label] if can? :destroy, label %>
           </td>
         </tr>
       <% end %>
@@ -36,6 +36,6 @@
   </table>
 </div>
 <div class="modal-footer">
-  <%= new_button [@project, :test_case_label], data: { remote: true, type: :xhrml, target: ".modal-content" } %>
+  <%= new_button [@project, :test_case_label], data: { remote: true, type: :xhrml, target: ".modal-content" } if can? :new, TestCaseLabel %>
   <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :close %></button>
 </div>

@@ -59,7 +59,7 @@
               </td>
               <td>
                 <% issue.labels.each do |label| %>
-                  <%= label_tag(label, label.name) %>
+                  <%= label_badge_tag(label, label.name) %>
                 <% end %>
               </td>
               <td>

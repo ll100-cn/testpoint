@@ -5,7 +5,7 @@
 
   > *:last-child {
     bottom: -300px;
-    margin-bottom: 300px;
+    margin-bottom: 300px !important;
     margin-top: -300px;
     position: relative;
   }

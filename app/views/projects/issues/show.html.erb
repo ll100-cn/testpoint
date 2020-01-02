@@ -96,7 +96,7 @@
 
       <%= render layout: "attribute_info", locals: { template: form, attribute_name: :label_ids, issue: @issue } do %>
         <% @issue.labels.each do |label| %>
-          <%= label_tag label, label.name, class: "mb-1 d-block text-left" %>
+          <%= label_badge_tag label, label.name, class: "mb-1 d-block text-left" %>
         <% end %>
       <% end %>
 
