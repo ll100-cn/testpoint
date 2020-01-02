@@ -120,24 +120,18 @@
         <col width="5%">
         <col width="20%">
         <col width="10%">
-        <col width="15%">
+        <col width="8%">
         <col width="10%">
         <col width="10%">
-        <col width="10%">
-        <col>
-        <col>
       </colgroup>
       <thead>
         <tr>
           <th><%= sort_link(@q, :id)%></th>
           <th><%= sort_link(@q, :title)%></th>
           <th><%= sort_link(@q, :label_ids)%></th>
-          <th><%= sort_link(@q, :milestone_id)%></th>
           <th><%= sort_link(@q, :state)%></th>
           <th><%= sort_link(@q, :creator_id)%></th>
           <th><%= sort_link(@q, :assignee_id)%></th>
-          <th><%= sort_link(@q, :state_at)%></th>
-          <th><%= sort_link(@q, :last_edited_at)%></th>
         </tr>
       </thead>
       <tbody>
@@ -153,24 +147,17 @@
               <% end %>
             </td>
             <td>
-              <% if issue.milestone %>
-                <%= issue.milestone.title %>
-              <% end %>
-            </td>
-            <td>
               <span class="text-issue-<%= issue.state %>">
                 <%= issue.state.text %>
               </span>
             </td>
             <td><%= issue.creator.smart_name %></td>
             <td><%= issue.assignee&.smart_name %></td>
-            <td><%=l issue.state_at, format: :simple %></td>
             <% if @task %>
-            <td>
-              <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
-            </td>
+              <td>
+                <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
+              </td>
             <% end %>
-            <td><%=l issue.last_edited_at, format: :simple if issue.last_edited_at %></td>
           </tr>
         <% end %>
       </tbody>
