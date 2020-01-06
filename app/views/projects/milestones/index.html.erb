@@ -23,8 +23,8 @@
       </tr>
       </thead>
       <tbody>
-        <% @milestones.each do |milestone| %>
-          <tr>
+        <% @milestones.ranked.each do |milestone| %>
+          <tr class="<%= 'block-discard' if milestone.published? %>">
             <td><%= link_to milestone.title, [@project, milestone] %></td>
             <td><%=l milestone.published_at, format: :long if milestone.published_at? %></td>
             <td>

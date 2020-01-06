@@ -16,4 +16,11 @@ class Milestone < ApplicationRecord
   belongs_to :project
 
   validates :title, presence: true
+
+  scope :ranked, -> { order(published_at: :desc) }
+
+
+  def published?
+    published_at && published_at < DateTime.now
+  end
 end
