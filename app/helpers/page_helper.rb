@@ -29,7 +29,7 @@ module PageHelper
   end
 
   def new_button(models, options={})
-    default_opts =  { class: "btn btn-success" }
+    default_opts =  { class: "btn btn-primary" }
     new_link(models, merge_css(default_opts, options))
   end
 
