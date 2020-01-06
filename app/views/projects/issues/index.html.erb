@@ -122,6 +122,7 @@
         <col width="8%">
         <col width="10%">
         <col width="10%">
+        <col width="10%">
       </colgroup>
       <thead>
         <tr>
@@ -129,6 +130,7 @@
           <th><%= sort_link(@q, :title)%></th>
           <th><%= sort_link(@q, :label_ids)%></th>
           <th><%= sort_link(@q, :state)%></th>
+          <th><%= sort_link(@q, :milestone_id)%></th>
           <th><%= sort_link(@q, :creator_id)%></th>
           <th><%= sort_link(@q, :assignee_id)%></th>
         </tr>
@@ -149,6 +151,11 @@
               <span class="text-issue-<%= issue.state %>">
                 <%= issue.state.text %>
               </span>
+            </td>
+            <td>
+              <% if issue.milestone %>
+                <%= issue.milestone.title %>
+              <% end %>
             </td>
             <td><%= issue.creator.smart_name %></td>
             <td><%= issue.assignee&.smart_name %></td>
