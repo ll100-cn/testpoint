@@ -26,4 +26,9 @@ RSpec.describe Projects::FoldersController, type: :controller do
     action(skip: true) { delete :destroy, params: { id: folder.id, project_id: project.id } }
     it { expect { do_action }.to change { Folder.count }.by(-1) }
   end
+
+  describe "PATCH archive" do
+    action { patch :archive, params: { project_id: project.id, id: folder.id } }
+    it { is_expected.to respond_with :redirect }
+  end
 end

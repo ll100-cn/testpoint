@@ -57,15 +57,6 @@ module PageHelper
     content_tag(:span, *args, options, &block)
   end
 
-  def task_state_class_name(state)
-    case state
-    when "pass"
-      "text-success"
-    when "failure"
-      "text-danger"
-    end
-  end
-
   def markdown_to_html(markdown, math_engine = "mathjax_node_png")
     return "" if markdown.blank?
     Kramdown::Document.new(

@@ -63,8 +63,4 @@ class User < ApplicationRecord
     UserMailer
   end
 
-  def default_project
-    projects.take
-  end
-
 end

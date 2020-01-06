@@ -7,6 +7,15 @@ RSpec.describe Projects::TestCasesController, type: :controller do
   let!(:test_case) { create :test_case, platforms: [ platform ], project: project, folder: folder }
   login_superadmin
 
+  describe "GET new" do
+    let(:params) { { project_id: project.id } }
+    action { get :new, params: params, format: :xhrml }
+
+    context "success" do
+      it { is_expected.to respond_with :success }
+    end
+  end
+
   describe "GET index" do
     let(:params) { { project_id: project.id } }
     action { get :index, params: params }
