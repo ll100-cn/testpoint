@@ -2,6 +2,9 @@ class Projects::PlatformsController < BaseProjectController
   load_and_authorize_resource :project
   load_and_authorize_resource through: :project
 
+  def index
+  end
+
   def new
   end
 
