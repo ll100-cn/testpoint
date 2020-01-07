@@ -1,11 +1,12 @@
 <%= f.input :title %>
 <%= f.input :published_at, as: :datetime_pickr %>
 <%= f.input :description, input_html: { class: 'markdown-field' } %>
+<%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
 
 <hr>
 
-<%= f.actions_content do %>
+<div class="actions">
   <%= ok_url_tag %>
   <%= f.submit class: "btn btn-primary" %>
   <%= cancel_button [@project, :milestones] %>
-<% end %>
+</div>

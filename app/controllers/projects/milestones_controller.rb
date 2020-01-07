@@ -34,6 +34,6 @@ class Projects::MilestonesController < BaseProjectController
 
 protected
   def milestone_params
-    params.fetch(:milestone, {}).permit(:title, :published_at, :description)
+    params.fetch(:milestone, {}).permit(:title, :published_at, :description, attachment_ids: [])
   end
 end

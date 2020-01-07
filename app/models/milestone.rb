@@ -13,6 +13,7 @@
 
 class Milestone < ApplicationRecord
   has_many :issues, dependent: :nullify
+  has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
   belongs_to :project
 
   validates :title, presence: true

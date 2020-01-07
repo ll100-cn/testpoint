@@ -12,6 +12,7 @@
     <div class="card-body">
       <div class="no-margin-bottom">
         <%= markdown_to_html(@milestone.description) %>
+        <%= render "shared/attachments_box", attachmentable: @milestone %>
       </div>
     </div>
   </div>

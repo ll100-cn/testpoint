@@ -2,6 +2,6 @@
   <h2><%= page_i18n :edit, model_name: h(@milestone) %></h2>
 </div>
 
-<%= bootstrap_horizontal_form_for [@project, @milestone] do |f| %>
+<%= bootstrap_vertical_form_for [@project, @milestone] do |f| %>
   <%= render "form", f: f %>
 <% end %>
