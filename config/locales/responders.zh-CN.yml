@@ -9,7 +9,7 @@ zh-CN:
         # alert: '%{resource_name} could not be updated.'
       destroy:
         notice: '%{resource_name}删除成功.'
-        alert: '%{resource_name}不能删除.'
+        alert: '%{resource_name}不能删除, %{reason}'
     profiles:
       update:
         notice: 资料更新成功!

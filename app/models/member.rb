@@ -15,8 +15,10 @@ class Member < ApplicationRecord
   enumerize :role, in: [:owner, :manager, :developer, :reporter], default: :developer
   belongs_to :user
   belongs_to :project
-  has_many :comments, dependent: :destroy
-  has_many :issue_relationships, dependent: :destroy
+  has_many :issues, foreign_key: :creator_id, dependent: :restrict_with_error
+  has_many :comments,                         dependent: :restrict_with_error
+  has_many :issue_relationships,              dependent: :restrict_with_error
+  has_many :issue_activities,                 dependent: :restrict_with_error
   attr_accessor :email, :name
 
   cleanup_column :nickname

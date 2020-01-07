@@ -89,6 +89,7 @@ zh-CN:
         role: 角色
         user_id: 用户
         email: 邮箱
+        issues: 问题
         nickname: 昵称
         name: 用户名
       issue_relationship:

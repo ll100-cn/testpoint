@@ -54,7 +54,9 @@ RSpec.describe Projects::MembersController, type: :controller do
   end
 
   describe "DELETE destroy" do
-    action(skip: true) { delete :destroy, params: { id: member.id, project_id: project.id } }
+    let!(:new_user) { create :user }
+    let!(:new_member) { create :member, :reporter, project: project, user: new_user }
+    action(skip: true) { delete :destroy, params: { id: new_member.id, project_id: project.id } }
     it { expect { do_action }.to change { Member.count }.by(-1) }
   end
 end
