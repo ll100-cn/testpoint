@@ -8,12 +8,12 @@ RSpec.describe Projects::LabelsController, type: :controller do
   login_superadmin
 
   describe "GET index" do
-    action { get :index, params: { project_id: project.id } }
+    action { get :index, params: { project_id: project.id }, format: :xhrml }
     it { is_expected.to respond_with :success }
   end
 
   describe "GET new" do
-    action { get :new, params: { project_id: project.id } }
+    action { get :new, params: { project_id: project.id }, format: :xhrml }
     it { is_expected.to respond_with :success }
   end
 
@@ -27,11 +27,6 @@ RSpec.describe Projects::LabelsController, type: :controller do
     let(:attributes) { { name: "help wanted" } }
     action { put :update, params: { id: label.id, label: attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
-  end
-
-  describe "GET show" do
-    action { get :show, params: { id: label.id, project_id: project.id } }
-    it { is_expected.to respond_with :success }
   end
 
   describe "DELETE destroy" do

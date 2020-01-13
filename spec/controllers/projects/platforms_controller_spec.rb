@@ -5,8 +5,13 @@ RSpec.describe Projects::PlatformsController, type: :controller do
   let!(:platform) { create :platform, project: project }
   login_superadmin
 
+  describe "GET index" do
+    action { get :index, params: { project_id: project.id }, format: :xhrml }
+    it { is_expected.to respond_with :success }
+  end
+
   describe "GET new" do
-    action { get :new, params: { project_id: project.id } }
+    action { get :new, params: { project_id: project.id }, format: :xhrml }
     it { is_expected.to respond_with :success }
   end
 

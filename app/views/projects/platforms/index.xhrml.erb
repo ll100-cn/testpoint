@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <h5 class="modal-title"><%= page_i18n(:index, model_name: h(Platform)) %></h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <table class="table">
+    <colgroup>
+      <col width="50%">
+      <col width="50%">
+      <col>
+    </colgroup>
+    <thead>
+    <tr>
+      <th><%=h Platform, :name %></th>
+      <th><%= page_i18n :actions %></th>
+    </tr>
+    </thead>
+    <tbody>
+      <% @platforms.each do |platform| %>
+        <tr>
+          <td><%= platform.name %></td>
+          <td>
+            <%= edit_link [@project, platform], data: { remote: true, type: :xhrml, target: ".modal-content" } %>
+            <%= destroy_link [@project, platform] if can? :destroy, platform %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-footer">
+  <%= new_button [@project, :platform], data: { remote: true, type: :xhrml, target: ".modal-content" } if can? :new, Platform %>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :close %></button>
+</div>
