@@ -104,7 +104,7 @@
 
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :milestone_id } do |f| %>
-          <%= f.input :milestone_id, collection: @project.milestones %>
+          <%= f.input :milestone_id, collection: @project.milestones.ranked %>
         <% end %>
       <% end %>
 
