@@ -30,6 +30,7 @@ gem 'responders', "3.0.0"
 # Models
 gem 'devise', "4.7.1"
 gem 'devise-i18n', "1.8.2"
+gem 'devise_code_authenticatable', '0.1.1'
 gem 'cancancan', "3.0.1"
 gem "carrierwave", "2.0.2"
 gem 'enumerize', "2.3.1"

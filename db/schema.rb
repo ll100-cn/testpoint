@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_30_064526) do
+ActiveRecord::Schema.define(version: 2020_02_17_015706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,10 +103,10 @@ ActiveRecord::Schema.define(version: 2019_12_30_064526) do
   create_table "issue_relationships", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "source_id"
-    t.string "category"
     t.bigint "member_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_issue_relationships_on_member_id"
     t.index ["source_id"], name: "index_issue_relationships_on_source_id"
     t.index ["target_id"], name: "index_issue_relationships_on_target_id"
@@ -153,6 +153,17 @@ ActiveRecord::Schema.define(version: 2019_12_30_064526) do
     t.index ["project_id"], name: "index_labels_on_project_id"
   end
 
+  create_table "login_codes", force: :cascade do |t|
+    t.string "code"
+    t.integer "retry_times"
+    t.boolean "expired"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["resource_type", "resource_id"], name: "index_login_codes_on_resource_type_and_resource_id"
+  end
+
   create_table "members", force: :cascade do |t|
     t.string "role"
     t.bigint "project_id"
@@ -166,11 +177,11 @@ ActiveRecord::Schema.define(version: 2019_12_30_064526) do
 
   create_table "milestones", force: :cascade do |t|
     t.string "title"
+    t.datetime "published_at"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "project_id"
-    t.datetime "published_at"
     t.index ["project_id"], name: "index_milestones_on_project_id"
   end
 
@@ -181,6 +192,7 @@ ActiveRecord::Schema.define(version: 2019_12_30_064526) do
     t.boolean "archived", default: false
     t.datetime "start_at"
     t.bigint "project_id"
+    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["project_id"], name: "index_plans_on_project_id"
   end
 
@@ -190,6 +202,7 @@ ActiveRecord::Schema.define(version: 2019_12_30_064526) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
@@ -275,6 +288,7 @@ ActiveRecord::Schema.define(version: 2019_12_30_064526) do
     t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.index ["archived"], name: "index_test_cases_on_archived"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
@@ -298,6 +312,7 @@ ActiveRecord::Schema.define(version: 2019_12_30_064526) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

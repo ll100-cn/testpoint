@@ -3,7 +3,8 @@ Sidekiq::Web.set :sessions, false
 
 Rails.application.routes.draw do
   devise_for :users, path: "", controllers: {
-    sessions: "sessions"
+    sessions: "sessions",
+    login_codes: "login_codes"
   }, skip: [ :confirmations, :passwords ]
 
 

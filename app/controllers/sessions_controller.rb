@@ -1,3 +1,3 @@
-class SessionsController < Devise::SessionsController
+class SessionsController < DeviseCodeAuthenticatable::SessionsController
   layout false
 end
