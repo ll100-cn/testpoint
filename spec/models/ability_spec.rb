@@ -81,8 +81,6 @@ RSpec.describe Ability, type: :model do
     subject(:ability) { Ability.new { |a| a.apply_reporter_permissions(reporter) } }
 
     it {  is_expected.to be_able_to([:read, :create], Issue, Comment, Attachment)
-          is_expected.to be_able_to(:update, Issue.new(creator_id: reporter.id))
-          is_expected.to be_able_to(:update, Issue.new(assignee_id: reporter.id))
           is_expected.to be_able_to(:update, Comment.new(member_id: reporter.id)) }
   end
 

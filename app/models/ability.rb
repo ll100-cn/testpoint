@@ -29,8 +29,6 @@ class Ability
     can [:read, :create],       Comment
     can [:read, :create],       Issue
     can :update,                Comment,  member_id:   member.id
-    can :update,                Issue,    creator_id:  member.id
-    can :update,                Issue,    assignee_id: member.id
   end
 
   def apply_developer_permissions(member)
