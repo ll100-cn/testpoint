@@ -112,8 +112,8 @@
         <% if @issue.milestone %>
           <div class="d-flex align-items-center">
             <div class="progress flex-1">
-              <% total = @issue.milestone.issues.count %>
-              <% finished_issue = @issue.milestone.issues.where(state: "resolved").count %>
+              <% total = @issue.milestone.issues.without_state(:closed).count %>
+              <% finished_issue = @issue.milestone.issues.with_state(:resolved).count %>
               <div class="progress-bar bg-success" style="width: <%= 100 * finished_issue / total %>%"></div>
               <span class="progress-text"><%= @issue.milestone.title %></span>
             </div>
