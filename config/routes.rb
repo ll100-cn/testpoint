@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   devise_for :users, path: "", controllers: {
     sessions: "sessions",
     login_codes: "login_codes"
-  }, skip: [ :confirmations, :passwords ]
+  }
 
 
   devise_scope :user do

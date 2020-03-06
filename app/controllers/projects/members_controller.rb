@@ -13,7 +13,6 @@ class Projects::MembersController < BaseProjectController
   def create
     if @member.submit
       @user = @member.user
-      @user.send_activation_instructions unless @user.confirmed?
     end
 
     respond_with @member, location: -> { ok_url_or_default([@project, Member]) }
