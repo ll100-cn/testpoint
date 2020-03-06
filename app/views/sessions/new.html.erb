@@ -23,7 +23,7 @@
             <div class="kt-login-v2__title">
               <h3><%= t(".sign_in", scope: "devise") %></h3>
             </div>
-            <%= bootstrap_vertical_form_for resource, url: new_session_path(resource_name), html: { class: "kt-login-v2__form kt-form" } do |f| %>
+            <%= bootstrap_vertical_form_for resource, url: user_session_path, html: { class: "kt-login-v2__form kt-form" } do |f| %>
 
               <%= render 'in_form_flash' %>
 
