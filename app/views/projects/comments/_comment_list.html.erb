@@ -1,7 +1,7 @@
 <% (@issue.activities + @issue.comments + @issue.source_relationships + @issue.target_relationships).sort_by(&:created_at).each do |record| %>
   <% if record.is_a?(Comment) %>
     <% if record.collapsed? %>
-      <%= render template: "projects/comments/unfold.xhrml" %>
+      <%= render template: "projects/comments/unfold.xhrml", comment: record %>
     <% else %>
     <div class="issue-comment">
       <%= render "projects/issues/card_comment.html", comment: record %>
