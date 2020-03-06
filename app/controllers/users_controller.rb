@@ -10,10 +10,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user.password = SecureRandom.hex(4)
-    @user.password_confirmation = @user.password
-    @user.send_activation_instructions unless @user.confirmed? if @user.save
-
     respond_with @user, location: -> { ok_url_or_default([User]) }
   end
 

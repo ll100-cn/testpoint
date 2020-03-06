@@ -6,20 +6,12 @@ class Profiles::BasicsController < ApplicationController
   end
 
   def update
-    if user_params.values_at(*password_param_names).any?(&:present?)
-      @user.update_with_password(user_params)
-    else
-      @user.update(user_params)
-    end
+    @user.update(user_params)
     respond_with @user, action: :show, location: ok_url_or_default(action: :show)
   end
 
 protected
   def user_params
-    params.fetch(:user, {}).permit(:name, *password_param_names)
-  end
-
-  def password_param_names
-    [:current_password, :password, :password_confirmation]
+    params.fetch(:user, {}).permit(:name)
   end
 end

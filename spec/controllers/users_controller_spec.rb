@@ -21,7 +21,7 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "PUT update" do
-    let(:attributes) { { password: "123456", password_confirmation: "123456" } }
+    let(:attributes) { { email: "new_email@ll100.com" } }
     action { put :update, params: { id: user.id, user: attributes } }
     it { is_expected.to respond_with :redirect }
   end

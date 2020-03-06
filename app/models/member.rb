@@ -28,8 +28,7 @@ class Member < ApplicationRecord
   scope :chief, -> { where(role: [ "owner", "manager" ]) }
 
   def submit
-    password = SecureRandom.hex(4)
-    user = User.where(email: email).first_or_initialize(name: name, password: password, password_confirmation: password)
+    user = User.where(email: email).first_or_initialize(name: name)
     transaction do
       if user.new_record? && !user.save
         delegate_errors(user, self, [ :email, :name ], :email)
