@@ -13,6 +13,7 @@ before_script:
   - bin/yarn
   - cp config/redis.yml.example config/redis.yml
   - bin/rake db:create
+  - bin/rake db:migrate
 
 cache:
   timeout: 1200
