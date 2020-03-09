@@ -34,13 +34,13 @@ class Ability
   def apply_developer_permissions(member)
     apply_reporter_permissions(member)
     can [:fold, :unfold],       Comment
+    can :manage,                Issue
     can [:read, :create],       IssueRelationship
     can :manage,                [TestCase, TestCaseLabel, Plan, Platform, Folder, Task]
   end
 
   def apply_manager_permissions(member)
     apply_developer_permissions(member)
-    can :manage,                Issue
     can :manage,                IssueRelationship
     can :manage,                Milestone
     can :update,                member.project
