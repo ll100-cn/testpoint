@@ -97,7 +97,7 @@
         <% state_filter = [@q.state_filter].flatten.first %>
         <%= fume_nav state_filter do |n| %>
           <div class="btn-group btn-group-sm ml-2" role="group">
-            <% opening_states = [ "opening", "pending", "processing" ] %>
+            <% opening_states = [ "opening", "pending", "confirmed", "processing" ] %>
             <% if opening_states.include?(state_filter) %>
               <div class="btn btn-outline-primary active"><%= state_names[state_filter] %></div>
             <% else %>

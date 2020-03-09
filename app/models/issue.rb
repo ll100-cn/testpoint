@@ -19,7 +19,7 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [:pending, :processing, :processed, :closed, :resolved], default: :pending, scope: true
+  enumerize :state, in: [:pending, :confirmed, :processing, :processed, :closed, :resolved], default: :pending, scope: true
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -47,7 +47,7 @@ class Issue < ApplicationRecord
   scope :state_filter, ->(text) {
     case text
     when "opening"
-      where(state: [ "pending", "processing" ])
+      where(state: [ "pending", "confirmed", "processing" ])
     when "all"
       self
     else

@@ -12,12 +12,14 @@
     <div class="card-body">
       <% progress = {
         'pending':    @milestone.issues.with_state(:pending).count / @milestone.issues.without_state(:closed).count.to_f,
+        'confirmed':    @milestone.issues.with_state(:confirmed).count / @milestone.issues.without_state(:closed).count.to_f,
         'processing': @milestone.issues.with_state(:processing).count / @milestone.issues.without_state(:closed).count.to_f,
         'processed':  @milestone.issues.with_state(:processed).count / @milestone.issues.without_state(:closed).count.to_f,
         'resolved':   @milestone.issues.with_state(:resolved).count / @milestone.issues.without_state(:closed).count.to_f
       }.transform_values { |f| "#{f * 100}%" } %>
       <div class="progress">
-        <div class="progress-bar bg-danger" role="progressbar" style="width: <%= progress[:pending] %>">待处理</div>
+        <div class="progress-bar bg-danger" role="progressbar" style="width: <%= progress[:pending] %>">待确认</div>
+        <div class="progress-bar bg-danger" role="progressbar" style="width: <%= progress[:confirmed] %>">已确认</div>
         <div class="progress-bar bg-warning" role="progressbar" style="width: <%= progress[:processing] %>">处理中</div>
         <div class="progress-bar bg-info" role="progressbar" style="width: <%= progress[:processed] %>">已处理</div>
         <div class="progress-bar bg-success" role="progressbar" style="width: <%= progress[:resolved] %>">已解决</div>
