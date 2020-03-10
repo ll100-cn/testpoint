@@ -275,5 +275,17 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
+
+  # ==> Configuration for :code_authenticatable
+  # Maximum retry times for a code to be verifed (default: 5).
+  # Login code will not change even if user click resend mail,
+  # and the same code will be sent again.
+  # config.retry_limit = 2
+
+  # Deadline for a code to be verifed (default: 10.minutes).
+  # Login code will expired if user has not enter the login_code in 10 minutes
+  # config.expire_time = 1.minute
+
+
   config.secret_key = 'cf1866b60d3472dc91e23806776df9961da488b5fec595fc1a7ab53a0557b28e8167da111f15113027fc9bfa18c94c239083bc1c249b12acc083b362b2692c1f'
 end
