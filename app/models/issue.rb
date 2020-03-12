@@ -92,23 +92,32 @@ class Issue < ApplicationRecord
    end
  end
 
- def deliver_changed_notification(changer, with_chief: false)
-   recevier_ids = [
-     self.creator.user_id,
-     self.assignee&.user_id,
-     self.subscribed_user_ids
-   ]
-
-   recevier_ids += self.project.members.chief.pluck(:user_id) if with_chief
-   recevier_ids = recevier_ids.flatten.compact.uniq
-   recevier_ids.delete(changer.user_id)
-
-   recevier_ids.each do |receiver_id|
-     IssueMailer.changed_notification(self, changer, receiver_id).deliver_later
-   end
- end
-
  def ensure_state_at
    self.state_at = Time.current
  end
+
+ def notify_created_by(changer)
+   email_receivers.each { |receiver| IssueMailer.created_notification(self, changer, receiver).deliver_later }
+ end
+
+ def notify_assigned_by(changer)
+   email_receivers.each { |receiver| IssueMailer.assigned_notification(self, changer, receiver).deliver_later }
+ end
+
+ def notify_state_changed_by(changer)
+   email_receivers.each { |receiver| IssueMailer.state_changed_notification(self, changer, receiver).deliver_later }
+ end
+
+ def notify_commented_by(changer)
+   email_receivers.each { |receiver| IssueMailer.commented_notification(self, changer, receiver).deliver_later }
+ end
+
+ protected
+   def email_receivers
+     [
+       self.creator,
+       self.assignee,
+       self.subscribed_users
+     ].flatten.compact.uniq
+   end
 end

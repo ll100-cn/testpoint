@@ -84,13 +84,6 @@ RSpec.describe Projects::IssuesController, type: :controller do
     context "admin creat the issue" do
       before { attributes[:title] =  "Mail delivery test" }
       it { is_expected.to respond_with :redirect }
-      it "should receive mail" do
-        issue = Issue.find_by(title: "Mail delivery test")
-        message_delivery = instance_double(ActionMailer::MessageDelivery)
-        expect(IssueMailer).to receive(:changed_notification).with(issue, owner, manager.user_id).and_return(message_delivery)
-        allow(message_delivery).to receive(:deliver_later)
-        post :create, params: { issue: attributes, task_id: task.id, project_id: project.id }
-      end
     end
   end
 

@@ -23,7 +23,7 @@ class Projects::IssuesController < BaseProjectController
     end
 
     if params[:filter] == "subscribed"
-      @issues_scope = @issues_scope.subscribed_issues(current_user)
+      @issues_scope = @issues_scope.subscribed_issues(current_member)
     end
 
     @issues_state_counts = @issues_scope.unscope(:order, where: :state).group(:state).count
@@ -39,11 +39,11 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def create
-    @task = Task.find(params[:task_id]) if params[:task_id]
-    @issue.creator ||= current_member
-    @issue.tasks = [ @task ] if @task
-    if @issue.save
-      @issue.deliver_changed_notification(current_member, with_chief: true)
+    with_email_notification do
+      @task = Task.find(params[:task_id]) if params[:task_id]
+      @issue.creator ||= current_member
+      @issue.tasks = [ @task ] if @task
+      @issue.save
     end
     respond_with @issue, location: ok_url_or_default(action: :index)
   end
@@ -55,8 +55,8 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def update
-    if @issue.update_with_editor(issue_params, current_member)
-      @issue.deliver_changed_notification(current_member)
+    with_email_notification do
+      @issue.update_with_editor(issue_params, current_member)
     end
 
     respond_with @issue, location: ok_url_or_default(action: :show)
@@ -72,5 +72,18 @@ protected
              label_ids: [] ]
     names += [ :creator_id ] if can? :critical, Issue
     names
+  end
+
+  def with_email_notification
+    creating = proc(&:new_record?)
+    assigning = proc(&:assignee_id_changed?)
+    changing_state = proc(&:state_changed?)
+
+    @issue.assign_attributes(issue_params)
+    case @issue
+    when creating then @issue.notify_created_by(current_member) if yield
+    when assigning then  @issue.notify_assigned_by(current_member) if yield
+    when changing_state then @issue.notify_state_changed_by(current_member) if yield
+    end
   end
 end
