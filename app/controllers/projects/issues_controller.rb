@@ -84,6 +84,8 @@ protected
     when creating then @issue.notify_created_by(current_member) if yield
     when assigning then  @issue.notify_assigned_by(current_member) if yield
     when changing_state then @issue.notify_state_changed_by(current_member) if yield
+    else
+      yield
     end
   end
 end
