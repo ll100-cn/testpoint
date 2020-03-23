@@ -1,32 +1,32 @@
 class IssueMailer < ApplicationMailer
-  def created_notification(issue, changer, receiver)
-    @issue = issue
-    @changer = changer
-    @receiver = receiver
+  def created_notification(issue_id, changer_id, to_address)
+    @issue = Issue.find(issue_id)
+    @changer = Member.find(changer_id)
+    @to_address = to_address
     mail(**mailer_options)
   end
 
-  def assigned_notification(issue, changer, receiver)
-    @issue = issue
-    @changer = changer
-    @receiver = receiver
-    @assignee = issue.assignee
+  def assigned_notification(issue_id, changer_id, to_address)
+    @issue = Issue.find(issue_id)
+    @changer = Member.find(changer_id)
+    @to_address = to_address
+    @assignee = @issue.assignee
     mail(**mailer_options)
   end
 
-  def state_changed_notification(issue, changer, receiver)
-    @issue = issue
-    @changer = changer
-    @receiver = receiver
-    @state = issue.state_text
+  def state_changed_notification(issue_id, changer_id, to_address)
+    @issue = Issue.find(issue_id)
+    @changer = Member.find(changer_id)
+    @to_address = to_address
+    @state = @issue.state_text
     mail(**mailer_options)
   end
 
-  def commented_notification(issue, changer, receiver)
-    @issue = issue
-    @changer = changer
-    @receiver = receiver
-    @comment = issue.comments.last
+  def commented_notification(issue_id, changer_id, to_address)
+    @issue = Issue.find(issue_id)
+    @changer = Member.find(changer_id)
+    @to_address = to_address
+    @comment = @issue.comments.last
     mail(**mailer_options)
   end
 
@@ -34,7 +34,7 @@ class IssueMailer < ApplicationMailer
   def mailer_options
     {
       from: "#{@changer.smart_name} <#{ENV["DEVISE_MAILER_SENDER"]}>",
-      to: @receiver.user.email,
+      to: @to_address,
       subject: "[TESTPOINT] #{@issue.title} (##{@issue.id})"
     }
   end

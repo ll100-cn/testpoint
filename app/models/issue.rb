@@ -97,27 +97,27 @@ class Issue < ApplicationRecord
  end
 
  def notify_created_by(changer)
-   email_receivers.each { |receiver| IssueMailer.created_notification(self, changer, receiver).deliver_later }
+   email_list.each { |to_address| IssueMailer.created_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  def notify_assigned_by(changer)
-   email_receivers.each { |receiver| IssueMailer.assigned_notification(self, changer, receiver).deliver_later }
+   email_list.each { |to_address| IssueMailer.assigned_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  def notify_state_changed_by(changer)
-   email_receivers.each { |receiver| IssueMailer.state_changed_notification(self, changer, receiver).deliver_later }
+   email_list.each { |to_address| IssueMailer.state_changed_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  def notify_commented_by(changer)
-   email_receivers.each { |receiver| IssueMailer.commented_notification(self, changer, receiver).deliver_later }
+   email_list.each { |to_address| IssueMailer.commented_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  protected
-   def email_receivers
+   def email_list
      [
-       self.creator,
-       self.assignee,
+       self.creator&.user,
+       self.assignee&.user,
        self.subscribed_users
-     ].flatten.compact.uniq
+     ].flatten.compact.uniq.map(&:email)
    end
 end
