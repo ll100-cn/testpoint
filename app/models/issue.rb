@@ -97,7 +97,7 @@ class Issue < ApplicationRecord
  end
 
  def notify_created_by(changer)
-   email_list.each { |to_address| IssueMailer.created_notification(self.id, changer.id, to_address).deliver_later }
+   email_list(with_chief: true).each { |to_address| IssueMailer.created_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  def notify_assigned_by(changer)
@@ -113,11 +113,13 @@ class Issue < ApplicationRecord
  end
 
  protected
-   def email_list
-     [
-       self.creator&.user,
-       self.assignee&.user,
-       self.subscribed_users
-     ].flatten.compact.uniq.map(&:email)
+   def email_list(with_chief: false)
+     user_list = []
+     user_list += [self.creator&.user]
+     user_list += [self.assignee&.user]
+     user_list += self.subscribed_users
+     user_list += self.project.members.chief.to_a if with_chief
+
+     user_list.flatten.compact.uniq.map(&:email)
    end
 end
