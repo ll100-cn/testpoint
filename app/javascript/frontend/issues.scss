@@ -96,3 +96,10 @@
 .text-issue-resolved {
   color: $success;
 }
+
+.markdown-wrapper blockquote {
+  padding: 10px 15px;
+  margin: 15px 0;
+  color: $gray-600;
+  border-left: 4px solid $gray-300;
+}
