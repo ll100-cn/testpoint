@@ -59,14 +59,12 @@ module PageHelper
 
   def markdown_to_html(markdown, math_engine = "mathjax_node_png")
     return "" if markdown.blank?
-    content_tag(:div, class: "markdown-wrapper") do
-      Kramdown::Document.new(
-        markdown.strip,
-        auto_ids: false,
-        math_engine: math_engine,
-        smart_quotes: %w[apos apos quot quot]
-      ).to_html.html_safe
-    end
+    Kramdown::Document.new(
+      markdown.strip,
+      auto_ids: false,
+      math_engine: math_engine,
+      smart_quotes: %w[apos apos quot quot]
+    ).to_html.html_safe
   end
 
   def create_or_edit_time_in_words(model)
