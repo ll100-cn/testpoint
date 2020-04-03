@@ -115,10 +115,9 @@ class Issue < ApplicationRecord
  protected
    def email_list(with_chief: false)
      user_list = []
-     user_list += [self.creator&.user]
      user_list += [self.assignee&.user]
      user_list += self.subscribed_users
-     user_list += self.project.members.chief.to_a if with_chief
+     user_list += self.project.members.chief.to_a.map(&:user) if with_chief
 
      user_list.flatten.compact.uniq.map(&:email)
    end
