@@ -97,27 +97,29 @@ class Issue < ApplicationRecord
  end
 
  def notify_created_by(changer)
-   email_list(with_chief: true).each { |to_address| IssueMailer.created_notification(self.id, changer.id, to_address).deliver_later }
+   email_list(except: [changer]).each { |to_address| IssueMailer.created_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  def notify_assigned_by(changer)
-   email_list.each { |to_address| IssueMailer.assigned_notification(self.id, changer.id, to_address).deliver_later }
+   email_list(except: [changer]).each { |to_address| IssueMailer.assigned_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  def notify_state_changed_by(changer)
-   email_list.each { |to_address| IssueMailer.state_changed_notification(self.id, changer.id, to_address).deliver_later }
+   email_list(except: [changer]).each { |to_address| IssueMailer.state_changed_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  def notify_commented_by(changer)
-   email_list.each { |to_address| IssueMailer.commented_notification(self.id, changer.id, to_address).deliver_later }
+   email_list(except: [changer]).each { |to_address| IssueMailer.commented_notification(self.id, changer.id, to_address).deliver_later }
  end
 
  protected
-   def email_list(with_chief: false)
+   def email_list(args={ except: [] })
      user_list = []
+     user_list += [self.creator&.user]
      user_list += [self.assignee&.user]
      user_list += self.subscribed_users
-     user_list += self.project.members.chief.to_a.map(&:user) if with_chief
+     user_list += self.project.members.chief.to_a.map(&:user)
+     user_list -= args[:except].to_a.map(&:user)
 
      user_list.flatten.compact.uniq.map(&:email)
    end
