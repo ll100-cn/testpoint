@@ -57,14 +57,11 @@ module PageHelper
     content_tag(:span, *args, options, &block)
   end
 
-  def markdown_to_html(markdown, math_engine = "mathjax_node_png")
+  def markdown_to_html(markdown, options={ checkbox: { readonly: true } })
     return "" if markdown.blank?
-    Kramdown::Document.new(
-      markdown.strip,
-      auto_ids: false,
-      math_engine: math_engine,
-      smart_quotes: %w[apos apos quot quot]
-    ).to_html.html_safe
+    content_tag :div, class: "markdown-area", data: options do
+      markdown
+    end
   end
 
   def create_or_edit_time_in_words(model)
