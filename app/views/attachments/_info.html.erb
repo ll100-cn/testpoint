@@ -33,7 +33,7 @@
 
   <div class="media-body d-flex flex-column">
     <div class="d-flex align-items-center">
-      <h4 class="mb-0 d-inline-block"><%= attachment.title %></h4>
+      <h4 class="mb-0 d-inline-block"><%= attachment.title.truncate(20) %></h4>
       <%= link_to edit_attachment_path(attachment), class: "text-muted mr-auto ml-2", data: { remote: true, type: "xhrml", target: ".media", replace: true } do %>
         <span class="fa fa-pencil-square-o"></span>
       <% end %>
