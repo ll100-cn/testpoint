@@ -3,12 +3,12 @@
   <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(issue) %></span>
   <% if can? :edit, issue %>
     <div class="dropdown float-right dropdown-no-arrow">
-      <a href="#", class="text-muted dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
+      <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
         <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-      </a>
+      </button>
       <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
         <% data = { target: "#issue#{issue.id}_content", type: "xhrml", remote: true } %>
-        <%= edit_button [project, issue], class: "small dropdown-item", data: data if can? :edit, issue %>
+        <%= edit_link [project, issue], class: "small dropdown-item", data: data if can? :edit, issue %>
       </div>
     </div>
   <% end %>
