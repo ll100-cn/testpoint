@@ -22,7 +22,6 @@ export default class extends Controller {
   change(event) {
     const valueArray = $(event.currentTarget).serializeArray()
     const valuesMapping = _.reduce(valueArray, function(result, item) {
-      console.log(item)
       result[item.name] = result[item.name] || []
       result[item.name].push(item.value)
       return result

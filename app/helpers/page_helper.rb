@@ -5,11 +5,6 @@ module PageHelper
     hidden_field_tag "ok_url", params[:ok_url] if params[:ok_url].present?
   end
 
-  ### Resource CRUD links ###
-  # USAGE:
-  # new_link [@project, :plan]
-  # edit_link [@project, plan]
-  # cancel_link :projects
   def new_link(models, options={})
     build_link(models, :new, options)
   end
@@ -57,13 +52,6 @@ module PageHelper
     content_tag(:span, *args, options, &block)
   end
 
-  def markdown_to_html(markdown, options={ checkbox: { readonly: true } })
-    return "" if markdown.blank?
-    content_tag :div, class: "markdown-area", data: options do
-      markdown
-    end
-  end
-
   def create_or_edit_time_in_words(model)
     if model.last_edited_at
       "#{time_ago_in_words(model.last_edited_at)}前修改"
@@ -77,8 +65,6 @@ module PageHelper
     content_for :title, value
     value
   end
-
-
 
 protected
   def build_link(models, action, options)

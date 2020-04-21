@@ -25,7 +25,7 @@
         <div class="progress-bar bg-success" role="progressbar" style="width: <%= progress[:resolved] %>">已解决</div>
       </div>
       <div class="no-margin-bottom">
-        <%= markdown_to_html(@milestone.description) %>
+        <%= text_area_tag(:content, @milestone.description, data: { controller: "markdown" }, readonly: true, class: "d-none") %>
         <%= render "shared/attachments_box", attachmentable: @milestone %>
       </div>
     </div>

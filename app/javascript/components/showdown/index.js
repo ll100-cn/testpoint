@@ -8,10 +8,9 @@ function checkboxExtension(options) {
   const checkbox = {
     type: 'lang',
     filter: function (text, converter) {
-      const re = checkboxRegex
-      const inputReplacer = function(match, mark) {
+      return replaceMarkdownTaskList(text, function(mark, position, checked) {
         const attrs = []
-        if (mark == "[x]") {
+        if (checked) {
           attrs.push("checked")
         }
 
@@ -19,28 +18,28 @@ function checkboxExtension(options) {
           attrs.push("disabled")
         }
 
-        attrs.push(`data-action="change-&gt;markdown#toggleCheckbox"`)
-
-        return match.replace(mark, `<input type="checkbox" ${attrs.join(' ')}>`)
-      }
-      return text.replace(re, inputReplacer)
+        return `<input type="checkbox" ${attrs.join(' ')} data-position="${position}">`
+      })
     }
   }
   return checkbox
 }
 
-const renderMarkdown = function(markdown, options) {
+export function replaceMarkdownTaskList(markdown, callback) {
+  let position = 0
+  return markdown.replace(checkboxRegex, function(match, mark) {
+    position++
+    const checked = (mark == "[x]")
+    const newMark = callback(mark, position, checked)
+    return match.replace(mark, newMark)
+  })
+}
+
+export function renderMarkdown(markdown, options = {}) {
   const checkboxOptions = options.checkbox || {}
   _.unset(options, "checkbox")
   const converter = new showdown.Converter({ extensions: [checkboxExtension(checkboxOptions)], ...options })
   return converter.makeHtml(markdown)
 }
 
-$(document).on('content:loaded', function(event) {
-  $(event.target).find('.markdown-area').each(function() {
-    const options = $(this).data() || {}
-    this.innerHTML = renderMarkdown(this.innerHTML, options)
-  })
-})
-
-export default {renderMarkdown, checkboxRegex}
+export default {}
