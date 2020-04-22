@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h5 class="modal-title"><%= @task.finished? ? @task.test_case_when_finishing.title : @task.test_case.title %></h5>
+  <h5 class="modal-title"><%= @task.finished? ? @task.test_case_snapshot.title : @task.test_case.title %></h5>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -7,19 +7,18 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-10 mx-auto">
-      <% if @task.finished? && @task.changed_after_finish? %>
-        <div class="alert alert-danger">当前查看的为历史版本，本案例在完成测试后又发生了更改</div>
+      <% if @task.test_case_changed_after_finish? %>
+        <div class="alert alert-danger">当前显示测试完成时的快照，该案例已被更新</div>
       <% end %>
 
-      <% if (content = @task.test_case_when_finishing.content) %>
-        <div class="card mb-2">
-          <div class="card-body">
-            <div class="no-margin-bottom">
-              <%= markdown_to_html(content) %>
-            </div>
-          </div>
+      <div class="card mb-2">
+        <div class="card-body">
+          <% @task.content ||= @task.test_case_snapshot.content %>
+          <%= form_for @task, url: [@project, @plan, @task], html: { data: { remote: true, type: :xhrml, target: ".modal-content"  }, class: "auto-submit" } do |f| %>
+            <%= f.text_area(:content, data: { controller: "markdown" }, class: "d-none") %>
+          <% end %>
         </div>
-      <% end %>
+      </div>
 
       <p><%=h Task, :state %>: <span class="badge badge-<%= { :pending => "warning" , :pass => "success", :failure => "danger" }.fetch(@task.state.to_sym) %>"><%= @task.state.text %></span></p>
       <% if @task.state == "failure" %>
@@ -55,7 +54,7 @@
       </div>
     <% end %>
   </div>
-  <% data = {  } %>
+
   <%= link_to Task.state.find_value(:pass).text, [@project, @plan, @task, task: { state: :pass, test_case_version: DateTime.now }], method: :patch,
               class: "btn btn-success", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
   <%= link_to Task.state.find_value(:failure).text, edit_project_plan_task_path(@project, @plan, @task, task: { state: "failure" }),
