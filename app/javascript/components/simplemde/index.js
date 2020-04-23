@@ -2,10 +2,8 @@ import $ from 'jquery'
 import SimpleMDE from 'simplemde'
 import 'simplemde/debug/simplemde.css'
 import marked from 'marked'
-import showdown from '../showdown'
+import { renderMarkdown } from '../showdown'
 import './style.scss'
-
-const renderMarkdown = showdown.renderMarkdown
 
 $(document).on('content:loaded', function(event) {
   $(event.target).find('.markdown-field').each(function() {
