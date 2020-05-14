@@ -2,4 +2,11 @@
   <strong><%= @changer.smart_name %></strong> 添加了新的问题
   <strong><%= link_to @issue.title, [@issue.project, @issue] %>
 </p>
+
+<% @issue.attachments.each do |attachment| %>
+  <% if attachment.image? %>
+    <%= image_tag url_for(attachment.file), height: 320 %>
+  <% end %>
+<% end %>
+
 <p><%= link_to "点击查看详情", [@issue.project, @issue] %></p>
