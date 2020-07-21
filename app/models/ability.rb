@@ -44,6 +44,7 @@ class Ability
     can :manage,                IssueRelationship
     can :manage,                Milestone
     can :update,                member.project
+    can :manage,                Label
     can :read,                  Member
     can :modify,                Member, Member.where.not(role: "owner") do |member|
                                   !member.role.owner?
