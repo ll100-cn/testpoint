@@ -14,6 +14,7 @@
 #  updated_at          :datetime         not null
 #  name                :string
 #  superadmin          :boolean          default(FALSE)
+#  remember_token      :string
 #
 
 FactoryBot.define do

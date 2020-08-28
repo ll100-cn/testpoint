@@ -3,11 +3,13 @@ require 'rails_helper'
 RSpec.describe Projects::PlansController, type: :controller do
   let!(:project) { create :project }
   let!(:platform) { create :platform, project: project }
-  let!(:plan) { create :plan, project: project }
+  let!(:user) { create :user}
+  let!(:member) { create :member, user: user, project: project }
+  let(:plan) { create :plan, project: project, creator: member }
   let!(:folder) { create :folder, project: project }
   let!(:test_case) { create :test_case, project: project, folder: folder, platforms: [platform] }
   let!(:task) { create :task, test_case: test_case, plan: plan }
-  login_superadmin
+  before { sign_in user }
 
   describe "GET index" do
     action { get :new, params: { project_id: project.id, format: :xhrml } }

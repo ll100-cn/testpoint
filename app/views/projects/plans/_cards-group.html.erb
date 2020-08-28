@@ -22,7 +22,7 @@
         </div>
 
         <div class="card-footer d-flex justify-content-between align-items-end bg-white">
-          <small><%= "#{time_ago_in_words(plan.created_at)}前创建" %></small>
+          <small><%= "#{time_ago_in_words(plan.created_at)}前" %> <%= plan.creator.smart_name %> 创建</small>
           <%= link_to "进入测试", project_plan_path(@project, plan), class: "btn btn-outline-primary btn-sm py-1 stretched-link ml-auto" %>
         </div>
       </div>

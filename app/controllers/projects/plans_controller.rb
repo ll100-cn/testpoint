@@ -14,6 +14,7 @@ class Projects::PlansController < BaseProjectController
   end
 
   def create
+    @plan.creator = current_member
     @test_case_filter = TestCaseFilter.new(filter_params)
     @plan.submit(@test_case_filter)
     respond_with @plan, location: ok_url_or_default([@project, Plan])

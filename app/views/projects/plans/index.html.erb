@@ -4,13 +4,7 @@
 </div>
 
 
-<p>近期计划</p>
-<%= render 'cards-group', plans: @plans.where(created_at: 1.week.ago..Time.now) %>
-
-<p>更早的计划</p>
-<%= render 'cards-group', plans: @plans.where(created_at:  Time.at(0)..1.week.ago)%>
-
-
+<%= render 'cards-group', plans: @plans %>
 
 <div id="newPlanModal" class="modal">
   <div class="modal-dialog modal-lg">

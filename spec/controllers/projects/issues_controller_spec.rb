@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Projects::IssuesController, type: :controller do
   let!(:project) { create :project }
-  let(:plan) { create :plan, project: project }
+  let!(:user) { create :user}
+  let!(:member) { create :member, user: user, project: project }
+  let(:plan) { create :plan, project: project, creator: member }
   let(:task) { plan.tasks.first }
   let(:issue) { create :issue, project: project }
   let(:superadmin) { create :user, :superadmin }

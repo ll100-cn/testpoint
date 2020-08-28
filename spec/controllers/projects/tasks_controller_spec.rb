@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Projects::TasksController, type: :controller do
   let!(:project) { create :project }
-  let(:plan) { create :plan, project: project }
+  let!(:user) { create :user}
+  let!(:member) { create :member, user: user, project: project }
+  let(:plan) { create :plan, project: project, creator: member }
   let(:task) { plan.tasks.first }
   let(:task_attributes) { {} }
   let(:issue) { create :issue, title: "it is a issue", project: project }

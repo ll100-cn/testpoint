@@ -9,6 +9,7 @@
 #  archived   :boolean          default(FALSE)
 #  start_at   :datetime
 #  project_id :bigint
+#  creator_id :bigint           not null
 #
 
 FactoryBot.define do

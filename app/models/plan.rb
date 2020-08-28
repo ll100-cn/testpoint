@@ -9,6 +9,7 @@
 #  archived   :boolean          default(FALSE)
 #  start_at   :datetime
 #  project_id :bigint
+#  creator_id :bigint           not null
 #
 
 class Plan < ApplicationRecord
@@ -16,6 +17,7 @@ class Plan < ApplicationRecord
   has_many :test_cases, through: :tasks
   has_many :folders, through: :test_cases
   belongs_to :project
+  belongs_to :creator, class_name: "Member", foreign_key: "creator_id"
 
   validates :title, presence: true
 

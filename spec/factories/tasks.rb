@@ -12,6 +12,7 @@
 #  issue_id          :bigint
 #  message           :text
 #  test_case_version :datetime
+#  content           :text
 #
 
 FactoryBot.define do
