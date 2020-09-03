@@ -5,6 +5,7 @@
 <div class="container">
   <%= bootstrap_vertical_form_for [ @project, @task, @issue ], permit_for: issue_params_names do |f| %>
     <%= f.input :title %>
+    <%= f.association :subscribed_users, as: :check_boxes, disabled: false if can? :index, Member %>
 
     <hr>
 

@@ -41,6 +41,7 @@ zh-CN:
         label_ids: 标签
         milestone_id: 里程碑
         comments: 评论
+        subscribed_users: 接收通知的成员
         created_at: 创建时间
         creator_id: 创建人
         assignee_id: 受理人
@@ -90,6 +91,7 @@ zh-CN:
         issues: 问题
         nickname: 昵称
         name: 用户名
+        receive_mail: 默认接收邮件
       issue_relationship:
         target_id: 关联的问题
         category: 关系类型

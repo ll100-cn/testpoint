@@ -36,6 +36,7 @@ class Projects::IssuesController < BaseProjectController
     @issue.tasks = [ @task ] if @task
     @issue.title ||= @issue.default_title
     @issue.content ||= @issue.default_content
+    @issue.subscribed_users = @project.members.where(receive_mail: true).map(&:user) if @issue.subscribed_users.empty?
   end
 
   def create
@@ -69,7 +70,7 @@ protected
 
   def issue_params_names
     names = [ :title, :content, :state, :milestone_id, :assignee_id, attachment_ids: [],
-             label_ids: [] ]
+             label_ids: [], subscribed_user_ids: [] ]
     names += [ :creator_id ] if can? :critical, Issue
     names
   end
@@ -82,7 +83,13 @@ protected
     @issue.assign_attributes(issue_params)
     case @issue
     when creating then @issue.notify_created_by(current_member) if yield
-    when assigning then  @issue.notify_assigned_by(current_member) if yield
+    when assigning
+      if yield
+        @issue.subscribed_users |= [@issue.assignee.user]
+        @issue.save
+
+        @issue.notify_assigned_by(current_member)
+      end
     when changing_state then @issue.notify_state_changed_by(current_member) if yield
     else
       yield

@@ -2,13 +2,14 @@
 #
 # Table name: members
 #
-#  id         :bigint           not null, primary key
-#  role       :string
-#  project_id :bigint
-#  user_id    :bigint
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  nickname   :string
+#  id           :bigint           not null, primary key
+#  role         :string
+#  project_id   :bigint
+#  user_id      :bigint
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  nickname     :string
+#  receive_mail :boolean          default(TRUE)
 #
 
 FactoryBot.define do
