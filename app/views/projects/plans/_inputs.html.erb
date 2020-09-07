@@ -66,12 +66,12 @@
 
 <script type="text/javascript">
 $('#check-all').on("click", function(){
-  var folderCheckboxes = $('input[name="folder_ids[]"]');
+  var folderCheckboxes = $('input[name="test_case_filter[folder_ids][]"]');
   !folderCheckboxes.prop("checked", !folderCheckboxes.prop("checked"));
 });
 
 $('#check-none').on("click", function(){
-  var folderCheckboxes = $('input[name="folder_ids[]"]');
+  var folderCheckboxes = $('input[name="test_case_filter[folder_ids][]"]');
   !folderCheckboxes.prop("checked", false);
 });
 </script>
