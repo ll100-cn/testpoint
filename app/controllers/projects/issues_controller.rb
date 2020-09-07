@@ -36,7 +36,6 @@ class Projects::IssuesController < BaseProjectController
     @issue.tasks = [ @task ] if @task
     @issue.title ||= @issue.default_title
     @issue.content ||= @issue.default_content
-    @issue.subscribed_users = @project.members.where(receive_mail: true).map(&:user) if @issue.subscribed_users.empty?
   end
 
   def create
@@ -44,6 +43,7 @@ class Projects::IssuesController < BaseProjectController
       @task = Task.find(params[:task_id]) if params[:task_id]
       @issue.creator ||= current_member
       @issue.tasks = [ @task ] if @task
+      @issue.subscribed_users = @project.members.where(receive_mail: true).map(&:user) if @issue.subscribed_users.empty?
       @issue.save
     end
     respond_with @issue, location: ok_url_or_default(action: :index)
