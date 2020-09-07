@@ -82,15 +82,26 @@ protected
 
     @issue.assign_attributes(issue_params)
     case @issue
-    when creating then @issue.notify_created_by(current_member) if yield
+    when creating
+      if yield
+        @issue.subscribed_users |= [current_user]
+        @issue.save
+        @issue.notify_created_by(current_member)
+      end
     when assigning
       if yield
+        @issue.subscribed_users |= [current_user]
         @issue.subscribed_users |= [@issue.assignee.user]
         @issue.save
 
         @issue.notify_assigned_by(current_member)
       end
-    when changing_state then @issue.notify_state_changed_by(current_member) if yield
+    when changing_state
+      if yield
+        @issue.subscribed_users |= [current_user]
+        @issue.save
+        @issue.notify_state_changed_by(current_member)
+      end
     else
       yield
     end
