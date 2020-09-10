@@ -40,10 +40,6 @@ class Task < ApplicationRecord
     test_case.paper_trail.version_at(test_case_version)
   end
 
-  def test_case_latest
-    test_case
-  end
-
   def finished?
     state.pass? || state.failure?
   end

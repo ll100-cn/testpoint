@@ -83,7 +83,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
       it { is_expected.to respond_with :redirect }
     end
 
-    context "admin creat the issue" do
+    context "admin create the issue" do
       before { attributes[:title] =  "Mail delivery test" }
       it { is_expected.to respond_with :redirect }
     end
@@ -116,6 +116,14 @@ RSpec.describe Projects::IssuesController, type: :controller do
 
       it { is_expected.to respond_with :redirect }
     end
+
+    context "assigning" do
+      let(:attributes) { { assignee_id: owner } }
+      action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
+
+      it { is_expected.to respond_with :redirect }
+    end
+
   end
 
   describe "GET show" do

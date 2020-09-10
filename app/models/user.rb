@@ -39,9 +39,4 @@ class User < ApplicationRecord
   def subscribed?(issue)
     subscriptions.exists?(issue_id: issue)
   end
-
-  def devise_mailer
-    UserMailer
-  end
-
 end

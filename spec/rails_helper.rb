@@ -5,7 +5,9 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ])
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  add_filter "/lib/"
+end
 
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
