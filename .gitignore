@@ -46,3 +46,4 @@ yarn-debug.log*
 /coverage
 /config/redis.yml
 /config/sidekiq.yml
+/config/database.yml
