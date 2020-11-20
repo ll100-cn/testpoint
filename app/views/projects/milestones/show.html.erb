@@ -16,7 +16,7 @@
         'processing': @milestone.issues.with_state(:processing).count / @milestone.issues.without_state(:closed).count.to_f,
         'processed':  @milestone.issues.with_state(:processed).count / @milestone.issues.without_state(:closed).count.to_f,
         'resolved':   @milestone.issues.with_state(:resolved).count / @milestone.issues.without_state(:closed).count.to_f
-      }.transform_values { |f| number_to_percentage(f).sub("NaN", "0") } %>
+      }.transform_values { |f| number_to_percentage(f * 100).sub("NaN", "0") } %>
 
       <% unless progress.values.all? { |it| it == "0%" } %>
         <div class="progress">
