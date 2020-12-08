@@ -15,7 +15,7 @@ module PageHelper
 
   def destroy_link(models, options = {})
     default_opts = { method: :delete, data: { confirm: "确定删除？" } }
-    build_link(models, :destroy, merge_css(default_opts, options))
+    build_link(models, :destroy, merge_options(default_opts, options))
   end
 
   def cancel_link(url, options = {})
@@ -25,22 +25,22 @@ module PageHelper
 
   def new_button(models, options={})
     default_opts =  { class: "btn btn-primary" }
-    new_link(models, merge_css(default_opts, options))
+    new_link(models, merge_options(default_opts, options))
   end
 
   def edit_button(models, options={})
     default_opts = { class: "btn btn-primary" }
-    edit_link(models, merge_css(default_opts, options))
+    edit_link(models, merge_options(default_opts, options))
   end
 
   def destroy_button(models, options = {})
     default_opts = { class: "btn btn-danger" }
-    destroy_link(models, merge_css(default_opts, options))
+    destroy_link(models, merge_options(default_opts, options))
   end
 
   def cancel_button(url, options = {})
     default_opts = { class: "btn btn-secondary" }
-    cancel_link(url, merge_css(default_opts, options))
+    cancel_link(url, merge_options(default_opts, options))
   end
 
 
@@ -84,7 +84,14 @@ protected
     link_to label, url, options
   end
 
-  def merge_css(old_options, new_options)
-    old_options.merge(new_options) { |key, old, new| [old, new].join(" ") }
+  def merge_options(old_options, new_options)
+    old_options.merge(new_options) do |key, old, new|
+      result = if key == :class
+                [old, new].join(" ")
+              elsif key == :data
+                old.merge(new)
+              end
+      result
+    end
   end
 end

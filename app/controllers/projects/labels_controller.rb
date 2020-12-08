@@ -12,7 +12,7 @@ class Projects::LabelsController < BaseProjectController
 
   def create
     @label.save
-    respond_with @label, location: ok_url_or_default([@project, Label])
+    respond_with @label, location: ok_url_or_default(action: :index)
   end
 
   def show
@@ -23,12 +23,12 @@ class Projects::LabelsController < BaseProjectController
 
   def update
     @label.update(label_params)
-    respond_with @label, location: ok_url_or_default([@project, Label])
+    respond_with @label, location: ok_url_or_default(action: :index)
   end
 
   def destroy
     @label.destroy
-    respond_with @label, location: ok_url_or_default([@project, Label])
+    respond_with @label, location: ok_url_or_default(action: :index)
   end
 
 protected

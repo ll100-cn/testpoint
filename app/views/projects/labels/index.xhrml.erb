@@ -27,8 +27,10 @@
           <td><%= label.description %></td>
           <td><%= label.issues.count %></td>
           <td>
-            <%= edit_link [@project, label], data: { remote: true, type: :xhrml, target: ".modal-content" } %>
-            <%= destroy_link [@project, label] if can? :destroy, label %>
+            <%= form_with model: [@project, label], method: :delete, data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
+              <%= edit_button [@project, label], data: { remote: true, type: :xhrml, target: ".modal-content" }, class: "btn-sm" %>
+              <%= f.submit action_i18n(:destroy, model_name: h(label)), class: "btn btn-danger btn-sm" %>
+            <% end if can? :destroy, label %>
           </td>
         </tr>
       <% end %>

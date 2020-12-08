@@ -7,7 +7,7 @@ class ApplicationResponder < ActionController::Responder
   # include Responders::CollectionResponder
   def to_xhrml
     if get? || !has_errors? || response_overridden?
-      default_render
+      to_html
     else
       render action: default_action, status: :unprocessable_entity
     end

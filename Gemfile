@@ -53,7 +53,7 @@ gem 'sass-rails', '5.1.0'
 gem 'uglifier', '4.2.0'
 gem 'webpacker', '4.0.7'
 gem 'coffee-rails', '5.0.0'
-gem 'turbolinks', '5.2.1'
+# gem 'turbolinks', '5.2.1'
 
 # Use Active Storage variant
 # gem 'image_processing', '1.2'
