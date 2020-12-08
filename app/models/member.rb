@@ -65,4 +65,12 @@ class Member < ApplicationRecord
   def smart_name
     nickname || user.name
   end
+
+  def subscribe(issue)
+    user.subscribe(issue)
+  end
+
+  def subscribed?(issue)
+    user.subscribed?(issue)
+  end
 end

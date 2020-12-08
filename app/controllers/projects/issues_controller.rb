@@ -57,7 +57,7 @@ class Projects::IssuesController < BaseProjectController
 
   def update
     with_email_notification do
-      @issue.update_with_editor(issue_params, current_member)
+      @issue.update_with_author(issue_params, current_member)
     end
 
     respond_with @issue, location: ok_url_or_default(action: :show)
@@ -76,34 +76,13 @@ protected
   end
 
   def with_email_notification
-    creating = proc(&:new_record?)
-    assigning = proc(&:assignee_id_changed?)
-    changing_state = proc(&:state_changed?)
+    issue_before = @issue.clone
+    yield
+    issue_after = @issue.clone
 
-    @issue.assign_attributes(issue_params)
-    case @issue
-    when creating
-      if yield
-        @issue.subscribed_users |= [current_user]
-        @issue.save
-        @issue.notify_created_by(current_member)
-      end
-    when assigning
-      if yield
-        @issue.subscribed_users |= [current_user]
-        @issue.subscribed_users |= [@issue.assignee.user]
-        @issue.save
-
-        @issue.notify_assigned_by(current_member)
-      end
-    when changing_state
-      if yield
-        @issue.subscribed_users |= [current_user]
-        @issue.save
-        @issue.notify_state_changed_by(current_member)
-      end
-    else
-      yield
+    if (changes = issue_before.assign_attributes(issue_after.attributes))&.any?
+      current_user.subscribe(@issue)
+      @issue.notify_changed_by(current_member, changes)
     end
   end
 end

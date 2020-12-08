@@ -26,7 +26,7 @@ RSpec.describe Projects::IssueRelationshipsController, type: :controller do
       end
 
       context "failed" do
-        before { allow_any_instance_of(Issue).to receive(:update_with_editor).with({"state" => "closed"}, member).and_return(false) }
+        before { allow_any_instance_of(Issue).to receive(:update_with_author).with({"state" => "closed"}, member).and_return(false) }
         action(skip: true) { post :create, params: { project_id: project.id, issue_id: issue.id, issue_relationship: attributes } }
 
         it { expect{ do_action }.to raise_error(ActionView::MissingTemplate) }

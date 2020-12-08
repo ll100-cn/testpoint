@@ -36,6 +36,10 @@ class User < ApplicationRecord
     "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
   end
 
+  def subscribe(issue)
+    subscriptions.create(issue_id: issue) unless subscribed?(issue)
+  end
+
   def subscribed?(issue)
     subscriptions.exists?(issue_id: issue)
   end

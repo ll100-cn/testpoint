@@ -17,7 +17,7 @@ class Projects::CommentsController < BaseProjectController
   end
 
   def update
-    @comment.update_with_editor(comment_params, current_member)
+    @comment.update_with_author(comment_params, current_member)
     respond_with @comment, location: ok_url_or_default([@project, @issue])
   end
 

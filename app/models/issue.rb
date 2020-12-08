@@ -70,7 +70,7 @@ class Issue < ApplicationRecord
    [ :state_filter ]
  end
 
- def update_with_editor(params, member)
+ def update_with_author(params, member)
    assign_attributes(params)
    self.last_edited_at = Time.current if will_save_change_to_content?
    transaction do
@@ -96,20 +96,35 @@ class Issue < ApplicationRecord
    self.state_at = Time.current
  end
 
- def notify_created_by(changer)
-   email_list.each { |to_address| IssueMailer.created_notification(self.id, changer.id, to_address).deliver_later }
+ def notify_created_by(author)
+   email_list.without(author.email).each { |address| IssueMailer.created_notification(self.id, author.id, address).deliver_later }
  end
 
- def notify_assigned_by(changer)
-   email_list.each { |to_address| IssueMailer.assigned_notification(self.id, changer.id, to_address).deliver_later }
+ def notify_assigned_by(author)
+   email_list.without(author.email).each { |address| IssueMailer.assigned_notification(self.id, author.id, address).deliver_later }
  end
 
- def notify_state_changed_by(changer)
-   email_list.each { |to_address| IssueMailer.state_changed_notification(self.id, changer.id, to_address).deliver_later }
+ def notify_state_changed_by(author)
+   email_list.without(author.email).each { |address| IssueMailer.state_changed_notification(self.id, author.id, address).deliver_later }
  end
 
- def notify_commented_by(changer)
-   email_list.each { |to_address| IssueMailer.commented_notification(self.id, changer.id, to_address).deliver_later }
+ def notify_commented_by(author)
+   email_list.without(author.email).each { |address| IssueMailer.commented_notification(self.id, author.id, address).deliver_later }
+ end
+
+ def notify_changed_by(author, changes)
+   if changes.has_key?(:id)
+     notify_created_by(author)
+     return
+   end
+
+   if changes.has_key?(:assignee_id)
+     notify_assigned_by(author)
+   end
+
+   if changes.has_key?(:state)
+     notify_state_changed_by(author)
+   end
  end
 
  protected

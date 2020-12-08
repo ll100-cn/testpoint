@@ -33,7 +33,7 @@ class IssueRelationship < ApplicationRecord
     return true unless self.category.duplicated?
     return true unless ["pending", "confirmed", "processing"].include?(self.source.state)
 
-    unless self.source.update_with_editor({"state" => "closed"}, self.member)
+    unless self.source.update_with_author({"state" => "closed"}, self.member)
       self.errors.add(:source_id, self.source.errors.full_messages.first)
       return false
     end
