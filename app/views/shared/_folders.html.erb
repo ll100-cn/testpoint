@@ -1,5 +1,5 @@
 <% unless @folders_mapping[key].nil? %>
-  <% (@folders_mapping[key] || []).each do |folder| %>
+  <% (@folders_mapping[key] || []).sort_by(&:name).each do |folder| %>
     <% children = @folders_mapping[folder.id] || [] %>
     <% open = (@folder&.ancestor_ids_with_self || []).include?(folder.id) && children.any? %>
     <li class="<%= 'has-children' if children.any? %> <%= 'mt-3 block-archived' if folder.archived_root? %>">
