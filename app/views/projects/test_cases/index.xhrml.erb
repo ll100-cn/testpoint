@@ -50,7 +50,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @test_cases.each do |test_case| %>
+            <% @test_cases.order(:created_at).each do |test_case| %>
               <tr>
                 <td><%= link_to test_case.title, "", data: { toggle: "modal", target: "#test_case_modal", url: apply_ok_url([ @project, test_case ]) } %></td>
                 <td>
