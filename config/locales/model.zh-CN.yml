@@ -46,7 +46,7 @@ zh-CN:
         creator_id: 创建人
         assignee_id: 受理人
         state_at: 状态修改时间
-        last_edited_at: 最新更新时间
+        last_edited_at: 修改时间
       platform:
         name: 名称
         archived: 是否存档
