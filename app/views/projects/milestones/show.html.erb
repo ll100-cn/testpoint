@@ -65,7 +65,7 @@
             <th><%= sort_link(@q, :creator_id)%></th>
             <th><%= sort_link(@q, :assignee_id)%></th>
             <th><%= sort_link(@q, :state_at)%></th>
-            <th><%= sort_link(@q, :last_edited_at)%></th>
+            <th><%= sort_link(@q, :updated_at)%></th>
           </tr>
         </thead>
         <tbody>
@@ -93,7 +93,7 @@
                 <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
               </td>
               <% end %>
-              <td><%=l issue.last_edited_at, format: :simple if issue.last_edited_at %></td>
+              <td><%=l issue.updated_at, format: :simple if issue.updated_at %></td>
             </tr>
           <% end %>
         </tbody>
