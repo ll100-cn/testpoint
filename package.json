@@ -6,7 +6,7 @@
     "@rails/actioncable": "6.0.0-alpha",
     "@rails/activestorage": "6.0.0-alpha",
     "@rails/ujs": "6.0.0-alpha",
-    "@rails/webpacker": "4.0.7",
+    "@rails/webpacker": "5.2.1",
     "@vendor/fontawesome-pro-web": "https://token:9d4aa7a88bcb1e65@dev.ll100.com/repo/fontawesome-pro-5.11.2-web.tar.gz",
     "@vendor/keen": "https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen_v1.4.4.tar.gz",
     "bootstrap": "4.3.1",

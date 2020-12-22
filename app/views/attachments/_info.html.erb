@@ -16,7 +16,11 @@
       <%= link_to url_for(file), target: "_blank", data: fancybox_options do %>
         <div class="embed-responsive embed-responsive-1by1">
           <div class="embed-responsive-item d-flex align-items-center justify-content-center">
-            <%= image_tag file.preview(resize: '100'), class: "h-100" %>
+            <% if file.previewable? %>
+              <%= image_tag file.preview(resize: '100'), class: "h-100" %>
+            <% else %>
+              <%= video_tag url_for(file), class: "h-100" %>
+            <% end %>
           </div>
         </div>
       <% end %>
