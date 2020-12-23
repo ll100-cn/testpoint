@@ -88,7 +88,7 @@
             </button>
             <div class="dropdown-menu">
               <%= n.link_to nil, page_i18n(:all), current_url(q: { milestone_id_eq: nil }), class: "dropdown-item" %>
-              <% @project.milestones.each do |milestone| %>
+              <% @project.milestones.last(10).each do |milestone| %>
                 <%= n.link_to milestone.id, milestone.title, current_url(q: { milestone_id_eq: milestone.id }), class: "dropdown-item" %>
               <% end %>
               <% if can? :index, Milestone %>
@@ -108,7 +108,7 @@
             </button>
             <div class="dropdown-menu">
               <%= n.link_to nil, page_i18n(:all), current_url(q: { assignee_id_eq: nil }), class: "dropdown-item" %>
-              <% @project.members.each do |assignee| %>
+              <% @project.members.where(id: @project.issues.pluck(:assignee_id).uniq).each do |assignee| %>
                 <%= n.link_to assignee.id, assignee.smart_name, current_url(q: { assignee_id_eq: assignee.id }), class: "dropdown-item" %>
               <% end %>
             </div>
