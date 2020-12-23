@@ -24,12 +24,10 @@
 
 
 
-
-
+  <% issues_scope = @project.issues.state_filter("opening") %>
   <div class="card-body">
     <ul class="nav nav-tabs mb-3">
      <%= fume_nav params[:filter] || "all" do |n| %>
-       <% issues_scope = @project.issues.state_filter("opening") %>
        <li class="nav-item">
          <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
            全部 (<%= issues_scope.count %>)
@@ -108,8 +106,24 @@
             </button>
             <div class="dropdown-menu">
               <%= n.link_to nil, page_i18n(:all), current_url(q: { assignee_id_eq: nil }), class: "dropdown-item" %>
-              <% @project.members.where(id: @project.issues.pluck(:assignee_id).uniq).each do |assignee| %>
+              <% Member.where_exists(issues_scope.where_table(:assignee)).ranked.each do |assignee| %>
                 <%= n.link_to assignee.id, assignee.smart_name, current_url(q: { assignee_id_eq: assignee.id }), class: "dropdown-item" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <span class="ml-2 mr-2"><%=h Issue, :creator_id %></span>
+        <% creator = @project.members.where(id: @q.creator_id_eq).take %>
+        <%= fume_nav creator&.id do |n| %>
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+              <%= creator&.smart_name || page_i18n(:all) %>
+            </button>
+            <div class="dropdown-menu">
+              <%= n.link_to nil, page_i18n(:all), current_url(q: { creator_id_eq: nil }), class: "dropdown-item" %>
+              <% @project.members.where_exists(issues_scope.where_table(:creator)).ranked.each do |creator| %>
+                <%= n.link_to creator.id, creator.smart_name, current_url(q: { creator_id_eq: creator.id }), class: "dropdown-item" %>
               <% end %>
             </div>
           </div>

@@ -27,6 +27,7 @@ class Member < ApplicationRecord
   validates :user_id, uniqueness: { scope: :project_id }
 
   scope :chief, -> { where(role: [ "owner", "manager" ]) }
+  scope :ranked, -> { order(:id) }
 
   def submit
     user = User.where(email: email).first_or_initialize(name: name)
