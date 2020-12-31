@@ -9,7 +9,7 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  nickname     :string
-#  receive_mail :boolean          default(TRUE)
+#  receive_mail :boolean          default(FALSE)
 #
 
 class Member < ApplicationRecord

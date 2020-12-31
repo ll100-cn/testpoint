@@ -110,20 +110,37 @@ RSpec.describe Projects::IssuesController, type: :controller do
       it { expect(issue.title).not_to be_empty }
     end
 
-    context "update with state to generate activities" do
-      let(:attributes) { { state: "closed" } }
+    context "update with state processed" do
+      let(:attributes) { { state: "confirmed" } }
       action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
 
-      it { is_expected.to respond_with :redirect }
+      it { is_expected.to respond_with :redirect
+           expect(issue.reload.confirmed_at).to_not be nil }
+    end
+
+    context "update with state processing" do
+      let(:attributes) { { state: "processing" } }
+      action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
+
+      it { is_expected.to respond_with :redirect
+           expect(issue.reload.processing_at).to_not be nil }
+    end
+
+    context "update with state processed" do
+      let(:attributes) { { state: "processed" } }
+      action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
+
+      it { is_expected.to respond_with :redirect
+           expect(issue.reload.processed_at).to_not be nil }
     end
 
     context "assigning" do
       let(:attributes) { { assignee_id: owner } }
       action { put :update, params: { id: issue.id, issue: attributes, project_id: project.id } }
 
-      it { is_expected.to respond_with :redirect }
+      it { is_expected.to respond_with :redirect
+           expect(issue.reload.assigned_at).to_not be nil }
     end
-
   end
 
   describe "GET show" do

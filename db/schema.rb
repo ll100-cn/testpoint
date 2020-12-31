@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_03_033244) do
+ActiveRecord::Schema.define(version: 2020_12_31_032131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,6 +126,10 @@ ActiveRecord::Schema.define(version: 2020_09_03_033244) do
     t.bigint "creator_id"
     t.bigint "assignee_id"
     t.datetime "state_at"
+    t.datetime "assigned_at"
+    t.datetime "confirmed_at"
+    t.datetime "processing_at"
+    t.datetime "processed_at"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
@@ -194,7 +198,6 @@ ActiveRecord::Schema.define(version: 2020_09_03_033244) do
     t.datetime "start_at"
     t.bigint "project_id"
     t.bigint "creator_id", null: false
-    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["creator_id"], name: "index_plans_on_creator_id"
     t.index ["project_id"], name: "index_plans_on_project_id"
   end
@@ -205,7 +208,6 @@ ActiveRecord::Schema.define(version: 2020_09_03_033244) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
-    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
@@ -292,7 +294,6 @@ ActiveRecord::Schema.define(version: 2020_09_03_033244) do
     t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
-    t.index ["archived"], name: "index_test_cases_on_archived"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end

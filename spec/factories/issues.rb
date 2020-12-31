@@ -16,6 +16,10 @@
 #  creator_id      :bigint
 #  assignee_id     :bigint
 #  state_at        :datetime
+#  assigned_at     :datetime
+#  confirmed_at    :datetime
+#  processing_at   :datetime
+#  processed_at    :datetime
 #
 
 FactoryBot.define do
