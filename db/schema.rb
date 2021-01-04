@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_31_032131) do
+ActiveRecord::Schema.define(version: 2021_01_04_033327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,8 @@ ActiveRecord::Schema.define(version: 2020_12_31_032131) do
     t.datetime "confirmed_at"
     t.datetime "processing_at"
     t.datetime "processed_at"
+    t.datetime "resolved_at"
+    t.datetime "closed_at"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"

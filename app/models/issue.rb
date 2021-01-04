@@ -20,6 +20,8 @@
 #  confirmed_at    :datetime
 #  processing_at   :datetime
 #  processed_at    :datetime
+#  resolved_at     :datetime
+#  closed_at       :datetime
 #
 
 class Issue < ApplicationRecord
@@ -108,6 +110,14 @@ class Issue < ApplicationRecord
 
    if changes[:state].last == "processed"
      self.processed_at = Time.current
+   end
+
+   if changes[:state].last == "resolved"
+     self.resolved_at = Time.current
+   end
+
+   if changes[:state].last == "closed"
+     self.closed_at = Time.current
    end
  end
 
