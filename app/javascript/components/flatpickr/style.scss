@@ -1,0 +1,23 @@
+.flatpickr-calendar {
+  z-index: 9999;
+}
+
+.input-group.flatpickr {
+  .flatpickr-input {
+    background: white;
+    border-radius: 3px 0 0 3px !important;
+  }
+}
+
+.flatpickr-input:disabled {
+  background: #e9ecef !important;
+}
+
+.disabled {
+  .flatpickr {
+    width: 100%;
+    .input-group-addon {
+      display: none;
+    }
+  }
+}

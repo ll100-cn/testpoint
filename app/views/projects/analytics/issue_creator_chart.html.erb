@@ -1,0 +1,22 @@
+<div class="page-header justify-content-between">
+  <h2>统计报表</h2>
+</div>
+
+<h3>已创建的工单</h3>
+<%= bootstrap_inline_form_for @issue_creator_chart, url: issue_creator_chart_project_analytics_path(@project), method: :get do |f| %>
+  从：<%= f.input :starts_on, as: :date_picker %>
+
+  至：<%= f.input :ends_on, as: :date_picker %>
+
+  角色：<%= f.input :role, collection: Member.role.options, as: :select, include_blank: "全部" %>
+  <%= f.submit "过滤", class: "btn btn-primary mb-2" %>
+<% end %>
+
+<div class="row">
+  <% @issue_creator_chart.members.each do |member| %>
+    <% total_count = @issue_creator_chart.total_issues_count_by_creator(member) %>
+    <% unless total_count.zero? %>
+      <%= render 'issue_by_member_card', member: member, total_count: total_count %>
+    <% end %>
+  <% end %>
+</div>

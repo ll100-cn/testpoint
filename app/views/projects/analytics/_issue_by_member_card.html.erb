@@ -1,0 +1,34 @@
+<div class="col-12 col-md-6 col-lg-4 mb-3">
+  <div class="card mb-2" style="min-height: 10rem;">
+    <div class="card-header">
+      <div class="row align-items-center">
+        <div class="col"><h5 class="mb-0"><%= member.smart_name %></h5></div>
+        <div class="col-9">
+          <div class="progress" style="height: 0.75rem; opacity: 0.3;">
+            <% @project.labels.each do |label| %>
+              <% count = @issue_creator_chart.labeled_issues_count_by_creator(label, member) %>
+              <% unless count == 0 %>
+                <div class="progress-bar" style="background-color: <%= label.color %>; width: <%= count * 100.0 / total_count %>%;" role="progressbar"></div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <% @project.labels.each do |label| %>
+          <% count = @issue_creator_chart.labeled_issues_count_by_creator(label, member) %>
+          <% unless count == 0 %>
+          <div class="col-4 col-md-6 col-lg-6 col-xl-4">
+            <span class="text-nowrap">
+              <span class="badge badge-circle mr-1" style="background-color: <%= label.color %>;"></span>
+              <span><%= label.name %> (<%= count * 100 / total_count %>%)</span>
+            </span>
+          </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
