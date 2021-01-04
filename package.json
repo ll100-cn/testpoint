@@ -11,6 +11,7 @@
     "@vendor/keen": "https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen_v1.4.4.tar.gz",
     "bootstrap": "4.3.1",
     "bootstrap-colorpicker": "3.1.2",
+    "chart.js": "^2.9.4",
     "clipboard": "2.0.4",
     "flatpickr": "4.6.3",
     "jquery": "3.4.1",

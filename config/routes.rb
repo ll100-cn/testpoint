@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       resources :milestones
       resources :analytics do
         get :issue_creator_chart, on: :collection
+        get :issue_activity_chart, on: :collection
       end
       resources :members
     end

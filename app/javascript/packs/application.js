@@ -34,6 +34,7 @@ import '../components/tooltip'
 import '../components/fancybox'
 import '../components/treeview'
 import '../components/auto-submit'
+import '../components/chart'
 
 import '../frontend'
 

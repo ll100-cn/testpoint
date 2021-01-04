@@ -1,0 +1,36 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="mb-0"><%= header %></h3>
+    </div>
+  <div class="card-body">
+    <% total_count = time_costs.count %>
+    <% times_group = {
+      "1 小时内" => time_costs.select { |time| time < 1.hour }.count,
+      "24 小时内" => time_costs.select { |time| time < 24.hours }.count,
+      "1 周内" => time_costs.select { |time| time < 1.week }.count,
+      "大于 1 周" => time_costs.select { |time| time > 1.week }.count,
+    } %>
+    <% color_mapping = {
+      "1 小时内" => "primary",
+      "24 小时内" => "success",
+      "1 周内" => "warning",
+      "大于 1 周" => "danger"
+    } %>
+    <div class="progress mb-3">
+      <% times_group.each do |label, count| %>
+        <% unless count == 0 %>
+          <div class="progress-bar bg-<%= color_mapping[label] %>" style="width: <%= count * 100.0 / total_count %>%;" role="progressbar"><%= label %></div>
+        <% end %>
+      <% end %>
+    </div
+
+    <ul class="list-group list-group-flush">
+      <% times_group.each do |label, count| %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span><span class="text-<%= color_mapping[label] %> mr-1">●</span><%= label %>： <%= count %> 条</span>
+          <span><%= (count * 100.0 / total_count).round %>%</span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
