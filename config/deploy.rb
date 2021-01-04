@@ -6,6 +6,7 @@ fetch(:linked_files).concat %w[
   config/mailer.yml
   config/redis.yml
   config/sidekiq.yml
+  config/database.yml
   tmp/restart.txt
 ]
 
