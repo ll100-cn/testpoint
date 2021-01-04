@@ -1,6 +1,7 @@
 zh-CN:
   activerecord:
     models:
+      analytics: 统计报表
       plan: 计划
       attachment: 附件
       folder: 文件夹

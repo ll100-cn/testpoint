@@ -51,6 +51,9 @@ Rails.application.routes.draw do
       resources :labels
       resources :test_case_labels
       resources :milestones
+      resources :analytics do
+        get :issue_creator_chart, on: :collection
+      end
       resources :members
     end
   end

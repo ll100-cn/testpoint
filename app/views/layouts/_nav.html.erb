@@ -38,6 +38,9 @@
           <%= n.li_tag "milestones", class: "nav-item" do %>
             <%= link_to t('views.navbar.milestones'), [@project, Milestone], class: "nav-link" if can? :read, Milestone %>
           <% end %>
+          <%= n.li_tag "analytics", class: "nav-item" do %>
+            <%= link_to t('views.navbar.analytics'), [@project, Analytic], class: "nav-link" if can? :read, Analytic %>
+          <% end %>
         </ul>
       <% end %>
     </div>
