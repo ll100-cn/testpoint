@@ -15,11 +15,6 @@
 #  last_edited_at  :datetime
 #  creator_id      :bigint
 #  assignee_id     :bigint
-#  state_at        :datetime
-#  assigned_at     :datetime
-#  confirmed_at    :datetime
-#  processing_at   :datetime
-#  processed_at    :datetime
 #
 
 class Issue < ApplicationRecord
@@ -41,9 +36,6 @@ class Issue < ApplicationRecord
   has_many :target_relationships, class_name: IssueRelationship.to_s, foreign_key: :target_id, dependent: :destroy
 
   validates :title, presence: true
-
-  before_save :save_state_change_at, if: -> { will_save_change_to_state? }
-  before_save :save_assigned_at, if: -> { will_save_change_to_assignee_id? }
 
   scope :with_labels, -> { includes(:labels) }
   scope :created_issues, ->(member) { where(creator_id: member.id) }
@@ -94,26 +86,6 @@ class Issue < ApplicationRecord
      activity.after_value = after_value
      activity.member_id = member.id
      activity.save!
-   end
- end
-
- def save_state_change_at
-   if changes[:state].last == "confirmed"
-     self.confirmed_at = Time.current
-   end
-
-   if changes[:state].last == "processing"
-     self.processing_at = Time.current
-   end
-
-   if changes[:state].last == "processed"
-     self.processed_at = Time.current
-   end
- end
-
- def save_assigned_at
-   if changes[:assignee_id].last != nil
-     self.assigned_at = Time.current
    end
  end
 

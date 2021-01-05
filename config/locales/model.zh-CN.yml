@@ -46,7 +46,6 @@ zh-CN:
         created_at: 创建时间
         creator_id: 创建人
         assignee_id: 受理人
-        state_at: 状态修改时间
         last_edited_at: 修改时间
       platform:
         name: 名称

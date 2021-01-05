@@ -64,7 +64,7 @@
             <th><%= sort_link(@q, :state)%></th>
             <th><%= sort_link(@q, :creator_id)%></th>
             <th><%= sort_link(@q, :assignee_id)%></th>
-            <th><%= sort_link(@q, :state_at)%></th>
+            <th><%= sort_link(@q, :updated_at)%></th>
             <th><%= sort_link(@q, :updated_at)%></th>
           </tr>
         </thead>
@@ -87,7 +87,7 @@
               </td>
               <td><%= issue.creator.smart_name %></td>
               <td><%= issue.assignee&.smart_name %></td>
-              <td><%=l issue.state_at, format: :simple %></td>
+              <td><%=l issue.updated_at, format: :simple %></td>
               <% if @task %>
               <td>
                 <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
