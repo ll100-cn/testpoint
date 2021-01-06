@@ -60,6 +60,10 @@
   @include badge-variant($warning);
 }
 
+.badge-issue-waiting {
+  @include badge-variant($danger);
+}
+
 .badge-issue-confirmed {
   @include badge-variant($info);
 }
@@ -79,6 +83,10 @@
 
 .text-issue-pending {
   color: $warning;
+}
+
+.text-issue-waiting {
+  color: $danger;
 }
 
 .text-issue-confirmed {
