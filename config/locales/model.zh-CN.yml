@@ -47,6 +47,7 @@ zh-CN:
         creator_id: 创建人
         assignee_id: 受理人
         last_edited_at: 修改时间
+        updated_at: 更新时间
       platform:
         name: 名称
         archived: 是否存档
@@ -87,10 +88,9 @@ zh-CN:
       member:
         role: 角色
         user_id: 用户
-        email: 邮箱
-        issues: 问题
         nickname: 昵称
-        name: 用户名
+        user_email: 用户邮箱
+        issues: 问题
         receive_mail: 默认接收邮件
       issue_relationship:
         target_id: 关联的问题

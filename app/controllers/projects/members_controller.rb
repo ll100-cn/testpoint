@@ -33,7 +33,7 @@ class Projects::MembersController < BaseProjectController
 
 protected
   def member_params
-    params.fetch(:member, {}).permit(:role, :email, :name, :nickname, :receive_mail)
+    params.fetch(:member, {}).permit(:role, :user_email, :nickname, :receive_mail)
   end
 
   def flash_interpolation_options

@@ -2,7 +2,7 @@
   <%= image_tag comment.member.user.avatar_url, class: "rounded-circle avatar" %>
   <div class="card flex-grow-1">
     <div class="card-header">
-      <%= comment.member.smart_name %>
+      <%= comment.member.name %>
       <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(comment) %></span>
       <div class="dropdown float-right dropdown-no-arrow">
         <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">

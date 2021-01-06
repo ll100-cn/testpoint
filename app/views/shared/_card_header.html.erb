@@ -1,5 +1,5 @@
 <div class="card-header">
-  <%= creator.smart_name %>
+  <%= creator.name %>
   <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(issue) %></span>
   <% if can? :edit, issue %>
     <div class="dropdown float-right dropdown-no-arrow">

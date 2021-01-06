@@ -18,7 +18,7 @@ RSpec.describe Projects::MembersController, type: :controller do
 
   describe "POST create" do
     let!(:user) { create :user }
-    let(:attributes) { { role: "developer", name: "hello", email: user.email } }
+    let(:attributes) { { role: "developer", nickname: "hello", user_email: user.email } }
 
     context "when member exists" do
       action { post :create, params: { member: attributes, project_id: project.id } }
@@ -27,15 +27,15 @@ RSpec.describe Projects::MembersController, type: :controller do
     end
 
     context "when member doesn't exist" do
-      before { attributes[:email] = "testpoint@gmail.com" }
+      before { attributes[:user_email] = "testpoint@gmail.com" }
       action { post :create, params: { member: attributes, project_id: project.id } }
 
       it { is_expected.to respond_with :redirect }
     end
 
-    context "when name is invalid" do
-      before { attributes[:name] = "1" }
-      before { attributes[:email] = "test" }
+    context "when nickname is invalid" do
+      before { attributes[:nickname] = "1" }
+      before { attributes[:user_email] = "test" }
       action { post :create, params: { member: attributes, project_id: project.id } }
 
       it { expect(assigns[:member].errors).not_to be_empty }

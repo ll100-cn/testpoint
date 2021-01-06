@@ -29,7 +29,7 @@
         <% @members.each do |member| %>
           <tr>
             <td><%= member.id %></td>
-            <td><%= member.smart_name %></td>
+            <td><%= member.name %></td>
             <td><%= member.user.email %></td>
             <td><%= member.role_text %></td>
             <td><%= member.receive_mail ? "开启" : "关闭" %></td>

@@ -20,7 +20,8 @@ class Member < ApplicationRecord
   has_many :comments,                         dependent: :restrict_with_error
   has_many :issue_relationships,              dependent: :restrict_with_error
   has_many :issue_activities,                 dependent: :restrict_with_error
-  attr_accessor :email, :name
+
+  attr_accessor :user_email
 
   cleanup_column :nickname
 
@@ -30,7 +31,7 @@ class Member < ApplicationRecord
   scope :ranked, -> { order(:id) }
 
   def submit
-    user = User.where(email: email).first_or_initialize(name: name)
+    user = User.where(email: user_email).first_or_initialize(name: nickname)
     transaction do
       if user.new_record? && !user.save
         delegate_errors(user, self, [ :email, :name ], :email)
@@ -38,7 +39,7 @@ class Member < ApplicationRecord
       end
 
       self.user = user
-      self.nickname = name if self.user.name != name
+      self.nickname = nickname if self.user.name != nickname
 
       unless self.save
         delegate_errors(self, self, user_id: :email)
@@ -63,15 +64,19 @@ class Member < ApplicationRecord
     end
   end
 
-  def smart_name
-    nickname || user.name
-  end
-
   def subscribe(issue)
     user.subscribe(issue)
   end
 
   def subscribed?(issue)
     user.subscribed?(issue)
+  end
+
+  def email
+    user.email
+  end
+
+  def name
+    nickname || user.name
   end
 end

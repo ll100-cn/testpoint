@@ -16,7 +16,7 @@
 <div class="container">
   <%= bootstrap_vertical_form_for [ @project, @task, @issue ], permit_for: issue_params_names do |f| %>
     <%= f.input :title %>
-    <%= f.input :creator_id, collection: @project.members, label_method: :smart_name, input_html: { class: "select2-field" } %>
+    <%= f.input :creator_id, collection: @project.members, label_method: :name, input_html: { class: "select2-field" } %>
     <%= f.input :content, input_html: { class: 'markdown-field' } %>
     <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
 

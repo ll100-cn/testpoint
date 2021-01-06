@@ -23,7 +23,7 @@ RSpec.describe IssueMailer, :type => :mailer do
     before { issue.update(assignee: developer) }
     let(:mail) { IssueMailer.assigned_notification(issue.id, changer.id, manager.user.email) }
     it "should mail subscribed users" do
-      expect(mail.body.encoded).to match(developer.smart_name)
+      expect(mail.body.encoded).to match(developer.name)
     end
   end
 

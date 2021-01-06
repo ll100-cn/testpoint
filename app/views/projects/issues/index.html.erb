@@ -102,12 +102,12 @@
         <%= fume_nav assignee&.id do |n| %>
           <div class="dropdown">
             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <%= assignee&.smart_name || page_i18n(:all) %>
+              <%= assignee&.name || page_i18n(:all) %>
             </button>
             <div class="dropdown-menu">
               <%= n.link_to nil, page_i18n(:all), current_url(q: { assignee_id_eq: nil }), class: "dropdown-item" %>
               <% Member.where_exists(issues_scope.where_table(:assignee)).ranked.each do |assignee| %>
-                <%= n.link_to assignee.id, assignee.smart_name, current_url(q: { assignee_id_eq: assignee.id }), class: "dropdown-item" %>
+                <%= n.link_to assignee.id, assignee.name, current_url(q: { assignee_id_eq: assignee.id }), class: "dropdown-item" %>
               <% end %>
             </div>
           </div>
@@ -118,12 +118,12 @@
         <%= fume_nav creator&.id do |n| %>
           <div class="dropdown">
             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <%= creator&.smart_name || page_i18n(:all) %>
+              <%= creator&.name || page_i18n(:all) %>
             </button>
             <div class="dropdown-menu">
               <%= n.link_to nil, page_i18n(:all), current_url(q: { creator_id_eq: nil }), class: "dropdown-item" %>
               <% @project.members.where_exists(issues_scope.where_table(:creator)).ranked.each do |creator| %>
-                <%= n.link_to creator.id, creator.smart_name, current_url(q: { creator_id_eq: creator.id }), class: "dropdown-item" %>
+                <%= n.link_to creator.id, creator.name, current_url(q: { creator_id_eq: creator.id }), class: "dropdown-item" %>
               <% end %>
             </div>
           </div>
@@ -202,8 +202,8 @@
                 <%= issue.milestone.title %>
               <% end %>
             </td>
-            <td><%= issue.creator.smart_name %></td>
-            <td><%= issue.assignee&.smart_name %></td>
+            <td><%= issue.creator.name %></td>
+            <td><%= issue.assignee&.name %></td>
             <% if @task %>
               <td>
                 <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>

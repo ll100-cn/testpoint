@@ -57,7 +57,7 @@
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :creator_id } do |f| %>
           <% disabled = cannot? :critical, @issue %>
-          <%= f.input :creator_id, collection: @project.members, label_method: :smart_name, disabled: disabled %>
+          <%= f.input :creator_id, collection: @project.members, label_method: :name, disabled: disabled %>
         <% end %>
       <% end %>
 
@@ -65,7 +65,7 @@
         <% if @issue.creator %>
           <% user = @issue.creator.user %>
           <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
-          <span class="badge mb-1"><%= @issue.creator.smart_name %></span>
+          <span class="badge mb-1"><%= @issue.creator.name %></span>
         <% end %>
       <% end %>
 
@@ -74,7 +74,7 @@
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :assignee_id } do |f| %>
           <% grouped_assignees = @project.members.sort_by { |x| x.role.developer? ? 0 : 1 }.group_by(&:role_text) %>
-          <%= f.input :assignee_id, collection: grouped_assignees, as: :grouped_select, group_method: :last, group_label_method: :first, label_method: :smart_name %>
+          <%= f.input :assignee_id, collection: grouped_assignees, as: :grouped_select, group_method: :last, group_label_method: :first, label_method: :name %>
         <% end %>
       <% end %>
 
@@ -82,7 +82,7 @@
         <% if @issue.assignee %>
           <% user = @issue.assignee.user %>
           <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
-          <span class="badge mb-1"><%=@issue.assignee.smart_name %></span>
+          <span class="badge mb-1"><%=@issue.assignee.name %></span>
         <% end %>
       <% end %>
 
