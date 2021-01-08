@@ -23,6 +23,8 @@ class Comment < ApplicationRecord
   scope :recent, -> { order("created_at DESC") }
   scope :history, -> { order("created_at ASC") }
 
+  after_create :change_issue_state_to_pending, if: -> { member == issue.creator && issue.state.waiting?  }
+
   def update_with_author(params, member)
     assign_attributes(params)
     self.last_edited_at = Time.current if will_save_change_to_content?
@@ -35,5 +37,9 @@ class Comment < ApplicationRecord
 
   def fold
     update(collapsed: false)
+  end
+
+  def change_issue_state_to_pending
+    issue.update_with_author({ state: 'pending' }, member)
   end
 end

@@ -12,6 +12,11 @@ RSpec.describe Projects::CommentsController, type: :controller do
     let(:attributes) { { content: "comment create" } }
     action { post :create, params: { comment: attributes, issue_id: issue.id, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
+    context "issue state is pending and commmentor is issue creator" do
+      before { issue.update!(state: :waiting, creator_id: member.id) }
+      it { expect(issue.reload.creator).to eq member
+           expect(issue.activities.last.after_value).to eq 'pending' }
+    end
   end
 
   describe "PUT update" do
