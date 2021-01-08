@@ -1,0 +1,33 @@
+<div class="card app-card-main">
+  <div class="card-header bg-white d-flex">
+    <h2><%= title(page_i18n :index, model_name: h(IssueTemplate)) %></h2>
+    <div class="actions ml-auto">
+      <%= new_button [@project, :issue_template], class: "btn-sm" if can? :new, IssueTemplate %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <table class="table">
+      <colgroup>
+        <col>
+        <col>
+      </colgroup>
+      <thead>
+      <tr>
+        <th><%=h IssueTemplate, :name %></th>
+        <th><%=page_i18n :actions %></th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @issue_templates.each do |issue_template| %>
+          <tr>
+            <td><%= issue_template.name %></td>
+            <td>
+              <%= edit_link [@project, issue_template] %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

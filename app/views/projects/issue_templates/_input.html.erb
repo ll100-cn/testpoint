@@ -1,0 +1,17 @@
+<%= f.hidden_field :_destroy, value: 1 if f.object.persisted? %>
+<tr>
+  <td class="align-middle py-1">
+    <%= f.check_box :required, label: false %>
+  </td>
+
+  <td class="align-middle py-1">
+    <%= f.text_field :label, class: "form-control" %>
+  </td>
+
+  <td class="align-middle py-1">
+    <% if f.object.persisted? %>
+      <%= f.hidden_field :_destroy, value: 0 %>
+    <% end %>
+    <%= link_to "删除", "#", data: { action: "click->template#remove", confirm: "确定是否删除？", target: "tr" } %>
+  </td>
+</tr>

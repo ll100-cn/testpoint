@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_011734) do
+ActiveRecord::Schema.define(version: 2021_01_08_060549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,25 @@ ActiveRecord::Schema.define(version: 2021_01_05_011734) do
     t.index ["member_id"], name: "index_issue_relationships_on_member_id"
     t.index ["source_id"], name: "index_issue_relationships_on_source_id"
     t.index ["target_id"], name: "index_issue_relationships_on_target_id"
+  end
+
+  create_table "issue_template_inputs", force: :cascade do |t|
+    t.bigint "template_id"
+    t.string "as"
+    t.string "label"
+    t.string "name"
+    t.boolean "required", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["template_id"], name: "index_issue_template_inputs_on_template_id"
+  end
+
+  create_table "issue_templates", force: :cascade do |t|
+    t.string "name"
+    t.bigint "project_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_issue_templates_on_project_id"
   end
 
   create_table "issues", force: :cascade do |t|
@@ -336,6 +355,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_011734) do
   add_foreign_key "issue_relationships", "issues", column: "source_id"
   add_foreign_key "issue_relationships", "issues", column: "target_id"
   add_foreign_key "issue_relationships", "members"
+  add_foreign_key "issue_templates", "projects"
   add_foreign_key "issues", "members", column: "assignee_id"
   add_foreign_key "issues", "members", column: "creator_id"
   add_foreign_key "issues", "milestones"

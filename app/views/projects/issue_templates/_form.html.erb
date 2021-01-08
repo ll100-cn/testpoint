@@ -1,0 +1,32 @@
+<%= f.input :name %>
+<%= f.input :inputs, full_error: false do %>
+  <div class="card">
+    <div data-controller="template">
+      <table class="table table-bordered mb-0">
+        <thead>
+          <tr>
+            <th scope="col"><%= h IssueTemplateInput, :required %></th>
+            <th scope="col"><%= h IssueTemplateInput, :label %></th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody data-target="template.area">
+          <% (f.object.inputs || []).each do |input| %>
+            <%= f.simple_fields_for *bootstrap_args_for_vertical(:inputs, input) do |ff| %>
+              <%= render "input", f: ff %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      <%= f.simple_fields_for *bootstrap_args_for_vertical(:inputs, f.object.inputs.new, { child_index: "TS" }) do |ff| %>
+        <%= link_to "+ 新建", "#", data: { action: "template#add", template: render("input", f: ff) }, class: "btn btn-primary btn-sm m-2" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_button [@project, :issue_templates] %>
+<% end %>

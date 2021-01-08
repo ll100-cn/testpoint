@@ -19,6 +19,7 @@ zh-CN:
       member: 成员
       subscription: 订阅
       issue_relationship: 关联问题
+      issue_template: 问题模版
     attributes:
       plan:
         title: 标题
@@ -48,6 +49,14 @@ zh-CN:
         assignee_id: 受理人
         last_edited_at: 修改时间
         updated_at: 更新时间
+        template_id: 模版
+      issue_template:
+        name: 模版名称
+        inputs: 内容
+      issue_template_input:
+        label: 名称
+        required: 必填
+
       platform:
         name: 名称
         archived: 是否存档

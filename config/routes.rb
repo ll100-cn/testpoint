@@ -55,6 +55,7 @@ Rails.application.routes.draw do
         get :issue_creator_chart, on: :collection
         get :issue_activity_chart, on: :collection
       end
+      resources :issue_templates
       resources :members
     end
   end

@@ -41,6 +41,9 @@
           <%= n.li_tag "analytics", class: "nav-item" do %>
             <%= link_to t('views.navbar.analytics'), [@project, Analytic], class: "nav-link" if can? :read, Analytic %>
           <% end %>
+          <%= n.li_tag "issue_template", class: "nav-item" do %>
+            <%= link_to h(IssueTemplate), [@project, IssueTemplate], class: "nav-link" if can? :read, IssueTemplate %>
+          <% end %>
         </ul>
       <% end %>
     </div>

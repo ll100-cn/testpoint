@@ -69,8 +69,8 @@ protected
   end
 
   def issue_params_names
-    names = [ :title, :content, :state, :milestone_id, :assignee_id, attachment_ids: [],
-             label_ids: [], subscribed_user_ids: [] ]
+    names = [ :title, :content, :state, :milestone_id, :assignee_id, :template_id,
+       attachment_ids: [], label_ids: [], subscribed_user_ids: [] ]
     names += [ :creator_id ] if can? :critical, Issue
     names
   end

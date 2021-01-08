@@ -49,11 +49,15 @@ class Ability
     can :modify,                Member, Member.where.not(role: "owner") do |member|
                                   !member.role.owner?
                                 end
+    can :manage,                IssueTemplate
+    can :manage,                Analytic
   end
 
   def apply_owner_permissions(member)
     apply_manager_permissions(member)
     can :manage,               Member
+    can :manage,               IssueTemplate
+    can :manage,               Analytic
   end
 
   def apply_superadmin_permissions(user)
