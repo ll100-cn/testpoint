@@ -55,6 +55,9 @@ class Projects::IssuesController < BaseProjectController
   def edit
   end
 
+  def templates
+  end
+
   def update
     with_email_notification do
       @issue.update_with_author(issue_params, current_member)
@@ -70,7 +73,8 @@ protected
 
   def issue_params_names
     names = [ :title, :content, :state, :milestone_id, :assignee_id, :template_id,
-       attachment_ids: [], label_ids: [], subscribed_user_ids: [] ]
+       attachment_ids: [], label_ids: [], subscribed_user_ids: [],
+       template_ids: []]
     names += [ :creator_id ] if can? :critical, Issue
     names
   end

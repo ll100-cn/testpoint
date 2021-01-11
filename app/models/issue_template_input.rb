@@ -4,7 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  template_id :bigint
-#  type        :string
+#  as          :string
 #  label       :string
 #  name        :string
 #  required    :boolean          default(FALSE)
@@ -14,6 +14,4 @@
 
 class IssueTemplateInput < ApplicationRecord
   belongs_to :template, class_name: 'IssueTemplate'
-
-  attr_accessor :_destroy
 end

@@ -65,4 +65,15 @@ module ApplicationHelper
     }
     traverse.(mapping, nil, [])
   end
+
+  def ok_url_reload_script_tag
+    if (ok_url = params[:ok_url])
+      content_tag :script do
+        "location.href = #{ok_url.to_json};".html_safe
+      end
+    else
+      content_tag :script, "location.reload(false)"
+    end
+  end
+
 end

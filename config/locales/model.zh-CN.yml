@@ -20,6 +20,7 @@ zh-CN:
       subscription: 订阅
       issue_relationship: 关联问题
       issue_template: 问题模版
+      issue_form: 模版化表单
     attributes:
       plan:
         title: 标题
@@ -56,6 +57,9 @@ zh-CN:
       issue_template_input:
         label: 名称
         required: 必填
+      issue_form:
+        template_id: 模版
+        remark: 备注
 
       platform:
         name: 名称

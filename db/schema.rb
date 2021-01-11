@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_08_060549) do
+ActiveRecord::Schema.define(version: 2021_01_12_022004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,18 @@ ActiveRecord::Schema.define(version: 2021_01_08_060549) do
     t.datetime "updated_at", null: false
     t.index ["attachment_id"], name: "index_issue_attachments_on_attachment_id"
     t.index ["issue_id"], name: "index_issue_attachments_on_issue_id"
+  end
+
+  create_table "issue_forms", force: :cascade do |t|
+    t.bigint "issue_id", null: false
+    t.bigint "template_id", null: false
+    t.string "state"
+    t.json "values", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "remark"
+    t.index ["issue_id"], name: "index_issue_forms_on_issue_id"
+    t.index ["template_id"], name: "index_issue_forms_on_template_id"
   end
 
   create_table "issue_relationships", force: :cascade do |t|
@@ -352,6 +364,8 @@ ActiveRecord::Schema.define(version: 2021_01_08_060549) do
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "members"
   add_foreign_key "folders", "projects"
+  add_foreign_key "issue_forms", "issue_templates", column: "template_id"
+  add_foreign_key "issue_forms", "issues"
   add_foreign_key "issue_relationships", "issues", column: "source_id"
   add_foreign_key "issue_relationships", "issues", column: "target_id"
   add_foreign_key "issue_relationships", "members"

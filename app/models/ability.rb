@@ -29,6 +29,7 @@ class Ability
     can [:read, :create],       Comment
     can [:read, :create],       Issue
     can :update,                Comment,  member_id:   member.id
+    can :manage,                IssueForm
   end
 
   def apply_developer_permissions(member)

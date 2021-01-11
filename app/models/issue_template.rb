@@ -11,6 +11,6 @@
 
 class IssueTemplate < ApplicationRecord
   belongs_to :project
-  has_many :inputs, class_name: "IssueTemplateInput", foreign_key: :template_id
+  has_many :inputs, class_name: "IssueTemplateInput", foreign_key: :template_id, inverse_of: :template
   accepts_nested_attributes_for :inputs, allow_destroy: true
 end

@@ -34,6 +34,7 @@ class Issue < ApplicationRecord
   has_many :activities, class_name: IssueActivity.to_s, dependent: :destroy
   has_many :source_relationships, class_name: IssueRelationship.to_s, foreign_key: :source_id, dependent: :destroy
   has_many :target_relationships, class_name: IssueRelationship.to_s, foreign_key: :target_id, dependent: :destroy
+  has_many :issue_forms
 
   validates :title, presence: true
 
