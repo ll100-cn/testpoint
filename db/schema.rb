@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_12_022004) do
+ActiveRecord::Schema.define(version: 2021_01_12_034926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,10 +126,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_022004) do
 
   create_table "issue_template_inputs", force: :cascade do |t|
     t.bigint "template_id"
-    t.string "as"
     t.string "label"
-    t.string "name"
-    t.boolean "required", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["template_id"], name: "index_issue_template_inputs_on_template_id"

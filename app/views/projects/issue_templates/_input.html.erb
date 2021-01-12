@@ -1,10 +1,6 @@
 <%= f.hidden_field :_destroy, value: 1 if f.object.persisted? %>
 <tr>
   <td class="align-middle py-1">
-    <%= f.check_box :required, label: false %>
-  </td>
-
-  <td class="align-middle py-1">
     <%= f.text_field :label, class: "form-control" %>
   </td>
 
