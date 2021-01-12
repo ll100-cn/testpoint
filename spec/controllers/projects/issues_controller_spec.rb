@@ -10,6 +10,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
   let(:superadmin) { create :user, :superadmin }
   let!(:owner) { create :member, :owner, project: project, user: superadmin }
   let!(:manager) { create :member, :manager, project: project }
+  let!(:template) { create :issue_template, project: project }
   before { sign_in superadmin }
 
   describe "GET index" do
@@ -72,8 +73,9 @@ RSpec.describe Projects::IssuesController, type: :controller do
   end
 
   describe "POST create" do
-    let(:attributes) { { title: "issue create", content: "content for issue" } }
-    action { post :create, params: { issue: attributes, task_id: task.id, project_id: project.id } }
+    let(:attributes) { { issue_attributes: { title: "issue create", content: "content for issue" } } }
+    action { post :create, params: { issue_build_form: attributes, task_id: task.id, project_id: project.id,
+      issue_template_id: template.id } }
 
     context "assignee other members as creator" do
       let!(:user) { create :user }

@@ -20,7 +20,7 @@ zh-CN:
       subscription: 订阅
       issue_relationship: 关联问题
       issue_template: 问题模版
-      issue_form: 模版化表单
+      issue_info: 模版化表单
     attributes:
       plan:
         title: 标题
@@ -57,7 +57,7 @@ zh-CN:
       issue_template_input:
         label: 名称
         required: 必填
-      issue_form:
+      issue_info:
         template_id: 模版
         remark: 备注
 
@@ -111,8 +111,14 @@ zh-CN:
   activemodel:
     models:
       test_case_filter: 过滤用例
+      issue_build_form: 问题
     attributes:
       test_case_filter:
         label_ids: 标签
         platform_ids: 平台
         folder_ids: 文件夹
+      issue_info_input:
+        value: 内容
+  errors:
+    messages:
+      blank: 不能为空

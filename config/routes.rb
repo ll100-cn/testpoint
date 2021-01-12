@@ -40,7 +40,7 @@ Rails.application.routes.draw do
         end
         resource :subscription
         resources :issue_relationships
-        resources :issue_forms
+        resources :issue_infos
       end
       resources :tasks do
         resources :issues

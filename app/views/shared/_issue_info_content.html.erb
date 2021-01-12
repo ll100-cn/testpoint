@@ -1,16 +1,16 @@
 <div class="card mb-3">
   <div class="card-header d-flex align-items-center">
-    工单模版：<%= issue_form.template.name %>
-    <span class="ml-1 small text-muted"><%= time_ago_in_words(issue_form.updated_at) %>前修改</span>
-    <% if can? :edit, issue_form %>
+    工单模版：<%= issue_info.template.name %>
+    <span class="ml-1 small text-muted"><%= time_ago_in_words(issue_info.updated_at) %>前修改</span>
+    <% if can? :edit, issue_info %>
       <div class="dropdown ml-auto dropdown-no-arrow">
         <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
           <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
           <%= link_to "修改", "javascript:void(0)",
-            data: { toggle: "modal", target: "#applicationModal", url: url_for([:edit, @project, @issue, issue_form]) },
-            class: "small dropdown-item" if can? :edit, issue_form %>
+            data: { toggle: "modal", target: "#applicationModal", url: url_for([:edit, @project, @issue, issue_info]) },
+            class: "small dropdown-item" if can? :edit, issue_info %>
         </div>
       </div>
     <% end %>
@@ -18,13 +18,13 @@
 
   <div class="card-body">
     <div class="no-margin-bottom">
-      <% issue_form.inputs.each do |form_input| %>
+      <% issue_info.inputs.each do |form_input| %>
         <p><%= form_input.label %>: <%= form_input.value %></p>
       <% end %>
     </div>
   </div>
 
   <div class="card-footer">
-    备注：<%= issue_form.remark %>
+    备注：<%= issue_info.remark %>
   </div>
 </div>

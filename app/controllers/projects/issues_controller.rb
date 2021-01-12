@@ -36,6 +36,10 @@ class Projects::IssuesController < BaseProjectController
     @issue.tasks = [ @task ] if @task
     @issue.title ||= @issue.default_title
     @issue.content ||= @issue.default_content
+
+    template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
+    @issue_build_form = IssueBuildForm.new(template: template, issue: @issue)
+    @issue_build_form.prepare
   end
 
   def create
@@ -44,9 +48,14 @@ class Projects::IssuesController < BaseProjectController
       @issue.creator ||= current_member
       @issue.tasks = [ @task ] if @task
       @issue.subscribed_users = @project.members.where(receive_mail: true).map(&:user) if @issue.subscribed_users.empty?
-      @issue.save
+
+      @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
+      @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)
+      @issue_build_form.prepare
+
+      @issue_build_form.submit(issue_build_form_params)
     end
-    respond_with @issue, location: ok_url_or_default(action: :index)
+    respond_with @issue_build_form, location: ok_url_or_default(action: :index)
   end
 
   def show
@@ -67,6 +76,12 @@ class Projects::IssuesController < BaseProjectController
   end
 
 protected
+  def issue_build_form_params
+    params.fetch(:issue_build_form, {}).permit(
+      issue_attributes: [:title, :creator_id, :content],
+      info_attributes: [inputs_attributes: [:template_input_id, :value]])
+  end
+
   def issue_params
     params.fetch(:issue, {}).permit(*issue_params_names)
   end

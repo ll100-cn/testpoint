@@ -27,7 +27,7 @@
         </div>
         <div class="card-footer text-right bg-transparent">
           <%= ok_url_tag %>
-          <%= link_to "附加模版", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: new_project_issue_issue_form_path(@project, @issue) }, class: "btn btn-secondary" %>
+          <%= link_to "附加模版", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: new_project_issue_issue_info_path(@project, @issue) }, class: "btn btn-secondary" %>
           <%= f.submit class: "btn btn-primary" %>
         </div>
       <% end %>

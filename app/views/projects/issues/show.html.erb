@@ -10,15 +10,15 @@
 
   <div class="row">
     <div class="col-sm-9">
-      <% @issue.issue_forms.ranked.each do |issue_form| %>
-        <% if issue_form.state.pending? %>
+      <% @issue.issue_infos.ranked.each do |issue_info| %>
+        <% if issue_info.state.pending? %>
           <div class="alert alert-danger">
             该工单需要提供更多信息，请按照模版
-            <%= link_to "补充工单", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: apply_ok_url([:edit, @project, @issue, issue_form]) }, class: "alert-link" %>
-            <%= "，备注：#{issue_form.remark}" if issue_form.remark.present? %>
+            <%= link_to "补充工单", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: apply_ok_url([:edit, @project, @issue, issue_info]) }, class: "alert-link" %>
+            <%= "，备注：#{issue_info.remark}" if issue_info.remark.present? %>
           </div>
         <% else %>
-          <%= render "shared/issue_form_content", issue_form: issue_form %>
+          <%= render "shared/issue_info_content", issue_info: issue_info %>
         <% end %>
       <% end %>
 

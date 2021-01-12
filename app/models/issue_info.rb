@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: issue_forms
+# Table name: issue_infos
 #
 #  id          :bigint           not null, primary key
 #  issue_id    :bigint           not null
@@ -9,9 +9,10 @@
 #  values      :json
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  remark      :string
 #
 
-class IssueForm < ApplicationRecord
+class IssueInfo < ApplicationRecord
   belongs_to :issue
   belongs_to :template, class_name: "IssueTemplate"
 
@@ -35,7 +36,7 @@ class IssueForm < ApplicationRecord
   end
 
   def inputs
-    @inputs ||= template.inputs.map { |input| IssueFormInput.build(self, input)  }
+    @inputs ||= template.inputs.map { |input| IssueInfoInput.build(self, input) }
   end
 
   def inputs_attributes=(params)

@@ -1,4 +1,4 @@
-class IssueFormInput
+class IssueInfoInput
   include ActiveAttr::Model
 
   attribute :template_input
@@ -16,7 +16,7 @@ class IssueFormInput
   end
 
   def self.build(form, template_input)
-    record = IssueFormInput.new(template_input: template_input, form: form)
+    record = IssueInfoInput.new(template_input: template_input, form: form)
     values = form.values || {}
     record.value = values[template_input.id.to_s]
     record

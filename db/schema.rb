@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_034926) do
     t.index ["issue_id"], name: "index_issue_attachments_on_issue_id"
   end
 
-  create_table "issue_forms", force: :cascade do |t|
+  create_table "issue_infos", force: :cascade do |t|
     t.bigint "issue_id", null: false
     t.bigint "template_id", null: false
     t.string "state"
@@ -108,8 +108,8 @@ ActiveRecord::Schema.define(version: 2021_01_12_034926) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "remark"
-    t.index ["issue_id"], name: "index_issue_forms_on_issue_id"
-    t.index ["template_id"], name: "index_issue_forms_on_template_id"
+    t.index ["issue_id"], name: "index_issue_infos_on_issue_id"
+    t.index ["template_id"], name: "index_issue_infos_on_template_id"
   end
 
   create_table "issue_relationships", force: :cascade do |t|
@@ -361,8 +361,8 @@ ActiveRecord::Schema.define(version: 2021_01_12_034926) do
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "members"
   add_foreign_key "folders", "projects"
-  add_foreign_key "issue_forms", "issue_templates", column: "template_id"
-  add_foreign_key "issue_forms", "issues"
+  add_foreign_key "issue_infos", "issue_templates", column: "template_id"
+  add_foreign_key "issue_infos", "issues"
   add_foreign_key "issue_relationships", "issues", column: "source_id"
   add_foreign_key "issue_relationships", "issues", column: "target_id"
   add_foreign_key "issue_relationships", "members"
