@@ -29,7 +29,7 @@
 
   <% if type == "state" %>
     <span class="text-issue-<%= issue.state %>"><%= issue.state.text %></span>
-    <span><%= link_to content_tag(:i, '',class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
+    <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
   <% end %>
 
   <% if type == "assignee" %>
@@ -37,7 +37,7 @@
       <% user = issue.assignee.user %>
       <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
       <span class="badge mb-1"><%=issue.assignee.name %></span>
-      <span><%= link_to content_tag(:i, '',class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
+      <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
     <% end %>
   <% end %>
 
@@ -45,7 +45,7 @@
     <% issue.labels.each do |label| %>
       <span class="badge mb-1 text-white text-left" style="background-color: <%= label.color%>"><%=label.name %></span>
     <% end %>
-    <span><%= link_to content_tag(:i, '',class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
+    <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
   <% end %>
 
   <% if type == "milestone" %>
@@ -59,7 +59,7 @@
         </div>
         <span class="badge text-right"><%= 100 * finished_issue / total %>%</span>
       <% end %>
-      <span><%= link_to content_tag(:i, '',class: 'fa fa-pencil-square-o'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
+      <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
     </div>
   <% end %>
 

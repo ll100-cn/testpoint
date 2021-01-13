@@ -7,7 +7,7 @@
         <% if (can? :create, Comment) && !issue.state.closed? %>
           <div class="dropdown float-right dropdown-no-arrow">
             <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
-              <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+              <i class="far fa-ellipsis-h" aria-hidden="true"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right" style="min-width: auto;">
               <% data = { toggle: "modal", target: "#duplicate-issue", remote: true, type: "xhrml" } %>

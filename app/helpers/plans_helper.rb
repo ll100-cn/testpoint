@@ -1,7 +1,7 @@
 module PlansHelper
   def task_state_with_icon(state)
     text_sym = state.to_sym
-    icons = { pending: "fa fa-circle-o", pass: "fa fa-check", failure: "fa fa-times" }
+    icons = { pending: "far fa-circle", pass: "far fa-check", failure: "far fa-times" }
     class_names = { pending: "text-muted", pass: "text-success", failure: "text-danger" }
 
     class_name = class_names[text_sym]

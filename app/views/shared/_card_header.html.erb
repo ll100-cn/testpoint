@@ -4,7 +4,7 @@
   <% if can? :edit, issue %>
     <div class="dropdown float-right dropdown-no-arrow">
       <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
-        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        <i class="far fa-ellipsis-h" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
         <% data = { target: "#issue#{issue.id}_content", type: "xhrml", remote: true } %>

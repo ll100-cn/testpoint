@@ -39,17 +39,17 @@
     <div class="d-flex align-items-center">
       <h4 class="mb-0 d-inline-block"><%= attachment.title.truncate(20) %></h4>
       <%= link_to edit_attachment_path(attachment), class: "text-muted mr-auto ml-2", data: { remote: true, type: "xhrml", target: ".media", replace: true } do %>
-        <span class="fa fa-pencil-square-o"></span>
+        <span class="far fa-edit"></span>
       <% end %>
     </div>
     <div class="small d-flex">
       <span class="text-secondary mr-1"><%= number_to_human_size(blob.byte_size, precision: 2, locale: 'en') %></span>
       <%= link_to polymorphic_url(file), class: "clipboard" do %>
-        <span class="fa fa-link text-muted"></span>
+        <span class="far fa-link text-muted"></span>
       <% end %>
       <% data = { remote: true, type: "xhrml", target: ".col-lg-6", replace: true, confirm: "确认删除附件?" } %>
       <%= link_to apply_ok_url([ attachment ]), method: :delete, data: data, class: "text-muted ml-auto" do %>
-        <span class="fa fa-trash-o"></span>
+        <span class="far fa-trash-alt"></span>
       <% end %>
     </div>
   </div>

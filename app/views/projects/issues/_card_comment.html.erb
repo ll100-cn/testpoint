@@ -6,7 +6,7 @@
       <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(comment) %></span>
       <div class="dropdown float-right dropdown-no-arrow">
         <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
-          <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+          <i class="far fa-ellipsis-h" aria-hidden="true"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
           <% data = { type: "xhrml", remote: true, target: "#comment#{comment.id}_content" } %>
