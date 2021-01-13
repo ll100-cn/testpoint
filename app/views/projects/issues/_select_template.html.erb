@@ -1,6 +1,6 @@
 <%= form_tag url_for(action: :new), method: :get, class: "auto-submit" do %>
   <div class="form-group">
     <label>选择问题模版</label>
-    <%= select_tag :issue_template_id, options_from_collection_for_select(@project.issue_templates, "id", "name" , template&.id), include_blank: "请选择", class: "form-control"  %>
+    <%= select_tag :issue_template_id, options_from_collection_for_select(@project.issue_templates.available_for_build_form, "id", "name" , template&.id), include_blank: "请选择", class: "form-control"  %>
   </div>
 <% end %>

@@ -27,7 +27,7 @@ protected
   end
 
   def permit_attributes
-    result = [:name, inputs_attributes: [:id, :label, :_destroy]]
+    result = [:name, :lookup_by_build_form, inputs_attributes: [:id, :label, :_destroy]]
     result
   end
   helper_method :permit_attributes
