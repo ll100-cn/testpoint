@@ -1,13 +1,14 @@
 import $ from 'jquery'
-import SimpleMDE from 'simplemde'
-import 'simplemde/debug/simplemde.css'
+import EasyMDE from 'easymde'
+import 'easymde/src/css/easymde.css'
+import 'codemirror/lib/codemirror.css'
 import marked from 'marked'
 import { renderMarkdown } from '../showdown'
 import './style.scss'
 
 $(document).on('content:loaded', function(event) {
   $(event.target).find('.markdown-field').each(function() {
-    new SimpleMDE({
+    new EasyMDE({
       element: this,
       status: false,
       previewRender: function(plainText, preview) {
@@ -15,7 +16,8 @@ $(document).on('content:loaded', function(event) {
             preview.innerHTML = renderMarkdown(plainText, {})
         }, 250)
         return "Loading..."
-      }
+      },
+      autoDownloadFontAwesome: false
     })
   })
 })
