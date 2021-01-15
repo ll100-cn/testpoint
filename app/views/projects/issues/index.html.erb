@@ -1,21 +1,21 @@
-<div class="card flex-1">
-  <div class="card-header bg-white d-flex">
+<div class="card">
+  <div class="card-header bg-white d-flex align-items-center">
     <% if @task %>
       <h3><%= @task.test_case.title %></h3>
-      <div class="ml-2">
-        <%= task_state_with_icon(@task.state) %>
-        <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
-      </div>
+      <%= task_state_with_icon(@task.state) %>
+      <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
     <% else %>
       <h2><%= title(page_i18n :index, model_name: h(@issues)) %></h2>
     <% end %>
 
-    <%= search_form_for @q, url: project_issues_path(@project), class: "form-inline" do |f| %>
-      <div class="input-group-sm ml-3">
-        <%= f.search_field :title_cont, label: "标题", class: "form-control" %>
-        <%= f.submit "搜索", class: "btn btn-primary btn-sm" %>
-      </div>
-    <% end %>
+    <div class="d-none d-md-flex">
+      <%= search_form_for @q, url: project_issues_path(@project), class: "form-inline" do |f| %>
+        <div class="input-group-sm ml-3">
+          <%= f.search_field :title_cont, label: "标题", class: "form-control" %>
+          <%= f.submit "搜索", class: "btn btn-primary btn-sm" %>
+        </div>
+      <% end %>
+    </div>
 
     <div class="actions ml-auto">
       <%= new_button [@project, :issue] if can? :new, Issue %>
@@ -26,140 +26,44 @@
 
   <% issues_scope = @project.issues.state_filter("opening") %>
   <div class="card-body">
-    <ul class="nav nav-tabs mb-3">
-     <%= fume_nav params[:filter] || "all" do |n| %>
-       <li class="nav-item">
-         <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
-           全部 (<%= issues_scope.count %>)
-         <% end %>
-       </li>
-       <li class="nav-item">
-        <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
-          我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
-        <% end %>
-       </li>
-       <li class="nav-item">
-         <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
-           我创建的 (<%= issues_scope.created_issues(current_member).count %>)
-         <% end %>
-       </li>
-       <li class="nav-item">
-         <%= n.link_to "subscribed", project_issues_url(@project, @issue, filter: "subscribed"), class: "nav-item nav-link" do %>
-           我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
-         <% end %>
-       </li>
-      <% end %>
-    </ul>
 
-    <div class="d-flex align-items-center justify-content-between">
-      <div class="d-flex align-items-center mb-2">
-        <span class="mr-2"><%=h Issue, :label_ids %></span>
-        <% label = Label.where(id: @q.labels_id_eq).take %>
-        <%= fume_nav label&.id do |n| %>
-          <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <%= label_badge_tag label, nil, class: "badge-circle mr-2" %><%= label&.name || page_i18n(:all) %>
-            </button>
-            <div class="dropdown-menu">
-              <%= n.link_to nil, current_url(q: { labels_id_eq: nil }), class: "dropdown-item" do %>
-                <%= label_badge_tag nil, nil, class: "badge-circle mr-2" %><%= page_i18n(:all) %>
-              <% end %>
-              <% @project.labels.each do |label| %>
-                <%= n.link_to label.id, current_url(q: { labels_id_eq: label.id }), class: "dropdown-item" do %>
-                  <%= label_badge_tag label, nil, class: "badge-circle mr-2" %><%= label.name %>
-                <% end %>
-              <% end %>
-              <% if can? :index, Label %>
-                <div class="dropdown-divider"></div>
-                <%= link_to page_i18n(:index, model_name: h(Label)), "javascript:void(0)", class: "dropdown-item", data: { toggle: "modal", target: "#issue_modal", url: project_labels_path(@project, ok_url: request.fullpath) } %>
-              <% end %>
-            </div>
-          </div>
+    <div class="nav-scroll">
+      <ul class="nav nav-tabs mb-3">
+       <%= fume_nav params[:filter] || "all" do |n| %>
+         <li class="nav-item">
+           <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
+             全部问题 (<%= issues_scope.count %>)
+           <% end %>
+         </li>
+         <li class="nav-item">
+          <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
+            我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
+          <% end %>
+         </li>
+         <li class="nav-item">
+           <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
+             我创建的 (<%= issues_scope.created_issues(current_member).count %>)
+           <% end %>
+         </li>
+         <li class="nav-item">
+           <%= n.link_to "subscribed", project_issues_url(@project, @issue, filter: "subscribed"), class: "nav-item nav-link" do %>
+             我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
+           <% end %>
+         </li>
         <% end %>
-
-        <span class="ml-2 mr-2"><%=h Issue, :milestone_id %></span>
-        <% milestone = Milestone.where(id: @q.milestone_id_eq).take %>
-        <%= fume_nav milestone&.id do |n| %>
-          <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <%= milestone&.title || page_i18n(:all) %>
-            </button>
-            <div class="dropdown-menu">
-              <%= n.link_to nil, page_i18n(:all), current_url(q: { milestone_id_eq: nil }), class: "dropdown-item" %>
-              <% @project.milestones.last(10).each do |milestone| %>
-                <%= n.link_to milestone.id, milestone.title, current_url(q: { milestone_id_eq: milestone.id }), class: "dropdown-item" %>
-              <% end %>
-              <% if can? :index, Milestone %>
-                <div class="dropdown-divider"></div>
-                <%= link_to page_i18n(:index, model_name: h(Milestone)), project_milestones_path(@project, ok_url: request.fullpath), class: "dropdown-item" %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
-        <span class="ml-2 mr-2"><%=h Issue, :assignee_id %></span>
-        <% assignee = @project.members.where(id: @q.assignee_id_eq).take %>
-        <%= fume_nav assignee&.id do |n| %>
-          <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <%= assignee&.name || page_i18n(:all) %>
-            </button>
-            <div class="dropdown-menu">
-              <%= n.link_to nil, page_i18n(:all), current_url(q: { assignee_id_eq: nil }), class: "dropdown-item" %>
-              <% Member.where_exists(issues_scope.where_table(:assignee)).ranked.each do |assignee| %>
-                <%= n.link_to assignee.id, assignee.name, current_url(q: { assignee_id_eq: assignee.id }), class: "dropdown-item" %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
-        <span class="ml-2 mr-2"><%=h Issue, :creator_id %></span>
-        <% creator = @project.members.where(id: @q.creator_id_eq).take %>
-        <%= fume_nav creator&.id do |n| %>
-          <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <%= creator&.name || page_i18n(:all) %>
-            </button>
-            <div class="dropdown-menu">
-              <%= n.link_to nil, page_i18n(:all), current_url(q: { creator_id_eq: nil }), class: "dropdown-item" %>
-              <% @project.members.where_exists(issues_scope.where_table(:creator)).ranked.each do |creator| %>
-                <%= n.link_to creator.id, creator.name, current_url(q: { creator_id_eq: creator.id }), class: "dropdown-item" %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="mb-2">
-        <% state_names = Hash[Issue.state.options(except: [:resolved, :closed])].invert.merge("opening" => "未解决", "all" => "全部") %>
-        <% state_filter = [@q.state_filter].flatten.first %>
-        <%= fume_nav state_filter do |n| %>
-          <div class="btn-group btn-group-sm ml-2" role="group">
-            <% opening_states = [ "opening", "pending", "confirmed", "processing" ] %>
-            <% if opening_states.include?(state_filter) %>
-              <div class="btn btn-outline-primary active"><%= state_names[state_filter] %></div>
-            <% else %>
-              <%= link_to state_names[opening_states.first], current_url(q: { state_filter: opening_states.first }), class: "btn btn-outline-primary" %>
-            <% end %>
-            <div class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="sr-only">Toggle Dropdown</span>
-            </div>
-            <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
-              <% opening_states.each do |value| %>
-                <%= n.link_to value, state_names[value], current_url(q: { state_filter: value }), class: "small dropdown-item" %>
-              <% end %>
-            </div>
-          </div>
-          <div class="btn-group ml-1">
-            <% Issue.state.options(only: [:processed, :resolved, :closed]).each do |text, value| %>
-              <%= n.link_to value, "#{text}(#{@issues_state_counts[value] || 0})", current_url(q: { state_filter: value }), class: "btn btn-sm btn-outline-primary" %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
+      </ul>
     </div>
 
-    <table class="table">
+    <button class="btn btn-secondary btn-block d-md-none mb-3" type="button" data-toggle="collapse" data-target="#issueFilterCollapse">
+      过滤条件
+    </button>
+
+
+    <div class="collapse row d-md-flex mx-0 mb-3 align-items-center" id="issueFilterCollapse">
+      <%= render 'filter_bar', issues_scope: issues_scope %>
+    </div>
+
+    <table class="table d-none d-md-table">
       <colgroup>
         <col width="5%">
         <col width="20%">
@@ -214,10 +118,42 @@
       </tbody>
     </table>
 
-    <nav class="table-pagination">
-      <%= paginate @issues %>
-    </nav>
+    <div class="list-group list-group-flush d-flex d-md-none">
+      <% @issues.each do |issue| %>
+          <%= link_to [@project, issue], class: "list-group-item list-group-item-action" do %>
+            <div class="d-flex justify-content-between">
+              <h4 class="mb-1"><%= issue.title.truncate(12) %></h4>
+              <span class="text-issue-<%= issue.state %>">
+                <%= issue.state.text %>
+              </span>
+            </div>
+            <p class="mb-3">
+              <small>
+                <% issue.labels.each do |label| %>
+                  <%= label_badge_tag(label, label.name) %>
+                <% end %>
+              </small>
+            </p>
+            <div class="d-flex justify-content-between text-muted">
+              <small>
+                <b><%= issue.creator.name %></b> 创建于 <%= time_ago_in_words(issue.created_at) %>前
+              </small>
+              <small>
+                <% if issue.assignee %>
+                  <b><%= issue.assignee&.name %></b> 已受理
+                <% elsif issue.state.confirmed? %>
+                  尚未受理
+                <% end %>
+              </small>
+            </div>
+          <% end %>
+      <% end %>
+    </div>
   </div>
+
+  <nav class="table-pagination">
+    <%= paginate @issues %>
+  </nav>
 </div>
 
 
