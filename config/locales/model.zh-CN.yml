@@ -54,6 +54,8 @@ zh-CN:
       issue_template:
         name: 模版名称
         inputs: 内容
+        title_suggestion: 预设标题
+        content_suggestion: 预设内容
         lookup_by_build_form: 新建问题时可选
       issue_template_input:
         label: 名称

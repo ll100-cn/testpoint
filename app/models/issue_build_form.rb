@@ -31,6 +31,9 @@ class IssueBuildForm
 
   def prepare
     self.info = IssueInfo.new(template: self.template, issue: self.issue)
-    self.issue.title = self.template.name if self.template
+    if self.template
+      self.issue.title = self.template.title_suggestion
+      self.issue.content = self.template.content_suggestion
+    end
   end
 end
