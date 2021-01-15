@@ -1,7 +1,7 @@
-<div class="d-flex align-items-start">
-  <%= image_tag comment.member.user.avatar_url, class: "rounded-circle avatar" %>
-  <div class="card flex-grow-1">
-    <div class="card-header">
+<div class="card flex-grow-1 mb-3 issue-comment">
+  <div class="card-body" id="comment<%= comment.id %>_content">
+    <div class="card-title">
+      <%= image_tag comment.member.user.avatar_url, width: 30, class: "rounded-circle avatar mr-1" %>
       <%= comment.member.name %>
       <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(comment) %></span>
       <div class="dropdown float-right dropdown-no-arrow">
@@ -21,11 +21,9 @@
         </div>
       </div>
     </div>
-    <div class="card-body" id="comment<%= comment.id %>_content">
-      <div class="no-margin-bottom">
-        <%= render "shared/page_content.html", content: comment.content %>
-        <%= render "shared/attachments_box.html", attachmentable: comment %>
-      </div>
+    <div class="card-text no-margin-bottom">
+      <%= render "shared/page_content.html", content: comment.content %>
+      <%= render "shared/attachments_box.html", attachmentable: comment %>
     </div>
   </div>
 </div>

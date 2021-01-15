@@ -1,36 +1,32 @@
-<div class="issue-comment">
-  <div class="d-flex align-items-start">
-    <%= image_tag current_user.avatar_url, class: "rounded-circle avatar" %>
-    <div class="card flex-grow-1">
-      <div class="card-header">
-        <strong><%= current_member.name %></strong>
-        <% if (can? :create, Comment) && !issue.state.closed? %>
-          <div class="dropdown float-right dropdown-no-arrow">
-            <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
-              <i class="far fa-ellipsis-h" aria-hidden="true"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" style="min-width: auto;">
-              <% data = { toggle: "modal", target: "#duplicate-issue", remote: true, type: "xhrml" } %>
-              <%= link_to action_i18n('reference'), apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "reference" }]), data: data, class: "small dropdown-item" %>
-              <%= link_to action_i18n('duplicate'), apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "duplicated" }]), data: data, class: "small dropdown-item" %>
-            </div>
-          </div>
-        <% end %>
+<div class="card flex-grow-1 mb-3 issue-comment">
+  <div class="card-header bg-white">
+    <%= image_tag current_user.avatar_url, width: 30, class: "rounded-circle avatar mr-1" %>
+  <strong><%= current_member.name %></strong> 添加评论
+    <% if (can? :create, Comment) && !issue.state.closed? %>
+      <div class="dropdown float-right dropdown-no-arrow">
+        <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
+          <i class="far fa-ellipsis-h" aria-hidden="true"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" style="min-width: auto;">
+          <% data = { toggle: "modal", target: "#duplicate-issue", remote: true, type: "xhrml" } %>
+          <%= link_to action_i18n('reference'), apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "reference" }]), data: data, class: "small dropdown-item" %>
+          <%= link_to action_i18n('duplicate'), apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "duplicated" }]), data: data, class: "small dropdown-item" %>
+        </div>
       </div>
-
-      <%= bootstrap_vertical_form_for [@project, issue, @comment || issue.comments.new], data: { remote: true, type: "xhrml", target: ".issue-comment" } do |f| %>
-        <div class="card-body">
-          <div class="no-margin-bottom">
-            <%= f.input :content, input_html: { class: 'markdown-field' } %>
-            <%= render "attachments/upload_area.html", attachments: f.object.attachments %>
-          </div>
-        </div>
-        <div class="card-footer text-right bg-transparent">
-          <%= ok_url_tag %>
-          <%= link_to "附加模版", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: new_project_issue_issue_info_path(@project, @issue) }, class: "btn btn-secondary" %>
-          <%= f.submit class: "btn btn-primary" %>
-        </div>
-      <% end %>
-    </div>
+    <% end %>
   </div>
+
+  <%= bootstrap_vertical_form_for [@project, issue, @comment || issue.comments.new], data: { remote: true, type: "xhrml", target: ".issue-comment" } do |f| %>
+    <div class="card-body">
+      <div class="no-margin-bottom">
+        <%= f.input :content, input_html: { class: 'markdown-field' } %>
+        <%= render "attachments/upload_area.html", attachments: f.object.attachments %>
+      </div>
+    </div>
+    <div class="card-footer text-right bg-transparent">
+      <%= ok_url_tag %>
+      <%= link_to "附加模版", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: new_project_issue_issue_info_path(@project, @issue) }, class: "btn btn-secondary" %>
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
+  <% end %>
 </div>

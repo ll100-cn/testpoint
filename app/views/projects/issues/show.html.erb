@@ -1,60 +1,62 @@
-<div class="page-header">
+<div class="page-header row mx-0">
   <h2 class="mr-1"><%= title(@issue.title) %></h2>
-  <div class="text-primary">#<%= @issue.id %></div>
+  <div>#<%= @issue.id %></div>
   <div class="ml-auto actions">
     <%= edit_button [@project, @issue] if can? :edit, @issue %>
   </div>
 </div>
 
-<div class="container-fluid">
 
-  <div class="row">
-    <div class="col-sm-9">
-      <% @issue.issue_infos.ranked.each do |issue_info| %>
-        <% if issue_info.state.pending? %>
-          <div class="alert alert-danger">
-            该工单需要提供更多信息，请按照模版
-            <%= link_to "补充工单", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: apply_ok_url([:edit, @project, @issue, issue_info]) }, class: "alert-link" %>
-            <%= "，备注：#{issue_info.remark}" if issue_info.remark.present? %>
-          </div>
-        <% else %>
-          <%= render "shared/issue_info_content", issue_info: issue_info %>
-        <% end %>
+<div class="row">
+  <div class="col-12 col-md-9 order-1 order-md-0 mb-5">
+    <% @issue.issue_infos.ranked.each do |issue_info| %>
+      <% if issue_info.state.pending? %>
+        <div class="alert alert-danger">
+          该工单需要提供更多信息，请按照模版
+          <%= link_to "补充工单", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: apply_ok_url([:edit, @project, @issue, issue_info]) }, class: "alert-link" %>
+          <%= "，备注：#{issue_info.remark}" if issue_info.remark.present? %>
+        </div>
+      <% else %>
+        <%= render "shared/issue_info_content", issue_info: issue_info %>
       <% end %>
+    <% end %>
 
-      <div class="issue-content">
-        <div class="d-flex align-items-start">
-          <% user = @issue.creator.user %>
-          <%= image_tag user.avatar_url, width: 60, class: "rounded-circle avatar" %>
-          <div class="card flex-grow-1">
-            <%= render "shared/card_header", issue: @issue, creator: @issue.creator, project: @project %>
-            <div class="card-body" id="issue<%= @issue.id %>_content">
-              <div class="no-margin-bottom">
-                <div>
-                  <%= render "shared/page_content", content: @issue.content %>
-                  <%= render "shared/attachments_box", attachmentable: @issue %>
-                </div>
+    <div class="issue-content">
+      <div class="d-flex align-items-start">
+        <% user = @issue.creator.user %>
+        <div class="card flex-grow-1 mb-3">
+          <div class="card-body" id="issue<%= @issue.id %>_content">
+            <%= render "card_header", issue: @issue, creator: @issue.creator, project: @project %>
+            <div class="card-text no-margin-bottom">
+              <div>
+                <%= render "shared/page_content", content: @issue.content %>
+                <%= render "shared/attachments_box", attachmentable: @issue %>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <% @issue.tasks.ranked.each do |task| %>
-        <%= render "card_task", task: task %>
-      <% end %>
-
-      <%= render "projects/comments/comment_list.html", issue: @issue %>
-
-      <%= render "projects/comments/form", issue: @issue if can? :create, Comment %>
-
     </div>
-    <div class="col-sm-3">
-      <h5><%=h Issue, :created_at %></h5>
+
+    <% @issue.tasks.ranked.each do |task| %>
+      <%= render "card_task", task: task %>
+    <% end %>
+
+    <%= render "projects/comments/comment_list.html", issue: @issue %>
+
+    <%= render "projects/comments/form", issue: @issue if can? :create, Comment %>
+  </div>
+
+
+  <div class="col-12 col-md-3 order-0 order-md-1">
+    <button class="btn btn-secondary btn-block d-md-none" type="button" data-toggle="collapse" data-target="#issueDetailCollapse">
+      问题设置
+    </button>
+
+    <div class="collapse d-md-block" id="issueDetailCollapse">
+      <h5 class="mt-2"><%=h Issue, :created_at %></h5>
       <span><%=l @issue.created_at, format: :long %></span>
-
       <hr>
-
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :state } do |f| %>
           <%= f.input :state, collection: Issue.state.options %>
@@ -148,6 +150,9 @@
         </div>
       </div>
     </div>
+
+    <hr>
+
   </div>
 </div>
 

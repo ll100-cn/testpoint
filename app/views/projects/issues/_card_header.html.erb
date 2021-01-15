@@ -1,4 +1,5 @@
-<div class="card-header">
+<div class="card-title bg-white">
+  <%= image_tag creator.user.avatar_url, width: 30, class: "rounded-circle avatar mr-1" %>
   <%= creator.name %>
   <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(issue) %></span>
   <% if can? :edit, issue %>
