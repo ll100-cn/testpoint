@@ -14,6 +14,8 @@ class IssueBuildForm
         raise ActiveRecord::Rollback
       end
 
+      return if self.template.content_blank?
+
       if !self.info.submit_and_save
         self.errors.add(:issue, self.errors.full_messages.first)
         raise ActiveRecord::Rollback

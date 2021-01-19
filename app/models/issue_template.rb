@@ -16,4 +16,8 @@ class IssueTemplate < ApplicationRecord
   accepts_nested_attributes_for :inputs, allow_destroy: true
 
   scope :available_for_build_form, -> { where(lookup_by_build_form: true ) }
+
+  def content_blank?
+    inputs.blank?
+  end
 end
