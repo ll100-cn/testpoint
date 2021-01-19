@@ -5,8 +5,8 @@ class Projects::PlansController < BaseProjectController
   load_and_authorize_resource through: :project
 
   def index
-    @plans = @plans.available.page(params[:page]).ranked
-    @tasks_count_mapping = Task.group(:plan_id, :state).count
+    @plans = @plans.available.page(params[:page]).ranked.page(params[:page]).per(12)
+    @tasks_count_mapping = Task.where(plan_id: @plans).group(:plan_id, :state).count
   end
 
   def new

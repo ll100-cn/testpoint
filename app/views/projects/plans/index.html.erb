@@ -6,6 +6,8 @@
 
 <%= render 'cards-group', plans: @plans %>
 
+<%= paginate @plans %>
+
 <div id="newPlanModal" class="modal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
