@@ -11,10 +11,7 @@ class Projects::MembersController < BaseProjectController
   end
 
   def create
-    if @member.submit
-      @user = @member.user
-    end
-
+    @member.submit_and_save
     respond_with @member, location: -> { ok_url_or_default([@project, Member]) }
   end
 

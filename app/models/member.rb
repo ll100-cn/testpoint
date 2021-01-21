@@ -30,19 +30,18 @@ class Member < ApplicationRecord
   scope :chief, -> { where(role: [ "owner", "manager" ]) }
   scope :ranked, -> { order(:id) }
 
-  def submit
-    user = User.where(email: user_email).first_or_initialize(name: nickname)
+  def submit_and_save
+    self.user = User.where(email: user_email).take || User.new(name: nickname, email: user_email)
     transaction do
-      if user.new_record? && !user.save
-        delegate_errors(user, self, [ :email, :name ], :email)
+      if self.user.new_record? && !self.user.save
+        delegate_errors(user, self, [[:email, :user_email], [:name, :nickname]], nil)
         raise ActiveRecord::Rollback
       end
 
-      self.user = user
       self.nickname = nickname if self.user.name != nickname
 
       unless self.save
-        delegate_errors(self, self, user_id: :email)
+        delegate_errors(self, self, user_id: :user_email)
         raise ActiveRecord::Rollback
       end
     end
