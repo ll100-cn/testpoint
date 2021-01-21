@@ -11,7 +11,9 @@ class ProjectsController < BaseProjectController
 
   def create
     @project.assign_attributes(members_attributes: [ { role: "owner", project: @project, user: current_user } ])
-    @project.save
+    if @project.save
+      @project.issue_templates.create(name: "DEFAULT")
+    end
     respond_with @project, location: ok_url_or_default(Project)
   end
 
