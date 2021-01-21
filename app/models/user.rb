@@ -29,7 +29,8 @@ class User < ApplicationRecord
   has_many :projects, through: :members
   has_many :subscriptions, dependent: :destroy
 
-  validates :name, presence: true, length: { minimum: 2 }
+  validates :name, presence: true, uniqueness: true, length: { minimum: 2 }
+  validates :email, presence: true, uniqueness: true
 
   def avatar_url(size = 200)
     gravatar_id = Digest::MD5.hexdigest(self.email.downcase)

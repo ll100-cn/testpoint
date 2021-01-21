@@ -11,10 +11,7 @@ class Projects::MembersController < BaseProjectController
   end
 
   def create
-    if @member.submit
-      @user = @member.user
-    end
-
+    @member.submit_and_save
     respond_with @member, location: -> { ok_url_or_default([@project, Member]) }
   end
 
@@ -33,7 +30,7 @@ class Projects::MembersController < BaseProjectController
 
 protected
   def member_params
-    params.fetch(:member, {}).permit(:role, :user_email, :nickname, :receive_mail)
+    params.fetch(:member, {}).permit(:user_id, :role, :user_email, :nickname, :receive_mail)
   end
 
   def flash_interpolation_options
