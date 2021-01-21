@@ -14,14 +14,18 @@
       </colgroup>
       <thead>
       <tr>
+        <th>ID</th>
         <th><%=h IssueTemplate, :name %></th>
+        <th><%=h IssueTemplate, :lookup_by_build_form %></th>
         <th><%=page_i18n :actions %></th>
       </tr>
       </thead>
       <tbody>
         <% @issue_templates.each do |issue_template| %>
           <tr>
+            <td><%= issue_template.id %></td>
             <td><%= issue_template.name %></td>
+            <td><%= issue_template.lookup_by_build_form ? "可见" : "隐藏" %></td>
             <td>
               <%= edit_link [@project, issue_template] %>
             </td>
