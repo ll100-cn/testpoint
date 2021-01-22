@@ -55,6 +55,7 @@ zh-CN:
         name: 模版名称
         inputs: 内容
         title_suggestion: 预设标题
+        default_label_id: 预设标签
         content_suggestion: 预设内容
         lookup_by_build_form: 新建问题时可选
       issue_template_input:

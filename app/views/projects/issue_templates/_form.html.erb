@@ -1,6 +1,7 @@
 <%= f.input :name %>
 <%= f.input :lookup_by_build_form %>
 <%= f.input :title_suggestion %>
+<%= f.input :default_label_id, collection: @project.labels %>
 <%= f.input :content_suggestion, input_html: { class: 'markdown-field' } %>
 <%= f.input :inputs, full_error: false do %>
   <div class="card">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_15_013136) do
+ActiveRecord::Schema.define(version: 2021_01_22_090022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,8 @@ ActiveRecord::Schema.define(version: 2021_01_15_013136) do
     t.boolean "lookup_by_build_form", default: true
     t.string "title_suggestion"
     t.string "content_suggestion"
+    t.bigint "default_label_id"
+    t.index ["default_label_id"], name: "index_issue_templates_on_default_label_id"
     t.index ["project_id"], name: "index_issue_templates_on_project_id"
   end
 
