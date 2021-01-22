@@ -1,4 +1,4 @@
-@import '../../bootstrap.variables';
+@import "keen/style";
 
 $tv-toggler-width: 1.1em;
 $tv-toggler-height: 1.1em;
@@ -29,8 +29,7 @@ $tv-item-left: 1.6em;
     }
 
     .item > a.active {
-      @include button-variant($primary, $primary);
-      // background-color: $primary;
+      @extend .btn.btn-primary;
     }
 
     &:before, &:after {

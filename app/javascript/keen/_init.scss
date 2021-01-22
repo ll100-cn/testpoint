@@ -1,0 +1,26 @@
+//
+// Main init file of global bootstrap and theme functions, mixins, variables and config
+//
+
+
+// Functions
+@import "~@vendor/keen/theme/demo1/src/sass/base/functions";
+
+// Mixins
+@import "~@vendor/keen/theme/demo1/src/sass/base/mixins";
+@import "~@vendor/keen/theme/demo1/src/sass/components/mixins";
+@import "~@vendor/keen/theme/demo1/src/sass/vendors/plugins/mixins";
+
+// Bootstrap mixins
+@import "~bootstrap/scss/_mixins.scss";
+
+// Global variables
+@import "~@vendor/keen/theme/demo1/src/sass/components/variables.bootstrap";
+@import "~@vendor/keen/theme/demo1/src/sass/components/variables.custom";
+
+// 3rd-Party plugins variables
+@import "~@vendor/keen/theme/demo1/src/sass/vendors/plugins/variables";
+
+// Theme layout variables
+@import "~@vendor/keen/theme/demo1/src/sass/layout/variables";
+@import "layout/variables";

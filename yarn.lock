@@ -963,9 +963,9 @@
   version "0.0.0"
   resolved "https://token:9d4aa7a88bcb1e65@dev.ll100.com/repo/fontawesome-pro-5.11.2-web.tar.gz#eb1effe357eb54094b3278831f79eeda9ac55ea5"
 
-"@vendor/keen@https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen_v1.4.4.tar.gz":
+"@vendor/keen@https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen-2.0.5.tar.gz":
   version "0.0.0"
-  resolved "https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen_v1.4.4.tar.gz#47b47cd810b2d0184e3530e53e8ed5e32f3b6227"
+  resolved "https://token:e7f20ec1323cda1d@dev.ll100.com/repo/keen-2.0.5.tar.gz#56e27e419dea34c7c6aa8cb473c6a15457851ce6"
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"

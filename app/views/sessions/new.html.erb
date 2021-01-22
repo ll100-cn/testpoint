@@ -1,53 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Testpoint</title>
-    <%= csrf_meta_tags %>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
-  <body class="kt-demo-panel--right kt-header-mobile--fixed kt-page-content-white kt-subheader--enabled kt-aside--secondary-enabled kt-offcanvas-panel--left kt-aside--left kt-page--loading">
-  <div class="kt-grid kt-grid--ver kt-grid--root">
-    <div class="kt-grid__item   kt-grid__item--fluid kt-grid  kt-grid kt-grid--hor kt-login-v2" id="kt_login_v2">
-      <div class="kt-grid__item  kt-grid--hor">
-        <div class="kt-login-v2__head">
-          <h5>TESTPOINT</h5>
-        </div>
-      </div>
-      <div class="kt-grid__item  kt-grid  kt-grid--ver  kt-grid__item--fluid">
-      <div class="kt-login-v2__body">
-        <div class="kt-login-v2__wrapper">
-          <div class="kt-login-v2__container">
-            <div class="kt-login-v2__title">
+<div class="login-body d-flex flex-column-fluid align-items-stretch justify-content-center">
+  <div class="login-body d-flex flex-column-fluid align-items-stretch justify-content-center">
+    <div class="container row">
+      <div class="col-lg-6 p-3 p-md-15">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
               <h3><%= t(".sign_in", scope: "devise") %></h3>
             </div>
-            <%= bootstrap_vertical_form_for resource, url: user_session_path, html: { class: "kt-login-v2__form kt-form" } do |f| %>
-
+            <%= bootstrap_vertical_form_for resource, url: user_session_path do |f| %>
               <%= render 'in_form_flash' %>
-
               <%= f.input :email, label: false, placeholder: "邮箱" %>
-
-              <%= f.submit t(".send_code", scope: "devise"), class: "btn btn-brand btn-elevate btn-pill" %>
-
+              <%= f.submit t(".send_code", scope: "devise"), class: "btn btn-primary" %>
             <% end %>
           </div>
+
         </div>
-        <div class="kt-login-v2__image">
-          <img src="<%= asset_pack_path 'media/images/bg_icon.svg'%>" alt="">
-        </div>
+
       </div>
-      </div>
-      <div class="kt-grid__item">
-        <div class="kt-login-v2__footer">
-          <div class="kt-login-v2__info">
-            <a href="javascript:void(0)" class="kt-link">&copy; 2019 Testpoint</a>
-          </div>
-        </div>
-      </div>
+      <div class="col-lg-6 bgi-size-contain bgi-no-repeat bgi-position-y-center bgi-position-x-center min-h-150px mt-10 m-md-0" style="background-image: url(<%= asset_pack_path('media/images/bg_icon.svg') %>)"></div>
     </div>
   </div>
-
-
-</body>
+</div>

@@ -2,13 +2,8 @@
   <% flash.to_hash.each do |key, value| %>
     <% if value.present? %>
 
-      <div class="alert alert-bold alert-solid-<%= bootstrap_flash_class_for(key) %> fade show" role="alert">
+      <div class="alert alert-<%= bootstrap_flash_class_for(key) %> fade show" role="alert">
         <div class="alert-text"><%= value %></div>
-        <div class="alert-close">
-          <a href="javascript:void(0)" data-dismiss="alert">
-            <i class="fal fa-times"></i>
-          </a>
-        </div>
       </div>
 
      <% end %>
