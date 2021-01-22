@@ -38,6 +38,7 @@ export function replaceMarkdownTaskList(markdown, callback) {
 export function renderMarkdown(markdown, options = {}) {
   const checkboxOptions = options.checkbox || {}
   _.unset(options, "checkbox")
+  _.merge(options, { "simpleLineBreaks": true })
   const converter = new showdown.Converter({ extensions: [checkboxExtension(checkboxOptions)], ...options })
   return converter.makeHtml(markdown)
 }
