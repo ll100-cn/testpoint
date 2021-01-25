@@ -1,58 +1,56 @@
-<div class="card">
-  <div class="card-header bg-white d-flex align-items-center">
-    <% if @task %>
-      <h3><%= @task.test_case.title %></h3>
-      <%= task_state_with_icon(@task.state) %>
-      <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
-    <% else %>
-      <h2><%= title(page_i18n :index, model_name: h(@issues)) %></h2>
+<div class="page-header justify-content-between">
+  <% if @task %>
+    <h3><%= @task.test_case.title %></h3>
+    <%= task_state_with_icon(@task.state) %>
+    <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
+  <% else %>
+    <h2><%= title(page_i18n :index, model_name: h(@issues)) %></h2>
+  <% end %>
+
+  <div class="d-none d-md-flex">
+    <%= search_form_for @q, url: project_issues_path(@project), class: "form-inline" do |f| %>
+      <div class="input-group-sm ml-3">
+        <%= f.search_field :title_cont, label: "标题", class: "form-control" %>
+        <%= f.submit "搜索", class: "btn btn-primary btn-sm" %>
+      </div>
     <% end %>
-
-    <div class="d-none d-md-flex">
-      <%= search_form_for @q, url: project_issues_path(@project), class: "form-inline" do |f| %>
-        <div class="input-group-sm ml-3">
-          <%= f.search_field :title_cont, label: "标题", class: "form-control" %>
-          <%= f.submit "搜索", class: "btn btn-primary btn-sm" %>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="actions ml-auto">
-      <%= new_button [@project, :issue] if can? :new, Issue %>
-    </div>
   </div>
 
+  <div class="actions ml-auto">
+    <%= new_button [@project, :issue] if can? :new, Issue %>
+  </div>
+</div>
 
+<% issues_scope = @project.issues %>
+<div class="nav-scroll">
+  <ul class="nav nav-tabs">
+   <%= fume_nav params[:filter] || "all" do |n| %>
+     <li class="nav-item">
+       <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
+         全部问题 (<%= issues_scope.count %>)
+       <% end %>
+     </li>
+     <li class="nav-item">
+      <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
+        我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
+      <% end %>
+     </li>
+     <li class="nav-item">
+       <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
+         我创建的 (<%= issues_scope.created_issues(current_member).count %>)
+       <% end %>
+     </li>
+     <li class="nav-item">
+       <%= n.link_to "subscribed", project_issues_url(@project, @issue, filter: "subscribed"), class: "nav-item nav-link" do %>
+         我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
+       <% end %>
+     </li>
+    <% end %>
+  </ul>
+</div>
 
-  <% issues_scope = @project.issues %>
+<div class="card border-top-0">
   <div class="card-body">
-
-    <div class="nav-scroll">
-      <ul class="nav nav-tabs mb-3">
-       <%= fume_nav params[:filter] || "all" do |n| %>
-         <li class="nav-item">
-           <%= n.link_to "all", project_issues_url(@project, @issue, filter: "all"), class: "nav-item nav-link" do %>
-             全部问题 (<%= issues_scope.count %>)
-           <% end %>
-         </li>
-         <li class="nav-item">
-          <%= n.link_to "assigned", project_issues_url(@project, @issue, filter: "assigned"), class: "nav-item nav-link" do %>
-            我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
-          <% end %>
-         </li>
-         <li class="nav-item">
-           <%= n.link_to "created", project_issues_url(@project, @issue, filter: "created"), class: "nav-item nav-link" do %>
-             我创建的 (<%= issues_scope.created_issues(current_member).count %>)
-           <% end %>
-         </li>
-         <li class="nav-item">
-           <%= n.link_to "subscribed", project_issues_url(@project, @issue, filter: "subscribed"), class: "nav-item nav-link" do %>
-             我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
-           <% end %>
-         </li>
-        <% end %>
-      </ul>
-    </div>
 
     <button class="btn btn-secondary btn-block d-md-none mb-3" type="button" data-toggle="collapse" data-target="#issueFilterCollapse">
       过滤条件
