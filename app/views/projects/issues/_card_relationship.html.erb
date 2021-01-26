@@ -3,7 +3,7 @@
   <%= image_tag user.avatar_url, width: 30, class: "rounded-circle avatar" %>
   <span class="mx-1"><%= issue_relationship.member.name %> 将</span>
   <%= render "projects/issues/relationship/#{issue_relationship.category}.html", issue_relationship: issue_relationship, issue: issue %>
-  <span class="small text-muted ml-1"><%= time_ago_in_words(issue_relationship.created_at) %>前</span>
+  <span class="small text-muted ml-1"><%=l issue_relationship.created_at, format: :long %></span>
 
   <% if can? :delete, issue_relationship %>
     <div class="ml-2 dropdown dropdown-no-arrow">

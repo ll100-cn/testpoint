@@ -1,7 +1,7 @@
 <div class="card mb-3">
   <div class="card-header d-flex align-items-center">
     工单模版：<%= issue_info.template.name %>
-    <span class="ml-1 small text-muted"><%= time_ago_in_words(issue_info.updated_at) %>前修改</span>
+    <span class="ml-3 small text-muted">修改于 <%=l issue_info.updated_at, format: :long %></span>
     <% if can? :edit, issue_info %>
       <div class="dropdown ml-auto dropdown-no-arrow">
         <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
@@ -24,7 +24,9 @@
     </div>
   </div>
 
-  <div class="card-footer">
-    备注：<%= issue_info.remark %>
-  </div>
+  <% if issue_info.remark.present? %>
+    <div class="card-footer">
+      备注：<%= issue_info.remark %>
+    </div>
+  <% end %>
 </div>

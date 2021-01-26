@@ -54,9 +54,17 @@ module PageHelper
 
   def create_or_edit_time_in_words(model)
     if model.last_edited_at
-      "#{time_ago_in_words(model.last_edited_at)}前修改"
+      if model.last_edited_at < 10.minutes.ago
+        "修改于 #{l(model.last_edited_at, format: :long)}"
+      else
+        "#{time_ago_in_words(model.last_edited_at)}前修改"
+      end
     else
-      "#{time_ago_in_words(model.created_at)}前创建"
+      if model.created_at < 10.minutes.ago
+        "添加于 #{l(model.created_at, format: :long)}"
+      else
+        "#{time_ago_in_words(model.created_at)}前添加"
+      end
     end
   end
 
