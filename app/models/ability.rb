@@ -29,7 +29,7 @@ class Ability
     can [:read, :create],       Comment
     can [:read, :create],       Issue
     can :update,                Comment,  member_id:   member.id
-    can :manage,                IssueInfo
+    can [:read, :create, :update], IssueInfo
   end
 
   def apply_developer_permissions(member)
@@ -43,6 +43,7 @@ class Ability
   def apply_manager_permissions(member)
     apply_developer_permissions(member)
     can :manage,                IssueRelationship
+    can :manage,                IssueInfo
     can :manage,                Milestone
     can :update,                member.project
     can :manage,                Label

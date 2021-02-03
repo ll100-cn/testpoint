@@ -16,7 +16,7 @@ import 'jquery-ujs'
 
 // Theme
 import '../keen'
-// import '../bootstrap-ext'
+import '../bootstrap-ext'
 
 import '../components/fontawesome'
 import '../components/turbolinks'

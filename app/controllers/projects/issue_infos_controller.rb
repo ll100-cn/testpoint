@@ -23,6 +23,11 @@ class Projects::IssueInfosController < BaseProjectController
     respond_with @issue_info
   end
 
+  def destroy
+    @issue_info.destroy
+    respond_with @issue_info, location: ok_url_or_default([@project, @issue])
+  end
+
 protected
   def issue_info_params
     params.fetch(:issue_info, {}).permit(*permit_attributes)
