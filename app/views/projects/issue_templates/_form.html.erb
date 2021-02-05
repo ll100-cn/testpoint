@@ -10,11 +10,12 @@
         <thead>
           <tr>
             <th scope="col"><%= h IssueTemplateInput, :label %></th>
+            <th scope="col"><%= h IssueTemplateInput, :order_index %></th>
             <th scope="col">操作</th>
           </tr>
         </thead>
         <tbody data-target="template.area">
-          <% (f.object.inputs || []).each do |input| %>
+          <% (f.object.inputs.ranked || []).each do |input| %>
             <%= f.simple_fields_for *bootstrap_args_for_vertical(:inputs, input) do |ff| %>
               <%= render "input", f: ff %>
             <% end %>

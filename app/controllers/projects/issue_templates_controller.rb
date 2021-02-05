@@ -28,7 +28,7 @@ protected
 
   def permit_attributes
     result = [:name, :lookup_by_build_form, :title_suggestion, :content_suggestion,
-      :default_label_id, inputs_attributes: [:id, :label, :_destroy]]
+      :default_label_id, inputs_attributes: [:id, :order_index, :label, :_destroy]]
     result
   end
   helper_method :permit_attributes

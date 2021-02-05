@@ -36,7 +36,7 @@ class IssueInfo < ApplicationRecord
   end
 
   def inputs
-    @inputs ||= template.inputs.map { |input| IssueInfoInput.build(self, input) }
+    @inputs ||= template.inputs.ranked.map { |input| IssueInfoInput.build(self, input) }
   end
 
   def inputs_attributes=(params)

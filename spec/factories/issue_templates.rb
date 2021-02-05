@@ -8,6 +8,9 @@
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  lookup_by_build_form :boolean          default(TRUE)
+#  title_suggestion     :string
+#  content_suggestion   :string
+#  default_label_id     :bigint
 #
 
 FactoryBot.define do
