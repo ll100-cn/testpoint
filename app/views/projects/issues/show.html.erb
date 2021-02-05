@@ -1,5 +1,10 @@
 <div class="page-header row mx-0">
-  <h2 class="mr-1"><%= title(@issue.title) %></h2>
+  <% if @issue.state.closed? %>
+    <s><h2 class="mr-1"><%= title(@issue.title) %></h2></s>
+    <span class="badge badge-issue-closed mr-1">已关闭</span>
+  <% else %>
+    <h2 class="mr-1"><%= title(@issue.title) %></h2>
+  <% end %>
   <div>#<%= @issue.id %></div>
   <div class="ml-auto actions">
     <%= edit_button [@project, @issue] if can? :edit, @issue %>
