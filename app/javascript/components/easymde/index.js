@@ -8,6 +8,7 @@ import './style.scss'
 
 $(document).on('content:loaded', function(event) {
   $(event.target).find('.markdown-field').each(function() {
+    $(this).removeClass("markdown-field")
     new EasyMDE({
       element: this,
       status: false,
