@@ -4,6 +4,7 @@ class Projects::MembersController < BaseProjectController
 
   def index
     @q = @project.members.ransack(params[:q])
+    @q.sorts = "user_email" if @q.sorts.empty?
     @members = @q.result.page(params[:page])
   end
 
