@@ -1,0 +1,49 @@
+<div class="page-header">
+  <h2>我的工单</h2>
+</div>
+
+<div class="collapse row d-md-flex mx-0 mb-3 align-items-center" id="issueFilterCollapse">
+  <%= render 'filter_bar', issues_scope: @issues_scope %>
+</div>
+
+<table class="table d-none d-md-table">
+  <colgroup>
+    <col width="5%">
+    <col width="20%">
+    <col width="10%">
+    <col width="8%">
+    <col width="10%">
+    <col width="10%">
+    <col width="10%">
+  </colgroup>
+  <thead>
+    <tr>
+      <th><%= sort_link(@q, :id)%></th>
+      <th><%= sort_link(@q, :title)%></th>
+      <th><%= sort_link(@q, :project_id)%></th>
+      <th><%= sort_link(@q, :label_ids)%></th>
+      <th><%= sort_link(@q, :state)%></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @issues.each do |issue| %>
+      <tr class="<%= 'block-discard' if issue.state.closed? %>">
+        <td><%= issue.id %></td>
+        <td>
+          <%= link_to issue.title, [issue.project, issue] %>
+        </td>
+        <td><%= link_to issue.project.name, [issue.project] %></td>
+        <td>
+          <% issue.labels.each do |label| %>
+            <%= label_badge_tag(label, label.name) %>
+          <% end %>
+        </td>
+        <td>
+          <span class="text-issue-<%= issue.state %>">
+            <%= issue.state.text %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

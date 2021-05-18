@@ -51,6 +51,7 @@ zh-CN:
       members: 成员
       milestones: 里程碑
       analytics: 统计报表
+      projects: 项目
   time:
     formats:
       simple: '%Y/%m/%d %H:%M'

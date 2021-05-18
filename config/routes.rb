@@ -66,6 +66,7 @@ Rails.application.routes.draw do
 
   namespace :profiles do
     resource :basic
+    resources :issues
     resources :projects
   end
 end

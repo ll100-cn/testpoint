@@ -1,0 +1,22 @@
+<% state_names = Hash[Issue.state.options(except: [:resolved, :closed])].invert.merge("opening" => "未解决", "all" => "全部") %>
+<% state_filter = [@q.state_filter].flatten.first %>
+<%= fume_nav state_filter do |n| %>
+  <div class="btn-group btn-group-sm mb-1" role="group">
+    <div class="btn-group" role="group">
+      <% opening_states = [ "opening", "pending", "confirmed", "processing" ] %>
+      <% if opening_states.include?(state_filter) %>
+        <div class="btn btn-sm btn-outline-primary active dropdown-toggle" data-toggle="dropdown"><%= state_names[state_filter] %></div>
+      <% else %>
+        <%= link_to state_names[opening_states.first], current_url(q: { state_filter: opening_states.first }), class: "btn btn-sm btn-outline-primary" %>
+      <% end %>
+      <div class="dropdown-menu dropdown-menu-right" style="min-width: 1rem;">
+        <% opening_states.each do |value| %>
+          <%= n.link_to value, state_names[value], current_url(q: { state_filter: value }), class: "small dropdown-item" %>
+        <% end %>
+      </div>
+    </div>
+    <% Issue.state.options(only: [:processed, :resolved, :closed]).each do |text, value| %>
+      <%= n.link_to value, "#{text}(#{@issues_state_counts[value] || 0})", current_url(q: { state_filter: value }), class: "btn btn-sm btn-outline-primary" %>
+    <% end %>
+  </div>
+<% end %>

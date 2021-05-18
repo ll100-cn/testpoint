@@ -51,12 +51,28 @@
           </ul>
         <% end %>
       </div>
+    <% else %>
+      <div>
+        <%= fume_nav controller_name do |n| %>
+          <ul class="navbar-nav">
+            <%= n.li_tag "projects", class: "nav-item" do %>
+              <%= link_to t('views.navbar.projects'), [:projects], class: "nav-link" if can? :read, Project %>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
     <% end %>
 
     <ul class="navbar-nav ml-md-auto">
       <% if user_signed_in? %>
+        <li class="nav-item">
+          <% issues_badge_count = Issue.where(assignee_id: current_user.members.ids).state_filter("opening").count %>
+          <%= link_to profiles_issues_path, class: "nav-link mr-3" do %>
+            待处理 <span class="badge badge-primary"><%= issues_badge_count %></span>
+          <% end %>
+        </li>
         <li class="nav-item dropdown">
-          <%= link_to "#", class: "nav-link dropdown-toggle py-0", data: { toggle: "dropdown" } do %>
+          <%= link_to "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } do %>
             <%= image_tag current_user.avatar_url, height: 25, class: "rounded-circle" %>
             <% if current_member && current_member.nickname? %>
               <%= current_member.nickname %> (<%= current_user.name %>)

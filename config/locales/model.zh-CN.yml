@@ -43,6 +43,7 @@ zh-CN:
         state: 状态
         label_ids: 标签
         milestone_id: 里程碑
+        project_id: 项目
         comments: 评论
         subscribed_users: 接收通知的成员
         created_at: 创建时间
