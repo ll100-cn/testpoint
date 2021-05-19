@@ -23,6 +23,7 @@
       <th><%= sort_link(@q, :project_id)%></th>
       <th><%= sort_link(@q, :label_ids)%></th>
       <th><%= sort_link(@q, :state)%></th>
+      <th><%= sort_link(@q, :creator_id)%></th>
     </tr>
   </thead>
   <tbody>
@@ -43,6 +44,7 @@
             <%= issue.state.text %>
           </span>
         </td>
+        <td><%= issue.creator.name %></td>
       </tr>
     <% end %>
   </tbody>
