@@ -61,7 +61,7 @@ function handleResponse($element, data) {
   $element.removeData('xhrml')
   $element.data('type', 'xhrml')
 
-  const selector = $element.data("bs-target")
+  const selector = $element.data("target")
   const [ container, target ] = selector.replace(" ", "|||").split("|||")
   const $container = replaceContent($element, data, container, target)
   $container.trigger('xhrml:success')

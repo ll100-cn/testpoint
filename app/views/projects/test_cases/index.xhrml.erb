@@ -9,7 +9,7 @@
     <%= render 'label_filter.html' %>
 
     <div class="actions ms-auto">
-      <%= new_button [@project, :test_case], class: "btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :new, TestCase %>
+      <%= new_button [@project, :test_case], class: "btn-sm", data: { bs_toggle: "modal", bs_target: "#test_case_modal", url: new_project_test_case_path(@project, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :new, TestCase %>
     </div>
   </div>
 
@@ -52,7 +52,7 @@
           <tbody>
             <% @test_cases.order(:created_at).each do |test_case| %>
               <tr>
-                <td><%= link_to test_case.title, "", data: { toggle: "modal", target: "#test_case_modal", url: apply_ok_url([ @project, test_case ]) } %></td>
+                <td><%= link_to test_case.title, "", data: { bs_toggle: "modal", bs_target: "#test_case_modal", url: apply_ok_url([ @project, test_case ]) } %></td>
                 <td>
                   <% test_case.platforms.each do |platform| %>
                      <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"><%= platform.name %></span>
