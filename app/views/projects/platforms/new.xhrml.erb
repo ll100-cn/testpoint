@@ -1,16 +1,14 @@
 <%= bootstrap_horizontal_form_for [@project, @platform],
-    defaults: { wrapper_html: { class: "ml-0" }, legend_tag_html: { class: "text-right", style: "width: 8rem;"  }, label_wrapper_html: { class: "text-right", style: "width: 8rem;"  }, content_html: { class: "col" } } do |f| %>
+    defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-right", style: "width: 8rem;"  }, label_wrapper_html: { class: "text-right", style: "width: 8rem;"  }, content_html: { class: "col" } } do |f| %>
   <div class="modal-header">
     <h5 class="modal-title"><%= page_i18n :new, model_name: h(@platform) %></h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <%= f.input :name %>
   </div>
   <div class="modal-footer">
     <%= f.submit class: "btn btn-primary" %>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :close %></button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :close %></button>
   </div>
 <% end %>

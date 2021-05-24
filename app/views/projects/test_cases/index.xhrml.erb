@@ -8,7 +8,7 @@
     <h5 class="my-auto mx-2"><%=h ::TestCase, :label_ids %></h5>
     <%= render 'label_filter.html' %>
 
-    <div class="actions ml-auto">
+    <div class="actions ms-auto">
       <%= new_button [@project, :test_case], class: "btn-sm", data: { toggle: "modal", target: "#test_case_modal", url: new_project_test_case_path(@project, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :new, TestCase %>
     </div>
   </div>
@@ -20,7 +20,7 @@
         <h5 class="my-auto"><%= link_to current_url(platform_id: @platform), class: "", data: { remote: true, type: "xhrml", target: "#tp-main .table", action: "activable#active" }  do %>
           <%=h Folder %>
         <% end %></h5>
-        <div class="actions ml-auto">
+        <div class="actions ms-auto">
           <small><%= new_link [@project, :folder] %></small>
         </div>
       </div>
@@ -29,9 +29,9 @@
         <ul>
           <%= render "shared/folders.html", key: nil do |folder| %>
             <%= link_to current_url(folder_id: folder.id), class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main table", action: "activable#active" }  do %>
-              <i class="fal fa-folder mr-2"></i><%= folder.name %>（<%= @folder_test_cases_counts[folder.id] %>）
+              <i class="fal fa-folder me-2"></i><%= folder.name %>（<%= @folder_test_cases_counts[folder.id] %>）
             <% end %>
-            <%= link_to [ :edit, @project, folder ], class: "text-muted ml-2 treeview-active-actions" do %>
+            <%= link_to [ :edit, @project, folder ], class: "text-muted ms-2 treeview-active-actions" do %>
               <i class="fal fa-pencil"></i>
             <% end %>
           <% end %>

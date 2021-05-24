@@ -66,7 +66,6 @@ zh-CN:
       issue_info:
         template_id: 模版
         remark: 备注
-
       platform:
         name: 名称
         archived: 是否存档
@@ -125,6 +124,13 @@ zh-CN:
         folder_ids: 文件夹
       issue_info_input:
         value: 内容
+      issue_activity_chart:
+        starts_on: 起始时间
+        ends_on: 截至时间
+      issue_creator_chart:
+        starts_on: 起始时间
+        ends_on: 截至时间
+        role: 成员权限
   errors:
     messages:
       blank: 不能为空

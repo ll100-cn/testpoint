@@ -1,8 +1,6 @@
 <div class="modal-header">
   <h5 class="modal-title"><%= page_i18n(:index, model_name: h(Platform)) %></h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
   <table class="table">
@@ -33,5 +31,5 @@
 
 <div class="modal-footer">
   <%= new_button [@project, :platform], data: { remote: true, type: :xhrml, target: ".modal-content" } if can? :new, Platform %>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :close %></button>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :close %></button>
 </div>

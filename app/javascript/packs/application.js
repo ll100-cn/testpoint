@@ -12,10 +12,11 @@
 
 import $ from 'jquery'
 window.$ = $
+
 import 'jquery-ujs'
 
 // Theme
-import '../keen'
+// import '../keen'
 import '../bootstrap-ext'
 
 import '../components/fontawesome'

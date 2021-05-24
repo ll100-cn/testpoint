@@ -27,7 +27,7 @@
     <ul class="list-group list-group-flush">
       <% times_group.each do |label, count| %>
         <li class="list-group-item d-flex justify-content-between">
-          <span><span class="text-<%= color_mapping[label] %> mr-1">●</span><%= label %>： <%= count %> 条</span>
+          <span><span class="text-<%= color_mapping[label] %> me-1">●</span><%= label %>： <%= count %> 条</span>
           <span><%= (count * 100.0 / total_count).round %>%</span>
         </li>
       <% end %>

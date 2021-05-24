@@ -1,7 +1,7 @@
 <% label = TestCaseLabel.where(id: @q.labels_id_eq).take %>
 <%= fume_nav label&.id do |n| %>
   <div class="dropdown">
-    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
       <%= label&.name || page_i18n(:all) %>
     </button>
     <div class="dropdown-menu">

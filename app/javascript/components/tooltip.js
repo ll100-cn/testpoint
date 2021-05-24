@@ -1,7 +1,8 @@
 import $ from 'jquery';
+import { Tooltip } from 'bootstrap';
 
 $(document).on('content:loaded', function() {
-  $(event.target).find('[data-toggle="tooltip"]').click(function(event) {
-    event.preventDefault();
-  }).tooltip();
+  $('[data-bs-toggle="tooltip"]').each(function() {
+    new Tooltip(this);
+  });
 });

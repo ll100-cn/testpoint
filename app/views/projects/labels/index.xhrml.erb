@@ -1,8 +1,6 @@
 <div class="modal-header">
   <h5 class="modal-title"><%= page_i18n(:index, model_name: h(Label)) %></h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
   <table class="table">
@@ -23,7 +21,7 @@
     <tbody>
       <% @labels.each do |label| %>
         <tr>
-          <td><%= label_badge_tag label, nil, class: "badge-circle mr-2" %><%= label.name %></td>
+          <td><%= label_badge_tag label, nil, class: "badge-circle me-2" %><%= label.name %></td>
           <td><%= label.description %></td>
           <td><%= label.issues.count %></td>
           <td>
@@ -44,5 +42,5 @@
 
 <div class="modal-footer">
   <%= new_button [@project, :label], data: { remote: true, type: :xhrml, target: ".modal-content" } if can? :new, Label %>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :close %></button>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :close %></button>
 </div>

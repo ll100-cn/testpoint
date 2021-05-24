@@ -63,7 +63,7 @@ module BootstrapHelper
           boolean:       :inline_boolean,
           check_boxes:   :inline_collection_inline
         },
-        html: { class: "form-inline" },
+        html: { class: "row mb-3" },
         builder: BootstrapVerticalBuilder
       }.deep_merge(options)
     )
@@ -73,7 +73,7 @@ module BootstrapHelper
 
   def bootstrap_inline_form_defaults
     {
-      wrapper_html: { class: "mb-2 mr-sm-3 ml-0" },
+      wrapper_html: { class: "" },
       label_html: { class: "" },
       legend_tag_html: { class: "" }
     }

@@ -1,15 +1,13 @@
 <%= bootstrap_horizontal_form_for [@project, @issue] do |f| %>
   <div class="modal-header">
     <h5 class="modal-title">选择问题模版</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <%= f.collection_check_boxes :template_ids, @project.issue_templates, :id, :name %>
   </div>
   <div class="modal-footer">
     <%= f.submit class: "btn btn-primary" %>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= action_i18n :close %></button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :close %></button>
   </div>
 <% end %>

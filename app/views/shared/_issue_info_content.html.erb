@@ -1,10 +1,10 @@
 <% if issue_info.state.pending? %>
   <div class="alert alert-danger d-flex">
     该工单需要提供更多信息，请按照模版
-    <%= link_to "补充工单", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: apply_ok_url([:edit, @project, @issue, issue_info]) }, class: "alert-link ml-1" %>
+    <%= link_to "补充工单", "javascript:void(0)", data: { toggle: "modal", target: "#applicationModal", url: apply_ok_url([:edit, @project, @issue, issue_info]) }, class: "alert-link ms-1" %>
     <%= "，备注：#{issue_info.remark}" if issue_info.remark.present? %>
-    <div class="dropdown float-right dropdown-no-arrow ml-auto">
-      <button class="btn btn-sm dropdown-toggle p-0" data-toggle="dropdown" style="background: transparent;">
+    <div class="dropdown float-right dropdown-no-arrow ms-auto">
+      <button class="btn btn-sm dropdown-toggle p-0" data-bs-toggle="dropdown" style="background: transparent;">
         <i class="far fa-ellipsis-h" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
@@ -16,10 +16,10 @@
   <div class="card mb-3">
     <div class="card-header d-flex align-items-center">
       工单模版：<%= issue_info.template.name %>
-      <span class="ml-3 small text-muted">修改于 <%=l issue_info.updated_at, format: :long %></span>
+      <span class="ms-3 small text-muted">修改于 <%=l issue_info.updated_at, format: :long %></span>
       <% if can? :edit, issue_info %>
-        <div class="dropdown ml-auto dropdown-no-arrow">
-          <button class="btn btn-sm dropdown-toggle p-0" data-toggle="dropdown" style="background: transparent;">
+        <div class="dropdown ms-auto dropdown-no-arrow">
+          <button class="btn btn-sm dropdown-toggle p-0" data-bs-toggle="dropdown" style="background: transparent;">
             <i class="far fa-ellipsis-h" aria-hidden="true"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">

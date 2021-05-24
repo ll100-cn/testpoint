@@ -2,7 +2,7 @@
 <div class="issue-overview">
   <div class="overview text-muted">
     <%= comment.member.name %> 在 <%=l comment.created_at, format: :long %> 发表了评论
-    <a href="#collapse_comment_<%= comment.id %>" data-toggle="collapse" class="small text-muted">展开</a>
+    <a href="#collapse_comment_<%= comment.id %>" data-bs-toggle="collapse" class="small text-muted">展开</a>
   </div>
   <div class="issue-comment collapse" id="collapse_comment_<%= comment.id %>">
     <%= render "projects/issues/card_comment.html", comment: comment %>

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-$(document).on('show.bs.modal', function(event) {
+document.addEventListener('show.bs.modal', function(event) {
   const $trigger = $(event.relatedTarget);
   const url = $trigger.data('url');
   if (url) {

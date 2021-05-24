@@ -2,21 +2,21 @@
   <% if @task %>
     <h3><%= @task.test_case.title %></h3>
     <%= task_state_with_icon(@task.state) %>
-    <span class="badge badge-secondary ml-2"><%= @task.platform.name %></span>
+    <span class="badge badge-secondary ms-2"><%= @task.platform.name %></span>
   <% else %>
     <h2><%= title(page_i18n :index, model_name: h(@issues)) %></h2>
   <% end %>
 
-  <div class="d-none d-md-flex">
-    <%= search_form_for @q, url: project_issues_path(@project), class: "form-inline" do |f| %>
-      <div class="input-group-sm ml-3">
-        <%= f.search_field :title_cont, label: "标题", class: "form-control" %>
-        <%= f.submit "搜索", class: "btn btn-primary btn-sm" %>
-      </div>
-    <% end %>
-  </div>
+  <%= search_form_for @q, url: project_issues_path(@project), class: "row row-cols-lg-auto g-3 align-items-center ms-3" do |f| %>
+    <div class="col-12">
+      <%= f.search_field :title_cont, label: "标题", class: "form-control" %>
+    </div>
+    <div class="col-12">
+      <%= f.submit "搜索", class: "btn btn-primary btn-sm" %>
+    </div>
+  <% end %>
 
-  <div class="actions ml-auto">
+  <div class="actions ms-auto">
     <%= new_button [@project, :issue] if can? :new, Issue %>
   </div>
 </div>
@@ -52,12 +52,12 @@
 <div class="card border-top-0">
   <div class="card-body">
 
-    <button class="btn btn-secondary btn-block d-md-none mb-3" type="button" data-toggle="collapse" data-target="#issueFilterCollapse">
+    <button class="btn btn-secondary btn-block d-md-none mb-3" type="button" data-bs-toggle="collapse" data-target="#issueFilterCollapse">
       过滤条件
     </button>
 
 
-    <div class="collapse row d-md-flex mx-0 mb-3 align-items-center" id="issueFilterCollapse">
+    <div class="collapse d-md-flex mx-0 mb-3 align-items-center" id="issueFilterCollapse">
       <%= render 'filter_bar', issues_scope: issues_scope %>
     </div>
 

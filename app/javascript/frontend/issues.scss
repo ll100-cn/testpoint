@@ -1,27 +1,33 @@
-@import '../bootstrap-ext/variables.scss';
+@import '../bootstrap-ext/all.scss';
 
 .badge-issue-pending {
-  @include badge-variant($warning);
+  @extend .badge;
+  @extend .bg-warning;
 }
 
 .badge-issue-waiting {
-  @include badge-variant($danger);
+  @extend .badge;
+  @extend .bg-danger;
 }
 
 .badge-issue-confirmed {
-  @include badge-variant($info);
+  @extend .badge;
+  @extend .bg-info;
 }
 
 .badge-issue-processing {
-  @include badge-variant($primary);
+  @extend .badge;
+  @extend .bg-primary;
 }
 
 .badge-issue-closed {
-  @include badge-variant($secondary);
+  @extend .badge;
+  @extend .bg-secondary;
 }
 
 .badge-issue-resolved {
-  @include badge-variant($success);
+  @extend .badge;
+  @extend .bg-success;
 }
 
 

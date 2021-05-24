@@ -7,12 +7,12 @@
 
 <div class="card app-card-main">
   <div class="card-header bg-white d-flex">
-    <h4 class="mr-auto my-auto"><%= page_i18n :index, model_name: h(@tasks) %></h4>
+    <h4 class="me-auto my-auto"><%= page_i18n :index, model_name: h(@tasks) %></h4>
 
     <%= fume_nav @platform&.id do |n| %>
       <div class="dropdown">
         <%=h Task, :platform_id %>：
-        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
           <%= @platform&.name || page_i18n(:all) %>
         </button>
         <div class="dropdown-menu">
@@ -25,9 +25,9 @@
     <% end %>
 
     <%= fume_nav @q.state_eq do |n| %>
-      <div class="dropdown ml-3">
+      <div class="dropdown ms-3">
         <%=h Task, :state %>：
-        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
           <%= Task.state.find_value(@q.state_eq)&.text || page_i18n(:all) %>
         </button>
         <div class="dropdown-menu" >
@@ -54,7 +54,7 @@
         <ul>
           <%= render "shared/folders.html", key: nil do |folder| %>
             <%= link_to current_url(folder_id: folder), class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main .test_cases-cards", action: "activable#active" }  do %>
-              <i class="fal fa-folder mr-2"></i><%= folder.name %>（<%= @folder_tasks_counts[folder.id] %>）
+              <i class="fal fa-folder me-2"></i><%= folder.name %>（<%= @folder_tasks_counts[folder.id] %>）
             <% end %>
           <% end %>
         </ul>

@@ -1,93 +1,101 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top tp-navbar">
-  <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarContent">
-    <% if @project && !@project.new_record? %>
-      <div class="dropdown">
-        <button class="btn btn-sm dropdown-toggle text-white px-0" data-toggle="dropdown" style="background: transparent;">
-          <%= @project.name %>
-        </button>
-        <div class="dropdown-menu">
-          <% if current_user.superadmin? %>
-            <% projects = Project.all %>
-          <% else %>
-            <% projects = current_user.projects %>
-          <% end %>
-          <% projects.each do |project| %>
-            <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
-          <% end %>
-
-          <div class="dropdown-divider"></div>
-
-          <%= link_to page_i18n(:index, model_name: h(Project)), projects_path, class: "small dropdown-item" %>
-        </div>
-      </div>
-      <div>
-        <%= fume_nav controller_name do |n| %>
-          <ul class="navbar-nav">
-            <%= n.li_tag "test_cases", class: "nav-item" do %>
-              <%= link_to t('views.navbar.cases'), [@project, ::TestCase], class: "nav-link" if can? :read, ::TestCase %>
-            <% end %>
-            <%= n.li_tag "plans", class: "nav-item" do %>
-              <%= link_to t('views.navbar.plans'), [@project, Plan], class: "nav-link" if can? :read, Plan %>
-            <% end %>
-            <%= n.li_tag "issues", class: "nav-item" do %>
-              <%= link_to t('views.navbar.issues'), [@project, Issue], class: "nav-link" if can? :read, Issue %>
-            <% end %>
-            <%= n.li_tag "members", class: "nav-item" do %>
-              <%= link_to t('views.navbar.members'), [@project, Member], class: "nav-link" if can? :read, Member %>
-            <% end %>
-            <%= n.li_tag "milestones", class: "nav-item" do %>
-              <%= link_to t('views.navbar.milestones'), [@project, Milestone], class: "nav-link" if can? :read, Milestone %>
-            <% end %>
-            <%= n.li_tag "analytics", class: "nav-item" do %>
-              <%= link_to t('views.navbar.analytics'), [@project, Analytic], class: "nav-link" if can? :read, Analytic %>
-            <% end %>
-            <%= n.li_tag "issue_template", class: "nav-item" do %>
-              <%= link_to h(IssueTemplate), [@project, IssueTemplate], class: "nav-link" if can? :read, IssueTemplate %>
-            <% end %>
-          </ul>
-        <% end %>
-      </div>
-    <% else %>
-      <div>
-        <%= fume_nav controller_name do |n| %>
-          <ul class="navbar-nav">
-            <%= n.li_tag "projects", class: "nav-item" do %>
-              <%= link_to t('views.navbar.projects'), [:projects], class: "nav-link" if can? :read, Project %>
-            <% end %>
-          </ul>
-        <% end %>
-      </div>
-    <% end %>
-
-    <ul class="navbar-nav ml-md-auto">
-      <% if user_signed_in? %>
-        <li class="nav-item">
-          <% issues_badge_count = Issue.where(assignee_id: current_user.members.ids).state_filter("opening").count %>
-          <%= link_to profiles_issues_path, class: "nav-link mr-3" do %>
-            待处理 <span class="badge badge-primary"><%= issues_badge_count %></span>
-          <% end %>
-        </li>
-        <li class="nav-item dropdown">
-          <%= link_to "#", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" } do %>
-            <%= image_tag current_user.avatar_url, height: 25, class: "rounded-circle" %>
-            <% if current_member && current_member.nickname? %>
-              <%= current_member.nickname %> (<%= current_user.name %>)
+  <div class="container-fluid">
+    <%= link_to "Testpoint", root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapseContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapseContent">
+      <% if @project && !@project.new_record? %>
+        <div class="dropdown">
+          <button class="btn btn-sm dropdown-toggle text-white px-0" data-bs-toggle="dropdown" style="background: transparent;">
+            <%= @project.name %>
+          </button>
+          <div class="dropdown-menu">
+            <% if current_user.superadmin? %>
+              <% projects = Project.all %>
             <% else %>
-              <%= current_user.name %>
+              <% projects = current_user.projects %>
             <% end %>
-          <% end %>
-          <div class="dropdown-menu dropdown-menu-right">
-            <%= link_to page_i18n('profile'), profiles_basic_path(request_for_ok_url), class: "dropdown-item" %>
-            <%= link_to action_i18n('logout'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
+            <% projects.each do |project| %>
+              <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
+            <% end %>
+
+            <div class="dropdown-divider"></div>
+
+            <%= link_to page_i18n(:index, model_name: h(Project)), projects_path, class: "small dropdown-item" %>
           </div>
-        </li>
+        </div>
+        <div>
+          <%= fume_nav controller_name do |n| %>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <%= n.link_to "test_cases", t('views.navbar.cases'), [@project, ::TestCase], class: "nav-link" if can? :read, ::TestCase %>
+              </li>
+
+              <li class="nav-item">
+                <%= n.link_to "plans", t('views.navbar.plans'), [@project, Plan], class: "nav-link" if can? :read, Plan %>
+              </li>
+
+              <li class="nav-item">
+                <%= n.link_to "issues", t('views.navbar.issues'), [@project, Issue], class: "nav-link" if can? :read, Issue %>
+              </li>
+
+              <li class="nav-item">
+                <%= n.link_to "members", t('views.navbar.members'), [@project, Member], class: "nav-link" if can? :read, Member %>
+              </li>
+
+              <li class="nav-item">
+                <%= n.link_to "milestones", t('views.navbar.milestones'), [@project, Milestone], class: "nav-link" if can? :read, Milestone %>
+              </li>
+
+              <li class="nav-item">
+                <%= n.link_to "analytics", t('views.navbar.analytics'), [@project, Analytic], class: "nav-link" if can? :read, Analytic %>
+              </li>
+
+              <li class="nav-item">
+                <%= n.link_to "issue_template", h(IssueTemplate), [@project, IssueTemplate], class: "nav-link" if can? :read, IssueTemplate %>
+              </li>
+            </ul>
+          <% end %>
+        </div>
       <% else %>
-        <li class="nav-item"><%= link_to action_i18n('login'), new_user_session_path, class: "nav-link" %></li>
+        <div>
+          <%= fume_nav controller_name do |n| %>
+            <ul class="navbar-nav">
+              <%= n.li_tag "projects", class: "nav-item" do %>
+                <%= link_to t('views.navbar.projects'), [:projects], class: "nav-link" if can? :read, Project %>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
       <% end %>
-    </ul>
+
+      <ul class="navbar-nav ms-md-auto">
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <% issues_badge_count = Issue.where(assignee_id: current_user.members.ids).state_filter("opening").count %>
+            <%= link_to profiles_issues_path, class: "nav-link me-3" do %>
+              待处理 <span class="badge bg-primary"><%= issues_badge_count %></span>
+            <% end %>
+          </li>
+          <li class="nav-item dropdown">
+            <%= link_to "#", class: "nav-link dropdown-toggle", data: { bs_toggle: "dropdown" }, id: "dropdownMenuUser", role: "button" do %>
+              <%= image_tag current_user.avatar_url, height: 25, class: "rounded-circle" %>
+              <% if current_member && current_member.nickname? %>
+                <%= current_member.nickname %> (<%= current_user.name %>)
+              <% else %>
+                <%= current_user.name %>
+              <% end %>
+            <% end %>
+            <div class="dropdown-menu dropdown-menu-right">
+              <%= link_to page_i18n('profile'), profiles_basic_path(request_for_ok_url), class: "dropdown-item" %>
+              <%= link_to action_i18n('logout'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
+            </div>
+          </li>
+        <% else %>
+          <li class="nav-item"><%= link_to action_i18n('login'), new_user_session_path, class: "nav-link" %></li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </nav>

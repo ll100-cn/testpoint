@@ -1,36 +1,24 @@
 <% file = attachment.file %>
 <% blob = file.blob %>
 <div class="media border bg-light p-2 align-items-center">
-  <div class="mr-2" style="width: 3rem">
+  <div class="me-2">
     <% attachmentable = attachment.attachmentable %>
     <% fancybox_options = attachmentable ? { fancybox: dom_id(attachmentable) } : {} %>
     <% if attachment.image? %>
       <%= link_to url_for(file), target: "_blank", data: fancybox_options do %>
-        <div class="embed-responsive embed-responsive-1by1">
-          <div class="embed-responsive-item d-flex align-items-center justify-content-center">
-            <%= image_tag url_for(file), class: "h-100" %>
-          </div>
-        </div>
+        <%= image_tag url_for(file), class: "img-fluid" %>
       <% end %>
     <% elsif attachment.video? %>
       <%= link_to url_for(file), target: "_blank", data: fancybox_options do %>
-        <div class="embed-responsive embed-responsive-1by1">
-          <div class="embed-responsive-item d-flex align-items-center justify-content-center">
-            <% if file.previewable? %>
-              <%= image_tag file.preview(resize: '100'), class: "h-100" %>
-            <% else %>
-              <%= video_tag url_for(file), class: "h-100" %>
-            <% end %>
-          </div>
-        </div>
+        <% if file.previewable? %>
+          <%= image_tag file.preview(resize: '100'), class: "h-100" %>
+        <% else %>
+          <%= video_tag url_for(file), class: "h-100" %>
+        <% end %>
       <% end %>
     <% else %>
       <%= link_to url_for(file), class: "h-100", target: "_blank" do %>
-        <div class="embed-responsive embed-responsive-1by1">
-          <div class="embed-responsive-item d-flex align-items-center justify-content-center">
-            <%= image_tag 'file.png', class: "h-100" %>
-          </div>
-        </div>
+        <%= image_tag 'file.png', style: "width: 3rem" %>
       <% end %>
     <% end %>
   </div>
@@ -38,17 +26,17 @@
   <div class="media-body d-flex flex-column">
     <div class="d-flex align-items-center">
       <h4 class="mb-0 d-inline-block"><%= attachment.title.truncate(20) %></h4>
-      <%= link_to edit_attachment_path(attachment), class: "text-muted mr-auto ml-2", data: { remote: true, type: "xhrml", target: ".media", replace: true } do %>
+      <%= link_to edit_attachment_path(attachment), class: "text-muted me-auto ms-2", data: { remote: true, type: "xhrml", target: ".media", replace: true } do %>
         <span class="far fa-edit"></span>
       <% end %>
     </div>
     <div class="small d-flex">
-      <span class="text-secondary mr-1"><%= number_to_human_size(blob.byte_size, precision: 2, locale: 'en') %></span>
+      <span class="text-secondary me-1"><%= number_to_human_size(blob.byte_size, precision: 2, locale: 'en') %></span>
       <%= link_to polymorphic_url(file), class: "clipboard" do %>
         <span class="far fa-link text-muted"></span>
       <% end %>
       <% data = { remote: true, type: "xhrml", target: ".col-lg-6", replace: true, confirm: "确认删除附件?" } %>
-      <%= link_to apply_ok_url([ attachment ]), method: :delete, data: data, class: "text-muted ml-auto" do %>
+      <%= link_to apply_ok_url([ attachment ]), method: :delete, data: data, class: "text-muted ms-auto" do %>
         <span class="far fa-trash-alt"></span>
       <% end %>
     </div>

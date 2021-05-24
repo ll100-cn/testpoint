@@ -4,7 +4,7 @@
     <% open = (@folder&.ancestor_ids_with_self || []).include?(folder.id) && children.any? %>
     <li class="<%= 'has-children' if children.any? %> <%= 'mt-3 block-archived' if folder.archived_root? %>">
       <% if children.any? %>
-        <a data-toggle="collapse" data-target="#treeview-<%= folder.id %>-container" class="toggler text-muted <%= 'collapsed' if !open %>">
+        <a data-bs-toggle="collapse" href="#treeview-<%= folder.id %>-container" class="toggler text-muted <%= 'collapsed' if !open %>">
           <i class="fal fa-plus-square"></i>
         </a>
       <% else %>

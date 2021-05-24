@@ -1,23 +1,13 @@
-<div class="login-body d-flex flex-column-fluid align-items-stretch justify-content-center">
-  <div class="login-body d-flex flex-column-fluid align-items-stretch justify-content-center">
-    <div class="container row">
-      <div class="col-lg-6 p-3 p-md-15">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-title">
-              <h3><%= t(".sign_in", scope: "devise") %></h3>
-            </div>
-            <%= bootstrap_vertical_form_for resource, url: user_session_path do |f| %>
-              <%= render 'in_form_flash' %>
-              <%= f.input :email, label: false, placeholder: "邮箱" %>
-              <%= f.submit t(".send_code", scope: "devise"), class: "btn btn-primary" %>
-            <% end %>
-          </div>
-
-        </div>
-
+<div class="container col-12 col-md-6 col-lg-4 col-xl-3">
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title mb-3">
+        <h3><%= t(".sign_in", scope: "devise") %></h3>
       </div>
-      <div class="col-lg-6 bgi-size-contain bgi-no-repeat bgi-position-y-center bgi-position-x-center min-h-150px mt-10 m-md-0" style="background-image: url(<%= asset_pack_path('media/images/bg_icon.svg') %>)"></div>
+      <%= bootstrap_vertical_form_for resource, url: user_session_path do |f| %>
+        <%= render 'in_form_flash' %>
+        <%= f.input :email, label: false, placeholder: "邮箱" %>
+        <%= f.submit t(".send_code", scope: "devise"), class: "btn btn-primary" %>
+      <% end %>
     </div>
   </div>
-</div>

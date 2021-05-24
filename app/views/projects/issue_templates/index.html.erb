@@ -1,7 +1,7 @@
 <div class="card app-card-main">
   <div class="card-header bg-white d-flex">
     <h2><%= title(page_i18n :index, model_name: h(IssueTemplate)) %></h2>
-    <div class="actions ml-auto">
+    <div class="actions ms-auto">
       <%= new_button [@project, :issue_template], class: "btn-sm" if can? :new, IssueTemplate %>
     </div>
   </div>

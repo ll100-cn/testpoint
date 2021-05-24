@@ -1,6 +1,6 @@
 <div class="page-header">
   <h2><%= page_i18n :edit, model_name: h(@folder) %></h2>
-  <div class="actions ml-auto">
+  <div class="actions ms-auto">
     <% unless @folder.archived_root? %>
       <%= link_to '归档', [ :archive, @project, @folder ], method: :patch, class: "btn btn-outline-danger btn-sm" if can? :archive, @folder %>
     <% end %>

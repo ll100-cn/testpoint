@@ -1,10 +1,10 @@
 <div class="card-title bg-white">
-  <%= image_tag creator.user.avatar_url, width: 30, class: "rounded-circle avatar mr-1" %>
+  <%= image_tag creator.user.avatar_url, width: 30, class: "rounded-circle avatar me-1" %>
   <%= creator.name %>
-  <span class="ml-1 small text-muted"><%= create_or_edit_time_in_words(issue) %></span>
+  <span class="ms-1 small text-muted"><%= create_or_edit_time_in_words(issue) %></span>
   <% if can? :edit, issue %>
     <div class="dropdown float-right dropdown-no-arrow">
-      <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown" style="background: transparent;">
+      <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
         <i class="far fa-ellipsis-h" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">

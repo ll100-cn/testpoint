@@ -15,8 +15,8 @@ protected
 
   def icon_tag
     content = <<~HTML
-      <a class="input-group-append" data-toggle>
-        <span class="input-group-text"><span class="far fa-fw fa-calendar-alt"></span></span>
+      <a class="input-group-text" data-toggle>
+        <span class="far fa-fw fa-calendar-alt"></span>
       </a>
     HTML
     content.html_safe

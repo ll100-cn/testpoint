@@ -5,7 +5,7 @@
     <div class="btn-group" role="group">
       <% opening_states = [ "opening", "pending", "confirmed", "processing" ] %>
       <% if opening_states.include?(state_filter) %>
-        <div class="btn btn-sm btn-outline-primary active dropdown-toggle" data-toggle="dropdown"><%= state_names[state_filter] %></div>
+        <div class="btn btn-sm btn-outline-primary active dropdown-toggle" data-bs-toggle="dropdown"><%= state_names[state_filter] %></div>
       <% else %>
         <%= link_to state_names[opening_states.first], current_url(q: { state_filter: opening_states.first }), class: "btn btn-sm btn-outline-primary" %>
       <% end %>
