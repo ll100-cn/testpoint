@@ -14,7 +14,7 @@
         <% end %>
       <% end %>
       <div class="dropdown-divider"></div>
-      <%= link_to page_i18n(:index, model_name: h(TestCaseLabel)), "#", class: "dropdown-item", data: { remote: true, bs_toggle: "modal", bs_target: "#test_case_modal", url: project_test_case_labels_path(@project, ok_url: request.fullpath) } %>
+      <%= link_to page_i18n(:index, model_name: h(TestCaseLabel)), "#", class: "dropdown-item", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: project_test_case_labels_path(@project, ok_url: request.fullpath) } %>
     </div>
   </div>
 <% end %>

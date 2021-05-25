@@ -8,7 +8,7 @@
         <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
           <i class="far fa-ellipsis-h" aria-hidden="true"></i>
         </button>
-        <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+        <div class="dropdown-menu dropdown-menu-end" style="min-width: 3px;">
           <% data = { type: "xhrml", remote: true, target: "#comment#{comment.id}_content" } %>
           <%= edit_link [comment.issue.project, comment.issue, comment ], class: "small dropdown-item", data: data if can? :edit, comment %>
           <% data = data.merge({ target: ".issue-comment", confirm: "确认删除评论？" }) %>

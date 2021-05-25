@@ -6,7 +6,7 @@
       <%= task_state_with_icon(task.state) %>
     </div>
 
-    <%= link_to "", "#", class: "stretched-link", data: { bs_target: "#task-info-modal", bs_toggle: "modal", url: project_plan_task_path(@project, @plan, task) } %>
+    <%= link_to "", "#", class: "stretched-link", data: { bs_target: "#applicationModal", bs_toggle: "modal", url: project_plan_task_path(@project, @plan, task) } %>
     <%= link_to 'refresh-self', [ :row, @project, @plan, task ], class: "d-none #{dom_id task, 'on'}", data: { remote: true, type: :xhrml, target: '.card .card-body' } %>
   </div>
 <% end %>

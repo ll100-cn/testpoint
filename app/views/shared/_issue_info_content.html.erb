@@ -7,7 +7,7 @@
       <button class="btn btn-sm dropdown-toggle p-0" data-bs-toggle="dropdown" style="background: transparent;">
         <i class="far fa-ellipsis-h" aria-hidden="true"></i>
       </button>
-      <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+      <div class="dropdown-menu dropdown-menu-end" style="min-width: 3px;">
         <%= link_to "取消该模版", [@project, @issue, issue_info], method: :delete, class: "small dropdown-item" if can? :destroy, IssueInfo %>
       </div>
     </div>
@@ -22,7 +22,7 @@
           <button class="btn btn-sm dropdown-toggle p-0" data-bs-toggle="dropdown" style="background: transparent;">
             <i class="far fa-ellipsis-h" aria-hidden="true"></i>
           </button>
-          <div class="dropdown-menu dropdown-menu-right" style="min-width: 3px;">
+          <div class="dropdown-menu dropdown-menu-end" style="min-width: 3px;">
             <%= link_to "修改", "javascript:void(0)",
               data: { bs_toggle: "modal", bs_target: "#applicationModal", url: url_for([:edit, @project, @issue, issue_info]) },
               class: "small dropdown-item" if can? :edit, issue_info if can? :edit, IssueInfo %>

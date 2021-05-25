@@ -1,19 +1,9 @@
 <div class="page-header justify-content-between">
   <h2><%= title(page_i18n :index, model_name: h(@plans)) %></h2>
-  <%= new_button [@project, :plan], class: "btn-sm", data: { remote: true, bs_toggle: "modal", bs_target: "#newPlanModal", url: new_project_plan_path(@project, @plan) } if can? :new, Plan %>
+  <%= new_button [@project, :plan], class: "btn-sm", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_plan_path(@project, @plan) } if can? :new, Plan %>
 </div>
 
 
 <%= render 'cards-group', plans: @plans %>
 
 <%= paginate @plans %>
-
-<div id="newPlanModal" class="modal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="d-flex justify-content-center">
-        <div class="spinner-border p-5 m-5" role="status"></div>
-      </div>
-    </div>
-  </div>
-</div>

@@ -9,7 +9,7 @@
       <% else %>
         <%= link_to state_names[opening_states.first], current_url(q: { state_filter: opening_states.first }), class: "btn btn-sm btn-outline-primary" %>
       <% end %>
-      <div class="dropdown-menu dropdown-menu-right" style="min-width: 1rem;">
+      <div class="dropdown-menu dropdown-menu-end" style="min-width: 1rem;">
         <% opening_states.each do |value| %>
           <%= n.link_to value, state_names[value], current_url(q: { state_filter: value }), class: "small dropdown-item" %>
         <% end %>

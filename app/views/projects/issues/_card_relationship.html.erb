@@ -10,7 +10,7 @@
       <a href="javascript:void(0)" class="text-muted dropdown-toggle" data-bs-toggle="dropdown">
         <i class="far fa-ellipsis-h" aria-hidden="true"></i>
       </a>
-      <div class="dropdown-menu dropdown-menu-right" style="min-width: auto;">
+      <div class="dropdown-menu dropdown-menu-end" style="min-width: auto;">
         <% data = { confirm: "确定删除问题的关联？" } %>
         <%= destroy_button [issue.project, issue_relationship.source, issue_relationship ], data: data, class: "small dropdown-item" if can? :destroy, issue_relationship %>
       </div>

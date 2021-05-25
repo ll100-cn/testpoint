@@ -78,7 +78,7 @@
         <% if @issue.creator %>
           <% user = @issue.creator.user %>
           <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
-          <span class="badge mb-1"><%= @issue.creator.name %></span>
+          <span class="mb-1"><%= @issue.creator.name %></span>
         <% end %>
       <% end %>
 
@@ -95,7 +95,7 @@
         <% if @issue.assignee %>
           <% user = @issue.assignee.user %>
           <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
-          <span class="badge mb-1"><%=@issue.assignee.name %></span>
+          <span class="mb-1"><%=@issue.assignee.name %></span>
         <% end %>
       <% end %>
 
@@ -153,6 +153,3 @@
 
   </div>
 </div>
-
-<%= content_tag :div, id: "duplicate-issue", class: "modal", role: "dialog" do %>
-<% end %>

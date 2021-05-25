@@ -87,7 +87,7 @@
                 <%= current_user.name %>
               <% end %>
             <% end %>
-            <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-end">
               <%= link_to page_i18n('profile'), profiles_basic_path(request_for_ok_url), class: "dropdown-item" %>
               <%= link_to action_i18n('logout'), destroy_user_session_path, class: "dropdown-item", method: :delete %>
             </div>
