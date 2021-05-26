@@ -1,10 +1,10 @@
 <div class="card flex-grow-1 mb-3 issue-comment">
   <div class="card-body" id="comment<%= comment.id %>_content">
-    <div class="card-title">
+    <div class="card-title d-flex">
       <%= image_tag comment.member.user.avatar_url, width: 30, class: "rounded-circle avatar me-1" %>
       <%= comment.member.name %>
       <span class="ms-1 small text-muted"><%= create_or_edit_time_in_words(comment) %></span>
-      <div class="dropdown float-right dropdown-no-arrow">
+      <div class="dropdown dropdown-no-arrow ms-auto">
         <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
           <i class="far fa-ellipsis-h" aria-hidden="true"></i>
         </button>

@@ -1,7 +1,7 @@
 <% if attachmentable.attachments.any? %>
   <div class="attachments-box">
     <% attachmentable.attachments.each do |attachment| %>
-      <div class="attachment-item col-lg-6">
+      <div class="attachment-item">
         <%= render "attachments/info.html", attachment: attachment %>
       </div>
     <% end %>

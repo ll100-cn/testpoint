@@ -1,5 +1,5 @@
 <% template = capture do %>
-  <div class="col-lg-6 p-0 pr-2 mb-2">
+  <div class="col-lg-6 p-0 pe-2 mb-2">
     <div class="media border bg-light p-2 align-items-center">
       <div class="me-2" style="width: 3rem">
         <div class="embed-responsive embed-responsive-1by1">
@@ -24,10 +24,10 @@
     </div>
   </div>
 <% end %>
-<%= content_tag :div, class: "upload-area pt-2 pl-2", data: { controller: "attachment", url: attachments_url, name: 'attachment[file]', template: template } do %>
+<%= content_tag :div, class: "upload-area pt-2 ps-2", data: { controller: "attachment", url: attachments_url, name: 'attachment[file]', template: template } do %>
   <div class="d-flex flex-wrap upload-container" data-target="attachment.container">
    <% attachments.each do |attachment| %>
-     <div class="col-lg-6 p-0 pr-2 mb-2">
+     <div class="col-lg-6 p-0 pe-2 mb-2">
        <%= render "attachments/info.html", attachment: attachment %>
        <%= hidden_field_tag "#{attachment.attachmentable_type.underscore}[attachment_ids][]", attachment.id %>
      </div>
