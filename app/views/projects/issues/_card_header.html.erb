@@ -1,9 +1,9 @@
-<div class="card-title bg-white">
+<div class="card-title d-flex bg-white">
   <%= image_tag creator.user.avatar_url, width: 30, class: "rounded-circle avatar me-1" %>
   <%= creator.name %>
   <span class="ms-1 small text-muted"><%= create_or_edit_time_in_words(issue) %></span>
   <% if can? :edit, issue %>
-    <div class="dropdown float-right dropdown-no-arrow">
+    <div class="dropdown dropdown-no-arrow ms-auto">
       <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
         <i class="far fa-ellipsis-h" aria-hidden="true"></i>
       </button>
