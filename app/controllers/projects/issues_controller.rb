@@ -64,6 +64,17 @@ class Projects::IssuesController < BaseProjectController
   def edit
   end
 
+  def edit_project
+  end
+
+  def update_project
+    with_email_notification do
+      @issue.change_project_with_author(issue_params, current_member)
+    end
+    
+    respond_with @issue, action: :edit_project, location: project_issue_path(@issue.reload.project, @issue)
+  end
+
   def templates
   end
 
@@ -87,7 +98,7 @@ protected
   end
 
   def issue_params_names
-    names = [ :title, :content, :state, :milestone_id, :assignee_id, :template_id,
+    names = [ :title, :content, :state, :milestone_id, :assignee_id, :template_id, :project_id,
        attachment_ids: [], label_ids: [], subscribed_user_ids: [],
        template_ids: []]
     names += [ :creator_id ] if can? :critical, Issue

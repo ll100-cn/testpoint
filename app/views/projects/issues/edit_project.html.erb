@@ -1,0 +1,15 @@
+<div class="page-header">
+  <h2>迁移项目</h2>
+</div>
+
+<div class="container">
+  <%= bootstrap_vertical_form_for [ :update_project, @project, @task, @issue ], permit_for: issue_params_names do |f| %>
+    <%= f.input :project_id, collection: Project.where_exists(current_user.members.where_table(:project)) %>
+
+    <hr>
+
+    <%= ok_url_tag %>
+    <%= f.submit class: "btn btn-primary" %>
+    <%= cancel_button ok_url_or_default([@project, @task, @issue]) %>
+  <% end %>
+</div>

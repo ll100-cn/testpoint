@@ -79,14 +79,30 @@ class Issue < ApplicationRecord
    end
  end
 
+ def change_project_with_author(params, member)
+  project_id = params[:project_id]
+  new_project = member.user.projects.find(project_id)
+  self.project_id = project_id
+  self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || member
+  self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
+  self.labels = []
+  self.milestone_id = nil
+   transaction do
+     unless self.save
+       raise ActiveRecord::Rollback
+     end
+     record_property_changes!(member)
+   end
+ end
+
  def record_property_changes!(member)
-   previous_changes.slice(:creator_id, :assignee_id, :state).each do |property, (before_value, after_value)|
-     activity = self.activities.new
-     activity.property = property
-     activity.before_value = before_value
-     activity.after_value = after_value
-     activity.member_id = member.id
-     activity.save!
+   previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id).each do |property, (before_value, after_value)|
+      activity = self.activities.new
+      activity.property = property
+      activity.before_value = before_value
+      activity.after_value = after_value
+      activity.member_id = member.id
+      activity.save!
    end
  end
 

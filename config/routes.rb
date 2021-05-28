@@ -32,6 +32,10 @@ Rails.application.routes.draw do
         end
       end
       resources :issues do
+        member do
+          get :edit_project
+          patch :update_project
+        end
         resources :comments do
           member do
             get :unfold

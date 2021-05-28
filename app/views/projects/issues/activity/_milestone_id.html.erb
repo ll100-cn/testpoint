@@ -1,13 +1,13 @@
 <span class="text-info"><%=h Issue, activity.property.to_sym %></span>
 
 <% if activity.before_value? %>
-  <span class="text-primary">从 <%= Member.find(activity.before_value).name %> </span><span>修改为</span>
+  <span class="text-primary">从 <%= Milestone.find(activity.before_value).title %> </span><span>修改为</span>
 <% else %>
   <span>修改为</span>
 <% end %>
 
 <% if activity.after_value? %>
-  <span class="text-primary"><%= Member.find(activity.after_value).name %></span>
+  <span class="text-primary"><%= Milestone.find(activity.after_value).title %></span>
 <% else %>
   <span>无</span>
 <% end %>

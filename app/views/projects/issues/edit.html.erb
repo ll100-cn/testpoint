@@ -10,7 +10,15 @@
     <hr>
 
     <%= ok_url_tag %>
+
     <%= f.submit class: "btn btn-primary" %>
-    <%= cancel_button [@project, @task, @issue] %>
+
+    <%= cancel_button ok_url_or_default([@project, @task, @issue]) %>
+
+    <%= link_to apply_ok_url([:edit_project, @project, @issue]), class: "btn btn-warning" do %>
+      <i class="far fa-exchange-alt me-1"></i> 迁移到其它项目
+    <% end %>
   <% end %>
+
 </div>
+
