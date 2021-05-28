@@ -30,6 +30,10 @@
   @extend .bg-success;
 }
 
+.badge-issue-processed {
+  @extend .badge;
+  @extend .bg-success;
+}
 
 .text-issue-pending {
   color: $warning;
@@ -52,6 +56,10 @@
 }
 
 .text-issue-resolved {
+  color: $success;
+}
+
+.text-issue-processed {
   color: $success;
 }
 
