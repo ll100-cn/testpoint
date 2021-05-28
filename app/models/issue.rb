@@ -83,7 +83,7 @@ class Issue < ApplicationRecord
   project_id = params[:project_id]
   new_project = member.user.projects.find(project_id)
   self.project_id = project_id
-  self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || member
+  self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || self.creator
   self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
   self.labels = []
   self.milestone_id = nil
