@@ -1,7 +1,7 @@
 <div class="card flex-grow-1 mb-3 issue-comment">
   <div class="card-body" id="comment<%= comment.id %>_content">
-    <div class="card-title d-flex">
-      <%= image_tag comment.member.user.avatar_url, width: 30, class: "rounded-circle avatar me-1" %>
+    <div class="card-title d-flex align-items-center">
+      <%= image_tag comment.member.user.avatar_url, width: 20, class: "rounded-circle avatar me-1" %>
       <%= comment.member.name %><%= "（#{comment.member.project.name}）" if comment.member.project_id != @project.id %>
       <span class="ms-1 small text-muted"><%= create_or_edit_time_in_words(comment) %></span>
       <div class="dropdown dropdown-no-arrow ms-auto">

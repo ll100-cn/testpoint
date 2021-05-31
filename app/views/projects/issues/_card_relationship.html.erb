@@ -1,6 +1,6 @@
 <div class="issue-relationship d-flex align-items-center">
   <% user = issue_relationship.member.user %>
-  <%= image_tag user.avatar_url, width: 30, class: "rounded-circle avatar" %>
+  <%= image_tag user.avatar_url, width: 20, class: "rounded-circle avatar" %>
   <span class="mx-1"><%= issue_relationship.member.name %> 将</span>
   <%= render "projects/issues/relationship/#{issue_relationship.category}.html", issue_relationship: issue_relationship, issue: issue %>
   <span class="small text-muted ms-1"><%=l issue_relationship.created_at, format: :long %></span>

@@ -1,7 +1,7 @@
 <div class="card flex-grow-1 mb-3 issue-comment">
-  <div class="card-header bg-white d-flex">
-    <%= image_tag current_user.avatar_url, width: 30, class: "rounded-circle avatar me-1" %>
-  <strong><%= current_member.name %></strong> 添加评论
+  <div class="card-header bg-white d-flex align-items-center">
+    <%= image_tag current_user.avatar_url, width: 20, class: "rounded-circle avatar me-1" %>
+    <strong class="me-1"><%= current_member.name %></strong> 添加评论
     <% if (can? :create, Comment) && !issue.state.closed? %>
       <div class="dropdown dropdown-no-arrow ms-auto">
         <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">

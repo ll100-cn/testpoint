@@ -33,7 +33,7 @@
   <% if type == "assignee" %>
     <% if issue.assignee %>
       <% user = issue.assignee.user %>
-      <%= image_tag user.avatar_url, height: 20, class: "rounded-circle" %>
+      <%= image_tag user.avatar_url, width: 20, class: "rounded-circle" %>
       <span class="badge mb-1"><%=issue.assignee.name %></span>
       <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
     <% end %>

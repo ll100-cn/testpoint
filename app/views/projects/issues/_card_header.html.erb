@@ -1,5 +1,5 @@
-<div class="card-title d-flex bg-white">
-  <%= image_tag creator.user.avatar_url, width: 30, class: "rounded-circle avatar me-1" %>
+<div class="card-title d-flex bg-white align-items-center">
+  <%= image_tag creator.user.avatar_url, width: 20, class: "rounded-circle avatar me-1" %>
   <%= creator.name %><%= "（#{creator.project.name}）" if creator.project_id != @project.id %>
   <span class="ms-1 small text-muted"><%= create_or_edit_time_in_words(issue) %></span>
   <% if can? :edit, issue %>
