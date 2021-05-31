@@ -29,6 +29,8 @@ zh-CN:
         platform_ids: 平台
         folder_ids: 文件夹
         label_ids: 标签
+        milestone_id: 里程碑
+        creator_id: 创建人
       attachment:
         file: 文件
         title: 描述

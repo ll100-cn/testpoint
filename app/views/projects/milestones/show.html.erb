@@ -48,7 +48,7 @@
       <table class="table">
         <colgroup>
           <col width="5%">
-          <col width="20%">
+          <col width="35%">
           <col width="10%">
           <col width="10%">
           <col width="10%">
@@ -86,11 +86,6 @@
               </td>
               <td><%= issue.creator.name %></td>
               <td><%= issue.assignee&.name %></td>
-              <% if @task %>
-              <td>
-                <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
-              </td>
-              <% end %>
               <td><%=l issue.updated_at, format: :simple if issue.updated_at %></td>
             </tr>
           <% end %>
@@ -100,6 +95,42 @@
       <nav class="table-pagination">
         <%= paginate @issues %>
       </nav>
+    </div>
+  </div>
+</div>
+
+<div class="m-3">
+  <div class="card">
+    <div class="card-header">
+      <%= "#{@milestone.plans.count} 个关联的测试计划" %>
+    </div>
+
+
+    <div class="list-group list-group-flush">
+      <% @milestone.plans.ranked.each do |plan| %>
+        <%= link_to [@project, plan], class: "list-group-item list-group-item-action" do %>
+          <% tasks_count = @tasks_count_mapping.sum { |key, value| key.first == plan.id ? value : 0 } %>
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"><%= plan.title %></h5>
+            <small><%= "#{time_ago_in_words(plan.created_at)}前" %> <%= plan.creator.name %> 创建</small>
+          </div>
+          
+          <%= tasks_count %> 个任务
+
+          <p class="mb-1">
+            <div class="progress" style="height: 8px;">
+              <% progress_bg_mapping = { "pass" => "bg-success", "failure" => "bg-danger" } %>
+              <div class="progress-bar" style="width: 0%"></div>
+              <% Task.state.values.each do |state| %>
+                <% count = @tasks_count_mapping[[plan.id, state]] || 0 %>
+                <% if count.nonzero? && (bar_bg = progress_bg_mapping[state]) %>
+                  <div class="progress-bar <%= bar_bg %>" style="width: <%= 100.0 * count / tasks_count %>%"></div>
+                <% end %>
+              <% end %>
+            </div>
+          </p>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>

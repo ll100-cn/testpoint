@@ -5,9 +5,12 @@
       <% tasks_count = @tasks_count_mapping.sum { |key, value| key.first == plan.id ? value : 0 } %>
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">
-            <%= plan.title %>
-          </h4>
+          <div class="card-title d-flex align-items-center">
+            <h4><%= plan.title %></h4>
+            <% if plan.milestone %>
+              <span class="badge bg-light text-dark ms-auto"><%= plan.milestone.title %></span>
+            <% end %>
+          </div>
           <p><%= tasks_count %> 个任务</p>
           <div class="progress" style="height: 8px;">
             <% progress_bg_mapping = { "pass" => "bg-success", "failure" => "bg-danger" } %>

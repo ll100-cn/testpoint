@@ -1,5 +1,6 @@
 <%= f.input :title %>
 <%= f.input :start_at, as: :datetime_picker %>
+<%= f.input :milestone_id, collection: @project.milestones.ranked %>
 
 
 

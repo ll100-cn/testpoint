@@ -43,9 +43,9 @@ module BootstrapHelper
 
   def bootstrap_horizontal_form_defaults
     {
-      legend_tag_html: { class: "col-sm-2 text-right" },
-      label_wrapper_html: { class: "col-sm-2 text-right" },
-      label_html: { class: "col-sm-2 text-right" },
+      legend_tag_html: { class: "col-sm-2 text-end" },
+      label_wrapper_html: { class: "col-sm-2 text-end" },
+      label_html: { class: "col-sm-2 text-end" },
     }
   end
 

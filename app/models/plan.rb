@@ -2,14 +2,15 @@
 #
 # Table name: plans
 #
-#  id         :bigint           not null, primary key
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  archived   :boolean          default(FALSE)
-#  start_at   :datetime
-#  project_id :bigint
-#  creator_id :bigint           not null
+#  id           :bigint           not null, primary key
+#  title        :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  archived     :boolean          default(FALSE)
+#  start_at     :datetime
+#  project_id   :bigint
+#  creator_id   :bigint           not null
+#  milestone_id :bigint
 #
 
 class Plan < ApplicationRecord
@@ -18,6 +19,7 @@ class Plan < ApplicationRecord
   has_many :folders, through: :test_cases
   belongs_to :project
   belongs_to :creator, class_name: "Member", foreign_key: "creator_id"
+  belongs_to :milestone, optional: true
 
   validates :title, presence: true
 

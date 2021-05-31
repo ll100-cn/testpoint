@@ -1,6 +1,12 @@
-<div class="page-header justify-content-between">
-  <h2><%= title(@plan.title) %></h2>
-  <%= link_to edit_project_plan_path(@project, @plan) do %>
+<div class="page-header d-flex">
+  <h2 class="me-3"><%= title(@plan.title) %></h2>
+  <% if @plan.milestone %>
+    <%= link_to [@project, @plan.milestone], class: "border-start me-3" do %>
+      <h4><span class="badge bg-light text-dark"><%= @plan.milestone.title %></span></h4>
+    <% end %>
+  <% end %>
+
+  <%= link_to edit_project_plan_path(@project, @plan), class: "ms-auto" do %>
     设置
   <% end %>
 </div>

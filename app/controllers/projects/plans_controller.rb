@@ -49,7 +49,7 @@ class Projects::PlansController < BaseProjectController
 
 protected
   def plan_params
-    params.fetch(:plan, {}).permit(:title, :start_at)
+    params.fetch(:plan, {}).permit(:title, :start_at, :milestone_id)
   end
 
   def filter_params
