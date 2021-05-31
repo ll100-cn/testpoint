@@ -1,5 +1,5 @@
 <%= bootstrap_horizontal_form_for [@project, @test_case_label],
-    defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-right", style: "width: 8rem;"  }, label_wrapper_html: { class: "text-right", style: "width: 8rem;"  }, content_html: { class: "col" } } do |f| %>
+    defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-end", style: "width: 8rem;"  }, label_wrapper_html: { class: "text-end", style: "width: 8rem;"  }, content_html: { class: "col" } } do |f| %>
   <div class="modal-header">
     <h5 class="modal-title"><%= page_i18n :edit, model_name: h(@test_case_label) %></h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -39,7 +39,7 @@
         <%= render "attachments/upload_area.html", attachments: f.object.attachments %>
       </div>
     </div>
-    <div class="card-footer text-right bg-transparent">
+    <div class="card-footer text-end bg-transparent">
       <%= ok_url_tag %>
       <%= link_to "附加模版", "javascript:void(0)", data: { bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_issue_issue_info_path(@project, @issue) }, class: "btn btn-secondary" %>
       <%= f.submit class: "btn btn-primary" %>

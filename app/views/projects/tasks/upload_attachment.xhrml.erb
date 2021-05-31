@@ -12,7 +12,7 @@
         <%= f.input :message, input_html: { class: 'markdown-field' } %>
         <%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
         <hr>
-        <div class="text-right mb-2">
+        <div class="text-end mb-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :cancel %></button>
           <%= f.submit class: "btn btn-primary" %>
         </div>

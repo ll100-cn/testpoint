@@ -10,7 +10,7 @@
   </div>
 
   <div class="modal-footer">
-    <div class="text-right">
+    <div class="text-end">
       <%= link_to action_i18n(:cancel), project_plan_task_path(@project, @plan, @task), data: { remote: true, type: 'xhrml', target: ".modal-content" }, class: "btn btn-secondary" %>
       <%= f.submit class: "btn btn-primary" %>
       <%= ok_url_tag %>

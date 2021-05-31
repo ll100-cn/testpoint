@@ -41,7 +41,7 @@
 
   <% if type == "label" %>
     <% issue.labels.each do |label| %>
-      <span class="badge mb-1 text-white text-left" style="background-color: <%= label.color%>"><%=label.name %></span>
+      <span class="badge mb-1 text-white text-start" style="background-color: <%= label.color%>"><%=label.name %></span>
     <% end %>
     <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
   <% end %>
@@ -55,7 +55,7 @@
           <div class="progress-bar bg-success" style="width: <%= 100 * finished_issue / total %>%"></div>
           <span class="progress-text"><%= issue.milestone.title %></span>
         </div>
-        <span class="badge text-right"><%= 100 * finished_issue / total %>%</span>
+        <span class="badge text-end"><%= 100 * finished_issue / total %>%</span>
       <% end %>
       <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
     </div>

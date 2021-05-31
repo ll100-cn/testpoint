@@ -2,7 +2,7 @@
   <% (@folders_mapping[key] || []).sort_by(&:name).each do |folder| %>
     <% children = @folders_mapping[folder.id] || [] %>
     <% open = (@folder&.ancestor_ids_with_self || []).include?(folder.id) && children.any? %>
-    <li class="<%= 'has-children' if children.any? %> <%= 'mt-3 block-archived' if folder.archived_root? %>">
+    <li class="<%= 'has-children' if children.any? %> <%= 'block-archived' if folder.archived_root? %>">
       <% if children.any? %>
         <a data-bs-toggle="collapse" href="#treeview-<%= folder.id %>-container" class="toggler text-muted <%= 'collapsed' if !open %>">
           <i class="fal fa-plus-square"></i>

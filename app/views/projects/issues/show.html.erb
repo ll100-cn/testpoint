@@ -109,7 +109,7 @@
 
       <%= render layout: "attribute_info", locals: { template: form, attribute_name: :label_ids, issue: @issue } do %>
         <% @issue.labels.each do |label| %>
-          <%= label_badge_tag label, label.name, class: "mb-1 d-block text-left" %>
+          <%= label_badge_tag label, label.name, class: "mb-1 d-block text-start" %>
         <% end %>
       <% end %>
 
@@ -130,7 +130,7 @@
               <div class="progress-bar bg-success" style="width: <%= 100 * finished_issue / total %>%"></div>
               <span class="progress-text"><%= @issue.milestone.title %></span>
             </div>
-            <span class="badge text-right"><%= 100 * finished_issue / total %>%</span>
+            <span class="badge text-end"><%= 100 * finished_issue / total %>%</span>
           </div>
         <% end %>
       <% end %>
