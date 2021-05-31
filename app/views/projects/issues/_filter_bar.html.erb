@@ -29,9 +29,9 @@
     <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
       <%= milestone&.title || page_i18n(:all) %>
     </button>
-    <div class="dropdown-menu">
+    <div class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
       <%= n.link_to nil, page_i18n(:all), current_url(q: { milestone_id_eq: nil }), class: "dropdown-item" %>
-      <% @project.milestones.last(10).each do |milestone| %>
+      <% @project.milestones.ranked.each do |milestone| %>
         <%= n.link_to milestone.id, milestone.title, current_url(q: { milestone_id_eq: milestone.id }), class: "dropdown-item" %>
       <% end %>
       <% if can? :index, Milestone %>
