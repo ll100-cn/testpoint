@@ -22,9 +22,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # :registerable, :recoverable
   devise :code_authenticatable, :rememberable, :trackable
-
-  has_many :created_issues, class_name: Issue.to_s, foreign_key: 'creator_id', dependent: :destroy, inverse_of: true
-  has_many :assigned_issues, class_name: Issue.to_s, foreign_key: 'assignee_id', dependent: :destroy, inverse_of: true
   has_many :members, dependent: :destroy
   has_many :projects, through: :members
   has_many :subscriptions, dependent: :destroy
