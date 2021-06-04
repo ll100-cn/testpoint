@@ -109,8 +109,8 @@ protected
     issue_before = @issue.clone
     yield
     issue_after = @issue.clone
-
-    if (changes = issue_before.assign_attributes(issue_after.attributes))&.any?
+    issue_before.assign_attributes(issue_after.attributes)
+    if (changes = issue_after.changes).any?
       current_user.subscribe(@issue)
       @issue.notify_changed_by(current_member, changes)
     end
