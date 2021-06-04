@@ -8,8 +8,9 @@ class Projects::CommentsController < BaseProjectController
 
   def create
     @comment.member = current_member
-    @comment.save
-    @issue.notify_commented_by(current_member)
+    if @comment.save
+      @issue.notify_commented_by(current_member)
+    end
     respond_with @comment, location: ok_url_or_default([@project, @issue, @comment])
   end
 
