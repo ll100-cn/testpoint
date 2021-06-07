@@ -7,7 +7,7 @@ class Projects::IssuesController < BaseProjectController
   def index
     @q = @issues.ransack(params[:q])
     @q.sorts = "updated_at desc" if @q.sorts.empty?
-    @q.state_filter = "opening" if @q.state_filter.blank?
+    @q.state_filter ||= params[:q].blank? && params[:filter].blank? ? "opening" : "all"
     @issues_scope = @q.result
 
     if params[:related_task]
