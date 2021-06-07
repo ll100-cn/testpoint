@@ -5,59 +5,38 @@
 
 
 <% if f.object.new_record? %>
-  <div class="row">
+  <div class="row" data-controller="form-toggle">
     <div class="col-sm-2 text-end">
       <label><%= h(TestCaseFilter) %></label>
     </div>
     <div class="col">
-      <div class="form-check form-check-inline">
-        <%= check_box_tag :label_filter, "1", params[:label_filter], class: "d-none" %>
-        <%= label_tag :label_filter, "标签", class: "btn-link c-pointer" %>
-      </div>
-      <div class="form-check form-check-inline">
-        <%= check_box_tag :platform_filter, "1", params[:platform_filter], class: "d-none" %>
-        <%= label_tag :platform_filter, "平台", class: "btn-link c-pointer" %>
-      </div>
-      <div class="form-check form-check-inline">
-        <%= check_box_tag :folder_filter, "1", params[:folder_filter], class: "d-none" %>
-        <%= label_tag :folder_filter, "文件夹", class: "btn-link c-pointer" %>
-      </div>
+      <%= check_box_tag :label_filter, "1", params[:label_filter], class: "d-none" %>
+      <%= label_tag :label_filter, "标签", class: "btn btn-primary btn-sm mb-1" %>
+      <%= check_box_tag :platform_filter, "1", params[:platform_filter], class: "d-none" %>
+      <%= label_tag :platform_filter, "平台", class: "btn btn-primary btn-sm mb-1" %>
+      <%= check_box_tag :folder_filter, "1", params[:folder_filter], class: "d-none" %>
+      <%= label_tag :folder_filter, "文件夹", class: "btn btn-primary btn-sm mb-1" %>
 
       <%= simple_fields_for @test_case_filter || TestCaseFilter.new, apply_bootstrap_inline_form_options! do |ff| %>
         <div class="form-inline col-12 px-0">
           <div class="card w-100 mb-2" data-target="form-toggle.container" data-for-name="label_filter" data-for-value="1">
             <div class="card-body">
-              <div class="no-margin-bottom">
-                <label for="label_filter" class="close c-pointer">
-                  <span aria-hidden="true">&times;</span>
-                </label>
-                <%= ff.input :label_ids, collection: f.object.project.test_case_labels.all, as: :check_boxes %>
-              </div>
+              <%= ff.input :label_ids, collection: f.object.project.test_case_labels.all, as: :check_boxes %>
             </div>
           </div>
 
           <div class="card w-100 mb-2" data-target="form-toggle.container" data-for-name="platform_filter" data-for-value="1">
             <div class="card-body">
-              <div class="no-margin-bottom">
-                <label for="platform_filter" class="close c-pointer">
-                  <span aria-hidden="true">&times;</span>
-                </label>
-                <%= ff.input :platform_ids, collection: f.object.project.platforms.all, as: :check_boxes %>
-              </div>
+              <%= ff.input :platform_ids, collection: f.object.project.platforms.all, as: :check_boxes %>
             </div>
           </div>
 
         </div>
         <div class="card w-100 mb-2" data-target="form-toggle.container" data-for-name="folder_filter" data-for-value="1">
           <div class="card-body">
-            <div class="no-margin-bottom">
-              <label for="folder_filter" class="close c-pointer">
-                <span aria-hidden="true">&times;</span>
-              </label>
-              <a id="check-all" class="small" href="javascript:void(0)">全选</a>
-              <a id="check-none" class="small" href="javascript:void(0)">无</a>
-              <%= ff.input :folder_ids, collection: f.object.project.folders.available, as: :check_boxes, wrapper: :horizontal_collection %>
-            </div>
+            <a id="check-all" class="small" href="javascript:void(0)">全选</a>
+            <a id="check-none" class="small" href="javascript:void(0)">无</a>
+            <%= ff.input :folder_ids, collection: f.object.project.folders.available, as: :check_boxes, wrapper: :horizontal_collection %>
           </div>
         </div>
       <% end %>
