@@ -10,20 +10,11 @@ RSpec.describe MainController, type: :controller do
 
     context "when sign in" do
       login_user
-      it { is_expected.to respond_with :redirect }
+      it { is_expected.to respond_with :success }
     end
 
     context "when not sign in" do
       it { should redirect_to(new_user_session_path) }
-    end
-  end
-
-  describe "GET #root with cookies" do
-    it "should go to project" do
-      sign_in user
-      request.cookies[:last_login_project] = project.id
-      get :root
-      expect(response).to redirect_to project_path(project)
     end
   end
 end

@@ -79,6 +79,7 @@
 <%= fume_nav state_filter do |n| %>
   <div class="btn-group btn-group-sm mb-1" role="group">
     <div class="btn-group" role="group">
+      <%= n.link_to "all", state_names["all"], current_url(q: { state_filter: "all" }), class: "btn btn-sm btn-outline-primary" %>
       <% opening_states = [ "opening", "pending", "confirmed", "processing" ] %>
       <% if opening_states.include?(state_filter) %>
         <div class="btn btn-sm btn-outline-primary active dropdown-toggle" data-bs-toggle="dropdown"><%= state_names[state_filter] %></div>

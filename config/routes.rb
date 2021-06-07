@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   end
 
   root 'main#root'
+  resources :issues do
+    get :assigned_to_me, on: :collection
+  end
 
   resources :projects do
     scope module: 'projects' do
@@ -70,7 +73,6 @@ Rails.application.routes.draw do
 
   namespace :profiles do
     resource :basic
-    resources :issues
     resources :projects
   end
 end

@@ -11,18 +11,14 @@
             <%= @project.name %>
           </button>
           <div class="dropdown-menu">
-            <% if current_user.superadmin? %>
-              <% projects = Project.all %>
-            <% else %>
-              <% projects = current_user.projects %>
-            <% end %>
-            <% projects.each do |project| %>
+            <% current_user.projects.each do |project| %>
               <%= link_to project.name, project_path(project), class: "small dropdown-item" %>
             <% end %>
 
             <div class="dropdown-divider"></div>
 
-            <%= link_to page_i18n(:index, model_name: h(Project)), projects_path, class: "small dropdown-item" %>
+            <%= link_to "项目设置", projects_path, class: "small dropdown-item" %>
+            <%= link_to "查看所有问题", issues_path, class: "small dropdown-item" %>
           </div>
         </div>
         <div>
@@ -62,9 +58,12 @@
         <div>
           <%= fume_nav controller_name do |n| %>
             <ul class="navbar-nav">
-              <%= n.li_tag "projects", class: "nav-item" do %>
-                <%= link_to t('views.navbar.projects'), [:projects], class: "nav-link" if can? :read, Project %>
-              <% end %>
+              <li class="nav-item">
+                <%= n.link_to :projects, t('views.navbar.enter_projects'), [:projects], class: "nav-link" if can? :read, Project %>
+              </li>
+              <li class="nav-item">
+                <%= n.link_to :issues, t('views.navbar.all_issues'), [:issues], class: "nav-link" %>
+              </li>
             </ul>
           <% end %>
         </div>
@@ -74,7 +73,7 @@
         <% if user_signed_in? %>
           <li class="nav-item">
             <% issues_badge_count = Issue.where(assignee_id: current_user.members.ids).state_filter("opening").count %>
-            <%= link_to profiles_issues_path, class: "nav-link me-3" do %>
+            <%= link_to assigned_to_me_issues_path, class: "nav-link" do %>
               待处理 <span class="badge bg-primary"><%= issues_badge_count %></span>
             <% end %>
           </li>

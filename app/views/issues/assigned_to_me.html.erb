@@ -1,10 +1,8 @@
 <div class="page-header">
-  <h2>我的工单</h2>
+  <h2>问题列表（我受理的）</h2>
 </div>
 
-<div class="collapse row d-md-flex mx-0 mb-3 align-items-center" id="issueFilterCollapse">
-  <%= render 'filter_bar', issues_scope: @issues_scope %>
-</div>
+<%= render 'filter_bar', issues_scope: @issues_scope %>
 
 <table class="table d-none d-md-table">
   <colgroup>
@@ -12,7 +10,6 @@
     <col width="20%">
     <col width="10%">
     <col width="8%">
-    <col width="10%">
     <col width="10%">
     <col width="10%">
   </colgroup>

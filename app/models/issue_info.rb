@@ -13,7 +13,7 @@
 #
 
 class IssueInfo < ApplicationRecord
-  belongs_to :issue
+  belongs_to :issue, touch: true
   belongs_to :template, class_name: "IssueTemplate"
 
   enumerize :state, in: [:pending, :submitted], default: :pending
