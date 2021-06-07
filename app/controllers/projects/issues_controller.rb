@@ -23,7 +23,7 @@ class Projects::IssuesController < BaseProjectController
     end
 
     if params[:filter] == "subscribed"
-      @issues_scope = @issues_scope.subscribed_issues(current_member)
+      @issues_scope = @issues_scope.subscribed_issues(current_user)
     end
 
     @issues_state_counts = @issues_scope.unscope(:order, where: :state).group(:state).count
