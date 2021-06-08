@@ -51,7 +51,7 @@ zh-CN:
       members: 成员
       milestones: 里程碑
       analytics: 统计报表
-      enter_projects: 进入项目
+      projects: 项目列表
       all_issues: 全部问题
   time:
     formats:

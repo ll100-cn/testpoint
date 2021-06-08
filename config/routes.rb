@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   end
 
   resources :projects do
+    patch :subscribe,   on: :member
+    patch :unsubscribe, on: :member
     scope module: 'projects' do
       resources :test_cases
       resources :plans do

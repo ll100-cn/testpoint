@@ -59,7 +59,7 @@
           <%= fume_nav controller_name do |n| %>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <%= n.link_to :projects, t('views.navbar.enter_projects'), [:projects], class: "nav-link" if can? :read, Project %>
+                <%= n.link_to :projects, t('views.navbar.projects'), [:projects], class: "nav-link" if can? :read, Project %>
               </li>
               <li class="nav-item">
                 <%= n.link_to :issues, t('views.navbar.all_issues'), [:issues], class: "nav-link" %>

@@ -235,6 +235,7 @@ ActiveRecord::Schema.define(version: 2021_05_31_024723) do
     t.bigint "project_id"
     t.bigint "creator_id", null: false
     t.bigint "milestone_id"
+    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["creator_id"], name: "index_plans_on_creator_id"
     t.index ["milestone_id"], name: "index_plans_on_milestone_id"
     t.index ["project_id"], name: "index_plans_on_project_id"
@@ -246,6 +247,7 @@ ActiveRecord::Schema.define(version: 2021_05_31_024723) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
@@ -332,6 +334,7 @@ ActiveRecord::Schema.define(version: 2021_05_31_024723) do
     t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.index ["archived"], name: "index_test_cases_on_archived"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end

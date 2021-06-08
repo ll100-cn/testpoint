@@ -1,6 +1,9 @@
 <div>
   <% data = { remote: true, type: "xhrml", target: "div" } %>
-  <%= link_to "订阅", [@project, @issue, :subscription], method: :post, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
+  <% if current_user.subscribed?(@project) %>
+    <small class="text-muted">您已订阅整个项目，无需单独订阅该问题也可收到通知</small>
+  <% end %>
+  <%= link_to "订阅问题", [@project, @issue, :subscription], method: :post, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
 
   <%= render "projects/subscriptions/subscribed_users.html", issue: @issue %>
 </div>

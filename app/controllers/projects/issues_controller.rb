@@ -47,7 +47,6 @@ class Projects::IssuesController < BaseProjectController
       @task = Task.find(params[:task_id]) if params[:task_id]
       @issue.creator ||= current_member
       @issue.tasks = [ @task ] if @task
-      @issue.subscribed_users = @project.members.where(receive_mail: true).map(&:user) if @issue.subscribed_users.empty?
 
       @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
       @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)

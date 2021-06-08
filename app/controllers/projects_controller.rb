@@ -3,7 +3,7 @@ class ProjectsController < BaseProjectController
   load_and_authorize_resource through: :user
 
   def index
-    @projects = @projects.page(params[:page])
+    @projects = @projects.page(params[:page]).order(:created_at)
   end
 
   def new
@@ -33,6 +33,16 @@ class ProjectsController < BaseProjectController
 
   def destroy
     @project.delete
+    respond_with @project, location: ok_url_or_default(Project)
+  end
+
+  def subscribe
+    @user.subscribe(@project)
+    respond_with @project, location: ok_url_or_default(Project)
+  end
+
+  def unsubscribe
+    @user.unsubscribe(@project)
     respond_with @project, location: ok_url_or_default(Project)
   end
 

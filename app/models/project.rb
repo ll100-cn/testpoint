@@ -22,4 +22,8 @@ class Project < ApplicationRecord
 
   accepts_nested_attributes_for :members
   has_many :users, through: :members
+
+  def subscribed_users
+    members.where(receive_mail: true).map(&:user)
+  end
 end

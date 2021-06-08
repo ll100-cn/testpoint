@@ -34,11 +34,33 @@ class User < ApplicationRecord
     "https://www.gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
   end
 
-  def subscribe(issue)
-    subscriptions.create(issue_id: issue) unless subscribed?(issue)
+  def subscribe(resource)
+    if resource.is_a? Issue
+      subscriptions.create(issue_id: resource) unless subscribed?(resource)
+    end
+
+    if resource.is_a? Project
+      members.where(project: resource).update_all(receive_mail: true)
+    end
   end
 
-  def subscribed?(issue)
-    subscriptions.exists?(issue_id: issue)
+  def unsubscribe(resource)
+    if resource.is_a? Issue
+      subscriptions.where(issue: resource).destroy_all
+    end
+
+    if resource.is_a? Project
+      members.where(project: resource).update_all(receive_mail: false)
+    end
+  end
+
+  def subscribed?(resource)
+    if resource.is_a? Issue
+      subscriptions.exists?(issue_id: resource)
+    end
+
+    if resource.is_a? Project
+      members.where(project: resource).any? { |member| member.receive_mail? }
+    end
   end
 end

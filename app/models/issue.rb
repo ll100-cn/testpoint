@@ -139,6 +139,6 @@ class Issue < ApplicationRecord
 
  protected
    def email_list
-     subscribed_users.map(&:email)
+      (subscribed_users + project.subscribed_users).uniq.map(&:email)
    end
 end
