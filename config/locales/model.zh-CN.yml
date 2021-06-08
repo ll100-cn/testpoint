@@ -108,6 +108,7 @@ zh-CN:
       member:
         role: 角色
         user_id: 用户
+        name: 名称
         nickname: 昵称
         user_email: 用户邮箱
         issues: 问题
