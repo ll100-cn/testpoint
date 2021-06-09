@@ -54,6 +54,7 @@ zh-CN:
         last_edited_at: 修改时间
         updated_at: 更新时间
         template_id: 模版
+        priority: 优先级
       issue_template:
         name: 模版名称
         inputs: 内容

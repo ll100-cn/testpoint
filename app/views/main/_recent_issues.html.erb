@@ -9,7 +9,7 @@
 
 			<div class="d-flex w-100">
 			<span class="mb-1">
-				<%= issue.title.truncate(23) %>
+				<%= issue.title_with_priority.truncate(23) %>
 			</span>
 			<small class="ms-auto">
 				<span class="badge badge-issue-<%= issue.state %>"><%= issue.state_text %></span>

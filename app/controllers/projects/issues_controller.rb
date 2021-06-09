@@ -5,10 +5,13 @@ class Projects::IssuesController < BaseProjectController
   helper_method :issue_params_names
 
   def index
+    sorts = "updated_at desc"
+    sorts = params[:q].delete("s") if params.dig(:q, :s).present?
+
     @q = @issues.ransack(params[:q])
-    @q.sorts = "updated_at desc" if @q.sorts.empty?
     @q.state_filter ||= params[:q].blank? && params[:filter].blank? ? "opening" : "all"
-    @issues_scope = @q.result
+    @issues_scope = @q.result.unscope(:order).sorted.order(sorts)
+    @q.sorts = sorts
 
     if params[:related_task]
       @task = Task.find(params[:related_task])
@@ -88,7 +91,7 @@ class Projects::IssuesController < BaseProjectController
 protected
   def issue_build_form_params
     params.fetch(:issue_build_form, {}).permit(
-      issue_attributes: [:title, :creator_id, :content],
+      issue_attributes: [:priority, :title, :creator_id, :content],
       info_attributes: [inputs_attributes: [:template_input_id, :value]])
   end
 
@@ -97,7 +100,7 @@ protected
   end
 
   def issue_params_names
-    names = [ :title, :content, :state, :milestone_id, :assignee_id, :template_id, :project_id,
+    names = [:priority, :title, :content, :state, :milestone_id, :assignee_id, :template_id, :project_id,
        attachment_ids: [], label_ids: [], subscribed_user_ids: [],
        template_ids: []]
     names += [ :creator_id ] if can? :critical, Issue

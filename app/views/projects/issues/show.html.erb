@@ -1,9 +1,9 @@
 <div class="page-header d-flex">
   <% if @issue.state.closed? %>
-    <s><h2 class="me-1"><%= title(@issue.title) %></h2></s>
+    <s><h2 class="me-1"><%= title(@issue.title_with_priority) %></h2></s>
     <span class="badge badge-issue-closed me-1">已关闭</span>
   <% else %>
-    <h2 class="me-1"><%= title(@issue.title) %></h2>
+    <h2 class="me-1"><%= title(@issue.title_with_priority) %></h2>
   <% end %>
   <div>#<%= @issue.id %></div>
   <div class="ms-auto actions">
@@ -60,8 +60,22 @@
         <% end %>
       <% end %>
 
+
       <%= render layout: "attribute_info", locals: { template: form, attribute_name: :state, issue: @issue } do %>
         <span class="text-issue-<%= @issue.state %>"><%= @issue.state.text %></span>
+      <% end %>
+
+      <hr>
+
+      <% form = capture do %>
+        <%= render layout: "attribute_inline_form", locals: { attribute_name: :priority } do |f| %>
+          <%= f.input :priority, collection: Issue.priority.options, include_blank: false %>
+        <% end %>
+      <% end %>
+
+
+      <%= render layout: "attribute_info", locals: { template: form, attribute_name: :priority, issue: @issue } do %>
+        <span class="text-issue-priority-<%= @issue.priority %>"><%= @issue.priority_text %></span>
       <% end %>
 
       <hr>

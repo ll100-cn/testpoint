@@ -1,5 +1,5 @@
 <p>
   <strong><%= @changer.name %></strong> 添加了新的问题
-  <strong><%= link_to @issue.title, [@issue.project, @issue] %>
+  <strong><%= link_to @issue.title_with_priority, [@issue.project, @issue] %>
 </p>
 <p><%= link_to "点击查看详情", [@issue.project, @issue] %></p>

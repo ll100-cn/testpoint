@@ -35,7 +35,7 @@ class IssueMailer < ApplicationMailer
     {
       from: "#{@changer.name} <#{ENV["DEVISE_MAILER_SENDER"]}>",
       to: @to_address,
-      subject: "[TESTPOINT] #{@issue.title} (##{@issue.id})",
+      subject: "[TESTPOINT] #{@issue.title_with_priority} (##{@issue.id})",
       references: "<#{Digest::MD5.hexdigest(@issue.id.to_s)}@testpoint>"
     }
   end

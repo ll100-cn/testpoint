@@ -85,7 +85,7 @@
           <tr class="<%= 'block-discard' if issue.state.closed? %>">
             <td><%= issue.id %></td>
             <td>
-              <%= link_to issue.title, [@project, issue] %>
+              <%= link_to issue.title_with_priority, [@project, issue] %>
             </td>
             <td>
               <% issue.labels.each do |label| %>
@@ -118,7 +118,7 @@
       <% @issues.each do |issue| %>
           <%= link_to [@project, issue], class: "list-group-item list-group-item-action" do %>
             <div class="d-flex justify-content-between">
-              <h4 class="mb-1"><%= issue.title.truncate(12) %></h4>
+              <h4 class="mb-1"><%= issue.title_with_priority.truncate(12) %></h4>
               <span class="text-issue-<%= issue.state %>">
                 <%= issue.state.text %>
               </span>

@@ -72,7 +72,7 @@
             <tr class="<%= 'block-discard' if issue.state.closed? %>">
               <td><%= issue.id %></td>
               <td>
-                <%= link_to issue.title, [@project, issue] %>
+                <%= link_to issue.title_with_priority, [@project, issue] %>
               </td>
               <td>
                 <% issue.labels.each do |label| %>

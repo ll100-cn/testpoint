@@ -28,7 +28,7 @@
       <tr class="<%= 'block-discard' if issue.state.closed? %>">
         <td><%= issue.id %></td>
         <td>
-          <%= link_to issue.title, [issue.project, issue] %>
+          <%= link_to issue.title_with_priority, [issue.project, issue] %>
         </td>
         <td><%= link_to issue.project.name, [issue.project] %></td>
         <td>

@@ -17,6 +17,7 @@
   <thead>
     <tr>
       <th><%= sort_link(@q, :id)%></th>
+      <th><%= h Issue, :priority %></th>
       <th><%= sort_link(@q, :title)%></th>
       <th><%= sort_link(@q, :project_id)%></th>
       <th><%= sort_link(@q, :label_ids)%></th>
@@ -30,7 +31,7 @@
       <tr class="<%= 'block-discard' if issue.state.closed? %>">
         <td><%= issue.id %></td>
         <td>
-          <%= link_to issue.title, [issue.project, issue] %>
+          <%= link_to issue.title_with_priority, [issue.project, issue] %>
         </td>
         <td><%= link_to issue.project.name, [issue.project] %></td>
         <td>

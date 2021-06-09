@@ -19,6 +19,7 @@
 
 class Issue < ApplicationRecord
   enumerize :state, in: [:pending, :waiting, :confirmed, :processing, :processed, :closed, :resolved], default: :pending, scope: true
+  enumerize :priority, in: [ :normal, :important ], default: :normal, scope: true
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -38,6 +39,7 @@ class Issue < ApplicationRecord
 
   validates :title, presence: true
 
+  scope :sorted, -> { order(:priority) }
   scope :with_labels, -> { includes(:labels) }
   scope :created_issues, ->(member) { where(creator_id: member.id) }
   scope :assigned_issues, ->(member) { where(assignee_id: member.id) }
@@ -52,6 +54,11 @@ class Issue < ApplicationRecord
       where(state: text)
     end
   }
+
+  def title_with_priority
+    prefix = priority.important? ? "!!" : ""
+    "#{prefix}#{title}"
+  end
 
   def default_title
     tasks.map do |task|
