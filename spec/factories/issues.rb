@@ -15,6 +15,7 @@
 #  last_edited_at  :datetime
 #  creator_id      :bigint
 #  assignee_id     :bigint
+#  priority        :string
 #
 
 FactoryBot.define do
