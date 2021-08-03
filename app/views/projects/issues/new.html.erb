@@ -3,7 +3,7 @@
     <h3><%= @task.test_case.title %></h3>
     <div class="ms-2">
       <%= task_state_with_icon(@task.state) %>
-      <span class="badge badge-secondary ms-2"><%= @task.platform.name %></span>
+      <span class="badge bg-secondary ms-2"><%= @task.platform.name %></span>
     </div>
   </div>
   <h4 class="mb-5"><%= page_i18n :new, model_name: h(@issue) %></h4>

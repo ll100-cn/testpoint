@@ -4,8 +4,8 @@
 
 <% if target.id == issue.id %>
   <%= render "projects/issues/relationship/issue_title.html", issue: source %>
-  <span>标记为 <span class="badge badge-secondary">相关问题</span></span>
+  <span>标记为 <span class="badge bg-secondary">相关问题</span></span>
 <% else %>
-  <span>该问题标记为 <span class="badge badge-secondary">相关问题</span>，请参考</span>
+  <span>该问题标记为 <span class="badge bg-secondary">相关问题</span>，请参考</span>
   <%= render "projects/issues/relationship/issue_title.html", issue: target %>
 <% end %>

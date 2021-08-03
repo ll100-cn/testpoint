@@ -2,7 +2,7 @@
   <% if @task %>
     <h3><%= @task.test_case.title %></h3>
     <%= task_state_with_icon(@task.state) %>
-    <span class="badge badge-secondary ms-2"><%= @task.platform.name %></span>
+    <span class="badge bg-secondary ms-2"><%= @task.platform.name %></span>
   <% else %>
     <h2><%= title(page_i18n :index, model_name: h(@issues)) %>（<%= @project.name %>）</h2>
   <% end %>
