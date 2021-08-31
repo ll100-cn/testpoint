@@ -1,0 +1,30 @@
+<% if @success %>
+  <script>
+    location.reload()
+  </script>
+<% else %>
+  <div class="modal-header">
+    <h5 class="modal-title">请在下方详细注明未解决的原因</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+
+  <div class="modal-body">
+    <%= bootstrap_vertical_form_for [ :unresolve, @project, @issue ], data: { remote: true, type: "xhrml", target: ".modal-content" } do |f| %>
+      <div class="card-body">
+        <div class="no-margin-bottom">
+          <%= f.input :content, input_html: { class: 'markdown-field' }, label: "未解决" %>
+          <%= render "attachments/upload_area.html", attachments: f.object.attachments %>
+        </div>
+      </div>
+      <% if f.object.errors.any? %>
+        <div class="text-danger text-start mx-3">
+          <%= f.object.errors.full_messages.join(", ") %>
+        </div>
+      <% end %>
+      <div class="card-footer text-end bg-transparent">
+        <%= ok_url_tag %>
+        <%= f.submit "提交", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

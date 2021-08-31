@@ -69,7 +69,7 @@
         </thead>
         <tbody>
           <% @issues.each do |issue| %>
-            <tr class="<%= 'block-discard' if issue.state.closed? %>">
+            <tr class="<%= 'block-discard' if issue.state.resolved? %>">
               <td><%= issue.id %></td>
               <td>
                 <%= link_to issue.title_with_priority, [@project, issue] %>

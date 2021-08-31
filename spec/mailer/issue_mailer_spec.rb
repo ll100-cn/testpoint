@@ -28,10 +28,10 @@ RSpec.describe IssueMailer, :type => :mailer do
   end
 
   describe "state changed" do
-    before { issue.update(state: :closed) }
+    before { issue.update(state: :resolved) }
     let(:mail) { IssueMailer.state_changed_notification(issue.id, changer.id, manager.user.email) }
     it "should mail subscribed users" do
-      expect(mail.body.encoded).to match('已关闭')
+      expect(mail.body.encoded).to match('已解决')
     end
   end
 

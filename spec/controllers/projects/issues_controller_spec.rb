@@ -59,8 +59,8 @@ RSpec.describe Projects::IssuesController, type: :controller do
         it { is_expected.to respond_with :success }
       end
 
-      context "filter closed issues" do
-        before { attributes[:q] = { "state_filter" => "closed" } }
+      context "filter resolved issues" do
+        before { attributes[:q] = { "state_filter" => "resolved" } }
 
         it { is_expected.to respond_with :success }
       end

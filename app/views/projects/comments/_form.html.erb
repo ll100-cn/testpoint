@@ -2,7 +2,7 @@
   <div class="card-header bg-white d-flex align-items-center">
     <%= image_tag current_user.avatar_url, width: 20, class: "rounded-circle avatar me-1" %>
     <strong class="me-1"><%= current_member.name %></strong> 添加评论
-    <% if (can? :create, Comment) && !issue.state.closed? %>
+    <% if (can? :create, Comment) && !issue.state.archived? %>
       <div class="dropdown dropdown-no-arrow ms-auto">
         <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
           <i class="far fa-ellipsis-h" aria-hidden="true"></i>

@@ -19,7 +19,7 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [:pending, :waiting, :confirmed, :processing, :processed, :closed, :resolved], default: :pending, scope: true
+  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :resolved, :archived ], default: :pending, scope: true
   enumerize :priority, in: [ :normal, :important ], default: :normal, scope: true
 
   has_many :tasks, dependent: :destroy
@@ -130,6 +130,10 @@ class Issue < ApplicationRecord
    email_list.without(author.email).each { |address| IssueMailer.commented_notification(self.id, author.id, address).deliver_later }
  end
 
+ def notify_creator
+   IssueMailer.state_changed_notification(self.id, self.creator_id, self.creator.user.email).deliver_later
+ end
+
  def notify_changed_by(author, changes)
    if changes.has_key?(:id)
      notify_created_by(author)
@@ -143,6 +147,24 @@ class Issue < ApplicationRecord
    if changes.has_key?(:state)
      notify_state_changed_by(author)
    end
+ end
+
+ def unresolve(comment_params)
+   self.errors.add(:state, :invalid) and return false if self.state.pending?
+
+   transaction do
+     comment = self.comments.new(member_id: self.creator_id)
+     comment.assign_attributes(comment_params)
+     self.state = :pending
+
+     raise ActiveRecord::Rollback unless comment.save! && self.save!
+   end
+   true
+ end
+
+ def archive
+   self.errors.add(:state, :invalid) and return false if self.state.archived?
+   self.update(state: :archived)
  end
 
  protected

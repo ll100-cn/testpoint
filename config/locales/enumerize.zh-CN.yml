@@ -10,10 +10,10 @@ zh-CN:
         pending: 待确认
         waiting: 等待反馈
         confirmed: 已确认
-        closed: 已关闭
         resolved: 已解决
         processing: 处理中
         processed: 已处理
+        archived: 已归档
       priority:
         important: 重要
         normal: 普通

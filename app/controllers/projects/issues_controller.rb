@@ -61,6 +61,9 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def show
+    if @issue.state.archived?
+      flash[:alert] = "该 Issue 已归档"
+    end
   end
 
   def edit
@@ -78,6 +81,18 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def templates
+  end
+
+  def archive
+    @issue.archive
+    respond_with @issue, location: ok_url_or_default(action: :show)
+  end
+
+  def unresolve
+    unless request.get?
+      @success = @issue.unresolve(unresolve_params)
+      respond_with @issue, location: ok_url_or_default(action: :show)
+    end
   end
 
   def update
@@ -99,6 +114,10 @@ protected
     params.fetch(:issue, {}).permit(*issue_params_names)
   end
 
+  def unresolve_params
+    params.fetch(:issue, {}).permit(:content, attachment_ids: [])
+  end
+
   def issue_params_names
     names = [:priority, :title, :content, :state, :milestone_id, :assignee_id, :template_id, :project_id,
        attachment_ids: [], label_ids: [], subscribed_user_ids: [],
@@ -108,11 +127,9 @@ protected
   end
 
   def with_email_notification
-    issue_before = @issue.clone
     yield
-    issue_after = @issue.clone
-    issue_before.assign_attributes(issue_after.attributes)
-    if (changes = issue_after.changes).any?
+    if (changes = @issue.previous_changes).any?
+      @issue.notify_creator if changes.fetch("state", []).last == "resolved"
       current_user.subscribe(@issue)
       @issue.notify_changed_by(current_member, changes)
     end

@@ -40,6 +40,8 @@ Rails.application.routes.draw do
         member do
           get :edit_project
           patch :update_project
+          post :archive
+          match :unresolve, via: [ :get, :patch ]
         end
         resources :comments do
           member do
