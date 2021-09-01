@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_31_022537) do
+ActiveRecord::Schema.define(version: 2021_09_01_084613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,12 +167,14 @@ ActiveRecord::Schema.define(version: 2021_08_31_022537) do
     t.bigint "creator_id"
     t.bigint "assignee_id"
     t.string "priority"
+    t.bigint "task_id"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
     t.index ["creator_id"], name: "index_issues_on_creator_id"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
+    t.index ["task_id"], name: "index_issues_on_task_id"
   end
 
   create_table "issues_labels", force: :cascade do |t|
@@ -247,6 +249,8 @@ ActiveRecord::Schema.define(version: 2021_08_31_022537) do
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.bigint "default_assignee_id"
+    t.index ["default_assignee_id"], name: "index_platforms_on_default_assignee_id"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
@@ -297,11 +301,9 @@ ActiveRecord::Schema.define(version: 2021_08_31_022537) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "platform_id"
-    t.bigint "issue_id"
     t.text "message"
     t.datetime "test_case_version"
     t.text "content"
-    t.index ["issue_id"], name: "index_tasks_on_issue_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["platform_id"], name: "index_tasks_on_platform_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
@@ -388,6 +390,7 @@ ActiveRecord::Schema.define(version: 2021_08_31_022537) do
   add_foreign_key "issues", "members", column: "creator_id"
   add_foreign_key "issues", "milestones"
   add_foreign_key "issues", "projects"
+  add_foreign_key "issues", "tasks"
   add_foreign_key "issues_labels", "issues"
   add_foreign_key "issues_labels", "labels"
   add_foreign_key "labels", "projects"

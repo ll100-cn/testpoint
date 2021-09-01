@@ -16,6 +16,7 @@
 #  creator_id      :bigint
 #  assignee_id     :bigint
 #  priority        :string
+#  task_id         :bigint
 #
 
 FactoryBot.define do

@@ -68,13 +68,13 @@ RSpec.describe Projects::IssuesController, type: :controller do
   end
 
   describe "GET new" do
-    action { get :new, params: { task_id: task.id, project_id: project.id } }
+    action { get :new, params: { project_id: project.id } }
     it { is_expected.to respond_with :success }
   end
 
   describe "POST create" do
     let(:attributes) { { issue_attributes: { title: "issue create", content: "content for issue" } } }
-    action { post :create, params: { issue_build_form: attributes, task_id: task.id, project_id: project.id,
+    action { post :create, params: { issue_build_form: attributes, project_id: project.id,
       issue_template_id: template.id } }
 
     context "assignee other members as creator" do

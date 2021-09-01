@@ -21,6 +21,7 @@
       <%= hidden_field_tag :issue_template_id, f.object.template.id %>
 
       <%= f.simple_fields_for :issue do |ff| %>
+        <%= ff.input :task_id if f.object.task %>
         <%= ff.input :title %>
         <%= ff.input :creator_id, collection: @project.members, label_method: :name, input_html: { class: "select2-field" } %>
         <%= ff.input :content, input_html: { class: 'markdown-field' } %>

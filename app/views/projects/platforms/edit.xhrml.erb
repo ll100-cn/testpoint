@@ -6,6 +6,13 @@
   </div>
   <div class="modal-body">
     <%= f.input :name %>
+    <%= f.input :default_assignee_id,
+      collection: @project.available_issue_assignees_with_group,
+      as: :grouped_select,
+      group_method: :last,
+      group_label_method: :first,
+      label_method: :name
+      %>
   </div>
   <div class="modal-footer">
     <%= f.submit class: "btn btn-primary" %>

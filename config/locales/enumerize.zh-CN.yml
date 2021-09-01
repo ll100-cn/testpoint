@@ -2,9 +2,9 @@ zh-CN:
   enumerize:
     task:
       state:
-        pending: 等待
+        pending: 待测试
         pass: 通过
-        failure: 失败
+        failure: 不通过
     issue:
       state:
         pending: 待确认

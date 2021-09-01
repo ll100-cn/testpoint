@@ -8,16 +8,30 @@ class Projects::TasksController < BaseProjectController
 
   def edit
     @task.assign_attributes(task_params)
+    if @task.state.failure? && @task.issues.empty?
+      issue = @task.issues.build 
+      issue.assignee = @task.platform.default_assignee
+      issue.title = "【测试失败】" + @task.test_case.title
+      issue.content =
+"""
+预期效果:
+#{(@task.content || @task.test_case.content).to_s}\n
+实际效果:
+"""
+    end
   end
 
   def update
-    @task.update(task_params)
-    @related_issues = @project.issues.left_outer_joins(:tasks).where(tasks: { test_case_id: @task.test_case.id }).records
+    @task.assign_attributes(task_params)
+    @task.issues.each do |issue|
+      issue.project ||= @project
+      issue.creator ||= current_member
+    end
+    @task.save
     respond_with @task, location: -> { ok_url_or_default [ @project, @plan ] }
   end
 
   def show
-    @related_issues = @project.issues.left_outer_joins(:tasks).where(tasks: { test_case_id: @task.test_case.id }).records
   end
 
   def upload_attachment
@@ -28,6 +42,10 @@ class Projects::TasksController < BaseProjectController
 
 protected
   def task_params
-    params.fetch(:task, {}).permit(:state, :test_case_version, :issue_id, :message, :content, attachment_ids: [])
+    params.fetch(:task, {}).permit(
+      :state, :test_case_version, :issue_id, :message, :content,
+      attachment_ids: [],
+      issues_attributes: [:id, :title, :content, :assignee_id],
+    )
   end
 end

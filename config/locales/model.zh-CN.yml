@@ -71,6 +71,7 @@ zh-CN:
         remark: 备注
       platform:
         name: 名称
+        default_assignee_id: 建议工单受理人
         archived: 是否存档
       task:
         message: 信息

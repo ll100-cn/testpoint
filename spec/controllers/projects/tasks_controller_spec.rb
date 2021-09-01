@@ -9,6 +9,7 @@ RSpec.describe Projects::TasksController, type: :controller do
   let(:task_attributes) { {} }
   let(:issue) { create :issue, title: "it is a issue", project: project }
   login_superadmin
+  before { sign_in user }
 
   describe "PUT update" do
     action { put :update, params: { project_id: project.id, plan_id: plan, id: task, task: task_attributes, format: :xhrml } }
@@ -22,32 +23,13 @@ RSpec.describe Projects::TasksController, type: :controller do
       let(:attachment) { create :attachment }
       before {
         task_attributes[:state] = :failure
-        task_attributes[:message] = "failure detail"
-        task_attributes[:attachment_ids] = [ attachment.id ]
+        task_attributes[:issues_attributes] = { "0": { title: "测试错误", content: "如题" } }
       }
 
       it {
         expect(task.reload.state).to eq :failure
-        expect(task.attachments.count).to eq 1
+        expect(task.issues.count).to eq 1
       }
-    end
-
-    context "relate issue" do
-      context "success" do
-        let(:project) { create :project }
-        let(:issue) { create :issue, project: project }
-        before { task_attributes[:issue_id] = issue.id }
-
-        it { expect(task.reload.issue).to eq issue }
-      end
-
-      context "when issue_id invalid" do
-        before {
-          Issue.destroy_all
-          task_attributes[:issue_id] = 1
-        }
-        it { expect(assigns(:task).errors[:issue_id].count).to eq 1 }
-      end
     end
   end
 

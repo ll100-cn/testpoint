@@ -26,6 +26,6 @@ class Projects::PlatformsController < BaseProjectController
 
 protected
   def platform_params
-    params.fetch(:platform, {}).permit(:name)
+    params.fetch(:platform, {}).permit(:name, :default_assignee_id)
   end
 end

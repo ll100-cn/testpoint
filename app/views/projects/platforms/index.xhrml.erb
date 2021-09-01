@@ -5,13 +5,15 @@
 <div class="modal-body">
   <table class="table">
     <colgroup>
+      <col width="30%">
       <col width="50%">
-      <col width="50%">
+      <col width="20%">
       <col>
     </colgroup>
     <thead>
     <tr>
       <th><%=h Platform, :name %></th>
+      <th><%=h Platform, :default_assignee_id %></th>
       <th><%= page_i18n :actions %></th>
     </tr>
     </thead>
@@ -19,6 +21,7 @@
       <% @platforms.each do |platform| %>
         <tr>
           <td><%= platform.name %></td>
+          <td><%= platform.default_assignee&.name || "无" %></td>
           <td>
             <%= edit_link [@project, platform], data: { remote: true, type: :xhrml, target: ".modal-content" } %>
             <%= destroy_link [@project, platform] if can? :destroy, platform %>

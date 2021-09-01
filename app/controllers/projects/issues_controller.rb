@@ -13,10 +13,6 @@ class Projects::IssuesController < BaseProjectController
     @issues_scope = @q.result.unscope(:order).sorted.order(sorts)
     @q.sorts = sorts
 
-    if params[:related_task]
-      @task = Task.find(params[:related_task])
-    end
-
     if params[:filter] == "created"
       @issues_scope = @issues_scope.created_issues(current_member)
     end
@@ -34,9 +30,7 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def new
-    @task = Task.find(params[:task_id]) if params[:task_id]
     @issue.creator ||= current_member
-    @issue.tasks = [ @task ] if @task
     @issue.title ||= @issue.default_title
     @issue.content ||= @issue.default_content
 
@@ -47,9 +41,7 @@ class Projects::IssuesController < BaseProjectController
 
   def create
     with_email_notification do
-      @task = Task.find(params[:task_id]) if params[:task_id]
       @issue.creator ||= current_member
-      @issue.tasks = [ @task ] if @task
 
       @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
       @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)
@@ -119,9 +111,10 @@ protected
   end
 
   def issue_params_names
-    names = [:priority, :title, :content, :state, :milestone_id, :assignee_id, :template_id, :project_id,
-       attachment_ids: [], label_ids: [], subscribed_user_ids: [],
-       template_ids: []]
+    names = [:priority, :title, :content, :state, :milestone_id, :assignee_id,
+            :template_id, :project_id,
+            attachment_ids: [], label_ids: [], subscribed_user_ids: [],
+            template_ids: []]
     names += [ :creator_id ] if can? :critical, Issue
     names
   end

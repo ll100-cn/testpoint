@@ -14,6 +14,10 @@
 
 <div class="row">
   <div class="col-12 col-md-9 order-1 order-md-0 mb-5">
+    <% if @issue.task %>
+      <%= render "related_task", task: @issue.task %>
+    <% end %>
+
     <% @issue.issue_infos.ranked.each do |issue_info| %>
       <%= render "shared/issue_info_content", issue_info: issue_info %>
     <% end %>
@@ -34,10 +38,6 @@
         </div>
       </div>
     </div>
-
-    <% @issue.tasks.ranked.each do |task| %>
-      <%= render "card_task", task: task %>
-    <% end %>
 
     <%= render "projects/comments/comment_list.html", issue: @issue %>
 
@@ -129,8 +129,15 @@
 
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :assignee_id } do |f| %>
-          <% grouped_assignees = @project.members.where.not(role: :reporter).sort_by { |x| x.role.developer? ? 0 : 1 }.group_by(&:role_text) %>
-          <%= f.input :assignee_id, collection: grouped_assignees, as: :grouped_select, group_method: :last, group_label_method: :first, label_method: :name %>
+
+          <%= f.input :assignee_id,
+                collection: @project.available_issue_assignees_with_group,
+                as: :grouped_select,
+                group_method: :last,
+                group_label_method: :first,
+                label_method: :name
+                %>
+
         <% end %>
       <% end %>
 

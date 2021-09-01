@@ -2,17 +2,19 @@
 #
 # Table name: platforms
 #
-#  id         :bigint           not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  archived   :boolean          default(FALSE)
-#  project_id :bigint
+#  id                  :bigint           not null, primary key
+#  name                :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  archived            :boolean          default(FALSE)
+#  project_id          :bigint
+#  default_assignee_id :bigint
 #
 
 class Platform < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_and_belongs_to_many :test_cases
+  belongs_to :default_assignee, class_name: Member.to_s, optional: true
   belongs_to :project
 
   validates :name, presence: true

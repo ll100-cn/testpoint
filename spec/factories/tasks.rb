@@ -9,7 +9,6 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  platform_id       :bigint
-#  issue_id          :bigint
 #  message           :text
 #  test_case_version :datetime
 #  content           :text

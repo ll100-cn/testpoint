@@ -16,6 +16,7 @@
 #  creator_id      :bigint
 #  assignee_id     :bigint
 #  priority        :string
+#  task_id         :bigint
 #
 
 class Issue < ApplicationRecord
@@ -32,6 +33,7 @@ class Issue < ApplicationRecord
   belongs_to :creator, class_name: Member.to_s
   belongs_to :assignee, class_name: Member.to_s, optional: true
   belongs_to :project
+  belongs_to :task, optional: true
   has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
   has_many :activities, class_name: IssueActivity.to_s, dependent: :destroy
   has_many :source_relationships, class_name: IssueRelationship.to_s, foreign_key: :source_id, dependent: :destroy

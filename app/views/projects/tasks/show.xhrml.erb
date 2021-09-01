@@ -1,60 +1,58 @@
 <div class="modal-header">
-  <h5 class="modal-title"><%= @task.finished? ? @task.test_case_snapshot.title : @task.test_case.title %></h5>
+  <h5 class="modal-title">
+    测试指南
+  </h5>
+  <% if @task.test_case_changed_after_finish? %>
+    <small class="text-danger ms-3">当前内容为测试完成时的快照，该案例的测试指南已被更新</small>
+  <% end %>
   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-  <div class="row">
-    <div class="col-md-10 mx-auto">
-      <% if @task.test_case_changed_after_finish? %>
-        <div class="alert alert-danger">当前显示测试完成时的快照，该案例已被更新</div>
-      <% end %>
+  <h5><%= @task.finished? ? @task.test_case_snapshot.title : @task.test_case.title %></h5>
 
-      <div class="card mb-2">
-        <div class="card-body">
-          <% @task.content ||= @task.test_case_snapshot.content %>
-          <%= form_for @task, url: [@project, @plan, @task], html: { data: { remote: true, type: :xhrml, target: ".modal-content"  }, class: "auto-submit" } do |f| %>
-            <%= f.text_area(:content, data: { controller: "markdown" }, class: "d-none") %>
-          <% end %>
-        </div>
-      </div>
+  <% @task.content ||= @task.test_case_snapshot.content %>
+  <%= content_tag :small, "该测试用例无详细信息", class: "text-muted" if @task.content.nil? %>
 
-      <p><%=h Task, :state %>: <span class="badge badge-<%= { :pending => "warning" , :pass => "success", :failure => "danger" }.fetch(@task.state.to_sym) %>"><%= @task.state.text %></span></p>
-      <% if @task.state == "failure" %>
-        <p><%= h Task, :message %>: </p>
-        <%= render "shared/page_content.html.erb", content: @task.message %>
-        <%= render "shared/attachments_box.html.erb", attachmentable: @task %>
+  <%= form_for @task, url: [@project, @plan, @task], html: { data: { remote: true, type: :xhrml, target: ".modal-content"  }, class: "auto-submit" } do |f| %>
+    <%= f.text_area(:content, data: { controller: "markdown" }, class: "d-none") %>
+  <% end %>
+
+  <hr class="mt-5">
+
+  <p class="d-flex justify-content-between">
+    <span><%= task_state_with_icon(@task.state) %></span>
+    <small class="text-muted"><%=l @task.updated_at, format: :short %>
+  </p>
+
+  <div class="mb-3">
+    <% if !@task.issues.empty? %>
+      <p class="text-muted mb-0">已关联的工单:</p>
+      <% @task.issues.each do |issue| %>
+        <p class="mb-0">
+          <%= link_to "##{issue.id}#{issue.title}", [@project, issue] %>
+        </p>
       <% end %>
-    </div>
-  </div>
-</div>
-<div class="modal-footer">
-  <div class="me-auto">
-    <% if @task.issue_id.nil? %>
-      <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= action_i18n('relate') %>
-        </button>
-        <div class="dropdown-menu">
-          <% @related_issues.each do |issue| %>
-            <%= link_to "#{h(Task, :issue_id)} #{}: #{issue.id}", [@project, @plan, @task, task: { issue_id: issue.id }], method: :patch, class: "dropdown-item small" %>
-          <% end %>
-          <%= link_to action_i18n('more'), project_issues_url(@project, { q: { state_filter: "opening" }, related_task: @task.id }), class: "dropdown-item small" %>
-        </div>
-      </div>
-    <% else %>
-      <div class="btn-group">
-        <%= link_to "#{h(Task, :issue_id)} #{}: #{@task.issue_id}", project_issue_path(@project, @task.issue_id), class: "btn btn-primary" %>
-        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        </button>
-        <div class="dropdown-menu dropdown-menu-end">
-          <%= link_to action_i18n('cancel_relate'), [@project, @plan, @task, task: { issue_id: nil }], method: :patch, class: "dropdown-item small text-muted" %>
-        </div>
-      </div>
     <% end %>
   </div>
 
-  <%= link_to Task.state.find_value(:pass).text, [@project, @plan, @task, task: { state: :pass, test_case_version: DateTime.now }], method: :patch,
-              class: "btn btn-success", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
-  <%= link_to Task.state.find_value(:failure).text, edit_project_plan_task_path(@project, @plan, @task, task: { state: "failure" }),
-              class: "btn btn-danger", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
+  <% if @task.message || !@task.attachments.empty? %>
+    <p class="mb-0 text-muted">附加的错误信息:</p>
+      <%= render "shared/page_content.html.erb", content: @task.message %>
+      <%= render "shared/attachments_box.html.erb", attachmentable: @task %>
+  <% end %>
+</div>
+<div class="modal-footer">
+  <% if @task.state.pending? %>
+    <%= link_to "全部通过",
+                [@project, @plan, @task, task: { state: :pass, test_case_version: Time.current }],
+                method: :patch,
+                class: "btn btn-success", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
+    <%= link_to "不通过, 创建工单",
+                [:edit, @project, @plan, @task, task: { state: :failure, test_case_version: Time.current }],
+                class: "btn btn-danger", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
+  <% else %>
+    <%= link_to "撤销当前的测试结果", [@project, @plan, @task, task: { state: :pending, test_case_version: Time.current }],
+                method: :patch,
+                data: { remote: true, type: :xhrml, target: ".modal-content" } %>
+  <% end %>
 </div>
