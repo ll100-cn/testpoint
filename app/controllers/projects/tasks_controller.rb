@@ -12,6 +12,7 @@ class Projects::TasksController < BaseProjectController
       issue = @task.issues.build 
       issue.assignee = @task.platform.default_assignee
       issue.title = "【测试失败】" + @task.test_case.title
+      issue.state = :confirmed
       issue.content =
 """
 预期效果:
@@ -45,7 +46,7 @@ protected
     params.fetch(:task, {}).permit(
       :state, :test_case_version, :issue_id, :message, :content,
       attachment_ids: [],
-      issues_attributes: [:id, :title, :content, :assignee_id],
+      issues_attributes: [:id, :title, :content, :assignee_id, :state],
     )
   end
 end

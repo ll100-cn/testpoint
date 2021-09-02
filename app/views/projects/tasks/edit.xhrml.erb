@@ -13,6 +13,7 @@
           <%= f.simple_fields_for :issues do |ff| %>
             <%= ff.input :title, label: "工单标题" %>
             <%= ff.input :content, label: "工单内容", input_html: { class: 'markdown-field' } %>
+            <%= ff.input :state %>
             <%= ff.input :assignee_id, label: "工单受理人",
                   collection: @project.available_issue_assignees_with_group,
                   as: :grouped_select,
