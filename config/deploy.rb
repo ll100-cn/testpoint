@@ -7,6 +7,7 @@ fetch(:linked_files).concat %w[
   config/redis.yml
   config/sidekiq.yml
   config/database.yml
+  config/master.key
   tmp/restart.txt
 ]
 
