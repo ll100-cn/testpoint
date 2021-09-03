@@ -1,17 +1,6 @@
-<% if @task %>
-  <div class="page-header">
-    <h3><%= @task.test_case.title %></h3>
-    <div class="ms-2">
-      <%= task_state_with_icon(@task.state) %>
-      <span class="badge bg-secondary ms-2"><%= @task.platform.name %></span>
-    </div>
-  </div>
-  <h4 class="mb-5"><%= page_i18n :new, model_name: h(@issue) %></h4>
-<% else %>
-  <div class="page-header">
-    <h2><%= page_i18n :new, model_name: h(@issue) %></h2>
-  </div>
-<% end %>
+<div class="page-header">
+  <h2><%= page_i18n :new, model_name: h(@issue) %></h2>
+</div>
 
 <div class="container">
   <%= render 'select_template', template: @issue_build_form.template %>
@@ -21,7 +10,6 @@
       <%= hidden_field_tag :issue_template_id, f.object.template.id %>
 
       <%= f.simple_fields_for :issue do |ff| %>
-        <%= ff.input :task_id if f.object.task %>
         <%= ff.input :title %>
         <%= ff.input :creator_id, collection: @project.members, label_method: :name, input_html: { class: "select2-field" } %>
         <%= ff.input :content, input_html: { class: 'markdown-field' } %>
@@ -41,7 +29,7 @@
 
       <%= ok_url_tag %>
       <%= f.submit class: "btn btn-primary" %>
-      <%= cancel_button [@project, @task, @issue] %>
+      <%= cancel_button [@project, @issue] %>
     <% end %>
   <% end %>
 </div>
