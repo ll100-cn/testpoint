@@ -11,6 +11,13 @@
   <% end %>
 </div>
 
+
+<nav class="nav">
+  <% @plan.phases.each do |phase| %>
+    <a class="nav-link active" href="#"><%= phase.title %></a>
+  <% end %>
+</nav>
+
 <div class="card app-card-main">
   <div class="card-header bg-white d-flex">
     <h4 class="me-auto my-auto"><%= page_i18n :index, model_name: h(@tasks) %></h4>

@@ -12,13 +12,14 @@
 #  message           :text
 #  test_case_version :datetime
 #  content           :text
+#  plan_phase_id     :bigint           not null
 #
 
 class Task < ApplicationRecord
   enumerize :state, in: [ :pending, :pass, :failure ], default: :pending
 
   belongs_to :test_case
-  belongs_to :plan
+  belongs_to :plan_phase
   belongs_to :platform
   has_many :issues
 
@@ -41,5 +42,9 @@ class Task < ApplicationRecord
   def test_case_changed_after_finish?
     return false unless finished?
     !test_case.paper_trail.version_at(test_case_version).version.nil?
+  end
+
+  def plan
+    plan_phase.plan
   end
 end

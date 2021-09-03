@@ -14,7 +14,8 @@
 #
 
 class Plan < ApplicationRecord
-  has_many :tasks, dependent: :destroy
+  has_many :phases, dependent: :destroy, class_name: "PlanPhase"
+  has_many :tasks, through: :phases
   has_many :test_cases, through: :tasks
   has_many :folders, through: :test_cases
   belongs_to :project

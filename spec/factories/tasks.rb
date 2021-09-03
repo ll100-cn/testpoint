@@ -12,6 +12,7 @@
 #  message           :text
 #  test_case_version :datetime
 #  content           :text
+#  plan_phase_id     :bigint           not null
 #
 
 FactoryBot.define do
