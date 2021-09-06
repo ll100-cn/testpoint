@@ -6,7 +6,8 @@ class Projects::PlansController < BaseProjectController
 
   def index
     @plans = @plans.available.page(params[:page]).ranked.page(params[:page]).per(12)
-    @tasks_count_mapping = Task.where(plan_id: @plans).group(:plan_id, :state).count
+    @plan_phases = @plans.map(&:latest_phase)
+    @tasks_count_mapping = Task.where(phase_id: @plan_phases).group(:plan_id, :state).count
   end
 
   def new
@@ -29,7 +30,8 @@ class Projects::PlansController < BaseProjectController
   end
 
   def show
-    tasks_scope = @plan.tasks.joins(:test_case)
+    @current_phase = @plan.phases.where(index: params[:phase_index] || 0).take!
+    tasks_scope = @current_phase.tasks.joins(:test_case)
     tasks_scope = tasks_scope.where(platform: @platform) if @platform
     tasks_scope = tasks_scope.joins(:test_case).where(test_cases: { folder_id: @folder.subtree }) if @folder
 

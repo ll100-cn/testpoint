@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     scope module: 'projects' do
       resources :test_cases
       resources :plans do
+        resources :phases
         resources :tasks do
           member do
             get :row

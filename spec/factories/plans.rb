@@ -16,7 +16,6 @@
 FactoryBot.define do
   factory :plan do
     sequence(:title) { |n| "Plan #{n}" }
-    tasks { build_list :task, 2 }
     project
   end
 end

@@ -12,6 +12,7 @@
 #  message           :text
 #  test_case_version :datetime
 #  content           :text
+#  phase_id          :bigint
 #
 
 class Task < ApplicationRecord
@@ -19,6 +20,7 @@ class Task < ApplicationRecord
 
   belongs_to :test_case
   belongs_to :plan
+  belongs_to :phase
   belongs_to :platform
   has_many :issues
 

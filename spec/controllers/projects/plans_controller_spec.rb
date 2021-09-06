@@ -5,10 +5,11 @@ RSpec.describe Projects::PlansController, type: :controller do
   let!(:platform) { create :platform, project: project }
   let!(:user) { create :user}
   let!(:member) { create :member, user: user, project: project }
-  let(:plan) { create :plan, project: project, creator: member }
+  let!(:plan) { create :plan, project: project, creator: member }
+  let!(:phase) { create :phase, plan: plan, index: 0 }
   let!(:folder) { create :folder, project: project }
   let!(:test_case) { create :test_case, project: project, folder: folder, platforms: [platform] }
-  let!(:task) { create :task, test_case: test_case, plan: plan }
+  let!(:task) {create :task, test_case: test_case, plan: plan, phase: phase }
   before { sign_in user }
 
   describe "GET index" do

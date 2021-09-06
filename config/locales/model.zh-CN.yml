@@ -21,6 +21,7 @@ zh-CN:
       issue_relationship: 关联问题
       issue_template: 问题模版
       issue_info: 模版化表单
+      phase: 测试轮次
     attributes:
       plan:
         title: 标题
@@ -107,6 +108,9 @@ zh-CN:
       project:
         name: 项目名称
         created_at: 创建时间
+      phase:
+        title: 标题
+        release_revision: 版本构建号
       member:
         role: 角色
         user_id: 用户

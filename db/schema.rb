@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_01_084613) do
+ActiveRecord::Schema.define(version: 2021_09_06_132623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -229,6 +229,16 @@ ActiveRecord::Schema.define(version: 2021_09_01_084613) do
     t.index ["project_id"], name: "index_milestones_on_project_id"
   end
 
+  create_table "phases", force: :cascade do |t|
+    t.bigint "plan_id", null: false
+    t.string "title"
+    t.string "release_revision"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "index"
+    t.index ["plan_id"], name: "index_phases_on_plan_id"
+  end
+
   create_table "plans", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -304,6 +314,8 @@ ActiveRecord::Schema.define(version: 2021_09_01_084613) do
     t.text "message"
     t.datetime "test_case_version"
     t.text "content"
+    t.bigint "phase_id"
+    t.index ["phase_id"], name: "index_tasks_on_phase_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["platform_id"], name: "index_tasks_on_platform_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
@@ -395,12 +407,14 @@ ActiveRecord::Schema.define(version: 2021_09_01_084613) do
   add_foreign_key "issues_labels", "labels"
   add_foreign_key "labels", "projects"
   add_foreign_key "milestones", "projects"
+  add_foreign_key "phases", "plans"
   add_foreign_key "plans", "projects"
   add_foreign_key "platforms", "projects"
   add_foreign_key "platforms_test_cases", "platforms"
   add_foreign_key "platforms_test_cases", "test_cases"
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
+  add_foreign_key "tasks", "phases"
   add_foreign_key "tasks", "platforms"
   add_foreign_key "test_case_label_links", "test_case_labels"
   add_foreign_key "test_case_label_links", "test_cases"

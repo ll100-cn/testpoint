@@ -14,7 +14,8 @@
 #
 
 class Plan < ApplicationRecord
-  has_many :tasks, dependent: :destroy
+  has_many :phases, dependent: :destroy
+  has_many :tasks
   has_many :test_cases, through: :tasks
   has_many :folders, through: :test_cases
   belongs_to :project
@@ -31,10 +32,11 @@ class Plan < ApplicationRecord
     test_cases = test_case_filter.build_test_cases_scope(project.test_cases.available)
     platforms = project.platforms
     platforms = platforms.where(id: test_case_filter.platform_ids) if test_case_filter.platform_ids.present?
+    default_phase = phases.new(title: "第 1 轮", index: 0)
     platforms.each do |platform|
       test_cases.each do |test_case|
         if test_case.platforms.exists? platform.id
-          tasks.new(test_case_id: test_case.id, platform: platform)
+          tasks.new(test_case_id: test_case.id, platform: platform, phase: default_phase)
         end
       end
     end
@@ -44,5 +46,9 @@ class Plan < ApplicationRecord
 
   def archive
     update(archived: true)
+  end
+
+  def latest_phase
+    phases.ranked.last
   end
 end
