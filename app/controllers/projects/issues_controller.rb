@@ -54,7 +54,7 @@ class Projects::IssuesController < BaseProjectController
 
   def show
     if @issue.state.archived?
-      flash[:alert] = "该 Issue 已归档"
+      flash[:alert] = "该问题已归档"
     end
   end
 
