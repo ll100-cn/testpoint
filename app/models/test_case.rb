@@ -28,7 +28,20 @@ class TestCase < ApplicationRecord
   scope :archived, -> { where(archived: true) }
   scope :with_folder, -> { joins(:folder).includes(:folder) }
 
+  after_create :sync_to_processing_plan
+
   def archive
     update(archived: true)
+  end
+
+  def sync_to_processing_plan
+    # append self to current test plan
+    Plan.recent.select { |it| !it.finished? }.each do |plan|
+      (plan.platforms & self.platforms).each do |platform|
+        plan.phases.each do |phase|
+          phase.tasks.create!(test_case: self, plan: plan, platform: platform)
+        end
+      end
+    end
   end
 end

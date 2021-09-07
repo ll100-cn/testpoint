@@ -18,6 +18,7 @@ class Plan < ApplicationRecord
   has_many :tasks
   has_many :test_cases, through: :tasks
   has_many :folders, through: :test_cases
+  has_many :platforms, through: :tasks
   belongs_to :project
   belongs_to :creator, class_name: "Member", foreign_key: "creator_id"
   belongs_to :milestone, optional: true
@@ -27,6 +28,7 @@ class Plan < ApplicationRecord
   scope :available, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
   scope :ranked, -> { order(:created_at).reverse_order }
+  scope :recent, -> { where("created_at > ?", 1.month.ago) }
 
   def submit(test_case_filter)
     test_cases = test_case_filter.build_test_cases_scope(project.test_cases.available)
@@ -50,5 +52,9 @@ class Plan < ApplicationRecord
 
   def latest_phase
     phases.ranked.last
+  end
+
+  def finished?
+    phases.ranked.last.tasks.where(state: :pending).empty?
   end
 end
