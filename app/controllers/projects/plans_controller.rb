@@ -30,7 +30,7 @@ class Projects::PlansController < BaseProjectController
   end
 
   def show
-    @current_phase = @plan.phases.where(index: params[:phase_index] || 0).take!
+    @current_phase = @plan.phases.where(index: params[:phase_index] || @plan.phases.ranked.last.index).take!
     tasks_scope = @current_phase.tasks.joins(:test_case)
     tasks_scope = tasks_scope.where(platform: @platform) if @platform
     tasks_scope = tasks_scope.joins(:test_case).where(test_cases: { folder_id: @folder.subtree }) if @folder
