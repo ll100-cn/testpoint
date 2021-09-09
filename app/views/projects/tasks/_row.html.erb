@@ -4,7 +4,7 @@
     <span class="me-auto"><%= task.test_case.title %></span>
     <span class="badge bg-secondary" style="width:70px"><%= task.platform.name %></span>
 
-    <%= link_to "", "#", class: "stretched-link", data: { bs_target: "#applicationModal", bs_toggle: "modal", url: project_plan_task_path(@project, @plan, task) } %>
+    <%= link_to "", "#", class: "stretched-link", data: { bs_target: "#applicationModal", bs_toggle: "modal", url: build_upshot_token_path(task, phase) } %>
     <%= link_to 'refresh-self', [ :row, @project, @plan, task ], class: "d-none #{dom_id task, 'on'}", data: { remote: true, type: :xhrml, target: '.card .card-body' } %>
   </div>
 <% end %>

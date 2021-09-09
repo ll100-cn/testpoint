@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_132623) do
+ActiveRecord::Schema.define(version: 2021_09_09_020220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,6 +304,20 @@ ActiveRecord::Schema.define(version: 2021_09_06_132623) do
     t.index ["task_id"], name: "index_task_attachments_on_task_id"
   end
 
+  create_table "task_upshots", force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.bigint "phase_id", null: false
+    t.string "state"
+    t.datetime "state_changed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "content"
+    t.string "token"
+    t.index ["phase_id"], name: "index_task_upshots_on_phase_id"
+    t.index ["task_id"], name: "index_task_upshots_on_task_id"
+    t.index ["token"], name: "index_task_upshots_on_token", unique: true
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.bigint "test_case_id"
     t.bigint "plan_id"
@@ -414,6 +428,8 @@ ActiveRecord::Schema.define(version: 2021_09_06_132623) do
   add_foreign_key "platforms_test_cases", "test_cases"
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
+  add_foreign_key "task_upshots", "phases"
+  add_foreign_key "task_upshots", "tasks"
   add_foreign_key "tasks", "phases"
   add_foreign_key "tasks", "platforms"
   add_foreign_key "test_case_label_links", "test_case_labels"

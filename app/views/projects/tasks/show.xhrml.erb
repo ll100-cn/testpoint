@@ -19,11 +19,6 @@
 
   <hr class="mt-5">
 
-  <p class="d-flex justify-content-between">
-    <span><%= task_state_with_icon(@task.state) %></span>
-    <small class="text-muted"><%=l @task.updated_at, format: :short %>
-  </p>
-
   <div class="mb-3">
     <% if !@task.issues.empty? %>
       <p class="text-muted mb-0">已关联的工单:</p>
@@ -41,18 +36,7 @@
       <%= render "shared/attachments_box.html.erb", attachmentable: @task %>
   <% end %>
 </div>
+
 <div class="modal-footer">
-  <% if @task.state.pending? %>
-    <%= link_to "全部通过",
-                [@project, @plan, @task, task: { state: :pass, test_case_version: Time.current }],
-                method: :patch,
-                class: "btn btn-success", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
-    <%= link_to "不通过, 创建工单",
-                [:edit, @project, @plan, @task, task: { state: :failure, test_case_version: Time.current }],
-                class: "btn btn-danger", data: { remote: true, type: :xhrml, target: ".modal-content" } %>
-  <% else %>
-    <%= link_to "撤销当前的测试结果", [@project, @plan, @task, task: { state: :pending, test_case_version: Time.current }],
-                method: :patch,
-                data: { remote: true, type: :xhrml, target: ".modal-content" } %>
-  <% end %>
+  <%= render template: 'projects/tasks/edit_upshot.xhrml' %>
 </div>

@@ -1,0 +1,66 @@
+<div class="w-100" data-controller="form-toggle">
+  <%= render 'alert.html', model: @upshot, except: [:issue] if @action_error_state %>
+
+  <form data-target="form-toggle.form">
+    <% form_category_name = dom_id(@upshot) %>
+    <% form_category = @action_error_state == 'failure' ? 'failure' : 'pending' %>
+    <input class="d-none" type="radio" name="<%= form_category_name %>" value="pending" id="<%= form_category_name %>_pending" <%= 'checked' if form_category == "pending" %>>
+    <input class="d-none" type="radio" name="<%= form_category_name %>" value="failure" id="<%= form_category_name %>_failure" <%= 'checked' if form_category == "failure" %>>
+  </form>
+
+  <div data-target="form-toggle.container" data-for-name="<%= form_category_name %>" data-for-value="pending">
+
+    <%  if @upshot_was.state.pass? || @upshot_was.state.failure? %>
+      <%= link_to "撤销测试结果", url_for(action: :state, task_upshot: { state: :pending }), method: :patch,
+            data: { remote: true, type: :xhrml, target: ".modal-content" },
+            class: "btn btn-primary" %>
+    <% else %>
+      <%= link_to "全部通过", url_for(action: :state, task_upshot: { state: :pass }), method: :patch,
+            data: { remote: true, type: :xhrml, target: ".modal-content" },
+            class: "btn btn-success" %>
+
+      <label for="<%= form_category_name %>_failure" class="btn btn-danger">不通过</label>
+    <% end %>
+  </div>
+
+
+  <div data-target="form-toggle.container" data-for-name="<%= form_category_name %>" data-for-value="failure">
+    <%= bootstrap_vertical_form_for @upshot,
+          url: url_for(action: :state), method: :patch,
+          data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
+      <h5>补充工单详情</h5>
+      <% issue = f.object.issue || Issue.new %>
+      <% 
+      issue.assignee ||= @task.platform.default_assignee
+      issue.title ||= "【测试失败】" + @task.test_case.title
+      issue.state ||= :confirmed
+      issue.content ||=
+"""
+预期效果:
+#{(@task.content || @task.test_case.content).to_s}\n
+实际效果:
+""" %>
+
+      <div class="border rounded p-3 mb-3">
+        <%= f.simple_fields_for :issue, issue do |ff| %>
+          <%= ff.input :title, label: "工单标题" %>
+          <%= ff.input :content, label: "工单内容", input_html: { class: 'markdown-field' } %>
+          <%= ff.input :state %>
+          <%= ff.input :assignee_id, label: "工单受理人",
+                collection: @project.available_issue_assignees_with_group,
+                as: :grouped_select,
+                group_method: :last,
+                group_label_method: :first,
+                label_method: :name
+              %>
+        <% end %>
+      </div>
+
+      <%= f.hidden_field :state, value: "failure" %>
+
+      <%= f.submit "提交", class: "btn btn-primary" %>
+  
+      <label for="<%= form_category_name %>_pending" class="btn btn-secondary">取消</label>
+    <% end %>
+  </div>
+</div>

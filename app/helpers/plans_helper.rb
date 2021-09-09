@@ -14,4 +14,10 @@ module PlansHelper
       ], ' ')
     end
   end
+
+  def build_upshot_token_path(task, phase)
+    project = task.plan.project
+    token = TaskUpshot.build_token(task, phase)
+    project_plan_task_upshot_path(project, task.plan_id, task, token)
+  end
 end

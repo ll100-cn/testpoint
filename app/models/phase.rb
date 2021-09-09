@@ -13,9 +13,12 @@
 class Phase < ApplicationRecord
   belongs_to :plan
   has_many :tasks, dependent: :destroy
+  has_many :task_upshots
+
   scope :ranked, -> { order("index") }
 
   validates :index, uniqueness: { scope: :plan_id }
+
 
   def assign_tasks
   end

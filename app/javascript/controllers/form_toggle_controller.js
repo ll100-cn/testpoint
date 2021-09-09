@@ -3,14 +3,19 @@ import $ from 'jquery'
 import _ from 'lodash'
 
 export default class extends Controller {
-  static targets = [ "container" ]
+  static targets = [ "container", "form" ]
 
   initialize() {
     this.change = this.change.bind(this)
   }
 
   connect() {
-    this.$form = $(this.containerTarget).closest("form")
+    if (this.hasFormTarget) {
+      this.$form = $(this.formTarget) 
+    } else {
+      this.$form = $(this.containerTarget).closest("form")
+    }
+  
     this.$form.on("change", this.change)
     this.$form.trigger("change")
   }

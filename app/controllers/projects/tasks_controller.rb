@@ -4,6 +4,7 @@ class Projects::TasksController < BaseProjectController
   load_and_authorize_resource through: :plan
 
   def row
+    # @phase = @plan.phases.where(id: params[:phase_id]).take!
   end
 
   def edit
@@ -32,7 +33,11 @@ class Projects::TasksController < BaseProjectController
     respond_with @task, location: -> { ok_url_or_default [ @project, @plan ] }
   end
 
+
   def show
+    @phase = @plan.phases.where(id: params[:phase_id]).take!
+    @upshot = @task.upshots.where(phase_id: @phase).first_or_initialize
+
   end
 
   def upload_attachment

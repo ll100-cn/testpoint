@@ -34,8 +34,17 @@ Rails.application.routes.draw do
             get :change_state
             get :upload_attachment
             get :related_issues
+            patch :update_upshot
+          end
+
+          resources :upshots do
+            member do
+              patch :state
+              patch :content
+            end
           end
         end
+        resources :upshots
       end
       resources :issues do
         member do

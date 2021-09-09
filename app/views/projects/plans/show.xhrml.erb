@@ -91,7 +91,7 @@
       <div id="tp-main">
         <div class="test_cases-cards">
           <% @tasks.each do |task| %>
-            <%= render 'projects/tasks/row.html', task: task %>
+            <%= render 'projects/tasks/row.html', task: task, phase: @current_phase %>
           <% end %>
         </div>
       </div>
