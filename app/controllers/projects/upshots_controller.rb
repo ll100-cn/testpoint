@@ -46,7 +46,8 @@ protected
   end
 
   def prepare_upshot
-    @upshot = @task.upshots.fetch_by_token(params[:id])
+    @phases = @plan.phases.ranked
+    @upshot = TaskUpshot.where(task_id: @task.id).fetch_by_token(params[:id])
     @upshot_was = @upshot.dup
   end
 end

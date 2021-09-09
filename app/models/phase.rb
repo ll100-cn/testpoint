@@ -24,11 +24,6 @@ class Phase < ApplicationRecord
   end
 
   def submit
-    pending_tasks = final_phase? ? plan.phases.ranked.first.tasks.all : previous_phase.tasks.where(state: [:failure, :pending])
-    pending_tasks.each do |pending_task|
-      tasks.new(test_case: pending_task.test_case, platform: pending_task.platform, plan: plan)
-    end
-
     save
   end
 

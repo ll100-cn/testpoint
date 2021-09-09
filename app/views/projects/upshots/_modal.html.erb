@@ -20,7 +20,10 @@
 
   <%= render 'details_state.html' %>
 
-  <hr>
+  <% if @phases.last == @upshot.phase %>
 
-  <%= render 'details_action.html' %>
+    <hr>
+    
+    <%= render 'details_action.html' %>
+  <% end %>
 </div>
