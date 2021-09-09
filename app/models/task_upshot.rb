@@ -17,7 +17,7 @@ class TaskUpshot < ApplicationRecord
   belongs_to :phase
   attr_accessor :issue
 
-  enumerize :state, in: [ :pending, :pass, :failure ], default: :pending
+  enumerize :state, in: [ :pending, :pass, :failure ]
 
   validates :phase_id, uniqueness: { scope: :task_id }
 
@@ -90,5 +90,17 @@ class TaskUpshot < ApplicationRecord
     record = where(token: token).first_or_initialize
     record.phase = find_phase_by_token(record.task, token) if record.new_record?
     record
+  end
+
+  def self.build(task, phase)
+    self.new(token: build_token(task, phase), task: task, phase: phase)
+  end
+
+  def self.query_by_token_mapping(mapping)
+    tokens = mapping.map do |(task_id, phase_id)|
+      "#{task_id}-#{phase_id}"
+    end
+
+    self.where(token: tokens)
   end
 end

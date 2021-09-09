@@ -31,6 +31,7 @@ class Projects::PlansController < BaseProjectController
 
   def show
     @current_phase = @plan.phases.where(index: params[:phase_index] || @plan.phases.ranked.last.index).take!
+
     tasks_scope = @current_phase.tasks.joins(:test_case)
     tasks_scope = tasks_scope.where(platform: @platform) if @platform
     tasks_scope = tasks_scope.joins(:test_case).where(test_cases: { folder_id: @folder.subtree }) if @folder
@@ -38,6 +39,9 @@ class Projects::PlansController < BaseProjectController
     @q = tasks_scope.ransack(params[:q])
     tasks_scope = @q.result
     @tasks = tasks_scope
+
+    upshot_token_mapping = TaskUpshot.where.not(state: nil).where(task_id: @tasks.ids).group(:task_id).maximum("phase_id")
+    @last_upshot_mapping = TaskUpshot.query_by_token_mapping(upshot_token_mapping).index_by(&:task_id)
 
     @folders = @project.folders.ranked
     @folder_tasks_counts = Folder.descendants_with_self_counts(@folders, tasks_scope.group("test_cases.folder_id").count)

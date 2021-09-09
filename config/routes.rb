@@ -39,6 +39,7 @@ Rails.application.routes.draw do
 
           resources :upshots do
             member do
+              get :row
               patch :state
               patch :content
             end

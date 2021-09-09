@@ -4,7 +4,7 @@ class Projects::TasksController < BaseProjectController
   load_and_authorize_resource through: :plan
 
   def row
-    # @phase = @plan.phases.where(id: params[:phase_id]).take!
+    @phase = @plan.phases.where(id: params[:phase_id]).take!
   end
 
   def edit

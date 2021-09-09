@@ -91,7 +91,7 @@
       <div id="tp-main">
         <div class="test_cases-cards">
           <% @tasks.each do |task| %>
-            <%= render 'projects/tasks/row.html', task: task, phase: @current_phase %>
+            <%= render 'projects/upshots/row.html', upshot: TaskUpshot.build(task, @current_phase), last_upshot: @last_upshot_mapping[task.id] %>
           <% end %>
         </div>
       </div>

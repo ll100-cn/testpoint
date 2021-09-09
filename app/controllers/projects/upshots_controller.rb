@@ -8,6 +8,10 @@ class Projects::UpshotsController < BaseProjectController
   def show
   end
 
+  def row
+    @last_upshot = @task.upshots.where("phase_id <= ?", @upshot.phase_id).order(phase_id: :desc).first
+  end
+
   def state
     if @upshot.submit(state_params, current_member)
       @upshot_was = @upshot
