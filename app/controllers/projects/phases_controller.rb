@@ -8,6 +8,7 @@ class Projects::PhasesController < BaseProjectController
   end
 
   def create
+    @phase.assign_attributes(phase_params)
     @phase.submit
     respond_with @phase, location: -> { ok_url_or_default [ @project, @plan, { phase_index: @phase.index } ] }
   end
