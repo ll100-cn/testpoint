@@ -5,12 +5,12 @@
 #  id               :bigint           not null, primary key
 #  task_id          :bigint           not null
 #  phase_id         :bigint           not null
-#  state            :string
+#  state_override   :string
 #  state_changed_at :datetime
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  content          :text
-#  token            :string
+#  state            :string
 #
 class TaskUpshot < ApplicationRecord
   belongs_to :task
@@ -18,12 +18,17 @@ class TaskUpshot < ApplicationRecord
   attr_accessor :issue
 
   enumerize :state, in: [ :pending, :pass, :failure ]
+  enumerize :state_override, in: [ :pending, :pass, :failure ]
 
   validates :phase_id, uniqueness: { scope: :task_id }
+  validates :state_override, presence: true, on: :submit
+
+  scope :state_modify_is, ->(value) { value == "overrided" ? where.not(state_override: nil) : where(state_override: nil) }
 
   def do_submit_for_failure(author)
+    self.state = self.state_override
     self.state_changed_at = Time.current
-    raise ActiveRecord::Rollback if !self.save
+    raise ActiveRecord::Rollback if !self.save(context: :submit)
     
     self.issue.project = @plan.project
     self.issue.task = task
@@ -42,8 +47,9 @@ class TaskUpshot < ApplicationRecord
   end
 
   def do_submit_for_not_failure(author)
+    self.state = self.state_override
     self.state_changed_at = Time.current
-    raise ActiveRecord::Rollback if !self.save
+    raise ActiveRecord::Rollback if !self.save(context: :submit)
 
     self.task.state = self.state
     if !self.task.save
@@ -54,7 +60,7 @@ class TaskUpshot < ApplicationRecord
 
   def submit(params, author)
     assign_attributes(params)
-    return false if !valid?
+    return false if !valid?(:submit)
 
     @plan = task.plan
     if @plan.phases.where("id > ?", self.phase_id).exists?
@@ -63,7 +69,7 @@ class TaskUpshot < ApplicationRecord
     end
 
     transaction do
-      if self.state.failure?
+      if self.state_override.failure?
         do_submit_for_failure(author) 
       else
         do_submit_for_not_failure(author) 
@@ -77,30 +83,7 @@ class TaskUpshot < ApplicationRecord
     self.issue = Issue.new(attrs)
   end
 
-  def self.build_token(task, phase)
-    "#{task.id}-#{phase.id}"
-  end
-
-  def self.find_phase_by_token(task, token)
-    _, phase_id = *token.split("-")
-    task.plan.phases.find(phase_id)
-  end
-
-  def self.fetch_by_token(token)
-    record = where(token: token).first_or_initialize
-    record.phase = find_phase_by_token(record.task, token) if record.new_record?
-    record
-  end
-
-  def self.build(task, phase)
-    self.new(token: build_token(task, phase), task: task, phase: phase)
-  end
-
-  def self.query_by_token_mapping(mapping)
-    tokens = mapping.map do |(task_id, phase_id)|
-      "#{task_id}-#{phase_id}"
-    end
-
-    self.where(token: tokens)
+  def self.ransackable_scopes(auth_object = nil)
+    [ :state_modify_is ]
   end
 end

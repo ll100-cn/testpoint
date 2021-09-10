@@ -31,20 +31,22 @@ class Projects::PlansController < BaseProjectController
 
   def show
     @current_phase = @plan.phases.where(index: params[:phase_index] || @plan.phases.ranked.last.index).take!
+    @prev_phase = @current_phase.prev_phase
 
-    tasks_scope = @plan.tasks.joins(:test_case)
-    tasks_scope = tasks_scope.where(platform: @platform) if @platform
-    tasks_scope = tasks_scope.joins(:test_case).where(test_cases: { folder_id: @folder.subtree }) if @folder
+    @all_task_upshots_scope = @current_phase.task_upshots
+    @q = @all_task_upshots_scope.ransack(params[:q])
+    @all_task_upshots_scope = @q.result
 
-    @q = tasks_scope.ransack(params[:q])
-    tasks_scope = @q.result
-    @tasks = tasks_scope
+    @all_task_upshots_scope = @all_task_upshots_scope.joins(task: :test_case)
 
-    upshot_token_mapping = TaskUpshot.where.not(state: nil).where(task_id: @tasks.ids).group(:task_id).maximum("phase_id")
-    @last_upshot_mapping = TaskUpshot.query_by_token_mapping(upshot_token_mapping).index_by(&:task_id)
+    task_upshots_scope = @all_task_upshots_scope
+    task_upshots_scope = task_upshots_scope.where(test_cases: { folder_id: @folder.subtree }) if @folder
+    task_upshots_scope = task_upshots_scope.merge(Task.ranked)
+
+    @task_upshots = task_upshots_scope
 
     @folders = @project.folders.ranked
-    @folder_tasks_counts = Folder.descendants_with_self_counts(@folders, tasks_scope.group("test_cases.folder_id").count)
+    @folder_tasks_counts = Folder.descendants_with_self_counts(@folders, @all_task_upshots_scope.group("test_cases.folder_id").count)
     @folders = @folders.find_all { |folder| @folder_tasks_counts[folder.id] > 0 }
   end
 

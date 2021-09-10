@@ -22,33 +22,13 @@
   <li class="nav-item mb-3 mx-3">
     <%= link_to '#', class: "nav-link",
           data: { bs_target: "#applicationModal", bs_toggle: "modal", url: new_project_plan_phase_path(@project, @plan) } do %>
-      <i class="fal fa-plus-circle"></i>
-        <% if @plan.phases.ranked.last.all_task_passed? %>
-          <span>进入最终总测</span>
-        <% else %>
-          <span>开始新一轮测试</span>
-        <% end %>
-      <% end %>
+      <i class="far fa-plus-circle me-1"></i><span>开始新一轮测试</span>
+    <% end %>
   </li>
 </ul>
 <div class="card app-card-main">
   <div class="card-header bg-white d-flex">
-    <h4 class="me-auto my-auto"><%= page_i18n :index, model_name: h(@tasks) %></h4>
-
-    <%= fume_nav @platform&.id do |n| %>
-      <div class="dropdown">
-        <%=h Task, :platform_id %>：
-        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          <%= @platform&.name || page_i18n(:all) %>
-        </button>
-        <div class="dropdown-menu">
-          <%= n.link_to nil, page_i18n(:all), current_url(platform_id: nil), class: "dropdown-item" %>
-          <% @project.platforms.each do |platform| %>
-            <%= n.link_to platform.id, platform.name, current_url(platform_id: platform), class: "dropdown-item" %>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
+    <h4 class="me-auto my-auto"><%= page_i18n :index, model_name: h(Task) %></h4>
 
     <%= fume_nav @q.state_eq do |n| %>
       <div class="dropdown ms-3">
@@ -60,6 +40,22 @@
           <%= n.link_to nil, page_i18n(:all), current_url(q: { state_eq: nil }), class: "dropdown-item" %>
           <% Task.state.options.each do |(text, value)| %>
             <%= n.link_to value, text, current_url(q: { state_eq: value }), class: "dropdown-item" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= fume_nav @q.state_modify_is do |n| %>
+      <div class="dropdown ms-3">
+        <% options = { not_overrided: "未测试", overrided: "已测试" } %>
+        本轮操作：
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <%= options[@q.state_modify_is&.to_sym] || page_i18n(:all) %>
+        </button>
+        <div class="dropdown-menu" >
+          <%= n.link_to nil, page_i18n(:all), current_url(q: { state_modify_is: nil }), class: "dropdown-item" %>
+          <% options.each do |(value, text)| %>
+            <%= n.link_to value, text, current_url(q: { state_modify_is: value }), class: "dropdown-item" %>
           <% end %>
         </div>
       </div>
@@ -90,8 +86,8 @@
     <div class="col-12 col-md-9 col-xl-10">
       <div id="tp-main">
         <div class="test_cases-cards">
-          <% @tasks.each do |task| %>
-            <%= render 'projects/upshots/row.html', upshot: TaskUpshot.build(task, @current_phase), last_upshot: @last_upshot_mapping[task.id] %>
+          <% @task_upshots.each do |task_upshot| %>
+            <%= render 'projects/upshots/row.html', upshot: task_upshot %>
           <% end %>
         </div>
       </div>

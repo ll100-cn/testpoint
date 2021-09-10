@@ -11,11 +11,11 @@
   <div data-target="form-toggle.container" data-for-name="<%= form_category_name %>" data-for-value="pending">
 
     <%  if @upshot_was.state&.pass? || @upshot_was.state&.failure? %>
-      <%= link_to "撤销测试结果", url_for(action: :state, task_upshot: { state: :pending }), method: :patch,
+      <%= link_to "撤销测试结果", url_for(action: :state, task_upshot: { state_override: :pending }), method: :patch,
             data: { remote: true, type: :xhrml, target: ".modal-content" },
             class: "btn btn-primary" %>
     <% else %>
-      <%= link_to "全部通过", url_for(action: :state, task_upshot: { state: :pass }), method: :patch,
+      <%= link_to "全部通过", url_for(action: :state, task_upshot: { state_override: :pass }), method: :patch,
             data: { remote: true, type: :xhrml, target: ".modal-content" },
             class: "btn btn-success" %>
 
@@ -56,7 +56,7 @@
         <% end %>
       </div>
 
-      <%= f.hidden_field :state, value: "failure" %>
+      <%= f.hidden_field :state_override, value: "failure" %>
 
       <%= f.submit "提交", class: "btn btn-primary" %>
   

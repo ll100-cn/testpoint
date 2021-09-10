@@ -40,14 +40,14 @@ protected
   end
 
   def state_params
-    params.fetch(:task_upshot, {}).permit(:state,
+    params.fetch(:task_upshot, {}).permit(:state_override,
       issue_attributes: [:title, :content, :assignee_id, :state]
     )
   end
 
   def prepare_upshot
     @phases = @plan.phases.ranked
-    @upshot = TaskUpshot.where(task_id: @task.id).fetch_by_token(params[:id])
+    @upshot = TaskUpshot.where(task_id: @task.id).find(params[:id])
     @upshot_was = @upshot.dup
   end
 end

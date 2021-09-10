@@ -1,14 +1,26 @@
 <% task = upshot.task %>
 <%= content_tag :div, class: "card mb-2" do %>
   <div class="card-body d-flex align-items-center py-2 px-2">
-    <div class="small me-3"><%= task_state_with_icon(upshot.state || last_upshot&.state || "pending") %></div>
+
+    <span class="me-3">
+      <% if upshot.state_override? %>
+        <i class="far fa-clipboard-check text-muted"></i>
+      <% else %>
+        <i class="far fa-clipboard" style="opacity: 0.25;"></i>
+      <% end %>
+    </span>
+  
+    <div class="small me-3"><%= task_state_with_icon(upshot.state) %></div>
+  
     <span class="me-auto"><%= task.test_case.title %></span>
+  
     <span class="badge bg-secondary" style="width:70px"><%= task.platform.name %></span>
 
-    <%= link_to "", "#", class: "stretched-link",
-      data: { bs_target: "#applicationModal", bs_toggle: "modal", url: project_plan_task_upshot_path(@project, task.plan_id, task, upshot.token) } %>
 
-    <%= link_to 'refresh-self', row_project_plan_task_upshot_path(@project, task.plan_id, task, upshot.token),
+    <%= link_to "", "#", class: "stretched-link",
+      data: { bs_target: "#applicationModal", bs_toggle: "modal", url: project_plan_task_upshot_path(@project, task.plan_id, task, upshot) } %>
+
+    <%= link_to 'refresh-self', row_project_plan_task_upshot_path(@project, task.plan_id, task, upshot),
           class: "d-none #{dom_id task, 'on'}", data: { remote: true, type: :xhrml, target: '.card .card-body' } %>
   </div>
 <% end %>

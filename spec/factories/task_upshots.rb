@@ -5,12 +5,12 @@
 #  id               :bigint           not null, primary key
 #  task_id          :bigint           not null
 #  phase_id         :bigint           not null
-#  state            :string
+#  state_override   :string
 #  state_changed_at :datetime
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  content          :text
-#  token            :string
+#  state            :string
 #
 FactoryBot.define do
   factory :task_upshot do

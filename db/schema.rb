@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_09_085327) do
+ActiveRecord::Schema.define(version: 2021_09_10_032624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -307,15 +307,15 @@ ActiveRecord::Schema.define(version: 2021_09_09_085327) do
   create_table "task_upshots", force: :cascade do |t|
     t.bigint "task_id", null: false
     t.bigint "phase_id", null: false
-    t.string "state"
+    t.string "state_override"
     t.datetime "state_changed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "content"
-    t.string "token"
+    t.string "state"
     t.index ["phase_id"], name: "index_task_upshots_on_phase_id"
+    t.index ["state"], name: "index_task_upshots_on_state"
     t.index ["task_id"], name: "index_task_upshots_on_task_id"
-    t.index ["token"], name: "index_task_upshots_on_token", unique: true
   end
 
   create_table "tasks", force: :cascade do |t|

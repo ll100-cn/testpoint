@@ -8,14 +8,10 @@
       <%= f.input :release_revision, hint: "*选填，仅用于备注" %>
 
       <hr>
-      <% if @phase.final_phase? %>
-        <p class="text-muted small"><span class="text-body"><%= @plan.phases.ranked.first.tasks.count %></span> 个用例将被重新测试</p>
-      <% else %>
-        <h5>待测用例</h5>
-        <p class="text-muted small"><span class="text-danger"><%= @plan.phases.ranked.last.tasks.where(state: :failure).count %></span> 个失败用例需要重新测试</p>
-        <p class="text-muted small"><span class="text-body"><%= @plan.phases.ranked.last.tasks.where(state: :pending).count %></span> 个未测试用例, 将添加到本轮</p>
-        <p class="text-muted small"><span class="text-success"><%= @plan.phases.ranked.last.tasks.where(state: :pass).count %></span> 个成功用例将不显示</p>
-      <% end %>
+      <h5>待测用例</h5>
+      <p class="text-muted small"><span class="text-danger"><%= @plan.phases.ranked.last.tasks.where(state: :failure).count %></span> 个失败用例需要重新测试</p>
+      <p class="text-muted small"><span class="text-body"><%= @plan.phases.ranked.last.tasks.where(state: :pending).count %></span> 个未测试用例, 将添加到本轮</p>
+      <p class="text-muted small"><span class="text-success"><%= @plan.phases.ranked.last.tasks.where(state: :pass).count %></span> 个成功用例将不显示</p>
   </div>
 
   <div class="modal-footer">

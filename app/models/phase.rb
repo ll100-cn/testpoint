@@ -13,34 +13,40 @@
 class Phase < ApplicationRecord
   belongs_to :plan
   has_many :tasks, dependent: :destroy
-  has_many :task_upshots
+  has_many :task_upshots, dependent: :destroy
 
   scope :ranked, -> { order("index") }
 
   validates :index, uniqueness: { scope: :plan_id }
+  validates :title, presence: true
 
 
-  def assign_tasks
+ def submit
+    self.index = plan.phases.count
+
+    transaction do
+      raise ActiveRecord::Rollback unless save
+
+      prev_upshot_mapping = (prev_phase&.task_upshots || []).index_by(&:task_id)
+      plan.tasks.each do |task|
+        prev_upshot = prev_upshot_mapping[task.id]
+        upshot = self.task_upshots.new(task: task, state: prev_upshot&.state || :pending)
+        if !save
+          errors.add(:task_upshots, upshot.errors.full_messages.first)
+          raise ActiveRecord::Rollback
+        end
+      end
+    end
+
+    self.errors.empty?
   end
 
-  def submit
-    save
-  end
-
-  def previous_phase
-    plan.phases.where.not(id: self.id).ranked.last
-  end
-
-  def final_phase?
-    previous_phase.all_task_passed?
-  end
-
-  def all_task_passed?
-    tasks.where.not(state: :pass).empty?
+  def prev_phase
+    @prev_phase ||= plan.phases.where("id < ?", self.id).order(id: :desc).take
   end
 
   def set_default_value
-    self.index ||= plan.phases.maximum("index") + 1
-    self.title ||= final_phase? ? "最终测试" : "第 #{index + 1} 轮"
+    i = plan.phases.maximum("index") + 1
+    self.title ||= "第 #{i + 1} 轮"
   end
 end

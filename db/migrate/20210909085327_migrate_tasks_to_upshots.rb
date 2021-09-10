@@ -26,6 +26,7 @@ class MigrateTasksToUpshots < ActiveRecord::Migration[6.1]
 
           if prev_state != task.state
             upshot.state = task.state
+            upshot.state_changed_at = task.updated_at
           end
 
 
