@@ -7,7 +7,7 @@ class Projects::PlansController < BaseProjectController
   def index
     @plans = @plans.available.page(params[:page]).ranked.page(params[:page]).per(12)
     @plan_phases = @plans.map(&:latest_phase)
-    @tasks_count_mapping = Task.where(phase_id: @plan_phases).group(:plan_id, :state).count
+    @tasks_count_mapping = Task.where(plan_id: @plans).group(:plan_id, :state).count
   end
 
   def new
