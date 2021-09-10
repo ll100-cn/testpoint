@@ -34,16 +34,32 @@ class Plan < ApplicationRecord
     test_cases = test_case_filter.build_test_cases_scope(project.test_cases.available)
     platforms = project.platforms
     platforms = platforms.where(id: test_case_filter.platform_ids) if test_case_filter.platform_ids.present?
-    default_phase = phases.new(title: "第 1 轮", index: 0)
-    platforms.each do |platform|
-      test_cases.each do |test_case|
-        if test_case.platforms.exists? platform.id
-          tasks.new(test_case_id: test_case.id, platform: platform, phase: default_phase)
+
+    transaction do 
+      raise ActiveRecord::Rollback unless save
+  
+      platforms.each do |platform|
+        test_cases.each do |test_case|
+          if test_case.platforms.where(id: platform.id).exists?
+            task = tasks.new(test_case: test_case, platform: platform)
+
+            if !task.save
+              self.errors.add(:tasks, task.errors.full_messages.first)
+              raise ActiveReocrd::Rollback
+            end
+          end
         end
       end
+    
+      phase = phases.new(title: "第 1 轮", index: 0)
+      
+      if !phase.submit
+        self.errors.add(:phases, phase.errors.full_messages.first)
+        raise ActiveReocrd::Rollback
+      end
     end
-
-    save
+  
+    self.errors.empty?
   end
 
   def archive

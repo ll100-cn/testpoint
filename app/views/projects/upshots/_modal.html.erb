@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    测试指南 - 
+    <%= @task.finished? ? @task.test_case_snapshot.title : @task.test_case.title %>
+  </h5>
+
+  <% if @task.test_case_changed_after_finish? %>
+    <small class="text-danger ms-3">当前内容为测试完成时的快照，该案例的测试指南已被更新</small>
+  <% end %>
+
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+
+<div class="modal-body">
+
+  <%= render 'details_content.html' %>
+
+  <hr>
+
+  <%= render 'details_state.html' %>
+
+  <% if @phases.last == @upshot.phase %>
+
+    <hr>
+    
+    <%= render 'details_action.html' %>
+  <% end %>
+</div>

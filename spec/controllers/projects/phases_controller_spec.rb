@@ -6,7 +6,7 @@ RSpec.describe Projects::PhasesController, type: :controller do
   let!(:member) { create :member, user: user, project: project }
   let(:plan) { create :plan, project: project, creator: member }
   let!(:phase) { create :phase, plan: plan, index: 0 }
-  let(:phase_attributes) { {} }
+  let(:phase_attributes) { { title: "第 2 轮" } }
   login_superadmin
   before { sign_in user }
 

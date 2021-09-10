@@ -20,9 +20,9 @@ class Task < ApplicationRecord
 
   belongs_to :test_case
   belongs_to :plan
-  belongs_to :phase
   belongs_to :platform
   has_many :issues
+  has_many :upshots, class_name: "TaskUpshot"
 
   has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
 
