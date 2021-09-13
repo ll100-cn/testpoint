@@ -74,6 +74,19 @@ module PageHelper
     value
   end
 
+  def badge_issue_state(issue_state)
+    color = {
+      "pending" => "bg-danger",
+      "waiting" => "bg-info",
+      "confirmed" => "bg-warning",
+      "processing" => "bg-warning",
+      "processed" => "bg-success",
+      "resolved" => "bg-secondary",
+      "archived" => "bg-light text-body"
+    }[issue_state]
+    content_tag :span, issue_state.text, class: "badge #{color}"
+  end
+
 protected
   def build_link(models, action, options)
     url_prefix = [:new, :edit].include?(action) ? action : nil

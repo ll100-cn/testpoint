@@ -1,54 +1,19 @@
 @import '../bootstrap-ext/all.scss';
 
-.badge-issue-pending {
-  @extend .badge;
-  @extend .bg-warning;
-}
-
-.badge-issue-waiting {
-  @extend .badge;
-  @extend .bg-danger;
-}
-
-.badge-issue-confirmed {
-  @extend .badge;
-  @extend .bg-info;
-}
-
-.badge-issue-processing {
-  @extend .badge;
-  @extend .bg-primary;
-}
-
-.badge-issue-closed {
-  @extend .badge;
-  @extend .bg-secondary;
-}
-
-.badge-issue-resolved {
-  @extend .badge;
-  @extend .bg-success;
-}
-
-.badge-issue-processed {
-  @extend .badge;
-  @extend .bg-success;
-}
-
 .text-issue-pending {
-  color: $warning;
-}
-
-.text-issue-waiting {
   color: $danger;
 }
 
-.text-issue-confirmed {
+.text-issue-waiting {
   color: $info;
 }
 
+.text-issue-confirmed {
+  color: $warning;
+}
+
 .text-issue-processing {
-  color: $primary;
+  color: $warning;
 }
 
 .text-issue-closed {
@@ -56,7 +21,7 @@
 }
 
 .text-issue-resolved {
-  color: $success;
+  color: $secondary;
 }
 
 .text-issue-processed {

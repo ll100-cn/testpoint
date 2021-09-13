@@ -15,7 +15,10 @@
     <% else %>
       <% issue = record %>
       <li>
-        <%= link_to "##{issue.id}#{issue.title}", [@project, issue] %>
+        <div class="d-flex align-items-center">
+          <%= link_to "##{issue.id}#{issue.title}", [@project, issue], class: "me-2" %>
+          <%= badge_issue_state(issue.state) %>
+        </div>
       </li>
     <% end %>
   

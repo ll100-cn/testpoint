@@ -12,7 +12,7 @@
 				<%= issue.title_with_priority.truncate(23) %>
 			</span>
 			<small class="ms-auto">
-				<span class="badge badge-issue-<%= issue.state %>"><%= issue.state_text %></span>
+        <%= badge_issue_state(issue.state) %>
 			</small>
 			</div>
 

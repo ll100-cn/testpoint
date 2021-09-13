@@ -1,7 +1,9 @@
 <div class="page-header d-flex">
   <% if @issue.state.resolved? %>
     <s><h2 class="me-1"><%= title(@issue.title_with_priority) %></h2></s>
-    <span class="badge badge-issue-closed me-1"><%= @issue.state_text %></span>
+    <span class="me-1">
+      <%= badge_issue_state(@issue.state) %>
+    </span>
   <% else %>
     <h2 class="me-1"><%= title(@issue.title_with_priority) %></h2>
   <% end %>
