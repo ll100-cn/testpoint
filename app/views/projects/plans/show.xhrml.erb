@@ -47,7 +47,7 @@
 
     <%= fume_nav @q.state_modify_is do |n| %>
       <div class="dropdown ms-3">
-        <% options = { not_overrided: "未测试", overrided: "已测试" } %>
+        <% options = { not_overrided: "未操作", overrided: "已操作" } %>
         本轮操作：
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
           <%= options[@q.state_modify_is&.to_sym] || page_i18n(:all) %>
