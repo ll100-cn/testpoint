@@ -11,6 +11,7 @@
 #  title_suggestion     :string
 #  content_suggestion   :string
 #  default_label_id     :bigint
+#  default_priority     :string
 #
 
 class IssueTemplate < ApplicationRecord
@@ -20,6 +21,7 @@ class IssueTemplate < ApplicationRecord
   accepts_nested_attributes_for :inputs, allow_destroy: true
 
   scope :available_for_build_form, -> { where(lookup_by_build_form: true ) }
+  enumerize :default_priority, in: [ :normal, :important ], default: :normal
 
   def content_blank?
     inputs.blank?

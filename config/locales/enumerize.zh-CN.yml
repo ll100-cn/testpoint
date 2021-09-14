@@ -17,6 +17,10 @@ zh-CN:
       priority:
         important: 重要
         normal: 普通
+    issue_template:
+      default_priority:
+        important: 重要
+        normal: 普通
     member:
       role:
         owner: 负责人

@@ -9,6 +9,8 @@ class IssueBuildForm
     self.assign_attributes(params)
 
     ActiveRecord::Base.transaction do
+      self.issue.priority = self.template.default_priority
+
       if !self.issue.save
         self.errors.add(:issue, self.errors.full_messages.first)
         raise ActiveRecord::Rollback

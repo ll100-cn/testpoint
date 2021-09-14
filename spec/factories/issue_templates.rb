@@ -11,6 +11,7 @@
 #  title_suggestion     :string
 #  content_suggestion   :string
 #  default_label_id     :bigint
+#  default_priority     :string
 #
 
 FactoryBot.define do
