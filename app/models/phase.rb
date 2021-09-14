@@ -30,7 +30,7 @@ class Phase < ApplicationRecord
       prev_upshot_mapping = (prev_phase&.task_upshots || []).index_by(&:task_id)
       plan.tasks.each do |task|
         prev_upshot = prev_upshot_mapping[task.id]
-        upshot = self.task_upshots.new(task: task, state: prev_upshot&.state || :pending)
+        upshot = self.task_upshots.new(task: task, state: prev_upshot&.state || :pending, content: prev_upshot&.content)
         if !save
           errors.add(:task_upshots, upshot.errors.full_messages.first)
           raise ActiveRecord::Rollback
