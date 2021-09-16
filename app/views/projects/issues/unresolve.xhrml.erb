@@ -12,8 +12,8 @@
     <%= bootstrap_vertical_form_for [ :unresolve, @project, @issue ], data: { remote: true, type: "xhrml", target: ".modal-content" } do |f| %>
       <div class="card-body">
         <div class="no-margin-bottom">
-          <%= f.input :content, input_html: { class: 'markdown-field' }, label: "未解决" %>
-          <%= render "attachments/upload_area.html", attachments: f.object.attachments %>
+          <%= f.input :content, input_html: { class: 'markdown-field', value: "" }, label: "未解决原因:" %>
+          <%= render "attachments/upload_area.html", attachments: [] %>
         </div>
       </div>
       <% if f.object.errors.any? %>
