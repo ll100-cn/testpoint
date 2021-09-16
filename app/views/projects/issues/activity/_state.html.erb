@@ -2,6 +2,6 @@
 <% state_names = Hash[Issue.state.options].invert.merge(deprecated_state_names) %>
 <span class="text-info"><%=h Issue, activity.property.to_sym %></span>
 <span>从</span>
-<%= badge_issue_state(Issue.state.find_value(activity.before_value)) %>
+<%= activity.before_value.nil? ? "无" : badge_issue_state(activity.before_value) %>
 <span>修改为</span>
-<%= badge_issue_state(Issue.state.find_value(activity.after_value)) %>
+<%= activity.after_value.nil? ? "无" : badge_issue_state(activity.after_value) %>

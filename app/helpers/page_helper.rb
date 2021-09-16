@@ -75,6 +75,8 @@ module PageHelper
   end
 
   def badge_issue_state(issue_state)
+    return if issue_state.nil?
+
     color = {
       "pending" => "bg-danger",
       "waiting" => "bg-info",
@@ -82,9 +84,13 @@ module PageHelper
       "processing" => "bg-warning",
       "processed" => "bg-success",
       "resolved" => "bg-secondary",
-      "archived" => "bg-light text-body"
+      "archived" => "bg-light text-body",
+      "closed" => "bg-light text-body"
     }[issue_state]
-    content_tag :span, issue_state.text, class: "badge #{color}"
+    text = issue_state.is_a?(String) ? Issue.state.find_value(issue_state)&.text : issue_state&.text
+    text = "已关闭" if issue_state == "closed"
+
+    content_tag :span, text, class: "badge #{color}"
   end
 
 protected
