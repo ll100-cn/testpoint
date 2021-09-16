@@ -17,6 +17,7 @@
 #  assignee_id     :bigint
 #  priority        :string
 #  task_id         :bigint
+#  label_ids_cache :bigint           default([]), is an Array
 #
 
 class Issue < ApplicationRecord
@@ -75,102 +76,101 @@ class Issue < ApplicationRecord
   end
 
   def self.ransackable_scopes(auth_object = nil)
-   [ :state_filter ]
+    [ :state_filter ]
+  end
+
+  def update_with_author(params, member)
+    transaction do
+      assign_attributes(params)
+      self.label_ids_cache = self.label_ids
+      self.last_edited_at = Time.current if will_save_change_to_content?
+      raise ActiveRecord::Rollback unless self.save
+      record_property_changes!(member)
+    end
  end
 
- def update_with_author(params, member)
-   assign_attributes(params)
-   self.last_edited_at = Time.current if will_save_change_to_content?
-   transaction do
-     unless self.save
-       raise ActiveRecord::Rollback
-     end
-     record_property_changes!(member)
-   end
- end
+  def change_project_with_author(params, member)
+    project_id = params[:project_id]
+    new_project = member.user.projects.find(project_id)
+    self.project_id = project_id
+    self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || self.creator
+    self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
+    self.labels = []
+    self.milestone_id = nil
+    transaction do
+      unless self.save
+        raise ActiveRecord::Rollback
+      end
+      record_property_changes!(member)
+    end
+  end
 
- def change_project_with_author(params, member)
-  project_id = params[:project_id]
-  new_project = member.user.projects.find(project_id)
-  self.project_id = project_id
-  self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || self.creator
-  self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
-  self.labels = []
-  self.milestone_id = nil
-   transaction do
-     unless self.save
-       raise ActiveRecord::Rollback
-     end
-     record_property_changes!(member)
-   end
- end
-
- def record_property_changes!(member)
-   previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id).each do |property, (before_value, after_value)|
+  def record_property_changes!(member)
+    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :label_ids_cache).each do |property, (before_value, after_value)|
       activity = self.activities.new
       activity.property = property
       activity.before_value = before_value
       activity.after_value = after_value
       activity.member_id = member.id
       activity.save!
-   end
- end
+    end
+  end
 
- def notify_created_by(author)
-   email_list.without(author.email).each { |address| IssueMailer.created_notification(self.id, author.id, address).deliver_later }
- end
+  def notify_created_by(author)
+    email_list.without(author.email).each { |address| IssueMailer.created_notification(self.id, author.id, address).deliver_later }
+  end
 
- def notify_assigned_by(author)
-   email_list.without(author.email).each { |address| IssueMailer.assigned_notification(self.id, author.id, address).deliver_later }
- end
+  def notify_assigned_by(author)
+    email_list.without(author.email).each { |address| IssueMailer.assigned_notification(self.id, author.id, address).deliver_later }
+  end
 
- def notify_state_changed_by(author)
-   email_list.without(author.email).each { |address| IssueMailer.state_changed_notification(self.id, author.id, address).deliver_later }
- end
+  def notify_state_changed_by(author)
+    email_list.without(author.email).each { |address| IssueMailer.state_changed_notification(self.id, author.id, address).deliver_later }
+  end
 
- def notify_commented_by(author)
-   email_list.without(author.email).each { |address| IssueMailer.commented_notification(self.id, author.id, address).deliver_later }
- end
+  def notify_commented_by(author)
+    email_list.without(author.email).each { |address| IssueMailer.commented_notification(self.id, author.id, address).deliver_later }
+  end
 
- def notify_creator
-   IssueMailer.state_changed_notification(self.id, self.creator_id, self.creator.user.email).deliver_later
- end
+  def notify_creator
+    IssueMailer.state_changed_notification(self.id, self.creator_id, self.creator.user.email).deliver_later
+  end
 
- def notify_changed_by(author, changes)
-   if changes.has_key?(:id)
-     notify_created_by(author)
-     return
-   end
+  def notify_changed_by(author, changes)
+    if changes.has_key?(:id)
+      notify_created_by(author)
+      return
+    end
 
-   if changes.has_key?(:assignee_id)
-     notify_assigned_by(author)
-   end
+    if changes.has_key?(:assignee_id)
+      notify_assigned_by(author)
+    end
 
-   if changes.has_key?(:state)
-     notify_state_changed_by(author)
-   end
- end
+    if changes.has_key?(:state)
+      notify_state_changed_by(author)
+    end
+  end
 
- def unresolve(comment_params)
-   self.errors.add(:state, :invalid) and return false if self.state.pending?
+  def unresolve(comment_params)
+    self.errors.add(:state, :invalid) and return false if self.state.pending?
 
-   transaction do
-     comment = self.comments.new(member_id: self.creator_id)
-     comment.assign_attributes(comment_params)
-     self.state = :pending
+    transaction do
+      comment = self.comments.new(member_id: self.creator_id)
+      comment.assign_attributes(comment_params)
+      self.state = :pending
 
-     raise ActiveRecord::Rollback unless comment.save! && self.save!
-   end
-   true
- end
+      raise ActiveRecord::Rollback unless comment.save! && self.save!
+    end
+    true
+  end
 
- def archive
-   self.errors.add(:state, :invalid) and return false if self.state.archived?
-   self.update(state: :archived)
- end
+  def archive
+    self.errors.add(:state, :invalid) and return false if self.state.archived?
+    self.update(state: :archived)
+  end
 
- protected
-   def email_list
+  protected
+    def email_list
       (subscribed_users + project.subscribed_users).uniq.map(&:email)
-   end
+    end
 end

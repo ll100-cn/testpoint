@@ -17,6 +17,7 @@
 #  assignee_id     :bigint
 #  priority        :string
 #  task_id         :bigint
+#  label_ids_cache :bigint           default([]), is an Array
 #
 
 FactoryBot.define do

@@ -1,0 +1,24 @@
+<% label_mapping = @project.labels.index_by(&:id) %>
+<% added_labels = eval(activity.after_value) - eval(activity.before_value) %>
+<% deleted_labels = eval(activity.before_value) - eval(activity.after_value) %>
+
+
+<% if added_labels.present? %>
+  <span>添加了</span>
+  <span><%=h Issue, :label_ids %></span>
+  <% added_labels.each do |label_id| %>
+    <% label = label_mapping[label_id] %>
+    <%= label_badge_tag label, label.name, class: "" %>
+  <% end %>
+<% end %>
+
+<% if deleted_labels.present? %>
+  <span><%= "，并" if added_labels.present? %>移除了</span>
+  <span><%=h Issue, :label_ids %></span>
+  <% deleted_labels.each do |label_id| %>
+    <% label = label_mapping[label_id] %>
+    <%= label_badge_tag label, label.name do %>
+      <del><%= label.name %></del>
+    <% end %>
+  <% end %>
+<% end %>

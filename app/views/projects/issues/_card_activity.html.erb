@@ -1,7 +1,7 @@
 <div class="issue-activity mb-3">
   <%= image_tag activity.member.user.avatar_url, width: 20, class: "rounded-circle avatar" %>
 
-  <span><%= activity.member.name %> 将</span>
+  <span><%= activity.member.name %></span>
 
   <%= render "projects/issues/activity/#{activity.property}.html", activity: activity %>
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_011724) do
+ActiveRecord::Schema.define(version: 2021_09_16_012054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_011724) do
     t.bigint "assignee_id"
     t.string "priority"
     t.bigint "task_id"
+    t.bigint "label_ids_cache", default: [], array: true
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
