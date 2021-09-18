@@ -57,10 +57,10 @@ class Projects::PlansController < BaseProjectController
 
 protected
   def plan_params
-    params.fetch(:plan, {}).permit(:title, :start_at, :milestone_id)
+    params.fetch(:plan, {}).permit(:title, :milestone_id, :platform_id)
   end
 
   def filter_params
-    params.fetch(:test_case_filter, {}).permit(label_ids: [], platform_ids: [], folder_ids: [])
+    params.fetch(:test_case_filter, {}).permit(label_ids: [], folder_ids: [])
   end
 end

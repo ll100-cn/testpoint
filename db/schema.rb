@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_16_012054) do
+ActiveRecord::Schema.define(version: 2021_09_18_024940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,12 +246,13 @@ ActiveRecord::Schema.define(version: 2021_09_16_012054) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "archived", default: false
-    t.datetime "start_at"
     t.bigint "project_id"
     t.bigint "creator_id", null: false
     t.bigint "milestone_id"
+    t.bigint "platform_id"
     t.index ["creator_id"], name: "index_plans_on_creator_id"
     t.index ["milestone_id"], name: "index_plans_on_milestone_id"
+    t.index ["platform_id"], name: "index_plans_on_platform_id"
     t.index ["project_id"], name: "index_plans_on_project_id"
   end
 
@@ -326,14 +327,12 @@ ActiveRecord::Schema.define(version: 2021_09_16_012054) do
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "platform_id"
     t.text "message"
     t.datetime "test_case_version"
     t.text "content"
     t.bigint "phase_id"
     t.index ["phase_id"], name: "index_tasks_on_phase_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
-    t.index ["platform_id"], name: "index_tasks_on_platform_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
   end
 
@@ -424,6 +423,7 @@ ActiveRecord::Schema.define(version: 2021_09_16_012054) do
   add_foreign_key "labels", "projects"
   add_foreign_key "milestones", "projects"
   add_foreign_key "phases", "plans"
+  add_foreign_key "plans", "platforms"
   add_foreign_key "plans", "projects"
   add_foreign_key "platforms", "projects"
   add_foreign_key "platforms_test_cases", "platforms"
@@ -433,7 +433,6 @@ ActiveRecord::Schema.define(version: 2021_09_16_012054) do
   add_foreign_key "task_upshots", "phases"
   add_foreign_key "task_upshots", "tasks"
   add_foreign_key "tasks", "phases"
-  add_foreign_key "tasks", "platforms"
   add_foreign_key "test_case_label_links", "test_case_labels"
   add_foreign_key "test_case_label_links", "test_cases"
   add_foreign_key "test_case_labels", "projects"

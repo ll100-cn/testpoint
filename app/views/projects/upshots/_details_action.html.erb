@@ -31,8 +31,8 @@
       <h5>补充工单详情</h5>
       <% issue = f.object.issue || Issue.new %>
       <% 
-      issue.assignee ||= @task.platform.default_assignee
-      issue.title ||= "【测试失败】" + @task.test_case.title
+      issue.assignee ||= @plan.platform.default_assignee
+      issue.title ||= "【#{@plan.platform.name} 测试失败】" + @task.test_case.title
       issue.state ||= :confirmed
       issue.content ||=
 """

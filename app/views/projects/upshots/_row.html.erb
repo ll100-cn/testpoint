@@ -14,8 +14,6 @@
   
     <span class="me-auto"><%= task.test_case.title %></span>
   
-    <span class="badge bg-secondary" style="width:70px"><%= task.platform.name %></span>
-
 
     <%= link_to "", "#", class: "stretched-link",
       data: { bs_target: "#applicationModal", bs_toggle: "modal", url: project_plan_task_upshot_path(@project, task.plan_id, task, upshot) } %>

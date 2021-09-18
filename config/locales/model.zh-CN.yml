@@ -25,9 +25,9 @@ zh-CN:
     attributes:
       plan:
         title: 标题
-        start_at: 开始时间
         archived: 是否存档
         platform_ids: 平台
+        platform_id: 平台
         folder_ids: 文件夹
         label_ids: 标签
         milestone_id: 里程碑
@@ -80,7 +80,6 @@ zh-CN:
         state: 状态
         issue_id: 问题
         attachments: 附件
-        platform_id: 平台
       test_case:
         title: 标题
         content: 内容

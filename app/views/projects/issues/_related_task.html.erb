@@ -1,6 +1,5 @@
-<% task_dom_id = dom_id(task) %>
-<p>
+<p class="d-flex align-items-center">
   <span class="text-muted">该问题来自测试</span>
   <span><%= link_to task.test_case.title, [@project, task.plan] %></span>
-  <span class="badge bg-secondary"><%= task.platform.name %></span>
+  <span class="badge bg-secondary ms-1"><%= task.plan.platform.name %></span>
 </p>

@@ -1,9 +1,23 @@
 <div class="page-header d-flex">
   <h2 class="me-3"><%= title(@plan.title) %></h2>
   <% if @plan.milestone %>
-    <%= link_to [@project, @plan.milestone], class: "border-start me-3" do %>
-      <h4><span class="badge bg-light text-dark"><%= @plan.milestone.title %></span></h4>
+    <%= link_to [@project, @plan.milestone], class: "border-start" do %>
+      <h4>
+        <span class="badge bg-light text-dark">
+          里程碑: <%= @plan.milestone.title %>
+        </span>
+      </h4>
     <% end %>
+  <% end %>
+
+  <% if @plan.platform %>
+    <div class="border-start">
+      <h4>
+        <span class="badge bg-light text-dark">
+          平台: <%= @plan.platform.name %>
+      </span>
+      </h4>
+    </div>
   <% end %>
 
   <%= link_to edit_project_plan_path(@project, @plan), class: "ms-auto" do %>

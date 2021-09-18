@@ -8,7 +8,6 @@
 #  state             :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  platform_id       :bigint
 #  message           :text
 #  test_case_version :datetime
 #  content           :text
@@ -20,7 +19,6 @@ class Task < ApplicationRecord
 
   belongs_to :test_case
   belongs_to :plan
-  belongs_to :platform
   has_many :issues
   has_many :upshots, class_name: "TaskUpshot"
 

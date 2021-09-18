@@ -23,7 +23,7 @@ RSpec.describe Projects::PlansController, type: :controller do
   end
 
   describe "POST create" do
-    let(:plan_attributes) { { title: "iOS 2.11.3" } }
+    let(:plan_attributes) { { title: "iOS 2.11.3", platform_id: platform.id } }
     let(:filter_attributes) { { folder_ids: project.folders.map { |folder| folder.id } } }
     action { post :create, params: { plan: plan_attributes, filter: filter_attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
