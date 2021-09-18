@@ -21,7 +21,7 @@ class IssueTemplate < ApplicationRecord
   accepts_nested_attributes_for :inputs, allow_destroy: true
 
   scope :available_for_build_form, -> { where(lookup_by_build_form: true ) }
-  enumerize :default_priority, in: [ :normal, :important ], default: :normal
+  enumerize :default_priority, in: Issue.priority.values, default: :normal
 
   def content_blank?
     inputs.blank?
