@@ -21,7 +21,8 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :resolved, :archived ], default: :pending, scope: true
+  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :archived ],
+                    default: :pending, scope: true
   enumerize :priority, in: { :low => :p2_low, :normal => :p1_normal, :important => :p0_important }, default: :normal, scope: true
 
   has_many :tasks, dependent: :destroy
