@@ -33,20 +33,8 @@ RSpec.describe Projects::IssuesController, type: :controller do
       it { is_expected.to respond_with :success }
     end
 
-    context "filter by created" do
-      before { attributes[:filter] = "assigned" }
-
-      it { is_expected.to respond_with :success }
-    end
-
-    context "filter by assigned" do
-      before { attributes[:filter] = "created" }
-
-      it { is_expected.to respond_with :success }
-    end
-
-    context "filter by subscribed" do
-      before { attributes[:filter] = "subscribed" }
+    context "filter by states" do
+      before { attributes[:filter] = "unconfirmed" }
 
       it { is_expected.to respond_with :success }
     end

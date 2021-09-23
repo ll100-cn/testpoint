@@ -49,6 +49,7 @@ class Issue < ApplicationRecord
   scope :created_issues, ->(member) { where(creator_id: member.id) }
   scope :assigned_issues, ->(member) { where(assignee_id: member.id) }
   scope :subscribed_issues, ->(user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }
+  scope :filter_state_is, ->(code) { where(state: self.filter_states_options[code.to_sym][:states]) }
   scope :state_filter, ->(text) {
     case text
     when "opening"
@@ -168,6 +169,22 @@ class Issue < ApplicationRecord
   def archive
     self.errors.add(:state, :invalid) and return false if self.state.archived?
     self.update(state: :archived)
+  end
+
+  def self.filter_states_options
+    {
+      unconfirmed: [:pending, :waiting],
+      developing: [:confirmed, :processing],
+      developed: [:processed],
+      deploying: nil,
+      resolved: nil,
+      archived: nil,
+    }.map do |(code, states)|
+      [ code, Hashie::Mash.new(
+        states: (states || [ code ]).map(&:to_s),
+        text: I18n.t(code, scope: "enumerize.issue.state")
+      ) ]
+    end.to_h
   end
 
   protected

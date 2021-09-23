@@ -22,11 +22,11 @@
          全部 (<%= @issue_state_counts.values.sum %>)
        <% end %>
      </li>
-     <% Issue.state.options.each do |(text, value)| %>
+     <% Issue.filter_states_options.each do |(code, attrs)| %>
 
       <li class="nav-item">
-        <%= n.link_to value, url_for(action: :index, filter: value), class: "nav-item nav-link" do %>
-          <%= text %> (<%= @issue_state_counts[value].to_i %>)
+        <%= n.link_to code, url_for(action: :index, filter: code), class: "nav-item nav-link" do %>
+          <%= attrs[:text] %> (<%= @issue_state_counts.values_at(*attrs[:states]).compact.sum %>)
         <% end %>
       </li>
 

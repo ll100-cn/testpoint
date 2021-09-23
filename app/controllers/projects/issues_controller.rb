@@ -11,40 +11,14 @@ class Projects::IssuesController < BaseProjectController
 
     @issue_state_counts = issues_scope.group(:state).count
 
-    issues_scope = issues_scope.where(state: @filter) if @filter != "all"
+    issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
     issues_scope = issues_scope.where("title LIKE ?", "%#{@keyword}%") if @keyword
     @issue_searcher = IssueSearcher.from(issues_scope, params.fetch(:q, {}))
     @issues_scope = @issue_searcher.result
 
     @q = issues_scope.ransack(params[:q])
-    # @issues_scope = @q.result
     @filter_issues_scope = @issues_scope.unscope(:order)
     @issues = @issues_scope.page(params[:page])
-
-
-
-    # sorts = "updated_at desc"
-    # sorts = params[:q].delete("s") if params.dig(:q, :s).present?
-
-    # @q = @issues.ransack(params[:q])
-    # @q.state_filter ||= params[:q].blank? && params[:filter].blank? ? "opening" : "all"
-    # @issues_scope = @q.result.unscope(:order).sorted.order(sorts)
-    # @q.sorts = sorts
-
-    # if params[:filter] == "created"
-    #   @issues_scope = @issues_scope.created_issues(current_member)
-    # end
-
-    # if params[:filter] == "assigned"
-    #   @issues_scope = @issues_scope.assigned_issues(current_member)
-    # end
-
-    # if params[:filter] == "subscribed"
-    #   @issues_scope = @issues_scope.subscribed_issues(current_user)
-    # end
-
-    # @issues_state_counts = @issues_scope.unscope(:order, where: :state).group(:state).count
-    # @issues = @issues_scope.with_labels.page(params[:page])
   end
 
   def new
