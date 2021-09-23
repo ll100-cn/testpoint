@@ -1,10 +1,10 @@
 <div class="page-header justify-content-between">
   <h2><%= title(page_i18n :index, model_name: h(@issues)) %>（<%= @project.name %>）</h2>
 
-  <%= search_form_for @q, url: project_issues_path(@project), class: "ms-auto" do |f| %>
+  <%= form_tag url_for(action: :index), method: :get, class: "ms-auto" do |f| %>
     <div class="input-group">
-      <%= f.search_field :title_cont, placeholder: "搜索标题", class: "form-control" %>
-      <%= f.submit "搜索", class: "btn btn-primary" %>
+      <%= search_field_tag :keyword, @keyword, placeholder: "搜索标题", class: "form-control" %>
+      <%= submit_tag "搜索", class: "btn btn-primary" %>
     </div>
   <% end %>
 
@@ -14,44 +14,66 @@
 </div>
 
 <% issues_scope = @project.issues %>
-<div class="nav-scroll">
+<div class="nav-scroll mb-n1px position-relative zindex-999">
   <ul class="nav nav-tabs">
-   <%= fume_nav params[:filter] || "all" do |n| %>
+   <%= fume_nav @filter do |n| %>
      <li class="nav-item">
-       <%= n.link_to "all", current_url(filter: "all"), class: "nav-item nav-link" do %>
-         全部问题 (<%= issues_scope.count %>)
+       <%= n.link_to "all", url_for(action: :index), class: "nav-item nav-link" do %>
+         全部 (<%= @issue_state_counts.values.sum %>)
        <% end %>
      </li>
-     <li class="nav-item">
-      <%= n.link_to "assigned", current_url(filter: "assigned"), class: "nav-item nav-link" do %>
-        我受理的 (<%= issues_scope.assigned_issues(current_member).count %>)
-      <% end %>
-     </li>
-     <li class="nav-item">
-       <%= n.link_to "created", current_url(filter: "created"), class: "nav-item nav-link" do %>
-         我创建的 (<%= issues_scope.created_issues(current_member).count %>)
-       <% end %>
-     </li>
-     <li class="nav-item">
-       <%= n.link_to "subscribed", current_url(filter: "subscribed"), class: "nav-item nav-link" do %>
-         我订阅的 (<%= issues_scope.subscribed_issues(current_user).count %>)
-       <% end %>
-     </li>
+     <% Issue.state.options.each do |(text, value)| %>
+
+      <li class="nav-item">
+        <%= n.link_to value, url_for(action: :index, filter: value), class: "nav-item nav-link" do %>
+          <%= text %> (<%= @issue_state_counts[value].to_i %>)
+        <% end %>
+      </li>
+
+     <% end %>
     <% end %>
   </ul>
 </div>
 
-<div class="card border-top-0">
+<div class="card rounded-top-left-0">
   <div class="card-body">
 
     <button class="btn btn-secondary btn-block d-md-none mb-3" type="button" data-bs-toggle="collapse" data-target="#issueFilterCollapse">
       过滤条件
     </button>
 
+    <%= bootstrap_inline_form_for @issue_searcher, as: :q, url: url_for(action: :index), method: :get, html: { class: "simple_form row mb-0 auto-submit" } do |f| %>
 
-    <div class="collapse d-md-flex mx-0 mb-3 align-items-center" id="issueFilterCollapse">
-      <%= render 'filter_bar', issues_scope: issues_scope %>
-    </div>
+      <% label_options = @project.labels.where(id: @issue_searcher.labels_counts.keys).map do |label| %>
+        <% ["#{label.name} (#{@issue_searcher.labels_counts[label.id].to_i})", label.id, data: { content: [
+                label_badge_tag(label, nil, class: "badge-circle me-2"),
+                label.name,
+                "(#{@issue_searcher.labels_counts[label.id].to_i})"
+              ].join(" ") } ] %>
+      <% end %>
+
+      <%= f.input :label_id_eq, collection: label_options, input_html: { class: "selectpicker" }, include_blank: "全部" %>
+
+      <% milestone_options = @project.milestones.where(id: @issue_searcher.milestone_counts.keys).ranked.map do |milestone| %>
+        <% ["#{milestone.title} (#{@issue_searcher.milestone_counts[milestone.id].to_i})", milestone.id] %>
+      <% end %>
+      <%= f.input :milestone_id_eq, collection: milestone_options, input_html: { class: "selectpicker" }, include_blank: "任意" %>
+    
+      <% assignee_options = @project.members.where(id: @issue_searcher.assignee_counts.keys).ranked.map do |member| %>
+        <% ["#{member.name} (#{@issue_searcher.assignee_counts[member.id].to_i})", member.id] %>
+      <% end %>
+      <%= f.input :assignee_id_eq, collection: assignee_options, input_html: { class: "selectpicker" }, include_blank: "任意" %>
+
+      <% creator_options = @project.members.where(id: @issue_searcher.creator_counts.keys).ranked.map do |member| %>
+        <% ["#{member.name} (#{@issue_searcher.creator_counts[member.id].to_i})", member.id] %>
+      <% end %>
+      <%= f.input :creator_id_eq, collection: creator_options, input_html: { class: "selectpicker" }, include_blank: "任意" %>
+
+      <%= f.input :task_id_is, collection: [["案例问题", "not_null"], ["非案例问题", "null"]], input_html: { class: "selectpicker" }, include_blank: "所有" %>
+  
+      <%= hidden_field_tag :filter, @filter %>
+      <%= hidden_field_tag :keyword, @keyword %>
+    <% end %>
 
     <table class="table d-none d-md-table">
       <colgroup>
