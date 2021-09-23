@@ -140,6 +140,12 @@ zh-CN:
         starts_on: 起始时间
         ends_on: 截至时间
         role: 成员权限
+      issue_searcher:
+        label_id_eq: 标签
+        milestone_id_eq: 里程碑
+        assignee_id_eq: 受理人
+        creator_id_eq: 创建人
+        task_id_is: 问题类型
   errors:
     messages:
       blank: 不能为空

@@ -1,10 +1,10 @@
 <div class="page-header justify-content-between">
   <h2><%= title(page_i18n :index, model_name: h(@issues)) %>（<%= @project.name %>）</h2>
 
-  <%= search_form_for @q, url: project_issues_path(@project), class: "ms-auto" do |f| %>
+  <%= form_tag url_for(action: :index), method: :get, class: "ms-auto" do |f| %>
     <div class="input-group">
-      <%= f.search_field :title_cont, placeholder: "搜索标题", class: "form-control" %>
-      <%= f.submit "搜索", class: "btn btn-primary" %>
+      <%= search_field_tag :keyword, @keyword, placeholder: "搜索标题", class: "form-control" %>
+      <%= submit_tag "搜索", class: "btn btn-primary" %>
     </div>
   <% end %>
 
@@ -14,7 +14,7 @@
 </div>
 
 <% issues_scope = @project.issues %>
-<div class="nav-scroll">
+<div class="nav-scroll mb-n1px position-relative zindex-999">
   <ul class="nav nav-tabs">
    <%= fume_nav @filter do |n| %>
      <li class="nav-item">
@@ -35,127 +35,45 @@
   </ul>
 </div>
 
-<div class="card border-top-0">
+<div class="card rounded-top-left-0">
   <div class="card-body">
 
     <button class="btn btn-secondary btn-block d-md-none mb-3" type="button" data-bs-toggle="collapse" data-target="#issueFilterCollapse">
       过滤条件
     </button>
 
+    <%= bootstrap_inline_form_for @issue_searcher, as: :q, url: url_for(action: :index), method: :get, html: { class: "simple_form row mb-0 auto-submit" } do |f| %>
 
-    <div class="collapse d-md-flex mx-0 mb-3 align-items-center" id="issueFilterCollapse">
-      <% issue_scope = @issues_scope %>
-      <span class="me-2 mb-1"><%=h Issue, :label_ids %></span>
-
-      <% label = Label.where(id: @issue_searcher.label_id_eq).take %>
-
-      <%= fume_nav label&.id do |n| %>
-        <div class="dropdown me-2 mb-1">
-
-          <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-            <%= label_badge_tag label, nil, class: "badge-circle me-2" %><%= label&.name || page_i18n(:all) %>
-          </button>
-
-          <div class="dropdown-menu">
-            <%= n.link_to nil, current_url(q: { label_id_eq: nil }), class: "dropdown-item" do %>
-              <%= label_badge_tag nil, nil, class: "badge-circle me-2" %><%= page_i18n(:all) %>
-            <% end %>
-            <% @project.labels.each do |label| %>
-              <%= n.link_to label.id, current_url(q: { label_id_eq: label.id }), class: "dropdown-item" do %>
-                <%= label_badge_tag label, nil, class: "badge-circle me-2" %>
-                <%= label.name %>
-                <%= "(#{@issue_searcher.labels_counts[label.id].to_i})" %>
-              <% end %>
-            <% end %>
-            <% if can? :index, Label %>
-              <div class="dropdown-divider"></div>
-              <%= link_to page_i18n(:index, model_name: h(Label)), "javascript:void(0)", class: "dropdown-item", data: { bs_toggle: "modal", bs_target: "#applicationModal", url: project_labels_path(@project, ok_url: request.fullpath) } %>
-            <% end %>
-          </div>
-        </div>
+      <% label_options = @project.labels.where(id: @issue_searcher.labels_counts.keys).map do |label| %>
+        <% ["#{label.name} (#{@issue_searcher.labels_counts[label.id].to_i})", label.id, data: { content: [
+                label_badge_tag(label, nil, class: "badge-circle me-2"),
+                label.name,
+                "(#{@issue_searcher.labels_counts[label.id].to_i})"
+              ].join(" ") } ] %>
       <% end %>
 
-      <span class="me-2 mb-1"><%=h Issue, :milestone_id %></span>
-      <% milestone = Milestone.where(id: @issue_searcher.milestone_id_eq).take %>
-      <%= fume_nav milestone&.id do |n| %>
-        <div class="dropdown me-2 mb-1">
-          <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-            <%= milestone&.title || page_i18n(:all) %>
-          </button>
+      <%= f.input :label_id_eq, collection: label_options, input_html: { class: "selectpicker" }, include_blank: "全部" %>
 
-          <div class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
-
-            <%= n.link_to nil, page_i18n(:all), current_url(q: { milestone_id_eq: nil }), class: "dropdown-item" %>
-
-            <% @project.milestones.where(id: @issue_searcher.milestone_counts.keys).ranked.each do |milestone| %>
-              <%= n.link_to milestone.id, current_url(q: { milestone_id_eq: milestone.id }), class: "dropdown-item" do %>
-                <%= milestone.title %> 
-                <%= "(#{@issue_searcher.milestone_counts[milestone.id].to_i})" %>
-              <% end %>
-            <% end %>
-
-          </div>
-        </div>
+      <% milestone_options = @project.milestones.where(id: @issue_searcher.milestone_counts.keys).ranked.map do |milestone| %>
+        <% ["#{milestone.title} (#{@issue_searcher.milestone_counts[milestone.id].to_i})", milestone.id] %>
       <% end %>
-
-      <span class="me-2 mb-1"><%=h Issue, :assignee_id %></span>
-      <% assignee = @project.members.where(id: @issue_searcher.assignee_id_eq).take %>
-      <%= fume_nav assignee&.id do |n| %>
-        <div class="dropdown me-2 mb-1">
-          <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-            <%= assignee&.name || page_i18n(:all) %>
-          </button>
-          <div class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
-            <%= n.link_to nil, page_i18n(:all), current_url(q: { assignee_id_eq: nil }), class: "dropdown-item" %>
-            <% @project.members.where(id: @issue_searcher.assignee_counts.keys).ranked.each do |assignee| %>
-              <%= n.link_to assignee.id, current_url(q: { assignee_id_eq: assignee.id }), class: "dropdown-item" do %>
-                <%= assignee.name %>
-                <%= "(#{@issue_searcher.assignee_counts[assignee.id].to_i})" %>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+      <%= f.input :milestone_id_eq, collection: milestone_options, input_html: { class: "selectpicker" }, include_blank: "任意" %>
+    
+      <% assignee_options = @project.members.where(id: @issue_searcher.assignee_counts.keys).ranked.map do |member| %>
+        <% ["#{member.name} (#{@issue_searcher.assignee_counts[member.id].to_i})", member.id] %>
       <% end %>
+      <%= f.input :assignee_id_eq, collection: assignee_options, input_html: { class: "selectpicker" }, include_blank: "任意" %>
 
-      <span class="me-2 mb-1"><%=h Issue, :creator_id %></span>
-      <% creator = @project.members.where(id: @issue_searcher.creator_id_eq).take %>
-      <%= fume_nav creator&.id do |n| %>
-        <div class="dropdown me-2 mb-1">
-          <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-            <%= creator&.name || page_i18n(:all) %>
-          </button>
-          <div class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
-            <%= n.link_to nil, page_i18n(:all), current_url(q: { creator_id_eq: nil }), class: "dropdown-item" %>
-            <% @project.members.where(id: @issue_searcher.creator_counts.keys).ranked.each do |creator| %>
-              <%= n.link_to creator.id, current_url(q: { creator_id_eq: creator.id }), class: "dropdown-item" do %>
-                <%= creator.name %>
-                <%= "(#{@issue_searcher.creator_counts[creator.id].to_i})" %>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+      <% creator_options = @project.members.where(id: @issue_searcher.creator_counts.keys).ranked.map do |member| %>
+        <% ["#{member.name} (#{@issue_searcher.creator_counts[member.id].to_i})", member.id] %>
       <% end %>
+      <%= f.input :creator_id_eq, collection: creator_options, input_html: { class: "selectpicker" }, include_blank: "任意" %>
 
-      <span class="me-2 mb-1">问题来源</span>
-      <%= fume_nav @issue_searcher.task_id_is do |n| %>
-        <div class="dropdown me-auto mb-1">
-          <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-            <%= @issue_searcher.task_id_is.presence || "所有" %>
-          </button>
-          <div class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
-            <%= n.link_to nil, current_url(q: { task_id_is: nil }), class: "dropdown-item" do %>
-              所有
-            <% end %>
-            <%= n.link_to "not_null", current_url(q: { task_id_is: "not_null" }), class: "dropdown-item" do %>
-              来自测试案例
-            <% end %>
-            <%= n.link_to "null", current_url(q: { task_id_is: "null" }), class: "dropdown-item" do %>
-              隐藏来自测试
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
+      <%= f.input :task_id_is, collection: [["案例问题", "not_null"], ["非案例问题", "null"]], input_html: { class: "selectpicker" }, include_blank: "所有" %>
+  
+      <%= hidden_field_tag :filter, @filter %>
+      <%= hidden_field_tag :keyword, @keyword %>
+    <% end %>
 
     <table class="table d-none d-md-table">
       <colgroup>

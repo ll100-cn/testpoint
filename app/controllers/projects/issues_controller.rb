@@ -6,11 +6,13 @@ class Projects::IssuesController < BaseProjectController
 
   def index
     @filter = params[:filter] || "all"
+    @keyword = params[:keyword].presence
     issues_scope = @issues
 
     @issue_state_counts = issues_scope.group(:state).count
 
     issues_scope = issues_scope.where(state: @filter) if @filter != "all"
+    issues_scope = issues_scope.where("title LIKE ?", "%#{@keyword}%") if @keyword
     @issue_searcher = IssueSearcher.from(issues_scope, params.fetch(:q, {}))
     @issues_scope = @issue_searcher.result
 
