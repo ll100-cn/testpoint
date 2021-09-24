@@ -8,7 +8,11 @@
       <li>
         <div class="d-flex">
           <span class="me-2"><%= upshot.phase.title %></span>
-          <span><%= task_state_with_icon(upshot.state) if upshot.state %></span>
+          <% if upshot.state_override %>
+            <span><%= task_state_with_icon(upshot.state_override) %></span>
+          <% else %>
+            <span>未操作</span>
+          <% end %>
           <small class="text-muted ms-auto"><%=l upshot.state_changed_at, format: :short if upshot.state_changed_at? %></small>
         </div>
       </li>
