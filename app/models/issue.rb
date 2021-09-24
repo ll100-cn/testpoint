@@ -18,6 +18,7 @@
 #  priority        :string
 #  task_id         :bigint
 #  label_ids_cache :bigint           default([]), is an Array
+#  category_id     :bigint
 #
 
 class Issue < ApplicationRecord
@@ -27,14 +28,13 @@ class Issue < ApplicationRecord
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_many :issues_labels, dependent: :destroy
-  has_many :labels, through: :issues_labels
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_users, through: :subscriptions, source: :user
   belongs_to :milestone, optional: true
   belongs_to :creator, class_name: Member.to_s
   belongs_to :assignee, class_name: Member.to_s, optional: true
   belongs_to :project
+  belongs_to :category, optional: true
   belongs_to :task, optional: true
   has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
   has_many :activities, class_name: IssueActivity.to_s, dependent: :destroy
@@ -84,7 +84,6 @@ class Issue < ApplicationRecord
   def update_with_author(params, member)
     transaction do
       assign_attributes(params)
-      self.label_ids_cache = self.label_ids
       self.last_edited_at = Time.current if will_save_change_to_content?
       raise ActiveRecord::Rollback unless self.save
       record_property_changes!(member)
@@ -97,7 +96,7 @@ class Issue < ApplicationRecord
     self.project_id = project_id
     self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || self.creator
     self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
-    self.labels = []
+    self.category = nil
     self.milestone_id = nil
     transaction do
       unless self.save
@@ -108,7 +107,7 @@ class Issue < ApplicationRecord
   end
 
   def record_property_changes!(member)
-    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :label_ids_cache).each do |property, (before_value, after_value)|
+    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :category_id).each do |property, (before_value, after_value)|
       activity = self.activities.new
       activity.property = property
       activity.before_value = before_value

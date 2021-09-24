@@ -1,0 +1,9 @@
+<% before_category = Category.find_by(id: activity.before_value) %>
+<% after_category = Category.find_by(id: activity.after_value) %>
+<span>将</span>
+<span class="text-info"><%=h Issue, :category_id %></span>
+<span>从</span>
+
+<%= activity.before_value.nil? ? "无" : category_badge_tag(before_category, before_category.name) %>
+<span>修改为</span>
+<%= activity.after_value.nil? ? "无" : category_badge_tag(after_category, after_category.name) %>

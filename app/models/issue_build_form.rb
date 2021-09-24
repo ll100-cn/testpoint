@@ -16,7 +16,7 @@ class IssueBuildForm
         raise ActiveRecord::Rollback
       end
 
-      self.issue.labels << self.template.default_label if self.template.default_label
+      self.issue.category = self.template.default_category
 
       return if self.template.content_blank?
 

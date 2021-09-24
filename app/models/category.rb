@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: labels
+# Table name: categories
 #
 #  id          :bigint           not null, primary key
 #  name        :string
@@ -11,10 +11,9 @@
 #  project_id  :bigint
 #
 
-class Label < ApplicationRecord
-  has_many :issues_labels, dependent: :destroy
-  has_many :issues, through: :issues_labels
+class Category < ApplicationRecord
   belongs_to :project
+  has_many :issues
 
   validates :name, presence: true
 end

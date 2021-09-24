@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_18_075057) do
+ActiveRecord::Schema.define(version: 2021_09_24_020453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 2021_09_18_075057) do
     t.string "content_type"
     t.index ["attachmentable_id"], name: "index_attachments_on_attachmentable_id"
     t.index ["attachmentable_type"], name: "index_attachments_on_attachmentable_type"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_categories_on_project_id"
   end
 
   create_table "comment_attachments", force: :cascade do |t|
@@ -148,9 +158,9 @@ ActiveRecord::Schema.define(version: 2021_09_18_075057) do
     t.boolean "lookup_by_build_form", default: true
     t.string "title_suggestion"
     t.string "content_suggestion"
-    t.bigint "default_label_id"
+    t.bigint "default_category_id"
     t.string "default_priority"
-    t.index ["default_label_id"], name: "index_issue_templates_on_default_label_id"
+    t.index ["default_category_id"], name: "index_issue_templates_on_default_category_id"
     t.index ["project_id"], name: "index_issue_templates_on_project_id"
   end
 
@@ -170,9 +180,11 @@ ActiveRecord::Schema.define(version: 2021_09_18_075057) do
     t.string "priority"
     t.bigint "task_id"
     t.bigint "label_ids_cache", default: [], array: true
+    t.bigint "category_id"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
+    t.index ["category_id"], name: "index_issues_on_category_id"
     t.index ["creator_id"], name: "index_issues_on_creator_id"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
@@ -186,16 +198,6 @@ ActiveRecord::Schema.define(version: 2021_09_18_075057) do
     t.datetime "updated_at", null: false
     t.index ["issue_id"], name: "index_issues_labels_on_issue_id"
     t.index ["label_id"], name: "index_issues_labels_on_label_id"
-  end
-
-  create_table "labels", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.string "color"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "project_id"
-    t.index ["project_id"], name: "index_labels_on_project_id"
   end
 
   create_table "login_codes", force: :cascade do |t|
@@ -404,6 +406,7 @@ ActiveRecord::Schema.define(version: 2021_09_18_075057) do
   end
 
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "categories", "projects"
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "members"
   add_foreign_key "folders", "projects"
@@ -418,9 +421,8 @@ ActiveRecord::Schema.define(version: 2021_09_18_075057) do
   add_foreign_key "issues", "milestones"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "tasks"
+  add_foreign_key "issues_labels", "categories", column: "label_id"
   add_foreign_key "issues_labels", "issues"
-  add_foreign_key "issues_labels", "labels"
-  add_foreign_key "labels", "projects"
   add_foreign_key "milestones", "projects"
   add_foreign_key "phases", "plans"
   add_foreign_key "plans", "platforms"

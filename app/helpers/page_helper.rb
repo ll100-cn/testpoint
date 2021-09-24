@@ -45,7 +45,7 @@ module PageHelper
 
 
 
-  def label_badge_tag(label, *args, &block)
+  def category_badge_tag(label, *args, &block)
     options = args.extract_options!
     options[:class] = "badge text-white #{options[:class]}"
     options[:style] = "background-color: #{label&.color || '#6c757d'}; #{options[:style]}"

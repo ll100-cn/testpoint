@@ -32,9 +32,7 @@
         </td>
         <td><%= link_to issue.project.name, [issue.project] %></td>
         <td>
-          <% issue.labels.each do |label| %>
-            <%= label_badge_tag(label, label.name) %>
-          <% end %>
+          <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
         </td>
         <td>
           <span class="text-issue-<%= issue.state %>">

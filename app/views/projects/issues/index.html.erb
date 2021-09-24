@@ -44,15 +44,15 @@
 
     <%= bootstrap_inline_form_for @issue_searcher, as: :q, url: url_for(action: :index), method: :get, html: { class: "simple_form row mb-0 auto-submit" } do |f| %>
 
-      <% label_options = @project.labels.where(id: @issue_searcher.labels_counts.keys).map do |label| %>
-        <% ["#{label.name} (#{@issue_searcher.labels_counts[label.id].to_i})", label.id, data: { content: [
-                label_badge_tag(label, nil, class: "badge-circle me-2"),
-                label.name,
-                "(#{@issue_searcher.labels_counts[label.id].to_i})"
+      <% category_options = @project.categories.where(id: @issue_searcher.categories_counts.keys).map do |category| %>
+        <% ["#{category.name} (#{@issue_searcher.categories_counts[category.id].to_i})", category.id, data: { content: [
+                category_badge_tag(category, nil, class: "badge-circle me-2"),
+                category.name,
+                "(#{@issue_searcher.categories_counts[category.id].to_i})"
               ].join(" ") } ] %>
       <% end %>
 
-      <%= f.input :label_id_eq, collection: label_options, input_html: { class: "selectpicker" }, include_blank: "全部" %>
+      <%= f.input :category_id_eq, collection: category_options, input_html: { class: "selectpicker" }, include_blank: "全部" %>
 
       <% milestone_options = @project.milestones.where(id: @issue_searcher.milestone_counts.keys).ranked.map do |milestone| %>
         <% ["#{milestone.title} (#{@issue_searcher.milestone_counts[milestone.id].to_i})", milestone.id] %>
@@ -89,7 +89,7 @@
         <tr>
           <th><%= sort_link(@q, :id)%></th>
           <th><%= sort_link(@q, :title)%></th>
-          <th><%= sort_link(@q, :label_ids)%></th>
+          <th><%= sort_link(@q, :category_id)%></th>
           <th><%= sort_link(@q, :state)%></th>
           <th><%= sort_link(@q, :milestone_id)%></th>
           <th><%= sort_link(@q, :creator_id)%></th>
@@ -104,9 +104,7 @@
               <%= link_to issue.title_with_priority, [@project, issue] %>
             </td>
             <td>
-              <% issue.labels.each do |label| %>
-                <%= label_badge_tag(label, label.name) %>
-              <% end %>
+              <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
             </td>
             <td>
               <span class="text-issue-<%= issue.state %>">
@@ -141,9 +139,7 @@
             </div>
             <p class="mb-3">
               <small>
-                <% issue.labels.each do |label| %>
-                  <%= label_badge_tag(label, label.name) %>
-                <% end %>
+                <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
               </small>
             </p>
             <div class="d-flex justify-content-between text-muted">

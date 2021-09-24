@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: labels
+# Table name: categories
 #
 #  id          :bigint           not null, primary key
 #  name        :string
@@ -12,8 +12,8 @@
 #
 
 FactoryBot.define do
-  factory :label do
-    name { "label1" }
+  factory :category do
+    name { "分类1" }
     description { "content of label1" }
     color { "#ace0ef" }
     project

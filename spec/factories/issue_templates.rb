@@ -10,7 +10,7 @@
 #  lookup_by_build_form :boolean          default(TRUE)
 #  title_suggestion     :string
 #  content_suggestion   :string
-#  default_label_id     :bigint
+#  default_category_id  :bigint
 #  default_priority     :string
 #
 

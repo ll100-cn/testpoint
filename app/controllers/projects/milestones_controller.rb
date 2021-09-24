@@ -16,7 +16,7 @@ class Projects::MilestonesController < BaseProjectController
 
   def show
     @q = @milestone.issues.ransack(params[:q])
-    @issues = @q.result.with_labels.page(params[:page])
+    @issues = @q.result.page(params[:page])
     @tasks_count_mapping = Task.where(plan_id: @milestone.plans).group(:plan_id, :state).count
   end
 

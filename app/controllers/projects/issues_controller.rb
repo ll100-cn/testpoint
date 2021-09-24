@@ -104,8 +104,8 @@ protected
 
   def issue_params_names
     names = [:priority, :title, :content, :state, :milestone_id, :assignee_id,
-            :template_id, :project_id,
-            attachment_ids: [], label_ids: [], subscribed_user_ids: [],
+            :template_id, :project_id, :category_id,
+            attachment_ids: [], subscribed_user_ids: [],
             template_ids: []]
     names += [ :creator_id ] if can? :critical, Issue
     names

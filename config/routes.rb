@@ -71,7 +71,7 @@ Rails.application.routes.draw do
         patch :archive, on: :member
       end
       resources :platforms
-      resources :labels
+      resources :categories
       resources :test_case_labels
       resources :milestones
       resources :analytics do

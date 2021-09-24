@@ -40,9 +40,7 @@
   <% end %>
 
   <% if type == "label" %>
-    <% issue.labels.each do |label| %>
-      <span class="badge mb-1 text-white text-start" style="background-color: <%= label.color%>"><%=label.name %></span>
-    <% end %>
+    <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
     <span><%= link_to content_tag(:i, '',class: 'far fa-edit'), "javascript:void(0)", data: { action: "click->inline-edit#replace" }, class: "float-right" %></span>
   <% end %>
 

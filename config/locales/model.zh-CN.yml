@@ -12,7 +12,7 @@ zh-CN:
       test_case: 测试用例
       user: 用户
       comment: 评论
-      label: 标签
+      category: 分类
       test_case_label: 标签
       milestone: 里程碑
       project: 项目
@@ -28,8 +28,8 @@ zh-CN:
         archived: 是否存档
         platform_ids: 平台
         platform_id: 平台
+        category_id: 分类
         folder_ids: 文件夹
-        label_ids: 标签
         milestone_id: 里程碑
         creator_id: 创建人
       attachment:
@@ -44,7 +44,7 @@ zh-CN:
         title: 标题
         content: 内容
         state: 状态
-        label_ids: 标签
+        category_id: 分类
         milestone_id: 里程碑
         project_id: 项目
         comments: 评论
@@ -141,7 +141,7 @@ zh-CN:
         ends_on: 截至时间
         role: 成员权限
       issue_searcher:
-        label_id_eq: 标签
+        category_id_eq: 分类
         milestone_id_eq: 里程碑
         assignee_id_eq: 受理人
         creator_id_eq: 创建人

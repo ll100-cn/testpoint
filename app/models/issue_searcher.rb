@@ -2,7 +2,7 @@ class IssueSearcher
   include ActiveAttr::Model
 
   attribute :base
-  attribute :label_id_eq
+  attribute :category_id_eq
   attribute :milestone_id_eq
   attribute :assignee_id_eq
   attribute :creator_id_eq
@@ -18,8 +18,8 @@ class IssueSearcher
 
     scope = base
 
-    if !except.include?(:label_id_eq) && label_id_eq.present?
-      scope = scope.where_exists(IssuesLabel.where(label_id: label_id_eq).where_table(:issue))
+    if !except.include?(:category_id_eq) && category_id_eq.present?
+      scope = scope.where(category_id: category_id_eq)
     end
 
     if !except.include?(:milestone_id_eq) && milestone_id_eq.present?
@@ -45,8 +45,8 @@ class IssueSearcher
     @result ||= build_scope
   end
 
-  def labels_counts
-    @labels_counts ||= build_scope(except: [:label_id_eq]).joins(:labels).group("labels.id").count
+  def categories_counts
+    @categories_counts ||= build_scope(except: [:category_id_eq]).group(:category_id).count
   end
 
   def milestone_counts

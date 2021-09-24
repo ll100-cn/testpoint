@@ -10,13 +10,13 @@
 #  lookup_by_build_form :boolean          default(TRUE)
 #  title_suggestion     :string
 #  content_suggestion   :string
-#  default_label_id     :bigint
+#  default_category_id  :bigint
 #  default_priority     :string
 #
 
 class IssueTemplate < ApplicationRecord
   belongs_to :project
-  belongs_to :default_label, class_name: Label.to_s, optional: true
+  belongs_to :default_category, class_name: Category.to_s, optional: true
   has_many :inputs, class_name: "IssueTemplateInput", foreign_key: :template_id, inverse_of: :template
   accepts_nested_attributes_for :inputs, allow_destroy: true
 

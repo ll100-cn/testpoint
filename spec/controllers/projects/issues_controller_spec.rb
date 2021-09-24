@@ -18,8 +18,8 @@ RSpec.describe Projects::IssuesController, type: :controller do
   before { sign_in superadmin }
 
   describe "GET index" do
-    let!(:label) { create :label }
-    let!(:issue) { create :issue, label_ids: [label.id], project: project }
+    let!(:category) { create :category}
+    let!(:issue) { create :issue, category: category, project: project }
     let!(:attributes) { { project_id: project.id } }
     action { get :index, params: attributes }
 

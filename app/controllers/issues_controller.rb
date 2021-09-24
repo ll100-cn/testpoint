@@ -13,7 +13,7 @@ class IssuesController < ApplicationController
     @q.sorts = sorts
 
     @issues_state_counts = @issues_scope.unscope(:order, where: :state).group(:state).count
-    @issues = @issues_scope.with_labels.page(params[:page])
+    @issues = @issues_scope.page(params[:page])
   end
 
   def assigned_to_me
@@ -25,6 +25,6 @@ class IssuesController < ApplicationController
     @issues_scope = @q.result
 
     @issues_state_counts = @issues_scope.unscope(:order, where: :state).group(:state).count
-    @issues = @issues_scope.with_labels.page(params[:page])
+    @issues = @issues_scope.page(params[:page])
   end
 end

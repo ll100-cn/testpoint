@@ -1,10 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Projects::LabelsController, type: :controller do
+RSpec.describe Projects::CategoriesController, type: :controller do
   let!(:project) { create :project }
-  let!(:label) { create :label, project: project }
-  let!(:issue) { create :issue, project: project }
-  let!(:issue_label) { create :issues_label, issue_id: issue.id, label_id: label.id }
+  let!(:category) { create :category, project: project }
+  let!(:issue) { create :issue, project: project, category: category }
   login_superadmin
 
   describe "GET index" do
@@ -19,18 +18,18 @@ RSpec.describe Projects::LabelsController, type: :controller do
 
   describe "POST create" do
     let(:attributes) { { name: "bug", description: "it is a bug", color: "#ace0ef" } }
-    action { post :create, params: { label: attributes, project_id: project.id } }
+    action { post :create, params: { category: attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
   end
 
   describe "PUT update" do
     let(:attributes) { { name: "help wanted" } }
-    action { put :update, params: { id: label.id, label: attributes, project_id: project.id } }
+    action { put :update, params: { id: category.id, category: attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
   end
 
   describe "DELETE destroy" do
-    action(skip: true) { delete :destroy, params: { id: label.id, project_id: project.id } }
-    it { expect { do_action }.to change { Label.count }.by(-1) }
+    action(skip: true) { delete :destroy, params: { id: category.id, project_id: project.id } }
+    it { expect { do_action }.to change { Category.count }.by(-1) }
   end
 end

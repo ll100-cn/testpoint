@@ -75,9 +75,7 @@
                 <%= link_to issue.title_with_priority, [@project, issue] %>
               </td>
               <td>
-                <% issue.labels.each do |label| %>
-                  <%= label_badge_tag(label, label.name) %>
-                <% end %>
+                <%= category_badge_tag(issue.category, issue.category.name) %>
               </td>
               <td>
                 <span class="text-issue-<%= issue.state %>">
