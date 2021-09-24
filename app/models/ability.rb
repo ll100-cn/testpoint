@@ -27,7 +27,7 @@ class Ability
   def apply_reporter_permissions(member)
     can :read,                  Milestone
     can [:read, :create],       Comment
-    can [:read, :create, :archive], Issue
+    can [:read, :create, :archive, :unresolve], Issue
     can :update,                Comment,  member_id:   member.id
     can [:read, :create, :update], IssueInfo
   end
