@@ -45,11 +45,15 @@ class Issue < ApplicationRecord
   validates :title, presence: true
 
   scope :sorted, -> { order(:priority) }
-  scope :with_labels, -> { includes(:labels) }
   scope :created_issues, ->(member) { where(creator_id: member.id) }
   scope :assigned_issues, ->(member) { where(assignee_id: member.id) }
   scope :subscribed_issues, ->(user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }
-  scope :filter_state_is, ->(code) { where(state: self.filter_states_options[code.to_sym][:states]) }
+  scope :assignee_id_is, ->(value) { value.in?(["not_null", true]) ? where.not(assignee_id: nil) : where(assignee_id: nil) }
+  scope :filter_state_is, ->(code) {
+    conds = self.filter_states_options[code.to_sym][:conds]
+    cond_any_of(conds)
+  }
+
   scope :state_filter, ->(text) {
     case text
     when "opening"
@@ -75,10 +79,6 @@ class Issue < ApplicationRecord
 
   def default_content
     tasks.map(&:message).join(" ")
-  end
-
-  def self.ransackable_scopes(auth_object = nil)
-    [ :state_filter ]
   end
 
   def update_with_author(params, member)
@@ -172,18 +172,23 @@ class Issue < ApplicationRecord
 
   def self.filter_states_options
     {
-      unconfirmed: [:pending, :waiting],
-      developing: [:confirmed, :processing],
-      developed: [:processed],
+      unassigned: [ { state: ["pending", "waiting"] }, { state: "confirmed", assignee_id_is: false } ],
+      developing: [ { state: "confirmed", assignee_id_is: true }, { state: "processing" } ],
+      developed:  [ { state: "processed" } ],
       deploying: nil,
       resolved: nil,
       archived: nil,
-    }.map do |(code, states)|
-      [ code, Hashie::Mash.new(
-        states: (states || [ code ]).map(&:to_s),
-        text: I18n.t(code, scope: "enumerize.issue.state")
-      ) ]
+    }.map do |(code, conds)|
+      attrs = {}
+      attrs[:states] = [code.to_s]
+      attrs[:conds] = conds || [ { state: code } ]
+      attrs[:text] = I18n.t(code, scope: "enumerize.issue.state")
+      [ code, attrs ]
     end.to_h
+  end
+
+  def self.ransackable_scopes(auth_object = nil)
+    [ :state_filter, :assignee_id_is ]
   end
 
   protected

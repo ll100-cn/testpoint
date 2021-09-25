@@ -34,7 +34,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
     end
 
     context "filter by states" do
-      before { attributes[:filter] = "unconfirmed" }
+      before { attributes[:filter] = "developing" }
 
       it { is_expected.to respond_with :success }
     end

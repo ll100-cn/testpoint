@@ -93,6 +93,13 @@ module PageHelper
     content_tag :span, text, class: "badge #{color}"
   end
 
+  def issue_filter_state_count(code, data)
+    conds = Issue.filter_states_options[code][:conds]
+    data.filter do |(key, _)|
+      conds.any? { |statements| Issue.cond_match?(statements, key) }
+    end.values.sum
+  end
+
 protected
   def build_link(models, action, options)
     url_prefix = [:new, :edit].include?(action) ? action : nil

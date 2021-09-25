@@ -5,11 +5,13 @@ class Projects::IssuesController < BaseProjectController
   helper_method :issue_params_names
 
   def index
-    @filter = params[:filter] || "all"
+    @filter = params[:filter] || "unassigned"
     @keyword = params[:keyword].presence
     issues_scope = @issues
 
-    @issue_state_counts = issues_scope.group(:state).count
+    @issue_filter_state_counts = issues_scope.group(:state, "assignee_id IS NOT NULL").count.transform_keys do |it|
+      [ :state, :assignee_id_is ].zip(it).to_h
+    end
 
     issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
     issues_scope = issues_scope.where("title LIKE ?", "%#{@keyword}%") if @keyword

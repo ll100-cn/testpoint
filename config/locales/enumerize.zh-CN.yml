@@ -15,7 +15,7 @@ zh-CN:
         deploying: 待部署
         resolved: 已解决
         archived: 已归档
-        unconfirmed: 未确认
+        unassigned: 未分配
         developing: 开发中
         developed: 已开发
       priority:

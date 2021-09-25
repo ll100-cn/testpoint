@@ -19,14 +19,14 @@
    <%= fume_nav @filter do |n| %>
      <li class="nav-item">
        <%= n.link_to "all", url_for(action: :index), class: "nav-item nav-link" do %>
-         全部 (<%= @issue_state_counts.values.sum %>)
+         全部 (<%= @issue_filter_state_counts.values.sum %>)
        <% end %>
      </li>
      <% Issue.filter_states_options.each do |(code, attrs)| %>
 
       <li class="nav-item">
         <%= n.link_to code, url_for(action: :index, filter: code), class: "nav-item nav-link" do %>
-          <%= attrs[:text] %> (<%= @issue_state_counts.values_at(*attrs[:states]).compact.sum %>)
+          <%= attrs[:text] %> (<%= issue_filter_state_count(code, @issue_filter_state_counts) %>)
         <% end %>
       </li>
 
