@@ -42,6 +42,7 @@ Rails.application.routes.draw do
               get :row
               patch :state
               patch :content
+              patch :archive_issue
             end
           end
         end

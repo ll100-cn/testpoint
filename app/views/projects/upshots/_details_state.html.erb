@@ -20,8 +20,16 @@
       <% issue = record %>
       <li>
         <div class="d-flex align-items-center">
-          <%= link_to "##{issue.id}#{issue.title}", [@project, issue], class: "me-2" %>
+
+          <%= link_to "##{issue.id}#{issue.title}", [@project, issue], class: "me-3" %>
+
           <%= badge_issue_state(issue.state) %>
+
+          <% if issue.state.resolved? %>
+              <%= link_to "归档该工单", url_for(action: :archive_issue, issue_id: issue.id), method: :patch,
+                data: { remote: true, type: :xhrml, target: ".modal-content", confirm: "确认后将归档该问题, 无法编辑, 是否确认问题已解决？"},
+                class: "btn btn-xs btn-link ms-auto" if can? :archive, issue %>
+          <% end %>
         </div>
       </li>
     <% end %>

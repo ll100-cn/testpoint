@@ -34,6 +34,15 @@ class Projects::UpshotsController < BaseProjectController
     respond_with @upshot, action: :show
   end
 
+  def archive_issue
+    @upshot.assign_attributes(content_params)
+    @issue = @upshot.task.issues.find(params[:issue_id])
+
+    @issue.archive
+    
+    respond_with @upshot, action: :show
+  end
+
 protected
   def content_params
     params.fetch(:task_upshot, {}).permit(:content)
