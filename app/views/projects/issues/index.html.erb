@@ -18,7 +18,7 @@
   <ul class="nav nav-tabs">
    <%= fume_nav @filter do |n| %>
      <li class="nav-item">
-       <%= n.link_to "all", url_for(action: :index), class: "nav-item nav-link" do %>
+       <%= n.link_to "all", url_for(action: :index, filter: 'all'), class: "nav-item nav-link" do %>
          全部 (<%= @issue_filter_state_counts.values.sum %>)
        <% end %>
      </li>
