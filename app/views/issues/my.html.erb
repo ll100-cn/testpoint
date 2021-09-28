@@ -1,25 +1,33 @@
-<div class="page-header">
-  <h2>问题列表（我受理的）</h2>
+<div class="page-header d-flex align-items-center">
+
+  <h2>我的工单</h2>
+
+  <%= link_to "新建工单", "#", class: "btn btn-primary ms-auto",
+        data: { bs_target: "#applicationModal",
+                bs_toggle: "modal",
+                url: url_for(action: :new) } %>
+
 </div>
 
 <%= render 'filter_bar', issues_scope: @issues_scope %>
 
+
 <table class="table d-none d-md-table">
   <colgroup>
     <col width="5%">
+    <col width="8%">
     <col width="20%">
     <col width="10%">
-    <col width="8%">
     <col width="10%">
     <col width="10%">
   </colgroup>
   <thead>
     <tr>
       <th><%= sort_link(@q, :id)%></th>
-      <th><%= sort_link(@q, :title)%></th>
       <th><%= sort_link(@q, :project_id)%></th>
-      <th><%= sort_link(@q, :label_ids)%></th>
+      <th><%= sort_link(@q, :title)%></th>
       <th><%= sort_link(@q, :state)%></th>
+      <th><%= sort_link(@q, :category_id)%></th>
       <th><%= sort_link(@q, :creator_id)%></th>
     </tr>
   </thead>
@@ -27,18 +35,23 @@
     <% @issues.each do |issue| %>
       <tr class="<%= 'block-discard' if issue.state.resolved? %>">
         <td><%= issue.id %></td>
+
+        <td><%= link_to issue.project.name, [issue.project] %></td>
+
         <td>
           <%= link_to issue.title_with_priority, [issue.project, issue] %>
         </td>
-        <td><%= link_to issue.project.name, [issue.project] %></td>
-        <td>
-          <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
-        </td>
+
         <td>
           <span class="text-issue-<%= issue.state %>">
             <%= issue.state.text %>
           </span>
         </td>
+
+        <td>
+          <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
+        </td>
+
         <td><%= issue.creator.name %></td>
       </tr>
     <% end %>

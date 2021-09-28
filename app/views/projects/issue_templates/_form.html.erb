@@ -1,7 +1,7 @@
 <%= f.input :name %>
 <%= f.input :lookup_by_build_form, hint: "不勾选则新建工单时隐藏, 只能人工指给定已创建的工单" %>
 <%= f.input :title_suggestion %>
-<%= f.input :default_label_id, collection: @project.labels %>
+<%= f.input :default_category_id, collection: @project.categories %>
 <%= f.input :default_priority, hint: "使用该模板创建的工单的优先级" %>
 <%= f.input :content_suggestion, input_html: { class: 'markdown-field' } %>
 <%= f.input :inputs, full_error: false do %>

@@ -18,7 +18,10 @@ Rails.application.routes.draw do
 
   root 'main#root'
   resources :issues do
-    get :assigned_to_me, on: :collection
+    collection do
+      get :my
+      get :archived
+    end
   end
 
   resources :projects do
