@@ -15,12 +15,12 @@ class Projects::IssuesController < BaseProjectController
 
     issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
     issues_scope = issues_scope.where("title LIKE ?", "%#{@keyword}%") if @keyword
-    @issue_searcher = IssueSearcher.from(issues_scope, params.fetch(:q, {}))
+    @issue_searcher = IssueSearcher.from(issues_scope, params.fetch(:search, {}))
     @issues_scope = @issue_searcher.result
 
-    @q = issues_scope.ransack(params[:q])
     @filter_issues_scope = @issues_scope.unscope(:order)
-    @issues = @issues_scope.page(params[:page])
+    @q = @issues_scope.ransack(params[:q])
+    @issues = @q.result.page(params[:page])
   end
 
   def new

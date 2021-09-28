@@ -42,7 +42,7 @@
       过滤条件
     </button>
 
-    <%= bootstrap_inline_form_for @issue_searcher, as: :q, url: url_for(action: :index), method: :get, html: { class: "simple_form row mb-0 auto-submit" } do |f| %>
+    <%= bootstrap_inline_form_for @issue_searcher, as: :search, url: url_for(action: :index), method: :get, html: { class: "simple_form row mb-0 auto-submit" } do |f| %>
 
       <% category_options = @project.categories.where(id: @issue_searcher.categories_counts.keys).map do |category| %>
         <% ["#{category.name} (#{@issue_searcher.categories_counts[category.id].to_i})", category.id, data: { content: [
