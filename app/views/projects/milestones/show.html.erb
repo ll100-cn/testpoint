@@ -78,9 +78,7 @@
                 <%= category_badge_tag(issue.category, issue.category.name) %>
               </td>
               <td>
-                <span class="text-issue-<%= issue.state %>">
-                  <%= issue.state.text %>
-                </span>
+                <%= badge_issue_state(issue.state) %>
               </td>
               <td><%= issue.creator.name %></td>
               <td><%= issue.assignee&.name %></td>

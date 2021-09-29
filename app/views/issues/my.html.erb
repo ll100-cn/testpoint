@@ -43,9 +43,7 @@
         </td>
 
         <td>
-          <span class="text-issue-<%= issue.state %>">
-            <%= issue.state.text %>
-          </span>
+          <%= badge_issue_state(issue.state) %>
         </td>
 
         <td>

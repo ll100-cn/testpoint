@@ -107,9 +107,7 @@
               <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
             </td>
             <td>
-              <span class="text-issue-<%= issue.state %>">
-                <%= issue.state.text %>
-              </span>
+              <%= badge_issue_state(issue.state) %>
             </td>
             <td>
               <% if issue.milestone %>
@@ -133,9 +131,7 @@
           <%= link_to [@project, issue], class: "list-group-item list-group-item-action" do %>
             <div class="d-flex justify-content-between">
               <h4 class="mb-1"><%= issue.title_with_priority.truncate(12) %></h4>
-              <span class="text-issue-<%= issue.state %>">
-                <%= issue.state.text %>
-              </span>
+              <%= badge_issue_state(issue.state) %>
             </div>
             <p class="mb-3">
               <small>

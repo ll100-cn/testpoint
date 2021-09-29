@@ -83,6 +83,7 @@ module PageHelper
       "confirmed" => "bg-warning",
       "processing" => "bg-warning",
       "processed" => "bg-success",
+      "deploying" => "bg-success",
       "resolved" => "bg-secondary",
       "archived" => "bg-light text-body",
       "closed" => "bg-light text-body"
@@ -90,7 +91,22 @@ module PageHelper
     text = issue_state.is_a?(String) ? Issue.state.find_value(issue_state)&.text : issue_state&.text
     text = "已关闭" if issue_state == "closed"
 
-    content_tag :span, text, class: "badge #{color}"
+    helper_tooltip_text = {
+      "pending" => "该问题尚未确认，等待测试人员确认后开始处理",
+      "waiting" => "暂时无法确认问题，需要报告人提供更多信息",
+      "confirmed" => "已确认存在该问题，准备分配给开发人员处理",
+      "processing" => "开发人员已知晓，正在处理",
+      "processed" => "开发人员已初步解决该问题，等待测试并发布程序",
+      "deploying" => "测试显示该问题已修复，即将发布到正式服务器",
+      "resolved" => "程序问题已修复，等待报告人确认后将归档该工单",
+      "archived" => "问题已全部处理完毕，无需再做任何操作",
+      "closed" => "问题无效或重复，不作处理"
+    }[issue_state]
+
+    content_tag :span, text,
+      class: "badge #{color}",
+      data: { bs_toggle: "tooltip", bs_placement: "top" },
+      title: helper_tooltip_text
   end
 
   def issue_filter_state_count(code, data)
