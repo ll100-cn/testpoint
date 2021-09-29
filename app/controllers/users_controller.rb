@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   end
 
   def create
+    @user.save
     respond_with @user, location: -> { ok_url_or_default([User]) }
   end
 

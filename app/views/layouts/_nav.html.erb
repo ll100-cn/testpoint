@@ -4,6 +4,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapseContent">
+    <% if user_signed_in? %>
       <%= fume_nav controller_name do |n| %>
         <ul class="navbar-nav">
 
@@ -69,6 +70,7 @@
 
         </ul>
       <% end %>
+    <% end %>
 
 
       <ul class="navbar-nav ms-md-auto">
