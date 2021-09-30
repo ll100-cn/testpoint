@@ -9,49 +9,77 @@
 
 </div>
 
-<%= render 'filter_bar', issues_scope: @issues_scope %>
+<div class="nav-scroll mb-n1px position-relative zindex-999">
+  <ul class="nav nav-tabs">
+  <%= fume_nav action_name do |n| %>
 
+    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="top" title="包含我创建的和我订阅的">
+      <%= n.link_to :my, url_for(action: :my), class: "nav-item nav-link" do %>
+        关注的 (<%= @issues_counts[:my] %>)
+      <% end %>
+    </li>
 
-<table class="table d-none d-md-table">
-  <colgroup>
-    <col width="5%">
-    <col width="8%">
-    <col width="20%">
-    <col width="10%">
-    <col width="10%">
-    <col width="10%">
-  </colgroup>
-  <thead>
-    <tr>
-      <th><%= sort_link(@q, :id)%></th>
-      <th><%= sort_link(@q, :project_id)%></th>
-      <th><%= sort_link(@q, :title)%></th>
-      <th><%= sort_link(@q, :state)%></th>
-      <th><%= sort_link(@q, :category_id)%></th>
-      <th><%= sort_link(@q, :creator_id)%></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @issues.each do |issue| %>
-      <tr class="<%= 'block-discard' if issue.state.resolved? %>">
-        <td><%= issue.id %></td>
+    <li class="nav-item">
+      <%= n.link_to :assigned, url_for(action: :assigned), class: "nav-item nav-link" do %>
+        受理的 (<%= @issues_counts[:assigned] %>)
+      <% end %>
+    </li>
 
-        <td><%= link_to issue.project.name, [issue.project] %></td>
+    <li class="nav-item">
+      <%= n.link_to :archived, url_for(action: :archived), class: "nav-item nav-link" do %>
+        已归档 (<%= @issues_counts[:archived] %>)
+      <% end %>
+    </li>
 
-        <td>
-          <%= link_to issue.title_with_priority, [issue.project, issue] %>
-        </td>
+  <% end %>
+  </ul>
+</div>
 
-        <td>
-          <%= badge_issue_state(issue.state) %>
-        </td>
+<div class="card rounded-top-left-0">
+  <div class="card-body">
+    <table class="table d-none d-md-table">
+      <colgroup>
+        <col width="5%">
+        <col width="8%">
+        <col width="20%">
+        <col width="10%">
+        <col width="10%">
+        <col width="10%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :id)%></th>
+          <th><%= sort_link(@q, :project_id)%></th>
+          <th><%= sort_link(@q, :title)%></th>
+          <th><%= sort_link(@q, :state)%></th>
+          <th><%= sort_link(@q, :category_id)%></th>
+          <th><%= sort_link(@q, :creator_id)%></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @issues.each do |issue| %>
+          <tr>
+            <td><%= issue.id %></td>
 
-        <td>
-          <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
-        </td>
+            <td><%= link_to issue.project.name, [issue.project] %></td>
 
-        <td><%= issue.creator.name %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+            <td>
+              <%= link_to issue.title_with_priority, [issue.project, issue] %>
+            </td>
+
+            <td>
+              <%= badge_issue_state(issue.state) %>
+            </td>
+
+            <td>
+              <%= category_badge_tag(issue.category, issue.category.name) if issue.category %>
+            </td>
+
+            <td><%= issue.creator.name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

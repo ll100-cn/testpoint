@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :issues do
     collection do
       get :my
+      get :assigned
       get :archived
     end
   end

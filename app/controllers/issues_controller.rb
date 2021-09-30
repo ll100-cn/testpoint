@@ -3,17 +3,64 @@ class IssuesController < ApplicationController
   before_action -> { @issues = Issue.where(project: @user.projects) }
 
   def my
-    @issues = @issues.where(assignee: @user.members)
-          .or(@issues.where(creator: @user.members))
-          .or(@issues.where_exists(@user.subscriptions.where_table(:issue)))
+    issues_my = @issues.where(creator: @user.members)
+                .or(@issues.where_exists(@user.subscriptions.where_table(:issue))).where.not(state: :archived)
+    issues_asssigned_to_me = @issues.where(assignee: @user.members).where.not(state: :archived)
+
+    issues_archived = @issues.where(creator: @user.members)
+                      .or(@issues.where_exists(@user.subscriptions.where_table(:issue)))
+                      .or(@issues.where(assignee: @user.members))
+                      .where(state: :archived)
   
+    @issues_counts = { my: issues_my.count,
+                       assigned: issues_asssigned_to_me.count,
+                       archived: issues_archived.count }
+
+    @issues = issues_my
+
     @q = @issues.ransack(params[:q])
-    @q.state_filter ||= "opening"
+    @issues = @q.result.page(params[:page])
+  end
 
-    @issues_scope = @q.result
+  def assigned
+    issues_my = @issues.where(creator: @user.members)
+                .or(@issues.where_exists(@user.subscriptions.where_table(:issue))).where.not(state: :archived)
+    issues_asssigned_to_me = @issues.where(assignee: @user.members).where.not(state: :archived)
 
-    @issues_state_counts = @issues_scope.unscope(:order, where: :state).group(:state).count
-    @issues = @issues_scope.page(params[:page])
+    issues_archived = @issues.where(creator: @user.members)
+                      .or(@issues.where_exists(@user.subscriptions.where_table(:issue)))
+                      .or(@issues.where(assignee: @user.members))
+                      .where(state: :archived)
+  
+    @issues_counts = { my: issues_my.count,
+                       assigned: issues_asssigned_to_me.count,
+                       archived: issues_archived.count }
+
+    @issues = issues_asssigned_to_me
+
+    @q = @issues.ransack(params[:q])
+    @issues = @q.result.page(params[:page])
+  end
+
+  def archived
+    issues_my = @issues.where(creator: @user.members)
+                .or(@issues.where_exists(@user.subscriptions.where_table(:issue))).where.not(state: :archived)
+    issues_asssigned_to_me = @issues.where(assignee: @user.members).where.not(state: :archived)
+
+    issues_archived = @issues.where(creator: @user.members)
+                      .or(@issues.where_exists(@user.subscriptions.where_table(:issue)))
+                      .or(@issues.where(assignee: @user.members))
+                      .where(state: :archived)
+  
+    @issues_counts = { my: issues_my.count,
+                       assigned: issues_asssigned_to_me.count,
+                       archived: issues_archived.count }
+
+    @issues = issues_archived
+
+    @q = @issues.ransack(params[:q])
+    @issues = @q.result.page(params[:page])
+
   end
 
   def new

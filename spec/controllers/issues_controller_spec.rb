@@ -10,4 +10,19 @@ RSpec.describe IssuesController, type: :controller do
     action { get :my }
     it { is_expected.to respond_with :success }
   end
+
+  describe "GET assigned" do
+    action { get :assigned }
+    it { is_expected.to respond_with :success }
+  end
+
+  describe "GET archived" do
+    action { get :archived }
+    it { is_expected.to respond_with :success }
+  end
+
+  describe "GET new" do
+    action { get :new, format: :xhrml }
+    it { is_expected.to respond_with :success }
+  end
 end
