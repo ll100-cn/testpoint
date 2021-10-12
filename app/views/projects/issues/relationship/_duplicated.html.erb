@@ -4,7 +4,7 @@
 
 <% if target.id == issue.id %>
   <%= render "projects/issues/relationship/issue_title.html", issue: source %>
-  <span>标记为 <span class="badge bg-dark">已重复</span></span>
+  <span>标记为该问题的重复问题</span>
 <% else %>
   <span>该问题标记为 <span class="badge bg-dark">已重复</span>，请参考</span>
   <%= render "projects/issues/relationship/issue_title.html", issue: target %>

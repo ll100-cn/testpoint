@@ -67,9 +67,7 @@
         </div>
 
         <div class="collapse mt-3" id="newComment">
-          <div class="card card-body">
-            <%= render "projects/comments/form", issue: @issue if can? :create, Comment %>
-          </div>
+          <%= render "projects/comments/form", issue: @issue if can? :create, Comment %>
         </div>
       </div>
     </div>

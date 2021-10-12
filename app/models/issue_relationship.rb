@@ -12,11 +12,14 @@
 #
 
 class IssueRelationship < ApplicationRecord
-  enumerize :category, in: [:duplicated, :reference]
+  enumerize :category, in: [:duplicated]
 
   belongs_to :source, class_name: Issue.to_s
   belongs_to :target, class_name: Issue.to_s
   belongs_to :member
+
+  attr_accessor :mark_source_category_as_duplicated
+  attr_accessor :creator_subscribe_target_issue
 
   def submit(current_member)
     self.member = current_member
@@ -30,13 +33,23 @@ class IssueRelationship < ApplicationRecord
   end
 
   def duplicated_submit
-    return true unless self.category.duplicated?
-    return true unless ["pending", "confirmed", "processing"].include?(self.source.state)
-
-    unless self.source.update_with_author({"state" => "resolved"}, self.member)
-      self.errors.add(:source_id, self.source.errors.full_messages.first)
-      return false
+    if self.creator_subscribe_target_issue == "1"
+      success = self.source.creator.subscribe(target)
+      if !success
+        self.errors.add(:source_id, "问题创建人订阅失败")
+        return false
+      end
     end
+
+    if self.mark_source_category_as_duplicated == "1"
+      category = self.source.project.categories.where(name: "重复问题").first_or_create
+      success = self.source.update(category: category)
+      if !success 
+        self.errors.add(:source_id, self.source.errors.full_messages.first)
+        return false
+      end
+    end
+
     true
   end
 end

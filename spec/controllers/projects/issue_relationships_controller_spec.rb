@@ -21,25 +21,9 @@ RSpec.describe Projects::IssueRelationshipsController, type: :controller do
       context "success" do
         action { post :create, params: { project_id: project.id, issue_id: issue.id, issue_relationship: attributes } }
 
-        it { is_expected.to respond_with :redirect
-          expect(issue.reload.state.resolved?).to be_truthy }
+        it { is_expected.to respond_with :redirect }
       end
 
-      context "failed" do
-        before { allow_any_instance_of(Issue).to receive(:update_with_author).with({"state" => "resolved"}, member).and_return(false) }
-        action(skip: true) { post :create, params: { project_id: project.id, issue_id: issue.id, issue_relationship: attributes } }
-
-        it { expect{ do_action }.to raise_error(ActionView::MissingTemplate) }
-      end
-
-    end
-
-    context "when relation is reference" do
-      let(:attributes) { { target_id: issue2.id, category: "reference" }}
-      action { post :create, params: { project_id: project.id, issue_id: issue.id, issue_relationship: attributes } }
-
-      it { is_expected.to respond_with :redirect
-           expect(issue.state.resolved?).to be_falsy }
     end
   end
 

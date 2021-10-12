@@ -18,6 +18,6 @@ class Projects::IssueRelationshipsController < BaseProjectController
 
 protected
   def issue_relationship_params
-    params.fetch(:issue_relationship, {}).permit(:target_id, :category)
+    params.fetch(:issue_relationship, {}).permit(:target_id, :category, :mark_source_category_as_duplicated, :creator_subscribe_target_issue)
   end
 end

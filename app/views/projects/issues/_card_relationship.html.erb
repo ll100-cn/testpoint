@@ -3,13 +3,14 @@
   <%= image_tag user.avatar_url, width: 20, class: "rounded-circle avatar" %>
   <span class="mx-1"><%= issue_relationship.member.name %> 将</span>
   <%= render "projects/issues/relationship/#{issue_relationship.category}.html", issue_relationship: issue_relationship, issue: issue %>
-  <span class="small text-muted ms-1"><%=l issue_relationship.created_at, format: :long %></span>
+
+  <span class="small text-muted ms-auto"><%=l issue_relationship.created_at, format: :long %></span>
 
   <% if can? :delete, issue_relationship %>
-    <div class="ms-2 dropdown dropdown-no-arrow">
-      <a href="javascript:void(0)" class="text-muted dropdown-toggle" data-bs-toggle="dropdown">
+    <div class="dropdown dropdown-no-arrow ms-1">
+      <button class="btn btn-sm btn-light dropdown-toggle text-muted" data-bs-toggle="dropdown" style="background: transparent;">
         <i class="far fa-ellipsis-h" aria-hidden="true"></i>
-      </a>
+      </button>
       <div class="dropdown-menu dropdown-menu-end" style="min-width: auto;">
         <% data = { confirm: "确定删除问题的关联？" } %>
         <%= destroy_button [issue.project, issue_relationship.source, issue_relationship ], data: data, class: "small dropdown-item" if can? :destroy, issue_relationship %>

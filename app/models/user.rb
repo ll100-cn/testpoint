@@ -36,11 +36,12 @@ class User < ApplicationRecord
 
   def subscribe(resource)
     if resource.is_a? Issue
-      subscriptions.create(issue_id: resource) unless subscribed?(resource)
+      return true if subscribed?(resource)
+      return subscriptions.create(issue: resource)
     end
 
     if resource.is_a? Project
-      members.where(project: resource).update_all(receive_mail: true)
+      return members.where(project: resource).update_all(receive_mail: true)
     end
   end
 
@@ -56,11 +57,11 @@ class User < ApplicationRecord
 
   def subscribed?(resource)
     if resource.is_a? Issue
-      subscriptions.exists?(issue_id: resource)
+      return subscriptions.exists?(issue_id: resource)
     end
 
     if resource.is_a? Project
-      members.where(project: resource).any? { |member| member.receive_mail? }
+      return members.where(project: resource).any? { |member| member.receive_mail? }
     end
   end
 end
