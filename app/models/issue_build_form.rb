@@ -10,13 +10,12 @@ class IssueBuildForm
 
     ActiveRecord::Base.transaction do
       self.issue.priority = self.template.default_priority
+      self.issue.category = self.template.default_category
 
       if !self.issue.save
         self.errors.add(:issue, self.errors.full_messages.first)
         raise ActiveRecord::Rollback
       end
-
-      self.issue.category = self.template.default_category
 
       return if self.template.content_blank?
 
