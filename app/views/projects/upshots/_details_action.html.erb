@@ -29,11 +29,10 @@
           url: url_for(action: :state), method: :patch,
           data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
       <h5>补充工单详情</h5>
-      <% issue = f.object.issue || Issue.new %>
+      <% issue = f.object.issue || Issue.new(state: :confirmed) %>
       <% 
       issue.assignee ||= @plan.platform.default_assignee
       issue.title ||= "【#{@plan.platform.name} 测试失败】" + @task.test_case.title
-      issue.state ||= :confirmed
       issue.content ||=
 """
 预期效果:
