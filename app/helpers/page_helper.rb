@@ -79,9 +79,9 @@ module PageHelper
 
     color = {
       "pending" => "bg-danger",
-      "waiting" => "bg-info",
+      "waiting" => "bg-warning",
       "confirmed" => "bg-warning",
-      "processing" => "bg-warning",
+      "processing" => "bg-info",
       "processed" => "bg-success",
       "deploying" => "bg-success",
       "resolved" => "bg-secondary",
