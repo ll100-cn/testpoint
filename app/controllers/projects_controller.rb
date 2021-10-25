@@ -3,7 +3,7 @@ class ProjectsController < BaseProjectController
   load_and_authorize_resource through: :user
 
   def index
-    @projects = @projects.page(params[:page]).order(:created_at)
+    @projects = @projects.available.page(params[:page]).order(:created_at)
   end
 
   def new
@@ -31,8 +31,8 @@ class ProjectsController < BaseProjectController
     redirect_to project_issues_path(@project)
   end
 
-  def destroy
-    @project.delete
+  def archive
+    @project.archive
     respond_with @project, location: ok_url_or_default(Project)
   end
 

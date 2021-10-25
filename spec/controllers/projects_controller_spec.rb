@@ -38,8 +38,8 @@ RSpec.describe ProjectsController, type: :controller do
     it { is_expected.to respond_with :redirect }
   end
 
-  describe "DELETE destroy" do
-    action(skip: true) { delete :destroy, params: { id: project.id } }
-    it { expect { do_action }.to change { Project.count }.by(-1) }
+  describe "PATCH archive" do
+    action(skip: true) { patch :archive, params: { id: project.id } }
+    it { expect { do_action }.to change { Project.available.count }.by(-1) }
   end
 end

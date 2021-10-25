@@ -23,7 +23,7 @@ class User < ApplicationRecord
   # :registerable, :recoverable
   devise :code_authenticatable, :rememberable, :trackable
   has_many :members, dependent: :destroy
-  has_many :projects, through: :members
+  has_many :projects, -> { available }, through: :members
   has_many :subscriptions, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true, length: { minimum: 2 }

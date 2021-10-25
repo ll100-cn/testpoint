@@ -15,7 +15,7 @@
           <li class="nav-item dropdown">
             <%= link_to @project&.name || "选择项目", "#", class: "nav-link dropdown-toggle", data: { bs_toggle: "dropdown" } %>
             <ul class="dropdown-menu">
-              <% current_user.projects.where.not(id: nil).each do |project| %>
+              <% current_user.projects.available.where.not(id: nil).each do |project| %>
                 <li>
                   <%= link_to project_path(project), class: "small dropdown-item d-flex align-items-center" do %>
                     <span class="me-auto"><%= project.name %></span>

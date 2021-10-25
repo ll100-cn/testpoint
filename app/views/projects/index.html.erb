@@ -44,7 +44,7 @@
               <td><%=l project.created_at, format: :long %></td>
               <td>
                 <%= edit_button project, class: "btn-xs" if can? :edit, project %>
-                <%= destroy_button project, class: "btn-xs" if can? :destroy, project %>
+                <%= link_to "归档", [:archive, project], method: :patch, data: {confirm: "确定归档该项目？"}, class: "btn btn-danger btn-xs" if can? :archive, project %>
               </td>
             </tr>
           <% end %>

@@ -23,6 +23,8 @@ class Project < ApplicationRecord
   accepts_nested_attributes_for :members
   has_many :users, through: :members
 
+  scope :available, -> { where(archived: false) }
+
   def subscribed_users
     members.where(receive_mail: true).map(&:user)
   end
@@ -31,5 +33,10 @@ class Project < ApplicationRecord
     members.where.not(role: :reporter)
       .sort_by { |x| x.role.developer? ? 0 : 1 }
       .group_by(&:role_text)
+  end
+
+  def archive
+    self.archived = true
+    self.save
   end
 end
