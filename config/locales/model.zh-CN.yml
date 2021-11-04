@@ -123,7 +123,6 @@ zh-CN:
         target_id: 关联的问题ID
         category: 关系类型
         creator_subscribe_target_issue: 使创建人订阅关联的问题
-        mark_source_category_as_duplicated: 将该问题分类为“重复问题”
   activemodel:
     models:
       test_case_filter: 过滤用例

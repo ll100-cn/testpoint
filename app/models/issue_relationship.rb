@@ -18,7 +18,6 @@ class IssueRelationship < ApplicationRecord
   belongs_to :target, class_name: Issue.to_s
   belongs_to :member
 
-  attr_accessor :mark_source_category_as_duplicated
   attr_accessor :creator_subscribe_target_issue
 
   def submit(current_member)
@@ -37,15 +36,6 @@ class IssueRelationship < ApplicationRecord
       success = self.source.creator.subscribe(target)
       if !success
         self.errors.add(:source_id, "问题创建人订阅失败")
-        return false
-      end
-    end
-
-    if self.mark_source_category_as_duplicated == "1"
-      category = self.source.project.categories.where(name: "重复问题").first_or_create
-      success = self.source.update(category: category)
-      if !success 
-        self.errors.add(:source_id, self.source.errors.full_messages.first)
         return false
       end
     end
