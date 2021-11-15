@@ -12,26 +12,24 @@
 #
 
 class IssueRelationship < ApplicationRecord
-  enumerize :category, in: [:duplicated]
-
   belongs_to :source, class_name: Issue.to_s
   belongs_to :target, class_name: Issue.to_s
   belongs_to :member
 
   attr_accessor :creator_subscribe_target_issue
 
-  def submit(current_member)
+  def submit_and_save(current_member)
     self.member = current_member
     transaction do
       success = true
       success &&= self.save
-      success &&= duplicated_submit
+      success &&= submit
       raise ActiveRecord::Rollback unless success
     end
     true
   end
 
-  def duplicated_submit
+  def submit
     if self.creator_subscribe_target_issue == "1"
       success = self.source.creator.subscribe(target)
       if !success

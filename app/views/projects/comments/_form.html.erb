@@ -3,12 +3,12 @@
     <%= image_tag current_user.avatar_url, width: 20, class: "rounded-circle avatar me-1" %>
     <strong class="me-1"><%= current_member.name %></strong> 添加评论
 
-    <%= link_to apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "duplicated" }]),
+    <%= link_to apply_ok_url([ :new, @project, issue, :issue_relationship]),
       data: {
         bs_toggle: "modal",
         bs_target: "#applicationModal",
         remote: true,
-        url: apply_ok_url([ :new, @project, issue, :issue_relationship, issue_relationship: { category: "duplicated" }])
+        url: apply_ok_url([ :new, @project, issue, :issue_relationship])
       },
       class: "btn btn-light btn-sm ms-auto" do %>
       <i class="far fa-link me-1"></i>关联问题

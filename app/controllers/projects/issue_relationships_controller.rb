@@ -7,7 +7,7 @@ class Projects::IssueRelationshipsController < BaseProjectController
   end
 
   def create
-    @issue_relationship.submit(current_member)
+    @issue_relationship.submit_and_save(current_member)
     respond_with @issue_relationship, location: ok_url_or_default([@project, @issue])
   end
 
@@ -18,6 +18,6 @@ class Projects::IssueRelationshipsController < BaseProjectController
 
 protected
   def issue_relationship_params
-    params.fetch(:issue_relationship, {}).permit(:target_id, :category, :creator_subscribe_target_issue)
+    params.fetch(:issue_relationship, {}).permit(:target_id, :creator_subscribe_target_issue)
   end
 end

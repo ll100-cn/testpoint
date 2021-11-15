@@ -5,7 +5,6 @@
 
 <div class="modal-body">
   <%= bootstrap_vertical_form_for [ @project, @issue, @issue_relationship ] do |f| %>
-    <%= f.input :category %>
     <%= f.input :target_id %>
     <%= f.input :creator_subscribe_target_issue, as: :boolean, :input_html => { :checked => true } %>
     <hr>

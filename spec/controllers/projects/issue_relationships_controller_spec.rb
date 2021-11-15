@@ -16,7 +16,7 @@ RSpec.describe Projects::IssueRelationshipsController, type: :controller do
 
   describe "POST create" do
     context "when relation is duplicated" do
-      let(:attributes) { { target_id: issue2.id, category: "duplicated" }}
+      let(:attributes) { { target_id: issue2.id }}
 
       context "success" do
         action { post :create, params: { project_id: project.id, issue_id: issue.id, issue_relationship: attributes } }

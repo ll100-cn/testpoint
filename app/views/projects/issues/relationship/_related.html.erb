@@ -1,0 +1,8 @@
+<% project = issue_relationship.member.project %>
+<% source = issue_relationship.source %>
+<% target = issue_relationship.target %>
+
+<span class="text-primary"><%= link_to "##{source.id} #{source.title_with_priority}", [source.project, issue] %></span>
+<span class="text text-issue-<%= source.state %> small me-2">(<%= source.state.text %>)</span>
+
+<span>标记为该问题的相关问题</span>
