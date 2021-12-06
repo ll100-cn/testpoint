@@ -18,6 +18,12 @@ zh-CN:
         unassigned: 未分配
         developing: 开发中
         developed: 已开发
+        deploy: 部署
+        resolve: 解决
+        archive: 归档
+        assign: 分配
+        develop: 开发
+        test: 测试
       priority:
         important: 重要
         normal: 普通

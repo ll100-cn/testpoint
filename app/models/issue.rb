@@ -172,12 +172,12 @@ class Issue < ApplicationRecord
 
   def self.filter_states_options
     {
-      unassigned: [ { state: ["pending", "waiting"] }, { state: "confirmed", assignee_id_is: false } ],
-      developing: [ { state: "confirmed", assignee_id_is: true }, { state: "processing" } ],
-      developed:  [ { state: "processed" } ],
-      deploying: nil,
-      resolved: nil,
-      archived: nil,
+      assign: [ { state: ["pending", "waiting"] }, { state: "confirmed", assignee_id_is: false } ],
+      develop: [ { state: "confirmed", assignee_id_is: true }, { state: "processing" } ],
+      resolve:  [ { state: "processed" } ],
+      deploy: [ { state: "deploying" } ],
+      test: [ {state: "resolved" } ],
+      archive: [ { state: "archived" } ],
     }.map do |(code, conds)|
       attrs = {}
       attrs[:states] = [code.to_s]
