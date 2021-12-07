@@ -14,7 +14,10 @@ class Projects::IssuesController < BaseProjectController
     end
 
     issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
-    issues_scope = issues_scope.where("title LIKE ?", "%#{@keyword}%") if @keyword
+    if @keyword
+      issues_scope = issues_scope.where_exists(Comment.where("content LIKE ?", "%#{@keyword}%").where_table(:issue))
+        .or(issues_scope.where("title LIKE ? or content LIKE ?", "%#{@keyword}%", "%#{@keyword}%"))
+    end
     @issue_searcher = IssueSearcher.from(issues_scope, params.fetch(:search, {}))
     @issues_scope = @issue_searcher.result
 
