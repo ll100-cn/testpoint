@@ -5,7 +5,7 @@ class Projects::IssuesController < BaseProjectController
   helper_method :issue_params_names
 
   def index
-    @filter = params[:filter] || "unassigned"
+    @filter = params[:filter] || "assign"
     @keyword = params[:keyword].presence
     issues_scope = @issues
 
