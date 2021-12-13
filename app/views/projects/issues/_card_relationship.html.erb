@@ -13,7 +13,7 @@
       </button>
       <div class="dropdown-menu dropdown-menu-end" style="min-width: auto;">
         <% data = { confirm: "确定删除问题的关联？" } %>
-        <%= destroy_button [issue.project, issue_relationship.source, issue_relationship ], data: data, class: "small dropdown-item" if can? :destroy, issue_relationship %>
+        <%= link_to "取消关联", [issue.project, issue_relationship.source, issue_relationship ], data: data, class: "small dropdown-item" if can? :destroy, issue_relationship %>
       </div>
     </div>
   <% end %>

@@ -43,25 +43,44 @@
 
     <%= render "projects/comments/comment_list.html", issue: @issue %>
 
-    <div class="card">
+    <div class="card mt-5">
       <div class="card-body">
+        <h6 class="card-title">提供更多信息</h6>
         <div class="d-flex">
+
           <button class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#newComment">
-            新增评论
+            <i class="far fa-comment me-1"></i> 新增评论
           </button>
+
+          <%= link_to "#", 
+            data: {
+              bs_toggle: "modal",
+              bs_target: "#applicationModal",
+              remote: true,
+              url: apply_ok_url([ :new, @project, @issue, :issue_relationship])
+            },
+            class: "btn btn-primary btn-sm ms-2" do %>
+            <i class="far fa-link me-1"></i>关联其它问题
+          <% end %>
+
           <% if @issue.state.resolved? %>
-            <div class="actions ms-auto">
-              <%= link_to "未解决",
-                apply_ok_url([ :unresolve, @project, @issue ]),
+            <div class="btn-group ms-auto" role="group">
+              <%= link_to apply_ok_url([:archive, @project, @issue]),
+                method: :post,
+                class: "btn btn-sm btn-outline-success",
+                data: { confirm: "确认后将归档该问题, 无法编辑, 是否确认问题已解决？" } do %>
+                <i class="far fa-check me-1"></i>已解决
+              <% end if can? :archive, @issue %>
+
+              <%= link_to apply_ok_url([ :unresolve, @project, @issue ]),
                 data: {
                   bs_toggle: "modal",
                   bs_target: "#applicationModal",
                   remote: true,
                   url: apply_ok_url([ :unresolve, @project, @issue ])
-                },
-                class: "btn btn-sm btn-outline-primary"
-               %>
-              <%= link_to "已解决", apply_ok_url([:archive, @project, @issue]), method: :post, class: "btn btn-sm btn-outline-primary", data: { confirm: "确认后将归档该问题, 无法编辑, 是否确认问题已解决？" } if can? :archive, @issue %>
+                }, class: "btn btn-sm btn-outline-danger" do %>
+                <i class="far fa-times me-1"></i>未解决
+              <% end %>
             </div>
           <% end %>
         </div>
@@ -72,6 +91,9 @@
       </div>
     </div>
   </div>
+
+
+
 
 
   <div class="col-12 col-md-3 order-0 order-md-1">
