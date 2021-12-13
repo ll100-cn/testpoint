@@ -102,7 +102,7 @@
     </button>
 
     <div class="collapse d-md-block" id="issueDetailCollapse">
-      <h5 class="mt-2"><%=h Issue, :created_at %></h5>
+      <span class="small text-muted mt-2 d-flex"><%=h Issue, :created_at %></span>
       <span><%=l @issue.created_at, format: :long %></span>
       <hr>
       <% form = capture do %>
