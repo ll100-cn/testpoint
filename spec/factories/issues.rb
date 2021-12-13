@@ -27,6 +27,7 @@ FactoryBot.define do
     title { "issue1" }
     content { "content of issue1" }
     state { "pending" }
+    category
     creator { create :member }
   end
 end

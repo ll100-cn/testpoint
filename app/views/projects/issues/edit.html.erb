@@ -4,12 +4,39 @@
 
 <div class="container">
   <%= bootstrap_vertical_form_for [ @project, @task, @issue ], permit_for: issue_params_names do |f| %>
-    <%= f.input :title %>
-    <%= f.association :subscribed_users, as: :check_boxes, disabled: false if can? :index, Member %>
 
-    <hr>
+    <%= f.input :title %>
+
+    <%= f.input :category_id,
+      collection: @project.categories,
+      input_html: { class: "select2-field" } %>
+
+    <%= f.input :assignee_id,
+      collection: @project.available_issue_assignees_with_group,
+      as: :grouped_select,
+      group_method: :last,
+      group_label_method: :first,
+      label_method: :name %>
+
+    <%= f.input :creator_id,
+      collection: @project.members,
+      label_method: :name,
+      input_html: { class: "select2-field" } %>
 
     <%= ok_url_tag %>
+
+    <% if f.object.errors.any? %>
+      <div class="mb-3">
+        <span class="text-danger">请解决以下问题:</span>
+        <div class="text-danger text-start mx-3">
+        <ul>
+          <% f.object.errors.each do |key, msg| %>
+          <li><%= h Issue, key %> <%= msg %></li>
+          <% end %>
+        </ul>
+        </div>
+      </div>
+    <% end %>
 
     <%= f.submit class: "btn btn-primary" %>
 

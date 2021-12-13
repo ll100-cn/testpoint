@@ -43,6 +43,7 @@ class Issue < ApplicationRecord
   has_many :issue_infos
 
   validates :title, presence: true
+  validate :require_category_when_archive
 
   scope :sorted, -> { order(:priority) }
   scope :created_issues, ->(member) { where(creator_id: member.id) }
@@ -189,6 +190,13 @@ class Issue < ApplicationRecord
 
   def self.ransackable_scopes(auth_object = nil)
     [ :state_filter, :assignee_id_is ]
+  end
+
+  def require_category_when_archive
+    return true if category.present?
+    if assignee.present? || state.in?([:confirmed, :processing, :processed, :deploying, :resolved, :archived])
+      self.errors.add(:category_id, :empty)
+    end
   end
 
   protected
