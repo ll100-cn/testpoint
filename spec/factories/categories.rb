@@ -2,13 +2,14 @@
 #
 # Table name: categories
 #
-#  id          :bigint           not null, primary key
-#  name        :string
-#  description :text
-#  color       :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  project_id  :bigint
+#  id                      :bigint           not null, primary key
+#  name                    :string
+#  description             :text
+#  color                   :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  project_id              :bigint
+#  default_as_test_failure :boolean          default(FALSE)
 #
 
 FactoryBot.define do

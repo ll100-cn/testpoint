@@ -33,6 +33,7 @@ class TaskUpshot < ApplicationRecord
     self.issue.project = @plan.project
     self.issue.task = task
     self.issue.creator = author
+    self.issue.category = @plan.project.categories.where(default_as_test_failure: true).take
 
     if !self.issue.save
       self.errors.add(:issue, :invalid)
