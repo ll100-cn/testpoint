@@ -175,9 +175,9 @@ class Issue < ApplicationRecord
     {
       assign: [ { state: ["pending", "waiting"] }, { state: "confirmed", assignee_id_is: false } ],
       develop: [ { state: "confirmed", assignee_id_is: true }, { state: "processing" } ],
-      resolve:  [ { state: "processed" } ],
+      test:  [ { state: "processed" } ],
       deploy: [ { state: "deploying" } ],
-      test: [ {state: "resolved" } ],
+      resolve: [ { state: "resolved" } ],
       archive: [ { state: "archived" } ],
     }.map do |(code, conds)|
       attrs = {}
