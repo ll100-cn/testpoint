@@ -23,6 +23,7 @@ class Projects::IssuesController < BaseProjectController
 
     @filter_issues_scope = @issues_scope.unscope(:order)
     @q = @issues_scope.ransack(params[:q])
+    @q.sorts = "updated_at desc" if @q.sorts.empty?
     @issues = @q.result.page(params[:page])
   end
 

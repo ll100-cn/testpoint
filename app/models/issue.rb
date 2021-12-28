@@ -22,7 +22,7 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :archived ],
+  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :archived, :closed ],
                     default: :pending, scope: true
   enumerize :priority, in: { :low => :p2_low, :normal => :p1_normal, :important => :p0_important }, default: :normal, scope: true
 
@@ -178,7 +178,7 @@ class Issue < ApplicationRecord
       test:  [ { state: "processed" } ],
       deploy: [ { state: "deploying" } ],
       resolve: [ { state: "resolved" } ],
-      archive: [ { state: "archived" } ],
+      archive: [ { state: ["archived", "closed"] } ],
     }.map do |(code, conds)|
       attrs = {}
       attrs[:states] = [code.to_s]
