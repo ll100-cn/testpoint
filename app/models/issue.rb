@@ -193,9 +193,10 @@ class Issue < ApplicationRecord
   end
 
   def require_category_when_archive
-    return true if category.present?
-    if assignee.present? || state.in?([:confirmed, :processing, :processed, :deploying, :resolved, :archived])
-      self.errors.add(:category_id, :empty)
+    if assignee.present? || state.to_sym.in?([:confirmed, :processing, :processed, :deploying, :resolved, :archived])
+      if !category.present?
+        self.errors.add(:category_id, :empty)
+      end
     end
   end
 
