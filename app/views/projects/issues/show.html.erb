@@ -86,7 +86,7 @@
         </div>
 
         <div class="collapse mt-3" id="newComment">
-          <%= render "projects/comments/form", issue: @issue if can? :create, Comment %>
+          <%= render "projects/comments/form", issue: @issue, comment: @issue.comments.new if can? :create, Comment %>
         </div>
       </div>
     </div>

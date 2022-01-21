@@ -15,6 +15,8 @@
 class Comment < ApplicationRecord
   belongs_to :member
   belongs_to :issue, touch: true
+  belongs_to :comment, optional: true
+  has_many :comments
 
   has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
 

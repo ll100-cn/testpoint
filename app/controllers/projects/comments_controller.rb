@@ -39,6 +39,6 @@ class Projects::CommentsController < BaseProjectController
 
 protected
   def comment_params
-    params.fetch(:comment, {}).permit(:content, attachment_ids: [])
+    params.fetch(:comment, {}).permit(:content, :comment_id, attachment_ids: [])
   end
 end

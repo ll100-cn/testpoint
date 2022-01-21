@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_14_031115) do
+ActiveRecord::Schema.define(version: 2022_01_21_024505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,8 @@ ActiveRecord::Schema.define(version: 2021_12_14_031115) do
     t.datetime "last_edited_at"
     t.boolean "collapsed", default: false
     t.bigint "member_id"
+    t.bigint "comment_id"
+    t.index ["comment_id"], name: "index_comments_on_comment_id"
     t.index ["issue_id"], name: "index_comments_on_issue_id"
     t.index ["member_id"], name: "index_comments_on_member_id"
   end
@@ -409,6 +411,7 @@ ActiveRecord::Schema.define(version: 2021_12_14_031115) do
 
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "projects"
+  add_foreign_key "comments", "comments"
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "members"
   add_foreign_key "folders", "projects"

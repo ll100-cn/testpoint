@@ -1,5 +1,6 @@
 <% (@issue.activities + @issue.comments + @issue.source_relationships + @issue.target_relationships).sort_by(&:created_at).each do |record| %>
   <% if record.is_a?(Comment) %>
+    <% next if record.comment %>
     <% if record.collapsed? %>
       <%= render template: "projects/comments/unfold.xhrml", locals: { comment: record } %>
     <% else %>

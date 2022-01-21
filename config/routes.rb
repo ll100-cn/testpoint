@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         end
         resources :comments do
           member do
+            get :comment
             get :unfold
             get :fold
           end
