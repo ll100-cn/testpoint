@@ -8,7 +8,7 @@
     <h2 class="me-1"><%= title(@issue.title_with_priority) %></h2>
   <% end %>
   <div>#<%= @issue.id %></div>
-  <div class="ms-auto actions">
+  <div class="ms-auto actions d-none d-md-block">
     <%= edit_button [@project, @issue] if can? :edit, @issue %>
   </div>
 </div>
@@ -97,8 +97,8 @@
 
 
   <div class="col-12 col-md-3 order-0 order-md-1">
-    <button class="btn btn-secondary btn-block d-md-none" type="button" data-bs-toggle="collapse" data-target="#issueDetailCollapse">
-      问题设置
+    <button class="btn btn-secondary btn-block d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#issueDetailCollapse">
+      修改问题
     </button>
 
     <div class="collapse d-md-block" id="issueDetailCollapse">

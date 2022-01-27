@@ -1,7 +1,7 @@
 <div class="page-header justify-content-between">
-  <h2><%= title(page_i18n :index, model_name: h(@issues)) %>（<%= @project.name %>）</h2>
+  <h2 class="d-none d-md-block"><%= title(page_i18n :index, model_name: h(@issues)) %>（<%= @project.name %>）</h2>
 
-  <%= form_tag url_for(action: :index), method: :get, class: "ms-auto" do |f| %>
+  <%= form_tag url_for(action: :index), method: :get, class: "ms-auto d-none d-md-block" do |f| %>
     <div class="input-group">
       <%= search_field_tag :keyword, @keyword, placeholder: "搜索问题或评论", class: "form-control" %>
       <%= hidden_field_tag :filter, 'all' %>
