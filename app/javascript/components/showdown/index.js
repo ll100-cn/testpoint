@@ -40,6 +40,7 @@ export function renderMarkdown(markdown, options = {}) {
   _.unset(options, "checkbox")
   _.merge(options, { "simpleLineBreaks": true })
   const converter = new showdown.Converter({ extensions: [checkboxExtension(checkboxOptions)], ...options })
+  converter.setFlavor('github')
   return converter.makeHtml(markdown)
 }
 
