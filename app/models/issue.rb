@@ -19,10 +19,11 @@
 #  task_id         :bigint
 #  label_ids_cache :bigint           default([]), is an Array
 #  category_id     :bigint
+#  archived_at     :datetime
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :archived, :closed ],
+  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :closed ],
                     default: :pending, scope: true
   enumerize :priority, in: { :low => :p2_low, :normal => :p1_normal, :important => :p0_important }, default: :normal, scope: true
 
@@ -108,7 +109,7 @@ class Issue < ApplicationRecord
   end
 
   def record_property_changes!(member)
-    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :category_id).each do |property, (before_value, after_value)|
+    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :category_id, :archived_at).each do |property, (before_value, after_value)|
       activity = self.activities.new
       activity.property = property
       activity.before_value = before_value
@@ -166,9 +167,14 @@ class Issue < ApplicationRecord
     true
   end
 
-  def archive
-    self.errors.add(:state, :invalid) and return false if self.state.archived?
-    self.update(state: :archived)
+  def archive(member)
+    self.errors.add(:archived_at, :invalid) and return false if self.archived_at
+
+    self.archived_at = Time.current
+    transaction do
+      raise ActiveRecord::Rollback unless self.save
+      record_property_changes!(member)
+    end
   end
 
   def self.filter_states_options
@@ -178,7 +184,7 @@ class Issue < ApplicationRecord
       test:  [ { state: "processed" } ],
       deploy: [ { state: "deploying" } ],
       resolve: [ { state: "resolved" } ],
-      archive: [ { state: ["archived", "closed"] } ],
+      closed: [ { state: ["closed"] } ],
     }.map do |(code, conds)|
       attrs = {}
       attrs[:states] = [code.to_s]
@@ -193,7 +199,7 @@ class Issue < ApplicationRecord
   end
 
   def require_category_when_archive
-    if assignee.present? || state.to_sym.in?([:confirmed, :processing, :processed, :deploying, :resolved, :archived])
+    if assignee.present? || state.to_sym.in?([:confirmed, :processing, :processed, :deploying, :resolved])
       if !category.present?
         self.errors.add(:category_id, :empty)
       end

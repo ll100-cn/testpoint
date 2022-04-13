@@ -83,6 +83,16 @@
               <% end %>
             </div>
           <% end %>
+          <% if @issue.state.closed? && @issue.archived_at.nil? %>
+            <div class="btn-group ms-auto" role="group">
+              <%= link_to apply_ok_url([:archive, @project, @issue]),
+                method: :post,
+                class: "btn btn-sm btn-outline-success",
+                data: { confirm: "确认后将归档该问题, 无法编辑, 是否确认问题已解决？" } do %>
+                <i class="far fa-check me-1"></i>确认关闭
+              <% end if can? :archive, @issue %>
+            </div>
+          <% end %>
         </div>
 
         <div class="collapse mt-3" id="newComment">
@@ -107,7 +117,7 @@
       <hr>
       <% form = capture do %>
         <%= render layout: "attribute_inline_form", locals: { attribute_name: :state } do |f| %>
-          <%= f.input :state, collection: Issue.state.options(except: :archived) %>
+          <%= f.input :state, collection: Issue.state.options %>
         <% end %>
       <% end %>
 

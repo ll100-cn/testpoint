@@ -19,6 +19,7 @@
 #  task_id         :bigint
 #  label_ids_cache :bigint           default([]), is an Array
 #  category_id     :bigint
+#  archived_at     :datetime
 #
 
 FactoryBot.define do

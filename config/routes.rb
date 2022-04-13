@@ -19,7 +19,9 @@ Rails.application.routes.draw do
   root 'main#root'
   resources :issues do
     collection do
-      get :my
+      get :dashboard
+      get :created
+      get :focused
       get :assigned
       get :archived
     end

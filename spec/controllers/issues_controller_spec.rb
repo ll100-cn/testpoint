@@ -6,8 +6,18 @@ RSpec.describe IssuesController, type: :controller do
   let!(:member) { create :member, user: user, project: project }
   before { sign_in user }
 
-  describe "GET my" do
-    action { get :my }
+  describe "GET dashboard" do
+    action { get :dashboard }
+    it { is_expected.to respond_with :success }
+  end
+
+  describe "GET created" do
+    action { get :created }
+    it { is_expected.to respond_with :success }
+  end
+
+  describe "GET focused" do
+    action { get :focused }
     it { is_expected.to respond_with :success }
   end
 

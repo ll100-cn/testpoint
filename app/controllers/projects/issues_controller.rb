@@ -51,7 +51,7 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def show
-    if @issue.state.archived?
+    if @issue.archived_at
       flash[:alert] = "该问题已归档"
     end
   end
@@ -74,7 +74,7 @@ class Projects::IssuesController < BaseProjectController
   end
 
   def archive
-    @issue.archive
+    @issue.archive(current_member)
     respond_with @issue, location: ok_url_or_default(action: :show)
   end
 

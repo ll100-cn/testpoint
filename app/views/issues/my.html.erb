@@ -13,21 +13,34 @@
   <ul class="nav nav-tabs">
   <%= fume_nav action_name do |n| %>
 
-    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="top" title="包含我创建的和我订阅的">
-      <%= n.link_to :my, url_for(action: :my), class: "nav-item nav-link" do %>
-        关注的 (<%= @issues_counts[:my] %>)
+    <li class="nav-item me-auto">
+      <%= n.link_to :dashboard, url_for(action: :dashboard), class: "nav-item nav-link" do %>
+        待处理的
+        <span class="badge bg-danger ms-1 rounded-pill"><%= @issues_counts[:unhandled] %></span>
+      <% end %>
+    </li>
+
+    <li class="nav-item">
+      <%= n.link_to :created, url_for(action: :created), class: "nav-item nav-link" do %>
+        创建的
+      <% end %>
+    </li>
+
+    <li class="nav-item">
+      <%= n.link_to :focused, url_for(action: :focused), class: "nav-item nav-link" do %>
+        关注的
       <% end %>
     </li>
 
     <li class="nav-item">
       <%= n.link_to :assigned, url_for(action: :assigned), class: "nav-item nav-link" do %>
-        受理的 (<%= @issues_counts[:assigned] %>)
+        受理的
       <% end %>
     </li>
 
     <li class="nav-item">
       <%= n.link_to :archived, url_for(action: :archived), class: "nav-item nav-link" do %>
-        已归档 (<%= @issues_counts[:archived] %>)
+        归档的
       <% end %>
     </li>
 
@@ -45,6 +58,7 @@
         <col width="10%">
         <col width="10%">
         <col width="10%">
+        <col width="10%">
       </colgroup>
       <thead>
         <tr>
@@ -54,6 +68,7 @@
           <th><%= sort_link(@q, :state)%></th>
           <th><%= sort_link(@q, :category_id)%></th>
           <th><%= sort_link(@q, :creator_id)%></th>
+          <th><%= sort_link(@q, :assignee_id)%></th>
         </tr>
       </thead>
       <tbody>
@@ -76,10 +91,15 @@
             </td>
 
             <td><%= issue.creator.name %></td>
+            <td><%= issue.assignee&.name %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
 
   </div>
+
+  <nav class="table-pagination">
+    <%= paginate @issues %>
+  </nav>
 </div>

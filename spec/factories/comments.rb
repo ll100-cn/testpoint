@@ -10,6 +10,7 @@
 #  last_edited_at :datetime
 #  collapsed      :boolean          default(FALSE)
 #  member_id      :bigint
+#  comment_id     :bigint
 #
 
 FactoryBot.define do

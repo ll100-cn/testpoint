@@ -1,4 +1,4 @@
-<% state_names = Hash[Issue.state.options(except: [:resolved, :archived])].invert.merge("opening" => "未解决", "all" => "全部") %>
+<% state_names = Hash[Issue.state.options(except: [:resolved])].invert.merge("opening" => "未解决", "all" => "全部") %>
 <% state_filter = [@q.state_filter].flatten.first %>
 <%= fume_nav state_filter do |n| %>
   <div class="btn-group btn-group-sm mb-1" role="group">
@@ -15,7 +15,7 @@
         <% end %>
       </div>
     </div>
-    <% Issue.state.options(only: [:processed, :resolved, :archived]).each do |text, value| %>
+    <% Issue.state.options(only: [:processed, :resolved]).each do |text, value| %>
       <% text = (value == 'processed' ? "待部署" : text) %>
       <%= n.link_to value, "#{text}(#{@issues_state_counts[value] || 0})", current_url(q: { state_filter: value }), class: "btn btn-sm btn-outline-primary" %>
     <% end %>
