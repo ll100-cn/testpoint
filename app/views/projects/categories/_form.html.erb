@@ -1,0 +1,11 @@
+<%= f.input :name %>
+<%= f.input :description %>
+<%= f.input :color, as: :color_picker %>
+
+<hr>
+
+<%= f.actions_content do %>
+  <%= ok_url_tag %>
+  <%= f.submit class: "btn btn-primary" %>
+  <%= cancel_button [ @project, :categories ], class: "btn" %>
+<% end %>

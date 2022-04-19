@@ -40,6 +40,11 @@ zh-CN:
         ancestry: 父文件夹
         archived: 是否存档
         parent_id: 父文件夹
+      category:
+        name: 名称
+        description: 描述
+        color: 颜色
+        issues: 关联问题数
       issue:
         title: 标题
         content: 内容

@@ -66,6 +66,10 @@
             <%= n.link_to "issue_templates", h(IssueTemplate), [@project, IssueTemplate], class: "nav-link" if can? :read, IssueTemplate %>
           </li>
 
+          <li class="nav-item">
+            <%= n.link_to "categories", h(Category), [@project, Category], class: "nav-link" if can? :read, Category %>
+          </li>
+
         <% end %>
 
         </ul>
@@ -97,7 +101,7 @@
 
       <% end %>
       </ul>
-  
+
     </div>
   </div>
 </nav>
