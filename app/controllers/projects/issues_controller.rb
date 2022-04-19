@@ -9,8 +9,8 @@ class Projects::IssuesController < BaseProjectController
     @keyword = params[:keyword].presence
     issues_scope = @issues
 
-    @issue_filter_state_counts = issues_scope.group(:state, "assignee_id IS NOT NULL").count.transform_keys do |it|
-      [ :state, :assignee_id_is ].zip(it).to_h
+    @issue_filter_state_counts = issues_scope.group(:state, "assignee_id IS NOT NULL", "archived_at IS NOT NULL").count.transform_keys do |it|
+      [ :state, :assignee_id_is, :archived_at_is ].zip(it).to_h
     end
 
     issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
@@ -66,7 +66,7 @@ class Projects::IssuesController < BaseProjectController
     with_email_notification do
       @issue.change_project_with_author(issue_params, current_member)
     end
-    
+
     respond_with @issue, action: :edit_project, location: project_issue_path(@issue.reload.project, @issue)
   end
 

@@ -51,6 +51,7 @@ class Issue < ApplicationRecord
   scope :assigned_issues, ->(member) { where(assignee_id: member.id) }
   scope :subscribed_issues, ->(user) { joins(:subscriptions).where(subscriptions: { user_id: user.id }) }
   scope :assignee_id_is, ->(value) { value.in?(["not_null", true]) ? where.not(assignee_id: nil) : where(assignee_id: nil) }
+  scope :archived_at_is, ->(value) { value.in?(["not_null", true]) ? where.not(archived_at: nil) : where(archived_at: nil) }
   scope :filter_state_is, ->(code) {
     conds = self.filter_states_options[code.to_sym][:conds]
     cond_any_of(conds)
@@ -183,8 +184,9 @@ class Issue < ApplicationRecord
       develop: [ { state: "confirmed", assignee_id_is: true }, { state: "processing" } ],
       test:  [ { state: "processed" } ],
       deploy: [ { state: "deploying" } ],
-      resolve: [ { state: "resolved" } ],
-      closed: [ { state: ["closed"] } ],
+      resolve: [ { state: "resolved", archived_at_is: false } ],
+      closed: [ { state: ["closed"], archived_at_is: false } ],
+      archive: [ { archived_at_is: true } ],
     }.map do |(code, conds)|
       attrs = {}
       attrs[:states] = [code.to_s]
@@ -195,7 +197,7 @@ class Issue < ApplicationRecord
   end
 
   def self.ransackable_scopes(auth_object = nil)
-    [ :state_filter, :assignee_id_is ]
+    [ :state_filter, :assignee_id_is, :archived_at_is ]
   end
 
   def require_category_when_archive
