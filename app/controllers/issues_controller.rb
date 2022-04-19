@@ -60,7 +60,7 @@ class IssuesController < ApplicationController
 
 protected
   def issue_stat
-    @issues_scope = Issue.joins(:creator).where(archived_at: nil)
+    @issues_scope = Issue.joins(:creator).where(archived_at: nil).joins(:project).merge(Project.available)
     conds = []
     conds << Issue.joins(:creator).where(creator: { user_id: @user.id }, state: [ :waiting, :resolved, :closed ])
     conds << Issue.where_exists(Member.where(user_id: @user.id).where("members.id = issues.assignee_id")).where(state: [ :confirmed, :processing ])
