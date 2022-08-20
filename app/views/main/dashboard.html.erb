@@ -1,0 +1,53 @@
+<div class="page-header d-flex align-items-center">
+  <div class="d-flex align-items-end">
+    <h2 class="me-3">仪表盘</h2>
+    <%= link_to [:dashboard], class: "text-primary me-2" do %>
+      <i class="far fa-check-square"></i> 按项目
+    <% end %>
+    <%= link_to [:dashboard, :issues], class: "text-secondary position-relative" do %>
+      <i class="far fa-square"></i> 按个人
+      <span class="text-danger">
+        (<%= @issues_counts[:unhandled] %>)
+      </span>
+    <% end %>
+  </div>
+</div>
+
+<div class="tab-content mt-4">
+  <div class="tab-pane show active" role="tabpanel" aria-labelledby="nav-home-tab">
+    <table class="table">
+      <thead>
+        <tr>
+          <th><%=h Project, :name %></th>
+          <% Issue.filter_states_options.each do |(_, attrs)| %>
+            <th><%= attrs[:text] %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @projects.each do |project| %>
+          <% local_mappings = @issues_mappings.select { |item| item[:project_id] == project.id } %>
+          <tr>
+            <td><%= link_to project.name, project %></td>
+            <% Issue.filter_states_options.each do |(code, attrs)| %>
+              <td>
+                <% current_state = local_mappings.filter { |(k, v)| issue_filter(code, { k => v }).presence } %>
+                <% result = current_state.each_with_object({}) { |(k, v), result| result[k[:category_id]] ||= 0; result[k[:category_id]] += v } %>
+
+                <% result.each do |(k, v)| %>
+                  <% category = @categories.find { |c| c.id == k } %>
+                  <% search_params = { filter: attrs[:states].first, search: { category_id_eq: category&.id } } %>
+                  <%= link_to [ project, :issues, search_params ] do %>
+                    <span class="text-nowrap mb-1 me-2">
+                      <%= category_badge_tag(category, (category&.name || "未分类") + " (#{v})") %>
+                    </span>
+                  <% end %>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

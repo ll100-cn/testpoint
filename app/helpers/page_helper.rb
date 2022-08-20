@@ -43,13 +43,19 @@ module PageHelper
     cancel_link(url, merge_options(default_opts, options))
   end
 
-
-
-  def category_badge_tag(label, *args, &block)
+  def category_tag(label, *args, &block)
     options = args.extract_options!
-    options[:class] = "badge text-white #{options[:class]}"
+    options[:class] = options[:class]
     options[:style] = "background-color: #{label&.color || '#6c757d'}; #{options[:style]}"
     content_tag(:span, *args, options, &block)
+  end
+
+  def category_badge_tag(label, *args, &block)
+    category_tag(label, *args, { class: "badge text-white" }, &block)
+  end
+
+  def category_button_tag(label, *args, &block)
+    category_tag(label, *args, { class: "btn btn-sm text-white" }, &block)
   end
 
   def create_or_edit_time_in_words(model)
@@ -74,7 +80,7 @@ module PageHelper
     value
   end
 
-  def badge_issue_state(issue_state)
+  def issue_state(issue_state, options = {})
     return if issue_state.nil?
 
     color = {
@@ -103,17 +109,31 @@ module PageHelper
       "closed" => "问题无效或重复，不作处理"
     }[issue_state]
 
+    css_class = options[:class].presence
     content_tag :span, text,
-      class: "badge #{color}",
+      class: "#{css_class} #{color}",
       data: { bs_toggle: "tooltip", bs_placement: "top" },
       title: helper_tooltip_text
   end
 
-  def issue_filter_state_count(code, data)
+  def badge_issue_state(issue_state)
+    issue_state(issue_state, class: "badge")
+  end
+
+  def button_issue_state(issue_state)
+    issue_state(issue_state, class: "btn btn-sm text-light")
+  end
+
+  def issue_filter(code, data)
     conds = Issue.filter_states_options[code][:conds]
     data.filter do |(key, _)|
       conds.any? { |statements| Issue.cond_match?(statements, key) }
-    end.values.sum
+    end
+  end
+
+  def issue_filter_state_count(code, data)
+    result = issue_filter(code, data)
+    result.values.sum
   end
 
 protected

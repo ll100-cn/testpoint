@@ -22,7 +22,13 @@ RSpec.describe MainController, type: :controller do
     it "should go to project" do
       sign_in user
       get :root
-      expect(response).to redirect_to dashboard_issues_path
+      expect(response).to redirect_to dashboard_path
     end
+  end
+
+  describe "GET dashboard" do
+    before { sign_in user }
+    action { get :dashboard }
+    it { is_expected.to respond_with :success }
   end
 end

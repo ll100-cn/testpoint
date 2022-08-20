@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   end
 
   root 'main#root'
+  get '/dashboard', to: 'main#dashboard'
+
   resources :issues do
     collection do
       get :dashboard

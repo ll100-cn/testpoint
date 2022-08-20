@@ -1,6 +1,17 @@
 <div class="page-header d-flex align-items-center">
 
-  <h2>我的工单</h2>
+  <div class="d-flex align-items-end">
+    <h2 class="me-3">仪表盘</h2>
+    <%= link_to [:dashboard], class: "text-secondary me-2" do %>
+      <i class="far fa-square"></i> 按项目
+    <% end %>
+    <%= link_to [:dashboard, :issues], class: "text-primary" do %>
+      <i class="far fa-check-square"></i> 按个人
+      <span class="text-danger">
+        (<%= @issues_counts[:unhandled] %>)
+      </span>
+    <% end %>
+  </div>
 
   <%= link_to "新建工单", "#", class: "btn btn-primary ms-auto",
         data: { bs_target: "#applicationModal",
