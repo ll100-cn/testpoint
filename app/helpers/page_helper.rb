@@ -46,7 +46,7 @@ module PageHelper
   def category_tag(label, *args, &block)
     options = args.extract_options!
     options[:class] = options[:class]
-    options[:style] = "background-color: #{label&.color || '#6c757d'}; #{options[:style]}"
+    options[:style] = "background-color: #{label&.color || '#212529'}; #{options[:style]}"
     content_tag(:span, *args, options, &block)
   end
 

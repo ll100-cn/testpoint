@@ -1,7 +1,8 @@
+<% issue_options = Issue.filter_states_options.filter { |(code, _)| code != :archive } %>
 <div class="page-header d-flex align-items-center">
   <div class="d-flex align-items-end">
     <h2 class="me-3">仪表盘</h2>
-    <%= link_to [:dashboard], class: "text-primary me-2" do %>
+    <%= link_to [:dashboard], class: "text-primary me-3" do %>
       <i class="far fa-check-square"></i> 按项目
     <% end %>
     <%= link_to [:dashboard, :issues], class: "text-secondary position-relative" do %>
@@ -19,7 +20,7 @@
       <thead>
         <tr>
           <th><%=h Project, :name %></th>
-          <% Issue.filter_states_options.each do |(_, attrs)| %>
+          <% issue_options.each do |(code, attrs)| %>
             <th><%= attrs[:text] %></th>
           <% end %>
         </tr>
@@ -29,7 +30,8 @@
           <% local_mappings = @issues_mappings.select { |item| item[:project_id] == project.id } %>
           <tr>
             <td><%= link_to project.name, project %></td>
-            <% Issue.filter_states_options.each do |(code, attrs)| %>
+            <% issue_options.each do |(code, attrs)| %>
+
               <td>
                 <% current_state = local_mappings.filter { |(k, v)| issue_filter(code, { k => v }).presence } %>
                 <% result = current_state.each_with_object({}) { |(k, v), result| result[k[:category_id]] ||= 0; result[k[:category_id]] += v } %>
