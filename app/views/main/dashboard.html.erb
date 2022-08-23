@@ -1,4 +1,33 @@
+<% count_mappings = {} %>
+<% result_mappings = {} %>
 <% issue_options = Issue.filter_states_options.filter { |(code, _)| code != :archive } %>
+
+<% @projects.each do |project| %>
+  <% local_mappings = @issues_mappings.select { |item| item[:project_id] == project.id } %>
+  <% issue_options.each do |(code, attrs)| %>
+    <% current_state = local_mappings.filter { |(k, v)| issue_filter(code, { k => v }).presence } %>
+    <% result = current_state.each_with_object({}) { |(k, v), result| result[k[:category_id]] ||= 0; result[k[:category_id]] += v } %>
+
+    <% result.each do |(k, v)| %>
+      <% category = @categories.find { |c| c.id == k } %>
+      <% search_params = { filter: attrs[:states].first, search: { category_id_eq: category&.id } } %>
+
+      <% text = link_to [ project, :issues, search_params ] do %>
+        <span class="text-nowrap mb-1 me-2">
+          <%= category_badge_tag(category, (category&.name || "未分类") + " (#{v})") %>
+        </span>
+      <% end %>
+
+      <% count_mappings[code] ||= 0 %>
+      <% count_mappings[code] += v %>
+
+      <% result_mappings[project] ||= {}  %>
+      <% result_mappings[project][code] ||= [] %>
+      <% result_mappings[project][code] << text %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <div class="page-header d-flex align-items-center">
   <div class="d-flex align-items-end">
     <h2 class="me-3">仪表盘</h2>
@@ -21,7 +50,7 @@
         <tr>
           <th><%=h Project, :name %></th>
           <% issue_options.each do |(code, attrs)| %>
-            <th><%= attrs[:text] %></th>
+            <th><%= attrs[:text] %><%= "(#{count_mappings[code] || 0})" %></th>
           <% end %>
         </tr>
       </thead>
@@ -31,19 +60,9 @@
           <tr>
             <td><%= link_to project.name, project %></td>
             <% issue_options.each do |(code, attrs)| %>
-
               <td>
-                <% current_state = local_mappings.filter { |(k, v)| issue_filter(code, { k => v }).presence } %>
-                <% result = current_state.each_with_object({}) { |(k, v), result| result[k[:category_id]] ||= 0; result[k[:category_id]] += v } %>
-
-                <% result.each do |(k, v)| %>
-                  <% category = @categories.find { |c| c.id == k } %>
-                  <% search_params = { filter: attrs[:states].first, search: { category_id_eq: category&.id } } %>
-                  <%= link_to [ project, :issues, search_params ] do %>
-                    <span class="text-nowrap mb-1 me-2">
-                      <%= category_badge_tag(category, (category&.name || "未分类") + " (#{v})") %>
-                    </span>
-                  <% end %>
+                <% result_mappings.dig(project, code)&.each do |link| %>
+                  <%= link.html_safe %>
                 <% end %>
               </td>
             <% end %>
