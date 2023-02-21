@@ -53,6 +53,10 @@ class Plan < ApplicationRecord
         self.errors.add(:phases, phase.errors.full_messages.first)
         raise ActiveReocrd::Rollback
       end
+
+      if !tasks.update_all(phase_id: phase.id)
+        raise ActiveReocrd::Rollback
+      end
     end
   
     self.errors.empty?
