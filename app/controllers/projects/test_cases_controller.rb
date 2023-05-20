@@ -3,6 +3,7 @@ class Projects::TestCasesController < BaseProjectController
   load_and_authorize_resource :folder
   load_and_authorize_resource :platform
   load_and_authorize_resource :test_case_label
+  load_and_authorize_resource :test_case_version
   load_and_authorize_resource through: :project
 
   def index
@@ -14,6 +15,8 @@ class Projects::TestCasesController < BaseProjectController
 
     @test_cases = test_cases_scope
     @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
+
+    @test_cases = @test_cases.where_exists(Versionable.where(test_case_version_id: @test_case_version).where_table(:test_case)) if @test_case_version
 
     @folders = @project.folders.ranked
     @folder_test_cases_counts = Folder.descendants_with_self_counts(@folders, test_cases_counts)

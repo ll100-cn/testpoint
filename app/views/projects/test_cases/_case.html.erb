@@ -1,0 +1,53 @@
+<%
+  version ||= nil
+  target ||= nil
+%>
+
+<div class="card text-dark bg-light">
+  <div class="card-body">
+    <h5>
+      <%= test_case.title %>
+      <% test_case.labels.each do |label| %>
+        <span class="badge bg-secondary"><%= label.name %></span>
+      <% end %>
+    </h5>
+
+    <% if test_case.platforms.exists? %>
+    <div class="py-1">
+      <% test_case.platforms.each do |platform| %>
+      <span class="badge" style="background-color: <%= calc_color_hex(platform.name) %>; color: white;"> <%= platform.name %></span>
+      <% end %>
+    </div>
+    <% end %>
+
+    <%= text_area_tag(:content, test_case.content, data: { controller: "markdown" }, readonly: true, class: "d-none") %>
+
+    <div>
+      <% versionable = @test_case.versionables.where(history_id: version&.id, category: target).take %>
+
+      <% if versionable.nil? && can?(:new, Versionable) &&  %>
+        <%= link_to "<i class='fal fa-plus'></i> 新增版本号".html_safe, new_project_test_case_versionable_path(@project, test_case, history_id: version&.id, category: target ), data: { remote: true, type: :xhrml, target: ".modal-content" }, class: "small pl-2" %>
+      <% elsif versionable.present? %>
+        <span><%= versionable.test_case_version.title %></span>
+        <span class="px-1">
+          <%= link_to "<i class='far fa-cog'></i> 设置版本号".html_safe, "#", id: "versionable_#{dom_id(versionable)}", class: "small pl-2 dropdown-toggle", data: { bs_toggle: 'dropdown' } %>
+          <ul class="dropdown-menu" aria-labelledby="versionable_<%= dom_id(versionable) %>%">
+            <% if can? :edit, versionable %>
+            <li>
+              <%= link_to "<i class='fal fa-edit'></i> 修改版本号".html_safe, edit_project_test_case_versionable_path(@project, test_case, versionable, history_id: version&.id, category: target ), data: { remote: true, type: :xhrml, target: ".modal-content" }, class: "dropdown-item small" %>
+            </li>
+            <% end %>
+
+            <% if can? :destroy, versionable %>
+            <li>
+              <%= link_to "<i class='fal fa-trash'></i> 删除版本号".html_safe, project_test_case_versionable_path(@project, test_case, versionable, history_id: version&.id, category: target ), method: :delete, data: { confirm: "确定要删除该版本号吗？" }, class: "dropdown-item small" %>
+            </li>
+            <% end %>
+          </ul>
+        </span>
+
+        <span class="px-1"></span>
+      <% end %>
+    </div>
+  </div>
+</div>

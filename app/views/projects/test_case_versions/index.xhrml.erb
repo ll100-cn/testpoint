@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h5 class="modal-title"><%= page_i18n(:index, model_name: h(TestCaseVersion)) %></h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <table class="table">
+    <colgroup>
+      <col width="70%">
+      <col>
+    </colgroup>
+    <thead>
+    <tr>
+      <th><%=h TestCaseVersion, :title %></th>
+      <th><%= page_i18n :actions %></th>
+    </tr>
+    </thead>
+    <tbody>
+      <% @test_case_versions.each do |version| %>
+        <tr>
+          <td><%= version.title %></td>
+          <td>
+            <%= edit_link [@project, version], data: { remote: true, type: :xhrml, target: ".modal-content" } %>
+            <%= destroy_link [@project, version] if can? :destroy, version %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <%= new_button [@project, :test_case_version], data: { remote: true, type: :xhrml, target: ".modal-content" } if can? :new, TestCaseVersion %>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :close %></button>
+</div>

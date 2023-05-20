@@ -4,8 +4,8 @@
     <div class="row">
       <div class="col">
         <% if version.previous %>
-          <%= link_to "#version-#{version.id}", data: { bs_toggle: "collapse" }, class: "btn btn-light d-block" do %>
-            <%= l(version.previous.created_at, format: :long) %> 创建的版本
+          <%= link_to "#version-#{version.id}", data: { bs_toggle: "collapse" }, class: "btn btn-light d-block text-start small" do %>
+            <span class="text-small"><%= l(version.previous.created_at, format: :long) %></span>
           <% end %>
           <div class="collapse multi-collapse my-2" id="version-<%= version.id %>">
             <div class="card card-body">

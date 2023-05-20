@@ -18,6 +18,7 @@ class TestCase < ApplicationRecord
   has_and_belongs_to_many :platforms
   belongs_to :project
   has_many :test_case_label_links, dependent: :destroy
+  has_many :versionables, dependent: :destroy
   has_many :labels, through: :test_case_label_links, source: :test_case_label
 
   cleanup_column :title, :content
@@ -29,6 +30,7 @@ class TestCase < ApplicationRecord
   scope :with_folder, -> { joins(:folder).includes(:folder) }
 
   after_create :sync_to_processing_plan
+  after_save :sync_current_versionable_to_history
 
   def archive
     update(archived: true)
@@ -43,5 +45,15 @@ class TestCase < ApplicationRecord
         end
       end
     end
+  end
+
+  def sync_current_versionable_to_history
+    current_versionable = self.versionables.with_category(:current).first
+    return unless current_versionable
+
+    current_version = self.versions.find { |version| version.reify.updated_at == current_versionable.case_updated_at }
+    return unless current_version
+
+    current_versionable.update!(history_id: current_version.id, category: :history)
   end
 end

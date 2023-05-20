@@ -37,7 +37,7 @@ class Ability
     can [:fold, :unfold],       Comment
     can :manage,                Issue
     can [:read, :create],       IssueRelationship
-    can :manage,                [TestCase, TestCaseLabel, Plan, Platform, Folder, Task, Phase]
+    can :manage,                [TestCase, TestCaseLabel, TestCaseVersion, Versionable, Plan, Platform, Folder, Task, Phase]
   end
 
   def apply_manager_permissions(member)

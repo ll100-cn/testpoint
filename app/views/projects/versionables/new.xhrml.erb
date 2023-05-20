@@ -1,0 +1,15 @@
+<%= bootstrap_horizontal_form_for [@project, @test_case, @versionable],
+    defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-end", style: "width: 8rem;"  }, label_wrapper_html: { class: "text-end", style: "width: 8rem;"  }, content_html: { class: "col" } },
+    data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
+  <div class="modal-header">
+    <h5 class="modal-title">创建版本号</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <%= render "inputs.html", f: f %>
+  </div>
+  <div class="modal-footer">
+    <%= f.submit class: "btn btn-primary" %>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :close %></button>
+  </div>
+<% end %>
