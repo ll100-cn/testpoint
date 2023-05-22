@@ -14,8 +14,9 @@ class Project < ApplicationRecord
   has_many :plans,              dependent: :destroy
   has_many :issues,             dependent: :destroy
   has_many :issue_templates,    dependent: :destroy
-  has_many :categories,             dependent: :destroy
+  has_many :categories,         dependent: :destroy
   has_many :test_case_labels,   dependent: :destroy
+  has_many :test_case_versions, dependent: :destroy
   has_many :milestones,         dependent: :destroy
   has_many :platforms,          dependent: :destroy
   has_many :folders,            dependent: :destroy

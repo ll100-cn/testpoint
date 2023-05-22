@@ -14,6 +14,7 @@ zh-CN:
       comment: 评论
       category: 分类
       test_case_label: 标签
+      test_case_version: 版本号
       milestone: 里程碑
       project: 项目
       member: 成员
@@ -106,6 +107,10 @@ zh-CN:
         name: 标题
         description: 描述
         test_cases: 案例
+      test_case_version:
+        title: 标题
+        version_at: 版本时间
+        description: 描述
       milestone:
         title: 标题
         description: 描述

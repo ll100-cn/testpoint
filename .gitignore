@@ -48,3 +48,4 @@ yarn-debug.log*
 /config/sidekiq.yml
 /config/database.yml
 /*.sql
+.python-version

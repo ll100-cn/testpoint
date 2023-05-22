@@ -18,6 +18,7 @@ class TestCase < ApplicationRecord
   has_and_belongs_to_many :platforms
   belongs_to :project
   has_many :test_case_label_links, dependent: :destroy
+  has_many :test_case_records, dependent: :destroy
   has_many :labels, through: :test_case_label_links, source: :test_case_label
 
   cleanup_column :title, :content
@@ -29,6 +30,7 @@ class TestCase < ApplicationRecord
   scope :with_folder, -> { joins(:folder).includes(:folder) }
 
   after_create :sync_to_processing_plan
+  after_save :save_to_record
 
   def archive
     update(archived: true)
@@ -43,5 +45,9 @@ class TestCase < ApplicationRecord
         end
       end
     end
+  end
+
+  def save_to_record
+    test_case_records.create!(changed_at: self.versions.reverse.first.reify.updated_at) if self.versions.reverse.first&.reify
   end
 end

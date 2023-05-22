@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_13_050635) do
+ActiveRecord::Schema.define(version: 2023_05_22_155453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -256,7 +256,6 @@ ActiveRecord::Schema.define(version: 2022_04_13_050635) do
     t.bigint "creator_id", null: false
     t.bigint "milestone_id"
     t.bigint "platform_id"
-    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["creator_id"], name: "index_plans_on_creator_id"
     t.index ["milestone_id"], name: "index_plans_on_milestone_id"
     t.index ["platform_id"], name: "index_plans_on_platform_id"
@@ -270,7 +269,6 @@ ActiveRecord::Schema.define(version: 2022_04_13_050635) do
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.bigint "default_assignee_id"
-    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["default_assignee_id"], name: "index_platforms_on_default_assignee_id"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
@@ -363,6 +361,24 @@ ActiveRecord::Schema.define(version: 2022_04_13_050635) do
     t.index ["project_id"], name: "index_test_case_labels_on_project_id"
   end
 
+  create_table "test_case_records", force: :cascade do |t|
+    t.bigint "test_case_id"
+    t.datetime "changed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["test_case_id"], name: "index_test_case_records_on_test_case_id"
+  end
+
+  create_table "test_case_versions", force: :cascade do |t|
+    t.bigint "project_id"
+    t.string "title"
+    t.datetime "version_at"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_test_case_versions_on_project_id"
+  end
+
   create_table "test_cases", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -371,7 +387,6 @@ ActiveRecord::Schema.define(version: 2022_04_13_050635) do
     t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
-    t.index ["archived"], name: "index_test_cases_on_archived"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
@@ -447,5 +462,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_050635) do
   add_foreign_key "test_case_label_links", "test_case_labels"
   add_foreign_key "test_case_label_links", "test_cases"
   add_foreign_key "test_case_labels", "projects"
+  add_foreign_key "test_case_records", "test_cases"
+  add_foreign_key "test_case_versions", "projects"
   add_foreign_key "test_cases", "projects"
 end

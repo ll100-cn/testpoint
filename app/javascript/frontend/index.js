@@ -2,6 +2,7 @@ import './style.scss'
 import './pages.scss'
 import './attachments.scss'
 import './issues.scss'
+import './timeline.scss'
 import $ from 'jquery'
 
 function removeAttachment(event) {

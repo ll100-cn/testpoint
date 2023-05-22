@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     patch :archive, on: :member
     scope module: 'projects' do
       resources :test_cases
+      resources :test_case_versions
       resources :plans do
         resources :phases
         resources :tasks do
@@ -84,6 +85,7 @@ Rails.application.routes.draw do
       resources :platforms
       resources :categories
       resources :test_case_labels
+      resources :test_case_versions
       resources :milestones
       resources :analytics do
         get :issue_creator_chart, on: :collection
