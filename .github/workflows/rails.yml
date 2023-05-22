@@ -16,7 +16,7 @@ jobs:
         if: "!startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/master'"
 
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     services:
       postgres:
@@ -37,9 +37,14 @@ jobs:
       # ==================
       # Container Setup
       # ------------------
-      - uses: actions/setup-ruby@v1
-        with: { ruby-version: 2.6.x }
-      - run: gem install bundler
+      - name: Set up Ruby 2.6
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Install gems
+        run: |
+          gem install bundler
 
       - uses: actions/setup-node@v1
         with: { node-version: '10.x' }
