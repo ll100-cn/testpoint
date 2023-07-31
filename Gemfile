@@ -50,7 +50,6 @@ gem 'rgb', '0.1.0'
 # Assets
 gem 'sass-rails', '5.1.0'
 gem 'uglifier', '4.2.0'
-gem 'webpacker', '5.2.1'
 gem 'coffee-rails', '5.0.0'
 # gem 'turbolinks', '5.2.1'
 
@@ -81,7 +80,7 @@ group :development do
   # gem 'spring', '2.1.0'
   # gem 'spring-watcher-listen', '2.0.1'
 
-  gem 'capsum', '1.1.4', require: false
+  gem 'capsum', '1.1.6', require: false
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
 end
