@@ -37,19 +37,14 @@ jobs:
       # ==================
       # Container Setup
       # ------------------
-      - name: Set up Ruby 2.6
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6
+      - uses: ruby/setup-ruby@v1
+        with: { ruby-version: 2.7.8 }
+      - run: gem install bundler
+      - run: gem update --system
 
-      - name: Install gems
-        run: |
-          gem install bundler
-
-      - uses: actions/setup-node@v1
-        with: { node-version: '10.x' }
+      - uses: actions/setup-node@v2
+        with: { node-version: '14.x' }
       - run: npm install -g yarn
-
 
       # ==================
       # Project Setup
