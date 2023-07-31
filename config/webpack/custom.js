@@ -25,6 +25,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
+      'window.Dropdown': ['bootstrap', 'Dropdown'] // fix error: https://github.com/snapappointments/bootstrap-select/pull/2736
     })
   ],
   optimization: {

@@ -21,7 +21,7 @@
     "@vendor/fontawesome-pro-web" "https://token:9d4aa7a88bcb1e65@dev.ll100.com/repo/fontawesome-pro-5.11.2-web.tar.gz"
     bootstrap "5.3.1"
     bootstrap-colorpicker "3.1.2"
-    bootstrap-select "1.14.0-beta2"
+    bootstrap-select "1.14.0-beta3"
     chart.js "^2.9.4"
     clipboard "2.0.4"
     easymde "2.8.0"
@@ -1947,10 +1947,10 @@ bootstrap-colorpicker@3.1.2:
     bootstrap ">=4.0"
     jquery ">=2.1.0"
 
-bootstrap-select@1.14.0-beta2:
-  version "1.14.0-beta2"
-  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.14.0-beta2.tgz#3abc9f778435238669f70d0af3615d0198ec4291"
-  integrity sha512-Q63QUbConUwA+/Te7tCJcv0nE3SI/J+rNI5A1mdX1KxP6lW0pFQy+4KVP6VwgZEcwkoPfrwjvAo6WT7fdl+Sdg==
+bootstrap-select@1.14.0-beta3:
+  version "1.14.0-beta3"
+  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.14.0-beta3.tgz#dc15083fe51d0ac7b38a3b99dfd492dcc0a783b0"
+  integrity sha512-wYUDY4NAYBcNydXybE7wh3+ucyf+AcUOhZ+e0TFIoZ38A+k/3BVT1RPl5f0CiPxAexP1IQuqALKMqI8wtZS71A==
 
 bootstrap@5.3.1, bootstrap@>=4.0:
   version "5.3.1"
