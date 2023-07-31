@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-require("turbolinks").start()
+// require("turbolinks").start()
 
 
 $(document).on('turbolinks:load', function(event) {
@@ -9,10 +9,10 @@ $(document).on('turbolinks:load', function(event) {
   $element.trigger('content:loaded');
 });
 
-if (Turbolinks.supported) {
-  Turbolinks.start()
-} else {
+// if (Turbolinks.supported) {
+  // Turbolinks.start()
+// } else {
   $(function() {
     $(document).trigger('turbolinks:load')
   })
-}
+// }

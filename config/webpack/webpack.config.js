@@ -1,6 +1,8 @@
 const { webpackConfig, merge } = require("shakapacker")
-
 const customConfig = require("./custom.js")
+const vueConfig = require('./rules/vue')
+const typescriptConfig = require('./rules/typescript')
+
 
 for (const rule of webpackConfig.module.rules) {
   if (rule.use) {
@@ -14,6 +16,8 @@ for (const rule of webpackConfig.module.rules) {
 }
 
 module.exports = merge(
+  vueConfig,
+  typescriptConfig,
   customConfig,
   webpackConfig
 )

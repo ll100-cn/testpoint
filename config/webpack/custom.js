@@ -26,6 +26,9 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
       'window.Dropdown': ['bootstrap', 'Dropdown'] // fix error: https://github.com/snapappointments/bootstrap-select/pull/2736
+    }),
+    new webpack.EnvironmentPlugin({
+      'RAILS_RELATIVE_URL_ROOT': process.env.RAILS_RELATIVE_URL_ROOT || '/',
     })
   ],
   optimization: {

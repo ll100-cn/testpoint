@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "module": "es2022",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "target": "es6",
+    "jsx": "react",
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/*": [
+        "./app/javascript/frontend/*"
+      ]
+    }
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "node_modules",
+    "vendor",
+    "public"
+  ],
+  "compileOnSave": false
+}

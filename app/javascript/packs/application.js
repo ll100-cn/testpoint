@@ -38,7 +38,7 @@ import '../components/auto-submit'
 import '../components/bootstrap-select'
 import '../components/chart'
 
-import '../frontend'
+import '../frontend/old'
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
