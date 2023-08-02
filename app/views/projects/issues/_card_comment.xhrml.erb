@@ -25,8 +25,8 @@
       </div>
     </div>
     <div class="card-text no-margin-bottom">
-      <%= render "shared/page_content.html", content: comment.content %>
-      <%= render "shared/attachments_box.html", attachmentable: comment %>
+      <%= render template: "shared/_page_content", formats: [ :html ], locals: { content: comment.content } %>
+      <%= render template: "shared/_attachments_box", formats: [ :html ], locals: { attachmentable: comment } %>
     </div>
   </div>
 
@@ -38,15 +38,15 @@
             <%= image_tag child_comment.member.user.avatar_url, width: 20, class: "rounded-circle avatar me-1" %>
             <%= child_comment.member.name %><%= "（#{child_comment.member.project.name}）" if child_comment.member.project_id != @project.id %>
             <span class="text-muted ms-1">回复评论：</span>
-            <%= render "shared/page_content.html", content: child_comment.content %>
-            <%= render "shared/attachments_box.html", attachmentable: child_comment %>
+            <%= render template: "shared/_page_content", formats: [ :html ], locals: { content: child_comment.content } %>
+            <%= render template: "shared/attachments_box", formats: [ :html ], locals: { attachmentable: child_comment } %>
             <span class="small text-muted">回复于 <%=l child_comment.created_at, format: :short %></span>
           </li>
         <% end %>
       </ul>
     </div>
   <% end %>
-   
+
   <div class="collapse mt-3" id="newCommentComment-<%= comment.id %>">
     <div class="card-footer bg-white">
       <div class="d-flex">
@@ -56,7 +56,7 @@
           取消回复
         <% end %>
       </div>
-      <%= render "projects/comments/form.html", comment: comment.comments.new(issue: comment.issue) if can? :create, Comment %>
+      <%= render template: "projects/comments/_form", formats: [ :html ], locals: { comment: comment.comments.new(issue: comment.issue) } if can? :create, Comment %>
     </div>
   </div>
 </div>

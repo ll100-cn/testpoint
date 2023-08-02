@@ -3,6 +3,6 @@
 </div>
 
 <%= bootstrap_horizontal_form_for [@project, @category],
- defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-end", style: "width: 8rem;"  }, label_wrapper_html: { class: "text-end", style: "width: 8rem;"  }, content_html: { class: "col" } } do |f| %>
+ defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-end", style: "width: 8rem;" }, label_wrapper_html: { class: "text-end", style: "width: 8rem;" }, content_html: { class: "col" } } do |f| %>
   <%= render "form", f: f %>
 <% end %>

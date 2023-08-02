@@ -1,12 +1,12 @@
 <%= bootstrap_horizontal_form_for [@project, @test_case],
-    defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-end", style: "width: 8rem;"  }, label_wrapper_html: { class: "text-end", style: "width: 8rem;"  }, content_html: { class: "col" } },
+    defaults: { wrapper_html: { class: "ms-0" }, legend_tag_html: { class: "text-end", style: "width: 8rem;" }, label_wrapper_html: { class: "text-end", style: "width: 8rem;" }, content_html: { class: "col" } },
     data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
   <div class="modal-header">
     <h5 class="modal-title"><%= page_i18n :show, model_name: h(@test_case) %></h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-    <%= render "inputs.html", f: f %>
+    <%= render "inputs", formats: [ :html ], f: f %>
   </div>
   <div class="modal-footer">
     <%= destroy_button [@project, @test_case], class: "btn-sm me-auto" if can? :destroy, @test_case if can? :destroy, @test_case %>

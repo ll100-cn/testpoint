@@ -1,5 +1,5 @@
 <div class="w-100" data-controller="form-toggle">
-  <%= render 'alert.html', model: @upshot, except: [:issue] if @action_error_state %>
+  <%= render 'alert', formats: [ :html ], model: @upshot, except: [:issue] if @action_error_state %>
 
   <form data-target="form-toggle.form">
     <% form_category_name = dom_id(@upshot) %>
@@ -30,7 +30,7 @@
           data: { remote: true, type: :xhrml, target: ".modal-content" } do |f| %>
       <h5>补充工单详情</h5>
       <% issue = f.object.issue || Issue.new(state: :confirmed) %>
-      <% 
+      <%
       issue.assignee ||= @plan.platform.default_assignee
       issue.title ||= "【#{@plan.platform.name} 测试失败】" + @task.test_case.title
       issue.content ||=
@@ -58,7 +58,7 @@
       <%= f.hidden_field :state_override, value: "failure" %>
 
       <%= f.submit "提交", class: "btn btn-primary" %>
-  
+
       <label for="<%= form_category_name %>_pending" class="btn btn-secondary">取消</label>
     <% end %>
   </div>

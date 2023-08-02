@@ -28,7 +28,7 @@
   <div class="d-flex flex-wrap upload-container" data-target="attachment.container">
    <% attachments.each do |attachment| %>
      <div class="col-lg-6 p-0 pe-2 mb-2">
-       <%= render "attachments/info.html", attachment: attachment %>
+       <%= render "attachments/info", formats: [ :html ], attachment: attachment %>
        <%= hidden_field_tag "#{attachment.attachmentable_type.underscore}[attachment_ids][]", attachment.id %>
      </div>
    <% end %>

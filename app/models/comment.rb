@@ -26,7 +26,7 @@ class Comment < ApplicationRecord
   scope :recent, -> { order("created_at DESC") }
   scope :history, -> { order("created_at ASC") }
 
-  after_create :change_issue_state_to_pending, if: -> { member == issue.creator && issue.state.waiting?  }
+  after_create :change_issue_state_to_pending, if: -> { member == issue.creator && issue.state.waiting? }
 
   def update_with_author(params, member)
     assign_attributes(params)

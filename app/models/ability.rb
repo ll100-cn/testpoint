@@ -2,7 +2,8 @@ class Ability
   include CanCan::Ability
 
   def initialize(&block)
-    alias_action :update, :destroy, :to => :modify
+    alias_action :update, :destroy, to: :modify
+    # rubocop:disable Performance/RedundantBlockCall
     block.(self)
   end
 
@@ -25,10 +26,10 @@ class Ability
   end
 
   def apply_reporter_permissions(member)
-    can :read,                  Milestone
-    can [:read, :create],       Comment
+    can :read, Milestone
+    can [:read, :create], Comment
     can [:read, :create, :archive, :unresolve], Issue
-    can :update,                Comment,  member_id:   member.id
+    can :update, Comment, member_id: member.id
     can [:read, :create, :update], IssueInfo
   end
 
@@ -48,9 +49,9 @@ class Ability
     can :update,                member.project
     can :manage,                Category
     can :read,                  Member
-    can :modify,                Member, Member.where.not(role: "owner") do |member|
-                                  !member.role.owner?
-                                end
+    can :modify,                Member, Member.where.not(role: "owner") do |m|
+      !m.role.owner?
+    end
     can :manage,                IssueTemplate
     can :manage,                Analytic
   end

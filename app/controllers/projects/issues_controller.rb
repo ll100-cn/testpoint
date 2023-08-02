@@ -97,7 +97,8 @@ protected
   def issue_build_form_params
     params.fetch(:issue_build_form, {}).permit(
       issue_attributes: [:priority, :title, :creator_id, :content],
-      info_attributes: [inputs_attributes: [:template_input_id, :value]])
+      info_attributes: [inputs_attributes: [:template_input_id, :value]]
+    )
   end
 
   def issue_params
@@ -109,10 +110,13 @@ protected
   end
 
   def issue_params_names
-    names = [:priority, :title, :content, :state, :milestone_id, :assignee_id,
-            :template_id, :project_id, :category_id,
-            attachment_ids: [], subscribed_user_ids: [],
-            template_ids: []]
+    names = [
+      :priority, :title, :content, :state, :milestone_id, :assignee_id,
+      :template_id, :project_id, :category_id,
+      attachment_ids: [],
+      subscribed_user_ids: [],
+      template_ids: []
+    ]
     names += [ :creator_id ] if can? :critical, Issue
     names
   end

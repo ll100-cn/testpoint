@@ -3,6 +3,7 @@ class ApplicationRecord < ActiveRecord::Base
   extend Enumerize
   include SqlScopes
   include AnyOfConds
+  include Ransackable
 
   def self.cleanup_column(*args)
     options = { strip: true, presence: true }.merge(args.extract_options!)
@@ -27,7 +28,7 @@ class ApplicationRecord < ActiveRecord::Base
         end
       end
     end
-  
+
     self.where_any_of(*items)
   end
 

@@ -5,5 +5,5 @@
   <% end %>
   <%= link_to "订阅问题", [@project, @issue, :subscription], method: :post, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
 
-  <%= render "projects/subscriptions/subscribed_users.html", issue: @issue %>
+  <%= render "projects/subscriptions/subscribed_users", formats: [:html], issue: @issue %>
 </div>

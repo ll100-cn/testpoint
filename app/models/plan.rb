@@ -20,7 +20,8 @@ class Plan < ApplicationRecord
   has_many :folders, through: :test_cases
   belongs_to :project
   belongs_to :platform
-  belongs_to :creator, class_name: "Member", foreign_key: "creator_id"
+
+  belongs_to :creator, class_name: "Member"
   belongs_to :milestone, optional: true
 
   validates :title, presence: true
@@ -33,9 +34,9 @@ class Plan < ApplicationRecord
   def submit(test_case_filter)
     test_cases = test_case_filter.build_test_cases_scope(project.test_cases.available)
 
-    transaction do 
+    transaction do
       raise ActiveRecord::Rollback unless save
-  
+
       test_cases.each do |test_case|
         if test_case.platforms.where(id: platform.id).exists?
           task = tasks.new(test_case: test_case)
@@ -46,9 +47,9 @@ class Plan < ApplicationRecord
           end
         end
       end
-    
+
       phase = phases.new(title: "第 1 轮", index: 0)
-      
+
       if !phase.submit
         self.errors.add(:phases, phase.errors.full_messages.first)
         raise ActiveReocrd::Rollback
@@ -58,7 +59,7 @@ class Plan < ApplicationRecord
         raise ActiveReocrd::Rollback
       end
     end
-  
+
     self.errors.empty?
   end
 

@@ -1,78 +1,215 @@
 #inherit_from: .rubocop_todo.yml
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
+  NewCops: enable
+  SuggestExtensions: false
   Exclude:
     - node_modules/**/*
     - bin/*
-    - db/schema.rb
+    - db/**/*
+    - scripts/**/*
 
 
-Bundler/OrderedGems:
+Style/FormatStringToken:
   Enabled: false
 
+Rails/ApplicationController:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/MigrationClassName:
+  Enabled: false
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+Rails/EnvironmentVariableAccess:
+  Enabled: false
+
+Rails/ContentTag:
+  Enabled: false
+
+Rails/WhereNotWithMultipleConditions:
+  Enabled: false
+
+Rails/ActionOrder:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Rails/FindBy:
+  Enabled: false
+
+Rails/RootPathnameMethods:
+  Enabled: false
+
+
+Metrics/MethodLength:
+  Max: 50
+  Exclude:
+    - '**/db/migrate/*'
+    - '**/scripts/*'
+
+Style/MultilineIfModifier:
+  Exclude:
+    - '**/config/deploy.rb'
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Max: 250
+
+Metrics/ClassLength:
+  Max: 500
+  Exclude:
+    - '**/db/migrate/*'
+
+Metrics/BlockLength:
+  Max: 350
+  Exclude:
+    - '**/spec/**/*_spec.rb'
+    - '**/config/routes/*'
+
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Lint/MissingCopEnableDirective:
+  Enabled: false
+
+Layout/LeadingCommentSpace:
+  Enabled: false
+
+Layout/ExtraSpacing:
+  Exclude:
+    - '**/db/migrate/*'
+
+Layout/HashAlignment:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 280
+  Exclude:
+    - '**/spec/**/*_spec.rb'
+    - '**/db/migrate/*'
+    - '**/config/initializers/*'
+
+Layout/SpaceInsideBlockBraces:
+  EnforcedStyle: space
+  EnforcedStyleForEmptyBraces: space
 
 Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
 
-Layout/EmptyLinesAroundAccessModifier:
+Style/AsciiComments:
   Enabled: false
 
-Layout/IndentArray:
-  EnforcedStyle: consistent
-
-Layout/SpaceInsideArrayLiteralBrackets:
-#  EnforcedStyle: compact
+Layout/BlockEndNewline:
   Enabled: false
 
-
-Metrics/BlockLength:
-#  Max: 150
-  Exclude:
-    - config/initializers/*.rb
-    - spec/**/*_spec.rb
-    - config/routes.rb
-
-Metrics/MethodLength:
-  Max: 20
-  Exclude:
-    - db/migrate/*.rb
-
-Metrics/LineLength:
-  Max: 160
-
-Metrics/AbcSize:
-  Max: 50
-
-
-Performance/RedundantBlockCall:
+Style/BlockDelimiters:
   Enabled: false
 
-
-Rails/ApplicationRecord:
-  Exclude:
-    - db/migrate/*.rb
-
-Rails/CreateTableWithTimestamps:
-  Enabled: false
-
-Rails/SkipsModelValidations:
-  Exclude:
-    - db/migrate/*.rb
-
-Rails/HasAndBelongsToMany:
-  Enabled: false
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-
-Style/StringLiterals:
-  Enabled: false
+Style/ClassAndModuleChildren:
+   Enabled: false
 
 Style/Documentation:
   Enabled: false
 
-Style/EmptyMethod:
+Style/DoubleNegation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
+  Enabled: false
+
+Style/CaseLikeIf:
+  Enabled: false
+
+Layout/EmptyLines:
+  Enabled: false
+
+Layout/TrailingEmptyLines:
+  Enabled: false
+
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: false
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: false
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
+  Enabled: false
+
+Style/WordArray:
+  MinSize: 16
+
+Style/SignalException:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/Next:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Layout/MultilineBlockLayout:
   Enabled: false
 
 Style/GuardClause:
@@ -81,24 +218,274 @@ Style/GuardClause:
 Style/IfUnlessModifier:
   Enabled: false
 
-Style/RedundantSelf:
-  Enabled: false
-
 Style/Lambda:
   Enabled: false
 
 Style/LambdaCall:
   EnforcedStyle: braces
 
-Style/BlockDelimiters:
+Style/Semicolon:
   Exclude:
-    - spec/**/*_spec.rb
+    - '**/spec/**/*_spec.rb'
 
-Style/ClassAndModuleChildren:
- Enabled: false
+Style/RedundantSelf:
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/TrailingUnderscoreVariable:
+  Enabled: false
+
+Style/For:
+  Enabled: false
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/OutputSafety:
+  Enabled: false
+
+Rails/Output:
+  Exclude:
+    - '**/db/migrate/*'
+
+Rails/ReflectionClassName:
+  Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Rails/ReversibleMigration:
+  Enabled: false
+
+Rails/BulkChangeTable:
+  Enabled: false
+
+Rails/RedundantPresenceValidationOnBelongsTo:
+  Enabled: false
+
+Rails/DurationArithmetic:
+  Enabled: false
+
+# ======================
+# TODO
+# ======================
+Metrics/AbcSize:
+  Max: 75
+  Exclude:
+    - '**/db/migrate/*'
+    - '**/scripts/*'
+
+Metrics/CyclomaticComplexity:
+  Max: 25
+  Exclude:
+    - '**/db/migrate/*'
+    - '**/scripts/*'
+
+Metrics/PerceivedComplexity:
+  Max: 25
+  Exclude:
+    - '**/scripts/*'
+
+Naming/PredicateName:
+  Enabled: false
+
+Naming/MethodParameterName:
+  MinNameLength: 2
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
+  Enabled: false
+
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: space
+  Enabled: false
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Style/MissingRespondToMissing:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
 
 Style/SymbolArray:
   Enabled: false
 
-Style/FrozenStringLiteralComment:
+Lint/AmbiguousBlockAssociation:
   Enabled: false
+
+Style/MixinGrouping:
+  Enabled: false
+
+Style/EmptyLiteral:
+  Enabled: false
+
+Style/DateTime:
+  Enabled: false
+
+Rails/Blank:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/AccessorGrouping:
+  Enabled: false
+
+Style/BisectedAttrAccessor:
+  Enabled: false
+
+Style/ExponentialNotation:
+  Enabled: false
+
+Style/RedundantAssignment:
+  Enabled: false
+
+Style/RedundantFetchBlock:
+  Enabled: false
+
+Style/RedundantRegexpCharacterClass:
+  Enabled: false
+
+Style/RedundantRegexpEscape:
+  Enabled: false
+
+Style/SlicingWithRange:
+  Enabled: false
+
+Style/SoleNestedConditional:
+  Enabled: false
+
+Style/CombinableLoops:
+  Enabled: false
+
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false
+
+Rails/ApplicationRecord:
+  Exclude:
+    - '**/db/migrate/*.rb'
+
+Rails/WhereExists:
+  Enabled: false
+
+Lint/SuppressedException:
+  Exclude:
+    - '**/db/migrate/*.rb'
+
+Naming/FileName:
+  Exclude:
+    - '**/core/*.gemspec'
+
+Style/TernaryParentheses:
+  Enabled: false
+
+Style/EmptyElse:
+  Enabled: false
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/ClassVars:
+  Enabled: false
+
+Style/StringConcatenation:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Lint/NonDeterministicRequireOrder:
+  Enabled: false
+
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: false
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Lint/EmptyFile:
+  Enabled: false
+
+Lint/EmptyBlock:
+  Enabled: false
+
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Layout/EmptyLineBetweenDefs:
+  Enabled: false
+
+Lint/DuplicateBranch:
+  Enabled: false
+
+Lint/SymbolConversion:
+  Enabled: false
+
+Lint/AmbiguousOperatorPrecedence:
+  Enabled: false
+
+Naming/InclusiveLanguage:
+  Enabled: false
+
+Layout/LineEndStringConcatenationIndentation:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  Enabled: false
+
+Style/RedundantStringEscape:
+  Enabled: false
+
+Style/YodaExpression:
+  Enabled: false
+
+Style/FetchEnvVar:
+  Enabled: false
+
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - '**/db/migrate/*'
+
+require:
+  - rubocop-rails
+  - rubocop-performance

@@ -5,10 +5,10 @@
     <div class="card app-card-main">
       <div class="card-header bg-white d-flex">
         <h5 class="my-auto mx-2"><%=h ::TestCase, :platform_ids %></h5>
-        <%= render 'platform_filter.html' %>
+        <%= render 'platform_filter' %>
 
         <h5 class="my-auto mx-2"><%=h ::TestCase, :label_ids %></h5>
-        <%= render 'label_filter.html' %>
+        <%= render 'label_filter' %>
 
         <div class="actions ms-auto">
           <%= new_button [@project, :test_case], class: "btn-sm", data: { bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_test_case_path(@project, ok_url: request.fullpath, test_case: { folder_id: @folder }) } if can? :new, TestCase %>
@@ -29,7 +29,7 @@
 
           <div id="folder-tree" class="treeview" data-controller="activable">
             <ul>
-              <%= render "shared/folders.html", key: nil do |folder| %>
+              <%= render "shared/folders", key: nil do |folder| %>
                 <%= link_to current_url(folder_id: folder.id), class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main table", action: "activable#active" }  do %>
                   <i class="fal fa-folder me-2"></i><%= folder.name %>（<%= @folder_test_cases_counts[folder.id] %>）
                 <% end %>

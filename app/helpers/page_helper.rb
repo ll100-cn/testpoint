@@ -5,11 +5,11 @@ module PageHelper
     hidden_field_tag "ok_url", params[:ok_url] if params[:ok_url].present?
   end
 
-  def new_link(models, options={})
+  def new_link(models, options = {})
     build_link(models, :new, options)
   end
 
-  def edit_link(models, options={})
+  def edit_link(models, options = {})
     build_link(models, :edit, options)
   end
 
@@ -23,12 +23,12 @@ module PageHelper
     link_to label, url, options
   end
 
-  def new_button(models, options={})
-    default_opts =  { class: "btn btn-primary" }
+  def new_button(models, options = {})
+    default_opts = { class: "btn btn-primary" }
     new_link(models, merge_options(default_opts, options))
   end
 
-  def edit_button(models, options={})
+  def edit_button(models, options = {})
     default_opts = { class: "btn btn-primary" }
     edit_link(models, merge_options(default_opts, options))
   end
@@ -65,12 +65,10 @@ module PageHelper
       else
         "#{time_ago_in_words(model.last_edited_at)}前修改"
       end
+    elsif model.created_at < 10.minutes.ago
+      "添加于 #{l(model.created_at, format: :long)}"
     else
-      if model.created_at < 10.minutes.ago
-        "添加于 #{l(model.created_at, format: :long)}"
-      else
-        "#{time_ago_in_words(model.created_at)}前添加"
-      end
+      "#{time_ago_in_words(model.created_at)}前添加"
     end
   end
 
@@ -110,10 +108,7 @@ module PageHelper
     }[issue_state]
 
     css_class = options[:class].presence
-    content_tag :span, text,
-      class: "#{css_class} #{color}",
-      data: { bs_toggle: "tooltip", bs_placement: "top" },
-      title: helper_tooltip_text
+    content_tag :span, text, class: "#{css_class} #{color}", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: helper_tooltip_text
   end
 
   def badge_issue_state(issue_state)
@@ -157,10 +152,10 @@ protected
   def merge_options(old_options, new_options)
     old_options.merge(new_options) do |key, old, new|
       result = if key == :class
-                [old, new].join(" ")
-              elsif key == :data
-                old.merge(new)
-              end
+                 [old, new].join(" ")
+               elsif key == :data
+                 old.merge(new)
+               end
       result
     end
   end

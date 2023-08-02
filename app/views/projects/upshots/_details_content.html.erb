@@ -1,9 +1,9 @@
-<%= render 'alert.html', model: @upshot if @content_error_state %>
+<%= render 'alert', formats: [ :html ], model: @upshot if @content_error_state %>
 
 <% @upshot.content ||= @task.test_case.content %>
 
 <%= content_tag :small, "无详细信息", class: "text-muted" if @task.content.nil? %>
 
-<%= form_for @upshot, url: url_for(action: :content), method: :patch, html: { data: { remote: true, type: :xhrml, target: ".modal-content"  }, class: "auto-submit" } do |f| %>
+<%= form_for @upshot, url: url_for(action: :content), method: :patch, html: { data: { remote: true, type: :xhrml, target: ".modal-content" }, class: "auto-submit" } do |f| %>
   <%= f.text_area(:content, data: { controller: "markdown" }, class: "d-none") %>
 <% end %>

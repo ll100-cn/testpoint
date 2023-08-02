@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Projects::PhasesController, type: :controller do
   let!(:project) { create :project }
-  let!(:user) { create :user}
+  let!(:user) { create :user }
   let!(:member) { create :member, user: user, project: project }
   let(:plan) { create :plan, project: project, creator: member }
   let!(:phase) { create :phase, plan: plan, index: 0 }

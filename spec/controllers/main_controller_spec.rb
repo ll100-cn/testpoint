@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MainController, type: :controller do
   let!(:project) { create :project }
-  let!(:user) { create :user, email: Faker::Internet.email, name: "new user"}
+  let!(:user) { create :user, email: Faker::Internet.email, name: "new user" }
   let!(:member) { create :member, project: project, user: user }
 
   describe "GET #root" do

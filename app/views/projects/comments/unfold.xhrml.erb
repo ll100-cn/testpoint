@@ -5,6 +5,6 @@
     <a href="#collapse_comment_<%= comment.id %>" data-bs-toggle="collapse" class="small text-muted">展开</a>
   </div>
   <div class="issue-comment collapse" id="collapse_comment_<%= comment.id %>">
-    <%= render "projects/issues/card_comment.html", comment: comment %>
+    <%= render "projects/issues/card_comment", formats: [ :html ], comment: comment %>
   </div>
 </div>

@@ -88,7 +88,7 @@
 
       <div id="folder-tree" class="treeview" data-controller="activable">
         <ul>
-          <%= render "shared/folders.html", key: nil do |folder| %>
+          <%= render "shared/folders", key: nil do |folder| %>
             <%= link_to current_url(folder_id: folder), class: "treeview-link flex-1 rounded  #{'active' if folder == @folder}", data: { remote: true, type: "xhrml", target: "#tp-main .test_cases-cards", action: "activable#active" }  do %>
               <i class="fal fa-folder me-2"></i><%= folder.name %>（<%= @folder_tasks_counts[folder.id] %>）
             <% end %>
@@ -101,7 +101,7 @@
       <div id="tp-main">
         <div class="test_cases-cards">
           <% @task_upshots.each do |task_upshot| %>
-            <%= render 'projects/upshots/row.html', upshot: task_upshot %>
+            <%= render 'projects/upshots/row', formats: [ :html ], upshot: task_upshot %>
           <% end %>
         </div>
       </div>

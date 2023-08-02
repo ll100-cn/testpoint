@@ -15,26 +15,25 @@ class IssueSearcher
   end
 
   def build_scope(except: [])
-
     scope = base
 
-    if !except.include?(:category_id_eq) && category_id_eq.present?
+    if except.exclude?(:category_id_eq) && category_id_eq.present?
       scope = scope.where(category_id: category_id_eq)
     end
 
-    if !except.include?(:milestone_id_eq) && milestone_id_eq.present?
+    if except.exclude?(:milestone_id_eq) && milestone_id_eq.present?
       scope = scope.where(milestone_id: milestone_id_eq)
     end
 
-    if !except.include?(:assignee_id_eq) && assignee_id_eq.present?
+    if except.exclude?(:assignee_id_eq) && assignee_id_eq.present?
       scope = scope.where(assignee_id: assignee_id_eq)
     end
 
-    if !except.include?(:creator_id_eq) && creator_id_eq.present?
+    if except.exclude?(:creator_id_eq) && creator_id_eq.present?
       scope = scope.where(creator_id: creator_id_eq)
     end
 
-    if !except.include?(:task_id_is) && task_id_is.present?
+    if except.exclude?(:task_id_is) && task_id_is.present?
       scope = task_id_is == "null" ? scope.where(task_id: nil) : scope.where.not(task_id: nil)
     end
 

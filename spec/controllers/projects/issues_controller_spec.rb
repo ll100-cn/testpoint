@@ -4,12 +4,12 @@ RSpec.describe Projects::IssuesController, type: :controller do
   let!(:project) { create :project }
   let!(:platform) { create :platform, project: project }
   let!(:folder) { create :folder, project: project }
-  let!(:user) { create :user}
+  let!(:user) { create :user }
   let!(:member) { create :member, user: user, project: project }
   let(:plan) { create :plan, project: project, creator: member }
   let!(:phase) { create :phase, plan: plan, index: 0 }
   let!(:test_case) { create :test_case, project: project, folder: folder, platforms: [platform] }
-  let!(:task) {create :task, test_case: test_case, plan: plan }
+  let!(:task) { create :task, test_case: test_case, plan: plan }
   let(:issue) { create :issue, project: project }
   let(:superadmin) { create :user, :superadmin }
   let!(:owner) { create :member, :owner, project: project, user: superadmin }
@@ -18,7 +18,7 @@ RSpec.describe Projects::IssuesController, type: :controller do
   before { sign_in superadmin }
 
   describe "GET index" do
-    let!(:category) { create :category}
+    let!(:category) { create :category }
     let!(:issue) { create :issue, category: category, project: project }
     let!(:attributes) { { project_id: project.id } }
     action { get :index, params: attributes }

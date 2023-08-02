@@ -51,7 +51,7 @@
         </h2>
         <div id="<%= case_dom_id %>_body" class="accordion-collapse collapse" aria-labelledby="<%= case_dom_id %>_header">
           <div class="accordion-body">
-            <%= render "case.html", test_case: @test_case %>
+            <%= render template: "projects/test_cases/_case", formats: [ :html ], locals: { test_case: @test_case } %>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
           </h2>
           <div id="<%= version_dom_id %>_body" class="accordion-collapse collapse" aria-labelledby="<%= version_dom_id %>_header">
             <div class="accordion-body">
-              <%= render "case.html", test_case: version.reify %>
+              <%= render template: "projects/test_cases/_case", formats: [ :html ], locals: { test_case: version.reify } %>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 <div class="container">
   <%= bootstrap_vertical_form_for @issue, url: [@project, @issue] do |f| %>
-    <%= render "form.html", f: f %>
+    <%= render "form", formats: [ :html ], f: f %>
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>
     <%= cancel_button [@project, @issue] %>

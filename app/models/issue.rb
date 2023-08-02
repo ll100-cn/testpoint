@@ -25,7 +25,7 @@
 class Issue < ApplicationRecord
   enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :closed ],
                     default: :pending, scope: true
-  enumerize :priority, in: { :low => :p2_low, :normal => :p1_normal, :important => :p0_important }, default: :normal, scope: true
+  enumerize :priority, in: { ow: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
 
   has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -91,7 +91,7 @@ class Issue < ApplicationRecord
       raise ActiveRecord::Rollback unless self.save
       record_property_changes!(member)
     end
- end
+  end
 
   def change_project_with_author(params, member)
     project_id = params[:project_id]
@@ -141,16 +141,16 @@ class Issue < ApplicationRecord
   end
 
   def notify_changed_by(author, changes)
-    if changes.has_key?(:id)
+    if changes.key?(:id)
       notify_created_by(author)
       return
     end
 
-    if changes.has_key?(:assignee_id)
+    if changes.key?(:assignee_id)
       notify_assigned_by(author)
     end
 
-    if changes.has_key?(:state)
+    if changes.key?(:state)
       notify_state_changed_by(author)
     end
   end
@@ -187,13 +187,13 @@ class Issue < ApplicationRecord
       resolve: [ { state: "resolved", archived_at_is: false } ],
       closed: [ { state: ["closed"], archived_at_is: false } ],
       archive: [ { archived_at_is: true } ],
-    }.map do |(code, conds)|
+    }.to_h do |(code, conds)|
       attrs = {}
       attrs[:states] = [code.to_s]
       attrs[:conds] = conds || [ { state: code } ]
       attrs[:text] = I18n.t(code, scope: "enumerize.issue.state")
       [ code, attrs ]
-    end.to_h
+    end
   end
 
   def self.ransackable_scopes(auth_object = nil)
@@ -208,8 +208,8 @@ class Issue < ApplicationRecord
     end
   end
 
-  protected
-    def email_list
-      (subscribed_users + project.subscribed_users).uniq.map(&:email)
-    end
+protected
+  def email_list
+    (subscribed_users + project.subscribed_users).uniq.map(&:email)
+  end
 end

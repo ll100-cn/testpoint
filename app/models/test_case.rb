@@ -38,7 +38,7 @@ class TestCase < ApplicationRecord
 
   def sync_to_processing_plan
     # append self to current test plan
-    Plan.recent.select { |it| !it.finished? }.each do |plan|
+    Plan.recent.reject(&:finished?).each do |plan|
       (plan.platforms & self.platforms).each do |platform|
         plan.phases.each do |phase|
           phase.tasks.create!(test_case: self, plan: plan, platform: platform)
@@ -48,6 +48,6 @@ class TestCase < ApplicationRecord
   end
 
   def save_to_record
-    test_case_records.create!(changed_at: self.versions.reverse.first.reify.updated_at) if self.versions.reverse.first&.reify
+    test_case_records.create!(changed_at: self.versions.last.reify.updated_at) if self.versions.last&.reify
   end
 end

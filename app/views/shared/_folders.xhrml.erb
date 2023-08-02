@@ -15,7 +15,7 @@
         <%= yield folder %>
       </div>
       <ul id="treeview-<%= folder.id %>-container" class="collapse <%= 'show' if open %>">
-        <%= render 'shared/folders', formats: [ :html ], key: folder.id do |folder| %>
+        <%= render 'shared/folders', key: folder.id do |folder| %>
           <%= yield folder %>
         <% end %>
       </ul>

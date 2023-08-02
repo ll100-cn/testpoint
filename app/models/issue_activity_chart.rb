@@ -30,7 +30,7 @@ class IssueActivityChart
       if issues_this_hour.empty?
         0
       else
-        ((issues_this_hour.map { |issue| issue_confirm_time(issue) }.sum / issues_this_hour.count)  / 1.hour).round(1)
+        ((issues_this_hour.sum { |issue| issue_confirm_time(issue) } / issues_this_hour.count) / 1.hour).round(1)
       end
     end
   end

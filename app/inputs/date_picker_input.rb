@@ -4,7 +4,7 @@ class DatePickerInput < SimpleForm::Inputs::Base
     value = object.send(attribute_name)
     input_html_options[:value] ||= localized(value, wrapper_attributes[:data]["alt-format"])
     input_html_options[:class] << "form-control"
-    input_html_options[:"data-input"] = true
+    input_html_options[:'data-input'] = true
 
     @builder.template.content_tag("div", wrapper_attributes) do
       @builder.text_field(attribute_name, input_html_options) + icon_tag

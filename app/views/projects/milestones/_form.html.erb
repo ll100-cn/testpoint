@@ -1,7 +1,7 @@
 <%= f.input :title %>
 <%= f.input :published_at, as: :datetime_picker %>
 <%= f.input :description, input_html: { class: 'markdown-field' } %>
-<%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+<%= render "attachments/upload_area", attachments: f.object.attachments %>
 
 <hr>
 

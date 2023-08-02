@@ -30,7 +30,7 @@ class Projects::UpshotsController < BaseProjectController
     else
       @content_error_state = @upshot.state
     end
-    
+
     respond_with @upshot, action: :show
   end
 
@@ -39,7 +39,7 @@ class Projects::UpshotsController < BaseProjectController
     @issue = @upshot.task.issues.find(params[:issue_id])
 
     @issue.archive
-    
+
     respond_with @upshot, action: :show
   end
 
@@ -49,9 +49,7 @@ protected
   end
 
   def state_params
-    params.fetch(:task_upshot, {}).permit(:state_override,
-      issue_attributes: [:title, :content, :assignee_id, :state]
-    )
+    params.fetch(:task_upshot, {}).permit(:state_override, issue_attributes: [:title, :content, :assignee_id, :state])
   end
 
   def prepare_upshot

@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe Projects::PlansController, type: :controller do
   let!(:project) { create :project }
   let!(:platform) { create :platform, project: project }
-  let!(:user) { create :user}
+  let!(:user) { create :user }
   let!(:member) { create :member, user: user, project: project }
   let!(:plan) { create :plan, project: project, creator: member }
   let!(:phase) { create :phase, plan: plan, index: 0 }
   let!(:folder) { create :folder, project: project }
   let!(:test_case) { create :test_case, project: project, folder: folder, platforms: [platform] }
-  let!(:task) {create :task, test_case: test_case, plan: plan }
+  let!(:task) { create :task, test_case: test_case, plan: plan }
   before { sign_in user }
 
   describe "GET index" do
@@ -24,7 +24,7 @@ RSpec.describe Projects::PlansController, type: :controller do
 
   describe "POST create" do
     let(:plan_attributes) { { title: "iOS 2.11.3", platform_id: platform.id } }
-    let(:filter_attributes) { { folder_ids: project.folders.map { |folder| folder.id } } }
+    let(:filter_attributes) { { folder_ids: project.folders.map(&:id) } }
     action { post :create, params: { plan: plan_attributes, filter: filter_attributes, project_id: project.id } }
     it { is_expected.to respond_with :redirect }
   end

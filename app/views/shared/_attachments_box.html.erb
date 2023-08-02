@@ -2,7 +2,7 @@
   <div class="attachments-box">
     <% attachmentable.attachments.each do |attachment| %>
       <div class="attachment-item">
-        <%= render "attachments/info.html", attachment: attachment %>
+        <%= render "attachments/info", formats: [ :html ], attachment: attachment %>
       </div>
     <% end %>
   </div>

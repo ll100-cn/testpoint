@@ -31,7 +31,7 @@ class Member < ApplicationRecord
   scope :ranked, -> { order(:id) }
 
   def submit_and_save
-    self.user = User.where(email: user_email).take || User.new(name: nickname, email: user_email)
+    self.user = User.find_by(email: user_email) || User.new(name: nickname, email: user_email)
     transaction do
       if self.user.new_record? && !self.user.save
         delegate_errors(user, self, [[:email, :user_email], [:name, :nickname]], nil)

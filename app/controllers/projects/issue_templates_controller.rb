@@ -27,8 +27,11 @@ protected
   end
 
   def permit_attributes
-    result = [:name, :lookup_by_build_form, :title_suggestion, :content_suggestion,
-      :default_category_id, :default_priority, inputs_attributes: [:id, :order_index, :label, :_destroy]]
+    result = [
+      :name, :lookup_by_build_form, :title_suggestion, :content_suggestion,
+      :default_category_id, :default_priority,
+      inputs_attributes: [:id, :order_index, :label, :_destroy]
+    ]
     result
   end
   helper_method :permit_attributes

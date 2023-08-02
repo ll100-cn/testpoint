@@ -20,7 +20,7 @@ class IssueTemplate < ApplicationRecord
   has_many :inputs, class_name: "IssueTemplateInput", foreign_key: :template_id, inverse_of: :template
   accepts_nested_attributes_for :inputs, allow_destroy: true
 
-  scope :available_for_build_form, -> { where(lookup_by_build_form: true ) }
+  scope :available_for_build_form, -> { where(lookup_by_build_form: true) }
   enumerize :default_priority, in: Issue.priority.values, default: :normal
 
   def content_blank?

@@ -41,7 +41,7 @@ class User < ApplicationRecord
     end
 
     if resource.is_a? Project
-      return members.where(project: resource).update_all(receive_mail: true)
+      members.where(project: resource).update_all(receive_mail: true)
     end
   end
 
@@ -61,7 +61,7 @@ class User < ApplicationRecord
     end
 
     if resource.is_a? Project
-      return members.where(project: resource).any? { |member| member.receive_mail? }
+      members.where(project: resource).any?(&:receive_mail?)
     end
   end
 end

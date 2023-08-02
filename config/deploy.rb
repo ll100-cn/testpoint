@@ -1,6 +1,7 @@
 set :application, "testpoint"
 set :deploy_to, "/home/app/www"
 
+# rubocop:disable Style/ConcatArrayLiterals
 fetch(:linked_files).concat %w[
   config/env
   config/mailer.yml

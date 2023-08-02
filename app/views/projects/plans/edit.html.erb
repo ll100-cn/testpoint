@@ -3,7 +3,7 @@
 
   <%= bootstrap_horizontal_form_for [@project, @plan] do |f| %>
     <div class="card-body">
-      <%= render "inputs.html", f: f %>
+      <%= render "inputs", formats: [ :html ], f: f %>
     </div>
     <div class="card-footer bg-white">
       <div class="d-flex justify-content-between">

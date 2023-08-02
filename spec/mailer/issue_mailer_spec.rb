@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe IssueMailer, :type => :mailer do
+RSpec.describe IssueMailer, type: :mailer do
   let!(:project) { create :project }
   let!(:user) { create :user }
   let!(:user2) { create :user }

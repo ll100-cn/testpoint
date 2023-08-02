@@ -12,7 +12,7 @@ class Projects::AnalyticsController < BaseProjectController
     @issue_activity_chart = IssueActivityChart.new(issue_activity_chart_params)
   end
 
-  protected
+protected
   def issue_creator_chart_params
     params.fetch(:issue_creator_chart, {}).permit(:project_id, :starts_on, :ends_on, :role).merge(project_id: @project.id)
   end

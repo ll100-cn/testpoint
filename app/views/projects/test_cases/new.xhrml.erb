@@ -1,1 +1,1 @@
-<%= render "shared/modal_form.html", action: :new, model: @test_case %>
+<%= render template: "shared/_modal_form", formats: [ :html ], locals: { action: :new, model: @test_case } %>

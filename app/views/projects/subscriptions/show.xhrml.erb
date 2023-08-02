@@ -2,5 +2,5 @@
   <% data = { remote: true, type: "xhrml", target: "div" } %>
   <%= link_to "取消订阅", [@project, @issue, :subscription], method: :delete, data: data, class: "btn border border-secondary bg-light w-100 text-dark" %>
 
-  <%= render "projects/subscriptions/subscribed_users.html", issue: @issue %>
+  <%= render "projects/subscriptions/subscribed_users", issue: @issue %>
 </div>

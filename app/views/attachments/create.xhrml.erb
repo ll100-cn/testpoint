@@ -1,4 +1,4 @@
-<%= render "info.html", attachment: @attachment %>
+<%= render "info", formats: [:html], attachment: @attachment %>
 <%= hidden_field_tag "issue[attachment_ids][]", @attachment.id %>
 <%= hidden_field_tag "comment[attachment_ids][]", @attachment.id %>
 <%= hidden_field_tag "task[attachment_ids][]", @attachment.id %>

@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <%= render "projects/comments/comment_list.html", issue: @issue %>
+    <%= render "projects/comments/comment_list", issue: @issue %>
 
     <div class="card mt-5">
       <div class="card-body">
@@ -52,7 +52,7 @@
             <i class="far fa-comment me-1"></i> 新增评论
           </button>
 
-          <%= link_to "#", 
+          <%= link_to "#",
             data: {
               bs_toggle: "modal",
               bs_target: "#applicationModal",
@@ -221,9 +221,9 @@
         <div class="h5"><%=h Subscription %></div>
         <div class="mt-1">
           <% if current_user.subscribed?(@issue) %>
-            <%= render template: "projects/subscriptions/show.xhrml" %>
+            <%= render template: "projects/subscriptions/show", formats: [:xhrml] %>
           <% else %>
-            <%= render template: "projects/subscriptions/new.xhrml" %>
+            <%= render template: "projects/subscriptions/new", formats: [:xhrml] %>
           <% end %>
         </div>
       </div>

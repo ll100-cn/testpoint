@@ -1,3 +1,3 @@
 <%= f.input :content, input_html: { class: 'markdown-field' } %>
-<%= render "attachments/upload_area.html.erb", attachments: f.object.attachments %>
+<%= render "attachments/upload_area", formats: [ :html ], attachments: f.object.attachments %>
 <hr>

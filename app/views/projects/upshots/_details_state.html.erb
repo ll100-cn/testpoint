@@ -33,13 +33,13 @@
         </div>
       </li>
     <% end %>
-  
+
   <% end %>
 </ul>
 
 <% if @task.message || !@task.attachments.empty? %>
   <p class="mb-0 text-muted">附加的错误信息:</p>
-  <%= render "shared/page_content.html.erb", content: @task.message %>
-  <%= render "shared/attachments_box.html.erb", attachmentable: @task %>
+  <%= render "shared/page_content", formats: [ :html ], content: @task.message %>
+  <%= render "shared/attachments_box", formats: [ :html ], attachmentable: @task %>
 <% end %>
 

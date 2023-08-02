@@ -21,7 +21,7 @@ class Phase < ApplicationRecord
   validates :title, presence: true
 
 
- def submit
+  def submit
     self.index = plan.phases.count
 
     transaction do

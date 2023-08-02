@@ -3,7 +3,7 @@
 
   <span><%= activity.member.name %></span>
 
-  <%= render "projects/issues/activity/#{activity.property}.html", activity: activity %>
+  <%= render "projects/issues/activity/#{activity.property}", formats: [ :html ], activity: activity %>
 
   <span class="small text-muted"><%=l activity.created_at, format: :long %></span>
 </div>

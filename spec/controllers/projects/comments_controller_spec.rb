@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Projects::CommentsController, type: :controller do
   let!(:project) { create :project }
   let!(:issue) { create :issue, project: project }
-  let!(:user) { create :user, :superadmin}
+  let!(:user) { create :user, :superadmin }
   let!(:member) { create :member, user: user, project: project }
   let!(:comment) { create :comment, issue: issue, member: member }
   before { sign_in user }

@@ -9,11 +9,11 @@ module ApplicationHelper
   alias h human
 
   def page_i18n(key, options = {})
-    i18n_lookup(key, :"views.page", options)
+    i18n_lookup(key, "views.page", options)
   end
 
   def action_i18n(key, options = {})
-    i18n_lookup(key, :"views.action", options)
+    i18n_lookup(key, "views.action", options)
   end
 
   def i18n_lookup(key, namespace, options = {})
@@ -56,10 +56,10 @@ module ApplicationHelper
 
   def sort_folders(folders)
     mapping = folders.group_by(&:parent_id)
-    traverse = ->(mapping, key, result) {
-      (mapping[key] || []).each do |child|
+    traverse = ->(hash, key, result) {
+      (hash[key] || []).each do |child|
         result << child
-        traverse.(mapping, child.id, result)
+        traverse.(hash, child.id, result)
       end
       result
     }

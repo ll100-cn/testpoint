@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h5 class="modal-title">
-    测试指南 - 
+    测试指南 -
     <%= @task.finished? ? @task.test_case_snapshot.title : @task.test_case.title %>
   </h5>
 
@@ -14,16 +14,16 @@
 
 <div class="modal-body">
 
-  <%= render 'details_content.html' %>
+  <%= render 'details_content', formats: [ :html ] %>
 
   <hr>
 
-  <%= render 'details_state.html' %>
+  <%= render 'details_state', formats: [ :html ] %>
 
   <% if @phases.last == @upshot.phase %>
 
     <hr>
-    
-    <%= render 'details_action.html' %>
+
+    <%= render 'details_action', formats: [ :html ] %>
   <% end %>
 </div>

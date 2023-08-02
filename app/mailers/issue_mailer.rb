@@ -30,7 +30,7 @@ class IssueMailer < ApplicationMailer
     mail(**mailer_options)
   end
 
-  protected
+protected
   def mailer_options
     {
       from: "#{@changer.name} <#{ENV["DEVISE_MAILER_SENDER"]}>",

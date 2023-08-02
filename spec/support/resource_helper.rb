@@ -6,7 +6,7 @@ module ResourceHelper
   end
 
   def self.resource_folder
-    Rails.root.join("spec", "resources")
+    Rails.root.join("spec/resources")
   end
 end
 

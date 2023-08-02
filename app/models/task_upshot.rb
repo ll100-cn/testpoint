@@ -29,7 +29,7 @@ class TaskUpshot < ApplicationRecord
     self.state = self.state_override
     self.state_changed_at = Time.current
     raise ActiveRecord::Rollback if !self.save(context: :submit)
-    
+
     self.issue.project = @plan.project
     self.issue.task = task
     self.issue.creator = author
@@ -71,9 +71,9 @@ class TaskUpshot < ApplicationRecord
 
     transaction do
       if self.state_override.failure?
-        do_submit_for_failure(author) 
+        do_submit_for_failure(author)
       else
-        do_submit_for_not_failure(author) 
+        do_submit_for_not_failure(author)
       end
     end
 

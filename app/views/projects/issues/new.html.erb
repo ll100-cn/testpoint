@@ -13,7 +13,7 @@
         <%= ff.input :title %>
         <%= ff.input :creator_id, collection: @project.members, label_method: :name, input_html: { class: "select2-field" } %>
         <%= ff.input :content, input_html: { class: 'markdown-field' } %>
-        <%= render "attachments/upload_area.html.erb", attachments: ff.object.attachments %>
+        <%= render "attachments/upload_area", formats: [ :html ], attachments: ff.object.attachments %>
       <% end %>
 
       <hr>
