@@ -187,7 +187,7 @@ class Issue < ApplicationRecord
       resolve: [ { state: "resolved", archived_at_is: false } ],
       closed: [ { state: ["closed"], archived_at_is: false } ],
       archive: [ { archived_at_is: true } ],
-    }.to_h do |(code, conds)|
+    }.to_h do |code, conds|
       attrs = {}
       attrs[:states] = [code.to_s]
       attrs[:conds] = conds || [ { state: code } ]
