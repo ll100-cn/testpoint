@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_22_155453) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_08_03_020238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,7 +19,7 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -32,7 +31,7 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.text "metadata"
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -44,8 +43,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   end
 
   create_table "attachments", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "title"
     t.bigint "attachmentable_id"
     t.string "attachmentable_type"
@@ -58,8 +57,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "name"
     t.text "description"
     t.string "color"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "project_id"
     t.boolean "default_as_test_failure", default: false
     t.index ["project_id"], name: "index_categories_on_project_id"
@@ -68,18 +67,18 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "comment_attachments", force: :cascade do |t|
     t.bigint "comment_id"
     t.bigint "attachment_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["attachment_id"], name: "index_comment_attachments_on_attachment_id"
     t.index ["comment_id"], name: "index_comment_attachments_on_comment_id"
   end
 
   create_table "comments", force: :cascade do |t|
     t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "issue_id"
-    t.datetime "last_edited_at"
+    t.datetime "last_edited_at", precision: nil
     t.boolean "collapsed", default: false
     t.bigint "member_id"
     t.bigint "comment_id"
@@ -92,8 +91,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "name"
     t.string "ancestry"
     t.bigint "project_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "syscode"
     t.index ["ancestry"], name: "index_folders_on_ancestry"
     t.index ["project_id"], name: "index_folders_on_project_id"
@@ -105,8 +104,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "property"
     t.string "before_value"
     t.string "after_value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["issue_id"], name: "index_issue_activities_on_issue_id"
     t.index ["member_id"], name: "index_issue_activities_on_member_id"
   end
@@ -114,8 +113,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "issue_attachments", force: :cascade do |t|
     t.bigint "issue_id"
     t.bigint "attachment_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["attachment_id"], name: "index_issue_attachments_on_attachment_id"
     t.index ["issue_id"], name: "index_issue_attachments_on_issue_id"
   end
@@ -125,8 +124,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.bigint "template_id", null: false
     t.string "state"
     t.json "values", default: {}
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "remark"
     t.index ["issue_id"], name: "index_issue_infos_on_issue_id"
     t.index ["template_id"], name: "index_issue_infos_on_template_id"
@@ -137,8 +136,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.bigint "source_id"
     t.bigint "member_id"
     t.string "category"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["member_id"], name: "index_issue_relationships_on_member_id"
     t.index ["source_id"], name: "index_issue_relationships_on_source_id"
     t.index ["target_id"], name: "index_issue_relationships_on_target_id"
@@ -147,8 +146,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "issue_template_inputs", force: :cascade do |t|
     t.bigint "template_id"
     t.string "label"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "order_index"
     t.index ["template_id"], name: "index_issue_template_inputs_on_template_id"
   end
@@ -156,8 +155,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "issue_templates", force: :cascade do |t|
     t.string "name"
     t.bigint "project_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "lookup_by_build_form", default: true
     t.string "title_suggestion"
     t.string "content_suggestion"
@@ -171,20 +170,20 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "title"
     t.text "content"
     t.string "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "milestone_id"
     t.bigint "bak_creator_id"
     t.bigint "bak_assignee_id"
     t.bigint "project_id"
-    t.datetime "last_edited_at"
+    t.datetime "last_edited_at", precision: nil
     t.bigint "creator_id"
     t.bigint "assignee_id"
     t.string "priority"
     t.bigint "task_id"
     t.bigint "label_ids_cache", default: [], array: true
     t.bigint "category_id"
-    t.datetime "archived_at"
+    t.datetime "archived_at", precision: nil
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
@@ -198,8 +197,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "issues_labels", force: :cascade do |t|
     t.bigint "issue_id"
     t.bigint "label_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["issue_id"], name: "index_issues_labels_on_issue_id"
     t.index ["label_id"], name: "index_issues_labels_on_label_id"
   end
@@ -210,8 +209,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.boolean "expired"
     t.string "resource_type"
     t.bigint "resource_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["resource_type", "resource_id"], name: "index_login_codes_on_resource_type_and_resource_id"
   end
 
@@ -219,8 +218,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "role"
     t.bigint "project_id"
     t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "nickname"
     t.boolean "receive_mail", default: false
     t.index ["project_id"], name: "index_members_on_project_id"
@@ -229,10 +228,10 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
 
   create_table "milestones", force: :cascade do |t|
     t.string "title"
-    t.datetime "published_at"
+    t.datetime "published_at", precision: nil
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "project_id"
     t.index ["project_id"], name: "index_milestones_on_project_id"
   end
@@ -241,16 +240,16 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.bigint "plan_id", null: false
     t.string "title"
     t.string "release_revision"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "index"
     t.index ["plan_id"], name: "index_phases_on_plan_id"
   end
 
   create_table "plans", force: :cascade do |t|
     t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.bigint "creator_id", null: false
@@ -264,8 +263,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
 
   create_table "platforms", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.bigint "default_assignee_id"
@@ -282,16 +281,16 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "archived", default: false
   end
 
   create_table "projects_users", force: :cascade do |t|
     t.bigint "project_id"
     t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["project_id"], name: "index_projects_users_on_project_id"
     t.index ["user_id"], name: "index_projects_users_on_user_id"
   end
@@ -299,8 +298,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "subscriptions", force: :cascade do |t|
     t.integer "user_id"
     t.integer "issue_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["issue_id"], name: "index_subscriptions_on_issue_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
@@ -308,8 +307,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "task_attachments", force: :cascade do |t|
     t.bigint "task_id"
     t.bigint "attachment_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["attachment_id"], name: "index_task_attachments_on_attachment_id"
     t.index ["task_id"], name: "index_task_attachments_on_task_id"
   end
@@ -318,9 +317,9 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.bigint "task_id", null: false
     t.bigint "phase_id", null: false
     t.string "state_override"
-    t.datetime "state_changed_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "state_changed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "content"
     t.string "state"
     t.index ["phase_id"], name: "index_task_upshots_on_phase_id"
@@ -332,10 +331,10 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.bigint "test_case_id"
     t.bigint "plan_id"
     t.string "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "message"
-    t.datetime "test_case_version"
+    t.datetime "test_case_version", precision: nil
     t.text "content"
     t.bigint "phase_id"
     t.index ["phase_id"], name: "index_tasks_on_phase_id"
@@ -346,8 +345,8 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
   create_table "test_case_label_links", force: :cascade do |t|
     t.bigint "test_case_label_id", null: false
     t.bigint "test_case_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["test_case_id"], name: "index_test_case_label_links_on_test_case_id"
     t.index ["test_case_label_id"], name: "index_test_case_label_links_on_test_case_label_id"
   end
@@ -356,51 +355,53 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "name"
     t.text "description"
     t.bigint "project_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_test_case_labels_on_project_id"
   end
 
   create_table "test_case_records", force: :cascade do |t|
     t.bigint "test_case_id"
-    t.datetime "changed_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "changed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["test_case_id"], name: "index_test_case_records_on_test_case_id"
   end
 
   create_table "test_case_versions", force: :cascade do |t|
     t.bigint "project_id"
     t.string "title"
-    t.datetime "version_at"
+    t.datetime "version_at", precision: nil
     t.text "description"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_test_case_versions_on_project_id"
   end
 
   create_table "test_cases", force: :cascade do |t|
     t.string "title"
     t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
+    t.string "role_name"
+    t.string "scene_name"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
-    t.datetime "remember_created_at"
+    t.datetime "remember_created_at", precision: nil
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "name"
     t.boolean "superadmin", default: false
     t.string "remember_token"
@@ -422,7 +423,7 @@ ActiveRecord::Schema.define(version: 2023_05_22_155453) do
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.integer "transaction_id"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["transaction_id"], name: "index_versions_on_transaction_id"

@@ -103,4 +103,10 @@ Rails.application.routes.draw do
     resource :basic
     resources :projects
   end
+
+  namespace :api, defaults: { format: :json } do
+    resources :projects do
+      resources :test_cases
+    end
+  end
 end
