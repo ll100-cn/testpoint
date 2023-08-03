@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col col-md-8 col-xl-9">
-      <CaseCard :test_cases="test_cases" :project_id="project_id" />
+      <CaseCard />
     </div>
     <div class="col col-md-4 col-xl-3">
       <VersionTimeline />
@@ -20,10 +20,7 @@ import _ from 'lodash'
 const route = useRoute()
 const { proxy } = getCurrentInstance()
 
-const project_id = _.toNumber(route.params.project_id)
-const test_cases = await new requests.TestCaseListRequest().setup(req => {
-  req.interpolations.project_id = project_id
-}).perform(proxy)
+
 
 const setupd = await (async () => true)()
 </script>

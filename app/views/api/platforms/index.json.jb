@@ -1,0 +1,1 @@
+render partial: "api/shared/platform", collection: @platforms, as: :platform

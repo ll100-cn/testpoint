@@ -16,6 +16,8 @@ export class Filter {
   role_name: string | null
   scene_path: string | null
   archived: string = "0"
+  platform_id: string | null
+  label_id: string | null
 }
 
 export type ChangeFilterFunction = (overrides: { [x: string]: string }) => void

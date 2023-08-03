@@ -5,18 +5,15 @@
 
       <div class="dropdown">
         <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-          全部
+          {{ current_platform?.name ?? "全部" }}
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item active" href="/projects/1/test_cases">全部</a>
-            <a class="dropdown-item " href="/projects/1/test_cases?platform_id=3">Web</a>
-            <a class="dropdown-item " href="/projects/1/test_cases?platform_id=9">微信公众号</a>
-            <a class="dropdown-item " href="/projects/1/test_cases?platform_id=2">Android</a>
-            <a class="dropdown-item " href="/projects/1/test_cases?platform_id=1">iOS</a>
-            <a class="dropdown-item " href="/projects/1/test_cases?platform_id=12">教师机房版</a>
-            <a class="dropdown-item " href="/projects/1/test_cases?platform_id=13">test</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/platforms?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">平台列表</a>
+          <a class="dropdown-item" href="#" :class="{ 'active': !current_platform }" @click="changeFilter({ ...reset_search, platform_id: null })">全部</a>
+          <template v-for="platform in platforms" :key="platform.id">
+            <a class="dropdown-item " href="#" :class="{ 'active': platform.id === current_platform?.id }" @click="changeFilter({ ...reset_search, platform_id: platform.id.toString() })">{{ platform.name }}</a>
+          </template>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/platforms?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">平台列表</a>
         </div>
       </div>
 
@@ -25,15 +22,15 @@
 
       <div class="dropdown">
         <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-          全部
+          {{ current_label?.name ?? "全部" }}
         </button>
         <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" :class="{ 'active': !current_label }" @click="changeFilter({ ...reset_search, label_id: null })">全部</a>
+          <template v-for="label in labels" :key="label.id">
+            <a class="dropdown-item " href="#" :class="{ 'active': label.id === current_label?.id }" @click="changeFilter({ ...reset_search, label_id: label.id.toString() })">{{ label.name }}</a>
+          </template>
 
-          <a class="dropdown-item active" href="/projects/1/test_cases?q%5Blabels_id_eq%5D=">全部</a>
-
-            <a class="dropdown-item " href="/projects/1/test_cases?q%5Blabels_id_eq%5D=1">
-              会员
-      </a>      <div class="dropdown-divider"></div>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/test_case_labels?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">标签列表</a>
         </div>
       </div>
@@ -63,33 +60,43 @@ import { ChangeFilterFunction, Filter } from './types'
 import CaseTable from './CaseTable.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { TestCase } from '@/models'
+import * as requests from '@/requests'
 import qs from "qs"
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { computed, provide } from 'vue'
+import { computed, getCurrentInstance, provide } from 'vue'
 
+const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
-const props = defineProps({
-  test_cases: {
-    type: Array<TestCase>,
-    required: true
-  },
-  project_id: {
-    type: Number,
-    required: true
-  }
-})
 
 const querystring = qs.stringify(route.query, { arrayFormat: "brackets" })
 const query = qs.parse(querystring, { ignoreQueryPrefix: true })
 const filter = plainToClass(Filter, query.f ?? {}) as Filter
+const reset_search = {
+  role_name: null,
+  scene_path: null,
+  archived: null
+}
 
-console.log(filter)
-console.log(typeof filter)
+const project_id = _.toNumber(route.params.project_id)
+const test_cases = await new requests.TestCaseListRequest().setup(req => {
+  req.interpolations.project_id = project_id
+}).perform(proxy)
+
+const labels = await new requests.TestCaseLabelListRequest().setup(req => {
+  req.interpolations.project_id = project_id
+}).perform(proxy)
+
+const platforms = await new requests.PlatformListRequest().setup(req => {
+  req.interpolations.project_id = project_id
+}).perform(proxy)
+
+const current_platform = platforms.find(it => it.id.toString() === filter.platform_id)
+const current_label = labels.find(it => it.id.toString() === filter.label_id)
 
 const avaiable_test_cases = computed(() => {
-  let scope = _(props.test_cases)
+  let scope = _(test_cases)
   if (filter.role_name) {
     scope = scope.filter(it => it.role_name === (filter.role_name === "" ? null : filter.role_name))
   }
@@ -99,12 +106,17 @@ const avaiable_test_cases = computed(() => {
   if (filter.archived) {
     scope = scope.filter(it => it.archived === (filter.archived === "1" ? true : false))
   }
+  if (!_.isEmpty(filter.platform_id)) {
+    scope = scope.filter(it => it.platform_ids.includes(_.toNumber(filter.platform_id)))
+  }
+  if (!_.isEmpty(filter.label_id)) {
+    scope = scope.filter(it => it.label_ids.includes(_.toNumber(filter.label_id)))
+  }
   return scope.value()
 })
 
 const changeFilter: ChangeFilterFunction = (overrides) => {
-  Object.assign(filter, overrides)
-  query["f"] = filter
+  query["f"] = _({}).assign(filter).assign(overrides).omitBy(_.isNil).value()
 
   const queryString = qs.stringify(query, { arrayFormat: "brackets" })
   router.push({ query: qs.parse(queryString, { depth: 0 }) as any })

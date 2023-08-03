@@ -1,0 +1,2 @@
+json = test_case_label.slice(:id, :name)
+json
