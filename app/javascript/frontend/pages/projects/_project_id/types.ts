@@ -2,7 +2,7 @@ import { TestCaseStat } from "@/models"
 
 export class SceneItem {
   name: string
-  path: string
+  path: string[] = []
   uuid: string
   children: SceneItem[] = []
   count: number = 0
@@ -18,12 +18,12 @@ export class TreeItem {
 }
 
 export class Filter {
-  [x: string]: string
+  [x: string]: string | string[]
   role_name: string | null
-  scene_path: string | null
+  scene_path: string[]
   archived: string = "0"
   platform_id: string | null
   label_id: string | null
 }
 
-export type ChangeFilterFunction = (overrides: { [x: string]: string }) => void
+export type ChangeFilterFunction = (overrides: { [x: string]: string | string[] }) => void

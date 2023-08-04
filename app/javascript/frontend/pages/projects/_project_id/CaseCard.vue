@@ -66,8 +66,8 @@ const query = qs.parse(querystring, { ignoreQueryPrefix: true })
 const filter = plainToClass(Filter, query.f ?? {}) as Filter
 const reset_search = {
   role_name: null,
-  scene_path: null,
-  archived: null
+  archived: null,
+  scene_path: null
 }
 
 const project_id = _.toNumber(route.params.project_id)
@@ -98,9 +98,7 @@ const search_test_cases = computed(() => {
 })
 
 const changeFilter: ChangeFilterFunction = (overrides) => {
-  console.log("changeFilter", overrides)
   query["f"] = _({}).assign(filter).assign(overrides).omitBy(_.isNil).value()
-  console.log("query", query)
 
   const queryString = qs.stringify(query, { arrayFormat: "brackets" })
   router.push({ query: qs.parse(queryString, { depth: 0 }) as any })

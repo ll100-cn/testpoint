@@ -62,7 +62,7 @@ const tree = computed(() => {
       } else {
         scene_item = new SceneItem()
         scene_item.name = scene_name
-        scene_item.path = _.slice(test_case_stat.scene_path, 0, i + 1).join(" | ")
+        scene_item.path = _.slice(test_case_stat.scene_path, 0, i + 1)
         scene_item.uuid = new UUID(4).format()
         scene_tree.push(scene_item)
         scene_tree = scene_item.children

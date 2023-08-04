@@ -53,11 +53,13 @@ const avaiable_test_cases = computed(() => {
   if (props.filter.role_name) {
     scope = scope.filter(it => it.role_name === (props.filter.role_name === "" ? null : props.filter.role_name))
   }
-  if (props.filter.scene_path) {
-    scope = scope.filter(it => _.startsWith(it.scene_name, props.filter.scene_path))
-  }
   if (props.filter.archived) {
     scope = scope.filter(it => it.archived === (props.filter.archived === "1" ? true : false))
+  }
+  if (!_.isEmpty(props.filter.scene_path)) {
+    scope = scope.filter(it => {
+      return _.isEqual(props.filter.scene_path, _.slice(it.scene_path, 0, props.filter.scene_path.length))
+    })
   }
   return scope.value()
 })

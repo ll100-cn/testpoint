@@ -55,6 +55,6 @@ defineOptions({
 
 const changeFilter = inject("changeFilter") as ChangeFilterFunction
 
-const collapsed = !props.actived || !_.startsWith(props.filter.scene_path, props.scene_item.path)
-const highlight = !collapsed && props.filter.scene_path == props.scene_item.path
+const collapsed = !props.actived || !_.isEqual(props.scene_item.path, _.slice(props.filter.scene_path, 0, props.scene_item.path.length))
+const highlight = !collapsed && _.isEqual(props.scene_item.path, props.filter.scene_path)
 </script>
