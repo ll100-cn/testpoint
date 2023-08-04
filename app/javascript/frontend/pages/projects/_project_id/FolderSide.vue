@@ -22,14 +22,14 @@
 import FolderRoleItem from "./FolderRoleItem.vue"
 import { TreeItem, SceneItem, Filter } from "./types"
 
-import { TestCase } from "@/models";
+import { TestCase, TestCaseStat } from "@/models";
 import { computed, PropType } from "vue";
 import _ from "lodash"
 import UUID from "pure-uuid"
 
 const props = defineProps({
-  test_cases: {
-    type: Array<TestCase>,
+  test_case_stats: {
+    type: Array<TestCaseStat>,
     required: true
   },
   filter: {
@@ -41,32 +41,35 @@ const props = defineProps({
 const tree = computed(() => {
   const result = { avaiable: [], archived: [] } as { avaiable: TreeItem[], archived: TreeItem[] }
 
-  for (const test_case of props.test_cases) {
-    const mapping = result[test_case.archived ? "archived" : "avaiable"]
+  for (const test_case_stat of props.test_case_stats) {
+    const mapping = result[test_case_stat.archived ? "archived" : "avaiable"]
 
-    let tree_item = mapping.find(it => it.role_name === test_case.role_name)
+    let tree_item = mapping.find(it => it.role_name === test_case_stat.role_name)
     if (!tree_item) {
       tree_item = new TreeItem()
-      tree_item.role_name = test_case.role_name
+      tree_item.role_name = test_case_stat.role_name
       tree_item.uuid = new UUID(4).format()
       mapping.push(tree_item)
     }
 
     let scene_tree = tree_item.scene_tree
-    const scene_names = test_case.scene_name.split(" | ")
-    for (let i = 0; i < scene_names.length; i++) {
-      const scene_name = scene_names[i];
-      const sence_item = scene_tree.find(it => it.name === scene_name)
+    for (let i = 0; i < test_case_stat.scene_path.length; i++) {
+      const scene_name = test_case_stat.scene_path[i];
+      let scene_item = scene_tree.find(it => it.name === scene_name)
 
-      if (sence_item) {
-        scene_tree = sence_item.children
+      if (scene_item) {
+        scene_tree = scene_item.children
       } else {
-        const new_scene_item = new SceneItem()
-        new_scene_item.name = scene_name
-        new_scene_item.path = _.slice(scene_names, 0, i + 1).join(" | ")
-        new_scene_item.uuid = new UUID(4).format()
-        scene_tree.push(new_scene_item)
-        scene_tree = new_scene_item.children
+        scene_item = new SceneItem()
+        scene_item.name = scene_name
+        scene_item.path = _.slice(test_case_stat.scene_path, 0, i + 1).join(" | ")
+        scene_item.uuid = new UUID(4).format()
+        scene_tree.push(scene_item)
+        scene_tree = scene_item.children
+      }
+
+      if (i === test_case_stat.scene_path.length - 1) {
+        scene_item.count = test_case_stat.count
       }
     }
   }

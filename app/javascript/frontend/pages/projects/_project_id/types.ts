@@ -1,8 +1,14 @@
+import { TestCaseStat } from "@/models"
+
 export class SceneItem {
   name: string
   path: string
   uuid: string
   children: SceneItem[] = []
+  count: number = 0
+  totalCount(): number {
+    return this.count + this.children.reduce((acc, cur) => acc + cur.totalCount(), 0)
+  }
 }
 
 export class TreeItem {

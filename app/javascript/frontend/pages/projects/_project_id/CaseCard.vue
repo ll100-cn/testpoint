@@ -41,23 +41,14 @@
       </div>
     </div>
 
-    <div class="card-body d-flex">
-      <div class="col-12 col-md-4 col-xl-3 border-end py-3">
-        <FolderSide :test_cases="test_cases" :filter="filter" />
-      </div>
-
-      <div class="col">
-        <CaseTable :test_cases="avaiable_test_cases" />
-      </div>
-    </div>
+    <CardBody :test_cases="search_test_cases" :filter="filter" />
   </div>
 </template>
 
 
 <script setup lang="ts">
-import FolderSide from './FolderSide.vue'
 import { ChangeFilterFunction, Filter } from './types'
-import CaseTable from './CaseTable.vue'
+import CardBody from './CardBody.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { TestCase } from '@/models'
 import * as requests from '@/requests'
@@ -95,17 +86,8 @@ const platforms = await new requests.PlatformListRequest().setup(req => {
 const current_platform = platforms.find(it => it.id.toString() === filter.platform_id)
 const current_label = labels.find(it => it.id.toString() === filter.label_id)
 
-const avaiable_test_cases = computed(() => {
+const search_test_cases = computed(() => {
   let scope = _(test_cases)
-  if (filter.role_name) {
-    scope = scope.filter(it => it.role_name === (filter.role_name === "" ? null : filter.role_name))
-  }
-  if (filter.scene_path) {
-    scope = scope.filter(it => _.startsWith(it.scene_name, filter.scene_path))
-  }
-  if (filter.archived) {
-    scope = scope.filter(it => it.archived === (filter.archived === "1" ? true : false))
-  }
   if (!_.isEmpty(filter.platform_id)) {
     scope = scope.filter(it => it.platform_ids.includes(_.toNumber(filter.platform_id)))
   }
@@ -116,7 +98,9 @@ const avaiable_test_cases = computed(() => {
 })
 
 const changeFilter: ChangeFilterFunction = (overrides) => {
+  console.log("changeFilter", overrides)
   query["f"] = _({}).assign(filter).assign(overrides).omitBy(_.isNil).value()
+  console.log("query", query)
 
   const queryString = qs.stringify(query, { arrayFormat: "brackets" })
   router.push({ query: qs.parse(queryString, { depth: 0 }) as any })

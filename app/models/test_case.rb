@@ -50,4 +50,8 @@ class TestCase < ApplicationRecord
   def save_to_record
     test_case_records.create!(changed_at: self.versions.last.reify.updated_at) if self.versions.last&.reify
   end
+
+  def scene_path
+    scene_name.split(' | ')
+  end
 end

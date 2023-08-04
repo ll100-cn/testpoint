@@ -5,7 +5,7 @@
     </a>
     <span class="line"></span>
     <div class="item">
-      <a @click="changeFilter({ ...params, role_name: role_item.role_name, scene_path: null })" href="#" class="treeview-link flex-1 rounded" :class="{ 'active': highlight }">
+      <a @click="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: null })" href="#" class="treeview-link flex-1 rounded" :class="{ 'active': highlight }">
         <i class="fal fa-folder me-2"></i>{{ role_item.role_name ?? '未设置' }}
       </a>
       <a class="text-muted ms-2 treeview-active-actions" href="/projects/1/folders/1/edit">
@@ -14,7 +14,7 @@
     </div>
     <ul :id="`treeview-${role_item.uuid}`" class="collapse" :class="{ 'show': !collapsed }">
       <template v-for="scene_item in role_item.scene_tree">
-        <FolderSceneItem :scene_item="scene_item" :filter="filter" :actived="!collapsed" :params="{ ...params, role_name: role_item.role_name }"  />
+        <FolderSceneItem :scene_item="scene_item" :filter="filter" :actived="!collapsed" :params="{ ...params, role_name: role_item.role_name ?? '' }"  />
       </template>
     </ul>
   </li>
