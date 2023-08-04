@@ -5,7 +5,7 @@
     </div>
 
     <div class="col">
-      <CaseTable :test_cases="avaiable_test_cases" />
+      <CaseTable :test_cases="avaiable_test_cases" :platform_repo="platform_repo" :label_repo="label_repo" />
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@ import FolderSide from './FolderSide.vue'
 import { ChangeFilterFunction, Filter } from './types'
 import CaseTable from './CaseTable.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { TestCase, TestCaseStat } from '@/models'
+import { EntityRepo, Platform, TestCase, TestCaseLabel, TestCaseStat } from '@/models'
 import * as requests from '@/requests'
 import qs from "qs"
 import _ from 'lodash'
@@ -24,6 +24,14 @@ import { computed, getCurrentInstance, PropType, provide } from 'vue'
 import { plainToClass } from 'class-transformer'
 
 const props = defineProps({
+  label_repo: {
+    type: Object as PropType<EntityRepo<TestCaseLabel>>,
+    required: true
+  },
+  platform_repo: {
+    type: Object as PropType<EntityRepo<Platform>>,
+    required: true
+  },
   test_cases: {
     type: Array<TestCase>,
     required: true

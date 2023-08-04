@@ -9,7 +9,7 @@
         </button>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="#" :class="{ 'active': !current_platform }" @click="changeFilter({ ...reset_search, platform_id: null })">全部</a>
-          <template v-for="platform in platforms" :key="platform.id">
+          <template v-for="platform in platform_repo.values()" :key="platform.id">
             <a class="dropdown-item " href="#" :class="{ 'active': platform.id === current_platform?.id }" @click="changeFilter({ ...reset_search, platform_id: platform.id.toString() })">{{ platform.name }}</a>
           </template>
           <div class="dropdown-divider"></div>
@@ -26,7 +26,7 @@
         </button>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="#" :class="{ 'active': !current_label }" @click="changeFilter({ ...reset_search, label_id: null })">全部</a>
-          <template v-for="label in labels" :key="label.id">
+          <template v-for="label in lable_repo.values()" :key="label.id">
             <a class="dropdown-item " href="#" :class="{ 'active': label.id === current_label?.id }" @click="changeFilter({ ...reset_search, label_id: label.id.toString() })">{{ label.name }}</a>
           </template>
 
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <CardBody :test_cases="search_test_cases" :filter="filter" />
+    <CardBody :test_cases="search_test_cases" :platform_repo="platform_repo" :label_repo="lable_repo" :filter="filter" />
   </div>
 </template>
 
@@ -50,12 +50,12 @@
 import { ChangeFilterFunction, Filter } from './types'
 import CardBody from './CardBody.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { TestCase } from '@/models'
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import * as requests from '@/requests'
 import qs from "qs"
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { computed, getCurrentInstance, provide } from 'vue'
+import { computed, getCurrentInstance, provide, ref } from 'vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -75,16 +75,24 @@ const test_cases = await new requests.TestCaseListRequest().setup(req => {
   req.interpolations.project_id = project_id
 }).perform(proxy)
 
-const labels = await new requests.TestCaseLabelListRequest().setup(req => {
+const _labels = ref(await new requests.TestCaseLabelListRequest().setup(req => {
   req.interpolations.project_id = project_id
-}).perform(proxy)
+}).perform(proxy))
 
-const platforms = await new requests.PlatformListRequest().setup(req => {
+const lable_repo = computed(() => {
+  return new EntityRepo<TestCaseLabel>(_labels.value)
+})
+
+const _platforms = ref(await new requests.PlatformListRequest().setup(req => {
   req.interpolations.project_id = project_id
-}).perform(proxy)
+}).perform(proxy))
 
-const current_platform = platforms.find(it => it.id.toString() === filter.platform_id)
-const current_label = labels.find(it => it.id.toString() === filter.label_id)
+const platform_repo = computed(() => {
+  return new EntityRepo<Platform>(_platforms.value)
+})
+
+const current_platform = platform_repo.value.find(_.toNumber(filter.platform_id))
+const current_label = lable_repo.value.find(_.toNumber(filter.label_id))
 
 const search_test_cases = computed(() => {
   let scope = _(test_cases)

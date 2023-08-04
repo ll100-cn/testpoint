@@ -10,13 +10,14 @@
       </thead>
       <tbody>
         <tr v-for="test_case in test_cases" :key="test_case.id">
-          <td><a data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/test_cases/1?ok_url=%2Fprojects%2F1%2Ftest_cases" href="">{{ test_case.title }}</a></td>
           <td>
-              <span class="badge" style="background-color: #932610; color: white;">Android</span>
-              <span class="badge" style="background-color: #769C2A; color: white;">Web</span>
-              <span class="badge" style="background-color: #10873A; color: white;">iOS</span>
+            <a data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/test_cases/1?ok_url=%2Fprojects%2F1%2Ftest_cases" href="">{{ test_case.title }}</a>
           </td>
           <td>
+            <CasePlatformCell :platform_ids="test_case.platform_ids" :platform_repo="platform_repo" />
+          </td>
+          <td>
+            <CaseLabelCell :label_ids="test_case.label_ids" :label_repo="label_repo" />
           </td>
         </tr>
       </tbody>
@@ -25,9 +26,20 @@
 </template>
 
 <script setup lang="ts">
-import { TestCase } from "@/models";
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from "@/models";
+import CasePlatformCell from "./CasePlatformCell.vue"
+import CaseLabelCell from "./CaseLabelCell.vue"
+import { PropType } from "vue";
 
 const props = defineProps({
+  label_repo: {
+    type: Object as PropType<EntityRepo<TestCaseLabel>>,
+    required: true
+  },
+  platform_repo: {
+    type: Object as PropType<EntityRepo<Platform>>,
+    required: true
+  },
   test_cases: {
     type: Array<TestCase>,
     required: true

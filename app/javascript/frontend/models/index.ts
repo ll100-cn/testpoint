@@ -2,5 +2,6 @@
 
 export * from "./TestCaseLabel"
 export * from "./TestCaseStat"
+export * from "./EntityRepo"
 export * from "./Platform"
 export * from "./TestCase"
