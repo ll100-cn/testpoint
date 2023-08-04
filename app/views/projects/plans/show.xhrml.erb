@@ -101,7 +101,7 @@
       <div id="tp-main">
         <div class="test_cases-cards">
           <% @task_upshots.each do |task_upshot| %>
-            <%= render 'projects/upshots/row', formats: [ :html ], upshot: task_upshot %>
+            <%= render template: 'projects/upshots/_row', formats: [ :html ], locals: { upshot: task_upshot } %>
           <% end %>
         </div>
       </div>

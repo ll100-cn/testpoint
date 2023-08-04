@@ -17,12 +17,11 @@ class IssueBuildForm
         raise ActiveRecord::Rollback
       end
 
-      # rubocop:disable Rails/TransactionExitStatement
-      return if self.template.content_blank?
-
-      if !self.info.submit_and_save
-        self.errors.add(:issue, self.errors.full_messages.first)
-        raise ActiveRecord::Rollback
+      if !self.template.content_blank?
+        if !self.info.submit_and_save
+          self.errors.add(:issue, self.errors.full_messages.first)
+          raise ActiveRecord::Rollback
+        end
       end
     end
   end

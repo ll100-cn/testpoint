@@ -6,7 +6,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-    <%= render "inputs", formats: [ :html ], f: f %>
+    <%= render template: "projects/test_cases/_inputs", formats: [ :html ], locals: { f: f } %>
   </div>
   <div class="modal-footer">
     <%= destroy_button [@project, @test_case], class: "btn-sm me-auto" if can? :destroy, @test_case if can? :destroy, @test_case %>
