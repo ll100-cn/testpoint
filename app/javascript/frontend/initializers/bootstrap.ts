@@ -5,7 +5,7 @@ export default function({ app }: AppContext) {
   app.directive('bs-tooltip', function(el, binding) {
     new Tooltip(el, {
       title: binding.value,
-      placement: binding.arg,
+      placement: binding.arg as any,
       trigger: 'hover'
     })
   })

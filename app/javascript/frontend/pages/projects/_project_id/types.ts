@@ -15,6 +15,9 @@ export class TreeItem {
   role_name: string | null
   uuid: string
   scene_tree: SceneItem[] = []
+  totalCount(): number {
+    return this.scene_tree.reduce((acc, cur) => acc + cur.totalCount(), 0)
+  }
 }
 
 export class Filter {

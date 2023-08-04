@@ -3,4 +3,5 @@
 export * from "./PlatformListRequest"
 export * from "./TestCaseLabelListRequest"
 export * from "./BaseRequest"
+export * from "./TestCaseUpdateRequest"
 export * from "./TestCaseListRequest"

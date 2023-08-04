@@ -7,6 +7,7 @@
     <div class="item">
       <a @click="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })" href="#" class="treeview-link flex-1 rounded" :class="{ 'active': highlight }">
         <i class="fal fa-folder me-2"></i>{{ role_item.role_name ?? '未设置' }}
+        <span class="small">({{ role_item.totalCount() }})</span>
       </a>
       <a class="text-muted ms-2 treeview-active-actions" href="/projects/1/folders/1/edit">
         <i class="fal fa-pencil"></i>

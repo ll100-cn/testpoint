@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <CardBody :test_cases="search_test_cases" :platform_repo="platform_repo" :label_repo="lable_repo" :filter="filter" />
+    <CardBody :test_cases="search_test_cases" :platform_repo="platform_repo" :label_repo="lable_repo" :filter="filter" @change="onTestCaseChanged" />
   </div>
 </template>
 
@@ -69,6 +69,10 @@ const reset_search = {
   archived: null,
   scene_path: null
 }
+
+const emit = defineEmits<{
+  (e: 'change', test_case: TestCase): void
+}>()
 
 const project_id = _.toNumber(route.params.project_id)
 const test_cases = await new requests.TestCaseListRequest().setup(req => {
@@ -113,5 +117,9 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 }
 
 provide("changeFilter", changeFilter)
+
+function onTestCaseChanged(test_case: TestCase) {
+  router.go(0)
+}
 
 </script>

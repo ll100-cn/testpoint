@@ -5,7 +5,7 @@
     </div>
 
     <div class="col">
-      <CaseTable :test_cases="avaiable_test_cases" :platform_repo="platform_repo" :label_repo="label_repo" />
+      <CaseTable :test_cases="avaiable_test_cases" :platform_repo="platform_repo" :label_repo="label_repo" @change="emit('change', $event)" />
     </div>
   </div>
 </template>
@@ -41,6 +41,10 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits<{
+  (e: 'change', test_case: TestCase): void
+}>()
 
 const test_case_stats = computed(() => {
   const result = _(props.test_cases).groupBy((it) => {

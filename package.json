@@ -12,6 +12,7 @@
     "@rails/actioncable": "6.0.0-alpha",
     "@rails/activestorage": "6.0.0-alpha",
     "@rails/ujs": "6.0.0-alpha",
+    "@types/bootstrap": "^5.2.6",
     "@types/js-md5": "^0.7.0",
     "@types/lodash": "^4.14.196",
     "@types/webpack-env": "^1.18.1",

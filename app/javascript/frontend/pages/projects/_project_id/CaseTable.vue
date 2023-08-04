@@ -11,7 +11,7 @@
       <tbody>
         <tr v-for="test_case in test_cases" :key="test_case.id">
           <td>
-            <a data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/test_cases/1?ok_url=%2Fprojects%2F1%2Ftest_cases" href="">{{ test_case.title }}</a>
+            <a href="#" @click="showModal(test_case)">{{ test_case.title }}</a>
           </td>
           <td>
             <CasePlatformCell :platform_ids="test_case.platform_ids" :platform_repo="platform_repo" />
@@ -23,13 +23,17 @@
       </tbody>
     </table>
   </div>
+  <Teleport to="body">
+    <CaseModal ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @change="emit('change', $event)" />
+  </Teleport>
 </template>
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from "@/models";
 import CasePlatformCell from "./CasePlatformCell.vue"
 import CaseLabelCell from "./CaseLabelCell.vue"
-import { PropType } from "vue";
+import CaseModal from "./CaseModal.vue"
+import { PropType, ref } from "vue";
 
 const props = defineProps({
   label_repo: {
@@ -45,4 +49,14 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits<{
+  (e: 'change', test_case: TestCase): void
+}>()
+
+const modal = ref<InstanceType<typeof CaseModal>>()
+function showModal(test_case: TestCase) {
+  modal.value.show(test_case)
+}
+
 </script>
