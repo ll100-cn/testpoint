@@ -47,7 +47,7 @@
 
 
 <script setup lang="ts">
-import { ChangeFilterFunction, Filter } from './types'
+import { ChangeFilterFunction, ColumnFilter, Filter } from './types'
 import CardBody from './CardBody.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
@@ -100,17 +100,15 @@ const current_label = lable_repo.value.find(_.toNumber(filter.label_id))
 
 const search_test_cases = computed(() => {
   let scope = _(test_cases)
-  if (!_.isEmpty(filter.platform_id)) {
-    scope = scope.filter(it => it.platform_ids.includes(_.toNumber(filter.platform_id)))
-  }
-  if (!_.isEmpty(filter.label_id)) {
-    scope = scope.filter(it => it.label_ids.includes(_.toNumber(filter.label_id)))
-  }
+
+  const columns = new ColumnFilter({ only: ['platform_id', 'label_id'] })
+  scope = scope.filter(it => filter.isMatch(it, columns))
+
   return scope.value()
 })
 
 const changeFilter: ChangeFilterFunction = (overrides) => {
-  query["f"] = _({}).assign(filter).assign(overrides).omitBy(_.isNil).value()
+  query["f"] = _({}).assign(filter.toParams()).assign(overrides).omitBy(_.isNil).value()
 
   const queryString = qs.stringify(query, { arrayFormat: "brackets" })
   router.push({ query: qs.parse(queryString, { depth: 0 }) as any })

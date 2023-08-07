@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import FolderSide from './FolderSide.vue'
-import { ChangeFilterFunction, Filter } from './types'
+import { ChangeFilterFunction, ColumnFilter, Filter } from './types'
 import CaseTable from './CaseTable.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { EntityRepo, Platform, TestCase, TestCaseLabel, TestCaseStat } from '@/models'
@@ -58,22 +58,28 @@ const test_case_stats = computed(() => {
     return stat
   }).value()
 
+  const stat = result.find((it) => {
+    return props.filter.isMatch(it as any, new ColumnFilter({ only: ['role_name', 'scene_path', 'archived'] }))
+  })
+
+  if (!stat) {
+    const empty_stat = new TestCaseStat()
+    empty_stat.archived = props.filter.archived === '1'
+    empty_stat.role_name = props.filter.role_name === '' ? null : props.filter.role_name
+    empty_stat.scene_path = props.filter.scene_path ?? []
+    empty_stat.count = 0
+    result.push(empty_stat)
+  }
+
   return result
 })
 
 const avaiable_test_cases = computed(() => {
   let scope = _(props.test_cases)
-  if (props.filter.role_name) {
-    scope = scope.filter(it => it.role_name === (props.filter.role_name === "" ? null : props.filter.role_name))
-  }
-  if (props.filter.archived) {
-    scope = scope.filter(it => it.archived === (props.filter.archived === "1" ? true : false))
-  }
-  if (!_.isEmpty(props.filter.scene_path)) {
-    scope = scope.filter(it => {
-      return _.isEqual(props.filter.scene_path, _.slice(it.scene_path, 0, props.filter.scene_path.length))
-    })
-  }
+
+  const columns = new ColumnFilter({ expect: ['platform_id', 'label_id'] })
+  scope = scope.filter(it => props.filter.isMatch(it, columns))
+
   return scope.value()
 })
 

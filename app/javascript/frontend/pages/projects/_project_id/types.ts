@@ -1,4 +1,5 @@
-import { TestCaseStat } from "@/models"
+import { TestCase, TestCaseStat } from "@/models"
+import _ from "lodash"
 
 export class SceneItem {
   name: string
@@ -20,13 +21,77 @@ export class TreeItem {
   }
 }
 
+export class ColumnFilter {
+  only: string[] = []
+  except: string[] = []
+
+  constructor(overrides?: any) {
+    Object.assign(this, overrides)
+  }
+
+  isEnabled(name: string): boolean {
+    if (this.except.length > 0 && this.except.includes(name)) {
+      return false
+    }
+
+    if (this.only.length > 0 && this.only.includes(name)) {
+      return true
+    }
+
+    return this.only.length === 0
+  }
+}
+
 export class Filter {
-  [x: string]: string | string[]
   role_name: string | null
   scene_path: string[]
   archived: string = "0"
   platform_id: string | null
   label_id: string | null
+
+  toParams(): { [x: string]: string | string[] } {
+    return {
+      role_name: this.role_name,
+      scene_path: this.scene_path,
+      archived: this.archived,
+      platform_id: this.platform_id,
+      label_id: this.label_id,
+    }
+  }
+
+  isMatch(testCase: TestCase, columns: ColumnFilter = new ColumnFilter()): boolean {
+    if (columns.isEnabled('platform_id') && !_.isEmpty(this.platform_id)) {
+      if (!testCase.platform_ids.includes(_.toNumber(this.platform_id))) {
+        return false
+      }
+    }
+
+    if (columns.isEnabled('label_id') && !_.isEmpty(this.label_id)) {
+      if (!testCase.label_ids.includes(_.toNumber(this.label_id))) {
+        return false
+      }
+    }
+
+    if (columns.isEnabled('role_name') && this.role_name) {
+      if (testCase.role_name !== (this.role_name === "" ? null : this.role_name)) {
+        return false
+      }
+    }
+
+    if (columns.isEnabled('archived') && this.archived) {
+      if (testCase.archived !== (this.archived === "1" ? true : false)) {
+        return false
+      }
+    }
+
+    if (columns.isEnabled('scene_path') && !_.isEmpty(this.scene_path)) {
+      if (!_.isEqual(this.scene_path, _.slice(testCase.scene_path, 0, this.scene_path.length))) {
+        return false
+      }
+    }
+
+    return true
+  }
 }
 
 export type ChangeFilterFunction = (overrides: { [x: string]: string | string[] }) => void
