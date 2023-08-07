@@ -16,7 +16,10 @@
             <input type="checkbox" :value="test_case.id" v-model="select_test_case_ids" role="switch" data-target="select-all.item" data-action="select-all#toggle" />
           </td>
           <td>
-            <a href="#" @click="showModal(test_case)">{{ test_case.title }}</a>
+            <a href="#" @click="showModal(test_case)">
+              <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
+              {{ test_case.title }}
+            </a>
           </td>
           <td>
             <CasePlatformCell :platform_ids="test_case.platform_ids" :platform_repo="platform_repo" />

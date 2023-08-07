@@ -7,13 +7,6 @@
       <form @submit="submitForm">
         <div class="modal-body">
           <div class="row mb-3 string required test_case_title ms-0">
-            <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">标题</label>
-            <div class="col">
-              <input class="form-control string required" type="text" name="title" id="test_case_title" v-model="form.title" />
-            </div>
-          </div>
-
-          <div class="row mb-3 string required test_case_title ms-0">
             <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">角色</label>
             <div class="col">
               <input class="form-control string required" type="text" name="role_name" id="test_case_title" v-model="form.role_name" />
@@ -21,9 +14,23 @@
           </div>
 
           <div class="row mb-3 string required test_case_title ms-0">
-              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">场景</label>
+            <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">场景</label>
+            <div class="col">
+              <input class="form-control string required" type="text" name="scene_name" id="test_case_title" v-model="form.scene_name" />
+            </div>
+          </div>
+
+          <div class="row mb-3 string required test_case_title ms-0">
+            <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">分组</label>
+            <div class="col">
+              <input class="form-control string required" type="text" name="group_name" id="test_case_title" v-model="form.group_name" />
+            </div>
+          </div>
+
+          <div class="row mb-3 string required test_case_title ms-0">
+              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">标题</label>
               <div class="col">
-                <input class="form-control string required" type="text" name="scene_name" id="test_case_title" v-model="form.scene_name" />
+                <input class="form-control string required" type="text" name="title" id="test_case_title" v-model="form.title" />
               </div>
             </div>
 
@@ -106,6 +113,7 @@ const form = ref({
   content: props.test_case.content,
   role_name: props.test_case.role_name,
   scene_name: props.test_case.scene_name,
+  group_name: props.test_case.group_name,
   platform_ids: props.test_case.platform_ids,
   label_ids: props.test_case.label_ids
 })

@@ -1,9 +1,8 @@
 import { Controller } from 'stimulus'
-import $ from 'jquery'
 import _ from 'lodash'
 
 export default class extends Controller {
-  static targets = ['handle', 'item', 'checkedItemsCount']
+  static targets = ['handle', 'item']
 
   items() {
     return _.filter(this['itemTargets'], ['disabled', false])
@@ -16,7 +15,6 @@ export default class extends Controller {
   toggleAll(event) {
     event.preventDefault()
 
-    this.renderText()
     for (const item of this.items()) {
       if (item.checked != this['handleTarget'].checked) {
         setTimeout(() => {
@@ -29,12 +27,5 @@ export default class extends Controller {
 
   toggle() {
     this['handleTarget'].checked = this.items().length === this.checkedItemsCount()
-    this.renderText()
-  }
-
-  renderText() {
-    if (this['hasCheckedItemsCountTarget']) {
-      $(this['checkedItemsCountTarget']).html(this.checkedItemsCount())
-    }
   }
 }

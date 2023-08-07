@@ -12,6 +12,6 @@ class Api::TestCasesController < Api::BaseController
 
 protected
   def test_case_params
-    params.permit(:title, :role_name, :content, :scene_name, label_ids: [], platform_ids: [])
+    params.permit(:title, :role_name, :content, :scene_name, :group_name, label_ids: [], platform_ids: [])
   end
 end

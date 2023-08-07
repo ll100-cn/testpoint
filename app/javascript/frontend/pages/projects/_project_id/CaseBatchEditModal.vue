@@ -10,19 +10,6 @@
             <div class="row mb-3 string required test_case_title ms-0">
               <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.title" >
-                  标题
-                </div>
-              </label>
-              <div class="col">
-                <input class="form-control string required" type="text" name="title" id="test_case_title"
-                  v-model="form.title" :disabled="!form_enabled_mapping.title" />
-              </div>
-            </div>
-
-            <div class="row mb-3 string required test_case_title ms-0">
-              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
-                <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.role_name" >
                   角色
                 </div>
@@ -37,12 +24,38 @@
               <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.scene_name" >
-                  角色
+                  场景
                 </div>
               </label>
               <div class="col">
                 <input class="form-control string required" type="text" name="scene_name" id="test_case_title"
                   v-model="form.scene_name" :disabled="!form_enabled_mapping.scene_name" />
+              </div>
+            </div>
+
+            <div class="row mb-3 string required test_case_title ms-0">
+              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.group_name" >
+                  分组
+                </div>
+              </label>
+              <div class="col">
+                <input class="form-control string required" type="text" name="group_name" id="test_case_title"
+                  v-model="form.group_name" :disabled="!form_enabled_mapping.group_name" />
+              </div>
+            </div>
+
+            <div class="row mb-3 string required test_case_title ms-0">
+              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.title" >
+                  标题
+                </div>
+              </label>
+              <div class="col">
+                <input class="form-control string required" type="text" name="title" id="test_case_title"
+                  v-model="form.title" :disabled="!form_enabled_mapping.title" />
               </div>
             </div>
 
@@ -223,6 +236,7 @@ const form = ref({
   content: null as string | null | undefined,
   role_name: null as string | null | undefined,
   scene_name: null as string | null | undefined,
+  group_name: null as string | null | undefined,
   platform_ids: null as number[] | null | undefined,
   label_ids: null as number[] | null | undefined
 })
@@ -232,6 +246,7 @@ const form_enabled_mapping = ref({
   content: false,
   role_name: false,
   scene_name: false,
+  group_name: false,
   platform_ids: false,
   label_ids: false
 })

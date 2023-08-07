@@ -21,7 +21,7 @@ class TestCase < ApplicationRecord
   has_many :test_case_records, dependent: :destroy
   has_many :labels, through: :test_case_label_links, source: :test_case_label
 
-  cleanup_column :title, :content, :role_name, :scene_name
+  cleanup_column :title, :content, :role_name, :scene_name, :group_name
 
   validates :title, :folder_id, :platform_ids, presence: true
   validates :scene_name, presence: true

@@ -35,6 +35,10 @@
         </div>
       </div>
 
+      <h5 class="my-auto mx-2">分组</h5>
+      <div class="input-group input-group-sm" style="width: 10rem;">
+        <input type="text" class="form-control" @keydown.enter.prevent="group_name_search = $event.target['value']">
+      </div>
 
       <div class="actions ms-auto">
 
@@ -97,12 +101,17 @@ const platform_repo = computed(() => {
 
 const current_platform = platform_repo.value.find(_.toNumber(filter.platform_id))
 const current_label = lable_repo.value.find(_.toNumber(filter.label_id))
+const group_name_search = ref("")
 
 const search_test_cases = computed(() => {
   let scope = _(test_cases)
 
   const columns = new ColumnFilter({ only: ['platform_id', 'label_id'] })
   scope = scope.filter(it => filter.isMatch(it, columns))
+
+  if (group_name_search.value) {
+    scope = scope.filter(it => it.group_name?.includes(group_name_search.value))
+  }
 
   return scope.value()
 })

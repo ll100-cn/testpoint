@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_03_020238) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_07_080045) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -388,7 +388,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_020238) do
     t.bigint "project_id"
     t.string "role_name"
     t.string "scene_name"
+    t.string "group_name"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
+    t.index ["group_name"], name: "index_test_cases_on_group_name"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
 

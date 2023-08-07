@@ -4,7 +4,10 @@
       <div class="modal-dialog modal-lg" v-if="mode == 'show'">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">{{ test_case.title }}</h5>
+            <h5 class="modal-title">
+              <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
+              {{ test_case.title }}
+            </h5>
             <a href="#" @click="mode = 'edit'">编辑</a>
           </div>
           <div class="modal-body">
