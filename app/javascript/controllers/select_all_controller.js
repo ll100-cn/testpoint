@@ -13,9 +13,18 @@ export default class extends Controller {
     return _.filter(this.items(), 'checked').length
   }
 
-  toggleAll() {
-    $(this.items()).prop('checked', this['handleTarget'].checked)
+  toggleAll(event) {
+    event.preventDefault()
+
     this.renderText()
+    for (const item of this.items()) {
+      if (item.checked != this['handleTarget'].checked) {
+        setTimeout(() => {
+          item.click()
+        }, 0)
+      }
+    }
+
   }
 
   toggle() {

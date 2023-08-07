@@ -186,6 +186,7 @@ async function submitForm(event: Event) {
   state.value = 'submiting'
 
   const form_data = new FormData(event.target as HTMLFormElement)
+
   for (const test_case of test_cases.value) {
     let info: { test_case: TestCase, error: string | null } = {
       test_case: test_case,

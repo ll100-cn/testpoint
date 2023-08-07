@@ -3,6 +3,7 @@ import { AppContext } from "@/types";
 import Axios from 'axios'
 
 const axios = Axios.create({
+  baseURL: process.env.RAILS_RELATIVE_URL_ROOT
 })
 
 declare module '@vue/runtime-core' {

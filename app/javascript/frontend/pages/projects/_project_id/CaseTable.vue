@@ -1,6 +1,6 @@
 <template>
   <div id="tp-main">
-    <a href="#" @click="batchEdit()">编辑</a>
+    <a href="#" @click="batchEdit()">编辑 ({{ select_test_case_ids.length }})</a>
     <table class="table" data-controller="select-all">
       <thead>
         <tr>

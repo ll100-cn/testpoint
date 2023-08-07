@@ -21,7 +21,7 @@ const routes = _(autoRoutes).filter(route => {
 
 console.log(routes)
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.RAILS_RELATIVE_URL_ROOT),
   routes: [
     {
       path: "/",
