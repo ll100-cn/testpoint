@@ -21,9 +21,10 @@ class TestCase < ApplicationRecord
   has_many :test_case_records, dependent: :destroy
   has_many :labels, through: :test_case_label_links, source: :test_case_label
 
-  cleanup_column :title, :content
+  cleanup_column :title, :content, :role_name, :scene_name
 
   validates :title, :folder_id, :platform_ids, presence: true
+  validates :scene_name, presence: true
 
   scope :available, -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
@@ -49,5 +50,9 @@ class TestCase < ApplicationRecord
 
   def save_to_record
     test_case_records.create!(changed_at: self.versions.last.reify.updated_at) if self.versions.last&.reify
+  end
+
+  def scene_path
+    scene_name.split(' | ')
   end
 end

@@ -15,6 +15,8 @@
 FactoryBot.define do
   factory :test_case do
     title { "user sign in" }
+    sequence(:role_name) { |n| "role_name #{n}" }
+    sequence(:scene_name) { |n| "scene_name #{n}" }
     content { "input username and password" }
     folder { create :folder }
     platforms { create_list :platform, 1 }

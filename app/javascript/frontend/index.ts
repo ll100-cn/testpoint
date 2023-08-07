@@ -1,43 +1,29 @@
-import { createApp, ref } from 'vue'
-import router from './router'
-import axios from '@/lib/axios'
-import store from './store'
+import { createApp } from 'vue'
+import { AppContext } from "@/types"
 
-const app = createApp({
-  template: "<RouterView></RouterView>",
+const ctx = { handleErrors: [] } as AppContext
+const app = ctx.app = createApp({})
+
+app.component("app-template", {
+  template: `
+    <router-view v-slot="{ Component }">
+      <component :is="Component">
+        <template v-for="(_, name) in $slots" v-slot:[name]="slotData"><slot :name="name" v-bind="slotData" /></template>
+      </component>
+    </router-view>
+  `,
   errorCaptured: (err, vm, info) => {
-    if (err instanceof CanceledError) {
-      return false
+    for (const handleErrors of ctx.handleErrors) {
+      if (handleErrors(err) === false) {
+        return false
+      }
     }
-  }
+  },
 })
 
-declare module '@vue/runtime-core' {
-  export interface ComponentCustomProperties {
-    $axios: typeof axios
-  }
+const context = require.context("@/initializers/", false, /initializers\/.+\.ts$/)
+for (const path of context.keys()) {
+  context(path).default(ctx)
 }
-app.config.globalProperties.$axios = axios
-
-
-import { Subscription } from "rxjs"
-import { CanceledError } from "axios"
-declare module '@vue/runtime-core' {
-  export interface ComponentCustomProperties {
-    $subscriptions: Subscription[]
-  }
-}
-app.config.globalProperties.$subscriptions = []
-
-router.beforeResolve((to, from) => {
-  app.config.globalProperties.$subscriptions.reverse().forEach(subscription => {
-    subscription.unsubscribe()
-  })
-
-  app.config.globalProperties.$subscriptions = []
-})
-
-app.use(router)
-app.use(store)
 
 app.mount('#app')

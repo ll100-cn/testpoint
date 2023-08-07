@@ -48,6 +48,7 @@ gem 'fume-nav', '0.1.4'
 gem 'jbuilder', '2.11.5'
 gem 'kramdown', '2.3.0'
 gem 'rgb', '0.1.0'
+gem "jb", "0.8.0"
 
 # Assets
 gem 'sass-rails', '5.1.0'

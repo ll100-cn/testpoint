@@ -1,12 +1,10 @@
-import { Account } from "@/models"
-import { AccountGetRequest } from "@/requests"
 
 export default {
   namespaced: true,
 
   state () {
     return {
-      account: undefined as Account | null | undefined
+      // account: undefined as Account | null | undefined
     }
   },
 
