@@ -1,4 +1,4 @@
-json = test_case.slice(:id, :title, :content, :scene_name, :role_name, :archived, :created_at, :updated_at)
+json = test_case.slice(:id, :title, :content, :scene_name, :role_name, :archived, :project_id, :created_at, :updated_at)
 json[:platform_ids] = test_case.platform_ids
 json[:label_ids] = test_case.label_ids
 json[:scene_path] = test_case.scene_path

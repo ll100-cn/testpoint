@@ -1,5 +1,6 @@
 export class TestCase {
   id: number
+  project_id: number
   title: string
   content: string
   platform_ids: number[]
