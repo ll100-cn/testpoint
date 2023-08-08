@@ -11,6 +11,16 @@
 #  created_at     :datetime
 #  transaction_id :integer
 #  object         :json
+#  object_changes :json
 #
 class TestCaseVersion < PaperTrail::Version
+  def reify_with_create
+    if event == 'create'
+      result = item_type.constantize.new
+      PaperTrail::Reifier.send(:reify_attributes, result, self, changeset.transform_values(&:last))
+      result
+    else
+      reify
+    end
+  end
 end

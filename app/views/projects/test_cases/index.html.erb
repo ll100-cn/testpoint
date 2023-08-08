@@ -15,10 +15,16 @@
 
       <div class="">
         <ul class="timeline">
+          <li class="timeline-item mb-5 <%= 'active' if params[:test_case_snapshot_id].nil? %>">
+            <div class="small mb-2">
+              <%= link_to "当前",  project_test_cases_path(@project) %>
+            </div>
+          </li>
+
           <% @project.test_case_snapshots.ranked.each do |version| %>
           <li class="timeline-item mb-5 <%= 'active' if version.id == @test_case_version&.id %>">
             <div class="small mb-2 <%= version.id == @test_case_version&.id ? '' : 'text-muted' %>">
-              <%= link_to l(version.version_at, format: :long), current_url(test_case_version_id: version.id), class: (version.id == @test_case_version&.id ? 'text-success' : '') %>
+              <%= link_to l(version.version_at, format: :long), project_test_cases_path(@project, test_case_snapshot_id: version.id), class: (version.id == @test_case_version&.id ? 'text-success' : '') %>
             </div>
 
             <div class="dropdown">

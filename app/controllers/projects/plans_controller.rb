@@ -45,9 +45,9 @@ class Projects::PlansController < BaseProjectController
 
     @task_upshots = task_upshots_scope
 
-    @folders = @project.folders.ranked
-    @folder_tasks_counts = Folder.descendants_with_self_counts(@folders, @all_task_upshots_scope.group("test_cases.folder_id").count)
-    @folders = @folders.find_all { |folder| @folder_tasks_counts[folder.id] > 0 }
+    @folders = @project.folders.all
+    @folder_tasks_counts = Folder.descendants_with_self_counts(@folders, {})
+    # @folders = @folders.find_all { |folder| @folder_tasks_counts[folder.id] > 0 }
   end
 
   def destroy

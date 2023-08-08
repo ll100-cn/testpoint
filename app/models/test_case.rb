@@ -2,31 +2,37 @@
 #
 # Table name: test_cases
 #
-#  id          :bigint           not null, primary key
-#  title       :string
-#  content     :text
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  folder_id   :bigint
-#  archived    :boolean          default(FALSE)
-#  project_id  :bigint
-#  role_name   :string
-#  scene_name  :string
-#  group_name  :string
-#  archived_at :datetime
+#  id           :bigint           not null, primary key
+#  title        :string
+#  content      :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  folder_id    :bigint
+#  archived     :boolean          default(FALSE)
+#  project_id   :bigint
+#  role_name    :string
+#  scene_name   :string
+#  group_name   :string
+#  archived_at  :datetime
+#  platform_ids :bigint           default([]), is an Array
+#  label_ids    :bigint           default([]), is an Array
 #
 
 class TestCase < ApplicationRecord
+  # belongs_to :folder, optional: true
+  # has_and_belongs_to_many :platforms
+  belongs_to :project
+  has_array_of :platforms, class_name: 'Platform'
+  has_array_of :labels, class_name: 'TestCaseLabel'
+  # has_many :test_case_versions, dependent: :destroy
+  # has_many :test_case_label_links, dependent: :destroy
+  # has_many :test_case_records, dependent: :destroy
+  # has_many :labels, through: :test_case_label_links, source: :test_case_label
+
   has_paper_trail versions: {
     inverse_of: :item,
     class_name: 'TestCaseVersion'
   }
-  belongs_to :folder
-  has_and_belongs_to_many :platforms
-  belongs_to :project
-  has_many :test_case_label_links, dependent: :destroy
-  has_many :test_case_records, dependent: :destroy
-  has_many :labels, through: :test_case_label_links, source: :test_case_label
 
   cleanup_column :title, :content, :role_name, :scene_name, :group_name
 
@@ -38,7 +44,6 @@ class TestCase < ApplicationRecord
   scope :with_folder, -> { joins(:folder).includes(:folder) }
 
   after_create :sync_to_processing_plan
-  after_save :save_to_record
 
   def archive
     update(archived: true)
@@ -55,11 +60,7 @@ class TestCase < ApplicationRecord
     end
   end
 
-  def save_to_record
-    test_case_records.create!(changed_at: self.versions.last.reify.updated_at) if self.versions.last&.reify
-  end
-
   def scene_path
-    scene_name.split(' | ')
+    (scene_name || "N/A").split(' | ')
   end
 end

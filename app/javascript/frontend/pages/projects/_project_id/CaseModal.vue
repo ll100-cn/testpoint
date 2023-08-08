@@ -5,6 +5,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
+              #{{ test_case.id }}
               <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
               {{ test_case.title }}
             </h5>

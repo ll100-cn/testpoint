@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_08_063414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
     t.string "content_type"
     t.index ["attachmentable_id"], name: "index_attachments_on_attachmentable_id"
     t.index ["attachmentable_type"], name: "index_attachments_on_attachmentable_type"
+  end
+
+  create_table "bak_platforms_test_cases", id: false, force: :cascade do |t|
+    t.bigint "platform_id"
+    t.bigint "test_case_id"
+    t.index ["platform_id"], name: "index_bak_platforms_test_cases_on_platform_id"
+    t.index ["test_case_id"], name: "index_bak_platforms_test_cases_on_test_case_id"
+  end
+
+  create_table "bak_test_case_label_links", force: :cascade do |t|
+    t.bigint "test_case_label_id", null: false
+    t.bigint "test_case_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["test_case_id"], name: "index_bak_test_case_label_links_on_test_case_id"
+    t.index ["test_case_label_id"], name: "index_bak_test_case_label_links_on_test_case_label_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -272,13 +288,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
 
-  create_table "platforms_test_cases", id: false, force: :cascade do |t|
-    t.bigint "platform_id"
-    t.bigint "test_case_id"
-    t.index ["platform_id"], name: "index_platforms_test_cases_on_platform_id"
-    t.index ["test_case_id"], name: "index_platforms_test_cases_on_test_case_id"
-  end
-
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -342,15 +351,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"
   end
 
-  create_table "test_case_label_links", force: :cascade do |t|
-    t.bigint "test_case_label_id", null: false
-    t.bigint "test_case_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["test_case_id"], name: "index_test_case_label_links_on_test_case_id"
-    t.index ["test_case_label_id"], name: "index_test_case_label_links_on_test_case_label_id"
-  end
-
   create_table "test_case_labels", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -383,15 +383,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
     t.text "content"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.bigint "folder_id"
+    t.bigint "bak_folder_id"
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.string "role_name"
     t.string "scene_name"
     t.string "group_name"
     t.datetime "archived_at"
+    t.bigint "platform_ids", default: [], array: true
+    t.bigint "label_ids", default: [], array: true
     t.index ["archived_at"], name: "index_test_cases_on_archived_at"
-    t.index ["folder_id"], name: "index_test_cases_on_folder_id"
+    t.index ["bak_folder_id"], name: "index_test_cases_on_bak_folder_id"
     t.index ["group_name"], name: "index_test_cases_on_group_name"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
   end
@@ -430,11 +432,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
     t.datetime "created_at", precision: nil
     t.integer "transaction_id"
     t.json "object"
+    t.json "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["transaction_id"], name: "index_versions_on_transaction_id"
   end
 
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bak_platforms_test_cases", "platforms"
+  add_foreign_key "bak_platforms_test_cases", "test_cases"
+  add_foreign_key "bak_test_case_label_links", "test_case_labels"
+  add_foreign_key "bak_test_case_label_links", "test_cases"
   add_foreign_key "categories", "projects"
   add_foreign_key "comments", "comments"
   add_foreign_key "comments", "issues"
@@ -458,15 +465,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
   add_foreign_key "plans", "platforms"
   add_foreign_key "plans", "projects"
   add_foreign_key "platforms", "projects"
-  add_foreign_key "platforms_test_cases", "platforms"
-  add_foreign_key "platforms_test_cases", "test_cases"
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
   add_foreign_key "task_upshots", "phases"
   add_foreign_key "task_upshots", "tasks"
   add_foreign_key "tasks", "phases"
-  add_foreign_key "test_case_label_links", "test_case_labels"
-  add_foreign_key "test_case_label_links", "test_cases"
   add_foreign_key "test_case_labels", "projects"
   add_foreign_key "test_case_records", "test_cases"
   add_foreign_key "test_case_snapshots", "projects"
