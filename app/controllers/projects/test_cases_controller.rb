@@ -15,7 +15,7 @@ class Projects::TestCasesController < BaseProjectController
     @test_cases = test_cases_scope
     @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
 
-    @test_case_version = @project.test_case_versions.where(id: params[:test_case_version_id]).first
+    @test_case_version = @project.test_case_snapshots.where(id: params[:test_case_version_id]).first
     @test_cases = @test_cases.where_exists(TestCaseRecord.where("changed_at <= ?", @test_case_version.version_at).where_table(:test_case)) if @test_case_version
 
     @folders = @project.folders.ranked
@@ -26,7 +26,7 @@ class Projects::TestCasesController < BaseProjectController
   end
 
   def show
-    @test_case_version_mapping = @project.test_case_versions.ranked.index_by(&:version_at)
+    @test_case_version_mapping = @project.test_case_snapshots.ranked.index_by(&:version_at)
   end
 
   def edit

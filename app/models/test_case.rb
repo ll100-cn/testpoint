@@ -2,18 +2,25 @@
 #
 # Table name: test_cases
 #
-#  id         :bigint           not null, primary key
-#  title      :string
-#  content    :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  folder_id  :bigint
-#  archived   :boolean          default(FALSE)
-#  project_id :bigint
+#  id          :bigint           not null, primary key
+#  title       :string
+#  content     :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  folder_id   :bigint
+#  archived    :boolean          default(FALSE)
+#  project_id  :bigint
+#  role_name   :string
+#  scene_name  :string
+#  group_name  :string
+#  archived_at :datetime
 #
 
 class TestCase < ApplicationRecord
-  has_paper_trail
+  has_paper_trail versions: {
+    inverse_of: :item,
+    class_name: 'TestCaseVersion'
+  }
   belongs_to :folder
   has_and_belongs_to_many :platforms
   belongs_to :project

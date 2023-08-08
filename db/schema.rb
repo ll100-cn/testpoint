@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_07_080045) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_08_014538) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -368,14 +368,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_080045) do
     t.index ["test_case_id"], name: "index_test_case_records_on_test_case_id"
   end
 
-  create_table "test_case_versions", force: :cascade do |t|
+  create_table "test_case_snapshots", force: :cascade do |t|
     t.bigint "project_id"
     t.string "title"
     t.datetime "version_at", precision: nil
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_test_case_versions_on_project_id"
+    t.index ["project_id"], name: "index_test_case_snapshots_on_project_id"
   end
 
   create_table "test_cases", force: :cascade do |t|
@@ -389,6 +389,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_080045) do
     t.string "role_name"
     t.string "scene_name"
     t.string "group_name"
+    t.datetime "archived_at"
+    t.index ["archived_at"], name: "index_test_cases_on_archived_at"
     t.index ["folder_id"], name: "index_test_cases_on_folder_id"
     t.index ["group_name"], name: "index_test_cases_on_group_name"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
@@ -424,9 +426,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_080045) do
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object"
+    t.text "old_object"
     t.datetime "created_at", precision: nil
     t.integer "transaction_id"
+    t.json "object"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["transaction_id"], name: "index_versions_on_transaction_id"
   end
@@ -466,6 +469,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_080045) do
   add_foreign_key "test_case_label_links", "test_cases"
   add_foreign_key "test_case_labels", "projects"
   add_foreign_key "test_case_records", "test_cases"
-  add_foreign_key "test_case_versions", "projects"
+  add_foreign_key "test_case_snapshots", "projects"
   add_foreign_key "test_cases", "projects"
 end
