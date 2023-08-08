@@ -18,6 +18,10 @@ class MigrateVersionChanges < ActiveRecord::Migration[7.0]
         version.object.delete('folder_id')
       end
 
+      if version.object.key?('bak_folder_id')
+        version.object.delete('bak_folder_id')
+      end
+
       version.save if version.changed?
     end
 
