@@ -14,7 +14,7 @@ zh-CN:
       comment: 评论
       category: 分类
       test_case_label: 标签
-      test_case_version: 版本号
+      test_case_snapshot: 版本号
       milestone: 里程碑
       project: 项目
       member: 成员

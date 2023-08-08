@@ -79,14 +79,14 @@
     <div class="">
       <div class="mt-1">
         <h5 class="my-auto d-inline-block">版本号</h5>
-        <%= link_to "<i class='fal fa-plus'></i> 新增".html_safe, "#", class: "float-end small", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_test_case_version_path(@project, ok_url: request.fullpath) } if can? :new, TestCaseVersion %>
+        <%= link_to "<i class='fal fa-plus'></i> 新增".html_safe, "#", class: "float-end small", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_test_case_version_path(@project, ok_url: request.fullpath) } if can? :new, TestCaseSnapshot %>
       </div>
 
       <hr>
 
       <div class="">
         <ul class="timeline">
-          <% @project.test_case_versions.ranked.each do |version| %>
+          <% @project.test_case_snapshots.ranked.each do |version| %>
           <li class="timeline-item mb-5 <%= 'active' if version.id == @test_case_version&.id %>">
             <div class="small mb-2 <%= version.id == @test_case_version&.id ? '' : 'text-muted' %>">
               <%= link_to l(version.version_at, format: :long), current_url(test_case_version_id: version.id), class: (version.id == @test_case_version&.id ? 'text-success' : '') %>

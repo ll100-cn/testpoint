@@ -21,7 +21,7 @@ module ApplicationHelper
     lookups << :"#{params[:controller]}.#{params[:action]}.#{key}"
     lookups << :"#{params[:controller]}.defaults.#{key}"
     lookups << :"defaults.#{key}"
-    I18n.t(lookups.shift, { scope: namespace, default: lookups }.merge(options))
+    I18n.t(lookups.shift, **{ scope: namespace, default: lookups }.merge(options))
   end
 
   def request_for_ok_url

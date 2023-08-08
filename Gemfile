@@ -49,6 +49,7 @@ gem 'jbuilder', '2.11.5'
 gem 'kramdown', '2.3.0'
 gem 'rgb', '0.1.0'
 gem "jb", "0.8.0"
+gem 'has_array_of', github: "marshall-lee/has_array_of"
 
 # Assets
 gem 'sass-rails', '5.1.0'
