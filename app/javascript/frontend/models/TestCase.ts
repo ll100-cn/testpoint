@@ -10,4 +10,5 @@ export class TestCase {
   group_name: string
   scene_path: string[]
   archived: boolean
+  updated_at: string
 }

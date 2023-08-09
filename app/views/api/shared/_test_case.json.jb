@@ -12,4 +12,5 @@ json[:project_id] = test_case.project_id
 json[:platform_ids] = test_case.platform_ids
 json[:label_ids] = test_case.label_ids
 json[:scene_path] = test_case.scene_path
+json[:updated_at] = test_case.updated_at.to_s
 json

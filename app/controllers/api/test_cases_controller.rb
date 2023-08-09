@@ -21,6 +21,15 @@ class Api::TestCasesController < Api::BaseController
     respond_with @test_case
   end
 
+  def history
+    @versions = @test_case.versions.where(event: 'update').reverse
+    @history = @versions.map do |version|
+      test_case = TestCase.new
+      test_case.assign_attributes(version.object)
+      test_case
+    end
+  end
+
 protected
   def test_case_params
     params.permit(:title, :role_name, :content, :scene_name, :group_name, label_ids: [], platform_ids: [])

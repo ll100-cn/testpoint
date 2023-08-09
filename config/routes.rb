@@ -106,7 +106,9 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :projects do
-      resources :test_cases
+      resources :test_cases do
+        get :history, on: :member
+      end
       resources :platforms
       resources :test_case_labels
 

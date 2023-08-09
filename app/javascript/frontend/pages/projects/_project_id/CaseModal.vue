@@ -1,24 +1,7 @@
 <template>
   <div class="modal" tabindex="-1" ref="modal">
     <template v-if="test_case">
-      <div class="modal-dialog modal-lg" v-if="mode == 'show'">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              #{{ test_case.id }}
-              <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
-              {{ test_case.title }}
-            </h5>
-            <a href="#" @click="mode = 'edit'">编辑</a>
-          </div>
-          <div class="modal-body">
-            <textarea data-controller="markdown" readonly class="d-none">{{ test_case.content }}</textarea>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
+      <CardShow :test_case="test_case" :history="history" v-if="mode == 'show'" @change-mode="onModeChange" />
       <CaseEditFrame v-if="mode == 'edit'" :test_case="test_case" :platform_repo="platform_repo" :label_repo="label_repo" @change="emit('change', $event)" />
     </template>
   </div>
@@ -27,8 +10,10 @@
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
 import { Modal } from 'bootstrap';
-import { PropType, nextTick, ref } from 'vue';
+import { PropType, getCurrentInstance, nextTick, ref } from 'vue';
 import CaseEditFrame from './CaseEditFrame.vue'
+import CardShow from './CardShow.vue'
+import * as requests from '@/requests'
 
 const props = defineProps({
   platform_repo: {
@@ -41,18 +26,28 @@ const props = defineProps({
   }
 })
 
+const { proxy } = getCurrentInstance()
+
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void
 }>()
 
 const test_case = ref<TestCase | null>()
+const history = ref<TestCase[]>([])
 const mode = ref('show')
 
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
-function show(a_test_case: TestCase) {
+async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
+
+  history.value = await new requests.TestCaseHistoryRequest().setup(req => {
+    req.interpolations.project_id = a_test_case.project_id
+    req.interpolations.id = a_test_case.id
+  }).perform(proxy)
+
+  console.log(history.value)
 
   nextTick(() => {
     const $modal = Modal.getOrCreateInstance(modal.value)
@@ -63,4 +58,8 @@ function show(a_test_case: TestCase) {
 defineExpose({
   show
 })
+
+function onModeChange(new_mode: string) {
+  mode.value = new_mode
+}
 </script>

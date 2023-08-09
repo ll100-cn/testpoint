@@ -139,9 +139,6 @@ async function submitForm(event: Event) {
 
     throw err
   }
-
 }
-
-
 
 </script>

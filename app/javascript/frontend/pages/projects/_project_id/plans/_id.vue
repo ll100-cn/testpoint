@@ -100,13 +100,7 @@ const avaiable_task_upshot_infos = computed(() => {
 })
 
 const changeFilter: ChangeFilterFunction = (overrides) => {
-  console.log("--------------111------------------")
-  console.log(JSON.stringify(filter.value))
-  console.log(overrides)
   filter.value = _.assign(filter.value, overrides)
-
-  console.log(JSON.stringify(filter.value))
-  console.log("--------------222------------------")
 }
 
 provide("changeFilter", changeFilter)
