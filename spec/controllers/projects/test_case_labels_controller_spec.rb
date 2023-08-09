@@ -3,8 +3,7 @@ require 'rails_helper'
 RSpec.describe Projects::TestCaseLabelsController, type: :controller do
   let!(:project) { create :project }
   let!(:test_case_label) { create :test_case_label, project: project }
-  let!(:test_case) { create :test_case, project: project }
-  let!(:test_case_label_link) { create :test_case_label_link, test_case_id: test_case.id, test_case_label_id: test_case_label.id }
+  let!(:test_case) { create :test_case, project: project, label_ids: [ test_case_label.id ] }
   login_superadmin
 
   describe "GET index" do

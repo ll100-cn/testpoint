@@ -14,7 +14,6 @@
 class Folder < ApplicationRecord
   has_ancestry
 
-  has_many :test_cases, dependent: :restrict_with_error
   belongs_to :project
 
   validates :name, presence: true

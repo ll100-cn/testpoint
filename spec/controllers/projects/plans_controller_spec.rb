@@ -7,8 +7,7 @@ RSpec.describe Projects::PlansController, type: :controller do
   let!(:member) { create :member, user: user, project: project }
   let!(:plan) { create :plan, project: project, creator: member }
   let!(:phase) { create :phase, plan: plan, index: 0 }
-  let!(:folder) { create :folder, project: project }
-  let!(:test_case) { create :test_case, project: project, folder: folder, platforms: [platform] }
+  let!(:test_case) { create :test_case, project: project, platforms: [platform] }
   let!(:task) { create :task, test_case: test_case, plan: plan }
   before { sign_in user }
 
@@ -36,7 +35,7 @@ RSpec.describe Projects::PlansController, type: :controller do
   end
 
   describe "GET show" do
-    action { get :show, params: { id: plan.id, project_id: project.id } }
+    action { get :show, params: { id: plan.id, project_id: project.id, phase_index: 0 } }
     it { is_expected.to respond_with :success }
   end
 

@@ -13,7 +13,6 @@
 
 class Platform < ApplicationRecord
   has_many :tasks, dependent: :destroy
-  has_and_belongs_to_many :test_cases
   belongs_to :default_assignee, class_name: Member.to_s, optional: true
   belongs_to :project
 
@@ -25,6 +24,10 @@ class Platform < ApplicationRecord
     self.joins("INNER JOIN platforms_test_cases ON platforms.id=platforms_test_cases.platform_id")
         .where("test_cases.id=platforms_test_cases.test_case_id")
   }
+
+  def test_cases
+    TestCase.where("platform_ids @> ARRAY[#{id}]::bigint[]")
+  end
 
   def archive
     update(archived: true)

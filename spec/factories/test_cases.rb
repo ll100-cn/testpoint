@@ -24,7 +24,6 @@ FactoryBot.define do
     sequence(:role_name) { |n| "role_name #{n}" }
     sequence(:scene_name) { |n| "scene_name #{n}" }
     content { "input username and password" }
-    folder { create :folder }
     platforms { create_list :platform, 1 }
     project
   end

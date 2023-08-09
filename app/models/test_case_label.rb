@@ -12,8 +12,12 @@
 
 class TestCaseLabel < ApplicationRecord
   belongs_to :project
-  has_many :test_case_label_links, dependent: :destroy
-  has_many :test_cases, through: :test_case_label_links
+  # has_many :test_case_label_links, dependent: :destroy
+  # belongs_to_array_in_many :test_cases, foreign_key: :label_ids
 
   validates :name, presence: true
+
+  def test_cases
+    TestCase.where("label_ids @> ARRAY[#{id}]::bigint[]")
+  end
 end

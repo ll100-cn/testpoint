@@ -12,7 +12,7 @@ class Projects::TestCasesController < BaseProjectController
     test_cases_scope = test_cases_scope.where_exists(Platform.connect_test_cases.where(id: @platform)) if @platform
 
     @test_cases = test_cases_scope
-    @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
+    # @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
 
     @test_case_snapshot = @project.test_case_snapshots.where(id: params[:test_case_snapshot_id]).first
     @test_cases = @test_cases.where_exists(TestCaseRecord.where("changed_at <= ?", @test_case_snapshot.version_at).where_table(:test_case)) if @test_case_version

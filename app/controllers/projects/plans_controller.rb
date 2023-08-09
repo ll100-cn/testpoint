@@ -45,7 +45,7 @@ class Projects::PlansController < BaseProjectController
     @all_task_upshots_scope = @all_task_upshots_scope.joins(task: :test_case)
 
     task_upshots_scope = @all_task_upshots_scope
-    task_upshots_scope = task_upshots_scope.where(test_cases: { folder_id: @folder.subtree }) if @folder
+    # task_upshots_scope = task_upshots_scope.where(test_cases: { folder_id: @folder.subtree }) if @folder
     task_upshots_scope = task_upshots_scope.merge(Task.ranked)
 
     @task_upshots = task_upshots_scope
