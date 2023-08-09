@@ -30,6 +30,11 @@ class Projects::PlansController < BaseProjectController
   end
 
   def show
+    if params[:phase_index].nil?
+      redirect_to url_for(action: :show, phase_index: @plan.phases.ranked.last.index)
+      return
+    end
+
     @current_phase = @plan.phases.where(index: params[:phase_index] || @plan.phases.ranked.last.index).take!
     @prev_phase = @current_phase.prev_phase
 

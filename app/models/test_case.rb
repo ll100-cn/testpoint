@@ -46,7 +46,7 @@ class TestCase < ApplicationRecord
   after_create :sync_to_processing_plan
 
   def archive
-    update(archived: true)
+    update(archived: true, archived_at: Time.current)
   end
 
   def sync_to_processing_plan
@@ -62,5 +62,31 @@ class TestCase < ApplicationRecord
 
   def scene_path
     (scene_name || "N/A").split(' | ')
+  end
+
+  def self.filter_by_version_at(base_scope, version_at)
+    test_cases_scope = base_scope
+
+    test_cases_scope = test_cases_scope.where("test_cases.created_at <= ?", version_at)
+    join_sub_query = TestCaseVersion.from("versions as v1").joins("INNER JOIN test_cases ON test_cases.id = v1.item_id AND v1.item_type = 'TestCase'")
+                            .merge(test_cases_scope)
+                            .where("v1.created_at <= ?", version_at)
+                            .group("v1.item_id")
+                            .select("MAX(v1.created_at) as created_at, v1.item_id")
+
+      test_case_versions = TestCaseVersion.where(
+        item_type: 'TestCase',
+      ).joins("INNER JOIN (#{join_sub_query.to_sql}) as v2 ON v2.item_id = versions.item_id AND v2.created_at = versions.created_at")
+
+      version_mapping = test_case_versions.index_by(&:item_id)
+
+      test_cases_scope.map do |test_case|
+        if version_mapping.key?(test_case.id)
+          version = version_mapping[test_case.id]
+          reify = version.reify_with_create
+        else
+          test_case
+        end
+      end
   end
 end

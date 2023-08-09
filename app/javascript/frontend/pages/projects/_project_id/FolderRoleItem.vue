@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { ChangeFilterFunction, Filter, TreeItem } from "./types"
 import FolderSceneItem from "./FolderSceneItem.vue"
-import { inject, PropType } from "vue"
+import { computed, inject, PropType } from "vue"
 
 const props = defineProps({
   actived: {
@@ -45,9 +45,13 @@ const props = defineProps({
   }
 })
 
+const collapsed = computed(() => {
+  return !props.actived || (props.role_item.role_name ?? '') != props.filter.role_name
+})
 
-const collapsed = !props.actived || (props.role_item.role_name ?? '') != props.filter.role_name
-const highlight = !collapsed && (props.filter.scene_path ?? '') == ''
+const highlight = computed(() => {
+  return !collapsed.value && (props.filter.scene_path ?? '') == ''
+})
 
 const changeFilter = inject("changeFilter") as ChangeFilterFunction
 </script>

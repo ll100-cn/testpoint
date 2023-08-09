@@ -109,6 +109,12 @@ Rails.application.routes.draw do
       resources :test_cases
       resources :platforms
       resources :test_case_labels
+
+      resources :plans do
+        resources :phases do
+          resources :task_upshot_infos
+        end
+      end
     end
   end
 end

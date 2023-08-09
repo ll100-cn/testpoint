@@ -1,1 +1,1 @@
-<%= render 'row', formats: [ :html ], upshot: @upshot, last_upshot: @last_upshot %>
+<%= render template: 'projects/upshots/_row', formats: [ :html ], locals: { upshot: @upshot, last_upshot: @last_upshot } %>

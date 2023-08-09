@@ -1,5 +1,7 @@
-<%= render 'modal', formats: [ :html ] %>
+<%= render template: 'projects/upshots/_modal', formats: [ :html ] %>
 
 <script>
-$(".<%= dom_id @task, 'on' %>").click()
+$(".task_<%= @task.id %>_on").each(function() {
+  this.click()
+})
 </script>

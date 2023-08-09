@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import _ from 'lodash'
-import { inject, PropType } from "vue";
+import { computed, inject, PropType } from "vue";
 import { ChangeFilterFunction, Filter, SceneItem, TreeItem } from "./types";
 
 const props = defineProps({
@@ -55,6 +55,11 @@ defineOptions({
 
 const changeFilter = inject("changeFilter") as ChangeFilterFunction
 
-const collapsed = !props.actived || !_.isEqual(props.scene_item.path, _.slice(props.filter.scene_path, 0, props.scene_item.path.length))
-const highlight = !collapsed && _.isEqual(props.scene_item.path, props.filter.scene_path)
+const collapsed = computed(() => {
+  return !props.actived || !_.isEqual(props.scene_item.path, _.slice(props.filter.scene_path, 0, props.scene_item.path.length))
+})
+
+const highlight = computed(() => {
+  return !collapsed.value && _.isEqual(props.scene_item.path, props.filter.scene_path)
+})
 </script>
