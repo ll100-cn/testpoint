@@ -25,6 +25,10 @@ class Ability
     apply_owner_permissions(member)     if member.role.owner?
   end
 
+  def apply_api_permissions(user)
+    can :manage, :all
+  end
+
   def apply_reporter_permissions(member)
     can :read, Milestone
     can [:read, :create], Comment
@@ -38,7 +42,7 @@ class Ability
     can [:fold, :unfold],       Comment
     can :manage,                Issue
     can [:read, :create],       IssueRelationship
-    can :manage,                [TestCase, TestCaseLabel, TestCaseSnapshot, Plan, Platform, Folder, Task, Phase]
+    can :manage,                [TestCase, TestCaseLabel, TestCaseSnapshot, Plan, Platform, Task, Phase]
   end
 
   def apply_manager_permissions(member)

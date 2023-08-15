@@ -1,6 +1,5 @@
 class Projects::PlansController < BaseProjectController
   load_and_authorize_resource :project
-  load_and_authorize_resource :folder, through: :project
   load_and_authorize_resource :platform, through: :project
   load_and_authorize_resource through: :project
 

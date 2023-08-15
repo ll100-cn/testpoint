@@ -1,8 +1,6 @@
 class Projects::TestCasesController < BaseProjectController
   load_and_authorize_resource :project
-  load_and_authorize_resource :folder
   load_and_authorize_resource :platform
-  load_and_authorize_resource :test_case_label
   load_and_authorize_resource through: :project
 
   def index
