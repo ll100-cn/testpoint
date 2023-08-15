@@ -10,7 +10,7 @@
         <a href="#" @click="emit('changeMode', 'edit')">编辑</a>
       </div>
       <div class="modal-body">
-        <textarea data-controller="markdown" readonly class="d-none">{{ test_case.content }}</textarea>
+        <textarea readonly data-controller="markdown" ref="textarea" data-action="render->markdown#render" class="d-none">{{ test_case.content }}</textarea>
 
         <div class="collapse show btn-toggle text-center p-1">
           <a class="btn btn-link mx-auto" data-bs-toggle="collapse" data-bs-target=".btn-toggle" role="button">
@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { TestCase } from '@/models';
-import { PropType } from 'vue';
+import { PropType, ref, onUpdated } from 'vue';
 
 const props = defineProps({
   test_case: {
@@ -58,7 +58,14 @@ const props = defineProps({
   }
 })
 
+const textarea = ref()
+
 const emit = defineEmits<{
   (e: 'changeMode', mode: string): void
 }>()
+
+onUpdated(() => {
+  textarea.value.dispatchEvent(new Event('render'))
+})
+
 </script>

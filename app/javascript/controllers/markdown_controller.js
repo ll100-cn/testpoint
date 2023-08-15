@@ -15,6 +15,10 @@ export default class extends Controller {
     $(this.viewElement).remove()
   }
 
+  render() {
+    this.renderView()
+  }
+
   toggleTaskList(event) {
     const inputElement = this.findInputElement()
     const checkbox = event.target
