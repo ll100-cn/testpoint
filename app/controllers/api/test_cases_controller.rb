@@ -16,6 +16,11 @@ class Api::TestCasesController < Api::BaseController
     end
   end
 
+  def create
+    @test_case.save
+    respond_with @test_case
+  end
+
   def update
     @test_case.update(test_case_params)
     respond_with @test_case
