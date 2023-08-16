@@ -3,6 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ test_case.title }}</h5>
+        <a href="#" class="text-danger small" @click="archiveTestCase">归档</a>
       </div>
       <form @submit="submitForm">
         <div class="modal-body">
@@ -105,7 +106,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (e: 'change', test_case: TestCase): void
+  (e: 'change', test_case: TestCase): void,
+  (e: 'destroy', test_case: TestCase): void,
 }>()
 
 const form = ref({
@@ -141,4 +143,29 @@ async function submitForm(event: Event) {
   }
 }
 
+async function archiveTestCase(event: Event) {
+  event.preventDefault()
+
+  if (!confirm('确认归档？')) {
+    return
+  }
+
+  try {
+    const new_test_case = await new requests.TestCaseDestroyRequest().setup(req => {
+      req.interpolations.project_id = props.test_case.project_id
+      req.interpolations.id = props.test_case.id
+    }).perform(proxy)
+
+    $(event.target).closest('.modal').modal('hide')
+    emit('destroy', new_test_case)
+  } catch (err) {
+    if (err instanceof AxiosError && err.response?.status == 422) {
+      const errors = err.response.data.errors
+      alert(JSON.stringify(errors, null, 2))
+      return
+    }
+
+    throw err
+  }
+}
 </script>

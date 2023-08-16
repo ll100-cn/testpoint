@@ -32,7 +32,10 @@
     </table>
   </div>
   <Teleport to="body">
-    <CaseModal ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @change="emit('change', $event)" />
+    <CaseModal ref="modal" :platform_repo="platform_repo"
+                           :label_repo="label_repo"
+                           @change="emit('change', $event)"
+                           @destroy="emit('destroy', $event)" />
   </Teleport>
 
   <CaseBatchEditModal ref="batch_edit_modal" :platform_repo="platform_repo" :label_repo="label_repo" @batch_change="emit('batch_change')" />
@@ -62,6 +65,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void,
+  (e: 'destroy', test_case: TestCase): void,
   (e: 'batch_change'): void
 }>()
 

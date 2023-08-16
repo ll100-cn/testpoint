@@ -2,7 +2,11 @@
   <div class="modal" tabindex="-1" ref="modal">
     <template v-if="test_case">
       <CardShow :test_case="test_case" :history="history" v-if="mode == 'show'" @change-mode="onModeChange" />
-      <CaseEditFrame v-if="mode == 'edit'" :test_case="test_case" :platform_repo="platform_repo" :label_repo="label_repo" @change="emit('change', $event)" />
+      <CaseEditFrame v-if="mode == 'edit'" :test_case="test_case"
+                                           :platform_repo="platform_repo"
+                                           :label_repo="label_repo"
+                                           @destroy="emit('destroy', $event)"
+                                           @change="emit('change', $event)" />
     </template>
   </div>
 </template>
@@ -29,7 +33,8 @@ const props = defineProps({
 const { proxy } = getCurrentInstance()
 
 const emit = defineEmits<{
-  (e: 'change', test_case: TestCase): void
+  (e: 'change', test_case: TestCase): void,
+  (e: 'destroy', test_case: TestCase): void,
 }>()
 
 const test_case = ref<TestCase | null>()

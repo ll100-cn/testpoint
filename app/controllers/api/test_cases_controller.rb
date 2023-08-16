@@ -26,6 +26,11 @@ class Api::TestCasesController < Api::BaseController
     respond_with @test_case
   end
 
+  def destroy
+    @test_case.archive
+    respond_with @test_case
+  end
+
   def history
     @versions = @test_case.versions.where(event: 'update').reverse
     @history = @versions.map do |version|

@@ -44,7 +44,13 @@
       </div>
     </div>
 
-    <CardBody :test_cases="search_test_cases" :platform_repo="platform_repo" :label_repo="lable_repo" :filter="filter" @change="onTestCaseChanged" @batch_change="onBatchChanged" />
+    <CardBody :test_cases="search_test_cases"
+              :platform_repo="platform_repo"
+              :label_repo="lable_repo"
+              :filter="filter"
+              @change="onTestCaseChanged"
+              @destroy="onTestCaseDestroyed"
+              @batch_change="onBatchChanged" />
 
     <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="lable_repo" @create="onTestCaseCreated" />
   </div>
@@ -135,6 +141,10 @@ function showModal(project_id: number) {
 
 
 function onTestCaseChanged(test_case: TestCase) {
+  router.go(0)
+}
+
+function onTestCaseDestroyed(test_case: TestCase) {
   router.go(0)
 }
 
