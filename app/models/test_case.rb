@@ -52,10 +52,8 @@ class TestCase < ApplicationRecord
   def sync_to_processing_plan
     # append self to current test plan
     Plan.recent.reject(&:finished?).each do |plan|
-      ([ plan.platform ] & self.platforms).each do |platform|
-        plan.phases.each do |phase|
-          phase.tasks.create!(test_case: self, plan: plan, platform: platform)
-        end
+      plan.phases.each do |phase|
+        phase.tasks.create!(test_case: self, plan: plan)
       end
     end
   end
