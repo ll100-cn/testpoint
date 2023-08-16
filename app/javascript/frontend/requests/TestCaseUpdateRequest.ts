@@ -1,6 +1,7 @@
-import { BaseRequest, PerformContext } from "./BaseRequest"
+import { BaseRequest, ErrorUnprocessableEntity, PerformContext } from "./BaseRequest"
 import { plainToClass, plainToInstance } from 'class-transformer'
-import { TestCase } from "@/models"
+import { TestCase, Validation } from "@/models"
+import { AxiosError, AxiosResponse } from "axios"
 
 
 export class TestCaseUpdateRequest extends BaseRequest {
@@ -10,13 +11,17 @@ export class TestCaseUpdateRequest extends BaseRequest {
   }
 
   async perform(ctx: PerformContext, data: any): Promise<TestCase> {
-    const resp = await this.axiosRequest(ctx, {
-      method: "PATCH",
-      url: this.buildUrl(),
-      data: data
-    })
-
-    const resource = plainToInstance(TestCase, resp.data)
-    return resource
+    try {
+      const resp = await this.axiosRequest(ctx, {
+        method: "PATCH",
+        url: this.buildUrl(),
+        data: data
+      })
+      const resource = plainToInstance(TestCase, resp.data)
+      return resource
+    } catch (error) {
+      this.handleUnprocessableEntity(error)
+      throw error
+    }
   }
 }

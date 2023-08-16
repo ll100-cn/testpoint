@@ -9,13 +9,18 @@ export class TestCaseCreateRequest extends BaseRequest {
   }
 
   async perform(ctx: PerformContext, data: any): Promise<TestCase> {
-    const resp = await this.axiosRequest(ctx, {
-      method: "POST",
-      url: this.buildUrl(),
-      data: data
-    })
+    try {
+      const resp = await this.axiosRequest(ctx, {
+        method: "POST",
+        url: this.buildUrl(),
+        data: data
+      })
 
-    const resource = plainToInstance(TestCase, resp.data)
-    return resource
+      const resource = plainToInstance(TestCase, resp.data)
+      return resource
+    } catch (error) {
+      this.handleUnprocessableEntity(error)
+      throw error
+    }
   }
 }

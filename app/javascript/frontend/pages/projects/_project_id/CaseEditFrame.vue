@@ -7,69 +7,38 @@
       </div>
       <form @submit="submitForm">
         <div class="modal-body">
-          <div class="row mb-3 string required test_case_title ms-0">
-            <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">角色</label>
-            <div class="col">
-              <input class="form-control string required" type="text" name="role_name" id="test_case_title" v-model="form.role_name" />
+          <div class="alert alert-danger" role="alert" v-if="validations.isAvaliableInvalid()">
+            <div v-for="message in validations.avaliableFullMessages()">
+              {{ message }}
             </div>
           </div>
+          <component :is="layouts.vertical_group" :validation="validations.disconnect('role_name')" label="角色" v-slot="slotProps">
+            <component :is="forms.string" v-bind="{ ...slotProps, form }" />
+          </component>
 
-          <div class="row mb-3 string required test_case_title ms-0">
-            <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">场景</label>
-            <div class="col">
-              <input class="form-control string required" type="text" name="scene_name" id="test_case_title" v-model="form.scene_name" />
-            </div>
-          </div>
+          <component :is="layouts.vertical_group" :validation="validations.disconnect('scene_name')" label="场景" v-slot="slotProps">
+            <component :is="forms.string" v-bind="{ ...slotProps, form }" />
+          </component>
 
-          <div class="row mb-3 string required test_case_title ms-0">
-            <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">分组</label>
-            <div class="col">
-              <input class="form-control string required" type="text" name="group_name" id="test_case_title" v-model="form.group_name" />
-            </div>
-          </div>
+          <component :is="layouts.vertical_group" :validation="validations.disconnect('group_name')" label="分组" v-slot="slotProps">
+            <component :is="forms.string" v-bind="{ ...slotProps, form }" />
+          </component>
 
-          <div class="row mb-3 string required test_case_title ms-0">
-              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">标题</label>
-              <div class="col">
-                <input class="form-control string required" type="text" name="title" id="test_case_title" v-model="form.title" />
-              </div>
-            </div>
+          <component :is="layouts.vertical_group" :validation="validations.disconnect('title')" label="标题" v-slot="slotProps">
+            <component :is="forms.string" v-bind="{ ...slotProps, form }" />
+          </component>
 
-          <div class="row mb-3 text optional test_case_content ms-0">
-            <label class="col-form-label text optional col-sm-2 text-end" for="test_case_content">内容</label>
-            <div class="col">
-              <textarea class="form-control text optional markdown-field" name="content" id="test_case_content" v-model="form.content"></textarea>
-            </div>
-          </div>
+          <component :is="layouts.vertical_group" :validation="validations.disconnect('content')" label="内容" v-slot="slotProps">
+            <textarea class="form-control text optional markdown-field" name="content" id="test_case_content" v-model="form.content"></textarea>
+          </component>
 
-          <div class="row check_boxes required test_case_platform_ids ms-0">
-            <label class="col-form-label check_boxes required col-sm-2 text-end">
-                平台
-            </label>
-            <div class="col">
-              <input type="hidden" value="" name="platform_ids[]" />
-              <div class="form-check form-check-inline" v-for="platform in platform_repo.values()">
-                <label class="form-check-label collection_check_boxes" >
-                  <input class="form-check-input check_boxes required" type="checkbox" :value="platform.id" v-model="form.platform_ids" name="platform_ids[]" />
-                  {{ platform.name }}
-                </label>
-              </div>
-            </div>
-          </div>
+          <component :is="layouts.vertical_group" :validation="validations.disconnect('platform_ids')" label="平台" v-slot="slotProps">
+            <component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+          </component>
 
-
-          <div class="row check_boxes optional test_case_label_ids ms-0">
-            <label class="col-form-label check_boxes optional col-sm-2 text-end">标签</label>
-            <div class="col">
-              <input type="hidden" value="" name="label_ids[]" />
-              <div class="form-check form-check-inline" v-for="label in label_repo.values()">
-                <label class="form-check-label collection_check_boxes">
-                  <input class="form-check-input check_boxes optional" type="checkbox" :value="label.id" name="label_ids[]" />
-                  {{ label.name }}
-                </label>
-              </div>
-            </div>
-          </div>
+          <component :is="layouts.vertical_group" :validation="validations.disconnect('label_ids')" label="标签" v-slot="slotProps">
+            <component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+          </component>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -82,11 +51,14 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import { PropType, getCurrentInstance, ref } from 'vue';
-import * as requests from '@/requests'
-import $ from 'jquery'
-import axios from '@/initializers/axios';
+import * as requests from '@/requests';
 import { AxiosError } from 'axios';
+import $ from 'jquery';
+import { PropType, getCurrentInstance, ref, reactive } from 'vue';
+import _ from "lodash"
+
+import { Validations, layouts, forms } from "@/components/simple_form";
+const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()
 
@@ -133,9 +105,8 @@ async function submitForm(event: Event) {
     $(event.target).closest('.modal').modal('hide')
     emit('change', new_test_case)
   } catch (err) {
-    if (err instanceof AxiosError && err.response?.status == 422) {
-      const errors = err.response.data.errors
-      alert(JSON.stringify(errors, null, 2))
+    if (err instanceof requests.ErrorUnprocessableEntity) {
+      validations.marge(err.validations, err.names)
       return
     }
 
@@ -159,9 +130,9 @@ async function archiveTestCase(event: Event) {
     $(event.target).closest('.modal').modal('hide')
     emit('destroy', new_test_case)
   } catch (err) {
-    if (err instanceof AxiosError && err.response?.status == 422) {
-      const errors = err.response.data.errors
-      alert(JSON.stringify(errors, null, 2))
+    if (err instanceof requests.ErrorUnprocessableEntity) {
+      validations.marge(err.validations, err.names)
+      alert(JSON.stringify(validations.fullMessages, null, 2))
       return
     }
 

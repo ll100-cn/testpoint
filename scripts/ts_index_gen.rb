@@ -43,6 +43,10 @@ def gen_folder_index(path)
     if content.match?(/export\s+default/)
       lines << %Q[export { default as #{basename} } from "./#{filename}"]
     end
+
+    if extname == ".vue"
+      lines << %Q[export { default as #{basename} } from "./#{filename}"]
+    end
   end
 
   if lines.length > 0
