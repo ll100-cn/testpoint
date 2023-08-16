@@ -10,7 +10,10 @@
         <div class="dropdown-menu">
           <a class="dropdown-item" href="#" :class="{ 'active': !current_platform }" @click="changeFilter({ ...reset_search, platform_id: null })">全部</a>
           <template v-for="platform in platform_repo.values()" :key="platform.id">
-            <a class="dropdown-item " href="#" :class="{ 'active': platform.id === current_platform?.id }" @click="changeFilter({ ...reset_search, platform_id: platform.id.toString() })">{{ platform.name }}</a>
+            <a class="dropdown-item d-flex align-items-center" href="#" :class="{ 'active': platform.id === current_platform?.id }" @click="changeFilter({ ...reset_search, platform_id: platform.id.toString() })">
+              <span class="me-2 badge p-2 rounded-circle" :style="{ backgroundColor: utils.calcColorHex(platform.name) }"><span></span></span>
+              {{ platform.name }}
+            </a>
           </template>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/platforms?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">平台列表</a>
@@ -68,6 +71,7 @@ import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref } from 'vue'
 import CardNew from './CardNew.vue'
+import * as utils from '@/lib/utils'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

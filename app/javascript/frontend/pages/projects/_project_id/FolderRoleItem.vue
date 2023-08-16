@@ -9,9 +9,6 @@
         <i class="fal fa-folder me-2"></i>{{ role_item.role_name ?? '未设置' }}
         <span class="small">({{ role_item.totalCount() }})</span>
       </a>
-      <a class="text-muted ms-2 treeview-active-actions" href="/projects/1/folders/1/edit">
-        <i class="fal fa-pencil"></i>
-      </a>
     </div>
     <ul :id="`treeview-${role_item.uuid}`" class="collapse" :class="{ 'show': !collapsed }">
       <template v-for="scene_item in role_item.scene_tree">

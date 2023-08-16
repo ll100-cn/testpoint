@@ -6,14 +6,10 @@
     <span class=""></span>
     <span class="line"></span>
     <div class="item">
-
       <a class="treeview-link flex-1 rounded" @click="changeFilter({ ...params, scene_path: scene_item.path })" href="#" :class="{ 'active': highlight }">
         <i class="fal fa-folder me-2"></i> {{ scene_item.name }}
         <span class="small" v-if="scene_item.count == 0 || scene_item.count == scene_item.totalCount()">({{ scene_item.totalCount() }})</span>
         <span class="small" v-else>({{ scene_item.count }}/{{ scene_item.totalCount() }})</span>
-      </a>
-      <a class="text-muted ms-2 treeview-active-actions" href="/projects/1/folders/9/edit">
-        <i class="fal fa-pencil"></i>
       </a>
     </div>
 
