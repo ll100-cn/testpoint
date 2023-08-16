@@ -17,7 +17,6 @@
         </div>
       </div>
 
-
       <h5 class="my-auto mx-2">标签</h5>
 
       <div class="dropdown">
@@ -41,11 +40,19 @@
       </div>
 
       <div class="actions ms-auto">
-
+        <a class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新建用例</a>
       </div>
     </div>
 
-    <CardBody :test_cases="search_test_cases" :platform_repo="platform_repo" :label_repo="lable_repo" :filter="filter" @change="onTestCaseChanged" @batch_change="onBatchChanged" />
+    <CardBody :test_cases="search_test_cases"
+              :platform_repo="platform_repo"
+              :label_repo="lable_repo"
+              :filter="filter"
+              @change="onTestCaseChanged"
+              @destroy="onTestCaseDestroyed"
+              @batch_change="onBatchChanged" />
+
+    <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="lable_repo" @create="onTestCaseCreated" />
   </div>
 </template>
 
@@ -60,6 +67,7 @@ import qs from "qs"
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref } from 'vue'
+import CardNew from './CardNew.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -126,11 +134,25 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 
 provide("changeFilter", changeFilter)
 
+const modal = ref<InstanceType<typeof CardNew>>()
+function showModal(project_id: number) {
+  modal.value.show(project_id.toString())
+}
+
+
 function onTestCaseChanged(test_case: TestCase) {
   router.go(0)
 }
 
+function onTestCaseDestroyed(test_case: TestCase) {
+  router.go(0)
+}
+
 function onBatchChanged() {
+  router.go(0)
+}
+
+function onTestCaseCreated(test_case: TestCase) {
   router.go(0)
 }
 

@@ -5,7 +5,12 @@
     </div>
 
     <div class="col">
-      <CaseTable :test_cases="avaiable_test_cases" :platform_repo="platform_repo" :label_repo="label_repo" @change="emit('change', $event)" @batch_change="emit('batch_change')" />
+      <CaseTable :test_cases="avaiable_test_cases"
+                 :platform_repo="platform_repo"
+                 :label_repo="label_repo"
+                 @change="emit('change', $event)"
+                 @destroy="emit('destroy', $event)"
+                 @batch_change="emit('batch_change')" />
     </div>
   </div>
 </template>
@@ -44,6 +49,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void,
+  (e: 'destroy', test_case: TestCase): void,
   (e: 'batch_change'): void
 }>()
 
