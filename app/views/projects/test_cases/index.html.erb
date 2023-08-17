@@ -7,44 +7,32 @@
   <div class="col">
     <div class="">
       <div class="mt-1">
-        <h5 class="my-auto d-inline-block">版本号</h5>
-        <%= link_to "<i class='fal fa-plus'></i> 新增".html_safe, "#", class: "float-end small", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_test_case_snapshot_path(@project, ok_url: request.fullpath) } if can? :new, TestCaseSnapshot %>
+        <h5 class="my-auto d-inline-block">里程碑</h5>
+        <%#= link_to "<i class='fal fa-plus'></i> 新增".html_safe, "#", class: "float-end small", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_test_case_snapshot_path(@project, ok_url: request.fullpath) } if can? :new, TestCaseSnapshot %>
       </div>
 
       <hr>
 
-      <div class="">
+      <div>
         <ul class="timeline">
-          <li class="timeline-item mb-5 <%= 'active' if params[:test_case_snapshot_id].nil? %>">
+          <li class="timeline-item mb-5 <%= 'active' if params[:milestone_id].nil? %>">
             <div class="small mb-2">
               <%= link_to "当前",  project_test_cases_path(@project) %>
             </div>
           </li>
 
-          <% @project.test_case_snapshots.ranked.each do |version| %>
-          <li class="timeline-item mb-5 <%= 'active' if version.id == @test_case_version&.id %>">
-            <div class="small mb-2 <%= version.id == @test_case_version&.id ? '' : 'text-muted' %>">
-              <%= link_to l(version.version_at, format: :long), project_test_cases_path(@project, test_case_snapshot_id: version.id), class: (version.id == @test_case_version&.id ? 'text-success' : '') %>
+          <% @project.milestones.ranked.each do |milestone| %>
+          <li class="timeline-item mb-5 <%= 'active' if milestone.id == @milestone&.id %>">
+            <div class="small mb-2 <%= milestone.id == @milestone&.id ? '' : 'text-muted' %>">
+              <% text = milestone.published_at? ? l(milestone.published_at, format: :long) : "尚无发布" %>
+              <%= link_to text, project_test_cases_path(@project, milestone_id: milestone.id), class: (milestone.id == @milestone&.id ? 'text-success' : '') %>
             </div>
 
-            <div class="dropdown">
-              <%= version.title %>
-              <%= link_to "<i class='far fa-cog'></i> 设置".html_safe, "#", id: "version_#{dom_id(version)}", class: "small pl-2 dropdown-toggle", data: { bs_toggle: 'dropdown' } %>
-              <ul class="dropdown-menu" aria-labelledby="version_<%= dom_id(version) %>">
-                <% if can? :edit, version %>
-                <li>
-                  <%= link_to "<i class='fal fa-edit'></i> 修改".html_safe, "#", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: edit_project_test_case_snapshot_path(@project, version, ok_url: request.fullpath) }, class: "dropdown-item small" %>
-                </li>
-                <% end %>
-                <% if can? :destroy, version %>
-                <li>
-                  <%= link_to "<i class='fal fa-trash'></i> 删除".html_safe, project_test_case_snapshot_path(@project, version), method: :delete, data: { confirm: "确定要删除该版本号吗？" }, class: "dropdown-item small" %>
-                </li>
-                <% end %>
-              </ul>
-            </div>
+            <%= milestone.title %>
 
-            <p class="text-muted"><%= version.description %></p>
+            <p class="text-muted">
+              <%= text_area_tag(:content, milestone.description, data: { controller: "markdown" }, readonly: true, class: "d-none") %>
+            </p>
           </li>
           <% end %>
         </ul>

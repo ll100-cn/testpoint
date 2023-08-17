@@ -3,15 +3,14 @@ class Api::TestCasesController < Api::BaseController
   load_and_authorize_resource through: :project
 
   def index
-    @test_case_snapshot = @project.test_case_snapshots.where(id: params[:test_case_snapshot_id]).first
+    @milestone = @project.milestones.where(id: params[:milestone_id]).first
 
-
-    if @test_case_snapshot
-      @test_cases = TestCase.filter_by_version_at(@test_cases, @test_case_snapshot.version_at)
+    if @milestone&.published_at?
+      @test_cases = TestCase.filter_by_version_at(@test_cases, @milestone.published_at)
     else
-      latest_snapshot = @project.test_case_snapshots.ranked.first
-      if latest_snapshot
-        @test_cases = @test_cases.where("archived_at is NULL OR archived_at > ?", latest_snapshot.version_at)
+      latest_milestone = @project.milestones.ranked.first
+      if latest_milestone&.published_at?
+        @test_cases = @test_cases.where("archived_at is NULL OR archived_at > ?", latest_milestone.published_at)
       end
     end
   end

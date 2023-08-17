@@ -93,7 +93,7 @@ const emit = defineEmits<{
 const project_id = _.toNumber(route.params.project_id)
 const test_cases = await new requests.TestCaseListRequest().setup(req => {
   req.interpolations.project_id = project_id
-  req.query.test_case_snapshot_id = route.query.test_case_snapshot_id
+  req.query.milestone_id = route.query.milestone_id
 }).perform(proxy)
 
 const _labels = ref(await new requests.TestCaseLabelListRequest().setup(req => {

@@ -12,8 +12,8 @@ class Projects::TestCasesController < BaseProjectController
     @test_cases = test_cases_scope
     # @test_cases = @test_cases.where(folder_id: @folder.subtree) if @folder
 
-    @test_case_snapshot = @project.test_case_snapshots.where(id: params[:test_case_snapshot_id]).first
-    @test_cases = @test_cases.where_exists(TestCaseRecord.where("changed_at <= ?", @test_case_snapshot.version_at).where_table(:test_case)) if @test_case_version
+    @milestone = @project.milestones.where(id: params[:milestone_id]).first
+    @test_cases = @test_cases.where_exists(TestCaseRecord.where("changed_at <= ?", @milestone.published_at).where_table(:test_case)) if @milestone && @milestone.published_at?
   end
 
   def new
