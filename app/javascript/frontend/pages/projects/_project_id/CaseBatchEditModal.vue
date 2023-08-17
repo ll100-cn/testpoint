@@ -7,6 +7,12 @@
         </div>
         <form @submit="submitForm">
           <div class="modal-body">
+            <div class="alert alert-danger" role="alert" v-if="validations.isAvaliableInvalid()">
+              <div v-for="message in validations.avaliableFullMessages()">
+                {{ message }}
+              </div>
+            </div>
+
             <component :is="layouts.vertical_group" :validation="validations.disconnect('role_name')" label="角色" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
@@ -173,9 +179,9 @@ async function submitForm(event: Event) {
         req.interpolations.id = test_case.id
       }).perform(proxy, form_data)
     } catch (err) {
-      if (err instanceof AxiosError && err.response?.status == 422) {
-        const errors = err.response.data.errors
-        const errors_string = JSON.stringify(errors, null, 2)
+      if (err instanceof requests.ErrorUnprocessableEntity) {
+        validations.marge(err.validations, err.names)
+        const errors_string = JSON.stringify(validations.fullMessages, null, 2)
 
         info.error = errors_string
         result.value.push(info)
