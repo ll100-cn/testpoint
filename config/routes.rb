@@ -86,7 +86,6 @@ Rails.application.routes.draw do
       resources :categories
       resources :test_case_labels
       resources :test_case_snapshots
-      resources :milestones
       resources :analytics do
         get :issue_creator_chart, on: :collection
         get :issue_activity_chart, on: :collection
@@ -94,6 +93,8 @@ Rails.application.routes.draw do
       resources :issue_templates
       resources :members
     end
+
+    get "milestones(/*path)", as: :milestones, action: "vue", on: :member
   end
 
   resources :users
@@ -117,6 +118,8 @@ Rails.application.routes.draw do
           resources :task_upshot_infos
         end
       end
+
+      resources :milestones
     end
   end
 end

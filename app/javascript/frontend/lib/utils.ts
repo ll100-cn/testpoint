@@ -1,6 +1,7 @@
 import md5 from 'js-md5'
 import _ from 'lodash'
 import { colord } from "colord"
+import dayjs from 'dayjs'
 
 const color_cache = new Map<string, string>()
 
@@ -14,4 +15,12 @@ export function calcColorHex(text: string) {
   }
 
   return color_cache.get(text)
+}
+
+export function humanize(time: Date | null, pattern: string) {
+  if (time == null) {
+    return ""
+  }
+
+  return dayjs(time).format(pattern)
 }

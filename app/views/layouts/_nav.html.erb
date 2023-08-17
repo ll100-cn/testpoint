@@ -55,7 +55,7 @@
           </li>
 
           <li class="nav-item">
-            <%= n.link_to "milestones", t('views.navbar.milestones'), [@project, Milestone], class: "nav-link" if can? :read, Milestone %>
+            <%= n.link_to "milestones", t('views.navbar.milestones'), milestones_project_path(@project), class: "nav-link" if can? :read, Milestone %>
           </li>
 
           <li class="nav-item">

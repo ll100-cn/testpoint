@@ -1,0 +1,75 @@
+<template>
+  <div class="page-header justify-content-between">
+    <h2>里程碑列表</h2>
+
+    <div class="actions ms-auto">
+      <RouterLink class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</RouterLink>
+    </div>
+  </div>
+
+
+  <div class="card app-card-main">
+    <div class="card-body py-0">
+      <table class="table mb-0">
+        <colgroup>
+          <col width="20%">
+          <col width="20%">
+          <col width="20%">
+          <col>
+        </colgroup>
+        <thead>
+        <tr>
+          <th>标题</th>
+          <th>发布时间</th>
+          <th class="text-end">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr v-for="milestone in milestones" :class="{ 'block-discard': milestone.isPublished() }">
+            <td>{{ milestone.title }}</td>
+            <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
+            <td class="x-spacer-x-1 text-end">
+                <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">修改</RouterLink>
+
+                <a href="#" @click.prevent="milestoneDestroy(milestone)">删除</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import * as requests from '@/requests';
+import * as utils from '@/lib/utils';
+import _ from 'lodash';
+import { getCurrentInstance } from 'vue';
+import { routerKey, useRoute, useRouter } from 'vue-router';
+import { DATE_FORMAT } from '@/constants';
+import { Milestone } from '@/models';
+
+const { proxy } = getCurrentInstance()
+const route = useRoute()
+const router = useRouter()
+
+const project_id = _.toNumber(route.params.project_id)
+const milestones = await new requests.MilestoneListRequest().setup(req => {
+  req.interpolations.project_id = project_id
+}).perform(proxy)
+
+
+function milestoneDestroy(milestone: Milestone) {
+  if (!confirm('确定要删除吗？')) {
+    return
+  }
+
+  new requests.MilestoneDestroyRequest().setup(req => {
+    req.interpolations.project_id = project_id
+    req.interpolations.id = milestone.id
+  }).perform(proxy)
+
+  router.go(0)
+}
+
+</script>

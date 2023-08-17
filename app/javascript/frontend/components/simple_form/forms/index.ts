@@ -2,3 +2,4 @@
 
 export { default as checkboxes } from "./checkboxes.vue"
 export { default as string } from "./string.vue"
+export { default as text } from "./text.vue"

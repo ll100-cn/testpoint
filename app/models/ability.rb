@@ -11,7 +11,7 @@ class Ability
     return unless user
     return apply_superadmin_permissions(user) if user.superadmin?
 
-    can :read,                Project, members: { user_id: user.id }
+    can [:read, :vue],                Project, members: { user_id: user.id }
     can :manage,              :profile
     can :manage,              Attachment
   end
