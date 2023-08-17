@@ -119,7 +119,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :milestones
+      resources :milestones do
+        patch :archive, on: :member
+      end
     end
   end
 end

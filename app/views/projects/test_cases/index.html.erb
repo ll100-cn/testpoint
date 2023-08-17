@@ -15,16 +15,10 @@
 
       <div>
         <ul class="timeline">
-          <li class="timeline-item mb-5 <%= 'active' if params[:milestone_id].nil? %>">
-            <div class="small mb-2">
-              <%= link_to "当前",  project_test_cases_path(@project) %>
-            </div>
-          </li>
-
-          <% @project.milestones.ranked.each do |milestone| %>
+          <% @project.milestones.available.ranked.each do |milestone| %>
           <li class="timeline-item mb-5 <%= 'active' if milestone.id == @milestone&.id %>">
             <div class="small mb-2 <%= milestone.id == @milestone&.id ? '' : 'text-muted' %>">
-              <% text = milestone.published_at? ? l(milestone.published_at, format: :long) : "尚无发布" %>
+              <% text = milestone.published_at? ? l(milestone.published_at, format: :long) : "尚未发布" %>
               <%= link_to text, project_test_cases_path(@project, milestone_id: milestone.id), class: (milestone.id == @milestone&.id ? 'text-success' : '') %>
             </div>
 

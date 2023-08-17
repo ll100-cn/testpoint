@@ -8,7 +8,8 @@ export class Milestone {
   platform_ids: number[]
 
   @Type(() => Date)
-  published_at: Date;
+  published_at: Date
+  archived_at: Date
 
   isPublished(): boolean {
     if (this.published_at == null) {
@@ -17,5 +18,9 @@ export class Milestone {
 
     const now = new Date()
     return this.published_at <= now
+  }
+
+  isArchived(): boolean {
+    return this.archived_at !== null
   }
 }

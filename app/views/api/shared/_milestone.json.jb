@@ -1,2 +1,2 @@
-json = milestone.slice(:id, :title, :description, :published_at, :project_id)
+json = milestone.slice(:id, :title, :description, :published_at, :archived_at, :project_id)
 json

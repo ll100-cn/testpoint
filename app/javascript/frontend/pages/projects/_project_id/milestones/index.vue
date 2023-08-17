@@ -21,6 +21,7 @@
         <tr>
           <th>标题</th>
           <th>发布时间</th>
+          <th>是否归档</th>
           <th class="text-end">操作</th>
         </tr>
         </thead>
@@ -28,12 +29,15 @@
           <tr v-for="milestone in milestones" :class="{ 'block-discard': milestone.isPublished() }">
             <td>{{ milestone.title }}</td>
             <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
+            <td><span v-if="milestone.isArchived()">已归档</span></td>
             <td class="x-spacer-x-1 text-end">
-                <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
-                  <i class="far fa-pencil-alt"></i> 修改
-                </RouterLink>
+              <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
+                <i class="far fa-pencil-alt"></i> 修改
+              </RouterLink>
 
-                <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-times"></i> 删除</a>
+              <a href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive"></i> 归档</a>
+
+              <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-times"></i> 删除</a>
             </td>
           </tr>
         </tbody>
@@ -67,6 +71,19 @@ function milestoneDestroy(milestone: Milestone) {
   }
 
   new requests.MilestoneDestroyRequest().setup(req => {
+    req.interpolations.project_id = project_id
+    req.interpolations.id = milestone.id
+  }).perform(proxy)
+
+  router.go(0)
+}
+
+function milestoneArchive(milestone: Milestone) {
+  if (!confirm('确定要归档吗？')) {
+    return
+  }
+
+  new requests.MilestoneArchiveRequest().setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform(proxy)

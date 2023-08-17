@@ -24,6 +24,11 @@ class Api::MilestonesController < Api::BaseController
     respond_with @milestone
   end
 
+  def archive
+    @milestone.archive
+    respond_with @milestone
+  end
+
 protected
   def milestone_params
     params.permit(:title, :description, :published_at)

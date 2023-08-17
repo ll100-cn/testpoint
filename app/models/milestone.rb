@@ -4,11 +4,12 @@
 #
 #  id           :bigint           not null, primary key
 #  title        :string
+#  published_at :datetime
 #  description  :text
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  project_id   :bigint
-#  published_at :datetime
+#  archived_at  :datetime
 #
 
 class Milestone < ApplicationRecord
@@ -22,8 +23,13 @@ class Milestone < ApplicationRecord
   validates :title, presence: true
 
   scope :ranked, -> { order(published_at: :desc) }
+  scope :available, -> { where(archived_at: nil) }
 
   def published?
-    published_at && published_at < DateTime.now
+    published_at && published_at < Time.current
+  end
+
+  def archive
+    update(archived_at: Time.current)
   end
 end

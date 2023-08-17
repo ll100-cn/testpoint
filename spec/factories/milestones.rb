@@ -4,11 +4,12 @@
 #
 #  id           :bigint           not null, primary key
 #  title        :string
+#  published_at :datetime
 #  description  :text
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  project_id   :bigint
-#  published_at :datetime
+#  archived_at  :datetime
 #
 
 FactoryBot.define do
