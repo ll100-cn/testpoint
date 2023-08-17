@@ -9,12 +9,17 @@ export class TestCaseDestroyRequest extends BaseRequest {
   }
 
   async perform(ctx: PerformContext): Promise<TestCase> {
-    const resp = await this.axiosRequest(ctx, {
-      method: "DELETE",
-      url: this.buildUrl()
-    })
+    try {
+      const resp = await this.axiosRequest(ctx, {
+        method: "DELETE",
+        url: this.buildUrl()
+      })
 
-    const resource = plainToInstance(TestCase, resp.data)
-    return resource
+      const resource = plainToInstance(TestCase, resp.data)
+      return resource
+    } catch (error) {
+      this.handleUnprocessableEntity(error)
+      throw error
+    }
   }
 }

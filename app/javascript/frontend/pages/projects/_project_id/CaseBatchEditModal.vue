@@ -7,110 +7,76 @@
         </div>
         <form @submit="submitForm">
           <div class="modal-body">
-            <div class="row mb-3 string required test_case_title ms-0">
-              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.role_name" >
-                  角色
-                </div>
-              </label>
-              <div class="col">
-                <input class="form-control string required" type="text" name="role_name" id="test_case_title"
-                  v-model="form.role_name" :disabled="!form_enabled_mapping.role_name" />
+            <div class="alert alert-danger" role="alert" v-if="validations.isAvaliableInvalid()">
+              <div v-for="message in validations.avaliableFullMessages()">
+                {{ message }}
               </div>
             </div>
 
-            <div class="row mb-3 string required test_case_title ms-0">
-              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.scene_name" >
-                  场景
+            <component :is="layouts.vertical_group" :validation="validations.disconnect('role_name')" label="角色" :disableds="form_disabled_mapping">
+              <template #label-prepend="{ code }">
+                <div class="form-check col-auto form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
                 </div>
-              </label>
-              <div class="col">
-                <input class="form-control string required" type="text" name="scene_name" id="test_case_title"
-                  v-model="form.scene_name" :disabled="!form_enabled_mapping.scene_name" />
-              </div>
-            </div>
+              </template>
+              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'role_name' }" /></template>
+            </component>
 
-            <div class="row mb-3 string required test_case_title ms-0">
-              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.group_name" >
-                  分组
+            <component :is="layouts.vertical_group" :validation="validations.disconnect('scene_name')" label="场景" :disableds="form_disabled_mapping">
+              <template #label-prepend="{ code }">
+                <div class="form-check col-auto form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
                 </div>
-              </label>
-              <div class="col">
-                <input class="form-control string required" type="text" name="group_name" id="test_case_title"
-                  v-model="form.group_name" :disabled="!form_enabled_mapping.group_name" />
-              </div>
-            </div>
+              </template>
+              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'scene_name' }" /></template>
+            </component>
 
-            <div class="row mb-3 string required test_case_title ms-0">
-              <label class="col-form-label string required col-sm-2 text-end" for="test_case_title">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.title" >
-                  标题
+            <component :is="layouts.vertical_group" :validation="validations.disconnect('group_name')" label="分组" :disableds="form_disabled_mapping">
+              <template #label-prepend="{ code }">
+                <div class="form-check col-auto form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
                 </div>
-              </label>
-              <div class="col">
-                <input class="form-control string required" type="text" name="title" id="test_case_title"
-                  v-model="form.title" :disabled="!form_enabled_mapping.title" />
-              </div>
-            </div>
+              </template>
+              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'group_name' }" /></template>
+            </component>
 
-            <div class="row mb-3 text optional test_case_content ms-0">
-              <label class="col-form-label text optional col-sm-2 text-end" for="test_case_content">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.content" >
-                  内容
+            <component :is="layouts.vertical_group" :validation="validations.disconnect('title')" label="标题" :disableds="form_disabled_mapping">
+              <template #label-prepend="{ code }">
+                <div class="form-check col-auto form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
                 </div>
-              </label>
-              <div class="col">
-                <textarea class="form-control text optional markdown-field" name="content" id="test_case_content"
-                  v-model="form.content" :disabled="!form_enabled_mapping.content"></textarea>
-              </div>
-            </div>
+              </template>
+              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'title' }" /></template>
+            </component>
 
-            <div class="row check_boxes required test_case_platform_ids ms-0">
-              <label class="col-form-label check_boxes required col-sm-2 text-end">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.platform_ids" >
-                  平台
+            <component :is="layouts.vertical_group" :validation="validations.disconnect('content')" label="内容" :disableds="form_disabled_mapping">
+              <template #label-prepend="{ code }">
+                <div class="form-check col-auto form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
                 </div>
-              </label>
-              <div class="col">
-                <input type="hidden" value="" name="platform_ids[]" :disabled="!form_enabled_mapping.platform_ids" />
-                <div class="form-check form-check-inline" v-for="platform in platform_repo.values()">
-                  <label class="form-check-label collection_check_boxes">
-                    <input class="form-check-input check_boxes required" type="checkbox" :value="platform.id"
-                      v-model="form.platform_ids" name="platform_ids[]" :disabled="!form_enabled_mapping.platform_ids" />
-                      {{ platform.name }}
-                  </label>
-                </div>
-              </div>
-            </div>
+              </template>
+              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'content' }" /></template>
+            </component>
 
+            <component :is="layouts.vertical_group" :validation="validations.disconnect('platform_ids')" label="平台" :disableds="form_disabled_mapping">
+              <template #label-prepend="{ code }">
+                <div class="form-check col-auto form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                </div>
+              </template>
+              <template #="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+            </component>
 
-            <div class="row check_boxes optional test_case_label_ids ms-0">
-              <label class="col-form-label check_boxes optional col-sm-2 text-end">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping.label_ids" >
-                  标签
+            <component :is="layouts.vertical_group" :validation="validations.disconnect('label_ids')" label="标签" :disableds="form_disabled_mapping">
+              <template #label-prepend="{ code }">
+                <div class="form-check col-auto form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
                 </div>
-              </label>
-              <div class="col">
-                <input type="hidden" value="" name="label_ids[]" :disabled="!form_enabled_mapping.label_ids" />
-                <div class="form-check form-check-inline" v-for="label in label_repo.values()">
-                  <label class="form-check-label collection_check_boxes">
-                    <input class="form-check-input check_boxes optional" type="checkbox" :value="label.id"
-                      name="label_ids[]" :disabled="!form_enabled_mapping.label_ids" />
-                    {{ label.name }}
-                  </label>
-                </div>
-              </div>
-            </div>
+              </template>
+              <template #="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+            </component>
           </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">保存</button>
@@ -160,13 +126,14 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import { PropType, getCurrentInstance, nextTick, ref } from 'vue';
-import * as requests from '@/requests'
-import $ from 'jquery'
-import axios from '@/initializers/axios';
+import * as requests from '@/requests';
 import { AxiosError } from 'axios';
 import { Modal } from 'bootstrap';
 import _ from 'lodash';
+import { PropType, getCurrentInstance, nextTick, ref, computed, reactive } from 'vue';
+
+import { Validations, layouts, forms } from "@/components/simple_form";
+const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()
 const state = ref('pending') // [ pending, submiting, submited ]
@@ -212,9 +179,9 @@ async function submitForm(event: Event) {
         req.interpolations.id = test_case.id
       }).perform(proxy, form_data)
     } catch (err) {
-      if (err instanceof AxiosError && err.response?.status == 422) {
-        const errors = err.response.data.errors
-        const errors_string = JSON.stringify(errors, null, 2)
+      if (err instanceof requests.ErrorUnprocessableEntity) {
+        validations.marge(err.validations, err.names)
+        const errors_string = JSON.stringify(validations.fullMessages, null, 2)
 
         info.error = errors_string
         result.value.push(info)
@@ -237,7 +204,7 @@ const form = ref({
   role_name: null as string | null | undefined,
   scene_name: null as string | null | undefined,
   group_name: null as string | null | undefined,
-  platform_ids: null as number[] | null | undefined,
+  platform_ids: [] as number[] | null | undefined,
   label_ids: null as number[] | null | undefined
 })
 
@@ -249,6 +216,10 @@ const form_enabled_mapping = ref({
   group_name: false,
   platform_ids: false,
   label_ids: false
+})
+
+const form_disabled_mapping = computed(() => {
+  return _.mapValues(form_enabled_mapping.value, (value) => !value)
 })
 
 const test_cases = ref<TestCase[]>([])

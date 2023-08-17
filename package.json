@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build-index-1": "scripts/ts_index_gen.rb app/javascript/frontend/requests app/javascript/frontend/models",
-    "build-index": "yarn build-index-1"
+    "build-index-2": "scripts/ts_index_gen.rb --ext=vue app/javascript/frontend/components/simple_form/layouts app/javascript/frontend/components/simple_form/forms",
+    "build-index": "yarn build-index-1 && yarn build-index-2"
   },
   "dependencies": {
     "@fancyapps/fancybox": "3.5.7",

@@ -1,14 +1,20 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
 import { Subscription } from "rxjs/internal/Subscription"
 import URITemplate from "urijs/src/URITemplate"
 import * as rxjs from "rxjs"
 import * as qs from "qs"
 import URI from 'urijs'
 import Keyv from "@keyvhq/core"
+import { Validation } from "@/models"
 
 export interface PerformContext {
   $axios: AxiosInstance,
   $keyv: Keyv
+}
+
+export class ErrorUnprocessableEntity {
+  names: { [x in string]: string } = {}
+  validations: Validation[] = []
 }
 
 export class BaseRequest {
@@ -78,5 +84,28 @@ export class BaseRequest {
       await $keyv.clear()
       return resp
     }
+  }
+
+  handleUnprocessableEntity(err: any) {
+    if (!(err instanceof AxiosError) || err.response.status != 422) {
+      return
+    }
+
+    const resp = err.response
+    const errors = resp.data.errors
+    const error = new ErrorUnprocessableEntity()
+    error.names = resp.data.names
+
+    for (const code in errors || {}) {
+      const messages = errors[code]
+      const validation = new Validation()
+      validation.code = code
+      validation.state = "invalid"
+      validation.messages = messages
+
+      error.validations.push(validation)
+    }
+
+    throw error
   }
 }

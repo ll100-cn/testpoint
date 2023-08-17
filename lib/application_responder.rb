@@ -12,4 +12,14 @@ class ApplicationResponder < ActionController::Responder
       render action: default_action, status: :unprocessable_entity
     end
   end
+
+  def json_resource_errors
+    {
+      errors: resource.errors,
+      error_messages: resource.errors.full_messages,
+      names: resource.errors.attribute_names.index_with do |key|
+        (key == :base) ? nil : resource.class.human_attribute_name(key)
+      end
+    }
+  end
 end
