@@ -17,10 +17,11 @@ class Milestone < ApplicationRecord
   has_many :plans
   belongs_to :project
 
+  cleanup_column :title, :description
+
   validates :title, presence: true
 
   scope :ranked, -> { order(published_at: :desc) }
-
 
   def published?
     published_at && published_at < DateTime.now

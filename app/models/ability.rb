@@ -11,7 +11,7 @@ class Ability
     return unless user
     return apply_superadmin_permissions(user) if user.superadmin?
 
-    can :read,                Project, members: { user_id: user.id }
+    can [:read, :vue],                Project, members: { user_id: user.id }
     can :manage,              :profile
     can :manage,              Attachment
   end
@@ -42,7 +42,7 @@ class Ability
     can [:fold, :unfold],       Comment
     can :manage,                Issue
     can [:read, :create],       IssueRelationship
-    can :manage,                [TestCase, TestCaseLabel, TestCaseSnapshot, Plan, Platform, Task, Phase]
+    can :manage,                [TestCase, TestCaseLabel, TestCaseSnapshot, Plan, Platform, Task, Phase, Milestone]
   end
 
   def apply_manager_permissions(member)

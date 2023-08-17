@@ -46,6 +46,9 @@ class ProjectsController < BaseProjectController
     respond_with @project, location: ok_url_or_default(Project)
   end
 
+  def vue
+  end
+
 protected
   def project_params
     params.fetch(:project, {}).permit(:name, user_ids: [])

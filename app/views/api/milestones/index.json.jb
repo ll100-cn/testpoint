@@ -1,0 +1,1 @@
+render partial: "api/shared/milestone", collection: @milestones, as: :milestone
