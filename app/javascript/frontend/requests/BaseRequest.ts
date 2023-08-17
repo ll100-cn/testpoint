@@ -1,11 +1,11 @@
-import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
-import { Subscription } from "rxjs/internal/Subscription"
-import URITemplate from "urijs/src/URITemplate"
-import * as rxjs from "rxjs"
-import * as qs from "qs"
-import URI from 'urijs'
-import Keyv from "@keyvhq/core"
 import { Validation } from "@/models"
+import Keyv from "@keyvhq/core"
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from "axios"
+import * as qs from "qs"
+import * as rxjs from "rxjs"
+import { Subscription } from "rxjs/internal/Subscription"
+import URI from 'urijs'
+import URITemplate from "urijs/src/URITemplate"
 
 export interface PerformContext {
   $axios: AxiosInstance,
@@ -17,22 +17,50 @@ export class ErrorUnprocessableEntity {
   validations: Validation[] = []
 }
 
-export class BaseRequest {
-  endpoint: string
+export abstract class BaseRequest<T> {
+  endpoint!: string
   interpolations = {} as { [ x: string]: any }
   query = {} as { [ x: string]: any }
   cancellation: Subscription | null
+  $axios: AxiosInstance = null
+  $keyv: Keyv = null
+  data: any = {}
+  method!: Method
+  ctx: PerformContext = { $axios: null, $keyv: null }
 
-  constructor() {
-    this.initialize()
-  }
+  setup(ctx: { $axios: any, $keyv: any }, callback: (instance: this) => void | null = null): this {
+    this.ctx = ctx
 
-  initialize(): void { }
+    if (callback) {
+      callback(this)
+    }
 
-  setup(callback: ((_: this) => void)): this {
-    callback(this)
     return this
   }
+
+  async perform(data?): Promise<T> {
+    this.data = data
+
+    try {
+      const resp = await this.axiosRequest(data)
+      const result = this.processResponse(resp)
+      return result
+    } catch (e) {
+      await this.processError(e)
+    }
+  }
+
+  async processError(e: Error) {
+    if (e instanceof AxiosError && e.response.status === 422) {
+      this.handleUnprocessableEntity(e)
+    } else if (e instanceof AxiosError && e.response.status === 403) {
+    } else if (e instanceof AxiosError && e.response.status === 401) {
+    } else {
+      throw e
+    }
+  }
+
+  abstract processResponse(response: AxiosResponse): T
 
   buildUrl() {
     const url = URITemplate(this.endpoint).expand(this.interpolations)
@@ -60,13 +88,15 @@ export class BaseRequest {
     }
   }
 
-  async axiosRequest(ctx: PerformContext, config: AxiosRequestConfig): Promise<AxiosResponse> {
-    const $axios = ctx.$axios
-    const $keyv = ctx.$keyv
+  async axiosRequest(params: any): Promise<AxiosResponse> {
+    const { $axios, $keyv } = this.ctx
 
-    // for await (const [ key, raw ] of { [Symbol.asyncIterator]: () => $keyv.iterator() }) {
-    //   console.log(key)
-    // }
+    const config: AxiosRequestConfig = {
+      url: this.buildUrl(),
+      method: this.method,
+      // headers: this.headers,
+      data: params,
+    }
 
     if (config.method === "GET") {
       const key = config.url
@@ -87,10 +117,6 @@ export class BaseRequest {
   }
 
   handleUnprocessableEntity(err: any) {
-    if (!(err instanceof AxiosError) || err.response.status != 422) {
-      return
-    }
-
     const resp = err.response
     const errors = resp.data.errors
     const error = new ErrorUnprocessableEntity()
@@ -105,7 +131,6 @@ export class BaseRequest {
 
       error.validations.push(validation)
     }
-
     throw error
   }
 }

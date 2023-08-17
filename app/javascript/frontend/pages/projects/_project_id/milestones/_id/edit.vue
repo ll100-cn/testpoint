@@ -38,10 +38,10 @@ const form = ref({
   description: null as string | null,
 })
 
-const milestone = await new requests.MilestoneShowRequest().setup(req => {
+const milestone = await new requests.MilestoneShow().setup(proxy, req => {
   req.interpolations.project_id = project_id
   req.interpolations.id = _.toNumber(route.params.id)
-}).perform(proxy)
+}).perform()
 
 form.value.title = milestone.title
 if (milestone.published_at != null) {
@@ -54,10 +54,10 @@ async function milestoneUpdate(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.MilestoneUpdateRequest().setup(req => {
+    const new_test_case = await new requests.MilestoneUpdate().setup(proxy, req => {
       req.interpolations.project_id = project_id
       req.interpolations.id = milestone.id
-    }).perform(proxy, form_data)
+    }).perform(form_data)
 
     router.push(`/projects/${project_id}/milestones`)
   } catch (err) {

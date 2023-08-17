@@ -43,9 +43,9 @@ async function milestoneCreate(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.MilestoneCreateRequest().setup(req => {
+    const new_test_case = await new requests.MilestoneCreate().setup(proxy, req => {
       req.interpolations.project_id = project_id
-    }).perform(proxy, form_data)
+    }).perform(form_data)
 
     router.push(`/projects/${project_id}/milestones`)
   } catch (err) {

@@ -60,17 +60,16 @@ const route = useRoute()
 const router = useRouter()
 
 const project_id = _.toNumber(route.params.project_id)
-const milestones = await new requests.MilestoneListRequest().setup(req => {
+const milestones = await new requests.MilestoneList().setup(proxy, req => {
   req.interpolations.project_id = project_id
-}).perform(proxy)
-
+}).perform()
 
 function milestoneDestroy(milestone: Milestone) {
   if (!confirm('确定要删除吗？')) {
     return
   }
 
-  new requests.MilestoneDestroyRequest().setup(req => {
+  new requests.MilestoneDestroy().setup(proxy, req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform(proxy)
@@ -83,7 +82,7 @@ function milestoneArchive(milestone: Milestone) {
     return
   }
 
-  new requests.MilestoneArchiveRequest().setup(req => {
+  new requests.MilestoneArchive().setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform(proxy)

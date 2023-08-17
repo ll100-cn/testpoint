@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title">新建案例</h5>
         </div>
-        <CaseForm :form="form" :platform_repo="platform_repo" :label_repo="label_repo" @create="submitForm" />
+        <CaseForm :form="form" :validations="validations" :platform_repo="platform_repo" :label_repo="label_repo" @create="submitForm" />
       </div>
     </div>
   </div>
@@ -54,9 +54,9 @@ async function submitForm(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.TestCaseCreateRequest().setup(req => {
+    const new_test_case = await new requests.TestCaseCreate().setup(proxy, req => {
       req.interpolations.project_id = project_id.value
-    }).perform(proxy, form_data)
+    }).perform(form_data)
 
     $(event.target).closest('.modal').modal('hide')
     emit('create', new_test_case)

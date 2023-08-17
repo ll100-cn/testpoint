@@ -5,7 +5,7 @@
         <h5 class="modal-title">{{ test_case.title }}</h5>
         <a href="#" class="text-danger small" @click="archiveTestCase">归档</a>
       </div>
-      <CaseForm :form="form" :platform_repo="platform_repo" :label_repo="label_repo" @create="submitForm" />
+      <CaseForm :form="form" :validations="validations" :platform_repo="platform_repo" :label_repo="label_repo" @create="submitForm" />
     </div>
   </div>
 </template>
@@ -57,10 +57,10 @@ async function submitForm(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.TestCaseUpdateRequest().setup(req => {
+    const new_test_case = await new requests.TestCaseUpdate().setup(proxy, req => {
       req.interpolations.project_id = 1
       req.interpolations.id = props.test_case.id
-    }).perform(proxy, form_data)
+    }).perform(form_data)
 
     $(event.target).closest('.modal').modal('hide')
     emit('change', new_test_case)
@@ -82,7 +82,7 @@ async function archiveTestCase(event: Event) {
   }
 
   try {
-    const new_test_case = await new requests.TestCaseDestroyRequest().setup(req => {
+    const new_test_case = await new requests.TestCaseDestroy().setup(proxy, req => {
       req.interpolations.project_id = props.test_case.project_id
       req.interpolations.id = props.test_case.id
     }).perform(proxy)

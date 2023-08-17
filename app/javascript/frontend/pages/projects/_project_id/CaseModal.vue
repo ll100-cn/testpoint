@@ -13,11 +13,11 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
+import * as requests from '@/requests';
 import { Modal } from 'bootstrap';
 import { PropType, getCurrentInstance, nextTick, ref } from 'vue';
-import CaseEditFrame from './CaseEditFrame.vue'
-import CardShow from './CardShow.vue'
-import * as requests from '@/requests'
+import CardShow from './CardShow.vue';
+import CaseEditFrame from './CaseEditFrame.vue';
 
 const props = defineProps({
   platform_repo: {
@@ -47,7 +47,7 @@ async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
 
-  history.value = await new requests.TestCaseHistoryRequest().setup(req => {
+  history.value = await new requests.TestCaseHistory().setup(proxy, req => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform(proxy)

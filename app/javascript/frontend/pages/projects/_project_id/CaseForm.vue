@@ -43,13 +43,9 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import { PropType, getCurrentInstance, ref, reactive } from 'vue';
-import _ from "lodash"
+import { PropType, getCurrentInstance } from 'vue';
 
-import { Validations, layouts, forms } from "@/components/simple_form";
-const validations = reactive<Validations>(new Validations())
-
-const { proxy } = getCurrentInstance()
+import { Validations, forms, layouts } from "@/components/simple_form";
 
 const props = defineProps({
   platform_repo: {
@@ -63,6 +59,10 @@ const props = defineProps({
   form: {
     type: Object,
     required: true
+  },
+  validations: {
+    type: Object as PropType<Validations>,
+    required: false
   }
 })
 

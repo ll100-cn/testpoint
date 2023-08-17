@@ -91,12 +91,12 @@ const emit = defineEmits<{
 }>()
 
 const project_id = _.toNumber(route.params.project_id)
-const test_cases = await new requests.TestCaseListRequest().setup(req => {
+const test_cases = await new requests.TestCaseList().setup(proxy, req => {
   req.interpolations.project_id = project_id
   req.query.milestone_id = route.query.milestone_id
 }).perform(proxy)
 
-const _labels = ref(await new requests.TestCaseLabelListRequest().setup(req => {
+const _labels = ref(await new requests.TestCaseLabelList().setup(proxy, req => {
   req.interpolations.project_id = project_id
 }).perform(proxy))
 
@@ -104,7 +104,7 @@ const lable_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>(_labels.value)
 })
 
-const _platforms = ref(await new requests.PlatformListRequest().setup(req => {
+const _platforms = ref(await new requests.PlatformList().setup(proxy, req => {
   req.interpolations.project_id = project_id
 }).perform(proxy))
 

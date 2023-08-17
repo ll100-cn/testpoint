@@ -127,12 +127,11 @@
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
 import * as requests from '@/requests';
-import { AxiosError } from 'axios';
 import { Modal } from 'bootstrap';
 import _ from 'lodash';
-import { PropType, getCurrentInstance, nextTick, ref, computed, reactive } from 'vue';
+import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue';
 
-import { Validations, layouts, forms } from "@/components/simple_form";
+import { Validations, forms, layouts } from "@/components/simple_form";
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()
@@ -174,10 +173,10 @@ async function submitForm(event: Event) {
     }
 
     try {
-      const new_test_case = await new requests.TestCaseUpdateRequest().setup(req => {
+      const new_test_case = await new requests.TestCaseUpdate().setup(proxy, req => {
         req.interpolations.project_id = test_case.project_id
         req.interpolations.id = test_case.id
-      }).perform(proxy, form_data)
+      }).perform(form_data)
     } catch (err) {
       if (err instanceof requests.ErrorUnprocessableEntity) {
         validations.marge(err.validations, err.names)
