@@ -11,7 +11,7 @@
           <a class="dropdown-item" href="#" :class="{ 'active': !current_platform }" @click="changeFilter({ ...reset_search, platform_id: null })">全部</a>
           <template v-for="platform in platform_repo.values()" :key="platform.id">
             <a class="dropdown-item d-flex align-items-center" href="#" :class="{ 'active': platform.id === current_platform?.id }" @click="changeFilter({ ...reset_search, platform_id: platform.id.toString() })">
-              <span class="me-2 badge p-2 rounded-circle" :style="{ backgroundColor: utils.calcColorHex(platform.name) }"><span></span></span>
+              <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }"></span>
               {{ platform.name }}
             </a>
           </template>

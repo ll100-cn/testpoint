@@ -29,9 +29,11 @@
             <td>{{ milestone.title }}</td>
             <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
             <td class="x-spacer-x-1 text-end">
-                <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">修改</RouterLink>
+                <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
+                  <i class="far fa-pencil-alt"></i> 修改
+                </RouterLink>
 
-                <a href="#" @click.prevent="milestoneDestroy(milestone)">删除</a>
+                <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-times"></i> 删除</a>
             </td>
           </tr>
         </tbody>
@@ -41,13 +43,13 @@
 </template>
 
 <script setup lang="ts">
-import * as requests from '@/requests';
+import { DATE_FORMAT } from '@/constants';
 import * as utils from '@/lib/utils';
+import { Milestone } from '@/models';
+import * as requests from '@/requests';
 import _ from 'lodash';
 import { getCurrentInstance } from 'vue';
-import { routerKey, useRoute, useRouter } from 'vue-router';
-import { DATE_FORMAT } from '@/constants';
-import { Milestone } from '@/models';
+import { useRoute, useRouter } from 'vue-router';
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
