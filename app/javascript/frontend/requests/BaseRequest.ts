@@ -1,6 +1,7 @@
 import { Validation } from "@/models"
 import Keyv from "@keyvhq/core"
 import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from "axios"
+import _ from "lodash"
 import * as qs from "qs"
 import * as rxjs from "rxjs"
 import { Subscription } from "rxjs/internal/Subscription"
@@ -88,14 +89,17 @@ export abstract class BaseRequest<T> {
     }
   }
 
-  async axiosRequest(params: any): Promise<AxiosResponse> {
+  async axiosRequest(data: any): Promise<AxiosResponse> {
     const { $axios, $keyv } = this.ctx
-
     const config: AxiosRequestConfig = {
       url: this.buildUrl(),
       method: this.method,
       // headers: this.headers,
-      data: params,
+    }
+
+    if (data) {
+      const formData = data instanceof FormData ? data : this.buildFormData(data)
+      config.data = formData
     }
 
     if (config.method === "GET") {
@@ -113,6 +117,30 @@ export abstract class BaseRequest<T> {
       const resp = await $axios.request(config)
       await $keyv.clear()
       return resp
+    }
+  }
+
+  buildFormData(params) {
+    const formData = new FormData()
+    for (const name in params) {
+      const value = params[name]
+      this.fillFormData(formData, name, value)
+    }
+    return formData
+  }
+
+  fillFormData(formData, name, value) {
+    if (_.isArray(value)) {
+      for (const val of value) {
+        this.fillFormData(formData, `${name}[]`, val)
+      }
+    } else if (_.isPlainObject(value)) {
+      for (const attr in value) {
+        const val = value[attr]
+        this.fillFormData(formData, `${name}[${attr}]`, val)
+      }
+    } else {
+      _.isNull(value) ? formData.append(name, "") : formData.append(name, value)
     }
   }
 

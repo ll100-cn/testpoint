@@ -4,9 +4,6 @@ class Projects::PlansController < BaseProjectController
   load_and_authorize_resource through: :project
 
   def index
-    @plans = @plans.available.page(params[:page]).ranked.page(params[:page]).per(12)
-    @plan_phases = @plans.map(&:latest_phase)
-    @tasks_count_mapping = Task.where(plan_id: @plans).group(:plan_id, :state).count
   end
 
   def new

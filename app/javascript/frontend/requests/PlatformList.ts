@@ -1,7 +1,6 @@
 import { Platform } from "@/models"
 import BaseArrayRequest from "./BaseArrayRequest"
 
-
 export class PlatformList extends BaseArrayRequest<Platform> {
   constructor() {
     super()

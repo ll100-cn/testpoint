@@ -1,7 +1,7 @@
 <template>
   <router-view v-slot="{ Component, route }">
     <Suspense timeout="0">
-      <component :is="Component" :key="route.fullPath"></component>
+      <component v-if="Component" :is="Component" :key="route.fullPath" />
     </Suspense>
   </router-view>
 </template>

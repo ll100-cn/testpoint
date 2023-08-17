@@ -72,7 +72,7 @@ function milestoneDestroy(milestone: Milestone) {
   new requests.MilestoneDestroy().setup(proxy, req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
-  }).perform(proxy)
+  }).perform()
 
   router.go(0)
 }
@@ -82,10 +82,10 @@ function milestoneArchive(milestone: Milestone) {
     return
   }
 
-  new requests.MilestoneArchive().setup(req => {
+  new requests.MilestoneArchive().setup(proxy, req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
-  }).perform(proxy)
+  }).perform()
 
   router.go(0)
 }

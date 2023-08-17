@@ -70,7 +70,7 @@ const task_upshot_infos = ref(await new requests.TaskUpshotInfoList().setup(prox
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_index = phase_index
-}).perform(proxy))
+}).perform())
 
 const filter = ref(new Filter())
 filter.value.archived = null
@@ -112,7 +112,7 @@ async function onTaskChanged(old_task_upshot_info: TaskUpshotInfo) {
     req.interpolations.plan_id = plan_id
     req.interpolations.phase_index = phase_index
     req.interpolations.id = id
-  }).perform(proxy)
+  }).perform()
 
   const index = _.findIndex(task_upshot_infos.value, (it) => it.id == task_upshot_info.id)
   task_upshot_infos.value[index] = task_upshot_info

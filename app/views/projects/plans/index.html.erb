@@ -3,7 +3,6 @@
   <%= new_button [@project, :plan], data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_plan_path(@project, @plan) } if can? :new, Plan %>
 </div>
 
-
-<%= render 'cards-group', plans: @plans %>
-
-<%= paginate @plans %>
+<div id="app">
+  <app-template />
+</div>

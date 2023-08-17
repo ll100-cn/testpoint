@@ -50,7 +50,7 @@ async function show(a_test_case: TestCase) {
   history.value = await new requests.TestCaseHistory().setup(proxy, req => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
-  }).perform(proxy)
+  }).perform()
 
   console.log(history.value)
 

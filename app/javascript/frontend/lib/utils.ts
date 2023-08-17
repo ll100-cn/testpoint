@@ -1,7 +1,7 @@
 import md5 from 'js-md5'
 import _ from 'lodash'
 import { colord } from "colord"
-import dayjs from 'dayjs'
+import dayjs from '@/lib/dayjs'
 
 const color_cache = new Map<string, string>()
 
@@ -23,4 +23,9 @@ export function humanize(time: Date | null, pattern: string) {
   }
 
   return dayjs(time).format(pattern)
+}
+
+export function redirect(path: string) {
+  const origin = location.origin
+  location.href = origin + process.env.RAILS_RELATIVE_URL_ROOT + _.trimStart(path, "/")
 }

@@ -2,6 +2,8 @@
 
 export * from "./EntityRepo"
 export * from "./Milestone"
+export * from "./Pagination"
+export * from "./Plan"
 export * from "./Platform"
 export * from "./Task"
 export * from "./TaskUpshotInfo"

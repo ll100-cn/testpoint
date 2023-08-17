@@ -85,7 +85,7 @@ async function archiveTestCase(event: Event) {
     const new_test_case = await new requests.TestCaseDestroy().setup(proxy, req => {
       req.interpolations.project_id = props.test_case.project_id
       req.interpolations.id = props.test_case.id
-    }).perform(proxy)
+    }).perform()
 
     $(event.target).closest('.modal').modal('hide')
     emit('destroy', new_test_case)
