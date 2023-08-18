@@ -47,7 +47,7 @@ export default class extends Controller {
   renderView() {
     const inputElement = this.findInputElement()
     const options = { checkbox: { readonly: inputElement.readOnly }}
-    this.viewElement.innerHTML = renderMarkdown(inputElement.value, options)
+    this.viewElement.innerHTML = renderMarkdown(_.trim(inputElement.value), options)
   }
 
   bindEvents() {

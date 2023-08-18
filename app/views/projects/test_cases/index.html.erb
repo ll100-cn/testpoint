@@ -1,35 +1,3 @@
-<div class="row">
-  <div class="col col-md-8 col-xl-9">
-    <div id="app">
-      <app-template />
-    </div>
-  </div>
-  <div class="col">
-    <div class="">
-      <div class="mt-1">
-        <h5 class="my-auto d-inline-block">里程碑</h5>
-        <%#= link_to "<i class='fal fa-plus'></i> 新增".html_safe, "#", class: "float-end small", data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_test_case_snapshot_path(@project, ok_url: request.fullpath) } if can? :new, TestCaseSnapshot %>
-      </div>
-
-      <hr>
-
-      <div>
-        <ul class="timeline">
-          <% @project.milestones.available.ranked.each do |milestone| %>
-          <li class="timeline-item mb-5 <%= 'active' if milestone.id == @milestone&.id %>">
-            <div class="small mb-2 <%= milestone.id == @milestone&.id ? '' : 'text-muted' %>">
-              <% text = milestone.published_at? ? l(milestone.published_at, format: :long) : "尚未发布" %>
-              <%= link_to text, project_test_cases_path(@project, milestone_id: milestone.id), class: (milestone.id == @milestone&.id ? 'text-success' : '') %>
-            </div>
-
-            <%= milestone.title %>
-
-            <p class="text-muted">
-              <%= text_area_tag(:content, milestone.description, data: { controller: "markdown" }, readonly: true, class: "d-none") %>
-            </p>
-          </li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-  </div>
+<div id="app">
+  <app-template />
+</div>

@@ -1,17 +1,17 @@
 <template>
-  <CaseCard />
+  <div class="row">
+    <div class="col col-md-8 col-xl-9">
+      <CaseCard />
+    </div>
+    <div class="col">
+      <Timeline />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import CaseCard from './CaseCard.vue'
-import { getCurrentInstance } from 'vue';
-import { useRoute } from 'vue-router'
-import _ from 'lodash'
-
-const route = useRoute()
-const { proxy } = getCurrentInstance()
-
-
+import CaseCard from './CaseCard.vue';
+import Timeline from './Timeline.vue';
 
 const setupd = await (async () => true)()
 </script>

@@ -4,6 +4,10 @@ class Api::MilestonesController < Api::BaseController
 
   def index
     @milestones = @milestones.ranked
+
+    if params[:filter] == 'available'
+      @milestones = @milestones.available
+    end
   end
 
   def create
