@@ -38,7 +38,7 @@ class Plan < ApplicationRecord
       raise ActiveRecord::Rollback unless save
 
       test_cases.each do |test_case|
-        if test_case.platforms.where(id: platform.id).nil?
+        if test_case.platform_ids.include?(platform_id)
           task = tasks.new(test_case: test_case)
 
           if !task.save
