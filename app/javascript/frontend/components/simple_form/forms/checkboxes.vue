@@ -1,8 +1,8 @@
 <template>
   <div class="pt-2">
-    <input type="hidden" :name="name ?? code" value="" :disabled="disabled" />
-    <div class="form-check form-check-inline" v-for="item in collection">
-      <input class="form-check-input" type="checkbox" :value="item[valueMethod]" v-model="form[code]" :name="name ?? code" :disabled="disabled" />
+    <input type="hidden" :name="name ?? code" value="" :disabled="disabled">
+    <div v-for="item in collection" class="form-check form-check-inline">
+      <input v-model="form[code]" class="form-check-input" type="checkbox" :value="item[valueMethod]" :name="name ?? code" :disabled="disabled">
       <label class="form-check-label">{{ item[labelMethod] }}</label>
     </div>
   </div>
@@ -24,6 +24,4 @@ const props = defineProps({
   valueMethod: { type: String, required: true },
 })
 
-
 </script>
-../Validations.js

@@ -7,6 +7,10 @@ class Api::BaseController < ApplicationController
     super.tap { |a| a.apply_api_permissions(current_user) }
   end
 
+  def current_member
+    @current_member ||= @project&.members&.where(user_id: current_user)&.take
+  end
+
 protected
   def kaminari_headers(pagy)
     response.headers['X-Pagination-Total-Count'] = pagy.total_pages

@@ -3,7 +3,6 @@
     v-if="pagination.total_count > 0"
     :value="pagination.current_page"
     :page-count="pagination.total_count"
-    @input="queryChange({ page: $event })"
     first-last-button
     first-button-text="<i class='fal fa-angle-double-left'>"
     last-button-text="<i class='fal fa-angle-double-right'>"
@@ -15,8 +14,8 @@
     next-class="page-item"
     prev-link-class="page-link"
     next-link-class="page-link"
-    page-class="page-item" />
-
+    page-class="page-item"
+    @input="queryChange({ page: $event })" />
 </template>
 
 <script setup lang="ts">

@@ -1,8 +1,3 @@
-<div class="page-header justify-content-between">
-  <h2><%= title(page_i18n :index, model_name: h(@plans)) %></h2>
-  <%= new_button [@project, :plan], data: { remote: true, bs_toggle: "modal", bs_target: "#applicationModal", url: new_project_plan_path(@project, @plan) } if can? :new, Plan %>
-</div>
-
 <div id="app">
   <app-template />
 </div>

@@ -1,6 +1,5 @@
 <template>
   <div class="mb-3">
-
     <div class="row align-items-center" :class="{ 'has-errors': validation.isInvaild() }">
       <slot name="label-prepend" :code="code" />
       <label v-if="label" :for="code" class="col-form-label col text-nowrap">
@@ -10,9 +9,8 @@
 
     <div class="">
       <slot name="default" :code="code" :validation="validation" :disabled="disableds[code]" />
-      <div class="invalid-feedback" v-if="validation.isInvaild()">{{ _.get(validation, 'messages', []).join(', ') }}</div>
+      <div v-if="validation.isInvaild()" class="invalid-feedback">{{ _.get(validation, 'messages', []).join(', ') }}</div>
     </div>
-
   </div>
 </template>
 

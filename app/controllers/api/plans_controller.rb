@@ -17,4 +17,23 @@ class Api::PlansController < Api::BaseController
       hash[plan_id][state] = count
     end
   end
+
+  def create
+    @plan.creator = current_member
+    @test_case_filter = TestCaseFilter.new(filter_params)
+    @plan.submit(@test_case_filter)
+    respond_with @plan
+  end
+
+  def show
+  end
+
+protected
+  def plan_params
+    params.permit(:title, :milestone_id, :platform_id)
+  end
+
+  def filter_params
+    params.permit(label_ids: [], folder_ids: [])
+  end
 end

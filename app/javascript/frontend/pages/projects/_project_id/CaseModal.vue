@@ -52,8 +52,6 @@ async function show(a_test_case: TestCase) {
     req.interpolations.id = a_test_case.id
   }).perform()
 
-  console.log(history.value)
-
   nextTick(() => {
     const $modal = Modal.getOrCreateInstance(modal.value)
     $modal.show()

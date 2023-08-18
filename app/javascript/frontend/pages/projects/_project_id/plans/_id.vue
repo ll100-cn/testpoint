@@ -3,7 +3,6 @@
     <div class="card-header bg-white d-flex">
       <h4 class="me-auto my-auto">任务列表</h4>
 
-
       <div class="dropdown ms-3">
         状态：
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -16,7 +15,6 @@
           <a class="dropdown-item " href="/testpoint/projects/1/plans/161?q%5Bstate_eq%5D=failure">不通过</a>
         </div>
       </div>
-
 
       <div class="dropdown ms-3">
         本轮操作：
@@ -31,7 +29,6 @@
       </div>
     </div>
 
-
     <div class="card-body p-0 d-flex align-items-stretch">
       <div class="col-12 col-md-3 col-xl-2 border-end p-3">
         <FolderSide :filter="filter" :test_case_stats="test_case_stats" />
@@ -45,7 +42,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -66,7 +62,7 @@ const route = useRoute()
 const project_id = _.toNumber(route.params.project_id)
 const plan_id = _.toNumber(route.params.id)
 const phase_index = _.toNumber(route.query.phase_index)
-const task_upshot_infos = ref(await new requests.TaskUpshotInfoList().setup(proxy, req => {
+const task_upshot_infos = ref(await new requests.TaskUpshotInfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_index = phase_index
@@ -107,7 +103,7 @@ provide("changeFilter", changeFilter)
 
 async function onTaskChanged(old_task_upshot_info: TaskUpshotInfo) {
   const id = old_task_upshot_info.id
-  const task_upshot_info = await new requests.TaskUpshotInfoShow().setup(proxy, req => {
+  const task_upshot_info = await new requests.TaskUpshotInfoShow().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.plan_id = plan_id
     req.interpolations.phase_index = phase_index

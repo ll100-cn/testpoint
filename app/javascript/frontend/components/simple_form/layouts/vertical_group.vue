@@ -10,7 +10,7 @@
 
       <div class="col">
         <slot name="default" :code="code" :validation="validation" :disabled="disableds[code]" />
-        <div class="invalid-feedback" v-if="validation.isInvaild()">{{ _.get(validation, 'messages', []).join(', ') }}</div>
+        <div v-if="validation.isInvaild()" class="invalid-feedback">{{ _.get(validation, 'messages', []).join(', ') }}</div>
       </div>
     </div>
   </div>
