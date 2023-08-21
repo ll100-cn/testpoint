@@ -1,3 +1,4 @@
+import { Type } from "class-transformer"
 export class TestCase {
   id: number
   project_id: number
@@ -10,5 +11,7 @@ export class TestCase {
   group_name: string
   scene_path: string[]
   archived: boolean
-  updated_at: string
+
+  @Type(() => Date)
+  updated_at: Date
 }
