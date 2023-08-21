@@ -74,12 +74,15 @@ class TestCase < ApplicationRecord
 
     test_case_versions = TestCaseVersion.where(item_type: 'TestCase')
                                         .joins("INNER JOIN (#{join_sub_query.to_sql}) as v2 ON v2.item_id = versions.item_id AND v2.created_at = versions.created_at")
+                                        .al_to_scope(:main)
 
-    version_mapping = test_case_versions.index_by(&:item_id)
+    test_case_versions.al_preload_all(:item, test_cases_scope)
+    version_mapping = test_case_versions.to_a.index_by(&:item_id)
 
     test_cases_scope.map do |test_case|
       if version_mapping.key?(test_case.id)
         version = version_mapping[test_case.id]
+        version.al_load(:item)
         version.reify_with_create
       else
         test_case

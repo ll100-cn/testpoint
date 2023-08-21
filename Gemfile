@@ -40,6 +40,7 @@ gem "ransack", "4.0.0", require: false
 gem 'paper_trail-association_tracking', '2.2.1'
 gem 'paper_trail', '14.0.0'
 gem "active_attr", "0.15.4"
+gem "fume-aloader", "0.1.6"
 
 # Views
 gem 'simple_form', '5.0.1'

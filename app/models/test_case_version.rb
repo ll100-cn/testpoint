@@ -23,4 +23,8 @@ class TestCaseVersion < PaperTrail::Version
       reify
     end
   end
+
+  aloader_init do
+    preset :main
+  end
 end
