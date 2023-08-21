@@ -1,27 +1,23 @@
 <template>
-  <div class="alert alert-danger" role="alert" v-if="validations.isAvaliableInvalid()">
-    <div v-for="message in validations.avaliableFullMessages()">
-      {{ message }}
-    </div>
-  </div>
+  <FormExtraErrorAlert :validations="validations" />
 
-  <component :is="layouts.horizontal_group" :validation="validations.disconnect('title')" label="标题" v-slot="slotProps">
+  <component :is="layouts.horizontal_group" v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
     <component :is="forms.string" v-bind="{ ...slotProps, form }" />
   </component>
 
-  <component :is="layouts.horizontal_group" :validation="validations.disconnect('published_at')" label="发布时间" v-slot="slotProps">
+  <component :is="layouts.horizontal_group" v-slot="slotProps" :validation="validations.disconnect('published_at')" label="发布时间">
     <component :is="forms.string" v-bind="{ ...slotProps, form }" />
   </component>
 
-  <component :is="layouts.horizontal_group" :validation="validations.disconnect('description')" label="描述" v-slot="slotProps">
+  <component :is="layouts.horizontal_group" v-slot="slotProps" :validation="validations.disconnect('description')" label="描述">
     <component :is="forms.text" v-bind="{ ...slotProps, form }" />
   </component>
 </template>
 
 <script setup lang="ts">
+import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue';
 import { Validations, layouts, forms } from '@/components/simple_form';
 import { PropType } from 'vue';
-
 
 const props = defineProps({
   validations: {

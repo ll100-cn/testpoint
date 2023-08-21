@@ -12,7 +12,6 @@
       <input type="submit" name="commit" value="编辑里程碑" class="btn btn-primary">
       <RouterLink :to="`/projects/${project_id}/milestones`" class="btn btn-secondary">取消</RouterLink>
     </div>
-
   </form>
 </template>
 
@@ -38,7 +37,7 @@ const form = ref({
   description: null as string | null,
 })
 
-const milestone = await new requests.MilestoneShow().setup(proxy, req => {
+const milestone = await new requests.MilestoneShow().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.id = _.toNumber(route.params.id)
 }).perform()
@@ -51,18 +50,18 @@ form.value.description = milestone.description
 
 async function milestoneUpdate(event: Event) {
   event.preventDefault()
+  validations.clear()
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.MilestoneUpdate().setup(proxy, req => {
+    await new requests.MilestoneUpdate().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.id = milestone.id
     }).perform(form_data)
 
     router.push(`/projects/${project_id}/milestones`)
   } catch (err) {
-    if (err instanceof requests.ErrorUnprocessableEntity) {
-      validations.marge(err.validations, err.names)
+    if (validations.handleError(err)) {
       return
     }
 

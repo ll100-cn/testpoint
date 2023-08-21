@@ -4,14 +4,7 @@ import { AppContext } from "@/types"
 const ctx = { handleErrors: [] } as AppContext
 const app = ctx.app = createApp({})
 
-app.component("app-template", {
-  template: `
-    <router-view v-slot="{ Component }">
-      <component :is="Component">
-        <template v-for="(_, name) in $slots" v-slot:[name]="slotData"><slot :name="name" v-bind="slotData" /></template>
-      </component>
-    </router-view>
-  `,
+app.component("AppTemplate", {
   errorCaptured: (err, vm, info) => {
     for (const handleErrors of ctx.handleErrors) {
       if (handleErrors(err) === false) {
@@ -19,6 +12,13 @@ app.component("app-template", {
       }
     }
   },
+  template: `
+    <router-view v-slot="{ Component }">
+      <component :is="Component">
+        <template v-for="(_, name) in $slots" v-slot:[name]="slotData"><slot :name="name" v-bind="slotData" /></template>
+      </component>
+    </router-view>
+  `,
 })
 
 const context = require.context("@/initializers/", false, /initializers\/.+\.ts$/)

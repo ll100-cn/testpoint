@@ -8,11 +8,8 @@
         </div>
         <form @submit="submitForm">
           <div class="modal-body">
-            <div v-if="validations.isAvaliableInvalid()" class="alert alert-danger" role="alert">
-              <div v-for="message in validations.avaliableFullMessages()" :key="message">
-                {{ message }}
-              </div>
-            </div>
+            <FormExtraErrorAlert :validations="validations" />
+
             <component :is="layouts.vertical_group" v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
               <component :is="forms.string" v-bind="{ ...slotProps, form }" />
             </component>
@@ -42,6 +39,7 @@ import { Plan, Platform } from '@/models'
 import * as requests from '@/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
+import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
 
 const { proxy } = getCurrentInstance()
 
@@ -84,6 +82,7 @@ async function hidden() {
 
 async function submitForm(event: Event) {
   event.preventDefault()
+  validations.clear()
   submitting.value = true
   try {
     const plan = await new requests.PlanCreate().setup(proxy, (req) => {
@@ -93,8 +92,7 @@ async function submitForm(event: Event) {
     hidden()
     emit('created', plan)
   } catch (err) {
-    if (err instanceof requests.ErrorUnprocessableEntity) {
-      validations.marge(err.validations, err.names)
+    if (validations.handleError(err)) {
       return
     }
 

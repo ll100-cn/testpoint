@@ -13,7 +13,7 @@ module.exports = {
     'plugin:vue/vue3-strongly-recommended',
     'standard',
   ],
-  plugins: ['only-warn'],
+  plugins: [ 'only-warn' ],
   rules: {
     "semi": "off",
     "quotes": "off",
@@ -34,14 +34,14 @@ module.exports = {
     "func-names": "off",
     "no-restricted-globals": "off",
     "no-restricted-syntax": "off",
-    "max-len": ["error", { "code": 180 }],
+    "max-len": [ "error", { "code": 180 }],
     "vue/require-prop-types": "off",
     "vue/require-default-prop": "off",
     "vue/no-v-html": "off",
     "no-unused-expressions": "off",
     "comma-dangle": "off",
     "no-else-return": "off",
-    "no-param-reassign": ["error", { "props": false }],
+    "no-param-reassign": [ "error", { "props": false }],
     "object-shorthand": "off",
     "node/no-callback-literal": "off",
     "no-return-await": "off",
@@ -66,6 +66,8 @@ module.exports = {
     "guard-for-in": "off",
     "vue/multi-word-component-names": "off",
     "camelcase": "off",
-    "vue/singleline-html-element-content-newline": "off"
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/one-component-per-file": "off",
+    "vue/prop-name-casing": "off"
   },
 }

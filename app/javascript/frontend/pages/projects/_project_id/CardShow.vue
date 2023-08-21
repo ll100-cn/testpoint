@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-dialog modal-lg" >
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
@@ -10,18 +10,18 @@
         <a href="#" @click="emit('changeMode', 'edit')">编辑</a>
       </div>
       <div class="modal-body">
-        <textarea readonly data-controller="markdown" ref="textarea" data-action="render->markdown#render" class="d-none">{{ test_case.content }}</textarea>
+        <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="d-none">{{ test_case.content }}</textarea>
 
         <div class="collapse show btn-toggle text-center p-1">
           <a class="btn btn-link mx-auto" data-bs-toggle="collapse" data-bs-target=".btn-toggle" role="button">
-            <i class="far fa-history me-1"></i>显示历史版本
+            <i class="far fa-history me-1" />显示历史版本
           </a>
         </div>
 
         <div class="collapse multi-collapse btn-toggle mt-4">
           <div class="accordion">
-            <div class="accordion-item" v-for="(version_case, index) in props.history">
-              <h2 class="accordion-header" :id="`test_case_version_${index}_header`">
+            <div v-for="(version_case, index) in props.history" :key="version_case.id" class="accordion-item">
+              <h2 :id="`test_case_version_${index}_header`" class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#test_case_version_${index}_body`" aria-expanded="false" :aria-controls="`test_case_version_${index}_body`">
                   {{ utils.humanize(version_case.updated_at, DATE_FORMAT) }}
                 </button>
@@ -29,7 +29,7 @@
 
               <div :id="`test_case_version_${index}_body`" class="accordion-collapse collapse" :aria-labelledby="`test_case_version_${index}_header`">
                 <div class="accordion-body">
-                  <textarea data-controller="markdown" readonly class="d-none">{{ version_case.content }}</textarea>
+                  <textarea v-model="version_case.content" data-controller="markdown" readonly class="d-none" />
                 </div>
               </div>
             </div>

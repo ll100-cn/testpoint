@@ -1,5 +1,5 @@
 <template>
-  <span v-for="label in labels" class="badge text-bg-secondary me-2">
+  <span v-for="label in labels" :key="label.id" class="badge text-bg-secondary me-2">
     {{ label.name }}
   </span>
 </template>

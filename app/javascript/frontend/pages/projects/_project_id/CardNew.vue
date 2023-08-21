@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" tabindex="-1" ref="modal">
+  <div ref="modal" class="modal" tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -12,22 +12,23 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, nextTick, ref, reactive, PropType } from 'vue';
-import * as requests from '@/requests'
-import { Modal } from 'bootstrap';
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
+import * as requests from '@/requests';
+import { Modal } from 'bootstrap';
+import { PropType, getCurrentInstance, nextTick, reactive, ref } from 'vue';
+import $ from 'jquery'
 
-import { Validations, layouts, forms } from "@/components/simple_form";
+import { Validations } from "@/components/simple_form";
 import CaseForm from './CaseForm.vue';
 const validations = reactive<Validations>(new Validations())
 
 const props = defineProps({
   platform_repo: {
-  type: Object  as PropType<EntityRepo<Platform>>,
+    type: Object as PropType<EntityRepo<Platform>>,
     required: true,
   },
   label_repo: {
-    type: Object  as PropType<EntityRepo<TestCaseLabel>>,
+    type: Object as PropType<EntityRepo<TestCaseLabel>>,
     required: true,
   }
 });
@@ -45,24 +46,22 @@ const form = ref({
 const { proxy } = getCurrentInstance()
 const project_id = ref("")
 
-const emit = defineEmits<{
-  (e: 'create', test_case: TestCase): void
-}>()
+const emit = defineEmits<{(e: 'create', test_case: TestCase): void}>()
 
 async function submitForm(event: Event) {
   event.preventDefault()
+  validations.clear()
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.TestCaseCreate().setup(proxy, req => {
+    const new_test_case = await new requests.TestCaseCreate().setup(proxy, (req) => {
       req.interpolations.project_id = project_id.value
     }).perform(form_data)
 
     $(event.target).closest('.modal').modal('hide')
     emit('create', new_test_case)
   } catch (err) {
-    if (err instanceof requests.ErrorUnprocessableEntity) {
-      validations.marge(err.validations, err.names)
+    if (validations.handleError(err)) {
       return
     }
 

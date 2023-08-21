@@ -1,12 +1,13 @@
 <template>
-  <div class="modal" tabindex="-1" ref="modal">
+  <div ref="modal" class="modal" tabindex="-1">
     <template v-if="test_case">
-      <CardShow :test_case="test_case" :history="history" v-if="mode == 'show'" @change-mode="onModeChange" />
-      <CaseEditFrame v-if="mode == 'edit'" :test_case="test_case"
-                                           :platform_repo="platform_repo"
-                                           :label_repo="label_repo"
-                                           @destroy="emit('destroy', $event)"
-                                           @change="emit('change', $event)" />
+      <CardShow v-if="mode == 'show'" :test_case="test_case" :history="history" @change-mode="onModeChange" />
+      <CaseEditFrame
+        v-if="mode == 'edit'" :test_case="test_case"
+        :platform_repo="platform_repo"
+        :label_repo="label_repo"
+        @destroy="emit('destroy', $event)"
+        @change="emit('change', $event)" />
     </template>
   </div>
 </template>
@@ -47,7 +48,7 @@ async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
 
-  history.value = await new requests.TestCaseHistory().setup(proxy, req => {
+  history.value = await new requests.TestCaseHistory().setup(proxy, (req) => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform()

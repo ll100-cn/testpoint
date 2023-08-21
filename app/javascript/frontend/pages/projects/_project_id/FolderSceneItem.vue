@@ -1,20 +1,20 @@
 <template>
   <li :class="{ 'has-children': scene_item.children.length > 0 }">
-    <a data-bs-toggle="collapse" :href="`#treeview-${scene_item.uuid}`" class="toggler text-muted" :class="{ 'collapsed': collapsed }" v-if="scene_item.children.length > 0">
-      <i class="fal fa-plus-square"></i>
+    <a v-if="scene_item.children.length > 0" data-bs-toggle="collapse" :href="`#treeview-${scene_item.uuid}`" class="toggler text-muted" :class="{ 'collapsed': collapsed }">
+      <i class="fal fa-plus-square" />
     </a>
-    <span class=""></span>
-    <span class="line"></span>
+    <span class="" />
+    <span class="line" />
     <div class="item">
-      <a class="treeview-link flex-1 rounded" @click="changeFilter({ ...params, scene_path: scene_item.path })" href="#" :class="{ 'active': highlight }">
-        <i class="fal fa-folder me-2"></i> {{ scene_item.name }}
-        <span class="small" v-if="scene_item.count == 0 || scene_item.count == scene_item.totalCount()">({{ scene_item.totalCount() }})</span>
-        <span class="small" v-else>({{ scene_item.count }}/{{ scene_item.totalCount() }})</span>
+      <a class="treeview-link flex-1 rounded" href="#" :class="{ 'active': highlight }" @click="changeFilter({ ...params, scene_path: scene_item.path })">
+        <i class="fal fa-folder me-2" /> {{ scene_item.name }}
+        <span v-if="scene_item.count == 0 || scene_item.count == scene_item.totalCount()" class="small">({{ scene_item.totalCount() }})</span>
+        <span v-else class="small">({{ scene_item.count }}/{{ scene_item.totalCount() }})</span>
       </a>
     </div>
 
     <ul :id="`treeview-${scene_item.uuid}`" class="collapse" :class="{ 'show': !collapsed }">
-      <template v-for="child in scene_item.children">
+      <template v-for="child in scene_item.children" :key="child">
         <Self v-bind="props" :scene_item="child" :actived="!collapsed" />
       </template>
     </ul>
@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import _ from 'lodash'
+import _ from 'lodash';
 import { computed, inject, PropType } from "vue";
-import { ChangeFilterFunction, Filter, SceneItem, TreeItem } from "./types";
+import { ChangeFilterFunction, Filter, SceneItem } from "./types";
 
 const props = defineProps({
   actived: {

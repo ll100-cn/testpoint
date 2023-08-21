@@ -1,5 +1,5 @@
 <template>
-  <span v-for="platform in platforms" class="badge me-2" :style="{ backgroundColor: utils.calcColorHex(platform.name), color: 'white' }">
+  <span v-for="platform in platforms" :key="platform.id" class="badge me-2" :style="{ backgroundColor: utils.calcColorHex(platform.name), color: 'white' }">
     {{ platform.name }}
   </span>
 </template>

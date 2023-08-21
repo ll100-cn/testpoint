@@ -5,28 +5,25 @@
     </div>
 
     <div class="col">
-      <CaseTable :test_cases="avaiable_test_cases"
-                 :platform_repo="platform_repo"
-                 :label_repo="label_repo"
-                 @change="emit('change', $event)"
-                 @destroy="emit('destroy', $event)"
-                 @batch_change="emit('batch_change')" />
+      <CaseTable
+        :test_cases="avaiable_test_cases"
+        :platform_repo="platform_repo"
+        :label_repo="label_repo"
+        @change="emit('change', $event)"
+        @destroy="emit('destroy', $event)"
+        @batch_change="emit('batch_change')" />
     </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
-import FolderSide from './FolderSide.vue'
-import { ChangeFilterFunction, ColumnFilter, Filter } from './types'
-import CaseTable from './CaseTable.vue'
-import { useRoute, useRouter } from 'vue-router'
 import { EntityRepo, Platform, TestCase, TestCaseLabel, TestCaseStat } from '@/models'
-import * as requests from '@/requests'
-import qs from "qs"
-import _ from 'lodash'
-import { computed, getCurrentInstance, PropType, provide } from 'vue'
 import { plainToClass } from 'class-transformer'
+import _ from 'lodash'
+import { PropType, computed } from 'vue'
+import CaseTable from './CaseTable.vue'
+import FolderSide from './FolderSide.vue'
+import { ColumnFilter, Filter } from './types'
 
 const props = defineProps({
   label_repo: {
@@ -65,7 +62,7 @@ const test_case_stats = computed(() => {
   }).value()
 
   const stat = result.find((it) => {
-    return props.filter.isMatch(it as any, new ColumnFilter({ only: ['role_name', 'scene_path', 'archived'] }))
+    return props.filter.isMatch(it as any, new ColumnFilter({ only: [ 'role_name', 'scene_path', 'archived' ] }))
   })
 
   if (!stat) {
@@ -83,8 +80,8 @@ const test_case_stats = computed(() => {
 const avaiable_test_cases = computed(() => {
   let scope = _(props.test_cases)
 
-  const columns = new ColumnFilter({ expect: ['platform_id', 'label_id'] })
-  scope = scope.filter(it => props.filter.isMatch(it, columns))
+  const columns = new ColumnFilter({ expect: [ 'platform_id', 'label_id' ] })
+  scope = scope.filter((it) => props.filter.isMatch(it, columns))
 
   return scope.value()
 })

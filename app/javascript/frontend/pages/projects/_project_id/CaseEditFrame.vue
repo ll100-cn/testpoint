@@ -54,10 +54,11 @@ const form = ref({
 
 async function submitForm(event: Event) {
   event.preventDefault()
+  validations.clear()
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.TestCaseUpdate().setup(proxy, req => {
+    const new_test_case = await new requests.TestCaseUpdate().setup(proxy, (req) => {
       req.interpolations.project_id = 1
       req.interpolations.id = props.test_case.id
     }).perform(form_data)
@@ -65,8 +66,7 @@ async function submitForm(event: Event) {
     $(event.target).closest('.modal').modal('hide')
     emit('change', new_test_case)
   } catch (err) {
-    if (err instanceof requests.ErrorUnprocessableEntity) {
-      validations.marge(err.validations, err.names)
+    if (validations.handleError(err)) {
       return
     }
 
@@ -76,13 +76,14 @@ async function submitForm(event: Event) {
 
 async function archiveTestCase(event: Event) {
   event.preventDefault()
+  validations.clear()
 
   if (!confirm('确认归档？')) {
     return
   }
 
   try {
-    const new_test_case = await new requests.TestCaseDestroy().setup(proxy, req => {
+    const new_test_case = await new requests.TestCaseDestroy().setup(proxy, (req) => {
       req.interpolations.project_id = props.test_case.project_id
       req.interpolations.id = props.test_case.id
     }).perform()
@@ -90,8 +91,7 @@ async function archiveTestCase(event: Event) {
     $(event.target).closest('.modal').modal('hide')
     emit('destroy', new_test_case)
   } catch (err) {
-    if (err instanceof requests.ErrorUnprocessableEntity) {
-      validations.marge(err.validations, err.names)
+    if (validations.handleError(err)) {
       alert(JSON.stringify(validations.fullMessages, null, 2))
       return
     }

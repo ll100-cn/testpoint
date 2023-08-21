@@ -4,7 +4,7 @@
     <table class="table" data-controller="select-all">
       <thead>
         <tr>
-          <th><input type="checkbox" data-target="select-all.handle" data-action="select-all#toggleAll" /></th>
+          <th><input type="checkbox" data-target="select-all.handle" data-action="select-all#toggleAll"></th>
           <th scope="col">标题</th>
           <th scope="col">平台</th>
           <th scope="col">标签</th>
@@ -13,7 +13,7 @@
       <tbody>
         <tr v-for="test_case in test_cases" :key="test_case.id">
           <td>
-            <input type="checkbox" :value="test_case.id" v-model="select_test_case_ids" role="switch" data-target="select-all.item" data-action="select-all#toggle" />
+            <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
           </td>
           <td>
             <a href="#" @click="showModal(test_case)">
@@ -32,10 +32,11 @@
     </table>
   </div>
   <Teleport to="body">
-    <CaseModal ref="modal" :platform_repo="platform_repo"
-                           :label_repo="label_repo"
-                           @change="emit('change', $event)"
-                           @destroy="emit('destroy', $event)" />
+    <CaseModal
+      ref="modal" :platform_repo="platform_repo"
+      :label_repo="label_repo"
+      @change="emit('change', $event)"
+      @destroy="emit('destroy', $event)" />
   </Teleport>
 
   <CaseBatchEditModal ref="batch_edit_modal" :platform_repo="platform_repo" :label_repo="label_repo" @batch_change="emit('batch_change')" />

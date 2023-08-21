@@ -37,7 +37,7 @@
       <div class="col-12 col-md-9 col-xl-10">
         <div id="tp-main">
           <div class="test_cases-cards">
-            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @change="onTaskChanged" />
+            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :key="task_upshot_info.id" :task_upshot_info="task_upshot_info" @change="onTaskChanged" />
           </div>
         </div>
       </div>

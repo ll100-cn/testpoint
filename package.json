@@ -5,7 +5,7 @@
     "eslint": "node_modules/.bin/eslint --ext .js,.vue,.ts app/javascript --ignore-path .gitignore app/javascript",
     "build-index-1": "scripts/ts_index_gen.rb app/javascript/frontend/requests app/javascript/frontend/models",
     "build-index-2": "scripts/ts_index_gen.rb --ext=vue app/javascript/frontend/components/simple_form/layouts app/javascript/frontend/components/simple_form/forms",
-    "build-store": "scripts/ts_index_gen.rb app/javascript/frontend/pinia",
+    "build-store": "scripts/ts_index_gen.rb app/javascript/frontend/store",
     "build-index": "yarn build-index-1 && yarn build-index-2 && yarn build-store"
   },
   "dependencies": {

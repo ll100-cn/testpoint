@@ -1,79 +1,75 @@
 <template>
-  <div class="modal" tabindex="-1" ref="modal">
-    <div class="modal-dialog modal-lg" v-if="state === 'pending'">
+  <div ref="modal" class="modal" tabindex="-1">
+    <div v-if="state === 'pending'" class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">批量编辑</h5>
         </div>
         <form @submit="submitForm">
           <div class="modal-body">
-            <div class="alert alert-danger" role="alert" v-if="validations.isAvaliableInvalid()">
-              <div v-for="message in validations.avaliableFullMessages()">
-                {{ message }}
-              </div>
-            </div>
+            <FormExtraErrorAlert :validations="validations" />
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('role_name')" label="角色" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'role_name' }" /></template>
+              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'role_name' }" /></template>
             </component>
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('scene_name')" label="场景" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'scene_name' }" /></template>
+              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'scene_name' }" /></template>
             </component>
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('group_name')" label="分组" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'group_name' }" /></template>
+              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'group_name' }" /></template>
             </component>
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('title')" label="标题" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'title' }" /></template>
+              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'title' }" /></template>
             </component>
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('content')" label="内容" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'content' }" /></template>
+              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'content' }" /></template>
             </component>
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('platform_ids')" label="平台" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+              <template #default="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
             </component>
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('label_ids')" label="标签" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" v-model="form_enabled_mapping[code]" >
+                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+              <template #default="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
             </component>
           </div>
 
@@ -85,7 +81,7 @@
       </div>
     </div>
 
-    <div class="modal-dialog modal-lg" v-if="state === 'submiting'">
+    <div v-if="state === 'submiting'" class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">提交中</h5>
@@ -96,14 +92,14 @@
       </div>
     </div>
 
-    <div class="modal-dialog modal-lg" v-if="state === 'submitted'">
+    <div v-if="state === 'submitted'" class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">提交结束, 错误数 {{ result.filter((it) => { return it.error != null }).length }} 个</h5>
         </div>
         <div class="modal-body">
           <h3>表单提交中</h3>
-          <template v-for="info in result">
+          <template v-for="info in result" :key="info">
             <div>
               <span>名称: {{ info.test_case.title }}</span>
               <span v-if="info.error" class="text-danger">
@@ -131,6 +127,7 @@ import { Modal } from 'bootstrap';
 import _ from 'lodash';
 import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue';
 
+import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue';
 import { Validations, forms, layouts } from "@/components/simple_form";
 const validations = reactive<Validations>(new Validations())
 
@@ -163,29 +160,29 @@ async function submitForm(event: Event) {
 
   result.value = []
   state.value = 'submiting'
+  validations.clear()
 
   const form_data = new FormData(event.target as HTMLFormElement)
 
   for (const test_case of test_cases.value) {
-    let info: { test_case: TestCase, error: string | null } = {
+    const info: { test_case: TestCase, error: string | null } = {
       test_case: test_case,
       error: null
     }
 
     try {
-      const new_test_case = await new requests.TestCaseUpdate().setup(proxy, req => {
+      await new requests.TestCaseUpdate().setup(proxy, (req) => {
         req.interpolations.project_id = test_case.project_id
         req.interpolations.id = test_case.id
       }).perform(form_data)
     } catch (err) {
-      if (err instanceof requests.ErrorUnprocessableEntity) {
-        validations.marge(err.validations, err.names)
+      if (validations.handleError(err)) {
         const errors_string = JSON.stringify(validations.fullMessages, null, 2)
 
         info.error = errors_string
         result.value.push(info)
         state.value = 'submitted'
-        break
+        return
       }
 
       throw err

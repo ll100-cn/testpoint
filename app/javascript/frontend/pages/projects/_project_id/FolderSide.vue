@@ -2,7 +2,7 @@
   <div id="folder-tree" class="treeview mb-3" data-controller="activable">
     <h5>有效</h5>
     <ul>
-      <template v-for="role_item in tree.avaiable">
+      <template v-for="role_item in tree.avaiable" :key="role_item">
         <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: '0' }" :actived="filter.archived == '0'" />
       </template>
     </ul>
@@ -11,7 +11,7 @@
   <div id="folder-tree-2" class="treeview block-archived mb-3" data-controller="activable">
     <h5>归档</h5>
     <ul>
-      <template v-for="role_item in tree.archived">
+      <template v-for="role_item in tree.archived" :key="role_item">
         <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: '1' }" :actived="filter.archived == '1'" />
       </template>
     </ul>
@@ -19,13 +19,13 @@
 </template>
 
 <script setup lang="ts">
-import FolderRoleItem from "./FolderRoleItem.vue"
-import { TreeItem, SceneItem, Filter } from "./types"
+import FolderRoleItem from "./FolderRoleItem.vue";
+import { Filter, SceneItem, TreeItem } from "./types";
 
-import { TestCase, TestCaseStat } from "@/models";
-import { computed, PropType } from "vue";
-import _ from "lodash"
-import UUID from "pure-uuid"
+import { TestCaseStat } from "@/models";
+import _ from "lodash";
+import UUID from "pure-uuid";
+import { PropType, computed } from "vue";
 
 const props = defineProps({
   test_case_stats: {
@@ -44,7 +44,7 @@ const tree = computed(() => {
   for (const test_case_stat of props.test_case_stats) {
     const mapping = result[test_case_stat.archived ? "archived" : "avaiable"]
 
-    let tree_item = mapping.find(it => it.role_name === test_case_stat.role_name)
+    let tree_item = mapping.find((it) => it.role_name === test_case_stat.role_name)
     if (!tree_item) {
       tree_item = new TreeItem()
       tree_item.role_name = test_case_stat.role_name
@@ -55,7 +55,7 @@ const tree = computed(() => {
     let scene_tree = tree_item.scene_tree
     for (let i = 0; i < test_case_stat.scene_path.length; i++) {
       const scene_name = test_case_stat.scene_path[i];
-      let scene_item = scene_tree.find(it => it.name === scene_name)
+      let scene_item = scene_tree.find((it) => it.name === scene_name)
 
       if (scene_item) {
         scene_tree = scene_item.children

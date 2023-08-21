@@ -1,18 +1,18 @@
 <template>
   <li :class="{ 'has-children': role_item.scene_tree.length > 0 }">
     <a data-bs-toggle="collapse" :href="`#treeview-${role_item.uuid}`" class="toggler text-muted" :class="{ 'collapsed': collapsed }">
-      <i class="fal fa-plus-square"></i>
+      <i class="fal fa-plus-square" />
     </a>
-    <span class="line"></span>
+    <span class="line" />
     <div class="item">
-      <a @click="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })" href="#" class="treeview-link flex-1 rounded" :class="{ 'active': highlight }">
-        <i class="fal fa-folder me-2"></i>{{ role_item.role_name ?? '未设置' }}
+      <a href="#" class="treeview-link flex-1 rounded" :class="{ 'active': highlight }" @click="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })">
+        <i class="fal fa-folder me-2" />{{ role_item.role_name ?? '未设置' }}
         <span class="small">({{ role_item.totalCount() }})</span>
       </a>
     </div>
     <ul :id="`treeview-${role_item.uuid}`" class="collapse" :class="{ 'show': !collapsed }">
       <template v-for="scene_item in role_item.scene_tree">
-        <FolderSceneItem :scene_item="scene_item" :filter="filter" :actived="!collapsed" :params="{ ...params, role_name: role_item.role_name ?? '' }"  />
+        <FolderSceneItem :scene_item="scene_item" :filter="filter" :actived="!collapsed" :params="{ ...params, role_name: role_item.role_name ?? '' }" />
       </template>
     </ul>
   </li>

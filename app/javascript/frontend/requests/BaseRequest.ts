@@ -1,4 +1,4 @@
-import { Validation } from "@/models"
+import { ErrorAccessDenied, ErrorUnauthorized } from "@/requests"
 import Keyv from "@keyvhq/core"
 import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from "axios"
 import _ from "lodash"
@@ -11,11 +11,6 @@ import URITemplate from "urijs/src/URITemplate"
 export interface PerformContext {
   $axios: AxiosInstance,
   $keyv: Keyv
-}
-
-export class ErrorUnprocessableEntity {
-  names: { [x in string]: string } = {}
-  validations: Validation[] = []
 }
 
 export abstract class BaseRequest<T> {
@@ -52,10 +47,10 @@ export abstract class BaseRequest<T> {
   }
 
   async processError(e: Error) {
-    if (e instanceof AxiosError && e.response.status === 422) {
-      this.handleUnprocessableEntity(e)
-    } else if (e instanceof AxiosError && e.response.status === 403) {
+    if (e instanceof AxiosError && e.response.status === 403) {
+      throw new ErrorAccessDenied()
     } else if (e instanceof AxiosError && e.response.status === 401) {
+      throw new ErrorUnauthorized()
     } else {
       throw e
     }
@@ -142,23 +137,5 @@ export abstract class BaseRequest<T> {
     } else {
       _.isNull(value) ? formData.append(name, "") : formData.append(name, value)
     }
-  }
-
-  handleUnprocessableEntity(err: any) {
-    const resp = err.response
-    const errors = resp.data.errors
-    const error = new ErrorUnprocessableEntity()
-    error.names = resp.data.names
-
-    for (const code in errors || {}) {
-      const messages = errors[code]
-      const validation = new Validation()
-      validation.code = code
-      validation.state = "invalid"
-      validation.messages = messages
-
-      error.validations.push(validation)
-    }
-    throw error
   }
 }

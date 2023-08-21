@@ -1,6 +1,7 @@
 import _ from "lodash"
 import { plainToInstance } from 'class-transformer'
 import { Validation } from "@/models"
+import { AxiosError } from "axios"
 
 export default class Validations {
   data: { [ key: string ]: Validation } = {}
@@ -63,7 +64,7 @@ export default class Validations {
       }
 
       const name = this.names[validation.code]
-      return validation.messages.map((message) => name + message )
+      return validation.messages.map((message) => name + message)
     })
   }
 
@@ -74,8 +75,39 @@ export default class Validations {
       }
 
       const name = this.names[validation.code]
-      return validation.messages.map((message) => name + message )
+      return validation.messages.map((message) => name + message)
     })
+  }
+
+  // handleError(err) {
+  //   if (!(err instanceof AxiosError) || err.response.status != 422) {
+  //     return false
+  //   }
+  //   const data = err.response.data
+  //   for (const code in data.errors) {
+  //     const messages = data.errors[code]
+  //     const validation = this.get(code)
+  //     validation.messages = messages
+  //     validation.state = "invalid"
+  //   }
+  //   return true
+  // }
+
+  handleError(err: any) {
+    if (!(err instanceof AxiosError) || err.response.status != 422) {
+      return false
+    }
+    const resp = err.response
+    const errors = resp.data.errors
+    this.names = resp.data.names
+
+    for (const code in errors || {}) {
+      const messages = errors[code]
+      const validation = this.get(code)
+      validation.state = "invalid"
+      validation.messages = messages
+    }
+    return true
   }
 
   disconnect(code: string) {

@@ -11,11 +11,11 @@
           <a class="dropdown-item" href="#" :class="{ 'active': !current_platform }" @click="changeFilter({ ...reset_search, platform_id: null })">全部</a>
           <template v-for="platform in platform_repo.values()" :key="platform.id">
             <a class="dropdown-item d-flex align-items-center" href="#" :class="{ 'active': platform.id === current_platform?.id }" @click="changeFilter({ ...reset_search, platform_id: platform.id.toString() })">
-              <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }"></span>
+              <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
               {{ platform.name }}
             </a>
           </template>
-          <div class="dropdown-divider"></div>
+          <div class="dropdown-divider" />
           <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/platforms?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">平台列表</a>
         </div>
       </div>
@@ -32,7 +32,7 @@
             <a class="dropdown-item " href="#" :class="{ 'active': label.id === current_label?.id }" @click="changeFilter({ ...reset_search, label_id: label.id.toString() })">{{ label.name }}</a>
           </template>
 
-          <div class="dropdown-divider"></div>
+          <div class="dropdown-divider" />
           <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/test_case_labels?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">标签列表</a>
         </div>
       </div>
@@ -47,18 +47,18 @@
       </div>
     </div>
 
-    <CardBody :test_cases="search_test_cases"
-              :platform_repo="platform_repo"
-              :label_repo="lable_repo"
-              :filter="filter"
-              @change="onTestCaseChanged"
-              @destroy="onTestCaseDestroyed"
-              @batch_change="onBatchChanged" />
+    <CardBody
+      :test_cases="search_test_cases"
+      :platform_repo="platform_repo"
+      :label_repo="lable_repo"
+      :filter="filter"
+      @change="onTestCaseChanged"
+      @destroy="onTestCaseDestroyed"
+      @batch_change="onBatchChanged" />
 
     <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="lable_repo" @create="onTestCaseCreated" />
   </div>
 </template>
-
 
 <script setup lang="ts">
 import { ChangeFilterFunction, ColumnFilter, Filter } from './types'
@@ -91,12 +91,12 @@ const emit = defineEmits<{
 }>()
 
 const project_id = _.toNumber(route.params.project_id)
-const test_cases = await new requests.TestCaseList().setup(proxy, req => {
+const test_cases = await new requests.TestCaseList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.milestone_id = route.query.milestone_id
 }).perform()
 
-const _labels = ref(await new requests.TestCaseLabelList().setup(proxy, req => {
+const _labels = ref(await new requests.TestCaseLabelList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -104,7 +104,7 @@ const lable_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>(_labels.value)
 })
 
-const _platforms = ref(await new requests.PlatformList().setup(proxy, req => {
+const _platforms = ref(await new requests.PlatformList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -119,18 +119,18 @@ const group_name_search = ref("")
 const search_test_cases = computed(() => {
   let scope = _(test_cases)
 
-  const columns = new ColumnFilter({ only: ['platform_id', 'label_id'] })
-  scope = scope.filter(it => filter.isMatch(it, columns))
+  const columns = new ColumnFilter({ only: [ 'platform_id', 'label_id' ] })
+  scope = scope.filter((it) => filter.isMatch(it, columns))
 
   if (group_name_search.value) {
-    scope = scope.filter(it => it.group_name?.includes(group_name_search.value))
+    scope = scope.filter((it) => it.group_name?.includes(group_name_search.value))
   }
 
   return scope.value()
 })
 
 const changeFilter: ChangeFilterFunction = (overrides) => {
-  query["f"] = _({}).assign(filter.toParams()).assign(overrides).omitBy(_.isNil).value()
+  query.f = _({}).assign(filter.toParams()).assign(overrides).omitBy(_.isNil).value()
 
   const queryString = qs.stringify(query, { arrayFormat: "brackets" })
   router.push({ query: qs.parse(queryString, { depth: 0 }) as any })
@@ -142,7 +142,6 @@ const modal = ref<InstanceType<typeof CardNew>>()
 function showModal(project_id: number) {
   modal.value.show(project_id.toString())
 }
-
 
 function onTestCaseChanged(test_case: TestCase) {
   router.go(0)

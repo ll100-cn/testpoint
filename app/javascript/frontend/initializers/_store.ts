@@ -1,6 +1,6 @@
-import { AppContext } from '@/types';
-import store from '../store'
+import { AppContext } from "@/types";
+import { createPinia } from "pinia"
 
-export default function(ctx: AppContext) {
-  ctx.app.use(store)
+export default function({ app }: AppContext) {
+  app.use(createPinia())
 }

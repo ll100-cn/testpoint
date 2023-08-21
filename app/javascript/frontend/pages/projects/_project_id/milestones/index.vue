@@ -7,7 +7,6 @@
     </div>
   </div>
 
-
   <div class="card app-card-main">
     <div class="card-body py-0">
       <table class="table mb-0">
@@ -18,26 +17,26 @@
           <col>
         </colgroup>
         <thead>
-        <tr>
-          <th>标题</th>
-          <th>发布时间</th>
-          <th>是否归档</th>
-          <th class="text-end">操作</th>
-        </tr>
+          <tr>
+            <th>标题</th>
+            <th>发布时间</th>
+            <th>是否归档</th>
+            <th class="text-end">操作</th>
+          </tr>
         </thead>
         <tbody>
-          <tr v-for="milestone in milestones" :class="{ 'block-discard': milestone.isPublished() }">
+          <tr v-for="milestone in milestones" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
             <td>{{ milestone.title }}</td>
             <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
             <td><span v-if="milestone.isArchived()">已归档</span></td>
             <td class="x-spacer-x-1 text-end">
               <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
-                <i class="far fa-pencil-alt"></i> 修改
+                <i class="far fa-pencil-alt" /> 修改
               </RouterLink>
 
-              <a href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive"></i> 归档</a>
+              <a href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive" /> 归档</a>
 
-              <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-times"></i> 删除</a>
+              <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-times" /> 删除</a>
             </td>
           </tr>
         </tbody>
@@ -60,7 +59,7 @@ const route = useRoute()
 const router = useRouter()
 
 const project_id = _.toNumber(route.params.project_id)
-const milestones = await new requests.MilestoneList().setup(proxy, req => {
+const milestones = await new requests.MilestoneList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform()
 
@@ -69,7 +68,7 @@ function milestoneDestroy(milestone: Milestone) {
     return
   }
 
-  new requests.MilestoneDestroy().setup(proxy, req => {
+  new requests.MilestoneDestroy().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()
@@ -82,7 +81,7 @@ function milestoneArchive(milestone: Milestone) {
     return
   }
 
-  new requests.MilestoneArchive().setup(proxy, req => {
+  new requests.MilestoneArchive().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()

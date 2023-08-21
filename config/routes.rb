@@ -124,4 +124,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get "*path" => "projects#vue"
 end
