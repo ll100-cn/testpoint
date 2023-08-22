@@ -89,4 +89,16 @@ class TestCase < ApplicationRecord
       end
     end
   end
+
+  def self.filter_by_label_id(label_id)
+    where("label_ids @> ARRAY[?]::bigint[]", label_id)
+  end
+
+  def self.filter_by_platform_id(platform_id)
+    where("platform_ids @> ARRAY[?]::bigint[]", platform_id)
+  end
+
+  def self.ransackable_scopes(auth_object = nil)
+    [ :filter_by_label_id, :filter_by_platform_id ]
+  end
 end
