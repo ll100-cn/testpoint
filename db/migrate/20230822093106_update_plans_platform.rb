@@ -5,6 +5,11 @@ class UpdatePlansPlatform < ActiveRecord::Migration[7.0]
   class Phase < ActiveRecord::Base; end
 
   def change
+    TestCase.find_each do |test_case|
+      test_case.platform_ids = test_case.platform_ids.uniq.compact
+      test_case.save! if test_case.changed?
+    end
+
     Plan.where(platform_id: nil).find_each do |plan|
       tasks = Task.where(plan_id: plan.id)
       if tasks.empty?
