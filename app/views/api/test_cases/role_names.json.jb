@@ -1,0 +1,7 @@
+json = []
+
+@role_names.each do |role_name|
+  json << { role_name: role_name }
+end
+
+json

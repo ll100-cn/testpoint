@@ -39,6 +39,10 @@ class Api::TestCasesController < Api::BaseController
     end
   end
 
+  def role_names
+    @role_names = @project.test_cases.pluck(:role_name).compact.uniq
+  end
+
 protected
   def test_case_params
     params.permit(:title, :role_name, :content, :scene_name, :group_name, label_ids: [], platform_ids: [])

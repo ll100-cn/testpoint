@@ -109,6 +109,7 @@ Rails.application.routes.draw do
     resources :projects do
       resources :test_cases do
         get :history, on: :member
+        get :role_names, on: :collection
       end
       resources :platforms
       resources :test_case_labels
