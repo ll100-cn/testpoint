@@ -27,7 +27,6 @@ class Issue < ApplicationRecord
                     default: :pending, scope: true
   enumerize :priority, in: { ow: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
 
-  has_many :tasks, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_users, through: :subscriptions, source: :user
@@ -74,14 +73,14 @@ class Issue < ApplicationRecord
   end
 
   def default_title
-    tasks.map do |task|
+    [task].compact.map do |task|
       test_case = task.test_case
       "#{test_case.folder.name}-#{test_case.title}"
     end.join(" ")
   end
 
   def default_content
-    tasks.map(&:message).join(" ")
+    [task].compact.map(&:message).join(" ")
   end
 
   def update_with_author(params, member)

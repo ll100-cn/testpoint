@@ -1,0 +1,2 @@
+json = category.slice(:id, :name, :description, :color, :project_id, :default_as_test_failure)
+json

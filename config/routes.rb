@@ -135,6 +135,10 @@ Rails.application.routes.draw do
         patch :archive, on: :member
       end
 
+      resources :issue_templates
+      resources :issues do
+        patch :archive, on: :member
+      end
     end
   end
 end

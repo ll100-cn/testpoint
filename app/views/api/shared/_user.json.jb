@@ -1,0 +1,2 @@
+json = user.slice(:id, :email, :name)
+json
