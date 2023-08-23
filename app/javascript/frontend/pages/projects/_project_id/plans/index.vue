@@ -3,36 +3,38 @@
     <h2>计划列表</h2>
     <button class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
   </div>
-  <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" @created="getData" />
+  <PlanPhaseCreateModal ref="PlanPhaseCreateModalRef" :platforms="platforms" @created="getData" />
 
   <div class="row border-bottom mb-3">
     <div v-for="plan in plans?.list" :key="plan.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title d-flex align-items-center">
-            <h4>{{ plan.title }}</h4>
-            <span v-if="plan.milestone" class="badge bg-light text-dark ms-auto">{{ plan.milestone.title }}</span>
+      <router-link :to="{ path: `plans/${plan.id}`, query: { phase_index: 0 } }">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-center">
+              <h4>{{ plan.title }}</h4>
+              <span v-if="plan.milestone" class="badge bg-light text-dark ms-auto">{{ plan.milestone.title }}</span>
+            </div>
+
+            <div class="d-flex">
+              <p><span>{{ _(plan.tasks_state_counts).values().sum() }} 个任务</span></p>
+              <p class="ms-auto">
+                <span class="badge" :style="{ backgroundColor: utils.calcColorHex(plan.platform.name) }">{{ plan.platform.name }}</span>
+              </p>
+            </div>
+
+            <div class="progress" style="height: 0.5rem;">
+              <template v-for="state in ['pass', 'failure']" :key="state">
+                <div :class="`progress-bar ${progress_bg_mapping[state]}`" :style="`width: ${100.0 * plan.tasks_state_counts[state] / _(plan.tasks_state_counts).values().sum()}%`" />
+              </template>
+            </div>
           </div>
 
-          <div class="d-flex">
-            <p><span>{{ _(plan.tasks_state_counts).values().sum() }} 个任务</span></p>
-            <p class="ms-auto">
-              <span class="badge" :style="{ backgroundColor: utils.calcColorHex(plan.platform.name) }">{{ plan.platform.name }}</span>
-            </p>
-          </div>
-
-          <div class="progress" style="height: 0.5rem;">
-            <template v-for="state in ['pass', 'failure']" :key="state">
-              <div :class="`progress-bar ${progress_bg_mapping[state]}`" :style="`width: ${100.0 * plan.tasks_state_counts[state] / _(plan.tasks_state_counts).values().sum()}%`" />
-            </template>
+          <div class="card-footer d-flex justify-content-between align-items-center bg-white">
+            <small>{{ dayjs(plan.created_at).fromNow() }} {{ plan.creator_name }} 创建</small>
+            <button class="btn btn-outline-primary btn-sm py-1 ms-auto text-nowrap">进入测试</button>
           </div>
         </div>
-
-        <div class="card-footer d-flex justify-content-between align-items-center bg-white">
-          <small>{{ dayjs(plan.created_at).fromNow() }} {{ plan.creator_name }} 创建</small>
-          <button class="btn btn-outline-primary btn-sm py-1 stretched-link ms-auto text-nowrap" @click="utils.redirect(`/projects/${project_id}/plans/${plan.id}`)">进入测试</button>
-        </div>
-      </div>
+      </router-link>
     </div>
   </div>
 

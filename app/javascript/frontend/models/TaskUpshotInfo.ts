@@ -1,10 +1,13 @@
 import { Task } from "./Task"
 import { TestCase } from "./TestCase"
 
+type TaskUpshotInfoState = "" | "pending" | "pass" | "failure"
+type TaskUpshotInfoStateOverride = "" | "pass" | "failure"
+
 export class TaskUpshotInfo {
   id: number
-  state: string
-  state_override: string | null
+  state: TaskUpshotInfoState
+  state_override: TaskUpshotInfoStateOverride
   test_case: TestCase
   task: Task
 }

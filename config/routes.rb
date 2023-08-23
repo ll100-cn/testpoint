@@ -118,6 +118,7 @@ Rails.application.routes.draw do
         resources :phases do
           resources :task_upshot_infos
         end
+        resources :phase_infos
       end
 
       resources :milestones do
