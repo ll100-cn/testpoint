@@ -1,0 +1,1 @@
+render partial: "api/shared/phase_info", collection: @phase_infos, as: :phase_info, locals: { upshots_state_counts: @upshots_state_counts }

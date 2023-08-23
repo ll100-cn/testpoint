@@ -1,0 +1,3 @@
+json = render partial: "api/shared/phase", locals: { phase: phase_info }
+json[:upshots_state_counts] = upshots_state_counts[phase_info.id] || {}
+json

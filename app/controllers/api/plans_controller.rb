@@ -34,6 +34,6 @@ protected
   end
 
   def filter_params
-    params.permit(label_ids: [], folder_ids: [])
+    params.fetch(:test_case_filter, {}).permit(label_ids: [], folder_ids: [])
   end
 end
