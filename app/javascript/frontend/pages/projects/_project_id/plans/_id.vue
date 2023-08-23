@@ -10,7 +10,7 @@
       </h4>
     </div>
 
-    <a class="ms-auto btn btn-link" @click="utils.redirect(`/projects/${project_id}/plans/${plan_id}/edit`)">设置</a>
+    <router-link class="ms-auto btn btn-link" :to="{ path: `${plan_id}/edit` }">设置</router-link>
   </div>
 
   <ul class="nav nav-pills">

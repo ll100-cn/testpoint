@@ -95,6 +95,7 @@ Rails.application.routes.draw do
     end
 
     get "milestones(/*path)", as: :milestones, action: "vue", on: :member
+    get "plans(/*path)", as: :plans, action: "vue", on: :member
   end
 
   resources :users
@@ -127,6 +128,4 @@ Rails.application.routes.draw do
 
     end
   end
-
-  get "*path" => "projects#vue"
 end

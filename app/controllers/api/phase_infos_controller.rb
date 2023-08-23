@@ -3,9 +3,12 @@ class Api::PhaseInfosController < Api::BaseController
   load_and_authorize_resource :plan, through: :project
 
   def index
-    @phase_infos = @plan.phases.ranked.includes(task_upshots: { task: :test_case })
-    @upshots_state_counts = @phase_infos.each_with_object({}) do |phase_info, counts|
-      counts[phase_info.id] = phase_info.task_upshots.group(:state).count
+    @phases_scope = @plan.phases
+    @phases = @phases_scope.ranked
+    @upshots_state_counts_mapping = {}
+    TaskUpshot.joins(:phase).merge(@phases_scope).group(:phase_id, :state).count.each do |(phase_id, state), count|
+      @upshots_state_counts_mapping[phase_id] ||= {}
+      @upshots_state_counts_mapping[phase_id][state] = count
     end
   end
 end
