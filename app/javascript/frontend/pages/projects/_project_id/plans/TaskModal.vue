@@ -1,6 +1,7 @@
 <template>
   <div ref="modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
+      <!-- <div class="modal-dialog modal-lg" role="document" style="margin-top: 400px;"> -->
       <div v-if="current_task_upshot_info" class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
@@ -40,18 +41,14 @@
               </div>
             </li>
           </ul>
-          <template v-if="current_phase_id == _.last(phase_infos).id">
-            <hr>
-            <div class="x-actions">
-              <SubmitButton
-                v-if="_.includes(['pass', 'failure'], current_task_upshot_info.state_override)"
-                type="primary"
-                :func="() => updateStateOverride('pending')"
-                submit_text="撤销测试结果" />
-              <SubmitButton v-else type="success" :func="() => updateStateOverride('pass')" submit_text="全部通过" />
-              <SubmitButton disabled type="danger" submit_text="不通过" />
-            </div>
-          </template>
+          <TaskDetailsAction
+            v-if="current_phase_id == _.last(phase_infos).id"
+            :key="current_task_upshot_info_id"
+            v-model:is_task_pass="is_task_pass"
+            :issue_templates="issue_templates"
+            :phase_infos="phase_infos"
+            :task_upshot_info="current_task_upshot_info"
+            @updated="emit('updated', $event)" />
         </div>
       </div>
       <div v-else class="modal-content">
@@ -64,18 +61,18 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router"
 import { DATE_SHORT_FORMAT } from '@/constants'
 import { computed, getCurrentInstance, nextTick, onUpdated, reactive, ref } from 'vue'
+import { useRoute } from "vue-router"
 
 import { Validations } from "@/components/simple_form"
 import * as utils from "@/lib/utils"
-import { PhaseInfo, Platform, TaskUpshot, TaskUpshotInfo } from '@/models'
+import { IssueTemplate, PhaseInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import * as requests from '@/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
 
-import SubmitButton from "@/components/SubmitButton.vue"
+import TaskDetailsAction from './TaskDetailsAction.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -85,6 +82,7 @@ const props = withDefaults(defineProps<{
   phase_infos: PhaseInfo[]
   current_phase_id: number
   task_upshot_infos: TaskUpshotInfo[]
+  issue_templates: IssueTemplate[]
 }>(), {
   platforms: () => [],
   phase_infos: () => [],
@@ -100,6 +98,7 @@ const modal = ref<InstanceType<typeof HTMLElement>>()
 const mode = ref('show')
 const project_id = _.toNumber(route.params.project_id)
 const plan_id = _.toNumber(route.params.id)
+const is_task_pass = ref(false)
 
 const current_task_upshot_info_id = ref()
 const textarea = ref()
@@ -145,33 +144,6 @@ async function hidden() {
     const $modal = ref(Modal.getOrCreateInstance(modal.value))
     $modal.value.hide()
   })
-}
-
-async function updateStateOverride(state_override: "pass" | "pending" | "failure") {
-  validations.clear()
-
-  try {
-    const task_upshot = await new requests.TaskUpshotStateUpdate().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-      req.interpolations.plan_id = plan_id
-      req.interpolations.task_id = current_task_upshot_info.value.task.id
-      req.interpolations.upshot_id = current_task_upshot_info.value.id
-      req.query = {
-        task_upshot: {
-          state_override
-        }
-      }
-    }).perform()
-    if (task_upshot) {
-      emit('updated', task_upshot)
-    }
-  } catch (err) {
-    if (validations.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
 }
 
 async function submitForm(event: InputEvent) {

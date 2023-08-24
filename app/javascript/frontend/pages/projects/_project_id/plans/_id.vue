@@ -92,6 +92,7 @@
     :phase_infos="phase_infos"
     :task_upshot_infos="avaiable_task_upshot_infos"
     :current_phase_id="phase_infos[currentQuery.phase_index].id"
+    :issue_templates="issue_templates"
     @updated="onTaskChanged" />
 </template>
 
@@ -152,6 +153,10 @@ const plan = ref(await new requests.PlanShow().setup(proxy, (req) => {
 const phase_infos = ref(await new requests.PlanPhaseInfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
+}).perform())
+
+const issue_templates = ref(await new requests.IssueTemplateList().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
 }).perform())
 
 const filter = ref(new Filter())

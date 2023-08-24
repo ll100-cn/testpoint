@@ -2,7 +2,7 @@
   <div class="mb-3">
     <div class="row align-items-center" :class="{ 'has-errors': validation.isInvaild() }">
       <slot name="label-prepend" :code="code" />
-      <label v-if="label" :for="code" class="col-form-label col text-nowrap">
+      <label v-if="label" :for="code" class="col-form-label col text-nowrap py-0">
         <span>{{ label }}</span>
       </label>
     </div>
