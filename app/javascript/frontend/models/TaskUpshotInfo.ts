@@ -1,13 +1,15 @@
+import { Type } from "class-transformer"
 import { Task } from "./Task"
 import { TestCase } from "./TestCase"
+import { TaskUpshot } from "./TaskUpshot"
 
-type TaskUpshotInfoState = "" | "pending" | "pass" | "failure"
-type TaskUpshotInfoStateOverride = "" | "pass" | "failure"
-
-export class TaskUpshotInfo {
-  id: number
-  state: TaskUpshotInfoState
-  state_override: TaskUpshotInfoStateOverride
+export class TaskUpshotInfo extends TaskUpshot {
+  @Type(() => TestCase)
   test_case: TestCase
+
+  @Type(() => Task)
   task: Task
+
+  @Type(() => TaskUpshot)
+  task_stats_by_phase: TaskUpshot[]
 }

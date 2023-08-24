@@ -82,9 +82,7 @@ async function onDestroy() {
     req.interpolations.plan_id = plan_id
   }).perform()
 
-  if (plan) {
-    router.push({ path: `/projects/${project_id}/plans`, params: { project_id } })
-  }
+  router.push({ path: `/projects/${project_id}/plans`, params: { project_id } })
 }
 
 </script>

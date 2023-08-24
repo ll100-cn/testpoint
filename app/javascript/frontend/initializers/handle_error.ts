@@ -24,9 +24,9 @@ function handleError(err, ctx: AppContext) {
       },
     })
   } else {
-    // router.push({
-    //   path: "/error",
-    // })
+    router.push({
+      path: "/error",
+    })
   }
 
   console.error(err)

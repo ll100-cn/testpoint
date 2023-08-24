@@ -15,7 +15,7 @@
               <span v-if="submitting"><i class="spinner-border spinner-border-sm" />提交中，请稍等</span>
               <span v-else>新增计划</span>
             </button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click.prevent>关闭</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
           </div>
         </form>
       </div>

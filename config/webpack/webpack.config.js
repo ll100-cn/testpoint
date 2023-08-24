@@ -3,7 +3,6 @@ const customConfig = require("./custom.js")
 const vueConfig = require('./rules/vue')
 const typescriptConfig = require('./rules/typescript')
 
-
 for (const rule of webpackConfig.module.rules) {
   if (rule.use) {
     for (const use of rule.use) {

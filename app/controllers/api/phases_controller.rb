@@ -1,4 +1,4 @@
-class Api::PhaseController < Api::BaseController
+class Api::PhasesController < Api::BaseController
   load_and_authorize_resource :project
   load_and_authorize_resource :plan
   load_and_authorize_resource through: :plan

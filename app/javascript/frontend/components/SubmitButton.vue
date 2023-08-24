@@ -11,7 +11,7 @@ import { ref, PropType } from "vue"
 const props = defineProps({
   submit_text: { type: String, default: "提交" },
   submitting_text: { type: String, default: "正在提交" },
-  type: { type: String as PropType<"primary" | "danger" | "secondary">, default: "primary" },
+  type: { type: String as PropType<"primary" | "danger" | "secondary" | "success">, default: "primary" },
   func: { type: Function }
 })
 

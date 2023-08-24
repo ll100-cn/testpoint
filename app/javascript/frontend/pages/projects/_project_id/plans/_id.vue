@@ -39,11 +39,11 @@
       <div class="dropdown ms-3">
         状态：
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          {{ stateDropdownOptions[state_eq || ""] }}
+          {{ state_dropdown_options[state_eq ?? ""] }}
         </button>
         <div class="dropdown-menu">
           <a
-            v-for="(option, key) in stateDropdownOptions"
+            v-for="(option, key) in state_dropdown_options"
             :key="key"
             class="dropdown-item"
             :class="{ active: key == state_eq }"
@@ -54,11 +54,11 @@
       <div class="dropdown ms-3">
         本轮操作：
         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          {{ stateModifyIsDropdownOptions[state_modify_is || ""] }}
+          {{ state_modify_is_dropdown_options[state_modify_is ?? ""] }}
         </button>
         <div class="dropdown-menu">
           <a
-            v-for="(option, key) in stateModifyIsDropdownOptions"
+            v-for="(option, key) in state_modify_is_dropdown_options"
             :key="key"
             class="dropdown-item"
             :class="{ active: key == state_modify_is }"
@@ -75,12 +75,24 @@
       <div class="col-12 col-md-9 col-xl-10">
         <div id="tp-main">
           <div class="test_cases-cards">
-            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :key="task_upshot_info.id" :task_upshot_info="task_upshot_info" @change="onTaskChanged" />
+            <TaskRow
+              v-for="task_upshot_info in avaiable_task_upshot_infos"
+              :key="task_upshot_info.id"
+              :task_upshot_info="task_upshot_info"
+              @change="onTaskChanged"
+              @click="TaskModalRef.show($event.id)" />
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <TaskModal
+    ref="TaskModalRef"
+    :phase_infos="phase_infos"
+    :task_upshot_infos="avaiable_task_upshot_infos"
+    :current_phase_id="phase_infos[currentQuery.phase_index].id"
+    @updated="onTaskChanged" />
 </template>
 
 <script setup lang="ts">
@@ -92,10 +104,10 @@ import * as requests from '@/requests';
 import { plainToClass } from 'class-transformer';
 import _ from 'lodash';
 import { ChangeFilterFunction, ColumnFilter, Filter } from '../types';
-import * as utils from '@/lib/utils'
 
 import FolderSide from '../FolderSide.vue';
 import PlanPhaseCreateModal from './PlanPhaseCreateModal.vue';
+import TaskModal from './TaskModal.vue';
 import TaskRow from './TaskRow.vue';
 
 const { proxy } = getCurrentInstance()
@@ -103,23 +115,24 @@ const route = useRoute()
 const router = useRouter()
 
 const currentQuery = ref({
-  phase_index: _.toNumber(route.query.phase_index) || 0,
+  phase_index: _.toNumber(route.query.phase_index) ?? 0,
 })
 
 const state_eq = ref("")
 const state_modify_is = ref("")
 
 const PlanPhaseCreateModalRef = ref<InstanceType<typeof PlanPhaseCreateModal>>()
+const TaskModalRef = ref<InstanceType<typeof TaskModal>>()
 const project_id = _.toNumber(route.params.project_id)
 const plan_id = _.toNumber(route.params.id)
-const stateDropdownOptions = {
+const state_dropdown_options = {
   '': '全部',
   pending: '待测试',
   pass: '通过',
   failure: '不通过',
 }
 
-const stateModifyIsDropdownOptions = {
+const state_modify_is_dropdown_options = {
   '': '全部',
   not_overrided: '未操作',
   overrided: '已操作',

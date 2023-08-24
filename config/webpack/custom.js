@@ -9,7 +9,7 @@ module.exports = {
         test: require.resolve("jquery"),
         loader: "expose-loader",
         options: {
-          exposes: ["$", "jQuery"],
+          exposes: [ "$", "jQuery" ],
         },
       }
     ]
@@ -25,8 +25,8 @@ module.exports = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
-      Buffer: ['buffer', 'Buffer'],
-      'window.Dropdown': ['bootstrap', 'Dropdown'] // fix error: https://github.com/snapappointments/bootstrap-select/pull/2736
+      Buffer: [ 'buffer', 'Buffer' ],
+      'window.Dropdown': [ 'bootstrap', 'Dropdown' ] // fix error: https://github.com/snapappointments/bootstrap-select/pull/2736
     }),
     new webpack.EnvironmentPlugin({
       'RAILS_RELATIVE_URL_ROOT': process.env.RAILS_RELATIVE_URL_ROOT || '/',
@@ -35,7 +35,7 @@ module.exports = {
   optimization: {
     runtimeChunk: {
       name: (entrypoint) => {
-        if (['event_props', 'functions'].includes(entrypoint.name)) {
+        if ([ 'event_props', 'functions' ].includes(entrypoint.name)) {
           return
         }
 
@@ -44,7 +44,7 @@ module.exports = {
     },
     splitChunks: {
       chunks(chunk) {
-        return !['event_props', 'functions'].includes(chunk.name)
+        return ![ 'event_props', 'functions' ].includes(chunk.name)
       }
     }
   }

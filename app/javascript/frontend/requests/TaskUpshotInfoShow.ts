@@ -1,7 +1,6 @@
 import { TaskUpshotInfo } from "@/models"
 import BaseObjectRequest from "./BaseObjectRequest"
 
-
 export class TaskUpshotInfoShow extends BaseObjectRequest<TaskUpshotInfo> {
   constructor() {
     super()

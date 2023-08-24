@@ -19,14 +19,14 @@
 
             <hr>
             <h5>待测用例</h5>
-            <p class="text-muted small"><span class="text-danger">{{ upshots_state_counts['failure'] || 0 }}</span> 个失败用例需要重新测试</p>
-            <p class="text-muted small"><span class="text-body">{{ upshots_state_counts['pending'] || 0 }}</span> 个未测试用例, 将添加到本轮</p>
-            <p class="text-muted small"><span class="text-success">{{ upshots_state_counts['pass'] || 0 }}</span> 个成功用例将不显示</p>
+            <p class="text-muted small"><span class="text-danger">{{ upshots_state_counts['failure'] ?? 0 }}</span> 个失败用例需要重新测试</p>
+            <p class="text-muted small"><span class="text-body">{{ upshots_state_counts['pending'] ?? 0 }}</span> 个未测试用例, 将添加到本轮</p>
+            <p class="text-muted small"><span class="text-success">{{ upshots_state_counts['pass'] ?? 0 }}</span> 个成功用例将不显示</p>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-success" :disabled="submitting">
               <span v-if="submitting"><i class="spinner-border spinner-border-sm" />提交中，请稍等</span>
-              <span else>确定进入下一轮</span>
+              <span v-else>确定进入下一轮</span>
             </button>
             <button class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close" @click.prevent>返回</button>
           </div>

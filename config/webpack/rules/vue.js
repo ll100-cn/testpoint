@@ -19,7 +19,7 @@ module.exports = {
     new VueLoaderPlugin()
   ],
   resolve: {
-    extensions: ['.vue'],
+    extensions: [ '.vue' ],
     alias: {
       "vue$": 'vue/dist/vue.esm-bundler.js',
       "@": path.resolve(__dirname, '../../..', 'app/javascript/frontend')

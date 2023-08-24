@@ -7,7 +7,7 @@ const checkboxRegex = /^\s*(?:\*|-|\+)\s+(\[(?:x| )?\])\s+/gm
 function checkboxExtension(options) {
   const checkbox = {
     type: 'lang',
-    filter: function (text, converter) {
+    filter: function(text, converter) {
       return replaceMarkdownTaskList(text, function(mark, position, checked) {
         const attrs = []
         if (checked) {
@@ -39,7 +39,7 @@ export function renderMarkdown(markdown, options = {}) {
   const checkboxOptions = options.checkbox || {}
   _.unset(options, "checkbox")
   _.merge(options, { "simpleLineBreaks": true })
-  const converter = new showdown.Converter({ extensions: [checkboxExtension(checkboxOptions)], ...options })
+  const converter = new showdown.Converter({ extensions: [ checkboxExtension(checkboxOptions) ], ...options })
   converter.setFlavor('github')
   return converter.makeHtml(markdown)
 }
