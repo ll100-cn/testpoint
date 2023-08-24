@@ -11,6 +11,7 @@
 #  creator_id   :bigint           not null
 #  milestone_id :bigint
 #  platform_id  :bigint
+#  role_name    :string
 #
 
 FactoryBot.define do

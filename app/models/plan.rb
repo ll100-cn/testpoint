@@ -11,6 +11,7 @@
 #  creator_id   :bigint           not null
 #  milestone_id :bigint
 #  platform_id  :bigint
+#  role_name    :string
 #
 
 class Plan < ApplicationRecord
@@ -23,6 +24,8 @@ class Plan < ApplicationRecord
 
   belongs_to :creator, class_name: "Member"
   belongs_to :milestone, optional: true
+
+  cleanup_column :title, :role_name
 
   validates :title, presence: true
 
