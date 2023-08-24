@@ -1,9 +1,10 @@
 import $ from 'jquery'
 import { Controller } from "stimulus"
+import _ from 'lodash'
 import { replaceMarkdownTaskList, renderMarkdown } from "../components/showdown"
 
 export default class extends Controller {
-  static targets = [ "input", "view"]
+  static targets = [ "input", "view" ]
 
   connect() {
     this.buildView()
@@ -46,7 +47,7 @@ export default class extends Controller {
 
   renderView() {
     const inputElement = this.findInputElement()
-    const options = { checkbox: { readonly: inputElement.readOnly }}
+    const options = { checkbox: { readonly: inputElement.readOnly } }
     this.viewElement.innerHTML = renderMarkdown(_.trim(inputElement.value), options)
   }
 

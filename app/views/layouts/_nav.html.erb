@@ -43,7 +43,7 @@
           </li>
 
           <li class="nav-item">
-            <%= n.link_to "plans", t('views.navbar.plans'), [@project, Plan], class: "nav-link" if can? :read, Plan %>
+            <%= n.link_to "plans", t('views.navbar.plans'), plans_project_path(@project), class: "nav-link" if can? :read, Plan %>
           </li>
 
           <li class="nav-item">

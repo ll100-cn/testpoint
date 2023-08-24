@@ -24,9 +24,11 @@ function handleError(err, ctx: AppContext) {
       },
     })
   } else {
-    router.push({
-      path: "/error",
-    })
+    if (process.env.NODE_ENV !== 'development') {
+      router.push({
+        path: "/error",
+      })
+    }
   }
 
   console.error(err)

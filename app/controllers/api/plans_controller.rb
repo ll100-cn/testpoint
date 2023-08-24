@@ -28,12 +28,22 @@ class Api::PlansController < Api::BaseController
   def show
   end
 
+  def destroy
+    @plan.archive
+    respond_with @plan
+  end
+
+  def update
+    @plan.update(plan_params)
+    respond_with @plan
+  end
+
 protected
   def plan_params
-    params.permit(:title, :role_name, :milestone_id, :platform_id)
+    params.permit(:title, :milestone_id, :platform_id)
   end
 
   def filter_params
-    params.permit(:role_name, label_ids: [], folder_ids: [])
+    params.permit(role_names: [])
   end
 end

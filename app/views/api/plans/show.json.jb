@@ -1,0 +1,3 @@
+json = render partial: "api/shared/plan", locals: { plan: @plan, tasks_state_counts_mapping: {} }
+
+json

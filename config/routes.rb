@@ -95,6 +95,8 @@ Rails.application.routes.draw do
     end
 
     get "milestones(/*path)", as: :milestones, action: "vue", on: :member
+    get "plans(/*path)", as: :plans, action: "vue", on: :member
+    get "error(/*path)", action: "vue", on: :member
   end
 
   resources :users
@@ -118,6 +120,15 @@ Rails.application.routes.draw do
         resources :phases do
           resources :task_upshot_infos
         end
+        resources :phase_infos
+        resources :tasks do
+          resources :upshots do
+            member do
+              patch :state
+              patch :content
+            end
+          end
+        end
       end
 
       resources :milestones do
@@ -126,6 +137,4 @@ Rails.application.routes.draw do
 
     end
   end
-
-  get "*path" => "projects#vue"
 end

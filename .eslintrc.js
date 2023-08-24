@@ -68,6 +68,7 @@ module.exports = {
     "camelcase": "off",
     "vue/singleline-html-element-content-newline": "off",
     "vue/one-component-per-file": "off",
-    "vue/prop-name-casing": "off"
+    "vue/prop-name-casing": "off",
+    "vue/require-explicit-emits": "off"
   },
 }

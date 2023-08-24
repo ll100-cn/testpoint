@@ -10,6 +10,7 @@
     <div class="">
       <slot name="default" :code="code" :validation="validation" :disabled="disableds[code]" />
       <div v-if="validation.isInvaild()" class="invalid-feedback">{{ _.get(validation, 'messages', []).join(', ') }}</div>
+      <small v-if="hint" class="form-text text-body-secondary">{{ hint }}</small>
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@ const props = defineProps({
   label: { type: String, required: false },
   validation: { type: Object as PropType<Validation>, required: true },
   disableds: { type: Object, required: false, default: () => ({}) },
+  hint: { type: String, required: false }
 })
 
 const code = computed(() => props.validation.code)
