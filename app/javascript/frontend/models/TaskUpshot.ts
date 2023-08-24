@@ -1,5 +1,5 @@
 type TaskUpshotInfoState = "" | "pending" | "pass" | "failure"
-type TaskUpshotInfoStateOverride = "" | "pass" | "failure"
+type TaskUpshotInfoStateOverride = "" | "pending" | "pass" | "failure"
 
 export class TaskUpshot {
   id: number

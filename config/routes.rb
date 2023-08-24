@@ -96,6 +96,7 @@ Rails.application.routes.draw do
 
     get "milestones(/*path)", as: :milestones, action: "vue", on: :member
     get "plans(/*path)", as: :plans, action: "vue", on: :member
+    get "error(/*path)", action: "vue", on: :member
   end
 
   resources :users

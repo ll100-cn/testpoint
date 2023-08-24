@@ -40,10 +40,10 @@ class Api::PlansController < Api::BaseController
 
 protected
   def plan_params
-    params.permit(:title, :role_name, :milestone_id, :platform_id)
+    params.permit(:title, :milestone_id, :platform_id)
   end
 
   def filter_params
-    params.permit(:role_name, label_ids: [], folder_ids: [])
+    params.permit(role_names: [])
   end
 end

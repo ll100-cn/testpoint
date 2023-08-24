@@ -17,7 +17,8 @@ const props = defineProps({
 
 const submitting = ref(false)
 
-async function onSubmit() {
+async function onSubmit(event: Event) {
+  event.preventDefault()
   submitting.value = true
   try {
     await props.func()

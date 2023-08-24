@@ -63,11 +63,13 @@ const props = defineProps({
 const textarea = ref()
 
 const emit = defineEmits<{
-  (e: 'changeMode', mode: string): void
+  changeMode: [mode: string]
 }>()
 
 onUpdated(() => {
-  textarea.value.dispatchEvent(new Event('render'))
+  if (textarea.value) {
+    textarea.value.dispatchEvent(new Event('render'))
+  }
 })
 
 </script>

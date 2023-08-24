@@ -1,7 +1,6 @@
 import { TaskUpshotInfo } from "@/models"
 import BaseArrayRequest from "./BaseArrayRequest"
 
-
 export class TaskUpshotInfoList extends BaseArrayRequest<TaskUpshotInfo> {
   constructor() {
     super()

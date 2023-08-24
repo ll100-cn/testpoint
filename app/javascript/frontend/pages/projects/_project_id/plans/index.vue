@@ -3,7 +3,7 @@
     <h2>计划列表</h2>
     <button class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
   </div>
-  <PlanPhaseCreateModal ref="PlanPhaseCreateModalRef" :platforms="platforms" @created="getData" />
+  <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="getData" />
 
   <div class="row border-bottom mb-3">
     <div v-for="plan in plans?.list" :key="plan.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
@@ -72,6 +72,10 @@ const getData = async () => {
 }
 await getData()
 const platforms = ref(await new requests.PlatformList().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+}).perform())
+
+const test_case_stats = ref(await new requests.TestCaseStatList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

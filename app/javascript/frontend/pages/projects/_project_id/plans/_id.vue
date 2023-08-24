@@ -115,7 +115,7 @@ const route = useRoute()
 const router = useRouter()
 
 const currentQuery = ref({
-  phase_index: _.toNumber(route.query.phase_index) ?? 0,
+  phase_index: _.toNumber(route.query.phase_index ?? 0),
 })
 
 const state_eq = ref("")
@@ -186,8 +186,7 @@ const avaiable_task_upshot_infos = computed(() => {
       if (it.state_override !== null && state_modify_is.value === 'not_overrided') {
         return false
       }
-
-      if (!_.includes([ "pass", "failure" ], it.state_override) && state_modify_is.value === 'overrided') {
+      if (!_.includes([ "pass", "failure", "pending" ], it.state_override) && state_modify_is.value === 'overrided') {
         return false
       }
     }

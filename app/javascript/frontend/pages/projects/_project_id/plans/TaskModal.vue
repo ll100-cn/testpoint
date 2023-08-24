@@ -92,7 +92,7 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  (e: 'updated', task_upshot: TaskUpshot): void,
+  updated: [task_upshot: TaskUpshot]
 }>()
 
 const validations = reactive<Validations>(new Validations())
@@ -197,7 +197,9 @@ async function submitForm(event: InputEvent) {
 }
 
 onUpdated(() => {
-  textarea.value.dispatchEvent(new Event('render'))
+  if (textarea.value) {
+    textarea.value.dispatchEvent(new Event('render'))
+  }
 })
 
 defineExpose({

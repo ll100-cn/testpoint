@@ -1,5 +1,5 @@
 <template>
-  <div ref="modal" class="modal fade" tabindex="-1">
+  <div v-if="test" ref="modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,13 +8,10 @@
         </div>
         <form @submit="onSubmit">
           <div class="modal-body">
-            <PlanForm :validations="validations" :form="form" :platforms="platforms" />
+            <PlanForm :validations="validations" :form="form" :platforms="platforms" :test_case_stats="test_case_stats" />
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" :disabled="submitting">
-              <span v-if="submitting"><i class="spinner-border spinner-border-sm" />提交中，请稍等</span>
-              <span v-else>新增计划</span>
-            </button>
+            <SubmitButton submit_text="新增计划" :func="onSubmit" />
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
           </div>
         </form>
@@ -28,32 +25,43 @@ import { Validations } from "@/components/simple_form"
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 
 import * as utils from "@/lib/utils"
-import { Plan, Platform } from '@/models'
+import { Plan, Platform, TestCaseStat } from '@/models'
 import * as requests from '@/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
+
+import SubmitButton from "@/components/SubmitButton.vue"
 import PlanForm from "./PlanForm.vue"
 
 const { proxy } = getCurrentInstance()
 
-const props = defineProps({
-  platforms: Array<Platform>,
+const props = withDefaults(defineProps<{
+  platforms: Platform[]
+  test_case_stats: TestCaseStat[]
+}>(), {
+  platforms: () => [],
 })
 
 const emit = defineEmits<{
-  (e: 'created', plan: Plan): void,
+  created: [plan: Plan]
 }>()
 
 const validations = reactive<Validations>(new Validations())
 const modal = ref<InstanceType<typeof HTMLElement>>()
 const mode = ref('show')
-const submitting = ref(false)
+const test = ref(true)
 
 const form = ref({
   title: `Test Plan: ${utils.humanize(new Date(), "YYYY-MM-DD")}` as string | null | undefined,
   platform_id: _.first(props.platforms).id as number | null | undefined,
   milestone_id: null as number | null | undefined,
+  role_names: [],
 })
+const _form = _.cloneDeep(form.value)
+
+function resetForm() {
+  form.value = _form
+}
 
 async function show() {
   mode.value = 'show'
@@ -73,10 +81,8 @@ async function hidden() {
   })
 }
 
-async function onSubmit(event: Event) {
-  event.preventDefault()
+async function onSubmit() {
   validations.clear()
-  submitting.value = true
   try {
     const plan = await new requests.PlanCreate().setup(proxy, (req) => {
       req.interpolations.project_id = 1
@@ -84,14 +90,13 @@ async function onSubmit(event: Event) {
 
     hidden()
     emit('created', plan)
+    resetForm()
   } catch (err) {
     if (validations.handleError(err)) {
       return
     }
 
     throw err
-  } finally {
-    submitting.value = false
   }
 }
 
