@@ -22,15 +22,15 @@ RSpec.describe Api::PlansController, type: :controller do
     action { post :create, params: { project_id: project.id }.merge(plan_attributes), format: :json }
     it { is_expected.to respond_with :success }
 
-    context "when role_name is given" do
-      let(:plan_attributes) { { title: "iOS 2.11.3", platform_id: platform.id, role_name: role_name } }
+    context "when role_names is given" do
+      let(:plan_attributes) { { title: "iOS 2.11.3", platform_id: platform.id, role_names: [role_name] } }
       it { is_expected.to respond_with :success
            plan = Plan.last
            expect(plan.tasks.where(test_case_id: test_case.id).take).not_to be_nil }
     end
 
-    context "when role_name is invalid" do
-      let(:plan_attributes) { { title: "iOS 2.11.3", platform_id: platform.id, role_name: "invalid" } }
+    context "when role_names is invalid" do
+      let(:plan_attributes) { { title: "iOS 2.11.3", platform_id: platform.id, role_names: ["invalid"] } }
       it { is_expected.to respond_with :success
            plan = Plan.last
            expect(plan.tasks.where(test_case_id: test_case.id).take).to be_nil }
