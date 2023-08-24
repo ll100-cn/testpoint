@@ -68,9 +68,9 @@ class TestCase < ApplicationRecord
     test_cases_scope = test_cases_scope.where("test_cases.created_at <= ?", version_at)
     join_sub_query = TestCaseVersion.from("versions as v1").joins("INNER JOIN test_cases ON test_cases.id = v1.item_id AND v1.item_type = 'TestCase'")
                                                            .merge(test_cases_scope)
-                                                           .where("v1.created_at <= ?", version_at)
+                                                           .where("v1.created_at >= ?", version_at)
                                                            .group("v1.item_id")
-                                                           .select("MAX(v1.created_at) as created_at, v1.item_id")
+                                                           .select("MIN(v1.created_at) as created_at, v1.item_id")
 
     test_case_versions = TestCaseVersion.where(item_type: 'TestCase')
                                         .joins("INNER JOIN (#{join_sub_query.to_sql}) as v2 ON v2.item_id = versions.item_id AND v2.created_at = versions.created_at")
