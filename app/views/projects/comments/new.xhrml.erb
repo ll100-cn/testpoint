@@ -1,1 +1,1 @@
-<%= render 'form', formats: [ :html ], issue: @issue, comment: @comment %>
+<%= render template: 'projects/comments/_form', formats: [ :html ], locals: { issue: @issue, comment: @comment } %>

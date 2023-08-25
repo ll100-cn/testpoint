@@ -2,7 +2,7 @@
   <%= bootstrap_vertical_form_for [comment.issue.project, comment.issue, comment], data: { remote: true, type: "xhrml", target: ".issue-comment" } do |f| %>
     <div class="no-margin-bottom">
       <%= f.input :content, input_html: { class: 'markdown-field' } %>
-      <%= render "attachments/upload_area", formats: [ :html ], attachments: f.object.attachments %>
+      <%= render template: "attachments/_upload_area", formats: [ :html ], locals: { attachments: f.object.attachments } %>
     </div>
     <% if f.object.errors.any? %>
       <div class="text-danger text-start mx-3">
