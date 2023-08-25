@@ -1,0 +1,1 @@
+render "api/shared/task_info", task: @task, task_upshots: @task_upshots, issues: @issues

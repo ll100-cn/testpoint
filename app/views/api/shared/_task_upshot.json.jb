@@ -1,3 +1,3 @@
-json = task_upshot.slice(:id, :state, :state_override, :state_changed_at, :phase_id, :content)
+json = task_upshot.slice(:id, :state, :state_override, :state_changed_at, :phase_id, :content, :created_at)
 
 json

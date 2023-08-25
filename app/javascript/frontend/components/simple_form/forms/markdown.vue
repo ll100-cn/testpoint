@@ -3,15 +3,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, nextTick, ref } from 'vue'
+import { PropType, onMounted, ref } from 'vue'
 
-import _ from "lodash"
 import EasyMDE from 'easymde'
 
 import { Validation } from '@/models'
 
+// import 'codemirror/lib/codemirror.css'
 import 'easymde/src/css/easymde.css'
-import 'codemirror/lib/codemirror.css'
 
 const props = defineProps({
   label: { type: String, required: false },

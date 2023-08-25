@@ -89,6 +89,8 @@
 
   <TaskModal
     ref="TaskModalRef"
+    :plan_id="plan_id"
+    :project_id="project_id"
     :phase_infos="phase_infos"
     :task_upshot_infos="avaiable_task_upshot_infos"
     :current_phase_id="phase_infos[currentQuery.phase_index].id"

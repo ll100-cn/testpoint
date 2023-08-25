@@ -129,6 +129,8 @@ Rails.application.routes.draw do
             end
           end
         end
+
+        resources :task_infos
       end
 
       resources :milestones do

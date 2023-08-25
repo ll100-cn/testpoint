@@ -11,20 +11,18 @@
   </div>
   <div v-else>
     <h5>补充工单详情</h5>
-    <form>
-      <div class="border rounded p-3 mb-3">
-        <IssueForm
-          :issue_templates="issue_templates"
-          :validations="validations"
-          :form="form"
-          :plan_id="plan_id"
-          :project_id="project_id" />
-      </div>
-      <div class="x-actions">
-        <SubmitButton submit_text="提交" :func="onSubmit" />
-        <SubmitButton submit_text="取消" type="secondary" @click="emit('update:is_task_pass', false)" />
-      </div>
-    </form>
+    <div class="border rounded p-3 mb-3">
+      <IssueForm
+        :issue_templates="issue_templates"
+        :validations="validations"
+        :form="form"
+        :plan_id="plan_id"
+        :project_id="project_id" />
+    </div>
+    <div class="x-actions">
+      <SubmitButton submit_text="提交" :func="onSubmit" />
+      <SubmitButton submit_text="取消" type="secondary" @click="emit('update:is_task_pass', false)" />
+    </div>
   </div>
 </template>
 
