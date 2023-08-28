@@ -47,9 +47,9 @@ class Api::IssuesController < Api::BaseController
   end
 
   def update
-    with_email_notification do
-      @issue.update_with_author(issue_params, current_member)
-    end
+    # with_email_notification do
+    @issue.update_with_author(issue_params, current_member)
+    # end
 
     respond_with @issue
   end
@@ -76,7 +76,7 @@ protected
   def issue_params_names
     names = [
       :priority, :title, :content, :state, :milestone_id, :assignee_id,
-      :template_id, :project_id, :category_id,
+      :template_id, :project_id, :category_id, :task_id,
       attachment_ids: [],
       subscribed_user_ids: [],
       template_ids: []

@@ -1,5 +1,5 @@
 <template>
-  <input v-model="form[code]" type="text" class="form-control" :name="name ?? code" :disabled="disabled" :class="{'is-invalid': validation?.isInvaild() }">
+  <input v-model="form[code]" type="number" class="form-control" :name="name ?? code" :disabled="disabled" :class="{'is-invalid': validation?.isInvaild() }">
 </template>
 
 <script setup lang="ts">

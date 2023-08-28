@@ -2,6 +2,7 @@
 
 export { default as checkboxes } from "./checkboxes.vue"
 export { default as markdown } from "./markdown.vue"
+export { default as number } from "./number.vue"
 export { default as select } from "./select.vue"
 export { default as string } from "./string.vue"
 export { default as text } from "./text.vue"

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!is_task_pass" class="x-actions">
+  <div v-if="!is_task_pass" class="d-flex x-actions">
     <SubmitButton
       v-if="_.includes(['pass', 'failure'], task_upshot_info.state_override)"
       type="primary"
@@ -9,6 +9,16 @@
       <SubmitButton type="success" :func="() => updateStateOverride('pass')" submit_text="全部通过" />
       <SubmitButton type="danger" submit_text="不通过" @click="emit('update:is_task_pass', true)" />
     </template>
+    <div class="ms-auto">
+      <button v-if="!is_bind_issue" class="btn btn-primary" @click="is_bind_issue = !is_bind_issue">关联问题</button>
+      <template v-else>
+        <div class="d-flex x-actions">
+          <forms.number v-bind="{ code: 'id', form: issue_form }" />
+          <SubmitButton :func="bindIssue" submit_text="关联" />
+          <button class="btn btn-secondary text-nowrap" @click="is_bind_issue = !is_bind_issue">取消</button>
+        </div>
+      </template>
+    </div>
   </div>
   <div v-else>
     <h5>补充工单详情</h5>
@@ -30,13 +40,13 @@
 </template>
 
 <script setup lang="ts">
-import { Validations } from "@/components/simple_form"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute } from "vue-router"
 
 import { IssueTemplate, PhaseInfo, Plan, TaskUpshot, TaskUpshotInfo } from '@/models'
 import * as requests from '@/requests'
 import _ from 'lodash'
+import { Validations, forms, layouts } from "@/components/simple_form";
 
 import IssueForm from "@/components/IssueForm.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
@@ -72,6 +82,8 @@ const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
 }).perform())
 
 const validations = reactive<Validations>(new Validations())
+const is_bind_issue = ref(false)
+const issue_form = ref({ id: null })
 
 const form = ref({
   // issue_template_id: "",
@@ -152,4 +164,15 @@ async function onSubmit() {
   }
 }
 
+async function bindIssue() {
+  const issue = await new requests.IssueUpdate().setup(proxy, (req) => {
+    req.interpolations.project_id = props.project_id
+    req.interpolations.issue_id = issue_form.value.id
+  }).perform({ task_id: props.task_upshot_info.task.id })
+  issue_form.value.id = null
+
+  if (issue) {
+    emit('updated', props.task_upshot_info)
+  }
+}
 </script>
