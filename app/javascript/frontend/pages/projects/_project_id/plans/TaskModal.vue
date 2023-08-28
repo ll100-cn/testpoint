@@ -37,6 +37,7 @@
             </form>
             <hr>
             <TaskDetailsState
+              :key="current_task_upshot_info.id"
               :task_info="task_info"
               :phase_infos="phase_infos"
               :current_phase_id="current_phase_id"
@@ -65,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, nextTick, onUpdated, reactive, ref } from 'vue'
+import { computed, getCurrentInstance, nextTick, onMounted, onUpdated, reactive, ref } from 'vue'
 
 import { Validations } from "@/components/simple_form"
 import { IssueTemplate, PhaseInfo, Plan, TaskInfo, TaskUpshot } from '@/models'
@@ -176,6 +177,12 @@ onUpdated(() => {
   if (textarea.value) {
     textarea.value.dispatchEvent(new Event('render'))
   }
+})
+
+onMounted(() => {
+  modal.value.addEventListener("hidden.bs.modal", () => {
+    is_task_pass.value = false
+  })
 })
 
 defineExpose({

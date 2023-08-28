@@ -75,7 +75,7 @@ const validations = reactive<Validations>(new Validations())
 
 const form = ref({
   // issue_template_id: "",
-  title: `【${props.plan.platform.name} 测试失败】发布公告`,
+  title: `【${props.plan.platform.name} 测试失败】${props.task_upshot_info.test_case.title}`,
   content: buildContent(props.task_upshot_info.content ?? props.task_upshot_info.test_case.content),
   state: "confirmed",
   assignee_id: "",
