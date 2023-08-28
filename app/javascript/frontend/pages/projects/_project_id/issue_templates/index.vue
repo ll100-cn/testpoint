@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>问题模版列表</h2>
     <div class="actions ms-auto">
-      <button class="btn btn-primary" @click="utils.redirect(`/projects/${project_id}/issue_templates/new`)">问题模版列表</button>
+      <button class="btn btn-primary" @click="utils.redirect(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
     </div>
   </div>
   <div class="card">

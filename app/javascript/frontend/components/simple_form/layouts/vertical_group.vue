@@ -1,7 +1,7 @@
 <template>
   <div class="container mb-3">
     <div class="row align-items-start">
-      <div class="col-3 row align-items-center" :class="{ 'has-errors': validation.isInvaild() }">
+      <div class="row align-items-center" :class="[{ 'has-errors': validation.isInvaild() }, label_class]">
         <slot name="label-prepend" :code="code" />
         <label v-if="label" :for="code" class="col-form-label col text-end text-nowrap">
           <span>{{ label }}</span>
@@ -11,6 +11,7 @@
       <div class="col">
         <slot name="default" :code="code" :validation="validation" :disabled="disableds[code]" />
         <div v-if="validation.isInvaild()" class="invalid-feedback">{{ _.get(validation, 'messages', []).join(', ') }}</div>
+        <small v-if="hint" class="form-text text-body-secondary">{{ hint }}</small>
       </div>
     </div>
   </div>
@@ -26,6 +27,8 @@ const props = defineProps({
   label: { type: String, required: false },
   validation: { type: Object as PropType<Validation>, required: true },
   disableds: { type: Object, required: false, default: () => ({}) },
+  hint: { type: String, required: false },
+  label_class: { type: String, default: "col-3" }
 })
 
 const code = computed(() => props.validation.code)

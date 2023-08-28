@@ -1,0 +1,1 @@
+render partial: "api/shared/issue_template", @issue_template :issue_template
