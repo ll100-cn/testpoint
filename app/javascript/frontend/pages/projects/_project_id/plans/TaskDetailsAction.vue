@@ -126,6 +126,18 @@ async function onSubmit() {
     const issue = await new requests.IssueCreate().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
     }).perform(form.value)
+    await new requests.TaskUpshotStateUpdate().setup(proxy, (req) => {
+      req.interpolations.project_id = props.project_id
+      req.interpolations.plan_id = props.plan.id
+      req.interpolations.task_id = props.task_upshot_info.task.id
+      req.interpolations.upshot_id = props.task_upshot_info.id
+      req.query = {
+        task_upshot: {
+          state_override: 'failure',
+        }
+      }
+    }).perform()
+
     if (issue) {
       emit('update:is_task_pass', false)
       emit('updated', props.task_upshot_info)
