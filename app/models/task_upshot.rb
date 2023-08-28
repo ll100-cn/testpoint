@@ -15,7 +15,6 @@
 class TaskUpshot < ApplicationRecord
   belongs_to :task
   belongs_to :phase
-  attr_accessor :issue
 
   enumerize :state, in: [ :pending, :pass, :failure ]
   enumerize :state_override, in: [ :pending, :pass, :failure ]
@@ -29,16 +28,6 @@ class TaskUpshot < ApplicationRecord
     self.state = self.state_override
     self.state_changed_at = Time.current
     raise ActiveRecord::Rollback if !self.save(context: :submit)
-
-    self.issue.project = @plan.project
-    self.issue.task = task
-    self.issue.creator = author
-    self.issue.category = @plan.project.categories.where(default_as_test_failure: true).take
-
-    if !self.issue.save
-      self.errors.add(:issue, :invalid)
-      raise ActiveRecord::Rollback
-    end
 
     self.task.state = self.state
     if !self.task.save
@@ -78,10 +67,6 @@ class TaskUpshot < ApplicationRecord
     end
 
     self.errors.empty?
-  end
-
-  def issue_attributes=(attrs)
-    self.issue = Issue.new(attrs)
   end
 
   def self.ransackable_scopes(auth_object = nil)
