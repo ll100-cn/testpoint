@@ -10,4 +10,3 @@ export class IssueTemplate {
   project_id: number
   title_suggestion: string
 }
-"联考关联学校帐号"
