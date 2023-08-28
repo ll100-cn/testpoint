@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { Task, TaskUpshotInfo } from '@/models'
-import { PropType, computed } from 'vue'
-import TaskStateWithIcon from './TaskStateWithIcon.vue'
+import { TaskUpshotInfo } from '@/models';
+import { PropType, computed } from 'vue';
+import TaskStateWithIcon from './TaskStateWithIcon.vue';
 
 const RAILS_RELATIVE_URL_ROOT = process.env.RAILS_RELATIVE_URL_ROOT
 const props = defineProps({

@@ -12,6 +12,7 @@
 class Project < ApplicationRecord
   has_many :test_cases,          dependent: :destroy
   has_many :plans,               dependent: :destroy
+  has_many :tasks, through: :plans
   has_many :issues,              dependent: :destroy
   has_many :issue_templates,     dependent: :destroy
   has_many :categories,          dependent: :destroy

@@ -33,15 +33,15 @@ class Api::IssuesController < Api::BaseController
   end
 
   def create
-    with_email_notification do
-      @issue.creator ||= current_member
+    # with_email_notification do
+    @issue.creator ||= current_member
 
-      @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
-      @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)
-      @issue_build_form.prepare
+    @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
+    @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)
+    @issue_build_form.prepare
 
-      @issue_build_form.submit(issue_build_form_params)
-    end
+    @issue_build_form.submit(issue_build_form_params)
+    # end
     @issue = @issue_build_form.issue
     respond_with @issue_build_form, location: ok_url_or_default(action: :index)
   end
@@ -67,6 +67,7 @@ class Api::IssuesController < Api::BaseController
 protected
   def issue_build_form_params
     params.permit(
+      :from_task_id,
       issue_attributes: [:priority, :title, :creator_id, :content],
       info_attributes: [inputs_attributes: [:template_input_id, :value]]
     )

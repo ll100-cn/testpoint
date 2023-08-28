@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+import { ISSUE_STATE_MAPPING } from '@/constants';
 import { computed, ref } from 'vue'
 
 const props = withDefaults(defineProps<{
@@ -12,26 +13,6 @@ const props = withDefaults(defineProps<{
   options?: any
 }>(), {
   options: () => ({}),
-})
-
-const state_mapping = ref({
-  pending: "待确认",
-  waiting: "等待反馈",
-  confirmed: "已确认",
-  processing: "处理中",
-  processed: "已处理",
-  deploying: "待部署",
-  resolved: "已解决",
-  closed: "已关闭",
-  unassigned: "未分配",
-  developing: "开发中",
-  developed: "已开发",
-  deploy: "部署",
-  resolve: "解决",
-  archive: "归档",
-  assign: "分配",
-  develop: "开发",
-  test: "测试",
 })
 
 const color = computed(() => {
@@ -52,7 +33,7 @@ const color = computed(() => {
 const text = computed(() => {
   let text = ""
   if (typeof props.issue_state === "string") {
-    text = state_mapping.value[props.issue_state]
+    text = ISSUE_STATE_MAPPING[props.issue_state]
   } else {
     text = props.issue_state
   }

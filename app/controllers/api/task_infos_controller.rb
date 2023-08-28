@@ -6,6 +6,5 @@ class Api::TaskInfosController < Api::BaseController
     @task = @plan.tasks.find(params[:id])
     @task_upshots = @task.upshots
     @issues = @task.issues
-    sleep(2)
   end
 end
