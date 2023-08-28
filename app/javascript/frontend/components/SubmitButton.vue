@@ -8,20 +8,30 @@
 <script setup lang="ts">
 import { ref, PropType } from "vue"
 
-const props = defineProps({
-  submit_text: { type: String, default: "提交" },
-  submitting_text: { type: String, default: "正在提交" },
-  type: { type: String as PropType<"primary" | "danger" | "secondary" | "success">, default: "primary" },
-  func: { type: Function }
+const props = withDefaults(defineProps<{
+  submit_text?: string
+  submitting_text?: string
+  type?: "primary" | "danger" | "secondary" | "success"
+  func?: Function
+  not_prevent_default?: boolean
+}>(), {
+  submit_text: "提交",
+  submitting_text: "正在提交",
+  type: "primary",
+  not_prevent_default: false
 })
 
 const submitting = ref(false)
 
 async function onSubmit(event: Event) {
-  event.preventDefault()
+  if (!props.not_prevent_default) {
+    event.preventDefault()
+  }
   submitting.value = true
   try {
-    await props.func()
+    if (props.func) {
+      await props.func()
+    }
   } catch (error) {
     throw error
   } finally {

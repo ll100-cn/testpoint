@@ -6,7 +6,7 @@
         <i v-else class="far fa-clipboard" style="opacity: 0.25" />
       </span>
 
-      <div class="small me-3">
+      <div class="small me-3" style="width: 4rem;">
         <TaskStateWithIcon :state="task_upshot_info.state" />
       </div>
 
@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { Task, TaskUpshotInfo } from '@/models'
-import { PropType, computed } from 'vue'
-import TaskStateWithIcon from './TaskStateWithIcon.vue'
+import { TaskUpshotInfo } from '@/models';
+import { PropType, computed } from 'vue';
+import TaskStateWithIcon from './TaskStateWithIcon.vue';
 
 const RAILS_RELATIVE_URL_ROOT = process.env.RAILS_RELATIVE_URL_ROOT
 const props = defineProps({

@@ -9,7 +9,4 @@ export class TaskUpshotInfo extends TaskUpshot {
 
   @Type(() => Task)
   task: Task
-
-  @Type(() => TaskUpshot)
-  task_stats_by_phase: TaskUpshot[]
 }

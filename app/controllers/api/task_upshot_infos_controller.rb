@@ -11,8 +11,6 @@ class Api::TaskUpshotInfosController < Api::BaseController
     test_case_scope = TestCase.where_exists(@plan.tasks.where_table(:test_case))
     @test_cases = TestCase.filter_by_version_at(test_case_scope, @plan.created_at)
     @test_case_mapping = @test_cases.index_by(&:id)
-
-    @task_stats_by_phase_mapping = TaskUpshot.where(phase_id: @plan.phases).group_by(&:task_id)
   end
 
   def show
@@ -24,7 +22,5 @@ class Api::TaskUpshotInfosController < Api::BaseController
     test_case_scope = TestCase.where_exists(@plan.tasks.where(id: @task_upshot.task_id).where_table(:test_case))
     @test_cases = TestCase.filter_by_version_at(test_case_scope, @plan.created_at)
     @test_case_mapping = @test_cases.index_by(&:id)
-
-    @task_stats_by_phase_mapping = TaskUpshot.where(phase_id: @plan.phases).group_by(&:task_id)
   end
 end

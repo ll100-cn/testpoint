@@ -1,1 +1,1 @@
-render partial: "api/shared/task_upshot_info", collection: @task_upshots, as: :task_upshot, locals: { test_case_mapping: @test_case_mapping, task_stats_by_phase_mapping: @task_stats_by_phase_mapping }
+render partial: "api/shared/task_upshot_info", collection: @task_upshots, as: :task_upshot, locals: { test_case_mapping: @test_case_mapping }

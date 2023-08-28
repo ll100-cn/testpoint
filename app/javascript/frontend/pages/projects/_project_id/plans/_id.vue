@@ -2,12 +2,15 @@
   <div class="page-header d-flex">
     <h2 class="me-3">{{ plan.title }}</h2>
 
-    <div class="border-start">
-      <h4>
-        <span class="badge bg-light text-dark">
-          平台: {{ plan.platform.name }}
-        </span>
-      </h4>
+    <div class="border-start px-2">
+      <span class="text-dark fw-bold">
+        平台: {{ plan.platform.name }}
+      </span>
+    </div>
+    <div class="border-start px-2">
+      <span class="text-dark fw-bold">
+        创建人: {{ plan.creator_name }}
+      </span>
     </div>
 
     <router-link class="ms-auto btn btn-link" :to="{ path: `${plan_id}/edit` }">设置</router-link>
@@ -89,9 +92,11 @@
 
   <TaskModal
     ref="TaskModalRef"
+    :plan="plan"
+    :project_id="project_id"
     :phase_infos="phase_infos"
-    :task_upshot_infos="avaiable_task_upshot_infos"
     :current_phase_id="phase_infos[currentQuery.phase_index].id"
+    :issue_templates="issue_templates"
     @updated="onTaskChanged" />
 </template>
 
@@ -152,6 +157,10 @@ const plan = ref(await new requests.PlanShow().setup(proxy, (req) => {
 const phase_infos = ref(await new requests.PlanPhaseInfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
+}).perform())
+
+const issue_templates = ref(await new requests.IssueTemplateList().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
 }).perform())
 
 const filter = ref(new Filter())
