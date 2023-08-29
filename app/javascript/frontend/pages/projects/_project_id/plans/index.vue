@@ -80,7 +80,7 @@ const PaginationBarRef = ref<InstanceType<typeof PaginationBar>>()
 
 const querystring = qs.stringify(route.query)
 const query: PageQuery = qs.parse(querystring, { ignoreQueryPrefix: true })
-const current_creator_id = ref(_.toInteger(query.q?.creator_id_eq))
+const current_creator_id = ref(query.q?.creator_id_eq)
 
 const currentQuery = ref<PageQuery>({
   page: _.toInteger(query.page) || 1,
