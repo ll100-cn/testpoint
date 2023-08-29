@@ -17,6 +17,7 @@
 class IssueTemplate < ApplicationRecord
   belongs_to :project
   belongs_to :default_category, class_name: Category.to_s, optional: true
+  has_many :issue_infos, dependent: :restrict_with_error, foreign_key: :template_id
   has_many :inputs, class_name: "IssueTemplateInput", foreign_key: :template_id, inverse_of: :template
   accepts_nested_attributes_for :inputs, allow_destroy: true
 

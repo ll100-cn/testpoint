@@ -20,7 +20,7 @@
     <forms.markdown v-bind="{ ...slotProps, form }" />
   </layouts.vertical_group>
   <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('inputs')" label="内容">
-    <div class="card">
+    <div class="card overflow-auto">
       <table class="table mb-0">
         <thead>
           <tr>
@@ -33,7 +33,9 @@
           <tr v-for="(input, index) in form.inputs_attributes" :key="input.id">
             <td><forms.string v-bind="{ ...slotProps, form: input, code: 'label' }" /></td>
             <td><forms.number v-bind="{ ...slotProps, form: input, code: 'order_index' }" /></td>
-            <td><button class="btn btn-link" @click="onRemoveInput(index)">删除</button></td>
+            <td>
+              <a class="btn btn-danger" @click="onRemoveInput(index)">删除</a>
+            </td>
           </tr>
         </tbody>
       </table>

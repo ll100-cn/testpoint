@@ -5,9 +5,11 @@
 
   <Form :categories="categories" :form="form" :project_id="project_id" :validations="validations" />
 
-  <div class="x-actions">
+  <hr>
+
+  <div class="x-actions offset-2">
     <SubmitButton submit_text="新增问题模版" :func="onSubmit" />
-    <button class="btn btn-secondary" @click="router.push('/projects/' + project_id + '/issue_templates')">取消</button>
+    <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issue_templates`">取消</router-link>
   </div>
 </template>
 

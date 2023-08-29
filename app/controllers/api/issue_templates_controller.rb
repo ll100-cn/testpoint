@@ -20,6 +20,11 @@ class Api::IssueTemplatesController < Api::BaseController
     respond_with @issue_template
   end
 
+  def destroy
+    @issue_template.destroy
+    respond_with @issue_template
+  end
+
 protected
   def issue_template_params
     params.permit(*permit_attributes)
