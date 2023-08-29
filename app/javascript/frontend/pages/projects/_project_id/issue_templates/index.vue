@@ -28,9 +28,9 @@
               <td>{{ item.name }}</td>
               <td>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</td>
               <td class="x-actions text-end">
-                <RouterLink :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
+                <router-link :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
-                </RouterLink>
+                </router-link>
                 <a href="#" @click.prevent="onRemove(item.id)"><i class="far fa-times" /> 删除</a>
               </td>
             </tr>

@@ -5,4 +5,5 @@ export class Category {
   color: string
   project_id: number
   default_as_test_failure: boolean
+  issue_count: number
 }

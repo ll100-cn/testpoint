@@ -1,6 +1,6 @@
 <template>
   <div class="container mb-3">
-    <div class="row align-items-start">
+    <div class="row align-items-center">
       <div class="row align-items-center" :class="[{ 'has-errors': validation.isInvaild() }, label_class]">
         <slot name="label-prepend" :code="code" />
         <label v-if="label" :for="code" class="col-form-label col text-end text-nowrap">

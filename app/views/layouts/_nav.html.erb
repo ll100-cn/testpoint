@@ -66,8 +66,15 @@
             <%= n.link_to "issue_templates", h(IssueTemplate), [@project, IssueTemplate], class: "nav-link" if can? :read, IssueTemplate %>
           </li>
 
-          <li class="nav-item">
-            <%= n.link_to "categories", h(Category), [@project, Category], class: "nav-link" if can? :read, Category %>
+
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              设置
+            </a>
+            <ul class="dropdown-menu">
+              <%= n.link_to "categories", h(Category), [@project, Category], class: "dropdown-item" if can? :read, Category %>
+            </ul>
           </li>
 
         <% end %>
