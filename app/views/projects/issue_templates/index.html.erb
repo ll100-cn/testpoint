@@ -1,37 +1,3 @@
-<div class="card app-card-main">
-  <div class="card-header bg-white d-flex">
-    <h2><%= title(page_i18n :index, model_name: h(IssueTemplate)) %></h2>
-    <div class="actions ms-auto">
-      <%= new_button [@project, :issue_template] if can? :new, IssueTemplate %>
-    </div>
-  </div>
-
-  <div class="card-body">
-    <table class="table">
-      <colgroup>
-        <col>
-        <col>
-      </colgroup>
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th><%=h IssueTemplate, :name %></th>
-        <th><%=h IssueTemplate, :lookup_by_build_form %></th>
-        <th><%=page_i18n :actions %></th>
-      </tr>
-      </thead>
-      <tbody>
-        <% @issue_templates.each do |issue_template| %>
-          <tr>
-            <td><%= issue_template.id %></td>
-            <td><%= issue_template.name %></td>
-            <td><%= issue_template.lookup_by_build_form ? "可见" : "隐藏" %></td>
-            <td>
-              <%= edit_link [@project, issue_template] %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+<div id="app">
+  <app-template />
 </div>
