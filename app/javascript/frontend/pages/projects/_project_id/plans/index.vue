@@ -19,7 +19,6 @@
           includeBlank: true
         }" @change="PaginationBarRef.queryChange({ page: 1, q: { creator_id_eq: ($event.target as HTMLInputElement).value } })" />
     </div>
-    <button class="btn btn-secondary" @click="router.push({ query: {} })">重置</button>
   </div>
   <div class="row mb-3">
     <div v-for="plan in plans?.list" :key="plan.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
@@ -115,7 +114,7 @@ const test_case_stats = ref(await new requests.TestCaseStatList().setup(proxy, (
 const progress_bg_mapping = ref({ pass: "bg-success", failure: "bg-danger" })
 
 const availiable_members = computed(() => {
-  return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').value()
+  return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()
 })
 
 </script>

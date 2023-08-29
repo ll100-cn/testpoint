@@ -1,8 +1,8 @@
 <template>
   <div class="page-header">
-    <h2>分类列表</h2>
+    <h2>项目成员列表</h2>
     <div class="actions ms-auto">
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/categories/new`">新增分类</router-link>
+      <router-link class="btn btn-primary" :to="`/projects/${project_id}/members/new`">新增成员</router-link>
     </div>
   </div>
 
@@ -16,36 +16,37 @@
           <col>
           <col>
           <col>
+          <col>
         </colgroup>
         <thead>
           <tr>
             <th>ID</th>
             <th>名称</th>
-            <th>描述</th>
-            <th>关联问题数</th>
+            <th>邮箱</th>
+            <th>角色</th>
+            <th>默认接收邮箱</th>
             <th />
           </tr>
         </thead>
         <tbody>
-          <template v-for="category in categories.list" :key="category.id">
+          <template v-for="member in members.list" :key="member.id">
             <tr>
-              <td>{{ category.id }}</td>
-              <td>
-                <span class="badge" :style="`background-color: ${category.color}`">{{ category.name }}</span>
-              </td>
-              <td>{{ category.description }}</td>
-              <td>{{ category.issue_count }}</td>
+              <td>{{ member.id }}</td>
+              <td>{{ member.name }}</td>
+              <td>{{ member.email }}</td>
+              <td>{{ member.role_text }}</td>
+              <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
               <td class="x-actions text-end">
-                <router-link :to="`/projects/${project_id}/categories/${category.id}/edit`">
+                <router-link :to="`/projects/${project_id}/members/${member.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" @click.prevent="onRemove(category.id)"><i class="far fa-times" /> 删除</a>
+                <a href="#" @click.prevent="onArchive(member.id)"><i class="far fa-archive" /> 归档</a>
               </td>
             </tr>
           </template>
         </tbody>
       </table>
-      <PaginationBar class="mb-0" :pagination="categories" :current-query="currentQuery" />
+      <PaginationBar class="mb-0" :pagination="members" :current-query="currentQuery" />
     </div>
   </div>
 </template>
@@ -73,19 +74,20 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const categories = ref(await new requests.CategoryPaginationList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberPaginationList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id.value
+  req.query = currentQuery.value
 }).perform())
 
-async function onRemove(id: number) {
-  if (!confirm("是否删除分类？")) {
+async function onArchive(id: number) {
+  if (!confirm("是否归档成员？")) {
     return
   }
 
   try {
-    await new requests.CategoryDestroy().setup(proxy, (req) => {
+    await new requests.MemberArchive().setup(proxy, (req) => {
       req.interpolations.project_id = project_id.value
-      req.interpolations.category_id = id
+      req.interpolations.member_id = id
     }).perform()
 
     router.go(0)

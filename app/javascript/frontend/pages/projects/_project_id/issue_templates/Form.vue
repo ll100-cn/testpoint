@@ -45,21 +45,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 
 import { Validations, forms, layouts } from "@/components/simple_form"
-import { Category } from '@/models'
+import * as requests from '@/requests'
 
 import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue'
 
+const { proxy } = getCurrentInstance()
 const props = defineProps<{
   form: any
   project_id: string
-  categories: Category[]
   validations: Validations
 }>()
 
-const validations = ref(new Validations())
 const lookup_by_build_form_collection = ref([
   { label: "", value: true },
 ])
@@ -68,6 +67,10 @@ const priority_collection = ref([
   { label: "普通", value: "normal" },
   { label: "重要", value: "important" },
 ])
+
+const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
+  req.interpolations.project_id = props.project_id
+}).perform())
 
 async function onRemoveInput(index: number) {
   props.form.inputs_attributes.splice(index, 1)

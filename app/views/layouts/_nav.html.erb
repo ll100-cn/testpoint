@@ -51,10 +51,6 @@
           </li>
 
           <li class="nav-item">
-            <%= n.link_to "members", t('views.navbar.members'), [@project, Member], class: "nav-link" if can? :read, Member %>
-          </li>
-
-          <li class="nav-item">
             <%= n.link_to "milestones", t('views.navbar.milestones'), milestones_project_path(@project), class: "nav-link" if can? :read, Milestone %>
           </li>
 
@@ -62,18 +58,14 @@
             <%= n.link_to "analytics", t('views.navbar.analytics'), [@project, Analytic], class: "nav-link" if can? :read, Analytic %>
           </li>
 
-          <li class="nav-item">
-            <%= n.link_to "issue_templates", h(IssueTemplate), [@project, IssueTemplate], class: "nav-link" if can? :read, IssueTemplate %>
-          </li>
-
-
-
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               设置
             </a>
             <ul class="dropdown-menu">
-              <%= n.link_to "categories", h(Category), [@project, Category], class: "dropdown-item" if can? :read, Category %>
+              <li><%= n.link_to "categories", h(Category), [@project, Category], class: "dropdown-item" if can? :read, Category %></li>
+              <li><%= n.link_to "issue_templates", h(IssueTemplate), [@project, IssueTemplate], class: "dropdown-item" if can? :read, IssueTemplate %></li>
+              <li><%= n.link_to "members", t('views.navbar.members'), [@project, Member], class: "dropdown-item" if can? :read, Member %></li>
             </ul>
           </li>
 

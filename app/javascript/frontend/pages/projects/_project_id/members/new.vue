@@ -1,6 +1,6 @@
 <template>
   <div class="page-header">
-    <h2>新增问题模版</h2>
+    <h2>新增成员</h2>
   </div>
 
   <Form :form="form" :project_id="project_id" :validations="validations" />
@@ -8,8 +8,8 @@
   <hr>
 
   <div class="x-actions offset-2">
-    <SubmitButton submit_text="新增问题模版" :func="onSubmit" />
-    <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issue_templates`">取消</router-link>
+    <SubmitButton submit_text="新增成员" :func="onSubmit" />
+    <router-link class="btn btn-secondary" :to="`/projects/${project_id}/members`">取消</router-link>
   </div>
 </template>
 
@@ -31,24 +31,20 @@ const project_id = route.params.project_id as string
 const validations = ref(new Validations())
 
 const form = ref({
-  name: "",
-  content_suggestion: "",
-  lookup_by_build_form: true,
-  title_suggestion: "",
-  default_priority: "normal",
-  default_category_id: "",
-  inputs_attributes: []
+  user_email: "",
+  nickname: "",
+  role: ""
 })
 
 async function onSubmit() {
   validations.value.clear()
 
   try {
-    const issue_template = await new requests.IssueTemplateCreate().setup(proxy, (req) => {
+    const member = await new requests.MemberCreate().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
     }).perform(form.value)
-    if (issue_template) {
-      router.push('/projects/' + project_id + '/issue_templates')
+    if (member) {
+      router.push('/projects/' + project_id + '/members')
     }
   } catch (err) {
     if (validations.value.handleError(err)) {

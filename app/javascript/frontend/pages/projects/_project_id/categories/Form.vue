@@ -24,6 +24,4 @@ const props = defineProps<{
   project_id: string
   validations: Validations
 }>()
-
-const validations = ref(new Validations())
 </script>

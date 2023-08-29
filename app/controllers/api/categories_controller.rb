@@ -7,6 +7,10 @@ class Api::CategoriesController < Api::BaseController
     kaminari_headers(@categories)
   end
 
+  def list
+    @categories
+  end
+
   def create
     @category.save
     respond_with @category

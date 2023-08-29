@@ -50,7 +50,7 @@ import { useRoute } from "vue-router"
 import { IssueTemplate, PhaseInfo, Plan, TaskUpshot, TaskUpshotInfo } from '@/models'
 import * as requests from '@/requests'
 import _ from 'lodash'
-import { Validations, forms, layouts } from "@/components/simple_form";
+import { Validations, forms, layouts } from "@/components/simple_form"
 
 import IssueForm from "@/components/IssueForm.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
