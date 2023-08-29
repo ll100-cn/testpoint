@@ -19,7 +19,7 @@
   <ul class="nav nav-pills">
     <li v-for="(phase, index) in phase_infos" :key="phase.id" class="nav-item mb-3 mx-3">
       <router-link :to="{ query: { phase_index: index } }" class="nav-link" :class="{ active: index == currentQuery.phase_index }">
-        <span>{{ phase.title }}</span>
+        <span>{{ phase.title }} ({{ phase.upshots_state_counts['failure'] ?? 0 }})</span>
       </router-link>
     </li>
     <li class="nav-item mb-3 mx-3">

@@ -1,5 +1,5 @@
 <template>
-  <select v-model="form[code]" class="form-select" :class="{'is-invalid': validation?.isInvaild()}" :disabled="disabled" @change="emit('create', $event)">
+  <select v-model="form[code]" class="form-select" :class="{'is-invalid': validation?.isInvaild()}" :disabled="disabled" @change="emit('change', $event)">
     <option v-if="includeBlank" value="" />
     <template v-if="(collection instanceof Array)">
       <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  create: [evenvt: Event]
+  change: [evenvt: Event]
 }>()
 
 </script>
