@@ -9,7 +9,7 @@ class Projects::IssueTemplatesController < BaseProjectController
   end
 
   def create
-    # @issue_template.save
+    @issue_template.save
     respond_with @issue_template, location: ok_url_or_default([@project, IssueTemplate])
   end
 

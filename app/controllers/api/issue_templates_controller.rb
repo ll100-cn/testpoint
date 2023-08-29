@@ -11,6 +11,15 @@ class Api::IssueTemplatesController < Api::BaseController
     respond_with @issue_template
   end
 
+  def show
+    respond_with @issue_template
+  end
+
+  def update
+    @issue_template.update(issue_template_params)
+    respond_with @issue_template
+  end
+
 protected
   def issue_template_params
     params.permit(*permit_attributes)

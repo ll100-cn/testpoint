@@ -7,4 +7,5 @@ if issue_template.default_category
   json[:default_category] = render partial: "api/shared/category", locals: { category: issue_template.default_category }
 end
 
+json[:inputs] = issue_template.inputs
 json

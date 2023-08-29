@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>问题模版列表</h2>
     <div class="actions ms-auto">
-      <button class="btn btn-primary" @click="utils.redirect(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
+      <button class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
     </div>
   </div>
   <div class="card">
@@ -27,7 +27,7 @@
               <td>{{ item.name }}</td>
               <td>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</td>
               <td>
-                <a href="javascript:void(0)" @click="utils.redirect(`/projects/${project_id}/issue_templates/${item.id}/edit`)">修改</a>
+                <a href="javascript:void(0)" @click="router.push(`/projects/${project_id}/issue_templates/${item.id}/edit`)">修改</a>
               </td>
             </tr>
           </template>
@@ -39,12 +39,13 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import * as requests from '@/requests'
 import * as utils from '@/lib/utils'
 
 const route = useRoute()
+const router = useRouter()
 const { proxy } = getCurrentInstance()
 const project_id = ref(route.params.project_id)
 
