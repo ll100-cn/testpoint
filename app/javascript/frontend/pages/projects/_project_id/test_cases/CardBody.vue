@@ -22,8 +22,8 @@ import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { PropType, computed } from 'vue'
 import CaseTable from './CaseTable.vue'
-import FolderSide from './FolderSide.vue'
-import { ColumnFilter, Filter } from './types'
+import FolderSide from '../FolderSide.vue'
+import { ColumnFilter, Filter } from '../types'
 
 const props = defineProps({
   label_repo: {

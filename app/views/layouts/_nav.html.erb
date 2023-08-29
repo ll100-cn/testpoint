@@ -66,6 +66,8 @@
               <li><%= n.link_to "categories", h(Category), [@project, Category], class: "dropdown-item" if can? :read, Category %></li>
               <li><%= n.link_to "issue_templates", h(IssueTemplate), [@project, IssueTemplate], class: "dropdown-item" if can? :read, IssueTemplate %></li>
               <li><%= n.link_to "members", t('views.navbar.members'), [@project, Member], class: "dropdown-item" if can? :read, Member %></li>
+              <li><%= n.link_to "test_case_labels", h(TestCaseLabel), [@project, TestCaseLabel], class: "dropdown-item" if can? :read, TestCaseLabel %></li>
+              <li><%= n.link_to "platforms", h(Platform), [@project, Platform], class: "dropdown-item" if can? :read, Platform %></li>
             </ul>
           </li>
 

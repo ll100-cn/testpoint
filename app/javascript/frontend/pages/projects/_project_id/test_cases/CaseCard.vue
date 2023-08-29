@@ -16,7 +16,7 @@
             </a>
           </template>
           <div class="dropdown-divider" />
-          <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/platforms?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">平台列表</a>
+          <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
         </div>
       </div>
 
@@ -29,11 +29,11 @@
         <div class="dropdown-menu">
           <a class="dropdown-item" href="#" :class="{ 'active': !current_label }" @click="changeFilter({ ...reset_search, label_id: null })">全部</a>
           <template v-for="label in lable_repo.values()" :key="label.id">
-            <a class="dropdown-item " href="#" :class="{ 'active': label.id === current_label?.id }" @click="changeFilter({ ...reset_search, label_id: label.id.toString() })">{{ label.name }}</a>
+            <a class="dropdown-item" href="#" :class="{ 'active': label.id === current_label?.id }" @click="changeFilter({ ...reset_search, label_id: label.id.toString() })">{{ label.name }}</a>
           </template>
 
           <div class="dropdown-divider" />
-          <a class="dropdown-item" data-remote="true" data-bs-toggle="modal" data-bs-target="#applicationModal" data-url="/projects/1/test_case_labels?ok_url=%2Fprojects%2F1%2Ftest_cases" href="#">标签列表</a>
+          <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
         </div>
       </div>
 
@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChangeFilterFunction, ColumnFilter, Filter } from './types'
+import { ChangeFilterFunction, ColumnFilter, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
