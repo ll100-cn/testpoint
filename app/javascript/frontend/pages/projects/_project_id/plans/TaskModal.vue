@@ -53,6 +53,8 @@
             :plan="plan"
             :project_id="project_id"
             :task_upshot_info="current_task_upshot_info"
+            @ignore="ignore"
+            @unignore="unignore"
             @updated="updated" />
         </div>
       </div>
@@ -69,7 +71,7 @@
 import { computed, getCurrentInstance, nextTick, onMounted, onUpdated, reactive, ref } from 'vue'
 
 import { Validations } from "@/components/simple_form"
-import { IssueTemplate, PhaseInfo, Plan, TaskInfo, TaskUpshot } from '@/models'
+import { IssueTemplate, PhaseInfo, Plan, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import * as requests from '@/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
@@ -171,6 +173,48 @@ async function getData(id: number) {
 async function updated(task_upshot: TaskUpshot) {
   await getData(task_upshot.id)
   emit("updated", current_task_upshot_info.value)
+}
+
+async function ignore(task_upshot_info: TaskUpshotInfo) {
+  try {
+    const task = await new requests.TaskIgnore().setup(proxy, (req) => {
+      req.interpolations.project_id = props.project_id
+      req.interpolations.plan_id = props.plan.id
+      req.interpolations.id = task_upshot_info.task.id
+    }).perform()
+
+    if (task) {
+      await getData(task_upshot_info.id)
+      emit('updated', current_task_upshot_info.value)
+    }
+  } catch (err) {
+    if (validations.handleError(err)) {
+      return
+    }
+
+    throw err
+  }
+}
+
+async function unignore(task_upshot_info: TaskUpshotInfo) {
+  try {
+    const task = await new requests.TaskUnignore().setup(proxy, (req) => {
+      req.interpolations.project_id = props.project_id
+      req.interpolations.plan_id = props.plan.id
+      req.interpolations.id = task_upshot_info.task.id
+    }).perform()
+
+    if (task) {
+      await getData(task_upshot_info.id)
+      emit('updated', current_task_upshot_info.value)
+    }
+  } catch (err) {
+    if (validations.handleError(err)) {
+      return
+    }
+
+    throw err
+  }
 }
 
 onUpdated(() => {

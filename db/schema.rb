@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_24_014835) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_29_061054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -348,6 +348,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_24_014835) do
     t.datetime "test_case_version", precision: nil
     t.text "content"
     t.bigint "phase_id"
+    t.datetime "ignore_at"
     t.index ["phase_id"], name: "index_tasks_on_phase_id"
     t.index ["plan_id"], name: "index_tasks_on_plan_id"
     t.index ["test_case_id"], name: "index_tasks_on_test_case_id"

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="!is_task_pass" class="d-flex x-actions">
+  <div v-if="task_upshot_info.is_ignored()">
+    <SubmitButton type="primary" submit_text="不忽略" @click="emit('unignore', props.task_upshot_info)" />
+  </div>
+  <div v-else-if="!is_task_pass" class="d-flex x-actions">
     <SubmitButton
       v-if="_.includes(['pass', 'failure'], task_upshot_info.state_override)"
       type="primary"
@@ -8,6 +11,7 @@
     <template v-else>
       <SubmitButton type="success" :func="() => updateStateOverride('pass')" submit_text="全部通过" />
       <SubmitButton type="danger" submit_text="不通过" @click="emit('update:is_task_pass', true)" />
+      <SubmitButton type="secondary" submit_text="忽略" @click="emit('ignore', props.task_upshot_info)" />
     </template>
     <div class="ms-auto">
       <button v-if="!is_bind_issue" class="btn btn-primary" @click="is_bind_issue = !is_bind_issue">关联问题</button>
@@ -69,6 +73,8 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
+  ignore: [task_upshot_info: TaskUpshotInfo]
+  unignore: [task_upshot_info: TaskUpshotInfo]
   updated: [task_upshot: TaskUpshot]
   "update:is_task_pass": [is_task_pass: boolean]
 }>()

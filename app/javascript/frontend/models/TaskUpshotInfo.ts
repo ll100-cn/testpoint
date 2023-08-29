@@ -9,4 +9,8 @@ export class TaskUpshotInfo extends TaskUpshot {
 
   @Type(() => Task)
   task: Task
+
+  is_ignored(): boolean {
+    return this.task.ignore_at != null
+  }
 }

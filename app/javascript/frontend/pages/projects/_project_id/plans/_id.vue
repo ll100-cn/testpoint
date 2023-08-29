@@ -19,7 +19,7 @@
   <ul class="nav nav-pills">
     <li v-for="(phase, index) in phase_infos" :key="phase.id" class="nav-item mb-3 mx-3">
       <router-link :to="{ query: { phase_index: index } }" class="nav-link" :class="{ active: index == currentQuery.phase_index }">
-        <span>{{ phase.title }} ({{ phase.upshots_state_counts['failure'] ?? 0 }})</span>
+        <span>{{ phase.title }}</span>
       </router-link>
     </li>
     <li class="nav-item mb-3 mx-3">
@@ -169,7 +169,7 @@ filter.value.archived = null
 const test_case_stats = computed(() => {
   const result = _(task_upshot_infos.value).groupBy((it) => {
     const test_case = it.test_case
-    return JSON.stringify({ archived: test_case.archived, role_name: test_case.role_name, scene_path: test_case.scene_path })
+    return JSON.stringify({ ignored: it.is_ignored(), role_name: test_case.role_name, scene_path: test_case.scene_path })
   }).mapValues((it) => {
     return it.length
   }).map((count, json) => {
@@ -180,6 +180,7 @@ const test_case_stats = computed(() => {
 
   return result
 })
+
 
 const columns = new ColumnFilter()
 const avaiable_task_upshot_infos = computed(() => {
@@ -196,6 +197,16 @@ const avaiable_task_upshot_infos = computed(() => {
         return false
       }
       if (!_.includes([ "pass", "failure", "pending" ], it.state_override) && state_modify_is.value === 'overrided') {
+        return false
+      }
+    }
+
+    if (filter.value.ignored === "1") {
+      if (!it.is_ignored()) {
+        return false
+      }
+    } else {
+      if (it.is_ignored()) {
         return false
       }
     }

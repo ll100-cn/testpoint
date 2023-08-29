@@ -3,16 +3,25 @@
     <h5>有效</h5>
     <ul>
       <template v-for="role_item in tree.avaiable" :key="role_item">
-        <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: '0' }" :actived="filter.archived == '0'" />
+        <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: '0', ignored: null }" :actived="filter.archived == '0'" />
       </template>
     </ul>
   </div>
 
-  <div id="folder-tree-2" class="treeview block-archived mb-3" data-controller="activable">
+  <div id="folder-tree-2" class="treeview block-archived mb-3" data-controller="activable" v-if="tree.archived.length > 0">
     <h5>归档</h5>
     <ul>
       <template v-for="role_item in tree.archived" :key="role_item">
-        <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: '1' }" :actived="filter.archived == '1'" />
+        <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: '1', ignored: null }" :actived="filter.archived == '1'" />
+      </template>
+    </ul>
+  </div>
+
+  <div id="folder-tree-3" class="treeview block-archived mb-3" data-controller="activable" v-if="tree.ignored.length > 0">
+    <h5>忽略</h5>
+    <ul>
+      <template v-for="role_item in tree.ignored" :key="role_item">
+        <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: null, ignored: '1' }" :actived="filter.ignored == '1'" />
       </template>
     </ul>
   </div>
@@ -39,10 +48,13 @@ const props = defineProps({
 })
 
 const tree = computed(() => {
-  const result = { avaiable: [], archived: [] } as { avaiable: TreeItem[], archived: TreeItem[] }
+  const result = { avaiable: [], archived: [], ignored: [] } as { avaiable: TreeItem[], archived: TreeItem[], ignored: TreeItem[] }
 
   for (const test_case_stat of props.test_case_stats) {
-    const mapping = result[test_case_stat.archived ? "archived" : "avaiable"]
+    let mapping = result[test_case_stat.archived ? "archived" : "avaiable"]
+    if (test_case_stat.ignored === true) {
+      mapping = result["ignored"]
+    }
 
     let tree_item = mapping.find((it) => it.role_name === test_case_stat.role_name)
     if (!tree_item) {

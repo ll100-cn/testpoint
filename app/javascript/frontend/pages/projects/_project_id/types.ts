@@ -46,6 +46,7 @@ export class Filter {
   role_name: string | null
   scene_path: string[]
   archived: string = "0"
+  ignored: string | null
   platform_id: string | null
   label_id: string | null
 

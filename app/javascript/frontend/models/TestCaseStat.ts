@@ -3,4 +3,5 @@ export class TestCaseStat {
   role_name: string | null
   scene_path: string[]
   count: number
+  ignored: boolean | null
 }

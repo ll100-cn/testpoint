@@ -7,7 +7,7 @@
       </span>
 
       <div class="small me-3" style="width: 4rem;">
-        <TaskStateWithIcon :state="task_upshot_info.state" />
+        <TaskStateWithIcon :state="task_upshot_info.is_ignored() ? 'ignore' : task_upshot_info.state" />
       </div>
 
       <span class="me-auto">

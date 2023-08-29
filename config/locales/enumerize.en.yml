@@ -5,6 +5,7 @@ en:
         pending: Pending
         pass: Pass
         failure: Failure
+        ignore: Ignore
     issue:
       state:
         closed: closed

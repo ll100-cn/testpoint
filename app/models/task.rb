@@ -12,6 +12,7 @@
 #  test_case_version :datetime
 #  content           :text
 #  phase_id          :bigint
+#  ignore_at         :datetime
 #
 
 class Task < ApplicationRecord
@@ -41,5 +42,13 @@ class Task < ApplicationRecord
   def test_case_changed_after_finish?
     return false unless finished?
     !test_case.paper_trail.version_at(test_case_version).version.nil?
+  end
+
+  def ignore
+    update(ignore_at: Time.current)
+  end
+
+  def unignore
+    update(ignore_at: nil)
   end
 end

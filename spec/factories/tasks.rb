@@ -12,6 +12,7 @@
 #  test_case_version :datetime
 #  content           :text
 #  phase_id          :bigint
+#  ignore_at         :datetime
 #
 
 FactoryBot.define do

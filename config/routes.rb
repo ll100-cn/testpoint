@@ -124,6 +124,11 @@ Rails.application.routes.draw do
         end
         resources :phase_infos
         resources :tasks do
+          member do
+            patch :ignore
+            patch :unignore
+          end
+
           resources :upshots do
             member do
               patch :state
