@@ -23,7 +23,6 @@
     "@vendor/fontawesome-pro-web": "https://token:9d4aa7a88bcb1e65@dev.ll100.com/repo/fontawesome-pro-5.11.2-web.tar.gz",
     "axios": "^1.4.0",
     "bootstrap": "5.3.1",
-    "bootstrap-colorpicker": "3.1.2",
     "bootstrap-select": "1.14.0-beta3",
     "buffer": "^6.0.3",
     "chart.js": "^2.9.4",

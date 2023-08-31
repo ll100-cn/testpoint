@@ -1,7 +1,6 @@
 import { Milestone } from "@/models"
 import BaseObjectRequest from "./BaseObjectRequest"
 
-
 export class MilestoneArchive extends BaseObjectRequest<Milestone> {
   constructor() {
     super()

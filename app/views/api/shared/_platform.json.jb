@@ -1,2 +1,2 @@
-json = platform.slice(:id, :name)
+json = platform.slice(:id, :name, :default_assignee_id)
 json

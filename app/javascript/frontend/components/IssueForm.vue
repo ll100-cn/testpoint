@@ -1,5 +1,5 @@
 <template>
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <!-- <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('issue_template_id')" label="选择模版">
     <forms.select v-bind="{ ...slotProps, form, collection: issue_templates, labelMethod: 'name', valueMethod: 'id' }" />
@@ -32,7 +32,7 @@ import { ISSUE_STATE_MAPPING } from '@/constants';
 import { Category, IssueTemplate, Member, TaskUpshot } from '@/models';
 import _ from "lodash";
 
-import FormExtraErrorAlert from './FormExtraErrorAlert.vue';
+import FormErrorAlert from './FormErrorAlert.vue';
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

@@ -119,10 +119,6 @@ const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 
-const currentQuery = ref({
-  phase_index: _.toNumber(route.query.phase_index ?? 0),
-})
-
 const state_eq = ref("")
 const state_modify_is = ref("")
 
@@ -143,6 +139,15 @@ const state_modify_is_dropdown_options = {
   overrided: '已操作',
 }
 
+const phase_infos = ref(await new requests.PlanPhaseInfoList().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+  req.interpolations.plan_id = plan_id
+}).perform())
+
+const currentQuery = ref({
+  phase_index: _.toNumber(route.query.phase_index ?? phase_infos.value.length - 1 ?? 0),
+})
+
 const task_upshot_infos = ref(await new requests.TaskUpshotInfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
@@ -150,11 +155,6 @@ const task_upshot_infos = ref(await new requests.TaskUpshotInfoList().setup(prox
 }).perform())
 
 const plan = ref(await new requests.PlanShow().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-  req.interpolations.plan_id = plan_id
-}).perform())
-
-const phase_infos = ref(await new requests.PlanPhaseInfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())

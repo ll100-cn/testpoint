@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, PropType } from "vue"
+import { ref } from "vue"
 
 const props = withDefaults(defineProps<{
   submit_text?: string

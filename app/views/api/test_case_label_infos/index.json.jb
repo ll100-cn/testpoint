@@ -1,0 +1,2 @@
+json = render partial: "api/shared/test_case_label_info", collection: @test_case_labels, as: :test_case_label
+json

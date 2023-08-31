@@ -5,7 +5,7 @@
       <button class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
     </div>
   </div>
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
   <div class="card">
     <div class="card-body">
       <table class="table mb-0">
@@ -28,9 +28,9 @@
               <td>{{ item.name }}</td>
               <td>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</td>
               <td class="x-actions text-end">
-                <RouterLink :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
+                <router-link :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
-                </RouterLink>
+                </router-link>
                 <a href="#" @click.prevent="onRemove(item.id)"><i class="far fa-times" /> 删除</a>
               </td>
             </tr>
@@ -48,7 +48,7 @@ import { useRoute, useRouter } from 'vue-router'
 import * as requests from '@/requests'
 import { Validations } from "@/components/simple_form"
 
-import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const route = useRoute()
 const router = useRouter()

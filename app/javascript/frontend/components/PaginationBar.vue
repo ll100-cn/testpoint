@@ -1,6 +1,6 @@
 <template>
   <paginate
-    v-if="pagination.total_count > 0"
+    v-if="pagination.total_count > 1"
     :value="pagination.current_page"
     :page-count="pagination.total_count"
     first-last-button

@@ -1,2 +1,2 @@
-json = member.slice(:id, :name, :email, :role, :role_text)
+json = member.slice(:id, :name, :email, :role, :role_text, :receive_mail)
 json

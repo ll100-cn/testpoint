@@ -29,6 +29,7 @@ class Member < ApplicationRecord
 
   scope :chief, -> { where(role: [ "owner", "manager" ]) }
   scope :ranked, -> { order(:id) }
+  scope :available, -> { where(archived_at: nil) }
 
   def submit_and_save
     self.user = User.find_by(email: user_email) || User.new(name: nickname, email: user_email)
@@ -77,5 +78,9 @@ class Member < ApplicationRecord
 
   def name
     nickname || user.name
+  end
+
+  def archive
+    update(archived_at: Time.current)
   end
 end

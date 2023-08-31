@@ -1,2 +1,2 @@
-json = test_case_label.slice(:id, :name)
+json = test_case_label.slice(:id, :name, :description)
 json

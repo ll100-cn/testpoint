@@ -3,7 +3,9 @@
     <h2>新增问题模版</h2>
   </div>
 
-  <Form :categories="categories" :form="form" :project_id="project_id" :validations="validations" />
+  <form>
+    <Form :form="form" :project_id="project_id" :validations="validations" />
+  </form>
 
   <hr>
 
@@ -29,10 +31,6 @@ const { proxy } = getCurrentInstance()
 
 const project_id = route.params.project_id as string
 const validations = ref(new Validations())
-
-const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
 
 const form = ref({
   name: "",

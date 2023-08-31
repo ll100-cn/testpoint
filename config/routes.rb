@@ -109,14 +109,19 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :projects do
-      resources :members
+      resources :members do
+        get "list", on: :collection
+        patch :archive, on: :member
+      end
       resources :categories
+      resources :category_infos
       resources :test_case_stats
       resources :test_cases do
         get :history, on: :member
       end
       resources :platforms
       resources :test_case_labels
+      resources :test_case_label_infos
 
       resources :plans do
         resources :phases do
