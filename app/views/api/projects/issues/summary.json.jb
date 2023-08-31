@@ -1,0 +1,21 @@
+json = {}
+json[:by_category] = @issue_searcher.categories_counts.map do |category, count|
+  category = render partial: "api/shared/category", locals: { category: category } if category
+  { category: category, count: count }
+end
+
+json[:by_milestone] = @issue_searcher.milestone_counts.map do |milestone, count|
+  milestone = render partial: "api/shared/milestone", locals: { milestone: milestone } if milestone
+  { milestone: milestone, count: count }
+end
+
+json[:by_assignee] = @issue_searcher.assignee_counts.map do |assignee, count|
+  assignee = render partial: "api/shared/member", locals: { member: assignee } if assignee
+  { assignee: assignee, count: count }
+end
+
+json[:by_creator] = @issue_searcher.creator_counts.map do |creator, count|
+  creator = render partial: "api/shared/member", locals: { member: creator } if creator
+  { creator: creator, count: count }
+end
+json

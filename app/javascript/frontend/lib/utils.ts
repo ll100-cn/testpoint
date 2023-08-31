@@ -2,6 +2,8 @@ import md5 from 'js-md5'
 import _ from 'lodash'
 import { colord } from "colord"
 import dayjs from '@/lib/dayjs'
+import qs from "qs"
+import { plainToClassFromExist } from 'class-transformer'
 
 const color_cache = new Map<string, string>()
 
@@ -28,4 +30,42 @@ export function humanize(time: Date | null, pattern: string) {
 export function redirect(path: string) {
   const origin = location.origin
   location.href = origin + process.env.RAILS_RELATIVE_URL_ROOT + _.trimStart(path, "/")
+}
+
+export function compactObject(obj) {
+  return _.pickBy(obj, (it) => it != null)
+}
+
+export function queryToPlain(query) {
+  const querystring = qs.stringify(query)
+  return qs.parse(querystring, { ignoreQueryPrefix: true })
+}
+
+export function plainToQuery(plain): any {
+  const querystring = qs.stringify(plain)
+  return qs.parse(querystring, { depth: 0, ignoreQueryPrefix: true })
+}
+
+export function extractKeys(...args: any[]) {
+  const result = []
+  for (const arg of args) {
+    if (arg instanceof Array) {
+      result.push(...extractKeys(...arg))
+    } else if (typeof arg === "string") {
+      result.push(arg)
+    } else {
+      result.push(..._.keys(arg))
+    }
+  }
+
+  return result
+}
+
+export function instance<T>(klass: { new(): T }, raw_data: any, options: { excludes?: any[] } = {}): T {
+  const exclude_names = extractKeys(...options.excludes ?? [])
+  const instance = new klass()
+  const names = _(instance).keys().difference(exclude_names).value()
+  const data = _.pick(raw_data, names)
+  plainToClassFromExist(instance, data)
+  return instance
 }

@@ -109,49 +109,53 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :projects do
-      resources :members do
-        get "list", on: :collection
-        patch :archive, on: :member
-      end
-      resources :categories
-      resources :category_infos
-      resources :test_case_stats
-      resources :test_cases do
-        get :history, on: :member
-      end
-      resources :platforms
-      resources :test_case_labels
-      resources :test_case_label_infos
-
-      resources :plans do
-        resources :phases do
-          resources :task_upshot_infos
+      scope module: 'projects' do
+        resources :members do
+          get "list", on: :collection
+          patch :archive, on: :member
         end
-        resources :phase_infos
-        resources :tasks do
-          member do
-            patch :ignore
-            patch :unignore
-          end
+        resources :categories
+        resources :category_infos
+        resources :test_case_stats
+        resources :test_cases do
+          get :history, on: :member
+        end
+        resources :platforms
+        resources :test_case_labels
+        resources :test_case_label_infos
 
-          resources :upshots do
+        resources :plans do
+          resources :phases do
+            resources :task_upshot_infos
+          end
+          resources :phase_infos
+          resources :tasks do
             member do
-              patch :state
-              patch :content
+              patch :ignore
+              patch :unignore
+            end
+
+            resources :upshots do
+              member do
+                patch :state
+                patch :content
+              end
             end
           end
+
+          resources :task_infos
         end
 
-        resources :task_infos
-      end
+        resources :milestones do
+          patch :archive, on: :member
+        end
 
-      resources :milestones do
-        patch :archive, on: :member
-      end
-
-      resources :issue_templates
-      resources :issues do
-        patch :archive, on: :member
+        resources :issue_templates
+        resources :issues do
+          get :summary, on: :collection
+          patch :archive, on: :member
+        end
+        resources :issue_stats
       end
     end
   end

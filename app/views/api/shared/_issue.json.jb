@@ -1,10 +1,14 @@
 json = issue.slice(
   :id, :title, :content, :state, :state_text, :created_at, :updated_at,
   :project_id, :last_edited_at, :creator_id, :assignee_id, :priority, :priority_text,
-  :task_id, :category_id, :archived_at
+  :task_id, :category_id, :archived_at, :milestone_id
 )
 
 json[:creator] = render partial: "api/shared/user", locals: { user: issue.creator }
+
+if issue.milestone
+  json[:milestone] = render partial: "api/shared/milestone", locals: { milestone: issue.milestone }
+end
 
 if issue.assignee
   json[:assignee] = render partial: "api/shared/user", locals: { user: issue.assignee }

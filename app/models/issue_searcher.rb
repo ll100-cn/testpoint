@@ -45,19 +45,19 @@ class IssueSearcher
   end
 
   def categories_counts
-    @categories_counts ||= build_scope(except: [:category_id_eq]).group(:category_id).count
+    @categories_counts ||= build_scope(except: [:category_id_eq]).group(:category).count
   end
 
   def milestone_counts
-    @milestone_counts ||= build_scope(except: [:milestone_id_eq]).group(:milestone_id).count
+    @milestone_counts ||= build_scope(except: [:milestone_id_eq]).group(:milestone).count
   end
 
   def assignee_counts
-    @assignee_counts ||= build_scope(except: [:assignee_id_eq]).group(:assignee_id).count
+    @assignee_counts ||= build_scope(except: [:assignee_id_eq]).group(:assignee).count
   end
 
   def creator_counts
-    @creator_counts ||= build_scope(except: [:creator_id_eq]).group(:creator_id).count
+    @creator_counts ||= build_scope(except: [:creator_id_eq]).group(:creator).count
   end
 
 end

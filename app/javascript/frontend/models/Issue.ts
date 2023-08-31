@@ -1,6 +1,7 @@
 import { Type } from "class-transformer"
 import { Member } from "./Member"
 import { Category } from "./Category"
+import { Milestone } from "./Milestone"
 
 export class Issue {
   id: number
@@ -19,6 +20,10 @@ export class Issue {
   task_id: number
   category_id: number
   archived_at: string
+  milestone_id: number
+
+  @Type(() => Milestone)
+  milestone: Milestone
 
   @Type(() => Member)
   creator: Member

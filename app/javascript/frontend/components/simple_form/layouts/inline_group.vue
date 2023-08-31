@@ -1,0 +1,29 @@
+<template>
+  <div class="col-auto d-flex mb-3">
+    <label v-if="label" :for="code" class="col-form-label col text-end text-nowrap me-1">{{ label }}</label>
+
+    <div>
+      <slot name="default" :code="code" :validation="validation" :disabled="disableds[code]" />
+      <div v-if="validation?.isInvaild()" class="invalid-feedback">{{ _.get(validation, 'messages', []).join(', ') }}</div>
+      <small v-if="hint" class="form-text text-body-secondary">{{ hint }}</small>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { PropType, computed } from 'vue'
+import _ from "lodash"
+
+import { Validation } from '@/models'
+
+const props = defineProps({
+  label: { type: String, required: false },
+  validation: { type: Object as PropType<Validation>, required: false },
+  disableds: { type: Object, required: false, default: () => ({}) },
+  hint: { type: String, required: false },
+  label_class: { type: String, default: "col-3" }
+})
+
+const code = computed(() => props.validation?.code)
+
+</script>

@@ -21,7 +21,7 @@
             <th>标题</th>
             <th>发布时间</th>
             <th>是否归档</th>
-            <th class="text-end">操作</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
             <td>{{ milestone.title }}</td>
             <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
             <td><span v-if="milestone.isArchived()">已归档</span></td>
-            <td class="x-spacer-x-1 text-end">
+            <td class="text-end x-actions">
               <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
                 <i class="far fa-pencil-alt" /> 修改
               </RouterLink>
