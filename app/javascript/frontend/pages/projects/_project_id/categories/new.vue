@@ -3,7 +3,9 @@
     <h2>新增分类</h2>
   </div>
 
-  <Form :form="form" :project_id="project_id" :validations="validations" />
+  <form>
+    <Form :form="form" :project_id="project_id" :validations="validations" />
+  </form>
 
   <hr>
 

@@ -1,3 +1,2 @@
 json = test_case_label.slice(:id, :name, :description)
-json[:test_case_count] = test_case_label.test_cases.count
 json

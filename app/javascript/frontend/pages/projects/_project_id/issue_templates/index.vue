@@ -5,7 +5,7 @@
       <button class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
     </div>
   </div>
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
   <div class="card">
     <div class="card-body">
       <table class="table mb-0">
@@ -48,7 +48,7 @@ import { useRoute, useRouter } from 'vue-router'
 import * as requests from '@/requests'
 import { Validations } from "@/components/simple_form"
 
-import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const route = useRoute()
 const router = useRouter()

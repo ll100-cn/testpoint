@@ -3,7 +3,9 @@
     <h2>修改成员</h2>
   </div>
 
-  <Form mode="edit" :form="form" :project_id="project_id" :validations="validations" />
+  <form>
+    <Form mode="edit" :form="form" :project_id="project_id" :validations="validations" />
+  </form>
 
   <hr>
 

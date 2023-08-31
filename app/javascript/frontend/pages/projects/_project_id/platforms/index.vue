@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <div class="card app-card-main">
     <div class="card-body">
@@ -50,7 +50,7 @@ import { Validations } from "@/components/simple_form"
 import * as requests from '@/requests'
 import _ from 'lodash'
 
-import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

@@ -8,7 +8,7 @@
         </div>
         <form @submit="onSubmit">
           <div class="modal-body">
-            <FormExtraErrorAlert :validations="validations" />
+            <FormErrorAlert :validations="validations" />
 
             <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
               <forms.string v-bind="{ ...slotProps, form }" />
@@ -41,7 +41,7 @@ import { Validations, forms, layouts } from "@/components/simple_form"
 import { PropType, getCurrentInstance, nextTick, reactive, ref, computed } from 'vue'
 import _ from 'lodash'
 
-import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { Phase, PhaseInfo, Plan, TaskUpshotInfo } from '@/models'
 import * as requests from '@/requests'
 import { Modal } from 'bootstrap'

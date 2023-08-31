@@ -1,7 +1,7 @@
 <template>
   <form @submit="submitForm">
     <div class="modal-body">
-      <FormExtraErrorAlert :validations="validations" />
+      <FormErrorAlert :validations="validations" />
 
       <component :is="layouts.vertical_group" v-slot="slotProps" :validation="validations.disconnect('role_name')" label="角色">
         <component :is="forms.string" v-bind="{ ...slotProps, form }" />
@@ -43,7 +43,7 @@ import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
 import { PropType } from 'vue';
 
 import { Validations, forms, layouts } from "@/components/simple_form";
-import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue';
+import FormErrorAlert from '@/components/FormErrorAlert.vue';
 
 const props = defineProps({
   platform_repo: {

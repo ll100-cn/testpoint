@@ -1,5 +1,5 @@
 <template>
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="模版名称">
     <forms.string v-bind="{ ...slotProps, form}" />
@@ -50,7 +50,7 @@ import { getCurrentInstance, ref } from 'vue'
 import { Validations, forms, layouts } from "@/components/simple_form"
 import * as requests from '@/requests'
 
-import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

@@ -3,7 +3,9 @@
     <h2>新增标签</h2>
   </div>
 
-  <Form :form="form" :project_id="project_id" :validations="validations" />
+  <form>
+    <Form :form="form" :project_id="project_id" :validations="validations" />
+  </form>
 
   <hr>
 

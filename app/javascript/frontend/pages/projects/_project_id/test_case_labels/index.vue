@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <div class="card app-card-main">
     <div class="card-body">
@@ -52,7 +52,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Validations } from "@/components/simple_form"
 import * as requests from '@/requests'
 
-import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -61,7 +61,7 @@ const router = useRouter()
 const validations = reactive<Validations>(new Validations())
 const project_id = ref(route.params.project_id)
 
-const test_case_labels = ref(await new requests.TestCaseLabelList().setup(proxy, (req) => {
+const test_case_labels = ref(await new requests.TestCaseLabelInfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id.value
 }).perform())
 

@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <div class="card app-card-main">
     <div class="card-body">
@@ -59,7 +59,7 @@ import * as requests from '@/requests'
 import { Validations } from "@/components/simple_form"
 import { PageQuery } from '@/types'
 
-import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 
 const { proxy } = getCurrentInstance()
@@ -73,7 +73,7 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const categories = ref(await new requests.CategoryPaginationList().setup(proxy, (req) => {
+const categories = ref(await new requests.CategoryInfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id.value
 }).perform())
 

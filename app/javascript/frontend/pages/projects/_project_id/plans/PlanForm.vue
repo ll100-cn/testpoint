@@ -1,5 +1,5 @@
 <template>
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
     <forms.string v-bind="{ ...slotProps, form }" />
@@ -20,7 +20,7 @@ import { Validations, forms, layouts } from "@/components/simple_form"
 import _ from "lodash"
 import { Platform, TestCaseStat } from "@/models"
 
-import FormExtraErrorAlert from "@/components/FormExtraErrorAlert.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const props = withDefaults(defineProps<{
   form: object

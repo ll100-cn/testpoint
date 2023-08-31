@@ -3,7 +3,9 @@
     <h2>修改问题模版</h2>
   </div>
 
-  <Form :form="form" :project_id="project_id" :validations="validations" />
+  <form>
+    <Form :form="form" :project_id="project_id" :validations="validations" />
+  </form>
 
   <hr>
 

@@ -3,11 +3,6 @@ class Api::CategoriesController < Api::BaseController
   load_and_authorize_resource through: :project
 
   def index
-    @categories = @categories.page(params[:page])
-    kaminari_headers(@categories)
-  end
-
-  def list
     @categories
   end
 

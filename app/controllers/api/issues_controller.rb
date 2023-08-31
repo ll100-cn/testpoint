@@ -11,7 +11,7 @@ class Api::IssuesController < Api::BaseController
     @issues = @issues.includes(:category).references(:category)
     issues_scope = @issues
 
-    @issue_filter_state_counts = issues_scope.group(:state, "assignee_id IS NOT NULL", "archived_at IS NOT NULL").count.transform_keys do |it|
+    @issue_filter_state_counts = issues_scope.group(:state, "assignee_id IS NOT NULL", "issues.archived_at IS NOT NULL").count.transform_keys do |it|
       [ :state, :assignee_id_is, :archived_at_is ].zip(it).to_h
     end
 

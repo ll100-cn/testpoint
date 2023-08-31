@@ -199,7 +199,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_080531) do
     t.bigint "task_id"
     t.bigint "label_ids_cache", default: [], array: true
     t.bigint "category_id"
-    t.datetime "archived_at", precision: nil
+    t.datetime "archived_at"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
@@ -238,7 +238,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_080531) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "nickname"
     t.boolean "receive_mail", default: false
-    t.date "archived_at"
+    t.datetime "archived_at"
     t.index ["project_id"], name: "index_members_on_project_id"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
@@ -274,6 +274,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_080531) do
     t.bigint "milestone_id"
     t.bigint "platform_id"
     t.string "role_name"
+    t.index ["archived"], name: "index_plans_on_archived"
     t.index ["creator_id"], name: "index_plans_on_creator_id"
     t.index ["milestone_id"], name: "index_plans_on_milestone_id"
     t.index ["platform_id"], name: "index_plans_on_platform_id"
@@ -287,6 +288,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_080531) do
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.bigint "default_assignee_id"
+    t.index ["archived"], name: "index_platforms_on_archived"
     t.index ["default_assignee_id"], name: "index_platforms_on_default_assignee_id"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end
@@ -396,6 +398,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_080531) do
     t.datetime "archived_at"
     t.bigint "platform_ids", default: [], array: true
     t.bigint "label_ids", default: [], array: true
+    t.index ["archived"], name: "index_test_cases_on_archived"
     t.index ["archived_at"], name: "index_test_cases_on_archived_at"
     t.index ["bak_folder_id"], name: "index_test_cases_on_bak_folder_id"
     t.index ["group_name"], name: "index_test_cases_on_group_name"
@@ -428,7 +431,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_080531) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
+    t.string "item_type"
+    t.string "{:null=>false}"
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"

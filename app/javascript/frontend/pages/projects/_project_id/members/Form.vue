@@ -1,5 +1,5 @@
 <template>
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('user_email')" label="用户邮箱">
     <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ form.user_email }}</div>
@@ -14,14 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from "vue";
+import { ref } from "vue"
 
 import { Validations, forms, layouts } from "@/components/simple_form"
-import * as requests from '@/requests'
 
-import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
 
-const { proxy } = getCurrentInstance()
 const props = defineProps<{
   form: any
   project_id: string
@@ -29,8 +27,11 @@ const props = defineProps<{
   mode?: "edit" | "new"
 }>()
 
-const role_collection = ref(await new requests.MemberRoleList().setup(proxy, (req) => {
-  req.interpolations.project_id = props.project_id
-}).perform())
+const role_collection = ref([
+  { "label": "负责人", "value": "owner" },
+  { "label": "管理员", "value": "manager" },
+  { "label": "开发人员", "value": "developer" },
+  { "label": "报告人", "value": "reporter" }
+])
 
 </script>

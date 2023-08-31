@@ -37,10 +37,6 @@ class Api::MembersController < Api::BaseController
     respond_with @member
   end
 
-  def roles
-    @roles = Member.role.options
-  end
-
 protected
   def member_params
     params.permit(:role, :user_email, :nickname, :receive_mail)

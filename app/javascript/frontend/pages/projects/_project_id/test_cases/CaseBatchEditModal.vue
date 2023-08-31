@@ -7,7 +7,7 @@
         </div>
         <form @submit="submitForm">
           <div class="modal-body">
-            <FormExtraErrorAlert :validations="validations" />
+            <FormErrorAlert :validations="validations" />
 
             <component :is="layouts.vertical_group" :validation="validations.disconnect('role_name')" label="角色" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
@@ -127,7 +127,7 @@ import { Modal } from 'bootstrap';
 import _ from 'lodash';
 import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue';
 
-import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue';
+import FormErrorAlert from '@/components/FormErrorAlert.vue';
 import { Validations, forms, layouts } from "@/components/simple_form";
 const validations = reactive<Validations>(new Validations())
 

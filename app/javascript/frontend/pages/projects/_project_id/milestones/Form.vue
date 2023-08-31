@@ -1,5 +1,5 @@
 <template>
-  <FormExtraErrorAlert :validations="validations" />
+  <FormErrorAlert :validations="validations" />
 
   <component :is="layouts.horizontal_group" v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
     <component :is="forms.string" v-bind="{ ...slotProps, form }" />
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import FormExtraErrorAlert from '@/components/FormExtraErrorAlert.vue';
+import FormErrorAlert from '@/components/FormErrorAlert.vue';
 import { Validations, layouts, forms } from '@/components/simple_form';
 import { PropType } from 'vue';
 
