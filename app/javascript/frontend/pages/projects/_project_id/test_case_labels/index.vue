@@ -8,7 +8,7 @@
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card app-card-main">
+  <div class="card card-x-table">
     <div class="card-body">
       <table class="table">
         <colgroup>
@@ -35,7 +35,7 @@
                 <router-link :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" @click.prevent="onRemove(test_case_label.id)"><i class="far fa-times" /> 删除</a>
+                <a href="#" @click.prevent="onRemove(test_case_label.id)"><i class="far fa-trash-alt" /> 删除</a>
               </td>
             </tr>
           </template>

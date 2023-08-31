@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <div class="card app-card-main">
+  <div class="card card-x-table">
     <div class="card-body py-0">
       <table class="table mb-0">
         <colgroup>
@@ -36,7 +36,7 @@
 
               <a href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive" /> 归档</a>
 
-              <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-times" /> 删除</a>
+              <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-trash-alt" /> 删除</a>
             </td>
           </tr>
         </tbody>

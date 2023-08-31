@@ -1,5 +1,5 @@
 <template>
-  <div class="card app-card-main">
+  <div class="card card-x-table">
     <div class="card-header bg-white d-flex">
       <h5 class="my-auto mx-2">平台</h5>
 

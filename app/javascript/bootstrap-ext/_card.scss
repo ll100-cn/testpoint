@@ -1,0 +1,13 @@
+.card-x-table {
+  .table {
+    margin-bottom: 0;
+
+    > tbody:last-child {
+      > tr:last-child {
+        > td, > th {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+}

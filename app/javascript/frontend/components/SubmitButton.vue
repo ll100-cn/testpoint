@@ -13,20 +13,15 @@ const props = withDefaults(defineProps<{
   submitting_text?: string
   type?: "primary" | "danger" | "secondary" | "success"
   func?: Function
-  not_prevent_default?: boolean
 }>(), {
   submit_text: "提交",
   submitting_text: "正在提交",
   type: "primary",
-  not_prevent_default: false
 })
 
 const submitting = ref(false)
 
 async function onSubmit(event: Event) {
-  if (!props.not_prevent_default) {
-    event.preventDefault()
-  }
   submitting.value = true
   try {
     if (props.func) {

@@ -6,7 +6,7 @@
     </div>
   </div>
   <FormErrorAlert :validations="validations" />
-  <div class="card">
+  <div class="card card-x-table">
     <div class="card-body">
       <table class="table mb-0">
         <colgroup>
@@ -31,7 +31,7 @@
                 <router-link :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" @click.prevent="onRemove(item.id)"><i class="far fa-times" /> 删除</a>
+                <a href="#" @click.prevent="onRemove(item.id)"><i class="far fa-trash-alt" /> 删除</a>
               </td>
             </tr>
           </template>

@@ -35,7 +35,7 @@
     :plan="plan"
     :task_upshot_infos="task_upshot_infos"
     @created="router.push({ query: { phase_index: phase_infos.length } })" />
-  <div class="card app-card-main">
+  <div class="card card-x-table">
     <div class="card-header bg-white d-flex">
       <h4 class="me-auto my-auto">任务列表</h4>
 

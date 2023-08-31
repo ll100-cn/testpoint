@@ -8,7 +8,7 @@
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card app-card-main">
+  <div class="card card-x-table">
     <div class="card-body">
       <table class="table">
         <colgroup>
@@ -46,7 +46,7 @@
           </template>
         </tbody>
       </table>
-      <PaginationBar class="mb-0" :pagination="members" :current-query="currentQuery" />
+      <PaginationBar class="mb-0 mt-2" :pagination="members" :current-query="currentQuery" />
     </div>
   </div>
 </template>
