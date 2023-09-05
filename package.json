@@ -58,9 +58,7 @@
     "turbolinks": "5.2.0",
     "urijs": "^1.19.11",
     "vue": "3.3.4",
-    "vue-auto-routing": "^1.0.1",
     "vue-router": "4.2.4",
-    "vue-router-layout": "^0.4.1",
     "vuejs-paginate": "^2.1.0",
     "vuex": "^4.1.0"
   },
@@ -104,6 +102,7 @@
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "5",
     "typescript": "^5.1.6",
+    "unplugin-vue-router": "^0.6.4",
     "vue-loader": "17.0.1",
     "webpack": "5",
     "webpack-assets-manifest": "5",

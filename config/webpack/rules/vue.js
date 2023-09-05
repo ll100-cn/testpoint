@@ -1,5 +1,5 @@
 const { VueLoaderPlugin } = require('vue-loader')
-const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
+const VueRouter = require('unplugin-vue-router/webpack').default
 const path = require("path")
 
 module.exports = {
@@ -12,11 +12,12 @@ module.exports = {
     ]
   },
   plugins: [
-    new VueAutoRoutingPlugin({
-      pages: 'app/javascript/frontend/pages',
-      importPrefix: '@/pages/'
+    new VueLoaderPlugin(),
+    VueRouter({
+      routesFolder: 'app/javascript/frontend/pages',
+      exclude: [ "**/[A-Z]*.vue" ],
+      dts: [ 'app/javascript/frontend/typed-router.d.ts' ]
     }),
-    new VueLoaderPlugin()
   ],
   resolve: {
     extensions: [ '.vue' ],
