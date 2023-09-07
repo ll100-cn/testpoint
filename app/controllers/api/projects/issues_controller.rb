@@ -36,7 +36,6 @@ class Api::Projects::IssuesController < Api::BaseController
       @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
       @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)
       @issue_build_form.prepare
-
       @issue_build_form.submit(issue_build_form_params)
     end
     @issue = @issue_build_form.issue

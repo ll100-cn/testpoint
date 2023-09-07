@@ -9,7 +9,7 @@
         </div>
       </form>
     </div>
-    <button class="btn btn-primary ms-3" @click="utils.redirect(`projects/${project_id}/issues/new`)">新增问题</button>
+    <RouterLink class="btn btn-primary ms-3" :to="`/projects/${project_id}/issues/new`">新增问题</RouterLink>
   </div>
 
   <ul class="nav nav-tabs border-bottom-0 zindex-999 position-relative">

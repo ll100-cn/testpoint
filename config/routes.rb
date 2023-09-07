@@ -108,6 +108,9 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: { format: :json } do
+    resource :account
+    resources :attachments
+
     resources :projects do
       scope module: 'projects' do
         resources :members do

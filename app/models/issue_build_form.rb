@@ -16,7 +16,7 @@ class IssueBuildForm
       end
 
       if !self.issue.save
-        self.errors.add(:issue, self.errors.full_messages.first)
+        self.errors.add(:issue, self.issue.errors.full_messages.first)
         raise ActiveRecord::Rollback
       end
 
@@ -24,7 +24,7 @@ class IssueBuildForm
         task = issue.project.tasks.find(from_task_id)
         issue.task = task
         if !self.issue.save
-          self.errors.add(:issue, self.errors.full_messages.first)
+          self.errors.add(:issue, self.issue.errors.full_messages.first)
           raise ActiveRecord::Rollback
         end
       end
@@ -32,7 +32,7 @@ class IssueBuildForm
       if template
         if !self.template.content_blank?
           if !self.info.submit_and_save
-            self.errors.add(:issue, self.errors.full_messages.first)
+            self.errors.add(:issue, self.info.errors.full_messages.first)
             raise ActiveRecord::Rollback
           end
         end

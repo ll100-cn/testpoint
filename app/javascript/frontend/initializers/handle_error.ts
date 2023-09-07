@@ -30,7 +30,6 @@ function handleError(err, ctx: AppContext) {
       })
     }
   }
-
   console.error(err)
 }
 
