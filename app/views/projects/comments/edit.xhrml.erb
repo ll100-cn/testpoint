@@ -1,7 +1,7 @@
 <div class="container">
   <%= bootstrap_vertical_form_for @comment, url: [@project, @issue, @comment] do |f| %>
     <%= f.input :content, input_html: { class: 'markdown-field' } %>
-    <%= render "attachments/upload_area", formats: [ :html ], attachments: f.object.attachments %>
+    <%= render template: "attachments/_upload_area", formats: [ :html ], locals: { attachments: f.object.attachments } %>
     <hr>
     <%= ok_url_tag %>
     <%= f.submit class: "btn btn-primary" %>

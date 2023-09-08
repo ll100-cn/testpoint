@@ -3,7 +3,6 @@ class Api::AttachmentsController < Api::BaseController
 
   def create
     @attachment.save
-    # sleep(5)
     @blob = ActiveStorage::Blob.find(@attachment.file.attachment.blob_id)
     respond_with @attachment
   end

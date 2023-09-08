@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, ref } from 'vue'
+import { PropType, onMounted, ref, watch } from 'vue'
 
 import EasyMDE from 'easymde'
 
@@ -24,6 +24,12 @@ const props = defineProps({
 const el = ref<HTMLElement>()
 const easyMDE = ref<EasyMDE>(null)
 
+// watch(() => props.form[props.code], (newVal, oldVal) => {
+//   if (easyMDE.value && !newVal) {
+//     easyMDE.value.value("")
+//   }
+// })
+
 onMounted(() => {
   easyMDE.value = new EasyMDE({
     element: el.value,
@@ -31,7 +37,7 @@ onMounted(() => {
     autoRefresh: { delay: 250 },
     autoDownloadFontAwesome: false,
   })
-  easyMDE.value.codemirror.on("change", () => {
+  easyMDE.value.codemirror.on("update", () => {
     props.form[props.code] = easyMDE.value.value()
   })
 })

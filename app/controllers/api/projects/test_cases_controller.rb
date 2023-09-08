@@ -15,6 +15,9 @@ class Api::Projects::TestCasesController < Api::BaseController
     end
   end
 
+  def show
+  end
+
   def create
     @test_case.save
     respond_with @test_case

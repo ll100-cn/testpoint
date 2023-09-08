@@ -1,11 +1,11 @@
+import { User } from "@/models"
 import BaseObjectRequest from "./BaseObjectRequest"
-import { Account } from "@/models/Account"
 
-export class AccountGet extends BaseObjectRequest<Account> {
+export class AccountGet extends BaseObjectRequest<User> {
   constructor() {
     super()
     this.method = "GET"
     this.endpoint = "/api/account"
-    this.klass = Account
+    this.klass = User
   }
 }

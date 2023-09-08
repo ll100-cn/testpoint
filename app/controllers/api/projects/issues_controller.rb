@@ -60,6 +60,11 @@ class Api::Projects::IssuesController < Api::BaseController
     respond_with @issue
   end
 
+  def unresolve
+    @success = @issue.unresolve(unresolve_params)
+    respond_with @issue
+  end
+
   def summary
     @filter = params[:filter] || "assign"
     @keyword = params[:keyword].presence
@@ -77,7 +82,27 @@ class Api::Projects::IssuesController < Api::BaseController
     @issue_searcher = IssueSearcher.from(issues_scope, params)
   end
 
+  def activities
+    @issue_activities = @issue.activities
+  end
+
+  def target_relationships
+    @issue_target_relationships = @issue.target_relationships
+  end
+
+  def source_relationships
+    @issue_source_relationships = @issue.source_relationships
+  end
+
+  def attachments
+    @attachments = @issue.attachments
+  end
+
 protected
+  def unresolve_params
+    params.permit(:content, attachment_ids: [])
+  end
+
   def issue_build_form_params
     params.permit(
       :from_task_id,

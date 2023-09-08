@@ -48,7 +48,7 @@
         <h6 class="card-title">提供更多信息</h6>
         <div class="d-flex">
 
-          <button class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#newComment">
+          <button class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#newComment1">
             <i class="far fa-comment me-1"></i> 新增评论
           </button>
 
@@ -95,7 +95,7 @@
           <% end %>
         </div>
 
-        <div class="collapse mt-3" id="newComment">
+        <div class="collapse mt-3" id="newComment1">
           <%= render "projects/comments/form", issue: @issue, comment: @issue.comments.new if can? :create, Comment %>
         </div>
       </div>
@@ -232,4 +232,8 @@
     <hr>
 
   </div>
+</div>
+
+<div id="app">
+  <app-template />
 </div>

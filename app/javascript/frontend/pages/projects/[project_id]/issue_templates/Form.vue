@@ -14,7 +14,7 @@
     <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
   </layouts.vertical_group>
   <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('default_priority')" label="预设优先级">
-    <forms.select v-bind="{ ...slotProps, form, collection: priority_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+    <forms.select v-bind="{ ...slotProps, form, collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
   </layouts.vertical_group>
   <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('content_suggestion')" label="预设内容">
     <forms.markdown v-bind="{ ...slotProps, form }" />
@@ -49,6 +49,7 @@ import { getCurrentInstance, ref } from 'vue'
 
 import { Validations, forms, layouts } from "@/components/simple_form"
 import * as requests from '@/requests'
+import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 
@@ -61,11 +62,6 @@ const props = defineProps<{
 
 const lookup_by_build_form_collection = ref([
   { label: "", value: true },
-])
-const priority_collection = ref([
-  { label: "ow", value: "ow" },
-  { label: "普通", value: "normal" },
-  { label: "重要", value: "important" },
 ])
 
 const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {

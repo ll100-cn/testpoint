@@ -1,11 +1,14 @@
 <template>
-  <span v-tooltip:top="helper_tooltip_text" class="badge" :class="[css_class, color]">
+  <span v-if="issue_state" v-tooltip:top="helper_tooltip_text" class="badge" :class="[css_class, color]">
     {{ text }}
+  </span>
+  <span v-else>
+    无
   </span>
 </template>
 
 <script setup lang="ts">
-import { ISSUE_STATE_MAPPING } from '@/constants';
+import { ISSUE_STATE_MAPPING } from '@/constants'
 import { computed, ref } from 'vue'
 
 const props = withDefaults(defineProps<{

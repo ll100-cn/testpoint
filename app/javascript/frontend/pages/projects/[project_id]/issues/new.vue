@@ -71,7 +71,6 @@ function build_inputs_attributes() {
 async function onSubmit() {
   validations.value.clear()
 
-  console.log(form.value)
   try {
     const issue = await new requests.IssueCreate().setup(proxy, (req) => {
       req.interpolations.project_id = params.project_id

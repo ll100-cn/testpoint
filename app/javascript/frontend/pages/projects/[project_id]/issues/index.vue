@@ -56,11 +56,6 @@
             <td>{{ issue.milestone?.title }}</td>
             <td>{{ issue.creator?.name }}</td>
             <td>{{ issue.assignee?.name }}</td>
-            <!-- <% if @task %>
-            <td>
-              <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
-            </td>
-            <% end %> -->
           </tr>
         </tbody>
       </table>

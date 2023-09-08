@@ -1,5 +1,13 @@
 <template>
-  <select ref="el" v-model="form[code]" :data-live-search="live_search" class="selectpicker form-control" data-style-base="form-control" :class="{'is-invalid': validation?.isInvaild()}" :disabled="disabled" @change="emit('change', $event)">
+  <select
+    ref="el"
+    v-model="form[code]"
+    :data-live-search="live_search"
+    class="selectpicker form-control"
+    data-style-base="form-control"
+    :class="[{'is-invalid': validation?.isInvaild()}, custom_class]"
+    :disabled="disabled"
+    @change="emit('change', $event)">
     <option v-if="include_blank" value>{{ include_blank }}</option>
     <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
       {{ item[labelMethod] }}
@@ -29,6 +37,7 @@ const props = withDefaults(defineProps<{
   include_blank?: string
   required?: boolean
   live_search?: boolean
+  custom_class?: string
 }>(), {
   disabled: false,
   includeBlank: false,

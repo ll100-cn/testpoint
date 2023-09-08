@@ -109,6 +109,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resource :account
+    resources :users
     resources :attachments
 
     resources :projects do
@@ -155,8 +156,25 @@ Rails.application.routes.draw do
 
         resources :issue_templates
         resources :issues do
+          resource :subscription
+          resources :issue_relationships
+          resources :issue_infos
+
           get :summary, on: :collection
+          patch :unresolve, on: :member
           patch :archive, on: :member
+          get :activities, on: :member
+          get :source_relationships, on: :member
+          get :target_relationships, on: :member
+          get :attachments, on: :member
+
+          resources :comments do
+            member do
+              get :comment
+              patch :unfold
+              patch :fold
+            end
+          end
         end
         resources :issue_stats
       end

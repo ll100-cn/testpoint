@@ -1,5 +1,5 @@
 <template>
-  <button type="submit" class="btn text-nowrap" :class="`btn-${type}`" :disabled="submitting" @click.prevent="onSubmit">
+  <button type="submit" class="btn text-nowrap" :class="`btn-${type} ${custom_class}`" :disabled="submitting" @click.prevent="onSubmit">
     <span v-if="submitting"><i class="spinner-border spinner-border-sm me-1" />{{ submitting_text }}</span>
     <span v-else>{{ submit_text }}</span>
   </button>
@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<{
   submitting_text?: string
   type?: "primary" | "danger" | "secondary" | "success"
   func?: Function
+  custom_class?: string
 }>(), {
   submit_text: "提交",
   submitting_text: "正在提交",

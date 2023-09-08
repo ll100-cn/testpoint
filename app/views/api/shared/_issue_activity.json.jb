@@ -1,0 +1,7 @@
+json = issue_activity.slice(:id, :issue_id, :member_id, :property, :before_value, :after_value, :created_at, :updated_at)
+
+if issue_activity.member
+  json[:member] = render partial: "api/shared/member", locals: { member: issue_activity.member }
+end
+
+json

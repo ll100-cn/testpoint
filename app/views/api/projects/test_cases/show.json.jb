@@ -1,0 +1,1 @@
+render 'api/shared/test_case', test_case: @test_case

@@ -6,4 +6,5 @@ export class Member {
   role_text: string
   receive_mail: boolean
   user_id: number
+  project_id: number
 }

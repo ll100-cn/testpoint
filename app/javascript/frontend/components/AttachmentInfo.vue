@@ -27,23 +27,23 @@
         <layouts.inline_group v-slot="slotProps" class="mb-0" :validation="validations.disconnect('title')">
           <forms.string v-bind="{ ...slotProps, form }" />
         </layouts.inline_group>
-        <div class="x-actions">
+        <div class="x-actions text-nowrap">
           <button class="btn btn-primary" @click.prevent="editAttachment">更新</button>
           <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
         </div>
       </div>
       <template v-else>
         <div class="d-flex align-items-center">
-          <span class="me-2">{{ attachment.title }}</span>
-          <span role="button" class="far fa-fw fa-edit" @click="onEdit" />
+          <span class="me-2">{{ _.truncate(attachment.title, { length: 20 }) }}</span>
+          <span role="button" class="far fa-fw fa-edit ms-auto" @click="onEdit" />
         </div>
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center x-actions">
           <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
           <a v-if="attachment.file_url" class="clipboard" :href="attachment.file_url" @click.prevent="clipboard($event.currentTarget)">
             <span class="far fa-fw fa-link text-muted" />
           </a>
           <a class="ms-auto" href="#" @click.prevent="deleteAttachment">
-            <span class="far fa-fw fa-trash-alt" />
+            <span class="far fa-fw fa-trash-alt text-muted" />
           </a>
         </div>
       </template>
@@ -52,12 +52,13 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, nextTick, onMounted, onUpdated, ref } from "vue"
 import { Validations, forms, layouts } from "@/components/simple_form"
+import { getCurrentInstance, nextTick, onMounted, onUpdated, ref } from "vue"
 
 import * as requests from "@/requests"
+import ClipboardJS from "clipboard"
 import prettyBytes from "pretty-bytes"
-import ClipboardJS from 'clipboard'
+import _ from "lodash"
 
 import { Attachment } from "@/models"
 
@@ -76,6 +77,12 @@ const validations = ref(new Validations())
 const editing = ref(false)
 const form = ref({
   title: ""
+})
+
+onMounted(() => {
+  nextTick(() => {
+    buildClipboard()
+  })
 })
 
 onUpdated(() => {
@@ -109,7 +116,9 @@ async function deleteAttachment() {
     const attachment = await new requests.AttachmentDestroy().setup(proxy, (req) => {
       req.interpolations.attachment_id = props.attachment.id
     }).perform()
-    emits('deleted', attachment)
+    if (attachment) {
+      emits('deleted', attachment)
+    }
   } catch (err) {
     if (validations.value.handleError(err)) {
       return
@@ -127,7 +136,9 @@ async function editAttachment() {
       req.interpolations.attachment_id = props.attachment.id
     }).perform(form.value)
     editing.value = false
-    emits('edited', attachment)
+    if (attachment) {
+      emits('edited', attachment)
+    }
   } catch (err) {
     if (validations.value.handleError(err)) {
       return

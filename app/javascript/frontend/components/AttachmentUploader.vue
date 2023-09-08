@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref, watch } from "vue"
+import { getCurrentInstance, onMounted, reactive, ref, watch } from "vue"
 
 import * as requests from "@/requests"
 import prettyBytes from 'pretty-bytes'
@@ -48,7 +48,9 @@ import { Attachment } from "@/models"
 import { plainToInstance } from "class-transformer"
 import { AxiosProgressEvent } from "axios"
 
-// const props = defineProps<{}>()
+const props = defineProps<{
+  attachments?: Attachment[]
+}>()
 const { proxy } = getCurrentInstance()
 
 type UploadFile = {
@@ -73,6 +75,16 @@ watch(files, (newValue, oldValue) => {
   }))
   emits("change", attachments)
 }, { deep: true })
+
+onMounted(() => {
+  files.value = buildFiles(props.attachments ?? [])
+})
+
+function buildFiles(attachments) {
+  return _.map(attachments, (attachment) => {
+    return reactive<UploadFile>({ state: "success", attachment })
+  })
+}
 
 function selected(event: Event) {
   const input_node = event.target as HTMLInputElement

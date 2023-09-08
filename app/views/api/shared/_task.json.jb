@@ -1,3 +1,3 @@
-json = task.slice(:id, :plan_id, :ignore_at)
+json = task.slice(:id, :plan_id, :ignore_at, :phase_id, :test_case_id)
 json[:finished] = task.finished?
 json
