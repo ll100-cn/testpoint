@@ -15,10 +15,6 @@
         {{ test_case.title }}
       </span>
 
-      <!-- <a
-        class="stretched-link" data-bs-target="#applicationModal" data-bs-toggle="modal"
-        :data-url="`${RAILS_RELATIVE_URL_ROOT}projects/${test_case.project_id}/plans/${task.plan_id}/tasks/${task.id}/upshots/${task_upshot_info.id}`" href="#" /> -->
-
       <a class="d-none" :class="`task_${task.id}_on`" href="#" @click.passive="onTaskChanged">refresh-self</a>
     </div>
   </div>
@@ -29,7 +25,6 @@ import { TaskUpshotInfo } from '@/models';
 import { PropType, computed } from 'vue';
 import TaskStateWithIcon from './TaskStateWithIcon.vue';
 
-const RAILS_RELATIVE_URL_ROOT = process.env.RAILS_RELATIVE_URL_ROOT
 const props = defineProps({
   task_upshot_info: {
     type: Object as PropType<TaskUpshotInfo>,

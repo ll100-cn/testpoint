@@ -29,7 +29,7 @@ export function humanize(time: Date | null, pattern: string) {
 
 export function redirect(path: string) {
   const origin = location.origin
-  location.href = origin + process.env.RAILS_RELATIVE_URL_ROOT + _.trimStart(path, "/")
+  location.href = origin + (import.meta.env.VITE_RAILS_RELATIVE_URL_ROOT ?? '/') + _.trimStart(path, "/")
 }
 
 export function compactObject(obj) {

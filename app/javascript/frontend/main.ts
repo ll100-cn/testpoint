@@ -21,9 +21,10 @@ app.component("AppTemplate", {
   `,
 })
 
-const context = require.context("@/initializers/", false, /initializers\/.+\.ts$/)
-for (const path of context.keys()) {
-  context(path).default(ctx)
+import * as initializers from "./initializers"
+for (const key in initializers) {
+  const initializer = initializers[key as keyof typeof initializers]
+  initializer(ctx)
 }
 
 app.mount('#app')

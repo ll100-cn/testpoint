@@ -53,10 +53,7 @@ gem "jb", "0.8.0"
 gem 'has_array_of', github: "marshall-lee/has_array_of"
 
 # Assets
-gem 'sass-rails', '5.1.0'
-gem 'uglifier', '4.2.0'
-gem 'coffee-rails', '5.0.0'
-# gem 'turbolinks', '5.2.1'
+gem 'vite_rails', '3.0.15'
 
 # Use Active Storage variant
 gem 'image_processing', '1.12.1'
@@ -109,5 +106,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-gem "shakapacker", "= 7.0.2"

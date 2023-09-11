@@ -24,7 +24,7 @@ function handleError(err, ctx: AppContext) {
       },
     })
   } else {
-    if (process.env.NODE_ENV !== 'development') {
+    if (import.meta.env.MODE !== 'development') {
       router.push({
         path: "/error",
       })

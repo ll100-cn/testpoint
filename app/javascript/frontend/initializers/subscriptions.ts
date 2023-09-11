@@ -2,12 +2,6 @@ import { AppContext } from "@/types";
 import { Subscription } from "rxjs";
 import { CanceledError } from "axios"
 
-declare module '@vue/runtime-core' {
-  export interface ComponentCustomProperties {
-    $subscriptions: Subscription[]
-  }
-}
-
 export default function({ app, router, handleErrors}: AppContext) {
   app.config.globalProperties.$subscriptions = []
 
@@ -24,4 +18,10 @@ export default function({ app, router, handleErrors}: AppContext) {
 
     app.config.globalProperties.$subscriptions = []
   })
+}
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $subscriptions: Subscription[]
+  }
 }

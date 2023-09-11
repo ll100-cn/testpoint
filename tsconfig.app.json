@@ -1,0 +1,16 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "app/javascript/**/*", "app/javascript/**/*.vue"],
+  "compilerOptions": {
+    "verbatimModuleSyntax": false,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
+
+    "experimentalDecorators": true,
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["app/javascript/frontend/*"]
+    }
+  }
+}
