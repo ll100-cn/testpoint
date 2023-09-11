@@ -39,6 +39,8 @@ import type {
 
 declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
+    '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/dashboard/': RouteRecordInfo<'/dashboard/', '/dashboard', Record<never, never>, Record<never, never>>,
     '/error': RouteRecordInfo<'/error', '/error', Record<never, never>, Record<never, never>>,
     '/projects/[project_id]/categories/': RouteRecordInfo<'/projects/[project_id]/categories/', '/projects/:project_id/categories', { project_id: ParamValue<true> }, { project_id: ParamValue<false> }>,
     '/projects/[project_id]/categories/[category_id].edit': RouteRecordInfo<'/projects/[project_id]/categories/[category_id].edit', '/projects/:project_id/categories/:category_id/edit', { project_id: ParamValue<true>, category_id: ParamValue<true> }, { project_id: ParamValue<false>, category_id: ParamValue<false> }>,
@@ -63,6 +65,9 @@ declare module 'vue-router/auto/routes' {
     '/projects/[project_id]/test_case_labels/[test_case_label_id].edit': RouteRecordInfo<'/projects/[project_id]/test_case_labels/[test_case_label_id].edit', '/projects/:project_id/test_case_labels/:test_case_label_id/edit', { project_id: ParamValue<true>, test_case_label_id: ParamValue<true> }, { project_id: ParamValue<false>, test_case_label_id: ParamValue<false> }>,
     '/projects/[project_id]/test_case_labels/new': RouteRecordInfo<'/projects/[project_id]/test_case_labels/new', '/projects/:project_id/test_case_labels/new', { project_id: ParamValue<true> }, { project_id: ParamValue<false> }>,
     '/projects/[project_id]/test_cases/': RouteRecordInfo<'/projects/[project_id]/test_cases/', '/projects/:project_id/test_cases', { project_id: ParamValue<true> }, { project_id: ParamValue<false> }>,
+    '/users/': RouteRecordInfo<'/users/', '/users', Record<never, never>, Record<never, never>>,
+    '/users/[user_id]/edit': RouteRecordInfo<'/users/[user_id]/edit', '/users/:user_id/edit', { user_id: ParamValue<true> }, { user_id: ParamValue<false> }>,
+    '/users/new': RouteRecordInfo<'/users/new', '/users/new', Record<never, never>, Record<never, never>>,
   }
 }
 

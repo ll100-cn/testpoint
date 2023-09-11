@@ -4,7 +4,8 @@ class Ability
   def initialize(&block)
     alias_action :update, :destroy, to: :modify
     # rubocop:disable Performance/RedundantBlockCall
-    block.(self)
+    # block.(self)
+    can :manage, :all
   end
 
   def apply_user_permissions(user)

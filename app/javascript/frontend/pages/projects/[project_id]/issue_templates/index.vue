@@ -17,7 +17,7 @@
           <tr>
             <th>ID</th>
             <th>模版名称</th>
-            <th>新建问题时可选</th>
+            <th>新增问题时可选</th>
             <th />
           </tr>
         </thead>

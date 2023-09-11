@@ -1,5 +1,5 @@
 <%= f.input :name %>
-<%= f.input :lookup_by_build_form, hint: "不勾选则新建工单时隐藏, 只能人工指给定已创建的工单" %>
+<%= f.input :lookup_by_build_form, hint: "不勾选则新增工单时隐藏, 只能人工指给定已创建的工单" %>
 <%= f.input :title_suggestion %>
 <%= f.input :default_category_id, collection: @project.categories %>
 <%= f.input :default_priority, hint: "使用该模板创建的工单的优先级" %>
@@ -24,7 +24,7 @@
         </tbody>
       </table>
       <%= f.simple_fields_for *bootstrap_args_for_vertical(:inputs, f.object.inputs.new, { child_index: "TS" }) do |ff| %>
-        <%= link_to "+ 新建", "#", data: { action: "template#add", template: render("input", f: ff) }, class: "btn btn-primary btn-sm m-2" %>
+        <%= link_to "+ 新增", "#", data: { action: "template#add", template: render("input", f: ff) }, class: "btn btn-primary btn-sm m-2" %>
       <% end %>
     </div>
   </div>

@@ -4,7 +4,7 @@
   <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="模版名称">
     <forms.string v-bind="{ ...slotProps, form}" />
   </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('lookup_by_build_form')" label="新建问题时可选" hint="不勾选则新建工单时隐藏, 只能人工指给定已创建的工单">
+  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('lookup_by_build_form')" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
     <forms.checkboxes v-bind="{ ...slotProps, form, collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
   </layouts.vertical_group>
   <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('title_suggestion')" label="预设标题">
@@ -39,7 +39,7 @@
           </tr>
         </tbody>
       </table>
-      <button class="btn btn-primary btn-sm m-2" @click="onAddInput">+ 新建</button>
+      <button class="btn btn-primary btn-sm m-2" @click="onAddInput">+ 新增</button>
     </div>
   </layouts.vertical_group>
 </template>

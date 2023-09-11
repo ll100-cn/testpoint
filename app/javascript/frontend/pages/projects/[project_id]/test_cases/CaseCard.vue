@@ -43,7 +43,7 @@
       </div>
 
       <div class="actions ms-auto">
-        <a class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新建用例</a>
+        <a class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
       </div>
     </div>
 
