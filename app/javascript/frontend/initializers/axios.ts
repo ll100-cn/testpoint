@@ -3,7 +3,7 @@ import { AppContext } from "@/types";
 import Axios from 'axios'
 
 const axios = Axios.create({
-  baseURL: import.meta.env.VITE_RAILS_RELATIVE_URL_ROOT ?? "/"
+  baseURL: import.meta.env.VITE_RUBY_BASE ?? "/"
 })
 
 export default function({ app }: AppContext) {

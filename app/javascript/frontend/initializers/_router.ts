@@ -5,8 +5,9 @@ import { AppContext } from "@/types"
 
 const routes_with_layout = setupLayouts(routes)
 
+
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_RAILS_RELATIVE_URL_ROOT ?? "/"),
+  history: createWebHistory(import.meta.env.VITE_RUBY_BASE ?? "/"),
   routes: routes_with_layout
 })
 

@@ -34,7 +34,7 @@ const { proxy } = getCurrentInstance()
 const route = useRoute()
 const params = route.params as any
 
-const RAILS_RELATIVE_URL_ROOT = import.meta.env.VITE_RAILS_RELATIVE_URL_ROOT ?? '/'
+const RAILS_RELATIVE_URL_ROOT = import.meta.env.VITE_RUBY_BASE ?? '/'
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null

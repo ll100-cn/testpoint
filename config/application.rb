@@ -26,6 +26,8 @@ module Testpoint
       g.test_framework :rspec, view_specs: false
     end
 
+    config.hosts << /.*lvh\.me/
+
     config.time_zone = "Beijing"
     config.active_record.use_yaml_unsafe_load = true
   end
