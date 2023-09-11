@@ -76,7 +76,7 @@ const currentQuery = ref<PageQuery>({
 })
 
 const members = ref(await new requests.MemberPaginationList().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id.value
+  req.interpolations.project_id = project_id
   req.query = currentQuery.value
 }).perform())
 
@@ -87,7 +87,7 @@ async function onArchive(id: number) {
 
   try {
     await new requests.MemberArchive().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id.value
+      req.interpolations.project_id = project_id
       req.interpolations.member_id = id
     }).perform()
 

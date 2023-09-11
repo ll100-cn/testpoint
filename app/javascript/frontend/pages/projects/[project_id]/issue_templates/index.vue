@@ -58,7 +58,7 @@ const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
 
 const issue_templates = ref(await new requests.IssueTemplateList().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id.value
+  req.interpolations.project_id = project_id
 }).perform())
 
 async function onRemove(id: number) {
@@ -68,7 +68,7 @@ async function onRemove(id: number) {
 
   try {
     await new requests.IssueTemplateDestroy().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id.value
+      req.interpolations.project_id = project_id
       req.interpolations.issue_template_id = id
     }).perform()
   } catch (error) {

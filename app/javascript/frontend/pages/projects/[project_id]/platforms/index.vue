@@ -61,11 +61,11 @@ const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
 
 const platforms = ref(await new requests.PlatformList().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id.value
+  req.interpolations.project_id = project_id
 }).perform())
 
 const members = ref(await new requests.MemberList().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id.value
+  req.interpolations.project_id = project_id
 }).perform())
 
 async function onRemove(id: number) {
@@ -75,7 +75,7 @@ async function onRemove(id: number) {
 
   try {
     await new requests.PlatformDestroy().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id.value
+      req.interpolations.project_id = project_id
       req.interpolations.platform_id = id
     }).perform()
 

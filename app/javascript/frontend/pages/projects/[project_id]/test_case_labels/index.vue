@@ -63,7 +63,7 @@ const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
 
 const test_case_labels = ref(await new requests.TestCaseLabelInfoList().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id.value
+  req.interpolations.project_id = project_id
 }).perform())
 
 async function onRemove(id: number) {
@@ -73,7 +73,7 @@ async function onRemove(id: number) {
 
   try {
     await new requests.TestCaseLabelDestroy().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id.value
+      req.interpolations.project_id = project_id
       req.interpolations.test_case_label_id = id
     }).perform()
 

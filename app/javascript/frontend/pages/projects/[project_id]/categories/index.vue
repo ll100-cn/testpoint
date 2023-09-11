@@ -75,7 +75,7 @@ const currentQuery = ref<PageQuery>({
 })
 
 const categories = ref(await new requests.CategoryInfoList().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id.value
+  req.interpolations.project_id = project_id
 }).perform())
 
 async function onRemove(id: number) {
@@ -85,7 +85,7 @@ async function onRemove(id: number) {
 
   try {
     await new requests.CategoryDestroy().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id.value
+      req.interpolations.project_id = project_id
       req.interpolations.category_id = id
     }).perform()
 
