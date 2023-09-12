@@ -42,6 +42,7 @@ declare module 'vue-router/auto/routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/dashboard/': RouteRecordInfo<'/dashboard/', '/dashboard', Record<never, never>, Record<never, never>>,
     '/error': RouteRecordInfo<'/error', '/error', Record<never, never>, Record<never, never>>,
+    '/issues/': RouteRecordInfo<'/issues/', '/issues', Record<never, never>, Record<never, never>>,
     '/projects/': RouteRecordInfo<'/projects/', '/projects', Record<never, never>, Record<never, never>>,
     '/projects/[project_id]/categories/': RouteRecordInfo<'/projects/[project_id]/categories/', '/projects/:project_id/categories', { project_id: ParamValue<true> }, { project_id: ParamValue<false> }>,
     '/projects/[project_id]/categories/[category_id].edit': RouteRecordInfo<'/projects/[project_id]/categories/[category_id].edit', '/projects/:project_id/categories/:category_id/edit', { project_id: ParamValue<true>, category_id: ParamValue<true> }, { project_id: ParamValue<false>, category_id: ParamValue<false> }>,

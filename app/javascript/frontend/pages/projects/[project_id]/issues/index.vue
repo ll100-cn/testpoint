@@ -109,7 +109,7 @@ const project = ref(await new requests.ProjectShow().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const issues = ref(await new requests.IssuePaginationList().setup(proxy, (req) => {
+const issues = ref(await new requests.ProjectIssuePaginationList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...page, ...search })
 }).perform())
