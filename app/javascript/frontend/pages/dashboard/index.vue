@@ -1,0 +1,102 @@
+<template>
+  <div class="page-header d-flex align-items-end">
+    <h2 class="me-3">仪表盘</h2>
+
+    <router-link class="text-primary me-3" to="/dashboard">
+      <i class="far fa-check-square"></i> 按项目
+    </router-link>
+
+    <router-link class="text-secondary position-relative" to="/issues">
+      <i class="far fa-square"></i> 按个人
+      <span class="text-danger">({{ total_issues.total_count }})</span>
+    </router-link>
+  </div>
+
+  <div class="card card-x-table">
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>项目名称</th>
+
+            <th v-for="(text, code) in ENUM_ISSUE_STAGES">
+              {{ text }} ({{ issue_stages_counts.get(code) ?? 0 }})
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="[project, issue_stats_mapping] in grouped_issue_stats">
+            <td>{{ project.name }}</td>
+
+            <td v-for="(_, code) in ENUM_ISSUE_STAGES">
+              <span v-for="issue_stat in issue_stats_mapping.get(code) ?? []" class="text-nowrap mb-1 me-2">
+                <span class="badge text-white" :style="`background-color: ${issue_stat.category?.color ?? '#212529'}`">{{ issue_stat.category?.name ?? "未分配" }} {{ issue_stat.count }}</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { IssueStat2, Project } from '@/models'
+import * as requests from '@/requests'
+import { computed, getCurrentInstance, ref } from 'vue'
+
+const proxy = getCurrentInstance()!.proxy!
+
+const issue_stats = ref(await new requests.IssueStat2List().setup(proxy).perform())
+
+const ENUM_ISSUE_STAGES = {
+  pending: '分配',
+  developing: '开发',
+  testing: '测试',
+  deploying: '部署',
+  resolved: '解决',
+  closed: '已关闭',
+}
+
+const grouped_issue_stats = computed(() => {
+  const project_repo = new Map<number, Project>()
+  const result = new Map<Project, Map<string, IssueStat2[]>>()
+
+  for (const issue_stat of issue_stats.value) {
+    const project = project_repo.get(issue_stat.project_id) || issue_stat.project
+    project_repo.set(issue_stat.project_id, project)
+
+    let issue_stats_mapping = result.get(project)
+    if (!issue_stats_mapping) {
+      issue_stats_mapping = new Map<string, IssueStat2[]>()
+      result.set(project, issue_stats_mapping)
+    }
+
+    let issue_stats = issue_stats_mapping.get(issue_stat.stage)
+    if (!issue_stats) {
+      issue_stats = []
+      issue_stats_mapping.set(issue_stat.stage, issue_stats)
+    }
+
+    issue_stats.push(issue_stat)
+  }
+
+  return result
+})
+
+const issue_stages_counts = computed(() => {
+  const result = new Map<string, number>()
+
+  for (const issue_stat of issue_stats.value) {
+    const count = result.get(issue_stat.stage) || 0
+    result.set(issue_stat.stage, count + issue_stat.count)
+  }
+
+  return result
+})
+
+const total_issues = ref(await new requests.IssuePaginationList().setup(proxy, req => {
+  req.query.per_page = 1
+}).perform())
+
+</script>

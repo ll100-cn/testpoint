@@ -158,5 +158,13 @@ Rails.application.routes.draw do
         resources :issue_stats
       end
     end
+
+    namespace :profile do
+      resources :issues
+      resources :issue_stats
+    end
+
+    resources :users
+    resources :projects
   end
 end

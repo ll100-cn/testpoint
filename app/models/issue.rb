@@ -25,6 +25,7 @@
 class Issue < ApplicationRecord
   enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :closed ],
                     default: :pending, scope: true
+  enumerize :stage, in: [ :pending, :developing, :testing, :deploying, :resolved, :closed ], scope: true
   enumerize :priority, in: { ow: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
 
   has_many :comments, dependent: :destroy
@@ -44,6 +45,8 @@ class Issue < ApplicationRecord
 
   validates :title, presence: true
   validate :require_category_when_archive
+
+  before_save :generate_stage
 
   scope :sorted, -> { order(:priority) }
   scope :created_issues, ->(member) { where(creator_id: member.id) }
@@ -66,6 +69,26 @@ class Issue < ApplicationRecord
       where(state: text)
     end
   }
+
+  def generate_stage
+    if state.pending? || state.waiting?
+      self.stage = :pending
+    elsif state.confirmed?
+      self.stage = assignee_id? ? :developing : :pending
+    elsif state.processing?
+      self.stage = :developing
+    elsif state.processed?
+      self.stage = :testing
+    elsif state.deploying
+      self.stage = :deploying
+    elsif state.resolved?
+      self.stage = :resolved
+    elsif state.closed?
+      self.stage = :closed
+    else
+      self.stage = nil
+    end
+  end
 
   def title_with_priority
     prefix = priority.important? ? "!!" : ""

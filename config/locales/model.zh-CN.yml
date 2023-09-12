@@ -69,7 +69,7 @@ zh-CN:
         default_category_id: 预设分类
         default_priority: 预设优先级
         content_suggestion: 预设内容
-        lookup_by_build_form: 新建问题时可选
+        lookup_by_build_form: 新增问题时可选
       issue_template_input:
         order_index: 排序
         label: 名称
