@@ -5,10 +5,9 @@
 <script setup lang="ts">
 import { ref, onUpdated } from "vue"
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   content: string
-}>(), {
-})
+}>()
 
 const textarea = ref()
 onUpdated(() => {

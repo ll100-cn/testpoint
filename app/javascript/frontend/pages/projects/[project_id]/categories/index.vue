@@ -11,12 +11,6 @@
   <div class="card card-x-table">
     <div class="card-body">
       <table class="table">
-        <colgroup>
-          <col>
-          <col>
-          <col>
-          <col>
-        </colgroup>
         <thead>
           <tr>
             <th>ID</th>
@@ -31,7 +25,7 @@
             <tr>
               <td>{{ category.id }}</td>
               <td>
-                <span class="badge" :style="`background-color: ${category.color}`">{{ category.name }}</span>
+                <CategoryBadge :category="category" />
               </td>
               <td>{{ category.description }}</td>
               <td>{{ category.issue_count }}</td>
@@ -61,6 +55,7 @@ import { PageQuery } from '@/types'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
+import CategoryBadge from '@/components/CategoryBadge.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

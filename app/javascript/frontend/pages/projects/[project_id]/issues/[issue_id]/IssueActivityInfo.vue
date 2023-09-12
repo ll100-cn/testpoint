@@ -1,6 +1,6 @@
 <template>
   <div class="issue-activity">
-    <!-- <img class="rounded-circle avatar me-1" :src="user.avatar_url" width="20"> -->
+    <img class="rounded-circle avatar me-1" :src="issue_activity.member.avatarUrl()" width="20">
     <span class="me-1">{{ issue_activity.member.name }}</span>
     <span v-if="issue_activity.property == 'state'" class="x-actions">
       <span>将</span>
@@ -37,62 +37,47 @@
       <span class="text-info">分类</span>
       <span>从</span>
       <template v-if="_.find(categories, { id: _.toInteger(issue_activity.before_value) })">
-        <span class="badge" :style="`background-color: ${_.find(categories, { id: _.toInteger(issue_activity.before_value) }).color};`">{{ _.find(categories, { id: _.toInteger(issue_activity.before_value) })?.name }}</span>
+        <CategoryBadge :category="_.find(categories, { id: _.toInteger(issue_activity.before_value) })" />
       </template>
       <template v-else>
         <span class="text-info">无</span>
       </template>
       <span>修改为</span>
-      <template v-if="_.find(categories, { id: _.toInteger(issue_activity.after_value) })">
-        <span class="badge" :style="`background-color: ${_.find(categories, { id: _.toInteger(issue_activity.after_value) }).color};`">{{ _.find(categories, { id: _.toInteger(issue_activity.after_value) })?.name }}</span>
-      </template>
-      <template v-else>
-        <span class="text-info">无</span>
-      </template>
+      <CategoryBadge :category="_.find(categories, { id: _.toInteger(issue_activity.after_value) })" />
     </span>
     <span v-else-if="issue_activity.property == 'archived_at'" class="x-actions">
       <span class="badge bg-light text-body">归档</span>
       <span>了该该问题</span>
     </span>
-    <!-- <%= render "projects/issues/activity/#{activity.property}", formats: [ :html ], activity: activity %> -->
+    <span v-else-if="issue_activity.property == 'project_id'" class="x-actions">
+      <span>将</span>
+      <span class="text-info">项目</span>
+      <span>从</span>
+      <span class="text-primary">{{ _.find(projects, { id: _.toInteger(issue_activity.before_value) })?.name ?? "未知" }}</span>
+      <span>修改为</span>
+      <span class="text-primary">{{ _.find(projects, { id: _.toInteger(issue_activity.after_value) })?.name ?? "未知" }}</span>
+    </span>
 
     <span class="small text-muted float-end">{{ utils.humanize(issue_activity.created_at, DATE_LONG_FORMAT) }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref } from "vue"
-
 import { DATE_LONG_FORMAT } from '@/constants'
 import * as utils from "@/lib/utils"
-import { Category, IssueActivity, IssueRelationship, Member, Milestone } from "@/models"
-import * as requests from "@/requests"
+import { Category, IssueActivity, Member, Milestone, Project } from "@/models"
 import _ from "lodash"
 
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
+import CategoryBadge from '@/components/CategoryBadge.vue'
 
-const { proxy } = getCurrentInstance()
 const props = defineProps<{
   issue_activity: IssueActivity
   project_id: number
   members: Member[]
   milestones: Milestone[]
   categories: Category[]
+  projects: Project[]
 }>()
 
-// const user = ref(await new requests.UserGet().setup(proxy, (req) => {
-//   req.interpolations.user_id = props.issue_activity.member.user_id
-// }).perform())
-
-// const issue = computed(() => {
-//   return props.issue_relationship.source
-// })
-
-// const target = computed(() => {
-//   if (issue.value == props.issue_relationship.source) {
-//     return props.issue_relationship.target
-//   } else {
-//     return props.issue_relationship.source
-//   }
-// })
 </script>

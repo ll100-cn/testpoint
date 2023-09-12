@@ -1,6 +1,6 @@
 import { Application } from 'stimulus'
-import { definitionsFromContext } from 'stimulus/webpack-helpers'
+import { registerControllers } from 'stimulus-vite-helpers'
 
 const application = Application.start()
-const context = require.context('../controllers', true, /\.jsx?$/)
-application.load(definitionsFromContext(context))
+const controllers = import.meta.globEager('../controllers/*.js')
+registerControllers(application, controllers)

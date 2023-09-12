@@ -3,19 +3,13 @@
     <h2>里程碑列表</h2>
 
     <div class="actions ms-auto">
-      <RouterLink class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</RouterLink>
+      <router-link class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</router-link>
     </div>
   </div>
 
   <div class="card card-x-table">
     <div class="card-body py-0">
       <table class="table mb-0">
-        <colgroup>
-          <col width="20%">
-          <col width="20%">
-          <col width="20%">
-          <col>
-        </colgroup>
         <thead>
           <tr>
             <th>标题</th>
@@ -30,9 +24,9 @@
             <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
             <td><span v-if="milestone.isArchived()">已归档</span></td>
             <td class="text-end x-actions">
-              <RouterLink :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
+              <router-link :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
                 <i class="far fa-pencil-alt" /> 修改
-              </RouterLink>
+              </router-link>
 
               <a href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive" /> 归档</a>
 

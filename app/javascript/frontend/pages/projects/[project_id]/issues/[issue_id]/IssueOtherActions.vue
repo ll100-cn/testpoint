@@ -44,16 +44,16 @@
 <script setup lang="ts">
 import { getCurrentInstance, nextTick, ref } from "vue"
 
+import { Comment, Issue, IssueInfo, IssueRelationship } from "@/models"
 import * as requests from "@/requests"
-import { Issue, IssueInfo, IssueRelationship, Comment } from "@/models"
-import _ from "lodash"
 import { Collapse } from "bootstrap"
+import _ from "lodash"
 
+import SubmitButton from "@/components/SubmitButton.vue"
 import { Validations } from "@/components/simple_form"
 import IssueCommentForm from "./IssueCommentForm.vue"
 import IssueInfoCreateModal from "./IssueInfoCreateModal.vue"
 import IssueRelationshipModal from "./IssueRelationshipModal.vue"
-import SubmitButton from "@/components/SubmitButton.vue"
 import IssueUnresolveModal from "./IssueUnresolveModal.vue"
 
 const { proxy } = getCurrentInstance()

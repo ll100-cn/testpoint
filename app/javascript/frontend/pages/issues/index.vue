@@ -3,11 +3,11 @@
     <h2 class="me-3">仪表盘</h2>
 
     <router-link class="text-secondary me-3" to="/dashboard">
-      <i class="far fa-square"></i> 按项目
+      <i class="far fa-square" /> 按项目
     </router-link>
 
     <router-link class="text-primary" to="/issues">
-      <i class="far fa-check-square"></i> 按个人
+      <i class="far fa-check-square" /> 按个人
       <span class="text-danger">
         ({{ total_issues.total_count }})
       </span>
@@ -16,7 +16,6 @@
 
   <div class="nav-scroll mb-n1px position-relative zindex-999">
     <ul class="nav nav-tabs">
-
       <li class="nav-item me-auto">
         <router-link class="nav-item nav-link" :class="{ 'active': filter == null }" to="/issues">
           待处理的
@@ -47,21 +46,12 @@
           归档的
         </router-link>
       </li>
-
     </ul>
   </div>
 
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
       <table class="table">
-        <colgroup>
-          <col width="5%">
-          <col width="30%">
-          <col width="10%">
-          <col width="15%">
-          <col width="10%">
-          <col width="10%">
-        </colgroup>
         <thead>
           <tr>
             <th>ID</th>
@@ -73,9 +63,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="issue in issues.list" :class="{ 'block-discard': issue.state == 'closed' }">
+          <tr v-for="issue in issues.list" :key="issue.id" :class="{ 'block-discard': issue.state == 'closed' }">
             <td>{{ issue.id }}</td>
-            <td><a href="" @click.prevent="utils.redirect(`/projects/${issue.project_id}/issues/${issue.id}`)">{{ issue.title }}</a></td>
+            <td><router-link :to="`/projects/${issue.project_id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
             <td><span class="badge" :style="`background-color: ${issue.category?.color}`">{{ issue.category?.name }}</span></td>
             <td><IssueStateBadge :issue_state="issue.state" /></td>
             <td>{{ issue.creator?.name }}</td>
@@ -103,13 +93,12 @@ const query = utils.queryToPlain(route.query)
 const filter = query.filter
 console.log(filter)
 
-const total_issues = ref(await new requests.IssuePaginationList().setup(proxy, req => {
+const total_issues = ref(await new requests.IssuePaginationList().setup(proxy, (req) => {
   req.query.per_page = 1
 }).perform())
 
-const issues = ref(await new requests.IssuePaginationList().setup(proxy, req => {
+const issues = ref(await new requests.IssuePaginationList().setup(proxy, (req) => {
   req.query.filter = filter
 }).perform())
-
 
 </script>

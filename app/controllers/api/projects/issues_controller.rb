@@ -98,6 +98,14 @@ class Api::Projects::IssuesController < Api::BaseController
     @attachments = @issue.attachments
   end
 
+  def migrate
+    with_email_notification do
+      @issue.change_project_with_author(issue_params, current_member)
+    end
+
+    respond_with @issue
+  end
+
 protected
   def unresolve_params
     params.permit(:content, attachment_ids: [])
@@ -114,7 +122,7 @@ protected
   def issue_params_names
     names = [
       :priority, :title, :content, :state, :milestone_id, :assignee_id,
-      :template_id, :project_id, :category_id, :task_id,
+      :template_id, :project_id, :category_id, :task_id, :targert_project_id,
       attachment_ids: [],
       subscribed_user_ids: [],
       template_ids: []

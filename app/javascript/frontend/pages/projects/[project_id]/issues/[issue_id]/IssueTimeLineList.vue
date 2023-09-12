@@ -1,9 +1,8 @@
 <template>
-  <div v-for="line in time_lines" :key="line.id" class="mb-3">
+  <div v-for="line in available_time_lines" :key="line.id" class="mb-3">
     <template v-if="(line instanceof Comment)">
       <template v-if="line.collapsed">
         <IssueUnfoldComment
-          v-if="line.comment_id === null"
           :comment="line"
           :issue="issue"
           :child_comment_mapping="child_comment_mapping"
@@ -14,7 +13,6 @@
       </template>
       <template v-else>
         <IssueComment
-          v-if="line.comment_id === null"
           :issue="issue"
           :comment="line"
           :child_comment_mapping="child_comment_mapping"
@@ -26,6 +24,7 @@
     </template>
     <template v-else-if="(line instanceof IssueActivity)">
       <IssueActivityInfo
+        :projects="projects"
         :members="members"
         :categories="categories"
         :milestones="milestones"
@@ -43,16 +42,16 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref, computed } from "vue"
+import { computed, getCurrentInstance, ref } from "vue"
 
-import { IssueActivity, IssueRelationship, Comment, Issue } from "@/models"
+import { Comment, Issue, IssueActivity, IssueRelationship } from "@/models"
 import * as requests from "@/requests"
-import _, { Collection } from "lodash"
+import _ from "lodash"
 
-import IssueUnfoldComment from "./IssueUnfoldComment.vue"
+import IssueActivityInfo from "./IssueActivityInfo.vue"
 import IssueComment from "./IssueComment.vue"
 import IssueRelationshipInfo from "./IssueRelationshipInfo.vue"
-import IssueActivityInfo from "./IssueActivityInfo.vue"
+import IssueUnfoldComment from "./IssueUnfoldComment.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
@@ -80,6 +79,16 @@ const milestones = await new requests.MilestoneList().setup(proxy, (req) => {
 const categories = await new requests.CategoryList().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform()
+
+const projects = ref(await new requests.ProjectPaginationList().setup(proxy, (req) => {
+  req.interpolations.project_id = props.project_id
+}).perform()).value.list
+
+const available_time_lines = computed(() => {
+  return _(props.time_lines).filter((line) => {
+    return !(line instanceof Comment) || (line instanceof Comment && _.isNull(line.comment_id))
+  }).value()
+})
 
 const child_comment_mapping = computed(() => {
   return _(props.time_lines).filter((line): line is Comment => {

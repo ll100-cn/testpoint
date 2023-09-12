@@ -48,7 +48,7 @@
             <forms.bootstrap_select v-bind="{ ...slotProps, live_search: true, custom_class: 'form-control-sm', collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
           </layouts.horizontal_group>
         </template>
-        {{ _.find(categories, { id: issue.category_id })?.name }}
+        <CategoryBadgeVue :category="_.find(categories, { id: issue.category_id })" />
       </IssueDetailEdit>
 
       <IssueDetailEdit :issue="issue" :validations="validations" code="milestone_id" attribute_name="里程碑" :form="form" @update-issue="emits('updateIssue', $event)">
@@ -72,7 +72,7 @@
               :key="user.id"
               v-tooltip:top="user.name"
               class="rounded-circle avatar"
-              :src="user.avatar_url" width="30">
+              :src="user.avatarUrl()" width="30">
           </div>
         </div>
       </div>
@@ -86,16 +86,17 @@
 import { computed, getCurrentInstance, ref } from "vue"
 
 import { Validations, forms, layouts } from "@/components/simple_form"
-import { DATE_LONG_FORMAT, ISSUE_STATE_MAPPING, ISSUE_PRIORITY_OPTIONS } from "@/constants"
+import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
 import * as utils from "@/lib/utils"
-import * as requests from "@/requests"
 import { Issue } from "@/models"
-import _ from "lodash"
+import * as requests from "@/requests"
 import { useSessionStore } from "@/store"
+import _ from "lodash"
 
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

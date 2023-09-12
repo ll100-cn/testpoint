@@ -39,26 +39,29 @@ const emits = defineEmits<{
 const el = ref<HTMLElement>()
 
 onMounted(() => {
-  el.value.addEventListener('hidden.bs.modal', (event) => {
+  el.value?.addEventListener('hidden.bs.modal', (event) => {
     emits('close', event)
   })
 })
 
 function show() {
-  console.log(Modal.getOrCreateInstance(el.value), 1111111111111)
-  Modal.getOrCreateInstance(el.value).show()
+  if (el.value) {
+    Modal.getOrCreateInstance(el.value).show()
+  }
 }
 
 function hide() {
-  Modal.getOrCreateInstance(el.value).hide()
+  if (el.value) {
+    Modal.getOrCreateInstance(el.value).hide()
+  }
 }
 
 async function asyncHide() {
   return new Promise<void>((resolve) => {
-    el.value.addEventListener('hidden.bs.modal', (event) => {
+    el.value?.addEventListener('hidden.bs.modal', (event) => {
       resolve()
     }, { once: true })
-    this.modalHide()
+    hide()
   })
 }
 

@@ -20,9 +20,9 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from "vue"
 
-import * as requests from "@/requests"
-import { Validations, forms, layouts } from "@/components/simple_form"
+import { Validations } from "@/components/simple_form"
 import { Issue } from "@/models"
+import * as requests from "@/requests"
 
 import SubmitButton from "@/components/SubmitButton.vue"
 

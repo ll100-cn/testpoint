@@ -11,6 +11,7 @@ import { Validations, forms, layouts } from "@/components/simple_form"
 import { Attachment } from "@/models"
 
 import AttachmentUploader from "@/components/AttachmentUploader.vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const props = defineProps<{
   form: any

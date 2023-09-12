@@ -3,13 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, ref, watch } from 'vue'
-
-import EasyMDE from 'easymde'
+import { PropType, onMounted, ref } from 'vue'
 
 import { Validation } from '@/models'
+import EasyMDE from 'easymde'
 
-// import 'codemirror/lib/codemirror.css'
+import 'codemirror/lib/codemirror.css'
 import 'easymde/src/css/easymde.css'
 
 const props = defineProps({

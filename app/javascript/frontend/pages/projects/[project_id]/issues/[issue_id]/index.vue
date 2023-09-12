@@ -9,7 +9,7 @@
     <h2 v-else class="me-1">{{ issue.titleWithPriority() }}</h2>
     <div>#{{ issue.id }}</div>
     <div class="ms-auto actions">
-      <button class="btn btn-primary" @click="utils.redirect(`projects/${project_id}/issues/${params.issue_id}/edit`)">修改</button>
+      <router-link class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
     </div>
   </div>
 
@@ -58,7 +58,6 @@
 import { computed, getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
-import * as utils from "@/lib/utils"
 import { IssueInfo, IssueRelationship, Comment } from "@/models"
 import * as requests from "@/requests"
 import { useSessionStore } from "@/store"

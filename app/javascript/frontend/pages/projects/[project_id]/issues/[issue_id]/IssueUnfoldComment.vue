@@ -6,7 +6,6 @@
     </div>
     <div :id="`collapse_comment_${comment.id}`" class="issue-comment collapse">
       <IssueComment
-        v-if="comment.comment_id === null"
         :issue="issue"
         :comment="comment"
         :child_comment_mapping="child_comment_mapping"
@@ -19,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { Comment, Issue } from "@/models"
-import * as utils from "@/lib/utils"
 import { DATE_LONG_FORMAT } from '@/constants'
+import * as utils from "@/lib/utils"
+import { Comment, Issue } from "@/models"
 
 import IssueComment from "./IssueComment.vue"
 

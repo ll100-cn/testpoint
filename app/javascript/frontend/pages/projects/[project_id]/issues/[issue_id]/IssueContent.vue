@@ -4,7 +4,7 @@
       <div class="card flex-grow-1 mb-3">
         <div :id="`issue${issue.id}_content`" class="card-body">
           <div class="card-title d-flex bg-white align-items-center">
-            <img class="rounded-circle avatar me-1" :src="user.avatar_url" width="20">
+            <img class="rounded-circle avatar me-1" :src=" issue.creator.avatarUrl()" width="20">
             <span>{{ issue.creator.name }}</span>
             <span class="ms-1 small text-muted">{{ issue.createOrEditTimeInWords() }}</span>
             <div class="dropdown dropdown-no-arrow ms-auto">
@@ -17,7 +17,7 @@
             </div>
           </div>
 
-          <div class="card-text no-margin-bottom">
+          <div class="no-margin-bottom">
             <template v-if="editing">
               <form>
                 <IssueCommentForm
@@ -49,11 +49,11 @@ import { Attachment, Issue, User } from "@/models"
 import * as requests from "@/requests"
 import _ from "lodash"
 
-import PageContent from "@/components/PageContent.vue"
 import AttachmentBox from "@/components/AttachmentBox.vue"
+import PageContent from "@/components/PageContent.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
-import IssueCommentForm from "./IssueCommentForm.vue"
 import { Validations } from "@/components/simple_form"
+import IssueCommentForm from "./IssueCommentForm.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

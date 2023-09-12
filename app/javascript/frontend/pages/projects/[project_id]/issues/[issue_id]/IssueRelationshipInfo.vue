@@ -1,10 +1,10 @@
 <template>
   <div class="issue-relationship d-flex align-items-center">
-    <!-- <img class="rounded-circle avatar me-1" :src="user.avatar_url" width="20"> -->
+    <img class="rounded-circle avatar me-1" :src="issue_relationship.member.avatarUrl()" width="20">
     <span>{{ issue_relationship.member.name }}</span>
 
     <span class="text-primary">
-      <RouterLink class="mx-1" :to="`/projects/${target.project_id}/issues/${target.project_id}`">#{{ target.id }} {{ target.titleWithPriority() }}</RouterLink>
+      <router-link class="mx-1" :to="`/projects/${target.project_id}/issues/${target.project_id}`">#{{ target.id }} {{ target.titleWithPriority() }}</router-link>
     </span>
     <span :class="`text text-issue-${target.state} small me-2`">({{ target.state_text }})</span>
     <span>标记为该问题的相关问题</span>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref } from "vue"
+import { computed, getCurrentInstance } from "vue"
 
 import { DATE_LONG_FORMAT } from '@/constants'
 import * as utils from "@/lib/utils"
@@ -38,10 +38,6 @@ const props = defineProps<{
 const emits = defineEmits<{
   destoryRelationship: [issue_relationship: IssueRelationship]
 }>()
-
-// const user = ref(await new requests.UserGet().setup(proxy, (req) => {
-//   req.interpolations.user_id = props.issue_relationship.member.user_id
-// }).perform())
 
 const issue = computed(() => {
   return props.issue_relationship.source

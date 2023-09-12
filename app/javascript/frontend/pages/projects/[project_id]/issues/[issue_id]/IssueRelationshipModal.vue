@@ -21,15 +21,12 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from "vue"
 
-import { IssueInfo, IssueRelationship, Issue } from "@/models"
-import * as utils from "@/lib/utils"
-import * as requests from "@/requests"
-import { DATE_LONG_FORMAT } from '@/constants'
-import _ from "lodash"
 import { Validations, forms, layouts } from "@/components/simple_form"
+import { Issue, IssueRelationship } from "@/models"
+import * as requests from "@/requests"
+import _ from "lodash"
 
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-
 import CommonModal from "@/components/CommonModal.vue"
 
 const { proxy } = getCurrentInstance()

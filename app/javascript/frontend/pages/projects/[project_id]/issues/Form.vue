@@ -28,8 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance } from 'vue'
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 
 import { Validations, forms, layouts } from "@/components/simple_form"
 import { Attachment, IssueTemplate, Member } from '@/models'
@@ -37,8 +36,6 @@ import { Attachment, IssueTemplate, Member } from '@/models'
 import AttachmentUploader from '@/components/AttachmentUploader.vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 
-const { proxy } = getCurrentInstance()
-const route = useRoute()
 const router = useRouter()
 
 const emits = defineEmits<{

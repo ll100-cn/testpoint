@@ -16,7 +16,7 @@
         </div>
       </li>
       <li v-if="(line instanceof Issue)" class="ms-3">
-        <a class="me-3" href="javascript:void(0)" @click="utils.redirect(`/projects/${project_id}/issues/${line.id}`)">{{ `#${line.id} ${line.title}` }}</a>
+        <router-link class="me-3" :to="`/projects/${project_id}/issues/${line.id}`">{{ `#${line.id} ${line.title}` }}</router-link>
         <IssueStateBadge :issue_state="line.state" />
       </li>
     </template>

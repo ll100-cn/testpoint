@@ -9,7 +9,7 @@
       </div>
 
       <div class="col">
-        <slot name="default" :code="code" :validation="validation" :disabled="disableds[code]" />
+        <slot name="default" :code="code" :validation="validation" :disabled="disabled" />
         <div v-if="validation?.isInvaild()" class="invalid-feedback">{{ _.get(validation, 'messages', []).join(', ') }}</div>
         <small v-if="hint" class="form-text text-body-secondary">{{ hint }}</small>
       </div>
@@ -18,10 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed } from 'vue'
+import { PropType, computed } from "vue"
 import _ from "lodash"
 
-import { Validation } from '@/models';
+import { Validation } from "@/models"
 
 const props = defineProps({
   label: { type: String, required: false },
@@ -32,5 +32,11 @@ const props = defineProps({
 })
 
 const code = computed(() => props.validation?.code)
+const disabled = computed(() => {
+  if (code.value) {
+    return props.disableds[code.value]
+  }
+  return false
+})
 
 </script>

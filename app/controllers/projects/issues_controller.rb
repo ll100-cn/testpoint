@@ -59,7 +59,7 @@ class Projects::IssuesController < BaseProjectController
   def edit
   end
 
-  def edit_project
+  def migrate
   end
 
   def update_project

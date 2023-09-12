@@ -20,7 +20,7 @@
             <th>ID</th>
             <th>名称</th>
             <th>是否规定</th>
-            <th></th>
+            <th />
           </tr>
         </thead>
         <tbody>

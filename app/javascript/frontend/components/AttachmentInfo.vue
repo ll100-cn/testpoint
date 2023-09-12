@@ -9,7 +9,7 @@
         </a>
       </template>
       <template v-else-if="attachment.isVideo() && attachment.file_url">
-        <a :href="attachment.file_url" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
+        <a :href="attachment.file_url" data-fancybox-trigger="gallery" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
           <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center">
             <img src="@/assets/images/file.png" class="h-100" alt="">
           </div>

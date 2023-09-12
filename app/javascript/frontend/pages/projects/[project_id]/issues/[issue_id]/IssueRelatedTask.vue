@@ -1,7 +1,7 @@
 <template>
   <p class="d-flex align-items-center">
     <span class="text-muted">该问题来自测试</span>
-    <span><RouterLink :to="`/projects/${project_id}/plans/${task.plan_id}`">{{ test_case.title }}</RouterLink></span>
+    <span><router-link :to="`/projects/${project_id}/plans/${task.plan_id}`">{{ test_case.title }}</router-link></span>
     <span class="badge bg-secondary ms-1">{{ plan.platform.name }}</span>
   </p>
 </template>

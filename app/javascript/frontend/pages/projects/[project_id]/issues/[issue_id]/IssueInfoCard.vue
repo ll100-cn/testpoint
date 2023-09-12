@@ -4,7 +4,7 @@
     <a role="button" class="alert-link ms-1" @click="issue_info_edit_modal.show()">补充工单</a>
     <span v-if="issue_info.remark">，备注：{{ issue_info.remark }}</span>
     <div class="dropdown float-right dropdown-no-arrow ms-auto">
-      <button class="btn btn-sm dropdown-toggle p-0" data-bs-toggle="dropdown" style="background: transparent;">
+      <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
         <i class="far fa-ellipsis-h" aria-hidden="true" />
       </button>
       <div class="dropdown-menu dropdown-menu-end" style="min-width: 3px;">
@@ -19,7 +19,7 @@
       工单模版：{{ issue_template.name }}
       <span class="ms-3 small text-muted">修改于 {{ utils.humanize(issue_info.updated_at, DATE_LONG_FORMAT) }}</span>
       <div class="dropdown ms-auto dropdown-no-arrow">
-        <button class="btn btn-sm dropdown-toggle p-0" data-bs-toggle="dropdown" style="background: transparent;">
+        <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
           <i class="far fa-ellipsis-h" aria-hidden="true" />
         </button>
         <div class="dropdown-menu dropdown-menu-end" style="min-width: 3px;">

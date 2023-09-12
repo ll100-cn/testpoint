@@ -60,7 +60,7 @@ Rails.application.routes.draw do
       end
       resources :issues do
         member do
-          get :edit_project
+          get :migrate
           patch :update_project
           post :archive
           match :unresolve, via: [ :get, :patch ]
@@ -163,6 +163,7 @@ Rails.application.routes.draw do
           get :summary, on: :collection
           patch :unresolve, on: :member
           patch :archive, on: :member
+          patch :migrate, on: :member
           get :activities, on: :member
           get :source_relationships, on: :member
           get :target_relationships, on: :member

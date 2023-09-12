@@ -8,7 +8,7 @@
     :class="[{'is-invalid': validation?.isInvaild()}, custom_class]"
     :disabled="disabled"
     @change="emit('change', $event)">
-    <option v-if="include_blank" value>{{ include_blank }}</option>
+    <option v-if="include_blank || include_blank == ''" value>{{ include_blank }}</option>
     <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
       {{ item[labelMethod] }}
     </option>

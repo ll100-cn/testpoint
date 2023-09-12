@@ -29,10 +29,10 @@ import { Validations } from "@/components/simple_form"
 import * as requests from "@/requests"
 import _ from "lodash"
 import * as utils from "@/lib/utils"
+import { Attachment } from "@/models"
 
 import SubmitButton from "@/components/SubmitButton.vue"
 import Form from "./Form.vue"
-import { Attachment } from "@/models"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -77,8 +77,7 @@ async function onSubmit() {
     }).perform(form.value)
 
     if (issue) {
-      utils.redirect(`projects/${params.project_id}/issues/${issue.id}`)
-      // router.push(`/projects/${params.project_id}/issues/${issue.id}`)
+      router.push(`/projects/${params.project_id}/issues/${issue.id}`)
     }
   } catch (err) {
     if (validations.value.handleError(err)) {
