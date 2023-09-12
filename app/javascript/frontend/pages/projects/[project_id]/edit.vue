@@ -1,16 +1,16 @@
 <template>
   <div class="page-header">
-    <h2>编辑用户</h2>
+    <h2>编辑项目</h2>
   </div>
 
-  <form @submit="userUpdate">
+  <form @submit="projectUpdate">
     <Form :validations="validations" :form="form" />
 
     <hr>
 
     <div class="x-spacer-x-1">
-      <input type="submit" name="commit" value="编辑用户" class="btn btn-primary">
-      <router-link :to="`/users`" class="btn btn-secondary">返回</router-link>
+      <input type="submit" name="commit" value="编辑项目" class="btn btn-primary">
+      <router-link :to="`/projects`" class="btn btn-secondary">返回</router-link>
     </div>
   </form>
 </template>
@@ -29,31 +29,29 @@ const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const user_id = params.user_id
+const project_id = params.project_id
 const form = ref({
-  email: null as string | null,
   name: null as string | null
 })
 
-const user = await new requests.UserGet().setup(proxy, (req) => {
-  req.interpolations.id = _.toNumber(user_id)
+const project = await new requests.ProjectShow().setup(proxy, (req) => {
+  req.interpolations.project_id = _.toNumber(project_id)
 }).perform()
 
-form.value.email = user.email
-form.value.name = user.name
+form.value.name = project.name
 
 
-async function userUpdate(event: Event) {
+async function projectUpdate(event: Event) {
   event.preventDefault()
   validations.clear()
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    await new requests.UserUpdate().setup(proxy, (req) => {
-      req.interpolations.id = user.id
+    await new requests.ProjectUpdate().setup(proxy, (req) => {
+      req.interpolations.id = project.id
     }).perform(form_data)
 
-    router.push(`/users`)
+    router.push(`/projects`)
   } catch (err) {
     if (validations.handleError(err)) {
       return

@@ -1,0 +1,2 @@
+json = project.slice(:id, :name, :archived)
+json
