@@ -29,5 +29,5 @@ export class IssueTemplate {
   project_id: number
   title_suggestion: string
 
-  inputs: any[]
+  inputs: IssueTemplateInput[]
 }

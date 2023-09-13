@@ -37,7 +37,7 @@
 import { computed } from "vue"
 import { useRoute } from "vue-router"
 import { useSessionStore } from "@/store"
-import { redirect } from "@/lib/utils";
+import { redirect } from "@/lib/utils"
 
 const route = useRoute()
 const store = useSessionStore()

@@ -1,0 +1,4 @@
+json = attachment.slice(:id, :title, :updated_at, :content_type)
+json[:file_url] = url_for(attachment.file)
+json[:file_size] = attachment.file.blob.byte_size
+json

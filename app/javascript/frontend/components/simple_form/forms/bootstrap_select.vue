@@ -1,6 +1,14 @@
 <template>
-  <select ref="el" v-model="form[code]" class="selectpicker form-control" :class="{'is-invalid': validation?.isInvaild()}" :disabled="disabled" @change="emit('change', $event)">
-    <option v-if="include_blank" :value="undefined">{{ include_blank }}</option>
+  <select
+    ref="el"
+    v-model="form[code]"
+    :data-live-search="live_search"
+    class="selectpicker form-control"
+    data-style-base="form-control"
+    :class="[{'is-invalid': validation?.isInvaild()}, custom_class]"
+    :disabled="disabled"
+    @change="emit('change', $event)">
+    <option v-if="include_blank || include_blank == ''" value>{{ include_blank }}</option>
     <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
       {{ item[labelMethod] }}
     </option>
@@ -28,17 +36,20 @@ const props = withDefaults(defineProps<{
   includeBlank?: boolean
   include_blank?: string
   required?: boolean
+  live_search?: boolean
+  custom_class?: string
 }>(), {
   disabled: false,
   includeBlank: false,
   required: false,
+  live_search: false
 })
 
 const emit = defineEmits<{
   change: [evenvt: Event]
 }>()
 
-const el = ref<HTMLElement>()
+const el = ref(null! as HTMLElement)
 
 onMounted(() => {
   nextTick(() => {

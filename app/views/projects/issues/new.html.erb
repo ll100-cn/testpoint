@@ -1,35 +1,4 @@
-<div class="page-header">
-  <h2><%= page_i18n :new, model_name: h(@issue) %></h2>
-</div>
 
-<div class="container">
-  <%= render 'select_template', template: @issue_build_form.template %>
-
-  <% if @issue_build_form.template %>
-    <%= bootstrap_vertical_form_for @issue_build_form, url: { action: :create } do |f| %>
-      <%= hidden_field_tag :issue_template_id, f.object.template.id %>
-
-      <%= f.simple_fields_for :issue do |ff| %>
-        <%= ff.input :title %>
-        <%= ff.input :creator_id, collection: @project.members, label_method: :name, input_html: { class: "select2-field" } %>
-        <%= ff.input :content, input_html: { class: 'markdown-field' } %>
-        <%= render "attachments/upload_area", formats: [ :html ], attachments: ff.object.attachments %>
-      <% end %>
-
-      <hr>
-
-      <%= f.simple_fields_for :info do |ff| %>
-        <%= ff.simple_fields_for *bootstrap_args_for_vertical(:inputs) do |fff| %>
-          <%= fff.input :template_input_id, as: :hidden %>
-          <%= fff.input :value, label: fff.object.label %>
-        <% end %>
-      <% end %>
-
-      <hr>
-
-      <%= ok_url_tag %>
-      <%= f.submit class: "btn btn-primary" %>
-      <%= cancel_button [@project, @issue] %>
-    <% end %>
-  <% end %>
+<div id="app">
+  <app-template />
 </div>

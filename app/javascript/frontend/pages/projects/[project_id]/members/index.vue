@@ -11,13 +11,6 @@
   <div class="card card-x-table">
     <div class="card-body">
       <table class="table">
-        <colgroup>
-          <col>
-          <col>
-          <col>
-          <col>
-          <col>
-        </colgroup>
         <thead>
           <tr>
             <th>ID</th>

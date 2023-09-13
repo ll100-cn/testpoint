@@ -9,7 +9,7 @@
         </div>
       </form>
     </div>
-    <button class="btn btn-primary ms-3" @click="utils.redirect(`projects/${project_id}/issues/new`)">新增问题</button>
+    <router-link class="btn btn-primary ms-3" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
   </div>
 
   <ul class="nav nav-tabs border-bottom-0 zindex-999 position-relative">
@@ -27,15 +27,6 @@
     <div class="card-body">
       <SearchBar :summary="issue_summary" />
       <table class="table">
-        <colgroup>
-          <col width="5%">
-          <col width="20%">
-          <col width="10%">
-          <col width="8%">
-          <col width="10%">
-          <col width="10%">
-          <col width="10%">
-        </colgroup>
         <thead>
           <tr>
             <th>ID</th>
@@ -50,17 +41,12 @@
         <tbody>
           <tr v-for="issue in issues.list" :key="issue.id" :class="{ 'block-discard': issue.state == 'closed' }">
             <td>{{ issue.id }}</td>
-            <td><a href="" @click.prevent="utils.redirect(`/projects/${project.id}/issues/${issue.id}`)">{{ issue.title }}</a></td>
-            <td><span class="badge" :style="`background-color: ${issue.category?.color}`">{{ issue.category?.name }}</span></td>
-            <td><IssueStateBadge :issue_state="issue.state" /></td>
+            <td><router-link :to="`/projects/${project.id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
+            <td><CategoryBadge :category="issue.category" /></td>
+            <td><IssueStateBadge :state="issue.state" /></td>
             <td>{{ issue.milestone?.title }}</td>
             <td>{{ issue.creator?.name }}</td>
             <td>{{ issue.assignee?.name }}</td>
-            <!-- <% if @task %>
-            <td>
-              <%= render "relate_issue", project: @project, plan: @task.plan, task: @task, issue: issue %>
-            </td>
-            <% end %> -->
           </tr>
         </tbody>
       </table>
@@ -70,15 +56,16 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref, computed, reactive } from "vue"
+import { computed, getCurrentInstance, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
-import _ from "lodash"
-import * as requests from "@/requests"
 import * as utils from "@/lib/utils"
 import Page from "@/pages/Page"
+import * as requests from "@/requests"
+import _ from "lodash"
 import Search from "./Search"
 
+import CategoryBadge from "@/components/CategoryBadge.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import PaginationBar2 from "@/components/PaginationBar2.vue"
 import SearchBar from "./SearchBar.vue"
@@ -147,7 +134,7 @@ function querySearch(search: Search | null) {
     const data = utils.compactObject(search)
     router.push({ query: utils.plainToQuery(data) })
   } else {
-    router.push({ query: null })
+    router.push({ query: undefined })
   }
 }
 

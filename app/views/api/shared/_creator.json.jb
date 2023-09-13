@@ -1,3 +1,2 @@
 json = creator.slice(:id, :name)
-
 json

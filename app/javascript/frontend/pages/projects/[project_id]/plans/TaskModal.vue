@@ -1,5 +1,5 @@
 <template>
-  <div ref="modal" class="modal fade" tabindex="-1" data-bs-backdrop="static">
+  <div ref="modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
       <div v-if="mode == 'shown'" class="modal-content">
         <div class="modal-header">

@@ -1,6 +1,6 @@
 import { ErrorAccessDenied, ErrorUnauthorized } from "@/requests"
 import Keyv from "@keyvhq/core"
-import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from "axios"
+import { AxiosError, AxiosHeaders, AxiosInstance, AxiosProgressEvent, AxiosRequestConfig, AxiosResponse, Method } from "axios"
 import _ from "lodash"
 import * as qs from "qs"
 import * as rxjs from "rxjs"
@@ -22,6 +22,8 @@ export abstract class BaseRequest<T> {
   $keyv: Keyv = null
   data: any = {}
   method!: Method
+  headers = {}
+  conifg: AxiosRequestConfig = {}
   ctx: PerformContext = { $axios: null, $keyv: null }
 
   setup(ctx: { $axios: any, $keyv: any }, callback: (instance: this) => void | null = null): this {
@@ -47,9 +49,9 @@ export abstract class BaseRequest<T> {
   }
 
   async processError(e: Error) {
-    if (e instanceof AxiosError && e.response.status === 403) {
+    if (e instanceof AxiosError && e.response?.status === 403) {
       throw new ErrorAccessDenied()
-    } else if (e instanceof AxiosError && e.response.status === 401) {
+    } else if (e instanceof AxiosError && e.response?.status === 401) {
       throw new ErrorUnauthorized()
     } else {
       throw e
@@ -89,7 +91,8 @@ export abstract class BaseRequest<T> {
     const config: AxiosRequestConfig = {
       url: this.buildUrl(),
       method: this.method,
-      // headers: this.headers,
+      headers: this.headers,
+      ...this.conifg
     }
 
     if (data) {
@@ -126,8 +129,12 @@ export abstract class BaseRequest<T> {
 
   fillFormData(formData, name, value) {
     if (_.isArray(value)) {
-      for (const val of value) {
-        this.fillFormData(formData, `${name}[]`, val)
+      for (const [ key, val ] of value.entries()) {
+        if (_.isPlainObject(val)) {
+          this.fillFormData(formData, `${name}[${key}]`, val)
+        } else {
+          this.fillFormData(formData, `${name}[]`, val)
+        }
       }
     } else if (_.isPlainObject(value)) {
       for (const attr in value) {

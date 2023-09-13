@@ -1,0 +1,1 @@
+render partial: "api/shared/issue_relationship", collection: @issue_source_relationships, as: :issue_relationship

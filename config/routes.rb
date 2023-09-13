@@ -60,7 +60,7 @@ Rails.application.routes.draw do
       end
       resources :issues do
         member do
-          get :edit_project
+          get :migrate
           patch :update_project
           post :archive
           match :unresolve, via: [ :get, :patch ]
@@ -108,6 +108,10 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: { format: :json } do
+    resource :account
+    resources :users
+    resources :attachments
+
     resources :projects do
       scope module: 'projects' do
         resources :members do
@@ -152,8 +156,24 @@ Rails.application.routes.draw do
 
         resources :issue_templates
         resources :issues do
+          resource :subscription
+          resources :issue_relationships
+          resources :issue_infos
+
           get :summary, on: :collection
+          patch :unresolve, on: :member
           patch :archive, on: :member
+          patch :migrate, on: :member
+          get :activities, on: :member
+          get :source_relationships, on: :member
+          get :target_relationships, on: :member
+          get :attachments, on: :member
+
+          resources :comments do
+            member do
+              get :comment
+            end
+          end
         end
         resources :issue_stats
       end

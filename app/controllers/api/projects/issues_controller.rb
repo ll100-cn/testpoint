@@ -36,7 +36,6 @@ class Api::Projects::IssuesController < Api::BaseController
       @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
       @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)
       @issue_build_form.prepare
-
       @issue_build_form.submit(issue_build_form_params)
     end
     @issue = @issue_build_form.issue
@@ -61,6 +60,11 @@ class Api::Projects::IssuesController < Api::BaseController
     respond_with @issue
   end
 
+  def unresolve
+    @success = @issue.unresolve(unresolve_params)
+    respond_with @issue
+  end
+
   def summary
     @filter = params[:filter] || "assign"
     @keyword = params[:keyword].presence
@@ -78,7 +82,39 @@ class Api::Projects::IssuesController < Api::BaseController
     @issue_searcher = IssueSearcher.from(issues_scope, params)
   end
 
+  def activities
+    @issue_activities = @issue.activities
+  end
+
+  def target_relationships
+    @issue_target_relationships = @issue.target_relationships
+  end
+
+  def source_relationships
+    @issue_source_relationships = @issue.source_relationships
+  end
+
+  def attachments
+    @attachments = @issue.attachments
+  end
+
+  def migrate
+    with_email_notification do
+      @issue.change_project_with_author(migrate_params, current_member)
+    end
+
+    respond_with @issue
+  end
+
 protected
+  def unresolve_params
+    params.permit(:content, attachment_ids: [])
+  end
+
+  def migrate_params
+    params.permit(:targert_project_id, :category_id)
+  end
+
   def issue_build_form_params
     params.permit(
       :from_task_id,
@@ -90,7 +126,7 @@ protected
   def issue_params_names
     names = [
       :priority, :title, :content, :state, :milestone_id, :assignee_id,
-      :template_id, :project_id, :category_id, :task_id,
+      :template_id, :project_id, :category_id, :task_id, :targert_project_id,
       attachment_ids: [],
       subscribed_user_ids: [],
       template_ids: []

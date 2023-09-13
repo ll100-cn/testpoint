@@ -1,7 +1,9 @@
 import { Type } from "class-transformer"
-import { Member } from "./Member"
 import { Category } from "./Category"
+import { Member } from "./Member"
 import { Milestone } from "./Milestone"
+import { Task } from "./Task"
+import { User } from "./User"
 
 export class Issue {
   id: number
@@ -9,10 +11,18 @@ export class Issue {
   content: string
   state: string
   state_text: string
-  created_at: string
-  updated_at: string
+
+  @Type(() => Date)
+  created_at: Date
+
+  @Type(() => Date)
+  updated_at: Date
+
   project_id: number
-  last_edited_at: string
+
+  @Type(() => Date)
+  last_edited_at: Date
+
   creator_id: number
   assignee_id: number
   priority: string
@@ -33,4 +43,15 @@ export class Issue {
 
   @Type(() => Category)
   category: Category
+
+  @Type(() => Task)
+  task: Task
+
+  @Type(() => User)
+  subscribed_users: User[]
+
+  titleWithPriority() {
+    const prefix = this.priority == "important" ? "!!" : ""
+    return `${prefix}${this.title}`
+  }
 }

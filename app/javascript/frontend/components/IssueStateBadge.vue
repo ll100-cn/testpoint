@@ -1,15 +1,19 @@
 <template>
-  <span v-tooltip:top="helper_tooltip_text" class="badge" :class="[css_class, color]">
+  <span v-if="state" v-tooltip:top="helper_tooltip_text" class="badge" :class="[css_class, color]">
     {{ text }}
+  </span>
+  <span v-else>
+    无
   </span>
 </template>
 
 <script setup lang="ts">
-import { ISSUE_STATE_MAPPING } from '@/constants';
-import { computed, ref } from 'vue'
+import { computed } from "vue"
+
+import { ISSUE_STATE_MAPPING } from "@/constants"
 
 const props = withDefaults(defineProps<{
-  issue_state: string
+  state: string
   options?: any
 }>(), {
   options: () => ({}),
@@ -27,17 +31,17 @@ const color = computed(() => {
     archived: "bg-light text-body",
     closed: "bg-light text-body"
   }
-  return colors[props.issue_state]
+  return colors[props.state]
 })
 
 const text = computed(() => {
   let text = ""
-  if (typeof props.issue_state === "string") {
-    text = ISSUE_STATE_MAPPING[props.issue_state]
+  if (typeof props.state === "string") {
+    text = ISSUE_STATE_MAPPING[props.state]
   } else {
-    text = props.issue_state
+    text = props.state
   }
-  return text ?? props.issue_state
+  return text ?? props.state
 })
 
 const helper_tooltip_text = computed(() => {
@@ -52,7 +56,7 @@ const helper_tooltip_text = computed(() => {
     archived: "问题已全部处理完毕，无需再做任何操作",
     closed: "问题无效或重复，不作处理"
   }
-  return tooltipTexts[props.issue_state]
+  return tooltipTexts[props.state]
 })
 
 const css_class = computed(() => props.options.class)

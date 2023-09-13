@@ -1,4 +1,4 @@
-import { AppContext } from "@/types";
+import { AppContext } from "@/types"
 import { createPinia } from "pinia"
 
 export default function({ app }: AppContext) {

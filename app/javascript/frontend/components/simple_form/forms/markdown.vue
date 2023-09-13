@@ -5,11 +5,10 @@
 <script setup lang="ts">
 import { PropType, onMounted, ref } from 'vue'
 
+import { Validation } from '@/models'
 import EasyMDE from 'easymde'
 
-import { Validation } from '@/models'
-
-// import 'codemirror/lib/codemirror.css'
+import 'codemirror/lib/codemirror.css'
 import 'easymde/src/css/easymde.css'
 
 const props = defineProps({
@@ -21,8 +20,14 @@ const props = defineProps({
   disabled: { type: Boolean, required: false, default: false },
 })
 
-const el = ref<HTMLElement>()
+const el = ref(null! as HTMLElement)
 const easyMDE = ref<EasyMDE>(null)
+
+// watch(() => props.form[props.code], (newVal, oldVal) => {
+//   if (easyMDE.value && !newVal) {
+//     easyMDE.value.value("")
+//   }
+// })
 
 onMounted(() => {
   easyMDE.value = new EasyMDE({
@@ -31,7 +36,7 @@ onMounted(() => {
     autoRefresh: { delay: 250 },
     autoDownloadFontAwesome: false,
   })
-  easyMDE.value.codemirror.on("change", () => {
+  easyMDE.value.codemirror.on("update", () => {
     props.form[props.code] = easyMDE.value.value()
   })
 })

@@ -9,10 +9,6 @@
   <div class="card card-x-table">
     <div class="card-body">
       <table class="table mb-0">
-        <colgroup>
-          <col>
-          <col>
-        </colgroup>
         <thead>
           <tr>
             <th>ID</th>

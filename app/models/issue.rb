@@ -26,7 +26,7 @@ class Issue < ApplicationRecord
   enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :closed ],
                     default: :pending, scope: true
   enumerize :stage, in: [ :pending, :developing, :testing, :deploying, :resolved, :closed ], scope: true
-  enumerize :priority, in: { ow: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
+  enumerize :priority, in: { low: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
 
   has_many :comments, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
@@ -116,12 +116,12 @@ class Issue < ApplicationRecord
   end
 
   def change_project_with_author(params, member)
-    project_id = params[:project_id]
+    project_id = params[:targert_project_id] || params[:project_id]
     new_project = member.user.projects.find(project_id)
     self.project_id = project_id
     self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || self.creator
     self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
-    self.category = nil
+    self.category = new_project.categories.find_by(id: params[:category_id])
     self.milestone_id = nil
     transaction do
       unless self.save
