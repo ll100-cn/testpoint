@@ -100,7 +100,7 @@ import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
-const current_user = store.account
+const current_user = store.account.user
 const props = defineProps<{
   issue: Issue
 }>()

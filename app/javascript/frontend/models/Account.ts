@@ -1,7 +1,7 @@
-import { Member } from "./Member"
+import { Type } from "class-transformer"
+import { User } from "./User"
 
-export class Account extends Member {
-  // id: number
-  // email: string
-  // name: string
+export class Account {
+  @Type(() => User)
+  user: User
 }

@@ -44,11 +44,11 @@
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuUser" role="button" href="#">
               <img height="25" class="rounded-circle"
                 src="https://www.gravatar.com/avatar/5afcacceca8e038dcdcbd94c1b93fb0f.png?s=200">
-              郭雄伟
+              {{ account?.user.name }}
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <a class="dropdown-item" href="/testpoint/profiles/basic?ok_url=%2Ftestpoint%2Fissues%2Fdashboard">个人中心</a>
-              <a class="dropdown-item" rel="nofollow" data-method="delete" href="/testpoint/sign_out">退出</a>
+              <a class="dropdown-item" rel="nofollow" href="#" @click="signOut">退出</a>
             </div>
           </div>
 
@@ -61,13 +61,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import ProjectNav from './ProjectNav.vue'
 import * as requests from '@/requests'
+import { useSessionStore } from '@/store/session'
+import { computed, getCurrentInstance, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import ProjectNav from './ProjectNav.vue'
+
+const session = useSessionStore()
+const account = session.account
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
+const router = useRouter()
 
 const projects = ref(await new requests.ProjectPaginationList().setup(proxy).perform())
 const project = computed(() => {
@@ -80,6 +85,10 @@ const project = computed(() => {
   return projects.value.list.find((it) => it.id.toString() === project_id)
 })
 
-console.log(project)
+async function signOut() {
+  await new requests.AccountSignOut().setup(proxy).perform()
+  session.clear()
+  router.push('/')
+}
 
 </script>

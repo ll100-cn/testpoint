@@ -34,16 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import ProjectNav from './ProjectNav.vue'
-import * as requests from '@/requests'
 import { Project } from '@/models'
-import { routerKey } from 'vue-router'
-
-const proxy = getCurrentInstance()!.proxy!
-const route = useRoute()
-const params = route.params
 
 defineProps<{
   project: Project

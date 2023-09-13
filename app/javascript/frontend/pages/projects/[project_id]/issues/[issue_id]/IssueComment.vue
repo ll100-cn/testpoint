@@ -127,7 +127,7 @@ import IssueCommentForm from "./IssueCommentForm.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
-const user = store.account
+const user = store.account.user
 
 defineOptions({
   name: "IssueComment"

@@ -108,7 +108,6 @@ Rails.application.routes.draw do
   # end
 
   namespace :api, defaults: { format: :json } do
-    resource :account
     resources :users
     resources :attachments
 
@@ -180,8 +179,15 @@ Rails.application.routes.draw do
     end
 
     namespace :profile do
+      root to: "main#root"
       resources :issues
       resources :issue_stats
+    end
+
+    devise_scope :user do
+      post :deliver, to: "sessions#deliver"
+      post :sign_in, to: "sessions#create"
+      delete :sign_out, to: "sessions#destroy"
     end
 
     resources :users
