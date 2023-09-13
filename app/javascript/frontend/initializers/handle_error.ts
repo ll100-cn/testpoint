@@ -1,5 +1,5 @@
 import { useSessionStore } from '@/store'
-import { ErrorAccessDenied, ErrorUnauthorized } from '@/requests'
+import { ErrorAccessDenied, ErrorUnauthorized } from '@/lib/requests'
 import { AppContext } from '@/types'
 import { type Router } from 'vue-router'
 

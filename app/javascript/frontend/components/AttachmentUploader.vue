@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { getCurrentInstance, onMounted, reactive, ref, watch } from "vue"
 
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import prettyBytes from 'pretty-bytes'
 
 import _ from "lodash"
@@ -107,7 +107,7 @@ async function upload(file: File) {
   files.value.push(upload_file)
 
   try {
-    const attachment = await new requests.AttachmentCreate().setup(proxy, (req) => {
+    const attachment = await new requests.AttachmentReq.Create().setup(proxy, (req) => {
       req.conifg = {
         onUploadProgress: (progressEvent: AxiosProgressEvent) => {
           upload_file.state = "uploading"

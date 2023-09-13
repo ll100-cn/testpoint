@@ -65,7 +65,7 @@ import { ChangeFilterFunction, ColumnFilter, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import qs from "qs"
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
@@ -92,12 +92,12 @@ const emit = defineEmits<{
 }>()
 
 const project_id = _.toNumber(params.project_id)
-const test_cases = await new requests.TestCaseList().setup(proxy, (req) => {
+const test_cases = await new requests.TestCaseReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.milestone_id = route.query.milestone_id
 }).perform()
 
-const _labels = ref(await new requests.TestCaseLabelList().setup(proxy, (req) => {
+const _labels = ref(await new requests.TestCaseLabelReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -105,7 +105,7 @@ const lable_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>(_labels.value)
 })
 
-const _platforms = ref(await new requests.PlatformList().setup(proxy, (req) => {
+const _platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

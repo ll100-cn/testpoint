@@ -43,7 +43,7 @@ import _ from 'lodash'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { Phase, PhaseInfo, Plan, TaskUpshotInfo } from '@/models'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import { useRoute } from "vue-router"
 
@@ -100,7 +100,7 @@ async function onSubmit(event: Event) {
   validations.clear()
   submitting.value = true
   try {
-    const phase = await new requests.PlanPhaseCreate().setup(proxy, (req) => {
+    const phase = await new requests.PlanPhaseReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.plan_id = plan_id
     }).perform(form.value)

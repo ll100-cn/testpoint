@@ -59,7 +59,7 @@ import { computed, getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
 import { IssueInfo, IssueRelationship, Comment } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import { useSessionStore } from "@/store"
 import _ from "lodash"
 
@@ -78,10 +78,10 @@ const store = useSessionStore()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 
-store.account = await new requests.AccountGet().setup(proxy).perform()
+store.account = await new requests.AccountReq.Get().setup(proxy).perform()
 const user = store.account.user
 
-const issue = ref(await new requests.IssueGet().setup(proxy, (req) => {
+const issue = ref(await new requests.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).perform())
@@ -91,27 +91,27 @@ const issue_attachments = ref(await new requests.IssueAttachments().setup(proxy,
   req.interpolations.issue_id = issue.value.id
 }).perform())
 
-const issue_infos = ref(await new requests.IssueInfoList().setup(proxy, (req) => {
+const issue_infos = ref(await new requests.IssueInfoReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue.value.id
 }).perform())
 
-const comments = ref(await new requests.IssueCommentList().setup(proxy, (req) => {
+const comments = ref(await new requests.IssueCommentReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue.value.id
 }).perform())
 
-const issue_activities = ref(await new requests.IssueActivitiyList().setup(proxy, (req) => {
+const issue_activities = ref(await new requests.IssueActivitiyReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue.value.id
 }).perform())
 
-const issue_target_relationships = ref(await new requests.IssueTargetRelationshipList().setup(proxy, (req) => {
+const issue_target_relationships = ref(await new requests.IssueTargetRelationshipReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue.value.id
 }).perform())
 
-const issue_source_relationships = ref(await new requests.IssueSourceRelationshipList().setup(proxy, (req) => {
+const issue_source_relationships = ref(await new requests.IssueSourceRelationshipReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue.value.id
 }).perform())
@@ -132,11 +132,11 @@ function destoryRelationship(issue_relationship: IssueRelationship) {
 
 async function updateIssue(new_issue) {
   issue.value = new_issue
-  issue_activities.value = await new requests.IssueActivitiyList().setup(proxy, (req) => {
+  issue_activities.value = await new requests.IssueActivitiyReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue.value.id
   }).perform()
-  comments.value = await new requests.IssueCommentList().setup(proxy, (req) => {
+  comments.value = await new requests.IssueCommentReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue.value.id
   }).perform()
@@ -147,11 +147,11 @@ async function updateIssue(new_issue) {
 }
 
 async function refreshIssue() {
-  issue.value = await new requests.IssueGet().setup(proxy, (req) => {
+  issue.value = await new requests.IssueReq.Get().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = params.issue_id
   }).perform()
-  issue_activities.value = await new requests.IssueActivitiyList().setup(proxy, (req) => {
+  issue_activities.value = await new requests.IssueActivitiyReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue.value.id
   }).perform()
@@ -196,7 +196,7 @@ async function updateComment(comment: Comment) {
 }
 
 async function refreshComment() {
-  comments.value = await new requests.IssueCommentList().setup(proxy, (req) => {
+  comments.value = await new requests.IssueCommentReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue.value.id
   }).perform()

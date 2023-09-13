@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { Validations } from '@/components/simple_form';
-import * as requests from '@/requests';
+import * as requests from '@/lib/requests';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 import { getCurrentInstance, reactive, ref } from 'vue';
@@ -38,7 +38,7 @@ const form = ref({
   description: null as string | null,
 })
 
-const milestone = await new requests.MilestoneShow().setup(proxy, (req) => {
+const milestone = await new requests.MilestoneReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.id = _.toNumber(params.milestone_id)
 }).perform()
@@ -55,7 +55,7 @@ async function milestoneUpdate(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    await new requests.MilestoneUpdate().setup(proxy, (req) => {
+    await new requests.MilestoneReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.id = milestone.id
     }).perform(form_data)

@@ -42,7 +42,7 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { Validations } from "@/components/simple_form"
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import _ from 'lodash'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -55,11 +55,11 @@ const params = route.params as any
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
 
-const platforms = ref(await new requests.PlatformList().setup(proxy, (req) => {
+const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await new requests.MemberList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -69,7 +69,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new requests.PlatformDestroy().setup(proxy, (req) => {
+    await new requests.PlatformReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.platform_id = id
     }).perform()

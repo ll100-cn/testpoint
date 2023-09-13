@@ -26,7 +26,7 @@ import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 
 import * as utils from "@/lib/utils"
 import { Plan, Platform, TestCaseStat } from '@/models'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
 
@@ -84,7 +84,7 @@ async function hidden() {
 async function onSubmit() {
   validations.clear()
   try {
-    const plan = await new requests.PlanCreate().setup(proxy, (req) => {
+    const plan = await new requests.PlanReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = 1
     }).perform(form.value)
 

@@ -47,7 +47,7 @@
 import { Validations, forms, layouts } from "@/components/simple_form"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { getCurrentInstance, reactive, ref } from "vue"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import { LoginCode } from "@/models"
 import { routerKey } from "vue-router"
 import { useRouter } from "vue-router"

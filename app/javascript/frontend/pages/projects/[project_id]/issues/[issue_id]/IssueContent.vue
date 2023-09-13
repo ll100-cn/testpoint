@@ -46,7 +46,7 @@
 import { getCurrentInstance, ref } from "vue"
 
 import { Attachment, Issue, User } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 import * as utils from "@/lib/utils"
 
@@ -101,7 +101,7 @@ async function issueEdit() {
   validations.value.clear()
 
   try {
-    const issue = await new requests.IssueUpdate().setup(proxy, (req) => {
+    const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
     }).perform(form.value)

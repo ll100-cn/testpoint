@@ -122,7 +122,7 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/requests';
+import * as requests from '@/lib/requests';
 import { Modal } from 'bootstrap';
 import _ from 'lodash';
 import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue';
@@ -171,7 +171,7 @@ async function submitForm(event: Event) {
     }
 
     try {
-      await new requests.TestCaseUpdate().setup(proxy, (req) => {
+      await new requests.TestCaseReq.Update().setup(proxy, (req) => {
         req.interpolations.project_id = test_case.project_id
         req.interpolations.id = test_case.id
       }).perform(form_data)

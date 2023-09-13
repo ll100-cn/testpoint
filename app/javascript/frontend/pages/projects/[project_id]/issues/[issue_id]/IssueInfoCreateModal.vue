@@ -23,7 +23,7 @@ import { getCurrentInstance, ref } from "vue"
 
 import { Validations, forms, layouts } from "@/components/simple_form"
 import { Issue, IssueInfo } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 
 import CommonModal from "@/components/CommonModal.vue"
@@ -53,7 +53,7 @@ function resetForm() {
 
 async function show() {
   modal.value.show()
-  issue_templates.value = await new requests.IssueTemplateList().setup(proxy, (req) => {
+  issue_templates.value = await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
   }).perform()
 }
@@ -62,7 +62,7 @@ async function addIssueInfo() {
   validations.value.clear()
 
   try {
-    const issue_info = await new requests.IssueInfoCreate().setup(proxy, (req) => {
+    const issue_info = await new requests.IssueInfoReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
     }).perform(form.value)

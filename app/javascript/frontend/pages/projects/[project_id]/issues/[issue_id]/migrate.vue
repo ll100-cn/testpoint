@@ -28,7 +28,7 @@ import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 
 import { Validations, forms, layouts } from "@/components/simple_form"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -41,7 +41,7 @@ const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 
-const issue = ref(await new requests.IssueGet().setup(proxy, (req) => {
+const issue = ref(await new requests.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).perform())
@@ -52,18 +52,18 @@ const form = ref({
   category_id: undefined
 })
 
-const projects = ref(await new requests.ProjectPaginationList().setup(proxy).perform()).value.list
+const projects = ref(await new requests.ProjectReq.Page().setup(proxy).perform()).value.list
 
 const project_collection = computed(() => {
   return _.filter(projects, { archived: false })
 })
 
-const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
+const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = form.value.project_id
 }).perform())
 
 async function getCategories() {
-  categories.value = await new requests.CategoryList().setup(proxy, (req) => {
+  categories.value = await new requests.CategoryReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = form.value.project_id
   }).perform()
   form.value.category_id = undefined

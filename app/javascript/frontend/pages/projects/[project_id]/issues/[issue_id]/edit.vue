@@ -34,7 +34,7 @@ import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 
 import { Validations, forms, layouts } from "@/components/simple_form"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -47,7 +47,7 @@ const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 
-const issue = ref(await new requests.IssueGet().setup(proxy, (req) => {
+const issue = ref(await new requests.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).perform())
@@ -60,11 +60,11 @@ const form = ref({
   creator_id: issue.value.creator_id,
 })
 
-const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
+const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await new requests.MemberList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -76,7 +76,7 @@ async function issueEdit() {
   validations.value.clear()
 
   try {
-    const issue = await new requests.IssueUpdate().setup(proxy, (req) => {
+    const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = issue_id
     }).perform(form.value)

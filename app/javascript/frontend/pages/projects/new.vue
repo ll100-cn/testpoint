@@ -20,7 +20,7 @@ import { getCurrentInstance, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { Validations, layouts } from "@/components/simple_form"
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 
 import SubmitButton from '@/components/SubmitButton.vue'
 import Form from './Form.vue'
@@ -38,7 +38,7 @@ async function onSubmit() {
   validations.value.clear()
 
   try {
-    const user = await new requests.ProjectCreate().setup(proxy).perform(form.value)
+    const user = await new requests.ProjectReq.Create().setup(proxy).perform(form.value)
     if (user) {
       router.push("/projects")
     }

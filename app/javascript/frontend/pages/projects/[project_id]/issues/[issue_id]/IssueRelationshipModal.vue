@@ -23,7 +23,7 @@ import { getCurrentInstance, ref } from "vue"
 
 import { Validations, forms, layouts } from "@/components/simple_form"
 import { Issue, IssueRelationship } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
@@ -58,7 +58,7 @@ async function onCreateIssueRelationship() {
   validations.value.clear()
 
   try {
-    const issue_relationship = await new requests.IssueRelationshipCreate().setup(proxy, (req) => {
+    const issue_relationship = await new requests.IssueRelationshipReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
     }).perform(form.value)

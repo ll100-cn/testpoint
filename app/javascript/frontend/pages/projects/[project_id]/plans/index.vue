@@ -64,7 +64,7 @@ import { useRoute } from 'vue-router'
 import { forms } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
 import * as utils from '@/lib/utils'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { PageQuery } from '@/types'
 import qs from 'qs'
 
@@ -93,21 +93,21 @@ const project_id = _.toNumber(params.project_id)
 const plans = ref()
 
 const getData = async () => {
-  plans.value = await new requests.PlanList().setup(proxy, (req) => {
+  plans.value = await new requests.PlanReq.Page().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.query = query
   }).perform()
 }
 await getData()
-const platforms = ref(await new requests.PlatformList().setup(proxy, (req) => {
+const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await new requests.MemberList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const test_case_stats = ref(await new requests.TestCaseStatList().setup(proxy, (req) => {
+const test_case_stats = ref(await new requests.TestCaseStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

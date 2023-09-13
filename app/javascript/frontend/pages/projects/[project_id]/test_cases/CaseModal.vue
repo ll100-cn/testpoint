@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/requests';
+import * as requests from '@/lib/requests';
 import { Modal } from 'bootstrap';
 import { PropType, getCurrentInstance, nextTick, ref } from 'vue';
 import CardShow from './CardShow.vue';

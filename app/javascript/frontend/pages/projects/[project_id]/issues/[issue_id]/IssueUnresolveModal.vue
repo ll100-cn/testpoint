@@ -19,7 +19,7 @@ import { getCurrentInstance, ref } from "vue"
 
 import { Validations } from "@/components/simple_form"
 import { Issue, IssueInfo } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 
 import CommonModal from "@/components/CommonModal.vue"

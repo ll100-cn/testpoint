@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { Validations } from '@/components/simple_form'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import _ from 'lodash'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -35,7 +35,7 @@ const form = ref({
   name: null as string | null
 })
 
-const user = await new requests.UserGet().setup(proxy, (req) => {
+const user = await new requests.UserReq.Get().setup(proxy, (req) => {
   req.interpolations.id = _.toNumber(user_id)
 }).perform()
 
@@ -49,7 +49,7 @@ async function userUpdate(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    await new requests.UserUpdate().setup(proxy, (req) => {
+    await new requests.UserReq.Update().setup(proxy, (req) => {
       req.interpolations.id = user.id
     }).perform(form_data)
 

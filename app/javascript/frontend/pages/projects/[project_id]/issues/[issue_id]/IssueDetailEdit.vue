@@ -22,7 +22,7 @@ import { getCurrentInstance, ref } from "vue"
 
 import { Validations } from "@/components/simple_form"
 import { Issue } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 
 import SubmitButton from "@/components/SubmitButton.vue"
 
@@ -45,7 +45,7 @@ async function issueEdit() {
   props.validations.clear()
 
   try {
-    const issue = await new requests.IssueUpdate().setup(proxy, (req) => {
+    const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
     }).perform({ [props.code]: props.form[props.code] })

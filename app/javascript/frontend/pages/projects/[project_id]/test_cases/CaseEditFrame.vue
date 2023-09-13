@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/requests';
+import * as requests from '@/lib/requests';
 import $ from 'jquery';
 import { PropType, getCurrentInstance, reactive, ref } from 'vue';
 
@@ -58,7 +58,7 @@ async function submitForm(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    const new_test_case = await new requests.TestCaseUpdate().setup(proxy, (req) => {
+    const new_test_case = await new requests.TestCaseReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = 1
       req.interpolations.id = props.test_case.id
     }).perform(form_data)
@@ -83,7 +83,7 @@ async function archiveTestCase(event: Event) {
   }
 
   try {
-    const new_test_case = await new requests.TestCaseDestroy().setup(proxy, (req) => {
+    const new_test_case = await new requests.TestCaseReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = props.test_case.project_id
       req.interpolations.id = props.test_case.id
     }).perform()

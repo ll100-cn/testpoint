@@ -20,7 +20,7 @@ import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { Validations, layouts } from "@/components/simple_form"
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 
 import SubmitButton from '@/components/SubmitButton.vue'
 import Form from './Form.vue'
@@ -34,7 +34,7 @@ const project_id = params.project_id
 const issue_template_id = params.issue_template_id
 const validations = ref(new Validations())
 
-const issue_template = ref(await new requests.IssueTemplateShow().setup(proxy, (req) => {
+const issue_template = ref(await new requests.IssueTemplateReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_template_id = issue_template_id
 }).perform())
@@ -53,7 +53,7 @@ async function onSubmit() {
   validations.value.clear()
 
   try {
-    const issue_template = await new requests.IssueTemplateUpdate().setup(proxy, (req) => {
+    const issue_template = await new requests.IssueTemplateReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_template_id = issue_template_id
     }).perform(form.value)

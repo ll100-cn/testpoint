@@ -43,7 +43,7 @@
 import { DATE_FORMAT } from '@/constants';
 import * as utils from '@/lib/utils';
 import { Milestone } from '@/models';
-import * as requests from '@/requests';
+import * as requests from '@/lib/requests';
 import _ from 'lodash';
 import { getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -54,7 +54,7 @@ const router = useRouter()
 const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
-const milestones = await new requests.MilestoneList().setup(proxy, (req) => {
+const milestones = await new requests.MilestoneReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform()
 
@@ -63,7 +63,7 @@ function milestoneDestroy(milestone: Milestone) {
     return
   }
 
-  new requests.MilestoneDestroy().setup(proxy, (req) => {
+  new requests.MilestoneReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()

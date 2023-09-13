@@ -115,7 +115,7 @@ import { useSessionStore } from "@/store"
 import { Validations } from "@/components/simple_form"
 import * as utils from "@/lib/utils"
 import { Attachment, Comment, Issue } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import { Collapse } from "bootstrap"
 import _ from "lodash"
 import { DATE_SHORT_FORMAT } from "@/constants"
@@ -173,7 +173,7 @@ async function destroyComment() {
   if (!confirm("确认删除该评论？")) {
     return
   }
-  const comment = await new requests.IssueCommentCreateDestroy().setup(proxy, (req) => {
+  const comment = await new requests.IssueCommentReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id
@@ -185,7 +185,7 @@ async function destroyComment() {
 }
 
 async function foldComment() {
-  const comment = await new requests.IssueCommentUpdate().setup(proxy, (req) => {
+  const comment = await new requests.IssueCommentReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id
@@ -198,7 +198,7 @@ async function foldComment() {
 }
 
 async function unfoldComment() {
-  const comment = await new requests.IssueCommentUpdate().setup(proxy, (req) => {
+  const comment = await new requests.IssueCommentReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id
@@ -215,7 +215,7 @@ async function editComment() {
   validations.value.clear()
 
   try {
-    const comment = await new requests.IssueCommentUpdate().setup(proxy, (req) => {
+    const comment = await new requests.IssueCommentReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
       req.interpolations.comment_id = props.comment.id
@@ -268,7 +268,7 @@ async function replyComment() {
   reply_validations.value.clear()
 
   try {
-    const comment = await new requests.IssueCommentCreate().setup(proxy, (req) => {
+    const comment = await new requests.IssueCommentReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
     }).perform({ ...reply_form.value, comment_id: props.comment.id })

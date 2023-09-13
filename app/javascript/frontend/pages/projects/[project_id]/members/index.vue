@@ -49,7 +49,7 @@ import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import _ from 'lodash'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { Validations } from "@/components/simple_form"
 import { PageQuery } from '@/types'
 
@@ -68,7 +68,7 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const members = ref(await new requests.MemberPaginationList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = currentQuery.value
 }).perform())

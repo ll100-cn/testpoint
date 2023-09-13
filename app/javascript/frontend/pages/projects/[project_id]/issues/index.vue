@@ -61,7 +61,7 @@ import { useRoute, useRouter } from "vue-router"
 
 import * as utils from "@/lib/utils"
 import Page from "@/pages/Page"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 import Search from "./Search"
 
@@ -92,16 +92,16 @@ const filter_states_options = ref([
 ])
 const current_issue_state = ref(search.filter ?? "assign")
 
-const project = ref(await new requests.ProjectShow().setup(proxy, (req) => {
+const project = ref(await new requests.ProjectReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const issues = ref(await new requests.ProjectIssuePaginationList().setup(proxy, (req) => {
+const issues = ref(await new requests.ProjectIssueReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...page, ...search })
 }).perform())
 
-const issue_summary = ref(await new requests.IssueSummaryGet().setup(proxy, (req) => {
+const issue_summary = ref(await new requests.IssueSummaryReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search })
 }).perform())

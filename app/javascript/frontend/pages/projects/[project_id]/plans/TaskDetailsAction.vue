@@ -48,7 +48,7 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute } from "vue-router"
 
 import { IssueTemplate, PhaseInfo, Plan, TaskUpshot, TaskUpshotInfo } from '@/models'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import _ from 'lodash'
 import { Validations, forms, layouts } from "@/components/simple_form"
 
@@ -79,11 +79,11 @@ const emit = defineEmits<{
   "update:is_task_pass": [is_task_pass: boolean]
 }>()
 
-const members = ref(await new requests.MemberList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform())
 
-const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
+const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform())
 
@@ -114,7 +114,7 @@ async function updateStateOverride(state_override: "pass" | "pending" | "failure
   validations.clear()
 
   try {
-    const task_upshot = await new requests.TaskUpshotStateUpdate().setup(proxy, (req) => {
+    const task_upshot = await new requests.TaskUpshotStateReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
       req.interpolations.plan_id = props.plan.id
       req.interpolations.task_id = props.task_upshot_info.task.id
@@ -141,10 +141,10 @@ async function onSubmit() {
   validations.clear()
 
   try {
-    const issue = await new requests.IssueCreate().setup(proxy, (req) => {
+    const issue = await new requests.IssueReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
     }).perform(form.value)
-    await new requests.TaskUpshotStateUpdate().setup(proxy, (req) => {
+    await new requests.TaskUpshotStateReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
       req.interpolations.plan_id = props.plan.id
       req.interpolations.task_id = props.task_upshot_info.task.id
@@ -171,7 +171,7 @@ async function onSubmit() {
 }
 
 async function bindIssue() {
-  const issue = await new requests.IssueUpdate().setup(proxy, (req) => {
+  const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.issue_id = issue_form.value.id
   }).perform({ task_id: props.task_upshot_info.task.id })

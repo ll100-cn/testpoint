@@ -26,7 +26,7 @@ import { getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
 import { Validations } from "@/components/simple_form"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 import * as utils from "@/lib/utils"
 import { Attachment } from "@/models"
@@ -40,15 +40,15 @@ const router = useRouter()
 const params = route.params as any
 const issue_template_id = route.query.issue_template_id ?? ""
 
-const members = ref(await new requests.MemberList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id
 }).perform())
 
-const issue_templates = ref(await new requests.IssueTemplateList().setup(proxy, (req) => {
+const issue_templates = ref(await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id
 }).perform())
 
-const account = ref(await new requests.AccountGet().setup(proxy).perform())
+const account = ref(await new requests.AccountReq.Get().setup(proxy).perform())
 const current_issue_template = ref(_.find(issue_templates.value, { id: _.toNumber(issue_template_id) }))
 const validations = ref(new Validations())
 const form = ref({
@@ -72,7 +72,7 @@ async function onSubmit() {
   validations.value.clear()
 
   try {
-    const issue = await new requests.IssueCreate().setup(proxy, (req) => {
+    const issue = await new requests.IssueReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = params.project_id
     }).perform(form.value)
 

@@ -31,13 +31,13 @@
 
 <script setup lang="ts">
 import { IssueStat2, Project } from '@/models'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
 
 const proxy = getCurrentInstance()!.proxy!
 
-const issue_stats = ref(await new requests.IssueStat2List().setup(proxy).perform())
+const issue_stats = ref(await new requests.IssueStat2Req.List().setup(proxy).perform())
 
 const ENUM_ISSUE_STAGES = {
   pending: '分配',
@@ -85,7 +85,7 @@ const issue_stages_counts = computed(() => {
   return result
 })
 
-const unhandled_issues_count = ref((await new requests.IssuePaginationList().setup(proxy, req => {
+const unhandled_issues_count = ref((await new requests.IssueReq.Page().setup(proxy, req => {
   req.query.per_page = 1
   req.query.filter = 'unhandled'
 }).perform()).total_count)

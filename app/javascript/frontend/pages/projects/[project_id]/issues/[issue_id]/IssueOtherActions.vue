@@ -45,7 +45,7 @@
 import { getCurrentInstance, nextTick, ref } from "vue"
 
 import { Comment, Issue, IssueInfo, IssueRelationship } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import { Collapse } from "bootstrap"
 import _ from "lodash"
 
@@ -91,7 +91,7 @@ async function addComment() {
   validations.value.clear()
 
   try {
-    const comment = await new requests.IssueCommentCreate().setup(proxy, (req) => {
+    const comment = await new requests.IssueCommentReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
     }).perform(form.value)

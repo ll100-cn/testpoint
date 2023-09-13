@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -74,7 +74,7 @@ const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
 const router = useRouter()
 
-const projects = ref(await new requests.ProjectPaginationList().setup(proxy).perform())
+const projects = ref(await new requests.ProjectReq.Page().setup(proxy).perform())
 const project = computed(() => {
   const project_id = route.path.match(/\/projects\/(\d+)/)?.[1]
   console.log(project_id)

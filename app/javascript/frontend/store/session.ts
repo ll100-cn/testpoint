@@ -1,5 +1,5 @@
 import { Account } from '@/models'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -13,7 +13,7 @@ export const useSessionStore = defineStore('session', () => {
     }
 
     try {
-      account.value = await new requests.AccountGet().setup(ctx).perform()
+      account.value = await new requests.AccountReq.Get().setup(ctx).perform()
     } catch (e) {
       if (e instanceof requests.ErrorUnauthorized) {
         account.value = null

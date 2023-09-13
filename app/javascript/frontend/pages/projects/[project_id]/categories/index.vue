@@ -49,7 +49,7 @@ import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import _ from 'lodash'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { Validations } from "@/components/simple_form"
 import { PageQuery } from '@/types'
 
@@ -69,7 +69,7 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const categories = ref(await new requests.CategoryInfoList().setup(proxy, (req) => {
+const categories = ref(await new requests.CategoryInfoReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -79,7 +79,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new requests.CategoryDestroy().setup(proxy, (req) => {
+    await new requests.CategoryReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.category_id = id
     }).perform()

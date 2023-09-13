@@ -72,7 +72,7 @@ import { computed, getCurrentInstance, nextTick, onMounted, onUpdated, reactive,
 
 import { Validations } from "@/components/simple_form"
 import { IssueTemplate, PhaseInfo, Plan, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
 
@@ -137,7 +137,7 @@ async function submitContent(event: InputEvent) {
   const formData = new FormData(event.currentTarget as HTMLFormElement)
 
   try {
-    const task_upshot = await new requests.TaskUpshotContentUpdate().setup(proxy, (req) => {
+    const task_upshot = await new requests.TaskUpshotContentReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
       req.interpolations.plan_id = props.plan.id
       req.interpolations.task_id = current_task_upshot_info.value.task.id
@@ -156,14 +156,14 @@ async function submitContent(event: InputEvent) {
 }
 
 async function getData(id: number) {
-  current_task_upshot_info.value = await new requests.TaskUpshotInfoShow().setup(proxy, (req) => {
+  current_task_upshot_info.value = await new requests.TaskUpshotInfoReq.Get().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.plan_id = props.plan.id
     req.interpolations.phase_index = _.findIndex(props.phase_infos, { id: props.current_phase_id })
     req.interpolations.id = id
   }).perform()
 
-  task_info.value = await new requests.TaskInfoShow().setup(proxy, (req) => {
+  task_info.value = await new requests.TaskInfoReq.Get().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.plan_id = props.plan.id
     req.interpolations.task_id = current_task_upshot_info.value.task.id

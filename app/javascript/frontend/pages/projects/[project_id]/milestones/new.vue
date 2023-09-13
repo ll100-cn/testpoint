@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { Validations } from '@/components/simple_form';
-import * as requests from '@/requests';
+import * as requests from '@/lib/requests';
 import _ from 'lodash';
 import { getCurrentInstance, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -41,7 +41,7 @@ async function milestoneCreate(event: Event) {
 
   const form_data = new FormData(event.target as HTMLFormElement)
   try {
-    await new requests.MilestoneCreate().setup(proxy, (req) => {
+    await new requests.MilestoneReq.Create().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
     }).perform(form_data)
 

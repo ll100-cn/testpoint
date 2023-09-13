@@ -48,7 +48,7 @@
 import { getCurrentInstance, ref } from 'vue'
 
 import { Validations, forms, layouts } from "@/components/simple_form"
-import * as requests from '@/requests'
+import * as requests from '@/lib/requests'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
@@ -64,7 +64,7 @@ const lookup_by_build_form_collection = ref([
   { label: "", value: true },
 ])
 
-const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
+const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform())
 

@@ -55,7 +55,7 @@
 import { Validations, forms, layouts } from "@/components/simple_form"
 import { getCurrentInstance, nextTick, onMounted, onUpdated, ref } from "vue"
 
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import ClipboardJS from "clipboard"
 import prettyBytes from "pretty-bytes"
 import _ from "lodash"
@@ -110,7 +110,7 @@ async function deleteAttachment() {
   validations.value.clear()
 
   try {
-    const attachment = await new requests.AttachmentDestroy().setup(proxy, (req) => {
+    const attachment = await new requests.AttachmentReq.Destroy().setup(proxy, (req) => {
       req.interpolations.attachment_id = props.attachment.id
     }).perform()
     if (attachment) {
@@ -129,7 +129,7 @@ async function editAttachment() {
   validations.value.clear()
 
   try {
-    const attachment = await new requests.AttachmentUpdate().setup(proxy, (req) => {
+    const attachment = await new requests.AttachmentReq.Update().setup(proxy, (req) => {
       req.interpolations.attachment_id = props.attachment.id
     }).perform(form.value)
     editing.value = false

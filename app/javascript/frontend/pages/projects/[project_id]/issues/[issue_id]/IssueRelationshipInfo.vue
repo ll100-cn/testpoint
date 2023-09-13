@@ -27,7 +27,7 @@ import { computed, getCurrentInstance } from "vue"
 import { DATE_LONG_FORMAT } from '@/constants'
 import * as utils from "@/lib/utils"
 import { IssueRelationship } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
@@ -55,7 +55,7 @@ async function destoryIssueRelationShip() {
   if (!confirm("确认删除问题的关联？")) {
     return
   }
-  const issue_relationship = await new requests.IssueRelationshipDestroy().setup(proxy, (req) => {
+  const issue_relationship = await new requests.IssueRelationshipReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.issue_id = props.issue_id
     req.interpolations.issue_relationship_id = props.issue_relationship.id

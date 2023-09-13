@@ -24,7 +24,7 @@ import { getCurrentInstance, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Validations } from '@/components/simple_form';
-import * as requests from '@/requests';
+import * as requests from '@/lib/requests';
 import _ from 'lodash';
 import PlanForm from './PlanForm.vue';
 import SubmitButton from '@/components/SubmitButton.vue';
@@ -37,12 +37,12 @@ const params = route.params as any
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan = ref(await new requests.PlanShow().setup(proxy, (req) => {
+const plan = ref(await new requests.PlanReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
 
-const platforms = ref(await new requests.PlatformList().setup(proxy, (req) => {
+const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -60,7 +60,7 @@ function onCancel() {
 async function onSubmit() {
   validations.clear()
   try {
-    const plan = await new requests.PlanUpdate().setup(proxy, (req) => {
+    const plan = await new requests.PlanReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.plan_id = plan_id
     }).perform(form.value)
@@ -78,7 +78,7 @@ async function onSubmit() {
 }
 
 async function onDestroy() {
-  const plan = await new requests.PlanDestroy().setup(proxy, (req) => {
+  const plan = await new requests.PlanReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.plan_id = plan_id
   }).perform()

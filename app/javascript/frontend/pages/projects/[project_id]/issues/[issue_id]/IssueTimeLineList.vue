@@ -45,7 +45,7 @@
 import { computed, getCurrentInstance, ref } from "vue"
 
 import { Comment, Issue, IssueActivity, IssueRelationship } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import _ from "lodash"
 
 import IssueActivityInfo from "./IssueActivityInfo.vue"
@@ -68,19 +68,19 @@ const emits = defineEmits<{
   refreshComment: []
 }>()
 
-const members = ref(await new requests.MemberList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform())
 
-const milestones = await new requests.MilestoneList().setup(proxy, (req) => {
+const milestones = await new requests.MilestoneReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform()
 
-const categories = await new requests.CategoryList().setup(proxy, (req) => {
+const categories = await new requests.CategoryReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform()
 
-const projects = ref(await new requests.ProjectPaginationList().setup(proxy, (req) => {
+const projects = ref(await new requests.ProjectReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
 }).perform()).value.list
 

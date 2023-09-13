@@ -89,7 +89,7 @@ import { Validations, forms, layouts } from "@/components/simple_form"
 import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
 import * as utils from "@/lib/utils"
 import { Issue } from "@/models"
-import * as requests from "@/requests"
+import * as requests from '@/lib/requests'
 import { useSessionStore } from "@/store"
 import _ from "lodash"
 
@@ -119,15 +119,15 @@ const form = ref({
 })
 const validations = ref(new Validations())
 
-const members = ref(await new requests.MemberList().setup(proxy, (req) => {
+const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.issue.project_id
 }).perform())
 
-const categories = ref(await new requests.CategoryList().setup(proxy, (req) => {
+const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.issue.project_id
 }).perform())
 
-const milestones = await new requests.MilestoneList().setup(proxy, (req) => {
+const milestones = await new requests.MilestoneReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.issue.project_id
 }).perform()
 
@@ -146,7 +146,7 @@ const assignee_collection = computed(() => {
 })
 
 async function subscribe() {
-  await new requests.SubscriptionCreate().setup(proxy, (req) => {
+  await new requests.SubscriptionReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
   }).perform()
@@ -154,7 +154,7 @@ async function subscribe() {
 }
 
 async function unsubscribe() {
-  await new requests.SubscriptionDestroy().setup(proxy, (req) => {
+  await new requests.SubscriptionReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
   }).perform()
