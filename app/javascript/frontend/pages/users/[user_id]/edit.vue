@@ -23,12 +23,12 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Form from '../Form.vue'
 
-const validations = reactive<Validations>(new Validations())
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
+const validations = reactive<Validations>(new Validations())
 const user_id = params.user_id
 const form = ref({
   email: null as string | null,

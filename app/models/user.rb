@@ -64,4 +64,8 @@ class User < ApplicationRecord
       members.where(project: resource).any?(&:receive_mail?)
     end
   end
+
+  def available_projects
+    Project.available.where_exists(members.available.where_table(:project))
+  end
 end

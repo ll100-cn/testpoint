@@ -79,7 +79,7 @@ const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 
 store.account = await new requests.AccountGet().setup(proxy).perform()
-const user = store.account
+const user = store.account.user
 
 const issue = ref(await new requests.IssueGet().setup(proxy, (req) => {
   req.interpolations.project_id = project_id

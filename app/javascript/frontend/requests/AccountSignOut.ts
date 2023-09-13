@@ -1,11 +1,11 @@
 import { Account } from "@/models"
 import BaseObjectRequest from "./BaseObjectRequest"
 
-export class AccountGet extends BaseObjectRequest<Account> {
+export class AccountSignOut extends BaseObjectRequest<Account> {
   constructor() {
     super()
-    this.method = "GET"
-    this.endpoint = "/api/profile"
+    this.method = "DELETE"
+    this.endpoint = "/api/sign_out"
     this.klass = Account
   }
 }

@@ -13,4 +13,4 @@ import '../components/fancybox'
 import '../components/stimulus'
 import '../frontend/vendor/old'
 
-import '../frontend/main'
+import '../frontend'

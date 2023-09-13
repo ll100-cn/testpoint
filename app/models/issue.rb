@@ -79,7 +79,7 @@ class Issue < ApplicationRecord
       self.stage = :developing
     elsif state.processed?
       self.stage = :testing
-    elsif state.deploying
+    elsif state.deploying?
       self.stage = :deploying
     elsif state.resolved?
       self.stage = :resolved
