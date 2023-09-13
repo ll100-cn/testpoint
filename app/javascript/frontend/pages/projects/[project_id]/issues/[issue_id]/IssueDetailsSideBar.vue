@@ -12,50 +12,50 @@
       <FormErrorAlert :validations="validations" />
       <IssueDetailEdit :issue="issue" :validations="validations" code="state" attribute_name="状态" :form="form" @update-issue="emits('updateIssue', $event)">
         <template #edit="slotProps">
-          <layouts.horizontal_group :validation="validations.disconnect(slotProps.code)">
+          <layouts.vertical_group :validation="validations.disconnect(slotProps.code)">
             <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
-          </layouts.horizontal_group>
+          </layouts.vertical_group>
         </template>
         <IssueStateBadge :state="issue.state" />
       </IssueDetailEdit>
       <IssueDetailEdit :issue="issue" :validations="validations" code="priority" attribute_name="优先级" :form="form" @update-issue="emits('updateIssue', $event)">
         <template #edit="slotProps">
-          <layouts.horizontal_group :validation="validations.disconnect(slotProps.code)">
+          <layouts.vertical_group :validation="validations.disconnect(slotProps.code)">
             <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
-          </layouts.horizontal_group>
+          </layouts.vertical_group>
         </template>
         <span :class="{'text-danger': issue.priority == 'important'}">{{ issue.priority_text }}</span>
       </IssueDetailEdit>
       <IssueDetailEdit :issue="issue" :validations="validations" code="creator_id" attribute_name="创建人" :form="form" @update-issue="emits('updateIssue', $event)">
         <template #edit="slotProps">
-          <layouts.horizontal_group :validation="validations.disconnect(slotProps.code)">
+          <layouts.vertical_group :validation="validations.disconnect(slotProps.code)">
             <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
-          </layouts.horizontal_group>
+          </layouts.vertical_group>
         </template>
         {{ issue.creator?.name }}
       </IssueDetailEdit>
       <IssueDetailEdit :issue="issue" :validations="validations" code="assignee_id" attribute_name="受理人" :form="form" @update-issue="emits('updateIssue', $event)">
         <template #edit="slotProps">
-          <layouts.horizontal_group :validation="validations.disconnect(slotProps.code)">
+          <layouts.vertical_group :validation="validations.disconnect(slotProps.code)">
             <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
-          </layouts.horizontal_group>
+          </layouts.vertical_group>
         </template>
         {{ issue.assignee?.name }}
       </IssueDetailEdit>
       <IssueDetailEdit :issue="issue" :validations="validations" code="category_id" attribute_name="分类" :form="form" @update-issue="emits('updateIssue', $event)">
         <template #edit="slotProps">
-          <layouts.horizontal_group :validation="validations.disconnect(slotProps.code)">
+          <layouts.vertical_group :validation="validations.disconnect(slotProps.code)">
             <forms.bootstrap_select v-bind="{ ...slotProps, live_search: true, custom_class: 'form-control-sm', collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
-          </layouts.horizontal_group>
+          </layouts.vertical_group>
         </template>
         <CategoryBadgeVue :category="_.find(categories, { id: issue.category_id })" />
       </IssueDetailEdit>
 
       <IssueDetailEdit :issue="issue" :validations="validations" code="milestone_id" attribute_name="里程碑" :form="form" @update-issue="emits('updateIssue', $event)">
         <template #edit="slotProps">
-          <layouts.horizontal_group :validation="validations.disconnect(slotProps.code)">
+          <layouts.vertical_group :validation="validations.disconnect(slotProps.code)">
             <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
-          </layouts.horizontal_group>
+          </layouts.vertical_group>
         </template>
         {{ _.find(milestones, { id: issue.milestone_id })?.title }}
       </IssueDetailEdit>

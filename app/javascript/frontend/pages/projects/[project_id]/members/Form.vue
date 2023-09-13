@@ -1,16 +1,16 @@
 <template>
   <FormErrorAlert :validations="validations" />
 
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('user_email')" label="用户邮箱">
+  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('user_email')" label="用户邮箱">
     <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ form.user_email }}</div>
     <forms.string v-else v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('nickname')" label="昵称">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('nickname')" label="昵称">
     <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('role')" label="角色">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('role')" label="角色">
     <forms.select v-bind="{ ...slotProps, form, collection: role_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
-  </layouts.vertical_group>
+  </layouts.horizontal_group>
 </template>
 
 <script setup lang="ts">

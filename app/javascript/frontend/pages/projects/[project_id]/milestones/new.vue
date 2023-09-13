@@ -6,7 +6,7 @@
   <form @submit="milestoneCreate">
     <Form :validations="validations" :form="form" />
     <hr>
-    <div class="x-spacer-x-1">
+    <div class="x-spacer-1">
       <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">
       <router-link :to="`/projects/${project_id}/milestones`" class="btn btn-secondary">取消</router-link>
     </div>

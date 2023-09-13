@@ -5,12 +5,12 @@
     </template>
     <template #body>
       <FormErrorAlert :validations="validations" />
-      <layouts.horizontal_group label="备注">
+      <layouts.vertical_group label="备注">
         <span>{{ issue_info.remark }}</span>
-      </layouts.horizontal_group>
-      <layouts.horizontal_group v-for="(input, index) in current_issue_template?.inputs" :key="index" v-slot="slotProps" :label="input.label">
+      </layouts.vertical_group>
+      <layouts.vertical_group v-for="(input, index) in current_issue_template?.inputs" :key="index" v-slot="slotProps" :label="input.label">
         <forms.string v-bind="{ ...slotProps, code: 'value', form: form.inputs_attributes[index] }" />
-      </layouts.horizontal_group>
+      </layouts.vertical_group>
     </template>
     <template #footer>
       <SubmitButton :func="updateIssueInfo" submit_text="更新模版化表单" />

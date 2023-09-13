@@ -6,12 +6,12 @@
   <form>
     <Form :form="form" :validations="validations" />
     <hr>
-    <layouts.vertical_group label_class="col-2">
+    <layouts.horizontal_group label_class="col-2">
       <div class="x-actions">
         <SubmitButton submit_text="新增项目" :func="onSubmit" />
         <router-link class="btn btn-secondary" to="/projects">取消</router-link>
       </div>
-    </layouts.vertical_group>
+    </layouts.horizontal_group>
   </form>
 </template>
 

@@ -8,7 +8,7 @@
 
     <hr>
 
-    <div class="x-spacer-x-1">
+    <div class="x-spacer-1">
       <input type="submit" name="commit" value="编辑项目" class="btn btn-primary">
       <router-link :to="`/projects`" class="btn btn-secondary">返回</router-link>
     </div>

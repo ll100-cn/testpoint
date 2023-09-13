@@ -5,12 +5,12 @@
     </template>
     <template #body>
       <FormErrorAlert :validations="validations" />
-      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('template_id')" label="模版">
+      <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('template_id')" label="模版">
         <forms.select v-bind="{ ...slotProps, form, collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
-      </layouts.vertical_group>
-      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('remark')" label="备注">
+      </layouts.horizontal_group>
+      <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('remark')" label="备注">
         <forms.string v-bind="{ ...slotProps, form }" />
-      </layouts.vertical_group>
+      </layouts.horizontal_group>
     </template>
     <template #footer>
       <SubmitButton :func="addIssueInfo" submit_text="新增模版化表单" />

@@ -5,12 +5,12 @@
     </template>
     <template #body>
       <FormErrorAlert :validations="validations" />
-      <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('target_id')" label="关联的问题ID">
+      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('target_id')" label="关联的问题ID">
         <forms.number v-bind="{ ...slotProps, form }" />
-      </layouts.horizontal_group>
-      <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('creator_subscribe_target_issue')">
+      </layouts.vertical_group>
+      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('creator_subscribe_target_issue')">
         <forms.checkboxes v-bind="{ ...slotProps, form, collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
-      </layouts.horizontal_group>
+      </layouts.vertical_group>
     </template>
     <template #footer>
       <button class="btn btn-primary" @click="onCreateIssueRelationship">新增关联问题</button>

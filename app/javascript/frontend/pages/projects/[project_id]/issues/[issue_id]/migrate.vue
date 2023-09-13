@@ -6,20 +6,20 @@
   <form>
     <FormErrorAlert :validations="validations" />
 
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('project_id')" label="项目">
+    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('project_id')" label="项目">
       <forms.select v-bind="{ ...slotProps, form, collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
-    </layouts.vertical_group>
+    </layouts.horizontal_group>
 
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
+    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
       <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-    </layouts.vertical_group>
+    </layouts.horizontal_group>
 
-    <layouts.vertical_group>
+    <layouts.horizontal_group>
       <div class="x-actions">
         <SubmitButton submit_text="迁移" :func="issueEdit" />
         <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
       </div>
-    </layouts.vertical_group>
+    </layouts.horizontal_group>
   </form>
 </template>
 

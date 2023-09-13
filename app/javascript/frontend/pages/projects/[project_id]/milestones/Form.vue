@@ -1,15 +1,15 @@
 <template>
   <FormErrorAlert :validations="validations" />
 
-  <component :is="layouts.horizontal_group" v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
+  <component :is="layouts.vertical_group" v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
     <component :is="forms.string" v-bind="{ ...slotProps, form }" />
   </component>
 
-  <component :is="layouts.horizontal_group" v-slot="slotProps" :validation="validations.disconnect('published_at')" label="发布时间">
+  <component :is="layouts.vertical_group" v-slot="slotProps" :validation="validations.disconnect('published_at')" label="发布时间">
     <component :is="forms.string" v-bind="{ ...slotProps, form }" />
   </component>
 
-  <component :is="layouts.horizontal_group" v-slot="slotProps" :validation="validations.disconnect('description')" label="描述">
+  <component :is="layouts.vertical_group" v-slot="slotProps" :validation="validations.disconnect('description')" label="描述">
     <component :is="forms.text" v-bind="{ ...slotProps, form }" />
   </component>
 </template>

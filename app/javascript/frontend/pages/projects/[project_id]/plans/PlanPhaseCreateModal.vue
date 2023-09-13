@@ -10,12 +10,12 @@
           <div class="modal-body">
             <FormErrorAlert :validations="validations" />
 
-            <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
+            <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
               <forms.string v-bind="{ ...slotProps, form }" />
-            </layouts.horizontal_group>
-            <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('release_revision')" label="版本构建号" hint="*选填，仅用于备注">
+            </layouts.vertical_group>
+            <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('release_revision')" label="版本构建号" hint="*选填，仅用于备注">
               <forms.string v-bind="{ ...slotProps, form }" />
-            </layouts.horizontal_group>
+            </layouts.vertical_group>
 
             <hr>
             <h5>待测用例</h5>
