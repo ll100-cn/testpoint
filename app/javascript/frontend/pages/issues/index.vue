@@ -67,7 +67,7 @@
             <td>{{ issue.id }}</td>
             <td><router-link :to="`/projects/${issue.project_id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
             <td><span class="badge" :style="`background-color: ${issue.category?.color}`">{{ issue.category?.name }}</span></td>
-            <td><IssueStateBadge :issue_state="issue.state" /></td>
+            <td><IssueStateBadge :state="issue.state" /></td>
             <td>{{ issue.creator?.name }}</td>
             <td>{{ issue.assignee?.name }}</td>
           </tr>

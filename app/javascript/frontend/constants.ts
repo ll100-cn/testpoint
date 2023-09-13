@@ -12,7 +12,7 @@ export const ISSUE_STATE_MAPPING = {
   closed: "已关闭",
 }
 export const ISSUE_PRIORITY_OPTIONS = [
-  { label: "ow", value: "ow" },
+  { label: "低优先级", value: "low" },
   { label: "普通", value: "normal" },
   { label: "重要", value: "important" },
 ]

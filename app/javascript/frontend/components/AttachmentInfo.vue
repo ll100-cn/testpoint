@@ -1,5 +1,5 @@
 <template>
-  <div ref="elRef" class="d-flex border bg-light p-2 align-items-center">
+  <div ref="el" class="d-flex border bg-light p-2 align-items-center">
     <div class="me-2" style="width: 3rem">
       <template v-if="attachment.isImage() && attachment.file_url">
         <a :href="attachment.file_url" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
@@ -39,7 +39,7 @@
         </div>
         <div class="d-flex align-items-center x-actions">
           <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
-          <a v-if="attachment.file_url" class="clipboard" :href="attachment.file_url" @click.prevent="clipboard($event.currentTarget)">
+          <a v-if="attachment.file_url" class="clipboard" :href="attachment.file_url" @click.prevent>
             <span class="far fa-fw fa-link text-muted" />
           </a>
           <a class="ms-auto" href="#" @click.prevent="deleteAttachment">
@@ -72,7 +72,7 @@ const emits = defineEmits<{
   edited: [attachment: Attachment]
 }>()
 
-const elRef = ref<HTMLElement>()
+const el = ref(null! as HTMLElement)
 const validations = ref(new Validations())
 const editing = ref(false)
 const form = ref({
@@ -85,15 +85,12 @@ onMounted(() => {
   })
 })
 
-onUpdated(() => {
-  nextTick(() => {
-    buildClipboard()
-  })
-})
-
 function buildClipboard() {
-  if (!elRef.value.querySelector(".clipboard")) return
-  clipboard(elRef.value.querySelector(".clipboard"))
+  new ClipboardJS(".clipboard", {
+    text(trigger: HTMLAnchorElement) {
+      return trigger.href
+    }
+  })
 }
 
 function onEdit() {
@@ -147,13 +144,4 @@ async function editAttachment() {
     throw err
   }
 }
-
-function clipboard(node) {
-  const clipboard = new ClipboardJS(node, {
-    text(trigger: any) {
-      return trigger.href
-    }
-  })
-}
-
 </script>

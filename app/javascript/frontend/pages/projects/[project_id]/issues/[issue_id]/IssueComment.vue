@@ -18,7 +18,7 @@
         <div class="card-title d-flex align-items-center x-actions">
           <img class="rounded-circle avatar" :src="comment.member.avatarUrl()" width="20">
           <span>{{ comment.member.name }}</span>
-          <span class="ms-1 small text-muted">{{ comment.createOrEditTimeInWords() }}</span>
+          <span class="ms-1 small text-muted">{{ utils.createOrEditTimeInWords(comment.created_at, comment.last_edited_at) }}</span>
           <div class="dropdown dropdown-no-arrow ms-auto">
             <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
               <i class="far fa-ellipsis-h" aria-hidden="true" />
@@ -185,22 +185,26 @@ async function destroyComment() {
 }
 
 async function foldComment() {
-  const comment = await new requests.IssueCommentFold().setup(proxy, (req) => {
+  const comment = await new requests.IssueCommentUpdate().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id
-  }).perform()
+  }).perform({
+    collapsed: false
+  })
   if (comment) {
     emits("updateComment", comment)
   }
 }
 
 async function unfoldComment() {
-  const comment = await new requests.IssueCommentUnfold().setup(proxy, (req) => {
+  const comment = await new requests.IssueCommentUpdate().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id
-  }).perform()
+  }).perform({
+    collapsed: true
+  })
 
   if (comment) {
     emits("updateComment", comment)

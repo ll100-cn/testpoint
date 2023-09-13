@@ -16,16 +16,18 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed } from 'vue'
 import _ from "lodash"
+import { computed } from "vue"
 
-import { Validation } from '@/models';
+import { Validation } from "@/models"
 
-const props = defineProps({
-  label: { type: String, required: false },
-  validation: { type: Object as PropType<Validation>, required: false },
-  disableds: { type: Object, required: false, default: () => ({}) },
-  hint: { type: String, required: false }
+const props = withDefaults(defineProps<{
+  label?: string
+  validation?: Validation
+  disableds?: any
+  hint?: string
+}>(), {
+  disableds: {}
 })
 
 const code = computed(() => props.validation?.code)

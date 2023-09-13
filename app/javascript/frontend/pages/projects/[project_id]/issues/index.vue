@@ -43,7 +43,7 @@
             <td>{{ issue.id }}</td>
             <td><router-link :to="`/projects/${project.id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
             <td><CategoryBadge :category="issue.category" /></td>
-            <td><IssueStateBadge :issue_state="issue.state" /></td>
+            <td><IssueStateBadge :state="issue.state" /></td>
             <td>{{ issue.milestone?.title }}</td>
             <td>{{ issue.creator?.name }}</td>
             <td>{{ issue.assignee?.name }}</td>

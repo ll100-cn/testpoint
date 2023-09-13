@@ -6,7 +6,7 @@
           <div class="card-title d-flex bg-white align-items-center">
             <img class="rounded-circle avatar me-1" :src=" issue.creator.avatarUrl()" width="20">
             <span>{{ issue.creator.name }}</span>
-            <span class="ms-1 small text-muted">{{ issue.createOrEditTimeInWords() }}</span>
+            <span class="ms-1 small text-muted">{{ utils.createOrEditTimeInWords(issue.created_at, issue.last_edited_at) }}</span>
             <div class="dropdown dropdown-no-arrow ms-auto">
               <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
                 <i class="far fa-ellipsis-h" aria-hidden="true" />
@@ -48,6 +48,7 @@ import { getCurrentInstance, ref } from "vue"
 import { Attachment, Issue, User } from "@/models"
 import * as requests from "@/requests"
 import _ from "lodash"
+import * as utils from "@/lib/utils"
 
 import AttachmentBox from "@/components/AttachmentBox.vue"
 import PageContent from "@/components/PageContent.vue"

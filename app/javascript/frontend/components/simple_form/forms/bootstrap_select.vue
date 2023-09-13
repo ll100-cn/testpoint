@@ -49,7 +49,7 @@ const emit = defineEmits<{
   change: [evenvt: Event]
 }>()
 
-const el = ref<HTMLElement>()
+const el = ref(null! as HTMLElement)
 
 onMounted(() => {
   nextTick(() => {

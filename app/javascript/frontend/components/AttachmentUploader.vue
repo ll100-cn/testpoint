@@ -1,6 +1,6 @@
 <template>
-  <div ref="uploadAreaRef" class="upload-area p-2" @dragover.prevent="fileDragOver" @dragleave.prevent="fileDragLeave" @drop.prevent="fileDrop">
-    <div class="row g-2 upload-container">
+  <div ref="upload_area" class="x-upload-area p-2" @dragover.prevent="fileDragOver" @dragleave.prevent="fileDragLeave" @drop.prevent="fileDrop">
+    <div class="row g-2 x-upload-container">
       <template v-for="file in files" :key="file">
         <div class="col-lg-6">
           <AttachmentInfo v-if="file.state != 'uploading'" :attachment="file.attachment" @edited="editAttachment" @deleted="deleteAttachment" />
@@ -65,7 +65,7 @@ const emits = defineEmits<{
   change: [attachments: Attachment[]]
 }>()
 const files = ref<UploadFile[]>([])
-const uploadAreaRef = ref<HTMLElement>()
+const upload_area = ref(null! as HTMLElement)
 
 watch(files, (newValue, oldValue) => {
   const attachments = _.compact(_.map(newValue, (uploadFile) => {
@@ -157,11 +157,11 @@ function deleteAttachment(attachment: Attachment) {
 }
 
 function fileDragOver() {
-  uploadAreaRef.value.classList.add('highlight')
+  upload_area.value.classList.add('highlight')
 }
 
 function fileDragLeave() {
-  uploadAreaRef.value.classList.remove('highlight')
+  upload_area.value.classList.remove('highlight')
 }
 
 function fileDrop(event: DragEvent) {
@@ -174,17 +174,3 @@ function fileDrop(event: DragEvent) {
 }
 
 </script>
-
-<style lang="scss">
-.upload-area {
-  border: 6px dashed #ccc;
-
-  &.highlight {
-    background-color: rgba(232, 240, 254, 0.8);
-  }
-}
-
-.upload-container {
-  min-height: 150px;
-}
-</style>

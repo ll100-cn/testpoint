@@ -1,10 +1,8 @@
 import { Type } from "class-transformer"
-import { Member } from "./Member"
 import { Category } from "./Category"
+import { Member } from "./Member"
 import { Milestone } from "./Milestone"
 import { Task } from "./Task"
-import dayjs from "@/lib/dayjs"
-import { DATE_LONG_FORMAT } from '@/constants'
 import { User } from "./User"
 
 export class Issue {
@@ -21,7 +19,10 @@ export class Issue {
   updated_at: Date
 
   project_id: number
-  last_edited_at: string
+
+  @Type(() => Date)
+  last_edited_at: Date
+
   creator_id: number
   assignee_id: number
   priority: string
@@ -52,19 +53,5 @@ export class Issue {
   titleWithPriority() {
     const prefix = this.priority == "important" ? "!!" : ""
     return `${prefix}${this.title}`
-  }
-
-  createOrEditTimeInWords() {
-    if (this.last_edited_at) {
-      if (dayjs(this.last_edited_at) < dayjs().subtract(10, 'minutes')) {
-        return "修改于 " + dayjs(this.last_edited_at, DATE_LONG_FORMAT)
-      } else {
-        return dayjs(this.last_edited_at).fromNow() + "前修改"
-      }
-    } else if (dayjs(this.created_at) < dayjs().subtract(10, 'minutes')) {
-      return "添加于 " + dayjs(this.created_at, DATE_LONG_FORMAT)
-    } else {
-      return dayjs(this.created_at).fromNow() + "前添加"
-    }
   }
 }

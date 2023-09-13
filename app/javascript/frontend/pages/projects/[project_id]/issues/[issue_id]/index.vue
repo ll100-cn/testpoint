@@ -3,7 +3,7 @@
     <template v-if="issue.state == 'resolved'">
       <s><h2 class="me-1">{{ issue.titleWithPriority() }}</h2></s>
       <span class="me-1">
-        <IssueStateBadge :issue_state="issue.state" />
+        <IssueStateBadge :state="issue.state" />
       </span>
     </template>
     <h2 v-else class="me-1">{{ issue.titleWithPriority() }}</h2>

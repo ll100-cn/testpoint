@@ -172,8 +172,6 @@ Rails.application.routes.draw do
           resources :comments do
             member do
               get :comment
-              patch :unfold
-              patch :fold
             end
           end
         end

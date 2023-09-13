@@ -20,7 +20,7 @@ const props = defineProps({
   disabled: { type: Boolean, required: false, default: false },
 })
 
-const el = ref<HTMLElement>()
+const el = ref(null! as HTMLElement)
 const easyMDE = ref<EasyMDE>(null)
 
 // watch(() => props.form[props.code], (newVal, oldVal) => {

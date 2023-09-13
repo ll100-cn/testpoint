@@ -100,7 +100,7 @@ class Api::Projects::IssuesController < Api::BaseController
 
   def migrate
     with_email_notification do
-      @issue.change_project_with_author(issue_params, current_member)
+      @issue.change_project_with_author(migrate_params, current_member)
     end
 
     respond_with @issue
@@ -109,6 +109,10 @@ class Api::Projects::IssuesController < Api::BaseController
 protected
   def unresolve_params
     params.permit(:content, attachment_ids: [])
+  end
+
+  def migrate_params
+    params.permit(:targert_project_id, :category_id)
   end
 
   def issue_build_form_params

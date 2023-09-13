@@ -36,7 +36,7 @@ const emits = defineEmits<{
   close: [event: Event]
 }>()
 
-const el = ref<HTMLElement>()
+const el = ref(null! as HTMLElement)
 
 onMounted(() => {
   el.value?.addEventListener('hidden.bs.modal', (event) => {

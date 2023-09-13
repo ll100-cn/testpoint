@@ -17,24 +17,20 @@ export default class extends Controller {
       })
       .on('drop', this.uploadByDrop.bind(this))
   }
-
   enterHighlight() {
     $(this.element).addClass('highlight')
   }
-
   leaveHighlight() {
     $(this.element).removeClass('highlight')
   }
-
   uploadByDrop(event) {
     this.leaveHighlight()
     const { files } = event.originalEvent.dataTransfer
 
-    _.each(files, (file) => {
+    _.each(files, file => {
       this.upload(file)
     })
   }
-
   upload(file) {
     const url = $(this.element).data('url')
     const name = $(this.element).data('name')
@@ -62,7 +58,7 @@ export default class extends Controller {
       },
       progress(event) {
         const percent = event.loaded / event.total
-        progress.css("width", numbro(percent).format({ output: "percent" }))
+        progress.css("width", numbro(percent).format({output: "percent"}))
         item.find('.upload-size').text(numbro(percent * file.size).format({ output: "byte", base: "binary", mantissa: 2 }))
       },
       complete() {
@@ -108,9 +104,9 @@ export default class extends Controller {
     $.ajax(options)
   }
 
-  uploadByInput(event) {
+  uploadByInput(event){
     const files = event.target.files
-    _.each(files, (file) => {
+    _.each(files, file => {
       this.upload(file)
     })
     $(event.target).val('')

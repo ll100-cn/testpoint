@@ -6,9 +6,9 @@
       <span>将</span>
       <span class="text-info">状态</span>
       <span>从</span>
-      <IssueStateBadge :issue_state="issue_activity.before_value" />
+      <IssueStateBadge :state="issue_activity.before_value" />
       <span>修改为</span>
-      <IssueStateBadge :issue_state="issue_activity.after_value" />
+      <IssueStateBadge :state="issue_activity.after_value" />
     </span>
     <span v-else-if="issue_activity.property == 'assignee_id'" class="x-actions">
       <span>将</span>

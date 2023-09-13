@@ -17,7 +17,7 @@
       </li>
       <li v-if="(line instanceof Issue)" class="ms-3">
         <router-link class="me-3" :to="`/projects/${project_id}/issues/${line.id}`">{{ `#${line.id} ${line.title}` }}</router-link>
-        <IssueStateBadge :issue_state="line.state" />
+        <IssueStateBadge :state="line.state" />
       </li>
     </template>
   </ul>

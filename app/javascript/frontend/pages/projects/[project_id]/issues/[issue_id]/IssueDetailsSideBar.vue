@@ -16,7 +16,7 @@
             <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
           </layouts.horizontal_group>
         </template>
-        <IssueStateBadge :issue_state="issue.state" />
+        <IssueStateBadge :state="issue.state" />
       </IssueDetailEdit>
       <IssueDetailEdit :issue="issue" :validations="validations" code="priority" attribute_name="优先级" :form="form" @update-issue="emits('updateIssue', $event)">
         <template #edit="slotProps">

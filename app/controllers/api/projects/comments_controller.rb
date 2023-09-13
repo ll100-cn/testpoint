@@ -24,18 +24,8 @@ class Api::Projects::CommentsController < Api::BaseController
     respond_with @comment
   end
 
-  def unfold
-    @comment.unfold
-    respond_with @comment
-  end
-
-  def fold
-    @comment.fold
-    respond_with @comment
-  end
-
 protected
   def comment_params
-    params.permit(:content, :comment_id, attachment_ids: [])
+    params.permit(:content, :comment_id, :collapsed, attachment_ids: [])
   end
 end
