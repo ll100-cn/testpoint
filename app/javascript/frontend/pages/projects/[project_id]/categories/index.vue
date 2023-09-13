@@ -1,7 +1,7 @@
 <template>
   <div class="page-header">
     <h2>分类列表</h2>
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/categories/new`">新增分类</router-link>
     </div>
   </div>

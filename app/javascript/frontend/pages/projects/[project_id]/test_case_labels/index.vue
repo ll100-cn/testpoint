@@ -1,7 +1,7 @@
 <template>
   <div class="page-header">
     <h2>标签列表</h2>
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</router-link>
     </div>
   </div>

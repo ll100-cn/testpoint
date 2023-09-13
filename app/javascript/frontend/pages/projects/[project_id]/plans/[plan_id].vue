@@ -13,7 +13,7 @@
       </span>
     </div>
 
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
     </div>
   </div>

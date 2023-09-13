@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>问题列表（{{ project.name }}）</h2>
 
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <form @submit="querySearch({ keyword: search.keyword, filter: 'all' })">
         <div class="input-group ms-auto">
           <input v-model="search.keyword" type="text" class="form-control" placeholder="搜索问题或评论">

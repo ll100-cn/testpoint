@@ -2,7 +2,7 @@
   <div class="page-header justify-content-between">
     <h2>计划列表</h2>
 
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <button class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
     </div>
   </div>

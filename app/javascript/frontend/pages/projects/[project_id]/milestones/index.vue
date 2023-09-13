@@ -2,7 +2,7 @@
   <div class="page-header justify-content-between">
     <h2>里程碑列表</h2>
 
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</router-link>
     </div>
   </div>

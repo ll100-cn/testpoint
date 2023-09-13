@@ -1,7 +1,7 @@
 <template>
   <div class="page-header">
     <h2>问题模版列表</h2>
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <button class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
     </div>
   </div>

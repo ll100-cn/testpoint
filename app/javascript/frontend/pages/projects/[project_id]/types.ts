@@ -47,31 +47,31 @@ export class Filter {
   scene_path: string[]
   archived: string = "0"
   ignored: string | null
-  platform_id: string | null
-  label_id: string | null
+  // platform_id: string | null
+  // label_id: string | null
 
   toParams(): { [x: string]: string | string[] } {
     return {
       role_name: this.role_name,
       scene_path: this.scene_path,
       archived: this.archived,
-      platform_id: this.platform_id,
-      label_id: this.label_id,
+      // platform_id: this.platform_id,
+      // label_id: this.label_id,
     }
   }
 
   isMatch(testCase: TestCase, columns: ColumnFilter = new ColumnFilter()): boolean {
-    if (columns.isEnabled('platform_id') && !_.isEmpty(this.platform_id)) {
-      if (!testCase.platform_ids.includes(_.toNumber(this.platform_id))) {
-        return false
-      }
-    }
+    // if (columns.isEnabled('platform_id') && !_.isEmpty(this.platform_id)) {
+    //   if (!testCase.platform_ids.includes(_.toNumber(this.platform_id))) {
+    //     return false
+    //   }
+    // }
 
-    if (columns.isEnabled('label_id') && !_.isEmpty(this.label_id)) {
-      if (!testCase.label_ids.includes(_.toNumber(this.label_id))) {
-        return false
-      }
-    }
+    // if (columns.isEnabled('label_id') && !_.isEmpty(this.label_id)) {
+    //   if (!testCase.label_ids.includes(_.toNumber(this.label_id))) {
+    //     return false
+    //   }
+    // }
 
     if (columns.isEnabled('role_name') && this.role_name) {
       if (testCase.role_name !== (this.role_name === "" ? null : this.role_name)) {

@@ -5,7 +5,7 @@
     <span class="me-1">
       <IssueStateBadge :state="issue.state" />
     </span>
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
     </div>
   </div>

@@ -2,7 +2,7 @@
   <div class="col-auto d-flex">
     <label v-if="label" :for="code" class="col-form-label col text-end text-nowrap me-1">{{ label }}</label>
 
-    <div>
+    <div class="d-flex align-items-center">
       <slot name="default" :code="code" :validation="validation" :disabled="disableds[code]" />
       <div v-if="validation?.isInvaild()" class="invalid-feedback">{{ _.get(validation, 'messages', []).join(', ') }}</div>
       <small v-if="hint" class="form-text text-body-secondary">{{ hint }}</small>

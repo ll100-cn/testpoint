@@ -80,8 +80,7 @@ const test_case_stats = computed(() => {
 const avaiable_test_cases = computed(() => {
   let scope = _(props.test_cases)
 
-  const columns = new ColumnFilter({ expect: [ 'platform_id', 'label_id' ] })
-  scope = scope.filter((it) => props.filter.isMatch(it, columns))
+  scope = scope.filter((it) => props.filter.isMatch(it))
 
   return scope.value()
 })

@@ -3,7 +3,7 @@
     <h2>成员列表</h2>
     <router-link to="/projects" class="ms-3">项目</router-link>
 
-    <div class="d-flex ms-auto x-spacer-3">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link to="/users/new" class="btn btn-primary">新增成员</router-link>
     </div>
   </div>
