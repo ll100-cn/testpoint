@@ -194,5 +194,6 @@ Rails.application.routes.draw do
     resources :projects
   end
 
+  root to: "main#vue"
   get "*path" => "main#vue"
 end

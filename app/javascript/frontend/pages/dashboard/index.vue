@@ -1,16 +1,5 @@
 <template>
-  <div class="page-header d-flex align-items-end">
-    <h2 class="me-3">仪表盘</h2>
-
-    <router-link class="text-primary me-3" to="/dashboard">
-      <i class="far fa-check-square"></i> 按项目
-    </router-link>
-
-    <router-link class="text-secondary position-relative" to="/issues">
-      <i class="far fa-square"></i> 按个人
-      <span class="text-danger">({{ total_issues.total_count }})</span>
-    </router-link>
-  </div>
+  <PageHeader :issues_count="unhandled_issues_count" current="projects" />
 
   <div class="card card-x-table">
     <div class="card-body">
@@ -44,6 +33,7 @@
 import { IssueStat2, Project } from '@/models'
 import * as requests from '@/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
+import PageHeader from "./PageHeader.vue"
 
 const proxy = getCurrentInstance()!.proxy!
 
@@ -95,8 +85,9 @@ const issue_stages_counts = computed(() => {
   return result
 })
 
-const total_issues = ref(await new requests.IssuePaginationList().setup(proxy, req => {
+const unhandled_issues_count = ref((await new requests.IssuePaginationList().setup(proxy, req => {
   req.query.per_page = 1
-}).perform())
+  req.query.filter = 'unhandled'
+}).perform()).total_count)
 
 </script>

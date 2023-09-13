@@ -15,6 +15,7 @@
     prev-link-class="page-link"
     next-link-class="page-link"
     page-class="page-item"
+    class="mb-0"
     @input="queryChange({ page: $event })" />
 </template>
 
