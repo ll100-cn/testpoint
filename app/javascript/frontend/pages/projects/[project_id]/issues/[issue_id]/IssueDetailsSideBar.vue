@@ -90,7 +90,7 @@ import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@
 import * as utils from "@/lib/utils"
 import { Issue } from "@/models"
 import * as requests from '@/lib/requests'
-import { useSessionStore } from "@/store"
+import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"

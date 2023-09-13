@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header d-flex">
+  <div class="page-header">
     <h2 class="me-3">{{ plan.title }}</h2>
 
     <div class="border-start px-2">
@@ -13,7 +13,9 @@
       </span>
     </div>
 
-    <router-link class="ms-auto btn btn-link" :to="{ path: `${plan_id}/edit` }">设置</router-link>
+    <div class="d-flex ms-auto x-spacer-3">
+      <router-link class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
+    </div>
   </div>
 
   <ul class="nav nav-pills">

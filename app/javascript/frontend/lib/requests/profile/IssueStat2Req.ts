@@ -1,5 +1,5 @@
 import { IssueStat2 } from "@/models"
-import BaseArrayRequest from "./BaseArrayRequest"
+import BaseArrayRequest from "../BaseArrayRequest"
 
 export default {
   List: class extends BaseArrayRequest<IssueStat2> {

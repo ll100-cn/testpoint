@@ -1,7 +1,7 @@
 <template>
   <div class="page-header">
     <h2>项目成员列表</h2>
-    <div class="actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/members/new`">新增成员</router-link>
     </div>
   </div>

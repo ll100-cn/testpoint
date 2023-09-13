@@ -1,13 +1,9 @@
 <template>
-  <div class="nav nav-tabs mb-4">
-    <router-link to="/projects" class="nav-item nav-link">项目</router-link>
-    <router-link to="/users" class="nav-item nav-link active">成员</router-link>
-  </div>
-
   <div class="page-header">
     <h2>成员列表</h2>
+    <router-link to="/projects" class="ms-3">项目</router-link>
 
-    <div class="page-actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3">
       <router-link to="/users/new" class="btn btn-primary">新增成员</router-link>
     </div>
   </div>

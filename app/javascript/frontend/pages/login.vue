@@ -15,7 +15,7 @@
           </div>
 
           <div class="card-footer x-spacer-2">
-            <input type="submit" name="commit" value="登陆" class="btn btn-primary">
+            <input type="submit" name="commit" value="确定" class="btn btn-primary">
           </div>
         </form>
 
@@ -56,7 +56,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { Validations, forms, layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
 import { LoginCode } from "@/models"
-import { useSessionStore } from '@/store'
+import { useSessionStore } from "@/store/session"
 import { getCurrentInstance, reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 

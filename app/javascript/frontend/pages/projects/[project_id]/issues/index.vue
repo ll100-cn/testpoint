@@ -1,15 +1,17 @@
 <template>
   <div class="page-header">
     <h2>问题列表（{{ project.name }}）</h2>
-    <div class="actions ms-auto">
+
+    <div class="d-flex ms-auto x-spacer-3">
       <form @submit="querySearch({ keyword: search.keyword, filter: 'all' })">
         <div class="input-group ms-auto">
           <input v-model="search.keyword" type="text" class="form-control" placeholder="搜索问题或评论">
           <button class="btn btn-primary" type="submit">搜索</button>
         </div>
       </form>
+
+      <router-link class="btn btn-primary" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
     </div>
-    <router-link class="btn btn-primary ms-3" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
   </div>
 
   <ul class="nav nav-tabs border-bottom-0 zindex-999 position-relative">

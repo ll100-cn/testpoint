@@ -82,14 +82,14 @@ const query = utils.queryToPlain(route.query)
 const filter = query.filter || 'unhandled'
 const unhandled_issues_count = ref(0)
 
-const pagination = ref(await new requests.IssueReq.Page().setup(proxy, req => {
+const pagination = ref(await new requests.profile.IssueReq.Page().setup(proxy, req => {
   req.query.filter = filter
 }).perform())
 
 if (filter == 'unhandled') {
   unhandled_issues_count.value = pagination.value.total_count
 } else {
-  const unhandled = await new requests.IssueReq.Page().setup(proxy, req => {
+  const unhandled = await new requests.profile.IssueReq.Page().setup(proxy, req => {
     req.query.per_page = 1
     req.query.filter = 'unhandled'
   }).perform()

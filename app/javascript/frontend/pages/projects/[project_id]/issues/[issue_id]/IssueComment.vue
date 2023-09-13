@@ -110,7 +110,7 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, nextTick, ref } from "vue"
-import { useSessionStore } from "@/store"
+import { useSessionStore } from "@/store/session"
 
 import { Validations } from "@/components/simple_form"
 import * as utils from "@/lib/utils"

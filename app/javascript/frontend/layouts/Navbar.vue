@@ -8,7 +8,7 @@
       <div class="collapse navbar-collapse">
         <div class="navbar-nav">
           <div class="nav-item">
-            <a class="nav-link " href="/testpoint/dashboard">Testpoint</a>
+            <router-link class="nav-link" to="/">Testpoint</router-link>
           </div>
 
           <template v-if="account">
