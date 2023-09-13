@@ -8,7 +8,7 @@
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>

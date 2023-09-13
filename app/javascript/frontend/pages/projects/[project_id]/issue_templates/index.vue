@@ -6,7 +6,7 @@
     </div>
   </div>
   <FormErrorAlert :validations="validations" />
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table mb-0">
         <thead>
@@ -14,7 +14,7 @@
             <th>ID</th>
             <th>模版名称</th>
             <th>新增问题时可选</th>
-            <th />
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -23,7 +23,7 @@
               <td>{{ item.id }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</td>
-              <td class="x-actions text-end">
+              <td class="x-spacer-3 text-end">
                 <router-link :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>

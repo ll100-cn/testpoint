@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>
@@ -16,7 +16,7 @@
             <th>ID</th>
             <th>名称</th>
             <th>是否规定</th>
-            <th />
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +25,7 @@
               <td>{{ project.id }}</td>
               <td>{{ project.name }}</td>
               <td>{{ project.archived ? "是" : "否" }}</td>
-              <td class="x-actions text-end">
+              <td class="x-spacer-3 text-end">
                 <router-link :to="`/projects/${project.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
                 <a href="#" @click.prevent="onRemove(project.id)"><i class="far fa-trash-alt" /> 归档</a>
               </td>
@@ -33,7 +33,9 @@
           </template>
         </tbody>
       </table>
-      <PaginationBar2 class="mb-0 mt-2" :pagination="projects" />
+    </div>
+    <div class="card-footer">
+      <PaginationBar :pagination="projects" />
     </div>
   </div>
 </template>
@@ -43,7 +45,7 @@ import Validations from '@/components/simple_form/Validations'
 import * as requests from '@/lib/requests'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import PaginationBar2 from '@/components/PaginationBar2.vue'
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()

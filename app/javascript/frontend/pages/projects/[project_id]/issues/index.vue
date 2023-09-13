@@ -52,7 +52,9 @@
           </tr>
         </tbody>
       </table>
-      <PaginationBar2 class="mb-0 mt-2" :pagination="issues" />
+    </div>
+    <div class="card-footer">
+      <PaginationBar :pagination="issues" />
     </div>
   </div>
 </template>
@@ -69,7 +71,7 @@ import Search from "./Search"
 
 import CategoryBadge from "@/components/CategoryBadge.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import PaginationBar2 from "@/components/PaginationBar2.vue"
+import PaginationBar from "@/components/PaginationBar.vue"
 import SearchBar from "./SearchBar.vue"
 
 const { proxy } = getCurrentInstance()

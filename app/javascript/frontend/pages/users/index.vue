@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>
@@ -25,7 +25,7 @@
               <td>{{ user.id }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
-              <td class="x-actions text-end">
+              <td class="x-spacer-3 text-end">
                 <router-link :to="`/users/${user.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
                 <a href="#" @click.prevent="onRemove(user.id)"><i class="far fa-trash-alt" /> 删除</a>
               </td>
@@ -33,7 +33,9 @@
           </template>
         </tbody>
       </table>
-      <PaginationBar2 class="mb-0 mt-2" :pagination="users" />
+    </div>
+    <div class="card-footer">
+      <PaginationBar :pagination="users" />
     </div>
   </div>
 </template>
@@ -41,7 +43,7 @@
 <script setup lang="ts">
 import * as requests from '@/lib/requests'
 import { getCurrentInstance, reactive, ref } from 'vue'
-import PaginationBar2 from '@/components/PaginationBar2.vue'
+import PaginationBar from '@/components/PaginationBar.vue'
 import Validations from '@/components/simple_form/Validations';
 import { useRouter } from 'vue-router';
 

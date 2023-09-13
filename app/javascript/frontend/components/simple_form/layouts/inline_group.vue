@@ -1,5 +1,5 @@
 <template>
-  <div class="col-auto d-flex mb-3">
+  <div class="col-auto d-flex">
     <label v-if="label" :for="code" class="col-form-label col text-end text-nowrap me-1">{{ label }}</label>
 
     <div>

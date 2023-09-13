@@ -60,7 +60,7 @@
       </table>
     </div>
     <div class="card-footer">
-      <PaginationBar2 :pagination="pagination" />
+      <PaginationBar :pagination="pagination" />
     </div>
   </div>
 </template>
@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import IssueLink from "@/components/IssueLink.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import PaginationBar2 from "@/components/PaginationBar2.vue"
+import PaginationBar from "@/components/PaginationBar.vue"
 import * as utils from "@/lib/utils"
 import * as requests from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'

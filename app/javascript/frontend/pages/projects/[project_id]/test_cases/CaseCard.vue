@@ -1,6 +1,13 @@
 <template>
-  <div class="card card-x-table">
+  <div class="card page-card">
     <div class="card-header bg-white d-flex">
+      <form>
+        <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('title')" label="平台">
+          <forms.string v-bind="{ ...slotProps, form: search }" />
+        </layouts.inline_group>
+
+      </form>
+
       <h5 class="my-auto mx-2">平台</h5>
 
       <div class="dropdown">
@@ -72,20 +79,29 @@ import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref } from 'vue'
 import CardNew from './CardNew.vue'
 import * as utils from '@/lib/utils'
+import { Validations, forms, layouts } from '@/components/simple_form'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const query = utils.queryToPlain(route.query)
 
-const querystring = qs.stringify(route.query, { arrayFormat: "brackets" })
-const query = qs.parse(querystring, { ignoreQueryPrefix: true })
-const filter = plainToClass(Filter, query.f ?? {}) as Filter
+class Search {
+  group_name_search: string | null
+  platform_id: string | null
+  label_id: string | null
+}
+
+const validations = ref(new Validations())
+const search = ref(plainToClass(Search, query))
+const filter = plainToClass(Filter, query.f ?? {})
 const reset_search = {
   role_name: null,
   archived: null,
   scene_path: null
 }
+
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void
@@ -120,8 +136,13 @@ const group_name_search = ref("")
 const search_test_cases = computed(() => {
   let scope = _(test_cases)
 
-  const columns = new ColumnFilter({ only: [ 'platform_id', 'label_id' ] })
-  scope = scope.filter((it) => filter.isMatch(it, columns))
+  if (current_platform) {
+    scope = scope.filter(it => it.platform_ids.includes(current_platform.id))
+  }
+
+  if (current_label) {
+    scope = scope.filter(it => it.label_ids.includes(current_label.id))
+  }
 
   if (group_name_search.value) {
     scope = scope.filter((it) => it.group_name?.includes(group_name_search.value))
