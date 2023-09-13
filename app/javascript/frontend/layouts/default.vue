@@ -3,8 +3,9 @@
     <Suspense timeout="0">
       <div :key="route.fullPath">
         <Navbar />
-        <div class="app-container">
-          <component v-if="Component" :is="Component" />
+        <Error />
+        <div v-show="store.errors.length == 0" class="app-container">
+          <component v-if="Component" :is="Component" :key="route.fullPath" />
         </div>
       </div>
     </Suspense>
@@ -13,5 +14,10 @@
 </template>
 
 <script setup lang="ts">
+import { usePageStore } from "@/store"
+
+import Error from './Error.vue'
 import Navbar from './Navbar.vue'
+
+const store = usePageStore()
 </script>

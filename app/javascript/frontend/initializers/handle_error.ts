@@ -1,35 +1,16 @@
-import { ErrorAccessDenied, ErrorUnauthorized } from '@/lib/requests'
-import { useSessionStore } from '@/store/session'
+import { usePageStore } from '@/store'
 import { AppContext } from '@/types'
-import { type Router } from 'vue-router'
 
 function handleError(err, ctx: AppContext) {
-  const router = ctx.router as Router
-  const store = useSessionStore()
+  const store = usePageStore()
+  store.errors.push(err)
 
-  store.error = err
-
-  if (err instanceof ErrorAccessDenied) {
-    router.push({
-      path: "/error",
-      query: {
-        status: 403,
-      },
+  if (import.meta.hot) {
+    import.meta.hot.on("vite:afterUpdate", () => {
+      store.clear()
     })
-  } else if (err instanceof ErrorUnauthorized) {
-    router.push({
-      path: "/error",
-      query: {
-        status: 401,
-      },
-    })
-  } else {
-    if (import.meta.env.MODE !== 'development') {
-      router.push({
-        path: "/error",
-      })
-    }
   }
+
   console.error(err)
 }
 

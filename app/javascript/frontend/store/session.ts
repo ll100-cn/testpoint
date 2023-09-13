@@ -5,7 +5,6 @@ import { ref } from 'vue'
 
 export const useSessionStore = defineStore('session', () => {
   const account = ref(undefined! as Account | null)
-  const error = ref(null)
 
   async function prepare(ctx: any) {
     if (account.value !== undefined) {
@@ -27,5 +26,5 @@ export const useSessionStore = defineStore('session', () => {
     account.value = null
   }
 
-  return { account, error, prepare, clear }
+  return { account, prepare, clear }
 })
