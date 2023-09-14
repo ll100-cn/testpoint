@@ -54,12 +54,10 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
-
 import { IssueInfo, IssueRelationship, Comment } from "@/models"
 import * as requests from '@/lib/requests'
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
-
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import IssueContent from "./IssueContent.vue"
 import IssueDetailsSideBar from "./IssueDetailsSideBar.vue"

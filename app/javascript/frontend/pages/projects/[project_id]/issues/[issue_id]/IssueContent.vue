@@ -19,16 +19,12 @@
 
           <div class="no-margin-bottom">
             <template v-if="editing">
-              <FormVertical :validations="validations">
-                <IssueCommentForm
-                  :form="form"
-                  :attachments="issue_attachments"
-                  :validations="validations"
-                  @attachment-change="attachmentChange" />
+              <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+                <IssueCommentForm v-bind="{ former }" :attachments="issue_attachments" @attachment-change="attachmentChange" />
 
                 <template #actions>
-                  <button class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
-                  <SubmitButton class="ms-auto" :func="issueEdit" submit_text="提交修改" />
+                  <button class="btn btn-secondary" type="button" @click.prevent="finishedEditing">取消</button>
+                  <layouts.submit class="ms-auto">提交修改</layouts.submit>
                 </template>
               </FormVertical>
             </template>
@@ -46,17 +42,17 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from "vue"
 
-import { Attachment, Issue, User } from "@/models"
 import * as requests from '@/lib/requests'
-import _ from "lodash"
 import * as utils from "@/lib/utils"
+import { Attachment, Issue, User } from "@/models"
+import _ from "lodash"
 
 import AttachmentBox from "@/components/AttachmentBox.vue"
-import PageContent from "@/components/PageContent.vue"
-import SubmitButton from "@/components/SubmitButton.vue"
-import { Validations } from "@/components/simple_form"
-import IssueCommentForm from "./IssueCommentForm.vue"
 import FormVertical from "@/components/FormVertical.vue"
+import PageContent from "@/components/PageContent.vue"
+import { layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
+import IssueCommentForm from "./IssueCommentForm.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
@@ -71,14 +67,23 @@ const emits = defineEmits<{
 }>()
 const editing = ref(false)
 
-const validations = ref(new Validations())
-const form = ref({
+const former = Former.build({
   content: props.issue.content,
   attachment_ids: []
 })
 
+former.perform = async function() {
+  const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue.project_id
+    req.interpolations.issue_id = props.issue.id
+  }).perform(this.form)
+
+  finishedEditing()
+  emits("updateIssue", issue)
+}
+
 function resetForm() {
-  form.value = {
+  former.form = {
     content: props.issue.content,
     attachment_ids: []
   }
@@ -95,29 +100,7 @@ function finishedEditing() {
 }
 
 function attachmentChange($event: Attachment[]) {
-  form.value.attachment_ids = _.map($event, 'id')
+  former.form.attachment_ids = _.map($event, 'id')
   emits("refreshIssue")
 }
-
-async function issueEdit() {
-  validations.value.clear()
-
-  try {
-    const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = props.issue.project_id
-      req.interpolations.issue_id = props.issue.id
-    }).perform(form.value)
-    if (issue) {
-      finishedEditing()
-      emits("updateIssue", issue)
-    }
-  } catch (error) {
-    if (validations.value.handleError(error)) {
-      return
-    }
-
-    throw error
-  }
-}
-
 </script>

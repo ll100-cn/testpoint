@@ -2,16 +2,12 @@
   <div v-if="comment.comment_id === null" class="card flex-grow-1 issue-comment">
     <div :id="`comment${comment.id}_content`" class="card-body">
       <div v-if="editing" class="no-margin-bottom">
-        <FormVertical :validations="validations">
-          <IssueCommentForm
-            :form="form"
-            :attachments="comment.attachments"
-            :validations="validations"
-            @attachment-change="attachmentChange" />
+        <FormVertical v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
+          <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" :former="edit_former" />
 
           <template #actions>
-            <button class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
-            <SubmitButton class="ms-auto" :func="editComment" submit_text="提交修改" />
+            <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
+            <layouts.submit class="ms-auto">提交修改</layouts.submit>
           </template>
         </FormVertical>
       </div>
@@ -61,14 +57,11 @@
             <i class="fa fa-times me-1" />取消回复
           </a>
         </div>
-        <FormVertical :validations="validations">
-          <IssueCommentForm
-            :form="reply_form"
-            :validations="reply_validations"
-            @attachment-change="replyAttachmentChange" />
+        <FormVertical v-bind="{ former: reply_former }" @submit.prevent="reply_former.submit">
+          <IssueCommentForm :former="reply_former" @attachment-change="replyAttachmentChange" />
 
           <template #actions>
-            <SubmitButton class="ms-auto" :func="replyComment" submit_text="新增评论" />
+            <layouts.submit class="ms-auto">新增评论</layouts.submit>
           </template>
         </FormVertical>
       </div>
@@ -76,16 +69,12 @@
   </div>
   <template v-else>
     <li class="list-group-item px-0">
-      <FormVertical v-if="editing" :validations="validations">
-        <IssueCommentForm
-          :form="form"
-          :attachments="comment.attachments"
-          :validations="validations"
-          @attachment-change="attachmentChange" />
+      <FormVertical v-if="editing" v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
+        <IssueCommentForm :attachments="comment.attachments" :former="edit_former" @attachment-change="attachmentChange" />
 
         <template #actions>
-          <button class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
-          <SubmitButton class="ms-auto" :func="editComment" submit_text="提交修改" />
+          <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
+          <layouts.submit class="ms-auto">提交修改</layouts.submit>
         </template>
       </FormVertical>
       <template v-else>
@@ -115,7 +104,7 @@
 import { getCurrentInstance, nextTick, ref } from "vue"
 import { useSessionStore } from "@/store/session"
 
-import { Validations } from "@/components/simple_form"
+import { Validations, layouts } from "@/components/simple_form"
 import * as utils from "@/lib/utils"
 import { Attachment, Comment, Issue } from "@/models"
 import * as requests from '@/lib/requests'
@@ -128,6 +117,8 @@ import PageContent from "@/components/PageContent.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
 import IssueCommentForm from "./IssueCommentForm.vue"
 import FormVertical from "@/components/FormVertical.vue"
+import Former from "@/components/simple_form/Former"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
@@ -150,14 +141,24 @@ const emits = defineEmits<{
 const editing = ref(false)
 const replying = ref(false)
 
-const validations = ref(new Validations())
-const form = ref({
+const edit_former = Former.build({
   content: props.comment.content,
   attachment_ids: []
 })
 
+edit_former.perform = async function() {
+  const comment = await new requests.IssueCommentReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue.project_id
+    req.interpolations.issue_id = props.issue.id
+    req.interpolations.comment_id = props.comment.id
+  }).perform(this.form)
+
+  finishedEditing()
+  emits("updateComment", comment)
+}
+
 function resetForm() {
-  form.value = {
+  edit_former.form = {
     content: props.comment.content,
     attachment_ids: []
   }
@@ -215,41 +216,28 @@ async function unfoldComment() {
   }
 }
 
-async function editComment() {
-  validations.value.clear()
-
-  try {
-    const comment = await new requests.IssueCommentReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = props.issue.project_id
-      req.interpolations.issue_id = props.issue.id
-      req.interpolations.comment_id = props.comment.id
-    }).perform(form.value)
-
-    if (comment) {
-      finishedEditing()
-      emits("updateComment", comment)
-    }
-  } catch (error) {
-    if (validations.value.handleError(error)) {
-      return
-    }
-
-    throw error
-  }
-}
-
 function attachmentChange($event: Attachment[]) {
-  form.value.attachment_ids = _.map($event, 'id')
+  edit_former.form.attachment_ids = _.map($event, 'id')
   emits("refreshComment")
 }
 
-const reply_form = ref({
+const reply_former = Former.build({
   content: "",
   attachment_ids: []
 })
-const reply_validations = ref(new Validations())
+
+reply_former.perform = async function() {
+  const comment = await new requests.IssueCommentReq.Create().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue.project_id
+    req.interpolations.issue_id = props.issue.id
+  }).perform({ ...this.form, comment_id: props.comment.id })
+
+  emits("addComment", comment)
+  finishedReplying()
+}
+
 function resetReplyForm() {
-  reply_form.value = {
+  reply_former.form = {
     content: "",
     attachment_ids: []
   }
@@ -268,29 +256,8 @@ function finishedReplying() {
   })
 }
 
-async function replyComment() {
-  reply_validations.value.clear()
-
-  try {
-    const comment = await new requests.IssueCommentReq.Create().setup(proxy, (req) => {
-      req.interpolations.project_id = props.issue.project_id
-      req.interpolations.issue_id = props.issue.id
-    }).perform({ ...reply_form.value, comment_id: props.comment.id })
-    if (comment) {
-      emits("addComment", comment)
-      finishedReplying()
-    }
-  } catch (error) {
-    if (reply_validations.value.handleError(error)) {
-      return
-    }
-
-    throw error
-  }
-}
-
 function replyAttachmentChange($event: Attachment[]) {
-  reply_form.value.attachment_ids = _.map($event, 'id')
+  reply_former.form.attachment_ids = _.map($event, 'id')
   emits("refreshComment")
 }
 

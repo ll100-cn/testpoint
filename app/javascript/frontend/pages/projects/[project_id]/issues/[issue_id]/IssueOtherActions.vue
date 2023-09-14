@@ -27,11 +27,11 @@
       </div>
 
       <div id="newComment" class="collapse mt-3">
-        <FormVertical :validations="validations">
-          <IssueCommentForm :form="form" :validations="validations" />
+        <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+          <IssueCommentForm v-bind="{ former }" />
 
           <template #actions>
-            <SubmitButton class="ms-auto" :func="addComment" submit_text="新增评论" />
+            <layouts.submit>新增评论</layouts.submit>
           </template>
         </FormVertical>
       </div>
@@ -50,12 +50,13 @@ import * as requests from '@/lib/requests'
 import { Collapse } from "bootstrap"
 import _ from "lodash"
 import SubmitButton from "@/components/SubmitButton.vue"
-import { Validations } from "@/components/simple_form"
+import { Validations, layouts } from "@/components/simple_form"
 import IssueCommentForm from "./IssueCommentForm.vue"
 import IssueInfoCreateModal from "./IssueInfoCreateModal.vue"
 import IssueRelationshipModal from "./IssueRelationshipModal.vue"
 import IssueUnresolveModal from "./IssueUnresolveModal.vue"
 import FormVertical from "@/components/FormVertical.vue"
+import Former from "@/components/simple_form/Former"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
@@ -72,42 +73,31 @@ const issue_relationship_modal = ref<InstanceType<typeof IssueRelationshipModal>
 const issue_info_create_modal = ref<InstanceType<typeof IssueInfoCreateModal>>()
 const issue_unresolve_modal = ref<InstanceType<typeof IssueUnresolveModal>>()
 
-const validations = ref(new Validations())
-const form = ref({
+const former = Former.build({
   content: "",
   attachment_ids: []
 })
-const _form = _.cloneDeep(form.value)
+
+former.perform = async function() {
+  const comment = await new requests.IssueCommentReq.Create().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue.project_id
+    req.interpolations.issue_id = props.issue.id
+  }).perform(this.form)
+
+  resetForm()
+  emits("addComment", comment)
+  hideNewComment()
+}
+
+const _form = _.cloneDeep(former.form)
 function resetForm() {
-  form.value = _form
+  former.form = _form
 }
 
 async function hideNewComment() {
   nextTick(() => {
     Collapse.getOrCreateInstance(document.getElementById("newComment")).hide()
   })
-}
-
-async function addComment() {
-  validations.value.clear()
-
-  try {
-    const comment = await new requests.IssueCommentReq.Create().setup(proxy, (req) => {
-      req.interpolations.project_id = props.issue.project_id
-      req.interpolations.issue_id = props.issue.id
-    }).perform(form.value)
-    if (comment) {
-      resetForm()
-      emits("addComment", comment)
-      hideNewComment()
-    }
-  } catch (error) {
-    if (validations.value.handleError(error)) {
-      return
-    }
-
-    throw error
-  }
 }
 
 async function archiveIssue() {

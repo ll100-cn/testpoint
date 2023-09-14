@@ -9,56 +9,67 @@
       <span>{{ utils.humanize(issue.created_at, DATE_LONG_FORMAT) }}</span>
       <hr>
 
-      <FormVertical :validations="validations">
-        <FormErrorAlert :validations="validations" />
-        <IssueDetailEdit :issue="issue" :validations="validations" code="state" attribute_name="状态" :form="form" @update-issue="emits('updateIssue', $event)">
-          <template #edit="slotProps">
-            <layouts.group :validation="validations.disconnect(slotProps.code)">
-              <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
+      <div>
+        <FormErrorAlert :validations="former.validations" />
+
+        <IssueDetailEdit v-bind="{ former }" code="state" title="状态">
+          <template #editable>
+            <layouts.group v-slot="slotProps" code="state">
+              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
             </layouts.group>
           </template>
+
           <IssueStateBadge :state="issue.state" />
         </IssueDetailEdit>
-        <IssueDetailEdit :issue="issue" :validations="validations" code="priority" attribute_name="优先级" :form="form" @update-issue="emits('updateIssue', $event)">
-          <template #edit="slotProps">
-            <layouts.group :validation="validations.disconnect(slotProps.code)">
-              <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
+
+        <IssueDetailEdit v-bind="{ former }" code="priority" title="优先级">
+          <template #editable>
+            <layouts.group v-slot="slotProps" code="priority">
+              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
             </layouts.group>
           </template>
+
           <span :class="{'text-danger': issue.priority == 'important'}">{{ issue.priority_text }}</span>
         </IssueDetailEdit>
-        <IssueDetailEdit :issue="issue" :validations="validations" code="creator_id" attribute_name="创建人" :form="form" @update-issue="emits('updateIssue', $event)">
-          <template #edit="slotProps">
-            <layouts.group :validation="validations.disconnect(slotProps.code)">
-              <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
+
+        <IssueDetailEdit v-bind="{ former }" code="creator_id" title="创建人">
+          <template #editable>
+            <layouts.group v-slot="slotProps" code="creator_id">
+              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
-          {{ issue.creator?.name }}
+
+          {{ issue.creator.name }}
         </IssueDetailEdit>
-        <IssueDetailEdit :issue="issue" :validations="validations" code="assignee_id" attribute_name="受理人" :form="form" @update-issue="emits('updateIssue', $event)">
-          <template #edit="slotProps">
-            <layouts.group :validation="validations.disconnect(slotProps.code)">
-              <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
+
+        <IssueDetailEdit v-bind="{ former }" code="assignee_id" title="受理人">
+          <template #editable>
+            <layouts.group v-slot="slotProps" code="assignee_id">
+              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
-          {{ issue.assignee?.name }}
+
+          {{ issue.assignee?.name ?? '无' }}
         </IssueDetailEdit>
-        <IssueDetailEdit :issue="issue" :validations="validations" code="category_id" attribute_name="分类" :form="form" @update-issue="emits('updateIssue', $event)">
-          <template #edit="slotProps">
-            <layouts.group :validation="validations.disconnect(slotProps.code)">
-              <forms.bootstrap_select v-bind="{ ...slotProps, live_search: true, custom_class: 'form-control-sm', collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
+
+        <IssueDetailEdit v-bind="{ former }" code="category_id" title="分类">
+          <template #editable>
+            <layouts.group v-slot="slotProps" code="category_id">
+              <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, live_search: true, custom_class: 'form-control-sm', collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
+
           <CategoryBadgeVue :category="_.find(categories, { id: issue.category_id })" />
         </IssueDetailEdit>
 
-        <IssueDetailEdit :issue="issue" :validations="validations" code="milestone_id" attribute_name="里程碑" :form="form" @update-issue="emits('updateIssue', $event)">
-          <template #edit="slotProps">
-            <layouts.group :validation="validations.disconnect(slotProps.code)">
-              <forms.select v-bind="{ ...slotProps, custom_class: 'form-select-sm', collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
+        <IssueDetailEdit v-bind="{ former }" code="milestone_id" title="里程碑">
+          <template #editable>
+            <layouts.group v-slot="slotProps" code="milestone_id">
+              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
             </layouts.group>
           </template>
-          {{ _.find(milestones, { id: issue.milestone_id })?.title }}
+
+          {{ _.find(milestones, { id: issue.milestone_id })?.title ?? '无' }}
         </IssueDetailEdit>
 
         <div class="d-flex flex-column">
@@ -68,16 +79,11 @@
             <button v-else class="btn border border-secondary bg-light w-100 text-dark" @click="subscribe">订阅问题</button>
             <div class="mt-2 small text-muted">{{ issue.subscribed_users.length }} 人订阅:</div>
             <div class="x-actions">
-              <img
-                v-for="user in issue.subscribed_users"
-                :key="user.id"
-                v-tooltip:top="user.name"
-                class="rounded-circle avatar"
-                :src="user.avatarUrl()" width="30">
+              <img v-for="user in issue.subscribed_users" :key="user.id" v-tooltip:top="user.name" class="rounded-circle avatar" :src="user.avatarUrl()" width="30">
             </div>
           </div>
         </div>
-      </FormVertical>
+      </div>
 
       <hr>
     </div>
@@ -87,19 +93,18 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, ref } from "vue"
 
-import { Validations, forms, layouts } from "@/components/simple_form"
-import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
-import * as utils from "@/lib/utils"
-import { Issue } from "@/models"
-import * as requests from '@/lib/requests'
-import { useSessionStore } from "@/store/session"
-import _ from "lodash"
-
+import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
+import { Validations, forms, layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
+import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
+import * as requests from '@/lib/requests'
+import * as utils from "@/lib/utils"
+import { Issue } from "@/models"
+import { useSessionStore } from "@/store/session"
+import _ from "lodash"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
-import CategoryBadgeVue from "@/components/CategoryBadge.vue"
-import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
@@ -121,6 +126,24 @@ const form = ref({
   milestone_id: props.issue?.milestone_id,
 })
 const validations = ref(new Validations())
+
+const former = Former.build({
+  state: props.issue?.state,
+  priority: props.issue?.priority,
+  creator_id: props.issue?.creator_id,
+  assignee_id: props.issue?.assignee_id,
+  category_id: props.issue?.category_id,
+  milestone_id: props.issue?.milestone_id,
+})
+
+former.perform = async function(code: string) {
+  const a_issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue.project_id
+    req.interpolations.issue_id = props.issue.id
+  }).perform({ [code]: this.form[code] })
+
+  emits("updateIssue", a_issue)
+}
 
 const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = props.issue.project_id

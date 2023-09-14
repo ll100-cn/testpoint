@@ -5,13 +5,13 @@
         <h5 class="mb-0">请在下方详细注明未解决的原因</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
-      <FormVertical :validations="validations">
+      <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
-          <IssueCommentForm :form="form" :validations="validations" />
+          <IssueCommentForm v-bind="{ former }" />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-          <SubmitButton :func="unresolveIssue" />
+          <layouts.submit>提交</layouts.submit>
         </div>
       </FormVertical>
     </template>
@@ -20,61 +20,49 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from "vue"
-
-import { Validations } from "@/components/simple_form"
-import { Issue, IssueInfo } from "@/models"
-import * as requests from '@/lib/requests'
-import _ from "lodash"
 import CommonModal from "@/components/CommonModal.vue"
-import SubmitButton from "@/components/SubmitButton.vue"
-import IssueCommentForm from './IssueCommentForm.vue'
 import FormVertical from "@/components/FormVertical.vue"
+import { layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
+import * as requests from '@/lib/requests'
+import { Issue, IssueInfo } from "@/models"
+import _ from "lodash"
+import IssueCommentForm from './IssueCommentForm.vue'
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
   issue: Issue
 }>()
-const emits = defineEmits<{
+const emit = defineEmits<{
   addIssueInfo: [issue_info: IssueInfo]
   updateIssue: [issue: Issue]
 }>()
 
-const validations = ref(new Validations())
 const modal = ref<InstanceType<typeof CommonModal>>()
-const form = ref({
+
+const former = Former.build({
   content: "",
   attachment_ids: []
 })
-const _form = _.cloneDeep(form.value)
+
+former.perform = async function() {
+  const issue = await new requests.IssueUnresolve().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue.project_id
+    req.interpolations.issue_id = props.issue.id
+  }).perform(this.form)
+
+  emit("updateIssue", issue)
+  resetForm()
+  modal.value.hide()
+}
+
+const _form = _.cloneDeep(former.form)
 function resetForm() {
-  form.value = _form
+  former.form = _form
 }
 
 async function show() {
   modal.value.show()
-}
-
-async function unresolveIssue() {
-  validations.value.clear()
-
-  try {
-    const issue = await new requests.IssueUnresolve().setup(proxy, (req) => {
-      req.interpolations.project_id = props.issue.project_id
-      req.interpolations.issue_id = props.issue.id
-    }).perform(form.value)
-
-    if (issue) {
-      emits("updateIssue", issue)
-      resetForm()
-      modal.value.hide()
-    }
-  } catch (error) {
-    if (validations.value.handleError(error)) {
-      return
-    }
-
-    throw error
-  }
 }
 
 defineExpose({
