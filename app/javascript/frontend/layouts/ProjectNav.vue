@@ -4,11 +4,11 @@
   </div>
 
   <div class="nav-item">
-    <router-link class="nav-link" :to="`/projects/${project.id}/issues`">问题</router-link>
+    <router-link class="nav-link" :to="`/projects/${project.id}/plans`">计划</router-link>
   </div>
 
   <div class="nav-item">
-    <router-link class="nav-link" :to="`/projects/${project.id}/plans`">计划</router-link>
+    <router-link class="nav-link" :to="`/projects/${project.id}/issues`">问题</router-link>
   </div>
 
   <div class="nav-item">
