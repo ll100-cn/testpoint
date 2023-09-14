@@ -5,41 +5,38 @@
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarCollapseContent">
-
+      <div class="collapse navbar-collapse">
         <div class="navbar-nav">
-
-
           <div class="nav-item">
-            <a class="nav-link " href="/testpoint/dashboard">Testpoint</a>
+            <router-link class="nav-link" to="/">Testpoint</router-link>
           </div>
 
-          <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" aria-expanded="false">
-              {{ project?.name ?? "选择项目" }}
-            </a>
+          <template v-if="account">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+                {{ project?.name ?? "选择项目" }}
+              </a>
 
-            <div class="dropdown-menu">
-              <router-link v-for="project in projects.list" class="small dropdown-item d-flex align-items-center" :to="`/projects/${project.id}`">
-                <span class="me-auto">{{ project.name }}</span>
-                <i class="fal fa-sign-in-alt"></i>
-              </router-link>
+              <div class="dropdown-menu">
+                <router-link v-for="project in projects" class="small dropdown-item d-flex align-items-center" :to="`/projects/${project.id}`">
+                  <span class="me-auto">{{ project.name }}</span>
+                  <i class="fal fa-sign-in-alt"></i>
+                </router-link>
 
-              <div class="dropdown-divider"></div>
+                <div class="dropdown-divider"></div>
 
-              <router-link class="small dropdown-item d-flex align-items-center" to="/projects">
-                <span class="me-auto">项目设置</span>
-                <i class="fal fa-cogs"></i>
-              </router-link>
+                <router-link class="small dropdown-item d-flex align-items-center" to="/projects">
+                  <span class="me-auto">项目设置</span>
+                  <i class="fal fa-cogs"></i>
+                </router-link>
+              </div>
             </div>
-          </div>
 
-          <ProjectNav v-if="project" :project="project" />
+            <ProjectNav v-if="project" :project="project" />
+          </template>
         </div>
 
-
-        <div class="navbar-nav ms-md-auto">
-
+        <div v-if="account" class="navbar-nav ms-md-auto">
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuUser" role="button" href="#">
               <img height="25" class="rounded-circle"
@@ -51,12 +48,9 @@
               <a class="dropdown-item" rel="nofollow" href="#" @click="signOut">退出</a>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
-
   </nav>
 </template>
 
@@ -66,23 +60,26 @@ import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
-
-const session = useSessionStore()
-const account = session.account
+import { Project } from '@/models'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
 const router = useRouter()
+const session = useSessionStore()
 
-const projects = ref(await new requests.ProjectReq.Page().setup(proxy).perform())
+const account = session.account
+let projects = ref([] as Project[])
+
+if (account) {
+  projects.value = (await new requests.ProjectReq.Page().setup(proxy).perform()).list
+}
 const project = computed(() => {
   const project_id = route.path.match(/\/projects\/(\d+)/)?.[1]
-  console.log(project_id)
   if (project_id == null) {
     return null
   }
 
-  return projects.value.list.find((it) => it.id.toString() === project_id)
+  return projects.value.find((it) => it.id.toString() === project_id)
 })
 
 async function signOut() {

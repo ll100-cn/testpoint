@@ -1,7 +1,7 @@
 <template>
   <PageHeader :issues_count="unhandled_issues_count" current="projects" />
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>
@@ -37,7 +37,7 @@ import PageHeader from "./PageHeader.vue"
 
 const proxy = getCurrentInstance()!.proxy!
 
-const issue_stats = ref(await new requests.IssueStat2Req.List().setup(proxy).perform())
+const issue_stats = ref(await new requests.profile.IssueStat2Req.List().setup(proxy).perform())
 
 const ENUM_ISSUE_STAGES = {
   pending: '分配',
@@ -85,7 +85,7 @@ const issue_stages_counts = computed(() => {
   return result
 })
 
-const unhandled_issues_count = ref((await new requests.IssueReq.Page().setup(proxy, req => {
+const unhandled_issues_count = ref((await new requests.profile.IssueReq.Page().setup(proxy, req => {
   req.query.per_page = 1
   req.query.filter = 'unhandled'
 }).perform()).total_count)

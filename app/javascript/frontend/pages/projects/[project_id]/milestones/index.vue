@@ -2,12 +2,12 @@
   <div class="page-header justify-content-between">
     <h2>里程碑列表</h2>
 
-    <div class="actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</router-link>
     </div>
   </div>
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body py-0">
       <table class="table mb-0">
         <thead>
@@ -15,7 +15,7 @@
             <th>标题</th>
             <th>发布时间</th>
             <th>是否归档</th>
-            <th />
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -23,7 +23,7 @@
             <td>{{ milestone.title }}</td>
             <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
             <td><span v-if="milestone.isArchived()">已归档</span></td>
-            <td class="text-end x-actions">
+            <td class="x-spacer-3 text-end">
               <router-link :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
                 <i class="far fa-pencil-alt" /> 修改
               </router-link>

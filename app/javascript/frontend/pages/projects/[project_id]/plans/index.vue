@@ -1,7 +1,10 @@
 <template>
   <div class="page-header justify-content-between">
     <h2>计划列表</h2>
-    <button class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
+
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
+      <button class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
+    </div>
   </div>
   <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="getData" />
 
@@ -17,7 +20,7 @@
           labelMethod: 'name',
           valueMethod: 'id',
           includeBlank: true
-        }" @change="PaginationBarRef.queryChange({ page: 1, q: { creator_id_eq: ($event.target as HTMLInputElement).value } })" />
+        }" @change="queryChange({ page: 1, q: { creator_id_eq: ($event.target as HTMLInputElement).value } })" />
     </div>
   </div>
   <div class="row mb-3">
@@ -53,41 +56,31 @@
     </div>
   </div>
 
-  <PaginationBar ref="PaginationBarRef" :pagination="plans" :current-query="currentQuery" />
+  <PaginationBar :pagination="plans" />
 </template>
 
 <script setup lang="ts">
-import _ from 'lodash'
-import { computed, getCurrentInstance, ref } from 'vue'
-import { useRoute } from 'vue-router'
-
+import PaginationBar from '@/components/PaginationBar.vue'
 import { forms } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
-import * as utils from '@/lib/utils'
 import * as requests from '@/lib/requests'
+import * as utils from '@/lib/utils'
 import { PageQuery } from '@/types'
+import _ from 'lodash'
 import qs from 'qs'
-
-import PaginationBar from '@/components/PaginationBar.vue'
+import { computed, getCurrentInstance, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import PlanCreateModal from './PlanCreateModal.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
+const router = useRouter()
 const params = route.params as any
-const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
-const PaginationBarRef = ref<InstanceType<typeof PaginationBar>>()
 
+const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
 const querystring = qs.stringify(route.query)
 const query: PageQuery = qs.parse(querystring, { ignoreQueryPrefix: true })
 const current_creator_id = ref(query.q?.creator_id_eq)
-
-const currentQuery = ref<PageQuery>({
-  page: _.toInteger(query.page) || 1,
-  q: {
-    ...query.q,
-    creator_id_eq: current_creator_id.value,
-  } || {},
-})
 
 const project_id = _.toNumber(params.project_id)
 const plans = ref()
@@ -117,4 +110,7 @@ const availiable_members = computed(() => {
   return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()
 })
 
+function queryChange(data) {
+  router.push({ query: data })
+}
 </script>

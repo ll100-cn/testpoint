@@ -1,18 +1,14 @@
 <template>
-  <div class="nav nav-tabs mb-4">
-    <router-link to="/projects" class="nav-item nav-link">项目</router-link>
-    <router-link to="/users" class="nav-item nav-link active">成员</router-link>
-  </div>
-
   <div class="page-header">
     <h2>成员列表</h2>
+    <router-link to="/projects" class="ms-3">项目</router-link>
 
-    <div class="page-actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link to="/users/new" class="btn btn-primary">新增成员</router-link>
     </div>
   </div>
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>
@@ -29,7 +25,7 @@
               <td>{{ user.id }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
-              <td class="x-actions text-end">
+              <td class="x-spacer-3 text-end">
                 <router-link :to="`/users/${user.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
                 <a href="#" @click.prevent="onRemove(user.id)"><i class="far fa-trash-alt" /> 删除</a>
               </td>
@@ -37,7 +33,9 @@
           </template>
         </tbody>
       </table>
-      <PaginationBar2 class="mb-0 mt-2" :pagination="users" />
+    </div>
+    <div class="card-footer">
+      <PaginationBar :pagination="users" />
     </div>
   </div>
 </template>
@@ -45,7 +43,7 @@
 <script setup lang="ts">
 import * as requests from '@/lib/requests'
 import { getCurrentInstance, reactive, ref } from 'vue'
-import PaginationBar2 from '@/components/PaginationBar2.vue'
+import PaginationBar from '@/components/PaginationBar.vue'
 import Validations from '@/components/simple_form/Validations';
 import { useRouter } from 'vue-router';
 

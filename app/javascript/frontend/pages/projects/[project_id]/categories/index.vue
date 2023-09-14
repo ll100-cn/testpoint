@@ -1,14 +1,14 @@
 <template>
   <div class="page-header">
     <h2>分类列表</h2>
-    <div class="actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/categories/new`">新增分类</router-link>
     </div>
   </div>
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>
@@ -17,7 +17,7 @@
             <th>名称</th>
             <th>描述</th>
             <th>关联问题数</th>
-            <th />
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
               </td>
               <td>{{ category.description }}</td>
               <td>{{ category.issue_count }}</td>
-              <td class="x-actions text-end">
+              <td class="x-spacer-3 text-end">
                 <router-link :to="`/projects/${project_id}/categories/${category.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
@@ -39,7 +39,9 @@
           </template>
         </tbody>
       </table>
-      <PaginationBar class="mb-0 mt-2" :pagination="categories" :current-query="currentQuery" />
+    </div>
+    <div class="card-footer">
+      <PaginationBar :pagination="categories" />
     </div>
   </div>
 </template>
@@ -47,12 +49,10 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
 import _ from 'lodash'
 import * as requests from '@/lib/requests'
 import { Validations } from "@/components/simple_form"
 import { PageQuery } from '@/types'
-
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import CategoryBadge from '@/components/CategoryBadge.vue'

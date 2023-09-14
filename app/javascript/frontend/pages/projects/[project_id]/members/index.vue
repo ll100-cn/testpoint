@@ -1,14 +1,14 @@
 <template>
   <div class="page-header">
     <h2>项目成员列表</h2>
-    <div class="actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/members/new`">新增成员</router-link>
     </div>
   </div>
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>
@@ -18,7 +18,7 @@
             <th>邮箱</th>
             <th>角色</th>
             <th>默认接收邮箱</th>
-            <th />
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
               <td>{{ member.email }}</td>
               <td>{{ member.role_text }}</td>
               <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
-              <td class="x-actions text-end">
+              <td class="x-spacer-3 text-end">
                 <router-link :to="`/projects/${project_id}/members/${member.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
@@ -39,22 +39,24 @@
           </template>
         </tbody>
       </table>
-      <PaginationBar class="mb-0 mt-2" :pagination="members" :current-query="currentQuery" />
+    </div>
+    <div class="card-footer">
+      <PaginationBar :pagination="members" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref, reactive } from 'vue'
+import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import _ from 'lodash'
-import * as requests from '@/lib/requests'
 import { Validations } from "@/components/simple_form"
+import * as requests from '@/lib/requests'
 import { PageQuery } from '@/types'
+import _ from 'lodash'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import PaginationBar from "@/components/PaginationBar.vue"
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

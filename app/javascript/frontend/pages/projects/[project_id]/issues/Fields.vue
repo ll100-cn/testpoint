@@ -1,29 +1,29 @@
 <template>
   <FormErrorAlert :validations="validations" />
 
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('issue_template_id')" label="选择问题模版">
+  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('issue_template_id')" label="选择问题模版">
     <forms.bootstrap_select v-bind="{ ...slotProps, form, collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
-  </layouts.horizontal_group>
+  </layouts.vertical_group>
   <template v-if="form['issue_template_id']">
-    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
+    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
       <forms.string v-bind="{ ...slotProps, form: form.issue_attributes }" />
-    </layouts.horizontal_group>
-    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('creator_id')" label="创建人">
+    </layouts.vertical_group>
+    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('creator_id')" label="创建人">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: form.issue_attributes, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
-    </layouts.horizontal_group>
-    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('content')" label="内容">
+    </layouts.vertical_group>
+    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('content')" label="内容">
       <forms.markdown v-bind="{ ...slotProps, form: form.issue_attributes }" />
-    </layouts.horizontal_group>
-    <layouts.horizontal_group>
+    </layouts.vertical_group>
+    <layouts.vertical_group>
       <AttachmentUploader @change="emits('attachmentChange', $event)" />
-    </layouts.horizontal_group>
+    </layouts.vertical_group>
   </template>
 
   <template v-if="current_issue_template">
     <hr>
-    <layouts.horizontal_group v-for="(input, index) in current_issue_template.inputs" :key="index" v-slot="slotProps" :label="input.label">
+    <layouts.vertical_group v-for="(input, index) in current_issue_template.inputs" :key="index" v-slot="slotProps" :label="input.label">
       <forms.string v-bind="{ ...slotProps, code: 'value', form: form.info_attributes.inputs_attributes[index] }" />
-    </layouts.horizontal_group>
+    </layouts.vertical_group>
   </template>
 </template>
 

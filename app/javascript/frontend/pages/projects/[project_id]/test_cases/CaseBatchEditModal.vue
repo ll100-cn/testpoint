@@ -5,11 +5,11 @@
         <div class="modal-header">
           <h5 class="modal-title">批量编辑</h5>
         </div>
-        <form @submit="submitForm">
+        <FormHorizontal :validations="validations" @submit="submitForm">
           <div class="modal-body">
             <FormErrorAlert :validations="validations" />
 
-            <component :is="layouts.vertical_group" :validation="validations.disconnect('role_name')" label="角色" :disableds="form_disabled_mapping">
+            <component :is="layouts.horizontal_group" :validation="validations.disconnect('role_name')" label="角色" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
@@ -18,7 +18,7 @@
               <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'role_name' }" /></template>
             </component>
 
-            <component :is="layouts.vertical_group" :validation="validations.disconnect('scene_name')" label="场景" :disableds="form_disabled_mapping">
+            <component :is="layouts.horizontal_group" :validation="validations.disconnect('scene_name')" label="场景" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
@@ -27,7 +27,7 @@
               <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'scene_name' }" /></template>
             </component>
 
-            <component :is="layouts.vertical_group" :validation="validations.disconnect('group_name')" label="分组" :disableds="form_disabled_mapping">
+            <component :is="layouts.horizontal_group" :validation="validations.disconnect('group_name')" label="分组" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
@@ -36,7 +36,7 @@
               <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'group_name' }" /></template>
             </component>
 
-            <component :is="layouts.vertical_group" :validation="validations.disconnect('title')" label="标题" :disableds="form_disabled_mapping">
+            <component :is="layouts.horizontal_group" :validation="validations.disconnect('title')" label="标题" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
@@ -45,7 +45,7 @@
               <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'title' }" /></template>
             </component>
 
-            <component :is="layouts.vertical_group" :validation="validations.disconnect('content')" label="内容" :disableds="form_disabled_mapping">
+            <component :is="layouts.horizontal_group" :validation="validations.disconnect('content')" label="内容" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
@@ -54,7 +54,7 @@
               <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'content' }" /></template>
             </component>
 
-            <component :is="layouts.vertical_group" :validation="validations.disconnect('platform_ids')" label="平台" :disableds="form_disabled_mapping">
+            <component :is="layouts.horizontal_group" :validation="validations.disconnect('platform_ids')" label="平台" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
@@ -63,7 +63,7 @@
               <template #default="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
             </component>
 
-            <component :is="layouts.vertical_group" :validation="validations.disconnect('label_ids')" label="标签" :disableds="form_disabled_mapping">
+            <component :is="layouts.horizontal_group" :validation="validations.disconnect('label_ids')" label="标签" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
@@ -77,7 +77,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">保存</button>
           </div>
-        </form>
+        </FormHorizontal>
       </div>
     </div>
 
@@ -129,6 +129,7 @@ import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 
 
 import FormErrorAlert from '@/components/FormErrorAlert.vue';
 import { Validations, forms, layouts } from "@/components/simple_form";
+import FormHorizontal from '@/components/FormHorizontal.vue'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()

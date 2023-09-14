@@ -28,14 +28,5 @@ export default {
       this.endpoint = "/api/projects/{project_id}/issues/{issue_id}"
       this.klass = Issue
     }
-  },
-
-  Page: class extends BasePaginationRequest<Issue> {
-    constructor() {
-      super()
-      this.method = "GET"
-      this.endpoint = "/api/profile/issues"
-      this.klass = Issue
-    }
   }
 }

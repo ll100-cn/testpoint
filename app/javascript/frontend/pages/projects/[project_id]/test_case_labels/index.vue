@@ -1,14 +1,14 @@
 <template>
   <div class="page-header">
     <h2>标签列表</h2>
-    <div class="actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</router-link>
     </div>
   </div>
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>
@@ -16,7 +16,7 @@
             <th>标签</th>
             <th>描述</th>
             <th>案例</th>
-            <th />
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +25,7 @@
               <td>{{ test_case_label.name }}</td>
               <td>{{ test_case_label.description }}</td>
               <td>{{ test_case_label.test_case_count }}</td>
-              <td class="x-actions text-end">
+              <td class="x-spacer-3 text-end">
                 <router-link :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>

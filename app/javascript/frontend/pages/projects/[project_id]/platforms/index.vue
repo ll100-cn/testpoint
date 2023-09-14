@@ -1,14 +1,14 @@
 <template>
   <div class="page-header">
     <h2>平台列表</h2>
-    <div class="actions ms-auto">
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/platforms/new`">新增平台</router-link>
     </div>
   </div>
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card card-x-table">
+  <div class="card page-card card-x-table">
     <div class="card-body">
       <table class="table">
         <thead>

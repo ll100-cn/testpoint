@@ -1,25 +1,25 @@
 <template>
   <FormErrorAlert :validations="validations" />
 
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="模版名称">
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('name')" label="模版名称">
     <forms.string v-bind="{ ...slotProps, form}" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('lookup_by_build_form')" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('lookup_by_build_form')" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
     <forms.checkboxes v-bind="{ ...slotProps, form, collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('title_suggestion')" label="预设标题">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title_suggestion')" label="预设标题">
     <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('default_category_id')" label="预设分类">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('default_category_id')" label="预设分类">
     <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('default_priority')" label="预设优先级">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('default_priority')" label="预设优先级">
     <forms.select v-bind="{ ...slotProps, form, collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('content_suggestion')" label="预设内容">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('content_suggestion')" label="预设内容">
     <forms.markdown v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('inputs')" label="内容">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('inputs')" label="内容">
     <div class="card overflow-auto">
       <table class="table mb-0">
         <thead>
@@ -39,19 +39,19 @@
           </tr>
         </tbody>
       </table>
-      <button class="btn btn-primary btn-sm m-2" @click="onAddInput">+ 新增</button>
+      <button class="btn btn-outline-primary btn-sm m-2" @click="onAddInput">+ 新增</button>
     </div>
-  </layouts.vertical_group>
+  </layouts.horizontal_group>
 </template>
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
 
 import { Validations, forms, layouts } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
-
+import * as requests from '@/lib/requests'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

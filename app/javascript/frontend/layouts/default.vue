@@ -1,10 +1,10 @@
 <template>
   <router-view v-slot="{ Component, route }">
     <Suspense timeout="0">
-      <div>
+      <div :key="route.fullPath">
         <Navbar />
         <div class="app-container">
-          <component v-if="Component" :is="Component" :key="route.fullPath" />
+          <component v-if="Component" :is="Component" />
         </div>
       </div>
     </Suspense>

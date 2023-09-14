@@ -28,12 +28,19 @@ def gen_folder_index(path)
   end
 
   lines = []
-  path.glob("*.{#{@options[:extensions]}}").each do |file|
-    filename = file.basename
+  (path.glob("*.{#{@options[:extensions]}}") + path.glob("*/index.ts")).sort.each do |file|
+    relative_path = file.relative_path_from(path)
+    filename = relative_path.to_s
     extname = file.extname
-    basename = File.basename(filename, extname)
-    filename = basename if [ ".ts", ".js" ].include?(extname)
-    next if basename == "index"
+    base = filename.chomp(extname)
+    filename = base if [ ".ts", ".js" ].include?(extname)
+    next if base == "index"
+
+    if base.end_with?("/index")
+      folder = base.chomp("/index")
+      lines << %Q[export * as #{folder} from "./#{folder}"]
+      next
+    end
 
     content = file.read
     if content.match?(/export\s+(?!default)/)
@@ -41,11 +48,11 @@ def gen_folder_index(path)
     end
 
     if content.match?(/export\s+default/)
-      lines << %Q[export { default as #{basename} } from "./#{filename}"]
+      lines << %Q[export { default as #{base} } from "./#{filename}"]
     end
 
     if extname == ".vue"
-      lines << %Q[export { default as #{basename} } from "./#{filename}"]
+      lines << %Q[export { default as #{base} } from "./#{filename}"]
     end
   end
 

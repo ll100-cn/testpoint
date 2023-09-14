@@ -1,19 +1,25 @@
 <template>
   <CommonModal ref="modal" close_btn_text="取消">
-    <template #title>
-      <h5 class="mb-0">选择问题模版</h5>
-    </template>
-    <template #body>
-      <FormErrorAlert :validations="validations" />
-      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('template_id')" label="模版">
-        <forms.select v-bind="{ ...slotProps, form, collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
-      </layouts.vertical_group>
-      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('remark')" label="备注">
-        <forms.string v-bind="{ ...slotProps, form }" />
-      </layouts.vertical_group>
-    </template>
-    <template #footer>
-      <SubmitButton :func="addIssueInfo" submit_text="新增模版化表单" />
+    <template #content>
+      <div class="modal-header">
+        <h5 class="mb-0">选择问题模版</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+      </div>
+      <FormHorizontal :validations="validations">
+        <div class="modal-body">
+          <FormErrorAlert :validations="validations" />
+          <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('template_id')" label="模版">
+            <forms.select v-bind="{ ...slotProps, form, collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
+          </layouts.horizontal_group>
+          <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('remark')" label="备注">
+            <forms.string v-bind="{ ...slotProps, form }" />
+          </layouts.horizontal_group>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <SubmitButton :func="addIssueInfo" submit_text="新增模版化表单" />
+        </div>
+      </FormHorizontal>
     </template>
   </CommonModal>
 </template>
@@ -29,6 +35,7 @@ import _ from "lodash"
 import CommonModal from "@/components/CommonModal.vue"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import SubmitButton from "@/components/SubmitButton.vue"
+import FormHorizontal from "@/components/FormHorizontal.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

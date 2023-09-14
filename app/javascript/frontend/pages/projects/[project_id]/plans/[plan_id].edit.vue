@@ -2,20 +2,23 @@
   <div class="card">
     <div class="card-header bg-white">修改计划</div>
 
-    <div class="card-body">
-      <PlanForm :form="form" :validations="validations" :platforms="platforms" />
-    </div>
-    <div class="card-footer bg-white">
-      <div class="d-flex justify-content-between">
-        <div>
-          <button class="btn btn-danger" @click="onDestroy">删除</button>
-        </div>
-        <div class="x-actions">
-          <button class="btn btn-secondary" @click="onCancel">取消</button>
-          <SubmitButton submit_text="更新计划" :func="onSubmit" />
+    <FormHorizontal :validations="validations">
+      <div class="card-body">
+        <Fields :form="form" :validations="validations" :platforms="platforms" />
+      </div>
+
+      <div class="card-footer bg-white">
+        <div class="d-flex justify-content-between">
+          <div>
+            <button class="btn btn-danger" @click="onDestroy">删除</button>
+          </div>
+          <div class="x-actions">
+            <button class="btn btn-secondary" @click="onCancel">取消</button>
+            <SubmitButton submit_text="更新计划" :func="onSubmit" />
+          </div>
         </div>
       </div>
-    </div>
+  </FormHorizontal>
   </div>
 </template>
 
@@ -26,8 +29,9 @@ import { useRoute, useRouter } from 'vue-router';
 import { Validations } from '@/components/simple_form';
 import * as requests from '@/lib/requests';
 import _ from 'lodash';
-import PlanForm from './PlanForm.vue';
+import Fields from './Fields.vue';
 import SubmitButton from '@/components/SubmitButton.vue';
+import FormHorizontal from '@/components/FormHorizontal.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

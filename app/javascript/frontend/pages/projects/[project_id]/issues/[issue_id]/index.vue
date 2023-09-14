@@ -1,14 +1,11 @@
 <template>
   <div class="page-header">
-    <template v-if="issue.state == 'resolved'">
-      <s><h2 class="me-1">{{ issue.titleWithPriority() }}</h2></s>
-      <span class="me-1">
-        <IssueStateBadge :state="issue.state" />
-      </span>
-    </template>
-    <h2 v-else class="me-1">{{ issue.titleWithPriority() }}</h2>
-    <div>#{{ issue.id }}</div>
-    <div class="ms-auto actions">
+    <h2 class="me-1">{{ issue.titleWithPriority() }}</h2>
+    <div class="me-1">#{{ issue.id }}</div>
+    <span class="me-1">
+      <IssueStateBadge :state="issue.state" />
+    </span>
+    <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
     </div>
   </div>
@@ -60,7 +57,7 @@ import { useRoute, useRouter } from "vue-router"
 
 import { IssueInfo, IssueRelationship, Comment } from "@/models"
 import * as requests from '@/lib/requests'
-import { useSessionStore } from "@/store"
+import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 
 import IssueStateBadge from "@/components/IssueStateBadge.vue"

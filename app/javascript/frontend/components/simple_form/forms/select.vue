@@ -1,6 +1,6 @@
 <template>
   <select v-model="form[code]" class="form-select" :class="[{'is-invalid': validation?.isInvaild()}, custom_class]" :disabled="disabled" @change="emit('change', $event)">
-    <option v-if="include_blank || include_blank == ''" value>{{ include_blank }}</option>
+    <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
     <template v-if="(collection instanceof Array)">
       <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
         {{ item[labelMethod] }}
@@ -29,13 +29,12 @@ const props = withDefaults(defineProps<{
   collection: object
   labelMethod: string
   valueMethod: string
-  includeBlank?: boolean
-  include_blank?: string
+  include_blank?: string | boolean
   required?: boolean
   custom_class?: string
 }>(), {
   disabled: false,
-  includeBlank: false,
+  include_blank: false,
   required: false,
 })
 

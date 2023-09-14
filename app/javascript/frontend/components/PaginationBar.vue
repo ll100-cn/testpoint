@@ -15,37 +15,29 @@
     prev-link-class="page-link"
     next-link-class="page-link"
     page-class="page-item"
-    @input="queryChange({ page: $event })" />
+    class="mb-0"
+    @input="queryChange($event)" />
 </template>
 
 <script setup lang="ts">
-import { Pagination } from '@/models';
-import _ from 'lodash';
-import qs from 'qs';
-import { PropType } from 'vue';
-import { useRouter } from 'vue-router';
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
-import { PageQuery } from '@/types'
+import * as utils from '@/lib/utils'
+import { Pagination } from '@/models'
+import { useRoute, useRouter } from 'vue-router'
+import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 const router = useRouter()
-const emit = defineEmits<{
-  (e: 'clickHandler', page: PageQuery): void
+const route = useRoute()
+const query = utils.queryToPlain(route.query)
+
+const props = defineProps<{
+  pagination?: Pagination<any>
 }>()
 
-const props = defineProps({
-  pagination: { type: Object as PropType<Pagination<any>>, required: true },
-  currentQuery: { type: Object as PropType<PageQuery>, default: () => ({}) },
-})
-
-const queryChange = (query: PageQuery) => {
-  const finalQuery = _.pickBy(Object.assign(props.currentQuery, query))
-  if (query.items && query.items != props.pagination.limit) finalQuery.page = 1
-  emit('clickHandler', finalQuery)
-  router.push({ query: qs.parse(qs.stringify(finalQuery), { depth: 0 }) as any })
+function queryChange(num: number) {
+  if (num == 1) {
+    num = null
+  }
+  const data = utils.compactObject({ ...query, page: num })
+  router.push({ query: utils.plainToQuery(data) })
 }
-
-defineExpose({
-  queryChange
-})
-
 </script>

@@ -1,16 +1,16 @@
 <template>
   <FormErrorAlert :validations="validations" />
 
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
     <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('platform_id')" label="平台">
+  </layouts.horizontal_group>
+  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('platform_id')" label="平台">
     <forms.select v-bind="{ ...slotProps, form, collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.vertical_group>
+  </layouts.horizontal_group>
 
-  <layouts.vertical_group v-if="test_case_stats && test_case_stats.length > 0" v-slot="slotProps" :validation="validations.disconnect('role_names')" label="角色">
+  <layouts.horizontal_group v-if="test_case_stats && test_case_stats.length > 0" v-slot="slotProps" :validation="validations.disconnect('role_names')" label="角色">
     <forms.checkboxes v-bind="{ ...slotProps, form, collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.vertical_group>
+  </layouts.horizontal_group>
 </template>
 
 <script setup lang="ts">

@@ -1,19 +1,26 @@
 <template>
   <CommonModal ref="modal" close_btn_text="取消">
-    <template #title>
-      <h5 class="mb-0">填写模版</h5>
-    </template>
-    <template #body>
-      <FormErrorAlert :validations="validations" />
-      <layouts.horizontal_group label="备注">
-        <span>{{ issue_info.remark }}</span>
-      </layouts.horizontal_group>
-      <layouts.horizontal_group v-for="(input, index) in current_issue_template?.inputs" :key="index" v-slot="slotProps" :label="input.label">
-        <forms.string v-bind="{ ...slotProps, code: 'value', form: form.inputs_attributes[index] }" />
-      </layouts.horizontal_group>
-    </template>
-    <template #footer>
-      <SubmitButton :func="updateIssueInfo" submit_text="更新模版化表单" />
+    <template #content>
+      <div class="modal-header">
+        <h5 class="mb-0">填写模版</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+      </div>
+
+      <FormVertical :validations="validations">
+        <div class="modal-body">
+          <FormErrorAlert :validations="validations" />
+          <layouts.vertical_group label="备注">
+            <span>{{ issue_info.remark }}</span>
+          </layouts.vertical_group>
+          <layouts.vertical_group v-for="(input, index) in current_issue_template?.inputs" :key="index" v-slot="slotProps" :label="input.label">
+            <forms.string v-bind="{ ...slotProps, code: 'value', form: form.inputs_attributes[index] }" />
+          </layouts.vertical_group>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <SubmitButton :func="updateIssueInfo" submit_text="更新模版化表单" />
+        </div>
+      </FormVertical>
     </template>
   </CommonModal>
 </template>
@@ -29,6 +36,7 @@ import _ from "lodash"
 import CommonModal from "@/components/CommonModal.vue"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import SubmitButton from "@/components/SubmitButton.vue"
+import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

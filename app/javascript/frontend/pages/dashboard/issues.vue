@@ -60,7 +60,7 @@
       </table>
     </div>
     <div class="card-footer">
-      <PaginationBar2 :pagination="pagination" />
+      <PaginationBar :pagination="pagination" />
     </div>
   </div>
 </template>
@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import IssueLink from "@/components/IssueLink.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import PaginationBar2 from "@/components/PaginationBar2.vue"
+import PaginationBar from "@/components/PaginationBar.vue"
 import * as utils from "@/lib/utils"
 import * as requests from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
@@ -82,14 +82,14 @@ const query = utils.queryToPlain(route.query)
 const filter = query.filter || 'unhandled'
 const unhandled_issues_count = ref(0)
 
-const pagination = ref(await new requests.IssueReq.Page().setup(proxy, req => {
+const pagination = ref(await new requests.profile.IssueReq.Page().setup(proxy, req => {
   req.query.filter = filter
 }).perform())
 
 if (filter == 'unhandled') {
   unhandled_issues_count.value = pagination.value.total_count
 } else {
-  const unhandled = await new requests.IssueReq.Page().setup(proxy, req => {
+  const unhandled = await new requests.profile.IssueReq.Page().setup(proxy, req => {
     req.query.per_page = 1
     req.query.filter = 'unhandled'
   }).perform()

@@ -6,15 +6,15 @@
           <h5 class="modal-title">新增计划</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
         </div>
-        <form @submit="onSubmit">
+        <FormHorizontal :validations="validations" @submit="onSubmit">
           <div class="modal-body">
-            <PlanForm :validations="validations" :form="form" :platforms="platforms" :test_case_stats="test_case_stats" />
+            <Fields :validations="validations" :form="form" :platforms="platforms" :test_case_stats="test_case_stats" />
           </div>
           <div class="modal-footer">
             <SubmitButton submit_text="新增计划" :func="onSubmit" />
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
           </div>
-        </form>
+        </FormHorizontal>
       </div>
     </div>
   </div>
@@ -23,15 +23,14 @@
 <script setup lang="ts">
 import { Validations } from "@/components/simple_form"
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
-
 import * as utils from "@/lib/utils"
 import { Plan, Platform, TestCaseStat } from '@/models'
 import * as requests from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
-
 import SubmitButton from "@/components/SubmitButton.vue"
-import PlanForm from "./PlanForm.vue"
+import Fields from "./Fields.vue"
+import FormHorizontal from "@/components/FormHorizontal.vue"
 
 const { proxy } = getCurrentInstance()
 

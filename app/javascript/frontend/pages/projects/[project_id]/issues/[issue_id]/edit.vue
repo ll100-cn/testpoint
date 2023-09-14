@@ -3,30 +3,28 @@
     <h2>修改问题</h2>
   </div>
 
-  <form>
+  <FormHorizontal :validations="validations">
     <FormErrorAlert :validations="validations" />
 
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
+    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
       <forms.string v-bind="{ ...slotProps, form }" />
-    </layouts.vertical_group>
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
+    </layouts.horizontal_group>
+    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
       <forms.bootstrap_select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
-    </layouts.vertical_group>
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('creator_id')" label="创建人">
+    </layouts.horizontal_group>
+    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('creator_id')" label="创建人">
       <forms.bootstrap_select v-bind="{ ...slotProps, form, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
-    </layouts.vertical_group>
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('assignee_id')" label="受理人">
+    </layouts.horizontal_group>
+    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('assignee_id')" label="受理人">
       <forms.select v-bind="{ ...slotProps, form, collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-    </layouts.vertical_group>
+    </layouts.horizontal_group>
 
-    <layouts.vertical_group>
-      <div class="x-actions">
-        <SubmitButton submit_text="更新问题" :func="issueEdit" />
-        <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
-        <router-link class="btn btn-warning" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
-      </div>
-    </layouts.vertical_group>
-  </form>
+    <template #actions>
+      <SubmitButton submit_text="更新问题" :func="issueEdit" />
+      <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
+      <router-link class="btn btn-warning" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
+    </template>
+  </FormHorizontal>
 </template>
 
 <script setup lang="ts">
@@ -37,8 +35,9 @@ import { Validations, forms, layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
 import _ from "lodash"
 
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
+import FormHorizontal from '@/components/FormHorizontal.vue'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

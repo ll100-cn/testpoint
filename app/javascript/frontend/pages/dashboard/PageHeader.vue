@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header d-flex align-items-end">
+  <div class="page-header">
     <h2 class="me-3">仪表盘</h2>
 
     <router-link v-if="current == 'projects'" class="text-primary me-3" to="/dashboard">

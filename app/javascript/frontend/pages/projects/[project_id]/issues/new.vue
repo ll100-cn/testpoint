@@ -3,8 +3,8 @@
     <h2>新增问题</h2>
   </div>
 
-  <form class="container">
-    <Form
+  <FormVertical :validations="validations">
+    <Fields
       :form="form"
       :validations="validations"
       :members="members"
@@ -18,7 +18,7 @@
         <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/issues`">取消</router-link>
       </div>
     </template>
-  </form>
+  </FormVertical>
 </template>
 
 <script setup lang="ts">
@@ -27,12 +27,12 @@ import { useRoute, useRouter } from "vue-router"
 
 import { Validations } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
-import _ from "lodash"
-import * as utils from "@/lib/utils"
 import { Attachment } from "@/models"
+import _ from "lodash"
 
+import FormVertical from "@/components/FormVertical.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
-import Form from "./Form.vue"
+import Fields from "./Fields.vue"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { useRoute } from "vue-router"
-import { useSessionStore } from "@/store"
+import { useSessionStore } from "@/store/session"
 import { redirect } from "@/lib/utils"
 
 const route = useRoute()
