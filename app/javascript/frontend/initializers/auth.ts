@@ -9,14 +9,12 @@ export default function({ app }: AppContext) {
 
   router.beforeEach(async (to, from, next) => {
     await session.prepare(app.config.globalProperties)
+    page.clear()
+
     if (to.meta.auth !== false && session.account == null) {
       next("/login")
     } else {
       next()
     }
-  })
-
-  router.afterEach((to, from) => {
-    page.clear()
   })
 }
