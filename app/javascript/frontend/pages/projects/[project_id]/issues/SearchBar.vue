@@ -1,34 +1,33 @@
 <template>
-  <FormInline :validations="validations">
-    <layouts.group v-slot="slotProps" label="分类" :validation="validations.disconnect('category_id_eq')">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: category_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '全部' }" @change="querySearch" />
+  <FormInline v-bind="{ former }" @submit.prevent="former.submit">
+    <layouts.group v-slot="slotProps" label="分类" code="category_id_eq">
+      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: category_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '全部' }" @change="former.submit" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" label="里程碑" :validation="validations.disconnect('milestone_id_eq')">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: milestone_collection, labelMethod: 'title', valueMethod: 'id', include_blank: '任意' }" @change="querySearch" />
+    <layouts.group v-slot="slotProps" label="里程碑" code="milestone_id_eq">
+      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: milestone_collection, labelMethod: 'title', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" label="受理人" :validation="validations.disconnect('assignee_id_eq')">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: assignee_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="querySearch" />
+    <layouts.group v-slot="slotProps" label="受理人" code="assignee_id_eq">
+      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: assignee_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" label="创建人" :validation="validations.disconnect('creator_id_eq')">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: creator_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="querySearch" />
+    <layouts.group v-slot="slotProps" label="创建人" code="creator_id_eq">
+      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: creator_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" label="问题类型" :validation="validations.disconnect('task_id_is')">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: issue_type_collection, labelMethod: 'label', valueMethod: 'value', include_blank: '所有' }" @change="querySearch" />
+    <layouts.group v-slot="slotProps" label="问题类型" code="task_id_is">
+      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: issue_type_collection, labelMethod: 'label', valueMethod: 'value', include_blank: '所有' }" @change="former.submit" />
     </layouts.group>
   </FormInline>
 </template>
 
 <script setup lang="ts">
+import FormInline from "@/components/FormInline.vue"
+import { forms, layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
+import * as utils from "@/lib/utils"
+import { IssueSummary } from "@/models"
+import _ from "lodash"
 import { computed, reactive } from "vue"
 import { useRoute, useRouter } from "vue-router"
-
-import * as utils from "@/lib/utils"
-import _ from "lodash"
-
-import { Validations, forms, layouts } from "@/components/simple_form"
-import { IssueSummary } from "@/models"
 import Search from "./Search"
-import FormInline from "@/components/FormInline.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -38,8 +37,14 @@ const props = defineProps<{
   summary: IssueSummary
 }>()
 
-const validations = reactive<Validations>(new Validations())
 const search = reactive(utils.instance(Search, query))
+
+const former = Former.build(search)
+former.perform = async function() {
+  const data = utils.compactObject(this.form)
+  router.push({ query: utils.plainToQuery(data) })
+}
+
 const issue_type_collection = [{ label: "案例问题", value: "not_null" }, { label: "非案例问题", value: "null" }]
 
 const category_collection = computed(() => {
@@ -77,13 +82,4 @@ const creator_collection = computed(() => {
     return false
   }).compact().value()
 })
-
-function querySearch() {
-  if (search) {
-    const data = utils.compactObject(search)
-    router.push({ query: utils.plainToQuery(data) })
-  } else {
-    router.push({ query: null })
-  }
-}
 </script>

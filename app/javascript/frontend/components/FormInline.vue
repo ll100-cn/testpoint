@@ -16,13 +16,15 @@
 import { provide, useSlots } from 'vue'
 import { Validations } from './simple_form'
 import inline_group from './simple_form/layouts/inline_group.vue'
+import Former from './simple_form/Former'
 
 const slots = useSlots()
 
 const props = defineProps<{
-  validations: Validations
+  validations?: Validations
+  former: Former<Record<string, any>>
 }>()
 
 provide("GroupComponent", inline_group)
-
+provide("former", props.former)
 </script>
