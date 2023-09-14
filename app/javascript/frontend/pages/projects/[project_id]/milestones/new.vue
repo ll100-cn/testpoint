@@ -3,14 +3,14 @@
     <h2>新增里程碑</h2>
   </div>
 
-  <form @submit="milestoneCreate">
-    <Form :validations="validations" :form="form" />
-    <hr>
-    <div class="x-spacer-1">
+  <FormVertical :validations="validations" @submit="milestoneCreate">
+    <Fields :validations="validations" :form="form" />
+
+    <template #actions>
       <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">
       <router-link :to="`/projects/${project_id}/milestones`" class="btn btn-secondary">取消</router-link>
-    </div>
-  </form>
+    </template>
+  </FormVertical>
 </template>
 
 <script setup lang="ts">
@@ -19,7 +19,8 @@ import * as requests from '@/lib/requests';
 import _ from 'lodash';
 import { getCurrentInstance, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Form from './Form.vue';
+import Fields from './Fields.vue';
+import FormVertical from '@/components/FormVertical.vue'
 
 const validations = reactive<Validations>(new Validations())
 const { proxy } = getCurrentInstance()

@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title">批量编辑</h5>
         </div>
-        <form @submit="submitForm">
+        <FormHorizontal :validations="validations" @submit="submitForm">
           <div class="modal-body">
             <FormErrorAlert :validations="validations" />
 
@@ -77,7 +77,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">保存</button>
           </div>
-        </form>
+        </FormHorizontal>
       </div>
     </div>
 
@@ -129,6 +129,7 @@ import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 
 
 import FormErrorAlert from '@/components/FormErrorAlert.vue';
 import { Validations, forms, layouts } from "@/components/simple_form";
+import FormHorizontal from '@/components/FormHorizontal.vue'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()

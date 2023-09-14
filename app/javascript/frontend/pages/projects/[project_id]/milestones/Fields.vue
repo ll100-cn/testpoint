@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import FormErrorAlert from '@/components/FormErrorAlert.vue';
-import { Validations, layouts, forms } from '@/components/simple_form';
-import { PropType } from 'vue';
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import { Validations, forms, layouts } from '@/components/simple_form'
+import { PropType } from 'vue'
 
 const props = defineProps({
   validations: {

@@ -1,5 +1,5 @@
 <template>
-  <form class="row g-3">
+  <FormInline :validations="validations">
     <layouts.inline_group v-slot="slotProps" label="分类" :validation="validations.disconnect('category_id_eq')">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: category_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '全部' }" @change="querySearch" />
     </layouts.inline_group>
@@ -15,7 +15,7 @@
     <layouts.inline_group v-slot="slotProps" label="问题类型" :validation="validations.disconnect('task_id_is')">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: issue_type_collection, labelMethod: 'label', valueMethod: 'value', include_blank: '所有' }" @change="querySearch" />
     </layouts.inline_group>
-  </form>
+  </FormInline>
 </template>
 
 <script setup lang="ts">
@@ -28,6 +28,7 @@ import _ from "lodash"
 import { Validations, forms, layouts } from "@/components/simple_form"
 import { IssueSummary } from "@/models"
 import Search from "./Search"
+import FormInline from "@/components/FormInline.vue"
 
 const route = useRoute()
 const router = useRouter()

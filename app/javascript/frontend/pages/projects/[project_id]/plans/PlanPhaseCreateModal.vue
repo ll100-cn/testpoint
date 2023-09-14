@@ -6,7 +6,7 @@
           <h5 class="modal-title">{{ plan.title }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
         </div>
-        <form @submit="onSubmit">
+        <FormVertical :validations="validations" @submit="onSubmit">
           <div class="modal-body">
             <FormErrorAlert :validations="validations" />
 
@@ -30,7 +30,7 @@
             </button>
             <button class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close" @click.prevent>返回</button>
           </div>
-        </form>
+        </FormVertical>
       </div>
     </div>
   </div>
@@ -46,6 +46,7 @@ import { Phase, PhaseInfo, Plan, TaskUpshotInfo } from '@/models'
 import * as requests from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import { useRoute } from "vue-router"
+import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

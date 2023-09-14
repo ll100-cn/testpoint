@@ -3,7 +3,7 @@
     <h2>项目迁移</h2>
   </div>
 
-  <form>
+  <FormHorizontal :validations="validations">
     <FormErrorAlert :validations="validations" />
 
     <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('project_id')" label="项目">
@@ -14,13 +14,11 @@
       <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
     </layouts.horizontal_group>
 
-    <layouts.horizontal_group>
-      <div class="x-actions">
-        <SubmitButton submit_text="迁移" :func="issueEdit" />
-        <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
-      </div>
-    </layouts.horizontal_group>
-  </form>
+    <template #actions>
+      <SubmitButton submit_text="迁移" :func="issueEdit" />
+      <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
+    </template>
+  </FormHorizontal>
 </template>
 
 <script setup lang="ts">
@@ -33,6 +31,7 @@ import _ from "lodash"
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
+import FormHorizontal from '@/components/FormHorizontal.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

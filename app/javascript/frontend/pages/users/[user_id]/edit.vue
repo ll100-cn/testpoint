@@ -3,16 +3,14 @@
     <h2>编辑用户</h2>
   </div>
 
-  <form @submit="userUpdate">
-    <Form :validations="validations" :form="form" />
+  <FormHorizontal :validations="validations" @submit="userUpdate">
+    <Fields :validations="validations" :form="form" />
 
-    <hr>
-
-    <div class="x-spacer-1">
+    <template #actions>
       <input type="submit" name="commit" value="编辑用户" class="btn btn-primary">
       <router-link :to="`/users`" class="btn btn-secondary">返回</router-link>
-    </div>
-  </form>
+    </template>
+  </FormHorizontal>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +19,8 @@ import * as requests from '@/lib/requests'
 import _ from 'lodash'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Form from '../Form.vue'
+import Fields from '../Fields.vue'
+import FormHorizontal from '@/components/FormHorizontal.vue'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()

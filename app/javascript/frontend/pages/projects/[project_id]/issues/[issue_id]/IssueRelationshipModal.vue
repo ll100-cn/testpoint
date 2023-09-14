@@ -1,33 +1,39 @@
 <template>
   <CommonModal ref="modal" close_btn_text="取消">
-    <template #title>
-      <h5 class="mb-0">关联问题</h5>
-    </template>
-    <template #body>
-      <FormErrorAlert :validations="validations" />
-      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('target_id')" label="关联的问题ID">
-        <forms.number v-bind="{ ...slotProps, form }" />
-      </layouts.vertical_group>
-      <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('creator_subscribe_target_issue')">
-        <forms.checkboxes v-bind="{ ...slotProps, form, collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
-      </layouts.vertical_group>
-    </template>
-    <template #footer>
-      <button class="btn btn-primary" @click="onCreateIssueRelationship">新增关联问题</button>
+    <template #content>
+      <div class="modal-header">
+        <h5 class="mb-0">关联问题</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+      </div>
+
+      <FormVertical :validations="validations">
+        <div class="modal-body">
+          <FormErrorAlert :validations="validations" />
+          <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('target_id')" label="关联的问题ID">
+            <forms.number v-bind="{ ...slotProps, form }" />
+          </layouts.vertical_group>
+          <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('creator_subscribe_target_issue')">
+            <forms.checkboxes v-bind="{ ...slotProps, form, collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
+          </layouts.vertical_group>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <button class="btn btn-primary" @click="onCreateIssueRelationship">新增关联问题</button>
+        </div>
+      </FormVertical>
     </template>
   </CommonModal>
 </template>
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from "vue"
-
 import { Validations, forms, layouts } from "@/components/simple_form"
 import { Issue, IssueRelationship } from "@/models"
 import * as requests from '@/lib/requests'
 import _ from "lodash"
-
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import CommonModal from "@/components/CommonModal.vue"
+import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

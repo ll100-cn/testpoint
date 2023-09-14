@@ -26,20 +26,22 @@
   </div>
   <div v-else>
     <h5>补充工单详情</h5>
+    <FormVertical :validations="validations">
 
-    <IssueForm
-      :issue_templates="issue_templates"
-      :validations="validations"
-      :members="members"
-      :categories="categories"
-      :form="form"
-      :plan_id="plan.id"
-      :project_id="project_id" />
+      <IssueForm
+        :issue_templates="issue_templates"
+        :validations="validations"
+        :members="members"
+        :categories="categories"
+        :form="form"
+        :plan_id="plan.id"
+        :project_id="project_id" />
 
-    <div class="x-actions">
-      <SubmitButton submit_text="提交" :func="onSubmit" />
-      <SubmitButton submit_text="取消" type="secondary" @click="emit('update:is_task_pass', false)" />
-    </div>
+      <template #actions>
+        <SubmitButton submit_text="提交" :func="onSubmit" />
+        <SubmitButton submit_text="取消" type="secondary" @click="emit('update:is_task_pass', false)" />
+      </template>
+    </FormVertical>
   </div>
 </template>
 
@@ -54,6 +56,7 @@ import { Validations, forms, layouts } from "@/components/simple_form"
 
 import IssueForm from "@/components/IssueForm.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
+import FormVertical from '@/components/FormVertical.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

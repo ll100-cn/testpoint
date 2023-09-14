@@ -19,17 +19,18 @@
 
           <div class="no-margin-bottom">
             <template v-if="editing">
-              <form>
+              <FormVertical :validations="validations">
                 <IssueCommentForm
                   :form="form"
                   :attachments="issue_attachments"
                   :validations="validations"
                   @attachment-change="attachmentChange" />
-                <div class="d-flex mt-3">
+
+                <template #actions>
                   <button class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
                   <SubmitButton class="ms-auto" :func="issueEdit" submit_text="提交修改" />
-                </div>
-              </form>
+                </template>
+              </FormVertical>
             </template>
             <div v-else>
               <PageContent :content="issue.content" />
@@ -55,6 +56,7 @@ import PageContent from "@/components/PageContent.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
 import { Validations } from "@/components/simple_form"
 import IssueCommentForm from "./IssueCommentForm.vue"
+import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

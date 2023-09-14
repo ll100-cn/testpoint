@@ -1,33 +1,30 @@
 <template>
   <div class="card page-card">
     <div class="card-header bg-white d-flex">
-      <form @submit.prevent="changeSearch(search)">
-        <div class="row">
+      <FormInline :validations="validations" @submit.prevent="changeSearch(search)">
+        <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('platform_id')" label="平台">
+          <forms.dropdown v-bind="{ ...slotProps, form: search }" #default="{ Component }" @change="changeSearch(search)">
+            <component v-for="platform in _platforms" :is="Component" :value="platform.id">
+              <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
+              {{ platform.name }}
+            </component>
+            <div class="dropdown-divider" />
+            <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
+          </forms.dropdown>
+        </layouts.inline_group>
 
-          <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('platform_id')" label="平台">
-            <forms.dropdown v-bind="{ ...slotProps, form: search }" #default="{ Component }" @change="changeSearch(search)">
-              <component v-for="platform in _platforms" :is="Component" :value="platform.id">
-                <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
-                {{ platform.name }}
-              </component>
-              <div class="dropdown-divider" />
-              <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
-            </forms.dropdown>
-          </layouts.inline_group>
+        <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('label_id')" label="标签">
+          <forms.dropdown v-bind="{ ...slotProps, form: search }" #default="{ Component }" @change="changeSearch(search)">
+            <component v-for="label in _labels" :is="Component" :value="label.id">{{ label.name }}</component>
+            <div class="dropdown-divider" />
+            <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
+          </forms.dropdown>
+        </layouts.inline_group>
 
-          <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('label_id')" label="标签">
-            <forms.dropdown v-bind="{ ...slotProps, form: search }" #default="{ Component }" @change="changeSearch(search)">
-              <component v-for="label in _labels" :is="Component" :value="label.id">{{ label.name }}</component>
-              <div class="dropdown-divider" />
-              <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
-            </forms.dropdown>
-          </layouts.inline_group>
-
-          <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('group_name_search')" label="分组">
-            <forms.string v-bind="{ ...slotProps, form: search }" />
-          </layouts.inline_group>
-        </div>
-      </form>
+        <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('group_name_search')" label="分组">
+          <forms.string v-bind="{ ...slotProps, form: search }" />
+        </layouts.inline_group>
+      </FormInline>
 
       <div class="d-flex ms-auto x-spacer-3 align-items-center">
         <a class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
@@ -60,6 +57,7 @@ import { computed, getCurrentInstance, provide, ref } from 'vue'
 import CardNew from './CardNew.vue'
 import * as utils from '@/lib/utils'
 import { Validations, forms, layouts } from '@/components/simple_form'
+import FormInline from '@/components/FormInline.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

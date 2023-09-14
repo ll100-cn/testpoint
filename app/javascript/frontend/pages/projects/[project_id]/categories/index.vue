@@ -49,16 +49,13 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
 import _ from 'lodash'
 import * as requests from '@/lib/requests'
 import { Validations } from "@/components/simple_form"
 import { PageQuery } from '@/types'
-
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import CategoryBadge from '@/components/CategoryBadge.vue'
-import PaginationBar from '@/components/PaginationBar.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

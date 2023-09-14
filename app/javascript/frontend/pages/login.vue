@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-header">用户登陆</div>
 
-        <form v-if="!login_code" @submit.prevent="onDeliver">
+        <FormVertical :validations="validations" v-if="!login_code" @submit.prevent="onDeliver">
           <div class="card-body">
             <FormErrorAlert :validations="validations" />
             <div class="row gy-3">
@@ -17,9 +17,9 @@
           <div class="card-footer x-spacer-2">
             <input type="submit" name="commit" value="确定" class="btn btn-primary">
           </div>
-        </form>
+        </FormVertical>
 
-        <form v-else @submit.prevent="onVerify">
+        <FormVertical :validations="validations" v-else @submit.prevent="onVerify">
           <div class="card-body">
             <FormErrorAlert :validations="validations" />
             <div class="row gy-3">
@@ -37,7 +37,7 @@
             <input type="submit" name="commit" value="登陆" class="btn btn-primary">
             <input type="button" value="取消" class="btn btn-secondary" @click="login_code = null">
           </div>
-        </form>
+        </FormVertical>
       </div>
     </div>
   </div>
@@ -53,6 +53,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import FormVertical from '@/components/FormVertical.vue'
 import { Validations, forms, layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
 import { LoginCode } from "@/models"

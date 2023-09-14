@@ -10,13 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
 import { Validations, forms, layouts } from "@/components/simple_form"
-
+import { computed } from "vue"
 import { Member } from '@/models'
 import _ from 'lodash'
-
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const props = defineProps<{
   form: any

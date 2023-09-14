@@ -3,16 +3,14 @@
     <h2>新增平台</h2>
   </div>
 
-  <form>
-    <Form :members="members" :form="form" :project_id="project_id" :validations="validations" />
-    <hr>
-    <layouts.horizontal_group label_class="col-2">
-      <div class="x-actions">
-        <SubmitButton submit_text="新增平台" :func="onSubmit" />
-        <router-link class="btn btn-secondary" :to="`/projects/${project_id}/platforms`">取消</router-link>
-      </div>
-    </layouts.horizontal_group>
-  </form>
+  <FormHorizontal :validations="validations">
+    <Fields :members="members" :form="form" :project_id="project_id" :validations="validations" />
+
+    <template #actions>
+      <SubmitButton submit_text="新增平台" :func="onSubmit" />
+      <router-link class="btn btn-secondary" :to="`/projects/${project_id}/platforms`">取消</router-link>
+    </template>
+  </FormHorizontal>
 </template>
 
 <script setup lang="ts">
@@ -23,7 +21,8 @@ import { Validations, layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
 
 import SubmitButton from '@/components/SubmitButton.vue'
-import Form from './Form.vue'
+import Fields from './Fields.vue'
+import FormHorizontal from '@/components/FormHorizontal.vue'
 
 const route = useRoute()
 const router = useRouter()

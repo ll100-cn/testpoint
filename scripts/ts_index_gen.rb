@@ -28,7 +28,7 @@ def gen_folder_index(path)
   end
 
   lines = []
-  (path.glob("*.{#{@options[:extensions]}}") + path.glob("*/index.ts")).each do |file|
+  (path.glob("*.{#{@options[:extensions]}}") + path.glob("*/index.ts")).sort.each do |file|
     relative_path = file.relative_path_from(path)
     filename = relative_path.to_s
     extname = file.extname

@@ -11,11 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { Validations, forms, layouts } from "@/components/simple_form"
-
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
 
 const props = defineProps<{
   form: any

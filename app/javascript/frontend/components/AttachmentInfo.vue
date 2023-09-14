@@ -24,13 +24,15 @@
 
     <div class="flex-column flex-grow-1">
       <div v-if="editing" class="d-flex x-actions">
-        <layouts.inline_group v-slot="slotProps" class="mb-0" :validation="validations.disconnect('title')">
-          <forms.string v-bind="{ ...slotProps, form }" />
-        </layouts.inline_group>
-        <div class="x-actions text-nowrap">
-          <button class="btn btn-primary" @click.prevent="editAttachment">更新</button>
-          <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
-        </div>
+        <FormInline :validations="validations">
+          <layouts.inline_group v-slot="slotProps" class="mb-0" :validation="validations.disconnect('title')">
+            <forms.string v-bind="{ ...slotProps, form }" />
+          </layouts.inline_group>
+          <div class="x-actions text-nowrap">
+            <button class="btn btn-primary" @click.prevent="editAttachment">更新</button>
+            <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
+          </div>
+        </FormInline>
       </div>
       <template v-else>
         <div class="d-flex align-items-center">
@@ -61,6 +63,7 @@ import prettyBytes from "pretty-bytes"
 import _ from "lodash"
 
 import { Attachment } from "@/models"
+import FormInline from "./FormInline.vue"
 
 const { proxy } = getCurrentInstance()
 

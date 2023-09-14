@@ -2,17 +2,18 @@
   <div v-if="comment.comment_id === null" class="card flex-grow-1 issue-comment">
     <div :id="`comment${comment.id}_content`" class="card-body">
       <div v-if="editing" class="no-margin-bottom">
-        <form>
+        <FormVertical :validations="validations">
           <IssueCommentForm
             :form="form"
             :attachments="comment.attachments"
             :validations="validations"
             @attachment-change="attachmentChange" />
-          <div class="d-flex mt-3">
+
+          <template #actions>
             <button class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
             <SubmitButton class="ms-auto" :func="editComment" submit_text="提交修改" />
-          </div>
-        </form>
+          </template>
+        </FormVertical>
       </div>
       <template v-else>
         <div class="card-title d-flex align-items-center x-actions">
@@ -60,31 +61,33 @@
             <i class="fa fa-times me-1" />取消回复
           </a>
         </div>
-        <form>
+        <FormVertical :validations="validations">
           <IssueCommentForm
             :form="reply_form"
             :validations="reply_validations"
             @attachment-change="replyAttachmentChange" />
-          <div class="d-flex mt-3">
+
+          <template #actions>
             <SubmitButton class="ms-auto" :func="replyComment" submit_text="新增评论" />
-          </div>
-        </form>
+          </template>
+        </FormVertical>
       </div>
     </div>
   </div>
   <template v-else>
     <li class="list-group-item px-0">
-      <form v-if="editing">
+      <FormVertical v-if="editing" :validations="validations">
         <IssueCommentForm
           :form="form"
           :attachments="comment.attachments"
           :validations="validations"
           @attachment-change="attachmentChange" />
-        <div class="d-flex mt-3">
+
+        <template #actions>
           <button class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
           <SubmitButton class="ms-auto" :func="editComment" submit_text="提交修改" />
-        </div>
-      </form>
+        </template>
+      </FormVertical>
       <template v-else>
         <div class="d-flex mb-2 align-items-center x-actions">
           <img class="rounded-circle avatar" :src="comment.member.avatarUrl()" width="20">
@@ -124,6 +127,7 @@ import AttachmentBox from "@/components/AttachmentBox.vue"
 import PageContent from "@/components/PageContent.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
 import IssueCommentForm from "./IssueCommentForm.vue"
+import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

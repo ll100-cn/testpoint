@@ -1,5 +1,5 @@
 <template>
-  <form @submit="submitForm">
+  <FormHorizontal :validations="validations" @submit="submitForm">
     <div class="modal-body">
       <FormErrorAlert :validations="validations" />
 
@@ -35,15 +35,15 @@
       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       <button type="submit" class="btn btn-primary">保存</button>
     </div>
-  </form>
+  </FormHorizontal>
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import { PropType } from 'vue';
-
-import { Validations, forms, layouts } from "@/components/simple_form";
-import FormErrorAlert from '@/components/FormErrorAlert.vue';
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import FormHorizontal from '@/components/FormHorizontal.vue'
+import { Validations, forms, layouts } from "@/components/simple_form"
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { PropType } from 'vue'
 
 const props = defineProps({
   platform_repo: {

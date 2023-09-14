@@ -27,12 +27,13 @@
       </div>
 
       <div id="newComment" class="collapse mt-3">
-        <form>
+        <FormVertical :validations="validations">
           <IssueCommentForm :form="form" :validations="validations" />
-          <div class="d-flex mt-3">
+
+          <template #actions>
             <SubmitButton class="ms-auto" :func="addComment" submit_text="新增评论" />
-          </div>
-        </form>
+          </template>
+        </FormVertical>
       </div>
     </div>
     <IssueRelationshipModal ref="issue_relationship_modal" :issue="issue" @add-relationship="emits('addRelationship', $event)" />
@@ -48,13 +49,13 @@ import { Comment, Issue, IssueInfo, IssueRelationship } from "@/models"
 import * as requests from '@/lib/requests'
 import { Collapse } from "bootstrap"
 import _ from "lodash"
-
 import SubmitButton from "@/components/SubmitButton.vue"
 import { Validations } from "@/components/simple_form"
 import IssueCommentForm from "./IssueCommentForm.vue"
 import IssueInfoCreateModal from "./IssueInfoCreateModal.vue"
 import IssueRelationshipModal from "./IssueRelationshipModal.vue"
 import IssueUnresolveModal from "./IssueUnresolveModal.vue"
+import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
