@@ -1,5 +1,5 @@
 <template>
-  <button type="submit" class="btn text-nowrap" :class="`btn-${type} ${custom_class}`" :disabled="submitting" @click.prevent="onSubmit">
+  <button type="submit" class="btn text-nowrap" :class="`btn-${type} ${custom_class}`" :disabled="submitting">
     <span v-if="submitting"><i class="spinner-border spinner-border-sm me-1" />{{ submitting_text }}</span>
     <span v-else>{{ submit_text }}</span>
   </button>

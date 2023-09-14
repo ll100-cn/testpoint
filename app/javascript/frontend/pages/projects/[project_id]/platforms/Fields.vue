@@ -1,25 +1,25 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="名称">
-    <forms.string v-bind="{ ...slotProps, form}" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('default_assignee_id')" label="建议工单受理人">
-    <forms.select v-bind="{ ...slotProps, form, collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.horizontal_group>
+  <layouts.group v-slot="slotProps" label_class="col-2" code="name" label="名称">
+    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" label_class="col-2" code="default_assignee_id" label="建议工单受理人">
+    <forms.select v-bind="{ ...slotProps, form: former.form, collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
-import { Validations, forms, layouts } from "@/components/simple_form"
-import { computed } from "vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { forms, layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
 import { Member } from '@/models'
 import _ from 'lodash'
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { computed } from "vue"
 
 const props = defineProps<{
-  form: any
+  former: Former<Record<string, any>>
   project_id: string
-  validations: Validations
   members: Member[]
 }>()
 

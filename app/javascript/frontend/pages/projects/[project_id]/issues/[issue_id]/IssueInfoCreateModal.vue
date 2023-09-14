@@ -8,12 +8,12 @@
       <FormHorizontal :validations="validations">
         <div class="modal-body">
           <FormErrorAlert :validations="validations" />
-          <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('template_id')" label="模版">
+          <layouts.group v-slot="slotProps" :validation="validations.disconnect('template_id')" label="模版">
             <forms.select v-bind="{ ...slotProps, form, collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
-          </layouts.horizontal_group>
-          <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('remark')" label="备注">
+          </layouts.group>
+          <layouts.group v-slot="slotProps" :validation="validations.disconnect('remark')" label="备注">
             <forms.string v-bind="{ ...slotProps, form }" />
-          </layouts.horizontal_group>
+          </layouts.group>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>

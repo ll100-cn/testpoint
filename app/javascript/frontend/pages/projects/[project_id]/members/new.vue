@@ -3,11 +3,11 @@
     <h2>新增成员</h2>
   </div>
 
-  <FormHorizontal :validations="validations">
-    <Fields :form="form" :project_id="project_id" :validations="validations" />
+  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <Fields :project_id="project_id" v-bind="{ former }" />
 
     <template #actions>
-      <SubmitButton submit_text="新增成员" :func="onSubmit" />
+      <layouts.submit>新增成员</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/members`">取消</router-link>
     </template>
   </FormHorizontal>
@@ -15,10 +15,10 @@
 
 <script setup lang="ts">
 import FormHorizontal from '@/components/FormHorizontal.vue'
-import SubmitButton from '@/components/SubmitButton.vue'
-import { Validations } from "@/components/simple_form"
+import { layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 
@@ -28,31 +28,17 @@ const { proxy } = getCurrentInstance()
 const params = route.params as any
 
 const project_id = params.project_id
-const validations = ref(new Validations())
 
-const form = ref({
+const former = Former.build({
   user_email: "",
   nickname: "",
   role: ""
 })
 
-async function onSubmit() {
-  validations.value.clear()
-
-  try {
-    const member = await new requests.MemberReq.Create().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-    }).perform(form.value)
-    if (member) {
-      router.push('/projects/' + project_id + '/members')
-    }
-  } catch (err) {
-    if (validations.value.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
+former.perform = async function() {
+  await new requests.MemberReq.Create().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+  }).perform(this.form)
+  router.push('/projects/' + project_id + '/members')
 }
-
 </script>

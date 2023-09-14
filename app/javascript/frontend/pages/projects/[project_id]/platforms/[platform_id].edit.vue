@@ -3,11 +3,11 @@
     <h2>修改平台</h2>
   </div>
 
-  <FormHorizontal :validations="validations">
-    <Fields :members="members" :form="form" :project_id="project_id" :validations="validations" />
+  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <Fields :members="members" :project_id="project_id" v-bind="{ former }" />
 
     <template #actions>
-      <SubmitButton submit_text="修改平台" :func="onSubmit" />
+      <layouts.submit>修改平台</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/platforms`">取消</router-link>
     </template>
   </FormHorizontal>
@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import FormHorizontal from '@/components/FormHorizontal.vue'
-import SubmitButton from '@/components/SubmitButton.vue'
-import { Validations } from "@/components/simple_form"
+import { layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -29,7 +29,6 @@ const params = route.params as any
 
 const project_id = params.project_id
 const platform_id = params.platform_id
-const validations = ref(new Validations())
 const platform = ref(await new requests.PlatformReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.platform_id = platform_id
@@ -39,29 +38,17 @@ const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const form = ref({
+const former = Former.build({
   name: platform.value.name,
   default_assignee_id: platform.value.default_assignee_id,
 })
 
-async function onSubmit() {
-  validations.value.clear()
+former.perform = async function() {
+  await new requests.PlatformReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+    req.interpolations.platform_id = platform_id
+  }).perform(this.form)
 
-  try {
-    const platform = await new requests.PlatformReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-      req.interpolations.platform_id = platform_id
-    }).perform(form.value)
-    if (platform) {
-      router.push('/projects/' + project_id + '/platforms')
-    }
-  } catch (err) {
-    if (validations.value.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
+  router.push('/projects/' + project_id + '/platforms')
 }
-
 </script>

@@ -1,30 +1,28 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
-    <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('platform_id')" label="平台">
-    <forms.select v-bind="{ ...slotProps, form, collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.horizontal_group>
+  <layouts.group v-slot="slotProps" code="title" label="标题">
+    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="platform_id" label="平台">
+    <forms.select v-bind="{ ...slotProps, form: former.form, collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
+  </layouts.group>
 
-  <layouts.horizontal_group v-if="test_case_stats && test_case_stats.length > 0" v-slot="slotProps" :validation="validations.disconnect('role_names')" label="角色">
-    <forms.checkboxes v-bind="{ ...slotProps, form, collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.horizontal_group>
+  <layouts.group v-if="test_case_stats && test_case_stats.length > 0" v-slot="slotProps" code="role_names" label="角色">
+    <forms.checkboxes v-bind="{ ...slotProps, form: former.form, collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
+import { forms, layouts } from "@/components/simple_form"
 import { computed } from 'vue'
-import { Validations, forms, layouts } from "@/components/simple_form"
-
-import _ from "lodash"
 import { Platform, TestCaseStat } from "@/models"
-
+import _ from "lodash"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import Former from '@/components/simple_form/Former'
 
 const props = withDefaults(defineProps<{
-  form: object
-  validations: Validations
+  former: Former<Record<string, any>>
   platforms: Platform[]
   test_case_stats?: TestCaseStat[]
 }>(), {

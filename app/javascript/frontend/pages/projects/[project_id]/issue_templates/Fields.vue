@@ -1,25 +1,25 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('name')" label="模版名称">
-    <forms.string v-bind="{ ...slotProps, form}" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('lookup_by_build_form')" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
-    <forms.checkboxes v-bind="{ ...slotProps, form, collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title_suggestion')" label="预设标题">
-    <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('default_category_id')" label="预设分类">
-    <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('default_priority')" label="预设优先级">
-    <forms.select v-bind="{ ...slotProps, form, collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('content_suggestion')" label="预设内容">
-    <forms.markdown v-bind="{ ...slotProps, form }" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('inputs')" label="内容">
+  <layouts.group v-slot="slotProps" code="name" label="模版名称">
+    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="lookup_by_build_form" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
+    <forms.checkboxes v-bind="{ ...slotProps, form: former.form , collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="title_suggestion" label="预设标题">
+    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="default_category_id" label="预设分类">
+    <forms.select v-bind="{ ...slotProps, form: former.form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="default_priority" label="预设优先级">
+    <forms.select v-bind="{ ...slotProps, form: former.form, collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="content_suggestion" label="预设内容">
+    <forms.markdown v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="inputs" label="内容">
     <div class="card overflow-auto">
       <table class="table mb-0">
         <thead>
@@ -30,7 +30,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(input, index) in form.inputs_attributes" :key="input.id">
+          <tr v-for="(input, index) in former.form.inputs_attributes" :key="input.id">
             <td><forms.string v-bind="{ ...slotProps, form: input, code: 'label' }" /></td>
             <td><forms.number v-bind="{ ...slotProps, form: input, code: 'order_index' }" /></td>
             <td>
@@ -39,25 +39,23 @@
           </tr>
         </tbody>
       </table>
-      <button class="btn btn-outline-primary btn-sm m-2" @click="onAddInput">+ 新增</button>
+      <button class="btn btn-outline-primary btn-sm m-2" type="button" @click="onAddInput">+ 新增</button>
     </div>
-  </layouts.horizontal_group>
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
-
-import { Validations, forms, layouts } from "@/components/simple_form"
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import { forms, layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 import * as requests from '@/lib/requests'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
-
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
-  form: any
+  former: Former<Record<string, any>>
   project_id: string
-  validations: Validations
 }>()
 
 const lookup_by_build_form_collection = ref([
@@ -69,11 +67,11 @@ const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) 
 }).perform())
 
 async function onRemoveInput(index: number) {
-  props.form.inputs_attributes.splice(index, 1)
+  props.former.form.inputs_attributes.splice(index, 1)
 }
 
 async function onAddInput() {
-  props.form.inputs_attributes.push({
+  props.former.form.inputs_attributes.push({
     label: "",
     order_index: "",
   })

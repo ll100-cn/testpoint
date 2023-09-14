@@ -1,8 +1,8 @@
 <template>
   <FormErrorAlert :validations="validations" />
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('content')" label="内容">
+  <layouts.group v-slot="slotProps" :validation="validations.disconnect('content')" label="内容">
     <forms.markdown v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
+  </layouts.group>
   <AttachmentUploader :attachments="attachments" @change="emits('attachmentChange', $event)" />
 </template>
 

@@ -13,13 +13,16 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from 'vue'
-import { Validations, layouts } from './simple_form'
+import { provide, useSlots } from 'vue'
+import { Validations } from './simple_form'
+import inline_group from './simple_form/layouts/inline_group.vue'
 
 const slots = useSlots()
 
 const props = defineProps<{
   validations: Validations
 }>()
+
+provide("GroupComponent", inline_group)
 
 </script>

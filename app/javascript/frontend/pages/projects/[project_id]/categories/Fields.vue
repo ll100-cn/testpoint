@@ -1,24 +1,23 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="名称">
-    <forms.string v-bind="{ ...slotProps, form}" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('description')" label="描述">
-    <forms.text v-bind="{ ...slotProps, form}" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('color')" label="颜色">
-    <forms.color v-bind="{ ...slotProps, form}" />
-  </layouts.horizontal_group>
+  <layouts.group v-slot="slotProps" code="name" label="名称">
+    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="description" label="描述">
+    <forms.text v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="color" label="颜色">
+    <forms.color v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { Validations, forms, layouts } from "@/components/simple_form"
+import { forms, layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
 
 const props = defineProps<{
-  form: any
-  project_id: string
-  validations: Validations
+  former: Former<Record<string, any>>
 }>()
 </script>

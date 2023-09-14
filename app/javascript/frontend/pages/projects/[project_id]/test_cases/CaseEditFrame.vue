@@ -5,19 +5,31 @@
         <h5 class="modal-title">{{ test_case.title }}</h5>
         <a href="#" class="text-danger small" @click="archiveTestCase">归档</a>
       </div>
-      <CaseForm :form="form" :validations="validations" :platform_repo="platform_repo" :label_repo="label_repo" @create="submitForm" />
+
+      <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+        <div class="modal-body">
+          <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <layouts.submit>保存</layouts.submit>
+        </div>z
+      </FormHorizontal>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/lib/requests';
-import $ from 'jquery';
-import { PropType, getCurrentInstance, reactive, ref } from 'vue';
-
-import { Validations } from "@/components/simple_form";
-import CaseForm from './CaseForm.vue';
+import * as requests from '@/lib/requests'
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { Modal } from 'bootstrap'
+import $ from 'jquery'
+import { PropType, getCurrentInstance, reactive } from 'vue'
+import CaseForm from './CaseForm.vue'
+import FormHorizontal from '@/components/FormHorizontal.vue'
+import { Validations, layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()
@@ -42,7 +54,7 @@ const emit = defineEmits<{
   (e: 'destroy', test_case: TestCase): void,
 }>()
 
-const form = ref({
+const former = Former.build({
   title: props.test_case.title,
   content: props.test_case.content,
   role_name: props.test_case.role_name,
@@ -52,26 +64,17 @@ const form = ref({
   label_ids: props.test_case.label_ids
 })
 
-async function submitForm(event: Event) {
-  event.preventDefault()
-  validations.clear()
+former.perform = async function(event) {
+  const new_test_case = await new requests.TestCaseReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = 1
+    req.interpolations.id = props.test_case.id
+  }).perform(this.form)
 
-  const form_data = new FormData(event.target as HTMLFormElement)
-  try {
-    const new_test_case = await new requests.TestCaseReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = 1
-      req.interpolations.id = props.test_case.id
-    }).perform(form_data)
+  const targe = event.target as HTMLElement
+  const modal = Modal.getOrCreateInstance(targe.closest('.modal'))
+  modal.hide()
 
-    $(event.target).closest('.modal').modal('hide')
-    emit('change', new_test_case)
-  } catch (err) {
-    if (validations.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
+  emit('change', new_test_case)
 }
 
 async function archiveTestCase(event: Event) {

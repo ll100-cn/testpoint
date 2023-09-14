@@ -1,14 +1,14 @@
 <template>
   <div class="page-header">
-    <h2>新增标签</h2>
+    <h2>编辑项目</h2>
   </div>
 
   <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields :project_id="project_id" v-bind="{ former }"/>
+    <Fields v-bind="{ former }" />
 
     <template #actions>
-      <layouts.submit>新增标签</layouts.submit>
-      <router-link class="btn btn-secondary" :to="`/projects/${project_id}/test_case_labels`">取消</router-link>
+      <layouts.submit>编辑项目</layouts.submit>
+      <router-link :to="`/projects`" class="btn btn-secondary">返回</router-link>
     </template>
   </FormHorizontal>
 </template>
@@ -22,23 +22,25 @@ import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 
+const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
 const router = useRouter()
-const { proxy } = getCurrentInstance()
 const params = route.params as any
 
-const project_id = params.project_id
+const project = await new requests.ProjectReq.Get().setup(proxy, (req) => {
+  req.interpolations.project_id = params.project_id
+}).perform()
 
 const former = Former.build({
-  name: "",
-  description: "",
+  name: project.name
 })
 
 former.perform = async function() {
-  await new requests.TestCaseLabelReq.Create().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
+  await new requests.ProjectReq.Update().setup(proxy, (req) => {
+    req.interpolations.id = project.id
   }).perform(this.form)
 
-  router.push('/projects/' + project_id + '/test_case_labels')
+  router.push(`/projects`)
 }
+
 </script>

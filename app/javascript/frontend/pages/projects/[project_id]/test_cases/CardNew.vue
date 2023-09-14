@@ -5,22 +5,32 @@
         <div class="modal-header">
           <h5 class="modal-title">新增案例</h5>
         </div>
-        <CaseForm :form="form" :validations="validations" :platform_repo="platform_repo" :label_repo="label_repo" @create="submitForm" />
+        <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+          <div class="modal-body">
+            <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <layouts.submit>保存</layouts.submit>
+          </div>
+        </FormHorizontal>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/lib/requests';
-import { Modal } from 'bootstrap';
-import { PropType, getCurrentInstance, nextTick, reactive, ref } from 'vue';
-import $ from 'jquery'
+import FormHorizontal from '@/components/FormHorizontal.vue'
+import { layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { Modal } from 'bootstrap'
+import { PropType, getCurrentInstance, nextTick, ref } from 'vue'
+import CaseForm from './CaseForm.vue'
 
-import { Validations } from "@/components/simple_form";
-import CaseForm from './CaseForm.vue';
-const validations = reactive<Validations>(new Validations())
+const { proxy } = getCurrentInstance()
 
 const props = defineProps({
   platform_repo: {
@@ -33,7 +43,7 @@ const props = defineProps({
   }
 });
 
-const form = ref({
+const former = Former.build({
   title: null as string | null | undefined,
   content: null as string | null | undefined,
   role_name: null as string | null | undefined,
@@ -43,31 +53,21 @@ const form = ref({
   label_ids: [] as number[]
 })
 
-const { proxy } = getCurrentInstance()
+former.perform = async function(event: SubmitEvent) {
+  const new_test_case = await new requests.TestCaseReq.Create().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id.value
+  }).perform(this.form)
+
+  const targe = event.target as HTMLElement
+  const modal = Modal.getOrCreateInstance(targe.closest('.modal'))
+  modal.hide()
+
+  emit('create', new_test_case)
+}
+
 const project_id = ref("")
 
 const emit = defineEmits<{(e: 'create', test_case: TestCase): void}>()
-
-async function submitForm(event: Event) {
-  event.preventDefault()
-  validations.clear()
-
-  const form_data = new FormData(event.target as HTMLFormElement)
-  try {
-    const new_test_case = await new requests.TestCaseReq.Create().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id.value
-    }).perform(form_data)
-
-    $(event.target).closest('.modal').modal('hide')
-    emit('create', new_test_case)
-  } catch (err) {
-    if (validations.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
-}
 
 const modal = ref<InstanceType<typeof HTMLElement>>()
 

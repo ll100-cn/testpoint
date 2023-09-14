@@ -1,22 +1,22 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('email')" label="用户邮箱">
-    <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ form.user_email }}</div>
-    <forms.string v-else v-bind="{ ...slotProps, form}" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="名称">
-    <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.horizontal_group>
+  <layouts.group v-slot="slotProps" code="email" label="用户邮箱">
+    <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ former.form.email }}</div>
+    <forms.string v-else v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
+  <layouts.group v-slot="slotProps" code="name" label="名称">
+    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { Validations, forms, layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
 
 const props = defineProps<{
-  form: any
-  validations: Validations
   mode?: "edit" | "new"
+  former: Former<Record<string, any>>
 }>()
 </script>

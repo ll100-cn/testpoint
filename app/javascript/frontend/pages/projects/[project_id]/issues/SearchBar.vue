@@ -1,20 +1,20 @@
 <template>
   <FormInline :validations="validations">
-    <layouts.inline_group v-slot="slotProps" label="分类" :validation="validations.disconnect('category_id_eq')">
+    <layouts.group v-slot="slotProps" label="分类" :validation="validations.disconnect('category_id_eq')">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: category_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '全部' }" @change="querySearch" />
-    </layouts.inline_group>
-    <layouts.inline_group v-slot="slotProps" label="里程碑" :validation="validations.disconnect('milestone_id_eq')">
+    </layouts.group>
+    <layouts.group v-slot="slotProps" label="里程碑" :validation="validations.disconnect('milestone_id_eq')">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: milestone_collection, labelMethod: 'title', valueMethod: 'id', include_blank: '任意' }" @change="querySearch" />
-    </layouts.inline_group>
-    <layouts.inline_group v-slot="slotProps" label="受理人" :validation="validations.disconnect('assignee_id_eq')">
+    </layouts.group>
+    <layouts.group v-slot="slotProps" label="受理人" :validation="validations.disconnect('assignee_id_eq')">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: assignee_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="querySearch" />
-    </layouts.inline_group>
-    <layouts.inline_group v-slot="slotProps" label="创建人" :validation="validations.disconnect('creator_id_eq')">
+    </layouts.group>
+    <layouts.group v-slot="slotProps" label="创建人" :validation="validations.disconnect('creator_id_eq')">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: creator_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="querySearch" />
-    </layouts.inline_group>
-    <layouts.inline_group v-slot="slotProps" label="问题类型" :validation="validations.disconnect('task_id_is')">
+    </layouts.group>
+    <layouts.group v-slot="slotProps" label="问题类型" :validation="validations.disconnect('task_id_is')">
       <forms.bootstrap_select v-bind="{ ...slotProps, form: search, collection: issue_type_collection, labelMethod: 'label', valueMethod: 'value', include_blank: '所有' }" @change="querySearch" />
-    </layouts.inline_group>
+    </layouts.group>
   </FormInline>
 </template>
 

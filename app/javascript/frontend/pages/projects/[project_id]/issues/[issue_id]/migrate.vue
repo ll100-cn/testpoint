@@ -6,13 +6,13 @@
   <FormHorizontal :validations="validations">
     <FormErrorAlert :validations="validations" />
 
-    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('project_id')" label="项目">
+    <layouts.group v-slot="slotProps" :validation="validations.disconnect('project_id')" label="项目">
       <forms.select v-bind="{ ...slotProps, form, collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
-    </layouts.horizontal_group>
+    </layouts.group>
 
-    <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
+    <layouts.group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
       <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-    </layouts.horizontal_group>
+    </layouts.group>
 
     <template #actions>
       <SubmitButton submit_text="迁移" :func="issueEdit" />

@@ -1,25 +1,25 @@
 <template>
   <FormErrorAlert :validations="validations" />
 
-  <!-- <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('issue_template_id')" label="选择模版">
+  <!-- <layouts.group v-slot="slotProps" :validation="validations.disconnect('issue_template_id')" label="选择模版">
     <forms.select v-bind="{ ...slotProps, form, collection: issue_templates, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.vertical_group> -->
+  </layouts.group> -->
   <!-- <template v-if="form['issue_template_id']"> -->
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
+  <layouts.group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
     <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('title')" label="工单标题">
+  </layouts.group>
+  <layouts.group v-slot="slotProps" :validation="validations.disconnect('title')" label="工单标题">
     <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('content')" label="工单内容">
+  </layouts.group>
+  <layouts.group v-slot="slotProps" :validation="validations.disconnect('content')" label="工单内容">
     <forms.markdown v-bind="{ ...slotProps, form }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('state')" label="状态">
+  </layouts.group>
+  <layouts.group v-slot="slotProps" :validation="validations.disconnect('state')" label="状态">
     <forms.select v-bind="{ ...slotProps, form, collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.vertical_group>
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('assignee_id')" label="工单受理人">
+  </layouts.group>
+  <layouts.group v-slot="slotProps" :validation="validations.disconnect('assignee_id')" label="工单受理人">
     <forms.select v-bind="{ ...slotProps, form, collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-  </layouts.vertical_group>
+  </layouts.group>
   <!-- </template> -->
 </template>
 

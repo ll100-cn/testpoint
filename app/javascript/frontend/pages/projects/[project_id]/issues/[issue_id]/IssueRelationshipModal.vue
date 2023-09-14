@@ -9,12 +9,12 @@
       <FormVertical :validations="validations">
         <div class="modal-body">
           <FormErrorAlert :validations="validations" />
-          <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('target_id')" label="关联的问题ID">
+          <layouts.group v-slot="slotProps" :validation="validations.disconnect('target_id')" label="关联的问题ID">
             <forms.number v-bind="{ ...slotProps, form }" />
-          </layouts.vertical_group>
-          <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('creator_subscribe_target_issue')">
+          </layouts.group>
+          <layouts.group v-slot="slotProps" :validation="validations.disconnect('creator_subscribe_target_issue')">
             <forms.checkboxes v-bind="{ ...slotProps, form, collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
-          </layouts.vertical_group>
+          </layouts.group>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>

@@ -85,7 +85,7 @@ export default class Validations {
     }
     const resp = err.response
     const errors = resp.data.errors
-    this.names = resp.data.names
+    Object.assign(this.names, resp.data.names)
 
     for (const code in errors || {}) {
       const messages = errors[code]

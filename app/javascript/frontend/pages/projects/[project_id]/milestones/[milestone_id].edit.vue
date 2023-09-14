@@ -3,18 +3,18 @@
     <h2>编辑里程碑</h2>
   </div>
 
-  <FormHorizontal :validations="validations" @submit="milestoneUpdate">
-    <Fields :validations="validations" :form="form" />
+  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <Fields v-bind="{ former }" />
 
     <template #actions>
-      <input type="submit" name="commit" value="编辑里程碑" class="btn btn-primary">
+      <layouts.submit>编辑里程碑</layouts.submit>
       <router-link :to="`/projects/${project_id}/milestones`" class="btn btn-secondary">取消</router-link>
     </template>
   </FormHorizontal>
 </template>
 
 <script setup lang="ts">
-import { Validations } from '@/components/simple_form';
+import { Validations, layouts } from '@/components/simple_form';
 import * as requests from '@/lib/requests';
 import dayjs from 'dayjs';
 import _ from 'lodash';
@@ -22,6 +22,7 @@ import { getCurrentInstance, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Fields from './Fields.vue';
 import FormHorizontal from '@/components/FormHorizontal.vue'
+import Former from '@/components/simple_form/Former'
 
 const validations = reactive<Validations>(new Validations())
 const { proxy } = getCurrentInstance()
@@ -31,41 +32,29 @@ const params = route.params as any
 
 const project_id = params.project_id
 
-const form = ref({
+const former = Former.build({
   title: null as string | null,
   published_at: null as string | null,
   description: null as string | null,
 })
+
+former.perform = async function() {
+  await new requests.MilestoneReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+    req.interpolations.id = milestone.id
+  }).perform(this.form)
+
+  router.push(`/projects/${project_id}/milestones`)
+}
 
 const milestone = await new requests.MilestoneReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.id = _.toNumber(params.milestone_id)
 }).perform()
 
-form.value.title = milestone.title
+former.form.title = milestone.title
 if (milestone.published_at != null) {
-  form.value.published_at = dayjs(milestone.published_at).format('YYYY-MM-DD HH:mm')
+  former.form.published_at = dayjs(milestone.published_at).format('YYYY-MM-DD HH:mm')
 }
-form.value.description = milestone.description
-
-async function milestoneUpdate(event: Event) {
-  event.preventDefault()
-  validations.clear()
-
-  const form_data = new FormData(event.target as HTMLFormElement)
-  try {
-    await new requests.MilestoneReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-      req.interpolations.id = milestone.id
-    }).perform(form_data)
-
-    router.push(`/projects/${project_id}/milestones`)
-  } catch (err) {
-    if (validations.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
-}
+former.form.description = milestone.description
 </script>
