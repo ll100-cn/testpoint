@@ -20,7 +20,7 @@
           <div class="no-margin-bottom">
             <template v-if="editing">
               <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
-                <IssueCommentForm v-bind="{ former }" :attachments="issue_attachments" @attachment-change="attachmentChange" />
+                <IssueCommentForm :attachments="issue_attachments" @attachment-change="attachmentChange" />
 
                 <template #actions>
                   <button class="btn btn-secondary" type="button" @click.prevent="finishedEditing">取消</button>

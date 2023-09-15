@@ -16,16 +16,15 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import { Validations, layouts } from "@/components/simple_form"
+import FormVertical from "@/components/FormVertical.vue"
+import { layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
 import { Attachment } from "@/models"
 import _ from "lodash"
-import FormVertical from "@/components/FormVertical.vue"
-import SubmitButton from "@/components/SubmitButton.vue"
+import { getCurrentInstance, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import Fields from "./Fields.vue"
-import Former from "@/components/simple_form/Former"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

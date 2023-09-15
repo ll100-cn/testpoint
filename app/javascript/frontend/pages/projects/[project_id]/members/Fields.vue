@@ -1,15 +1,15 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group v-slot="slotProps" code="user_email" label="用户邮箱">
+  <layouts.group code="user_email" label="用户邮箱">
     <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ former.form.user_email }}</div>
-    <forms.string v-else v-bind="{ ...slotProps, form: former.form }" />
+    <forms.string v-else />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="nickname" label="昵称">
-    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  <layouts.group code="nickname" label="昵称">
+    <forms.string />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="role" label="角色">
-    <forms.select v-bind="{ ...slotProps, form: former.form, collection: role_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+  <layouts.group code="role" label="角色">
+    <forms.select v-bind="{ collection: role_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
   </layouts.group>
 </template>
 

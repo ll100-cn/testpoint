@@ -2,8 +2,8 @@
   <div class="card page-card">
     <div class="card-header bg-white d-flex">
       <FormInline v-bind="{ former }" @submit.prevent="former.submit">
-        <layouts.group v-slot="slotProps" code="platform_id" label="平台">
-          <forms.dropdown v-bind="{ ...slotProps, form: former.form }" #default="{ Component }" @change="former.submit">
+        <layouts.group code="platform_id" label="平台">
+          <forms.dropdown #default="{ Component }">
             <component v-for="platform in _platforms" :is="Component" :value="platform.id">
               <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
               {{ platform.name }}
@@ -13,16 +13,16 @@
           </forms.dropdown>
         </layouts.group>
 
-        <layouts.group v-slot="slotProps" code="label_id" label="标签">
-          <forms.dropdown v-bind="{ ...slotProps, form: former.form }" #default="{ Component }" @change="former.submit">
+        <layouts.group code="label_id" label="标签">
+          <forms.dropdown #default="{ Component }">
             <component v-for="label in _labels" :is="Component" :value="label.id">{{ label.name }}</component>
             <div class="dropdown-divider" />
             <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
           </forms.dropdown>
         </layouts.group>
 
-        <layouts.group v-slot="slotProps" code="group_name_search" label="分组">
-          <forms.string v-bind="{ ...slotProps, form: former.form }" />
+        <layouts.group code="group_name_search" label="分组">
+          <forms.string />
         </layouts.group>
       </FormInline>
 
@@ -51,13 +51,14 @@ import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
-import { plainToClass } from 'class-transformer'
+import { Type, plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { computed, getCurrentInstance, provide, ref } from 'vue'
+import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import CardNew from './CardNew.vue'
+import { number } from '@/components/simple_form/forms'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -66,18 +67,23 @@ const params = route.params as any
 const query = utils.queryToPlain(route.query)
 
 class Search {
-  group_name_search: string | null
-  platform_id: string | null
-  label_id: string | null
+  @Type(() => String) group_name_search?: string = undefined
+  @Type(() => Number) platform_id?: number = undefined
+  @Type(() => Number) label_id?: number = undefined
 }
 
 const search = ref(plainToClass(Search, query))
 const filter = plainToClass(Filter, query.f ?? {})
 
-const former = Former.build(search)
+console.log(utils.instance(Search, query))
+
+const former = Former.build(search.value)
 former.perform = async function() {
-  router.push({ query: utils.plainToQuery(this.form) })
+  const data = utils.compactObject(this.form)
+  router.push({ query: utils.plainToQuery(data) })
 }
+
+watch(computed(() => [ former.form.platform_id, former.form.label_id ]), former.submit)
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void

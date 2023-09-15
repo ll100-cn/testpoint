@@ -18,7 +18,7 @@ import FormHorizontal from '@/components/FormHorizontal.vue'
 import { layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 

@@ -1,5 +1,5 @@
 <template>
-  <select v-model="form[code]" class="form-select" :class="[{'is-invalid': validation?.isInvaild()}, custom_class]" :disabled="disabled" @change="emit('change', $event)">
+  <select v-model="model_value" class="form-select" :class="[{'is-invalid': validation?.isInvaild()}, custom_class]" :disabled="disabled" @change="emit('change', $event)">
     <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
     <template v-if="(collection instanceof Array)">
       <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
@@ -18,13 +18,13 @@
 
 <script setup lang="ts">
 import { Validation } from "@/models"
+import * as helper from "./helper"
 
 const props = withDefaults(defineProps<{
-  label?: string
-  code: string
-  name?: string
-  form: object
+  modelValue?: any
   validation?: Validation
+
+  name?: string
   disabled?: boolean
   collection: object
   labelMethod: string
@@ -42,4 +42,7 @@ const emit = defineEmits<{
   change: [evenvt: Event]
 }>()
 
+const define_model_value = defineModel<any>()
+const model_value = helper.modelValue(define_model_value)
+const validation = helper.validation(props)
 </script>

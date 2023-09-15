@@ -6,14 +6,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
 
-      <FormVertical :validations="validations">
+      <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
-          <FormErrorAlert :validations="validations" />
-          <layouts.group label="备注">
-            <span>{{ issue_info.remark }}</span>
-          </layouts.group>
-          <layouts.group v-for="(input, index) in current_issue_template?.inputs" :key="index" v-slot="slotProps" :label="input.label">
-            <forms.string v-bind="{ ...slotProps, code: 'value', form: form.inputs_attributes[index] }" />
+          <FormErrorAlert />
+
+          <layouts.group label="备注"><span>{{ issue_info.remark }}</span></layouts.group>
+          <layouts.group v-for="(input, index) in current_issue_template?.inputs" :code="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
+            <forms.string />
           </layouts.group>
         </div>
         <div class="modal-footer">
@@ -37,6 +36,7 @@ import CommonModal from "@/components/CommonModal.vue"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import SubmitButton from "@/components/SubmitButton.vue"
 import FormVertical from "@/components/FormVertical.vue"
+import Former from "@/components/simple_form/Former"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
@@ -48,16 +48,29 @@ const emits = defineEmits<{
 }>()
 
 const modal = ref<InstanceType<typeof CommonModal>>()
-const form = ref({
+const former = Former.build({
   inputs_attributes: []
 })
-const _form = _.cloneDeep(form.value)
+
+former.perform = async function() {
+  const issue_info = await new requests.IssueInfoReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue.project_id
+    req.interpolations.issue_id = props.issue.id
+    req.interpolations.issue_info_id = props.issue_info.id
+  }).perform(this.form)
+
+  emits("updateIssueInfo", issue_info)
+  resetForm()
+  modal.value.hide()
+}
+
+const _form = _.cloneDeep(former.form)
 const validations = ref(new Validations())
 const current_issue_template = ref<IssueTemplate>()
 
 function resetForm() {
-  form.value = _form
-  form.value.inputs_attributes = build_inputs_attributes()
+  former.form = _form
+  former.form.inputs_attributes = build_inputs_attributes()
 }
 
 async function show() {
@@ -66,12 +79,12 @@ async function show() {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_template_id = props.issue_info.template_id
   }).perform()
-  form.value.inputs_attributes = build_inputs_attributes()
+  former.form.inputs_attributes = build_inputs_attributes()
 }
 
 function build_inputs_attributes() {
   return _.map(current_issue_template.value?.inputs, (input, index) => {
-    return { template_input_id: input.id, value: props.issue_info.values[input.id] }
+    return { template_input_id: input.id, value: props.issue_info.values[input.id] ?? null }
   })
 }
 
@@ -83,7 +96,7 @@ async function updateIssueInfo() {
       req.interpolations.project_id = props.issue.project_id
       req.interpolations.issue_id = props.issue.id
       req.interpolations.issue_info_id = props.issue_info.id
-    }).perform(form.value)
+    }).perform(former.form)
     if (issue_info) {
       emits("updateIssueInfo", issue_info)
       resetForm()

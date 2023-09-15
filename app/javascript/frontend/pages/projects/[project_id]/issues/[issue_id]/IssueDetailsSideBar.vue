@@ -14,8 +14,8 @@
 
         <IssueDetailEdit v-bind="{ former }" code="state" title="状态">
           <template #editable>
-            <layouts.group v-slot="slotProps" code="state">
-              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
+            <layouts.group code="state">
+              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
             </layouts.group>
           </template>
 
@@ -24,8 +24,8 @@
 
         <IssueDetailEdit v-bind="{ former }" code="priority" title="优先级">
           <template #editable>
-            <layouts.group v-slot="slotProps" code="priority">
-              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
+            <layouts.group code="priority">
+              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
             </layouts.group>
           </template>
 
@@ -34,8 +34,8 @@
 
         <IssueDetailEdit v-bind="{ former }" code="creator_id" title="创建人">
           <template #editable>
-            <layouts.group v-slot="slotProps" code="creator_id">
-              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
+            <layouts.group code="creator_id">
+              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -44,8 +44,8 @@
 
         <IssueDetailEdit v-bind="{ former }" code="assignee_id" title="受理人">
           <template #editable>
-            <layouts.group v-slot="slotProps" code="assignee_id">
-              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
+            <layouts.group code="assignee_id">
+              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -54,8 +54,8 @@
 
         <IssueDetailEdit v-bind="{ former }" code="category_id" title="分类">
           <template #editable>
-            <layouts.group v-slot="slotProps" code="category_id">
-              <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, live_search: true, custom_class: 'form-control-sm', collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
+            <layouts.group code="category_id">
+              <forms.bootstrap_select v-bind="{ live_search: true, custom_class: 'form-control-sm', collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -64,8 +64,8 @@
 
         <IssueDetailEdit v-bind="{ former }" code="milestone_id" title="里程碑">
           <template #editable>
-            <layouts.group v-slot="slotProps" code="milestone_id">
-              <forms.select v-bind="{ ...slotProps, form: former.form, custom_class: 'form-select-sm', collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
+            <layouts.group code="milestone_id">
+              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -116,16 +116,6 @@ const emits = defineEmits<{
   updateIssue: [issue: Issue]
   refreshIssue: []
 }>()
-
-const form = ref({
-  state: props.issue?.state,
-  priority: props.issue?.priority,
-  creator_id: props.issue?.creator_id,
-  assignee_id: props.issue?.assignee_id,
-  category_id: props.issue?.category_id,
-  milestone_id: props.issue?.milestone_id,
-})
-const validations = ref(new Validations())
 
 const former = Former.build({
   state: props.issue?.state,

@@ -6,16 +6,12 @@
           <h5 class="modal-title">{{ plan.title }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
         </div>
-        <FormVertical :validations="validations" @submit="onSubmit">
+        <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
-            <FormErrorAlert :validations="validations" />
+            <FormErrorAlert />
 
-            <layouts.group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
-              <forms.string v-bind="{ ...slotProps, form }" />
-            </layouts.group>
-            <layouts.group v-slot="slotProps" :validation="validations.disconnect('release_revision')" label="版本构建号" hint="*选填，仅用于备注">
-              <forms.string v-bind="{ ...slotProps, form }" />
-            </layouts.group>
+            <layouts.group code="title" label="标题"><forms.string /></layouts.group>
+            <layouts.group code="release_revision" label="版本构建号" hint="*选填，仅用于备注"><forms.string /></layouts.group>
 
             <hr>
             <h5>待测用例</h5>
@@ -24,11 +20,8 @@
             <p class="text-muted small"><span class="text-success">{{ upshots_state_counts['pass'] ?? 0 }}</span> 个成功用例将不显示</p>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success" :disabled="submitting">
-              <span v-if="submitting"><i class="spinner-border spinner-border-sm" />提交中，请稍等</span>
-              <span v-else>确定进入下一轮</span>
-            </button>
-            <button class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close" @click.prevent>返回</button>
+            <layouts.submit>确定进入下一轮</layouts.submit>
+            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close" @click.prevent>返回</button>
           </div>
         </FormVertical>
       </div>
@@ -37,23 +30,21 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, forms, layouts } from "@/components/simple_form"
-import { PropType, getCurrentInstance, nextTick, reactive, ref, computed } from 'vue'
+import { forms, layouts } from "@/components/simple_form"
 import _ from 'lodash'
+import { PropType, computed, getCurrentInstance, nextTick, ref } from 'vue'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { Phase, PhaseInfo, Plan, TaskUpshotInfo } from '@/models'
+import FormVertical from "@/components/FormVertical.vue"
+import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
+import { Phase, PhaseInfo, Plan, TaskUpshotInfo } from '@/models'
 import { Modal } from 'bootstrap'
 import { useRoute } from "vue-router"
-import FormVertical from "@/components/FormVertical.vue"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const params = route.params as any
-
-const project_id = _.toNumber(params.project_id)
-const plan_id = _.toNumber(params.id)
 
 const props = defineProps({
   plan: { type: Object as PropType<Plan>, requird: true },
@@ -65,19 +56,27 @@ const emit = defineEmits<{
   (e: 'created', phase: Phase): void,
 }>()
 
-const validations = reactive<Validations>(new Validations())
 const modal = ref<InstanceType<typeof HTMLElement>>()
 const mode = ref('show')
-const submitting = ref(false)
 
 const upshots_state_counts = computed(() => {
   return _.last(props.phase_infos).upshots_state_counts
 })
 
-const form = ref({
+const former = Former.build({
   title: `第 ${props.phase_infos.length + 1 ?? 1} 轮`,
   release_revision: ""
 })
+
+former.perform = async function() {
+  const phase = await new requests.PlanPhaseReq.Create().setup(proxy, (req) => {
+    req.interpolations.project_id = params.project_id
+    req.interpolations.plan_id = params.plan_id
+  }).perform(this.form)
+
+  hidden()
+  emit('created', phase)
+}
 
 async function show() {
   mode.value = 'show'
@@ -94,29 +93,6 @@ async function hidden() {
     const $modal = ref(Modal.getOrCreateInstance(modal.value))
     $modal.value.hide()
   })
-}
-
-async function onSubmit(event: Event) {
-  event.preventDefault()
-  validations.clear()
-  submitting.value = true
-  try {
-    const phase = await new requests.PlanPhaseReq.Create().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-      req.interpolations.plan_id = plan_id
-    }).perform(form.value)
-
-    hidden()
-    emit('created', phase)
-  } catch (err) {
-    if (validations.handleError(err)) {
-      return
-    }
-
-    throw err
-  } finally {
-    submitting.value = false
-  }
 }
 
 defineExpose({

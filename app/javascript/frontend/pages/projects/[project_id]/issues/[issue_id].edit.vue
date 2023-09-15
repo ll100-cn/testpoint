@@ -4,19 +4,17 @@
   </div>
 
   <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <FormErrorAlert v-bind="{ former }" />
+    <FormErrorAlert />
 
-    <layouts.group v-slot="slotProps" code="title" label="标题">
-      <forms.string v-bind="{ ...slotProps, form: former.form }" />
+    <layouts.group code="title" label="标题"><forms.string /></layouts.group>
+    <layouts.group code="category_id" label="分类">
+      <forms.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" code="category_id" label="分类">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
+    <layouts.group code="creator_id" label="创建人">
+      <forms.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" code="creator_id" label="创建人">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
-    </layouts.group>
-    <layouts.group v-slot="slotProps" code="assignee_id" label="受理人">
-      <forms.select v-bind="{ ...slotProps, form: former.form, collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+    <layouts.group code="assignee_id" label="受理人">
+      <forms.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
     </layouts.group>
 
     <template #actions>

@@ -4,7 +4,7 @@
   </div>
 
   <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields v-bind="{ former }" />
+    <Fields />
 
     <template #actions>
       <layouts.submit>编辑里程碑</layouts.submit>
@@ -14,17 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, layouts } from '@/components/simple_form';
-import * as requests from '@/lib/requests';
-import dayjs from 'dayjs';
-import _ from 'lodash';
-import { getCurrentInstance, reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import Fields from './Fields.vue';
 import FormHorizontal from '@/components/FormHorizontal.vue'
+import { layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
+import dayjs from 'dayjs'
+import _ from 'lodash'
+import { getCurrentInstance } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import Fields from './Fields.vue'
 
-const validations = reactive<Validations>(new Validations())
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()

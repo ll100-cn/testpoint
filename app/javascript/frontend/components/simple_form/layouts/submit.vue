@@ -20,6 +20,6 @@ const props = withDefaults(defineProps<{
 })
 
 const former = inject('former') as Former<Record<string, any>>
-const submitting = computed(() => former.submiting)
+const submitting = computed(() => former.submitting)
 
 </script>

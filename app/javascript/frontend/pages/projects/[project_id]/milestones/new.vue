@@ -4,7 +4,7 @@
   </div>
 
   <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields v-bind="{ former }" />
+    <Fields />
 
     <template #actions>
       <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">

@@ -8,8 +8,8 @@
           <div class="card-body">
             <FormErrorAlert />
             <div class="row gy-3">
-              <layouts.group v-slot="slotProps" code="email" label="邮箱">
-                <forms.string v-bind="{ ...slotProps, form: code_former.form }" />
+              <layouts.group code="email" label="邮箱">
+                <forms.string />
               </layouts.group>
             </div>
           </div>
@@ -23,12 +23,12 @@
           <div class="card-body">
             <FormErrorAlert />
             <div class="row gy-3">
-              <layouts.group v-slot="slotProps" code="email" label="邮箱">
+              <layouts.group code="email" label="邮箱">
                 <div class="form-control-plaintext">{{ former.form.email }}</div>
               </layouts.group>
 
-              <layouts.group v-slot="slotProps" code="login_code" label="验证码">
-                <forms.string v-bind="{ ...slotProps, form: former.form }" />
+              <layouts.group code="login_code" label="验证码">
+                <forms.string />
               </layouts.group>
             </div>
           </div>

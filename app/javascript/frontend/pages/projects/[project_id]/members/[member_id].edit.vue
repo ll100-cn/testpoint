@@ -14,14 +14,13 @@
 </template>
 
 <script setup lang="ts">
+import FormHorizontal from '@/components/FormHorizontal.vue'
+import { Validations, layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Validations, layouts } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
-import SubmitButton from '@/components/SubmitButton.vue'
 import Fields from './Fields.vue'
-import FormHorizontal from '@/components/FormHorizontal.vue'
-import Former from '@/components/simple_form/Former'
 
 const route = useRoute()
 const router = useRouter()

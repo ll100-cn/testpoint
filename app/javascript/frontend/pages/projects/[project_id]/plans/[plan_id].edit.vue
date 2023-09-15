@@ -4,7 +4,7 @@
 
     <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
       <div class="card-body">
-        <Fields v-bind="{ former }" :platforms="platforms" />
+        <Fields :platforms="platforms" />
       </div>
 
       <div class="card-footer bg-white">

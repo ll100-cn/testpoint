@@ -25,9 +25,7 @@
     <div class="flex-column flex-grow-1">
       <div v-if="editing" class="d-flex x-actions">
         <FormInline v-bind="{ former }" @submit.prevent="former.submit">
-          <layouts.group v-slot="slotProps" class="mb-0" code="title">
-            <forms.string v-bind="{ ...slotProps, form: former.form }" />
-          </layouts.group>
+          <layouts.group class="mb-0" code="title"><forms.string /></layouts.group>
           <div class="x-actions text-nowrap">
             <layouts.submit>更新</layouts.submit>
             <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>

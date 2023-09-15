@@ -8,7 +8,7 @@
         </div>
         <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
-            <Fields v-bind="{ former }" :platforms="platforms" :test_case_stats="test_case_stats" />
+            <Fields :platforms="platforms" :test_case_stats="test_case_stats" />
           </div>
           <div class="modal-footer">
             <layouts.submit>新增计划</layouts.submit>
@@ -21,17 +21,16 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, layouts } from "@/components/simple_form"
-import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
+import FormHorizontal from "@/components/FormHorizontal.vue"
+import { layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
+import * as requests from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Plan, Platform, TestCaseStat } from '@/models'
-import * as requests from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
-import SubmitButton from "@/components/SubmitButton.vue"
+import { getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
-import FormHorizontal from "@/components/FormHorizontal.vue"
-import Former from "@/components/simple_form/Former"
 
 const { proxy } = getCurrentInstance()
 
@@ -46,7 +45,6 @@ const emit = defineEmits<{
   created: [plan: Plan]
 }>()
 
-const validations = reactive<Validations>(new Validations())
 const modal = ref<InstanceType<typeof HTMLElement>>()
 const mode = ref('show')
 const test = ref(true)

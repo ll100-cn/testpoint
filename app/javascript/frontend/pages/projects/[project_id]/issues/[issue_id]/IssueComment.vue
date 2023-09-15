@@ -3,7 +3,7 @@
     <div :id="`comment${comment.id}_content`" class="card-body">
       <div v-if="editing" class="no-margin-bottom">
         <FormVertical v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
-          <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" :former="edit_former" />
+          <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" />
 
           <template #actions>
             <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
@@ -58,7 +58,7 @@
           </a>
         </div>
         <FormVertical v-bind="{ former: reply_former }" @submit.prevent="reply_former.submit">
-          <IssueCommentForm :former="reply_former" @attachment-change="replyAttachmentChange" />
+          <IssueCommentForm  @attachment-change="replyAttachmentChange" />
 
           <template #actions>
             <layouts.submit class="ms-auto">新增评论</layouts.submit>
@@ -70,7 +70,7 @@
   <template v-else>
     <li class="list-group-item px-0">
       <FormVertical v-if="editing" v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
-        <IssueCommentForm :attachments="comment.attachments" :former="edit_former" @attachment-change="attachmentChange" />
+        <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" />
 
         <template #actions>
           <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>

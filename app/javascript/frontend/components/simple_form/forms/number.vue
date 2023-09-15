@@ -1,17 +1,13 @@
 <template>
-  <input v-model="form[code]" type="number" class="form-control" :name="name ?? code" :disabled="disabled" :class="{'is-invalid': validation?.isInvaild() }">
+  <component :is="Component" v-bind="props" type="number" v-model="model_value" />
 </template>
 
 <script setup lang="ts">
-import { Validation } from '@/models';
-import { PropType } from 'vue';
+import * as helper from "./helper"
+import Component, { Props } from './string.vue'
 
-const props = defineProps({
-  label: { type: String, required: false },
-  code: { type: String, required: true },
-  form: { type: Object, required: true },
-  name: { type: String, required: false },
-  validation: { type: Object as PropType<Validation>, required: false },
-  disabled: { type: Boolean, required: false, default: false },
-})
+const props = defineProps<Props>()
+
+const define_model_value = defineModel<any>()
+const model_value = helper.modelValue(define_model_value)
 </script>

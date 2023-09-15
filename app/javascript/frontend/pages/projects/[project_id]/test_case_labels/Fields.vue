@@ -1,21 +1,11 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group v-slot="slotProps" code="name" label="名称">
-    <forms.string v-bind="{ ...slotProps, form: former.form }" />
-  </layouts.group>
-  <layouts.group v-slot="slotProps" code="description" label="描述">
-    <forms.text v-bind="{ ...slotProps, form: former.form }" />
-  </layouts.group>
+  <layouts.group code="name" label="名称"><forms.string /></layouts.group>
+  <layouts.group code="description" label="描述"><forms.text /></layouts.group>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { forms, layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
-
-const props = defineProps<{
-  former: Former<Record<string, any>>
-  project_id: string
-}>()
 </script>

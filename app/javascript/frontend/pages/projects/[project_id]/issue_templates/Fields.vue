@@ -1,25 +1,25 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group v-slot="slotProps" code="name" label="模版名称">
-    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  <layouts.group code="name" label="模版名称">
+    <forms.string />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="lookup_by_build_form" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
-    <forms.checkboxes v-bind="{ ...slotProps, form: former.form , collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
+  <layouts.group code="lookup_by_build_form" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
+    <forms.checkboxes v-bind="{ collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="title_suggestion" label="预设标题">
-    <forms.string v-bind="{ ...slotProps, form: former.form }" />
+  <layouts.group code="title_suggestion" label="预设标题">
+    <forms.string />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="default_category_id" label="预设分类">
-    <forms.select v-bind="{ ...slotProps, form: former.form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+  <layouts.group code="default_category_id" label="预设分类">
+    <forms.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="default_priority" label="预设优先级">
-    <forms.select v-bind="{ ...slotProps, form: former.form, collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+  <layouts.group code="default_priority" label="预设优先级">
+    <forms.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="content_suggestion" label="预设内容">
-    <forms.markdown v-bind="{ ...slotProps, form: former.form }" />
+  <layouts.group code="content_suggestion" label="预设内容">
+    <forms.markdown />
   </layouts.group>
-  <layouts.group v-slot="slotProps" code="inputs" label="内容">
+  <layouts.group code="inputs" label="内容">
     <div class="card overflow-auto">
       <table class="table mb-0">
         <thead>
@@ -31,8 +31,8 @@
         </thead>
         <tbody>
           <tr v-for="(input, index) in former.form.inputs_attributes" :key="input.id">
-            <td><forms.string v-bind="{ ...slotProps, form: input, code: 'label' }" /></td>
-            <td><forms.number v-bind="{ ...slotProps, form: input, code: 'order_index' }" /></td>
+            <td><forms.string v-model="input['label']" /></td>
+            <td><forms.number v-model="input['order_index']" /></td>
             <td>
               <a class="btn btn-danger" @click="onRemoveInput(index)">删除</a>
             </td>

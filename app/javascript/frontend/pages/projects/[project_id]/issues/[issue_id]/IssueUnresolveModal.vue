@@ -6,9 +6,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
       <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
-        <div class="modal-body">
-          <IssueCommentForm v-bind="{ former }" />
-        </div>
+        <div class="modal-body"><IssueCommentForm /></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <layouts.submit>提交</layouts.submit>

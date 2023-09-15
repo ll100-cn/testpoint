@@ -3,19 +3,19 @@
     <h2>项目迁移</h2>
   </div>
 
-  <FormHorizontal :validations="validations">
-    <FormErrorAlert :validations="validations" />
+  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <FormErrorAlert />
 
-    <layouts.group v-slot="slotProps" :validation="validations.disconnect('project_id')" label="项目">
-      <forms.select v-bind="{ ...slotProps, form, collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
+    <layouts.group code="project_id" label="项目">
+      <forms.select v-bind="{ collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
     </layouts.group>
 
-    <layouts.group v-slot="slotProps" :validation="validations.disconnect('category_id')" label="分类">
-      <forms.select v-bind="{ ...slotProps, form, collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+    <layouts.group code="category_id" label="分类">
+      <forms.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
     </layouts.group>
 
     <template #actions>
-      <SubmitButton submit_text="迁移" :func="issueEdit" />
+      <layouts.submit>迁移</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
     </template>
   </FormHorizontal>
@@ -25,13 +25,13 @@
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 
-import { Validations, forms, layouts } from "@/components/simple_form"
+import { forms, layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
 import _ from "lodash"
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import SubmitButton from "@/components/SubmitButton.vue"
 import FormHorizontal from '@/components/FormHorizontal.vue'
+import Former from '@/components/simple_form/Former'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -45,11 +45,19 @@ const issue = ref(await new requests.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.issue_id = issue_id
 }).perform())
 
-const validations = ref(new Validations())
-const form = ref({
+const former = Former.build({
   project_id: issue.value.project_id,
   category_id: undefined
 })
+
+former.perform = async function() {
+  const issue = await new requests.IssueMigrate().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+    req.interpolations.issue_id = issue_id
+  }).perform({ targert_project_id: former.form.project_id, category_id: former.form.category_id })
+
+  router.push({ path: `/projects/${issue.project_id}/issues/${issue_id}` })
+}
 
 const projects = ref(await new requests.ProjectReq.Page().setup(proxy).perform()).value.list
 
@@ -58,35 +66,13 @@ const project_collection = computed(() => {
 })
 
 const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = form.value.project_id
+  req.interpolations.project_id = former.form.project_id
 }).perform())
 
 async function getCategories() {
   categories.value = await new requests.CategoryReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = form.value.project_id
+    req.interpolations.project_id = former.form.project_id
   }).perform()
-  form.value.category_id = undefined
+  former.form.category_id = undefined
 }
-
-async function issueEdit() {
-  validations.value.clear()
-
-  try {
-    const issue = await new requests.IssueMigrate().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-      req.interpolations.issue_id = issue_id
-    }).perform({ targert_project_id: form.value.project_id, category_id: form.value.category_id })
-
-    if (issue) {
-      router.push({ path: `/projects/${issue.project_id}/issues/${issue_id}` })
-    }
-  } catch (error) {
-    if (validations.value.handleError(error)) {
-      return
-    }
-
-    throw error
-  }
-}
-
 </script>

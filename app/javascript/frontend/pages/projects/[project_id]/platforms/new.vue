@@ -4,7 +4,7 @@
   </div>
 
   <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields :members="members" :project_id="project_id" v-bind="{ former }" />
+    <Fields :members="members" :project_id="project_id" />
 
     <template #actions>
       <layouts.submit>新增平台</layouts.submit>
@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
+import FormHorizontal from '@/components/FormHorizontal.vue'
+import { layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Validations, layouts } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
-import FormHorizontal from '@/components/FormHorizontal.vue'
-import Former from '@/components/simple_form/Former'
 import Fields from './Fields.vue'
 
 const route = useRoute()

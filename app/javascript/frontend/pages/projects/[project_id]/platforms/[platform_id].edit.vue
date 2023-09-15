@@ -4,7 +4,7 @@
   </div>
 
   <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields :members="members" :project_id="project_id" v-bind="{ former }" />
+    <Fields :members="members" :project_id="project_id" />
 
     <template #actions>
       <layouts.submit>修改平台</layouts.submit>

@@ -28,7 +28,7 @@
 
       <div id="newComment" class="collapse mt-3">
         <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
-          <IssueCommentForm v-bind="{ former }" />
+          <IssueCommentForm />
 
           <template #actions>
             <layouts.submit>新增评论</layouts.submit>
@@ -45,18 +45,17 @@
 <script setup lang="ts">
 import { getCurrentInstance, nextTick, ref } from "vue"
 
-import { Comment, Issue, IssueInfo, IssueRelationship } from "@/models"
+import FormVertical from "@/components/FormVertical.vue"
+import { layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
+import { Comment, Issue, IssueInfo, IssueRelationship } from "@/models"
 import { Collapse } from "bootstrap"
 import _ from "lodash"
-import SubmitButton from "@/components/SubmitButton.vue"
-import { Validations, layouts } from "@/components/simple_form"
 import IssueCommentForm from "./IssueCommentForm.vue"
 import IssueInfoCreateModal from "./IssueInfoCreateModal.vue"
 import IssueRelationshipModal from "./IssueRelationshipModal.vue"
 import IssueUnresolveModal from "./IssueUnresolveModal.vue"
-import FormVertical from "@/components/FormVertical.vue"
-import Former from "@/components/simple_form/Former"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

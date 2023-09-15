@@ -1,17 +1,24 @@
 <template>
-  <input v-model="form[code]" type="text" class="form-control" :name="name ?? code" :disabled="disabled" :class="{'is-invalid': validation?.isInvaild() }">
+  <input v-model="model_value" class="form-control" :name="name" :disabled="disabled" :class="{'is-invalid': validation?.isInvaild() }">
 </template>
 
 <script setup lang="ts">
-import { Validation } from '@/models';
-import { PropType } from 'vue';
+import { Validation } from '@/models'
+import * as helper from "./helper"
 
-const props = defineProps({
-  label: { type: String, required: false },
-  code: { type: String, required: true },
-  form: { type: Object, required: true },
-  name: { type: String, required: false },
-  validation: { type: Object as PropType<Validation>, required: false },
-  disabled: { type: Boolean, required: false, default: false },
+export interface Props {
+  validation?: Validation
+
+  name?: string
+  disabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false
 })
+
+const define_model_value = defineModel<any>()
+const model_value = helper.modelValue(define_model_value)
+const validation = helper.validation(props)
+
 </script>

@@ -3,7 +3,7 @@ import Validations from "./Validations"
 
 export default class Former<T> {
   validations = reactive(new Validations())
-  submiting = false
+  submitting = false
   perform?: (...args: any[]) => Promise<void>
   form: T
 
@@ -15,7 +15,7 @@ export default class Former<T> {
 
   async submit(...args: any[]) {
     this.validations.clear()
-    this.submiting = true
+    this.submitting = true
 
     try {
       await this.perform?.(...args)
@@ -27,7 +27,7 @@ export default class Former<T> {
 
       throw e
     } finally {
-      this.submiting = false
+      this.submitting = false
     }
   }
 

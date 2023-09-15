@@ -1,18 +1,18 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group v-slot="slotProps" code="issue_template_id" label="选择问题模版">
-    <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form, collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
+  <layouts.group code="issue_template_id" label="选择问题模版">
+    <forms.bootstrap_select v-bind="{ collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
   </layouts.group>
   <template v-if="former.form['issue_template_id']">
-    <layouts.group v-slot="slotProps" code="title" label="标题">
-      <forms.string v-bind="{ ...slotProps, form: former.form.issue_attributes }" />
+    <layouts.group code="title" label="标题">
+      <forms.string v-bind="{ form: former.form.issue_attributes }" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" code="creator_id" label="创建人">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: former.form.issue_attributes, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
+    <layouts.group code="creator_id" label="创建人">
+      <forms.bootstrap_select v-bind="{ form: former.form.issue_attributes, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
     </layouts.group>
-    <layouts.group v-slot="slotProps" code="content" label="内容">
-      <forms.markdown v-bind="{ ...slotProps, form: former.form.issue_attributes }" />
+    <layouts.group code="content" label="内容">
+      <forms.markdown v-bind="{ form: former.form.issue_attributes }" />
     </layouts.group>
     <layouts.group>
       <AttachmentUploader @change="emits('attachmentChange', $event)" />
@@ -21,8 +21,8 @@
 
   <template v-if="current_issue_template">
     <hr>
-    <layouts.group v-for="(input, index) in current_issue_template.inputs" :key="index" v-slot="slotProps" :label="input.label">
-      <forms.string v-bind="{ ...slotProps, code: 'value', form: former.form.info_attributes.inputs_attributes[index] }" />
+    <layouts.group v-for="(input, index) in current_issue_template.inputs" :code="`info_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
+      <forms.string />
     </layouts.group>
   </template>
 </template>

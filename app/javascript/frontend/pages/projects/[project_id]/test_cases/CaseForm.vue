@@ -1,32 +1,19 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group v-slot="slotProps" code="role_name" label="角色">
-    <component :is="forms.string" v-bind="{ ...slotProps, form: former.form }" />
-  </layouts.group>
-
-  <layouts.group v-slot="slotProps" code="scene_name" label="场景">
-    <component :is="forms.string" v-bind="{ ...slotProps, form: former.form }" />
-  </layouts.group>
-
-  <layouts.group v-slot="slotProps" code="group_name" label="分组">
-    <component :is="forms.string" v-bind="{ ...slotProps, form: former.form }" />
-  </layouts.group>
-
-  <layouts.group v-slot="slotProps" code="title" label="标题">
-    <component :is="forms.string" v-bind="{ ...slotProps, form: former.form }" />
-  </layouts.group>
-
-  <layouts.group v-slot="slotProps" code="content" label="内容">
+  <layouts.group code="role_name" label="角色"><forms.string /></layouts.group>
+  <layouts.group code="scene_name" label="场景"><forms.string /></layouts.group>
+  <layouts.group code="group_name" label="分组"><forms.string /></layouts.group>
+  <layouts.group code="title" label="标题"><forms.string /></layouts.group>
+  <layouts.group code="content" label="内容">
     <textarea id="test_case_content" v-model="former.form.content" class="form-control text optional markdown-field" name="content" />
   </layouts.group>
-
-  <layouts.group v-slot="slotProps" code="platform_ids" label="平台">
-    <component :is="forms.checkboxes" v-bind="{ ...slotProps, form: former.form, name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+  <layouts.group code="platform_ids" label="平台">
+    <forms.checkboxes v-bind="{ name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
   </layouts.group>
 
-  <layouts.group v-slot="slotProps" code="label_ids" label="标签">
-    <component :is="forms.checkboxes" v-bind="{ ...slotProps, form: former.form, name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+  <layouts.group code="label_ids" label="标签">
+    <forms.checkboxes v-bind="{ name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
   </layouts.group>
 </template>
 
