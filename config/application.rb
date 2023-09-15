@@ -15,6 +15,8 @@ module Testpoint
     config.load_defaults 7.0
 
     config.paths.add "config/routes.rb", with: [ "config/routes.rb", "config/routes" ], glob: "**/*.rb"
+    config.railties_order = [ActiveStorage::Engine, :main_app, :all]
+
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
