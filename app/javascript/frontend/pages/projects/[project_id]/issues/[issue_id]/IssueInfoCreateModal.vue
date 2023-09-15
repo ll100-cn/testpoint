@@ -5,37 +5,34 @@
         <h5 class="mb-0">选择问题模版</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
-      <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
           <FormErrorAlert />
           <layouts.group code="template_id" label="模版">
-            <forms.select v-bind="{ collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
+            <controls.select v-bind="{ collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
           </layouts.group>
           <layouts.group code="remark" label="备注">
-            <forms.string />
+            <controls.string />
           </layouts.group>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <layouts.submit>新增模版化表单</layouts.submit>
         </div>
-      </FormHorizontal>
+      </layouts.form_horizontal>
     </template>
   </CommonModal>
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from "vue"
-
-import { forms, layouts } from "@/components/simple_form"
+import CommonModal from "@/components/CommonModal.vue"
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import { controls, layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
 import { Issue, IssueInfo } from "@/models"
 import _ from "lodash"
-
-import CommonModal from "@/components/CommonModal.vue"
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import FormHorizontal from "@/components/FormHorizontal.vue"
-import Former from "@/components/simple_form/Former"
+import { getCurrentInstance, ref } from "vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

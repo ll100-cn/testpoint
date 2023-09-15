@@ -3,18 +3,17 @@
     <h2>编辑项目</h2>
   </div>
 
-  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <Fields />
 
     <template #actions>
       <layouts.submit>编辑项目</layouts.submit>
       <router-link :to="`/projects`" class="btn btn-secondary">返回</router-link>
     </template>
-  </FormHorizontal>
+  </layouts.form_horizontal>
 </template>
 
 <script setup lang="ts">
-import FormHorizontal from '@/components/FormHorizontal.vue'
 import { layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'

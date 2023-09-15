@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title">新增案例</h5>
         </div>
-        <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+        <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
             <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
           </div>
@@ -14,14 +14,13 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <layouts.submit>保存</layouts.submit>
           </div>
-        </FormHorizontal>
+        </layouts.form_horizontal>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import FormHorizontal from '@/components/FormHorizontal.vue'
 import { layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'

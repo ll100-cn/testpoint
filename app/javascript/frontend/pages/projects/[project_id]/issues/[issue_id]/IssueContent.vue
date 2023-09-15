@@ -19,14 +19,14 @@
 
           <div class="no-margin-bottom">
             <template v-if="editing">
-              <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+              <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
                 <IssueCommentForm :attachments="issue_attachments" @attachment-change="attachmentChange" />
 
                 <template #actions>
                   <button class="btn btn-secondary" type="button" @click.prevent="finishedEditing">取消</button>
                   <layouts.submit class="ms-auto">提交修改</layouts.submit>
                 </template>
-              </FormVertical>
+              </layouts.form_vertical>
             </template>
             <div v-else>
               <PageContent :content="issue.content" />
@@ -40,18 +40,15 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from "vue"
-
+import AttachmentBox from "@/components/AttachmentBox.vue"
+import PageContent from "@/components/PageContent.vue"
+import { layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Attachment, Issue, User } from "@/models"
 import _ from "lodash"
-
-import AttachmentBox from "@/components/AttachmentBox.vue"
-import FormVertical from "@/components/FormVertical.vue"
-import PageContent from "@/components/PageContent.vue"
-import { layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
+import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from "./IssueCommentForm.vue"
 
 const { proxy } = getCurrentInstance()

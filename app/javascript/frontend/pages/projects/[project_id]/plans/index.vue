@@ -11,7 +11,7 @@
   <div class="page-filter x-actions">
     <div class="d-flex align-items-center">
       <label class="text-nowrap me-2">成员</label>
-      <forms.select
+      <controls.select
         class="bg-light"
         v-bind="{
           form: { creator_id: current_creator_id },
@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import PaginationBar from '@/components/PaginationBar.vue'
-import { forms } from "@/components/simple_form"
+import { controls } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
 import * as requests from '@/lib/requests'
 import * as utils from '@/lib/utils'

@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header bg-white">修改计划</div>
 
-    <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
       <div class="card-body">
         <Fields :platforms="platforms" />
       </div>
@@ -18,21 +18,18 @@
           </div>
         </div>
       </div>
-  </FormHorizontal>
+    </layouts.form_horizontal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-
-import { Validations, layouts } from '@/components/simple_form';
-import * as requests from '@/lib/requests';
-import _ from 'lodash';
-import Fields from './Fields.vue';
-import SubmitButton from '@/components/SubmitButton.vue';
-import FormHorizontal from '@/components/FormHorizontal.vue'
+import { Validations, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
+import _ from 'lodash'
+import { getCurrentInstance, reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import Fields from './Fields.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

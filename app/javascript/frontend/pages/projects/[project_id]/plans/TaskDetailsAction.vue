@@ -17,7 +17,7 @@
       <button v-if="!is_bind_issue" class="btn btn-primary" @click="is_bind_issue = !is_bind_issue">关联问题</button>
       <template v-else>
         <div class="d-flex x-actions">
-          <forms.number v-bind="{ code: 'id', form: issue_former.form }" />
+          <controls.number v-bind="{ code: 'id', form: issue_former.form }" />
           <SubmitButton :func="bindIssue" submit_text="关联" />
           <button class="btn btn-secondary text-nowrap" @click="is_bind_issue = !is_bind_issue">取消</button>
         </div>
@@ -26,29 +26,26 @@
   </div>
   <div v-else>
     <h5>补充工单详情</h5>
-    <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+    <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
       <IssueForm :issue_templates="issue_templates" :members="members" :categories="categories" :plan_id="plan.id" :project_id="project_id" />
 
       <template #actions>
         <layouts.submit>提交</layouts.submit>
         <SubmitButton submit_text="取消" type="secondary" @click="emit('update:is_task_pass', false)" />
       </template>
-    </FormVertical>
+    </layouts.form_vertical>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref } from 'vue'
-
-import { Validations, forms, layouts } from "@/components/simple_form"
+import IssueForm from "@/components/IssueForm.vue"
+import SubmitButton from "@/components/SubmitButton.vue"
+import { Validations, controls, layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import { IssueTemplate, PhaseInfo, Plan, TaskUpshot, TaskUpshotInfo } from '@/models'
 import _ from 'lodash'
-
-import FormVertical from '@/components/FormVertical.vue'
-import IssueForm from "@/components/IssueForm.vue"
-import SubmitButton from "@/components/SubmitButton.vue"
-import Former from '@/components/simple_form/Former'
+import { getCurrentInstance, reactive, ref } from 'vue'
 
 const { proxy } = getCurrentInstance()
 
@@ -169,9 +166,9 @@ async function updateStateOverride(state_override: "pass" | "pending" | "failure
 async function bindIssue() {
   const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
-    req.interpolations.issue_id = issue_form.value.id
+    req.interpolations.issue_id = issue_former.form.id
   }).perform({ task_id: props.task_upshot_info.task.id })
-  issue_form.value.id = null
+  issue_former.form.id = null
 
   if (issue) {
     emit('updated', props.task_upshot_info)

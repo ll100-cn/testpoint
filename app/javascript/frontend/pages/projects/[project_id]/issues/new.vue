@@ -3,7 +3,7 @@
     <h2>新增问题</h2>
   </div>
 
-  <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+  <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
     <Fields v-bind="{ former }" :members="members" :issue_templates="issue_templates" :current_issue_template="current_issue_template" @attachment-change="onAttachmentChange" />
     <template v-if="current_issue_template">
       <hr>
@@ -12,11 +12,10 @@
         <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/issues`">取消</router-link>
       </div>
     </template>
-  </FormVertical>
+  </layouts.form_vertical>
 </template>
 
 <script setup lang="ts">
-import FormVertical from "@/components/FormVertical.vue"
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'

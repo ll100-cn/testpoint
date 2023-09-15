@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title">批量编辑</h5>
         </div>
-        <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+        <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
             <FormErrorAlert />
 
@@ -15,7 +15,7 @@
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default><forms.string /></template>
+              <template #default><controls.string /></template>
             </layouts.group>
 
             <layouts.group code="scene_name" label="场景" :disableds="form_disabled_mapping">
@@ -24,7 +24,7 @@
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default><forms.string /></template>
+              <template #default><controls.string /></template>
             </layouts.group>
 
             <layouts.group code="group_name" label="分组" :disableds="form_disabled_mapping">
@@ -33,7 +33,7 @@
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default><forms.string /></template>
+              <template #default><controls.string /></template>
             </layouts.group>
 
             <layouts.group code="title" label="标题" :disableds="form_disabled_mapping">
@@ -42,7 +42,7 @@
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default><forms.string /></template>
+              <template #default><controls.string /></template>
             </layouts.group>
 
             <layouts.group code="content" label="内容" :disableds="form_disabled_mapping">
@@ -51,7 +51,7 @@
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default><forms.string /></template>
+              <template #default><controls.string /></template>
             </layouts.group>
 
             <layouts.group code="platform_ids" label="平台" :disableds="form_disabled_mapping">
@@ -60,7 +60,7 @@
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default><forms.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+              <template #default><controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
             </layouts.group>
 
             <layouts.group code="label_ids" label="标签" :disableds="form_disabled_mapping">
@@ -69,7 +69,7 @@
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default><forms.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+              <template #default><controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
             </layouts.group>
           </div>
 
@@ -77,7 +77,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">保存</button>
           </div>
-        </FormHorizontal>
+        </layouts.form_horizontal>
       </div>
     </div>
 
@@ -121,16 +121,14 @@
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/lib/requests';
-import { Modal } from 'bootstrap';
-import _ from 'lodash';
-import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue';
-
-import FormErrorAlert from '@/components/FormErrorAlert.vue';
-import { Validations, forms, layouts } from "@/components/simple_form";
-import FormHorizontal from '@/components/FormHorizontal.vue'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { Modal } from 'bootstrap'
+import _ from 'lodash'
+import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()

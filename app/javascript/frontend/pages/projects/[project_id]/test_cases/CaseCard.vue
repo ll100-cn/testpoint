@@ -1,30 +1,30 @@
 <template>
   <div class="card page-card">
     <div class="card-header bg-white d-flex">
-      <FormInline v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit" :default_wrapper_options="{ size: 'small' }">
         <layouts.group code="platform_id" label="平台">
-          <forms.dropdown #default="{ Component }">
+          <controls.dropdown #default="{ Component }">
             <component v-for="platform in _platforms" :is="Component" :value="platform.id">
               <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
               {{ platform.name }}
             </component>
             <div class="dropdown-divider" />
             <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
-          </forms.dropdown>
+          </controls.dropdown>
         </layouts.group>
 
         <layouts.group code="label_id" label="标签">
-          <forms.dropdown #default="{ Component }">
+          <controls.dropdown #default="{ Component }">
             <component v-for="label in _labels" :is="Component" :value="label.id">{{ label.name }}</component>
             <div class="dropdown-divider" />
             <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
-          </forms.dropdown>
+          </controls.dropdown>
         </layouts.group>
 
         <layouts.group code="group_name_search" label="分组">
-          <forms.string />
+          <controls.string />
         </layouts.group>
-      </FormInline>
+      </layouts.form_inline>
 
       <div class="d-flex ms-auto x-spacer-3 align-items-center">
         <a class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
@@ -45,8 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import FormInline from '@/components/FormInline.vue'
-import { forms, layouts } from '@/components/simple_form'
+import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import * as utils from '@/lib/utils'
@@ -58,7 +57,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import CardNew from './CardNew.vue'
-import { number } from '@/components/simple_form/forms'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

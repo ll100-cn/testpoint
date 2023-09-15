@@ -15,7 +15,7 @@
         <IssueDetailEdit v-bind="{ former }" code="state" title="状态">
           <template #editable>
             <layouts.group code="state">
-              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
+              <controls.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
             </layouts.group>
           </template>
 
@@ -25,7 +25,7 @@
         <IssueDetailEdit v-bind="{ former }" code="priority" title="优先级">
           <template #editable>
             <layouts.group code="priority">
-              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
+              <controls.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
             </layouts.group>
           </template>
 
@@ -35,7 +35,7 @@
         <IssueDetailEdit v-bind="{ former }" code="creator_id" title="创建人">
           <template #editable>
             <layouts.group code="creator_id">
-              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.select v-bind="{ collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -45,7 +45,7 @@
         <IssueDetailEdit v-bind="{ former }" code="assignee_id" title="受理人">
           <template #editable>
             <layouts.group code="assignee_id">
-              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.select v-bind="{ collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -55,7 +55,7 @@
         <IssueDetailEdit v-bind="{ former }" code="category_id" title="分类">
           <template #editable>
             <layouts.group code="category_id">
-              <forms.bootstrap_select v-bind="{ live_search: true, custom_class: 'form-control-sm', collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.bootstrap_select v-bind="{ live_search: true, collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -65,7 +65,7 @@
         <IssueDetailEdit v-bind="{ former }" code="milestone_id" title="里程碑">
           <template #editable>
             <layouts.group code="milestone_id">
-              <forms.select v-bind="{ custom_class: 'form-select-sm', collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
+              <controls.select v-bind="{ collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
             </layouts.group>
           </template>
 
@@ -96,7 +96,7 @@ import { computed, getCurrentInstance, ref } from "vue"
 import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import { Validations, forms, layouts } from "@/components/simple_form"
+import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
 import * as requests from '@/lib/requests'

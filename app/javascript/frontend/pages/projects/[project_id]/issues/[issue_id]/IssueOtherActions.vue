@@ -27,13 +27,13 @@
       </div>
 
       <div id="newComment" class="collapse mt-3">
-        <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+        <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
           <IssueCommentForm />
 
           <template #actions>
             <layouts.submit>新增评论</layouts.submit>
           </template>
-        </FormVertical>
+        </layouts.form_vertical>
       </div>
     </div>
     <IssueRelationshipModal ref="issue_relationship_modal" :issue="issue" @add-relationship="emits('addRelationship', $event)" />
@@ -43,15 +43,13 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, nextTick, ref } from "vue"
-
-import FormVertical from "@/components/FormVertical.vue"
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
 import { Comment, Issue, IssueInfo, IssueRelationship } from "@/models"
 import { Collapse } from "bootstrap"
 import _ from "lodash"
+import { getCurrentInstance, nextTick, ref } from "vue"
 import IssueCommentForm from "./IssueCommentForm.vue"
 import IssueInfoCreateModal from "./IssueInfoCreateModal.vue"
 import IssueRelationshipModal from "./IssueRelationshipModal.vue"

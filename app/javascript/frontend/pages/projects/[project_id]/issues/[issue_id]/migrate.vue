@@ -3,35 +3,32 @@
     <h2>项目迁移</h2>
   </div>
 
-  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <FormErrorAlert />
 
     <layouts.group code="project_id" label="项目">
-      <forms.select v-bind="{ collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
+      <controls.select v-bind="{ collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
     </layouts.group>
 
     <layouts.group code="category_id" label="分类">
-      <forms.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+      <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
     </layouts.group>
 
     <template #actions>
       <layouts.submit>迁移</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
     </template>
-  </FormHorizontal>
+  </layouts.form_horizontal>
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref } from 'vue'
-import { useRoute, useRouter } from "vue-router"
-
-import { forms, layouts } from "@/components/simple_form"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { controls, layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import _ from "lodash"
-
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import FormHorizontal from '@/components/FormHorizontal.vue'
-import Former from '@/components/simple_form/Former'
+import { computed, getCurrentInstance, ref } from 'vue'
+import { useRoute, useRouter } from "vue-router"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

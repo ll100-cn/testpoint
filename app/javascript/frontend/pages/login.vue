@@ -4,12 +4,12 @@
       <div class="card">
         <div class="card-header">用户登陆</div>
 
-        <FormVertical v-bind="{ former: code_former }" v-if="!login_code" @submit.prevent="code_former.submit">
+        <layouts.form_vertical v-bind="{ former: code_former }" v-if="!login_code" @submit.prevent="code_former.submit">
           <div class="card-body">
             <FormErrorAlert />
             <div class="row gy-3">
               <layouts.group code="email" label="邮箱">
-                <forms.string />
+                <controls.string />
               </layouts.group>
             </div>
           </div>
@@ -17,9 +17,9 @@
           <div class="card-footer x-spacer-2">
             <layouts.submit>确定</layouts.submit>
           </div>
-        </FormVertical>
+        </layouts.form_vertical>
 
-        <FormVertical v-bind="{ former }" v-else @submit.prevent="former.submit">
+        <layouts.form_vertical v-bind="{ former }" v-else @submit.prevent="former.submit">
           <div class="card-body">
             <FormErrorAlert />
             <div class="row gy-3">
@@ -28,7 +28,7 @@
               </layouts.group>
 
               <layouts.group code="login_code" label="验证码">
-                <forms.string />
+                <controls.string />
               </layouts.group>
             </div>
           </div>
@@ -37,7 +37,7 @@
             <layouts.submit>登陆</layouts.submit>
             <input type="button" value="取消" class="btn btn-secondary" @click="login_code = null">
           </div>
-        </FormVertical>
+        </layouts.form_vertical>
       </div>
     </div>
   </div>
@@ -53,8 +53,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import FormVertical from '@/components/FormVertical.vue'
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import { LoginCode } from "@/models"

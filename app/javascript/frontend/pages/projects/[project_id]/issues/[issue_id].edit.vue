@@ -3,18 +3,18 @@
     <h2>修改问题</h2>
   </div>
 
-  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <FormErrorAlert />
 
-    <layouts.group code="title" label="标题"><forms.string /></layouts.group>
+    <layouts.group code="title" label="标题"><controls.string /></layouts.group>
     <layouts.group code="category_id" label="分类">
-      <forms.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
+      <controls.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
     </layouts.group>
     <layouts.group code="creator_id" label="创建人">
-      <forms.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
+      <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', live_search: true }" include_blank />
     </layouts.group>
     <layouts.group code="assignee_id" label="受理人">
-      <forms.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+      <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id' }" include_blank />
     </layouts.group>
 
     <template #actions>
@@ -22,13 +22,12 @@
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
       <router-link class="btn btn-warning" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
     </template>
-  </FormHorizontal>
+  </layouts.form_horizontal>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import FormHorizontal from '@/components/FormHorizontal.vue'
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import _ from "lodash"

@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 import { PropType } from 'vue'
-import * as helper from "./helper"
+import * as helper from "../helper"
 
 const props = defineProps({
   validation: { type: Object as PropType<Validation>, required: false },

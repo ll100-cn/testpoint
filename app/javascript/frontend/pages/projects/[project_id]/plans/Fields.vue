@@ -1,19 +1,19 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group code="title" label="标题"><forms.string /></layouts.group>
+  <layouts.group code="title" label="标题"><controls.string /></layouts.group>
   <layouts.group code="platform_id" label="平台">
-    <forms.select v-bind="{ collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
+    <controls.select v-bind="{ collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
   </layouts.group>
 
   <layouts.group v-if="test_case_stats && test_case_stats.length > 0" code="role_names" label="角色">
-    <forms.checkboxes v-bind="{ collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
+    <controls.checkboxes v-bind="{ collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
   </layouts.group>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import { Platform, TestCaseStat } from "@/models"
 import _ from "lodash"
 import { computed } from 'vue'

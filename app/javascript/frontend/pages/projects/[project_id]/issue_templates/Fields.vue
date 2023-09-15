@@ -2,22 +2,22 @@
   <FormErrorAlert />
 
   <layouts.group code="name" label="模版名称">
-    <forms.string />
+    <controls.string />
   </layouts.group>
   <layouts.group code="lookup_by_build_form" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
-    <forms.checkboxes v-bind="{ collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
+    <controls.checkboxes v-bind="{ collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
   </layouts.group>
   <layouts.group code="title_suggestion" label="预设标题">
-    <forms.string />
+    <controls.string />
   </layouts.group>
   <layouts.group code="default_category_id" label="预设分类">
-    <forms.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+    <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
   </layouts.group>
   <layouts.group code="default_priority" label="预设优先级">
-    <forms.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+    <controls.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
   </layouts.group>
   <layouts.group code="content_suggestion" label="预设内容">
-    <forms.markdown />
+    <controls.markdown />
   </layouts.group>
   <layouts.group code="inputs" label="内容">
     <div class="card overflow-auto">
@@ -31,8 +31,8 @@
         </thead>
         <tbody>
           <tr v-for="(input, index) in former.form.inputs_attributes" :key="input.id">
-            <td><forms.string v-model="input['label']" /></td>
-            <td><forms.number v-model="input['order_index']" /></td>
+            <td><controls.string v-model="input['label']" /></td>
+            <td><controls.number v-model="input['order_index']" /></td>
             <td>
               <a class="btn btn-danger" @click="onRemoveInput(index)">删除</a>
             </td>
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 import * as requests from '@/lib/requests'

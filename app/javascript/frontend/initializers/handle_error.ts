@@ -15,11 +15,11 @@ function handleError(err, ctx: AppContext) {
 }
 
 export default function(ctx: AppContext) {
-  ctx.router.onError((error) => {
-    handleError(error, ctx)
-  })
+  // ctx.router.onError((error) => {
+  //   handleError(error, ctx)
+  // })
 
-  ctx.app.config.errorHandler = (error, vm, info) => {
-    handleError(error, ctx)
-  }
+  // ctx.app.config.errorHandler = (error, vm, info) => {
+  //   handleError(error, ctx)
+  // }
 }

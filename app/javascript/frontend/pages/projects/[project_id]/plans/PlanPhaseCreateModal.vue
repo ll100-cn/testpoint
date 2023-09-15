@@ -6,12 +6,12 @@
           <h5 class="modal-title">{{ plan.title }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
         </div>
-        <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+        <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
             <FormErrorAlert />
 
-            <layouts.group code="title" label="标题"><forms.string /></layouts.group>
-            <layouts.group code="release_revision" label="版本构建号" hint="*选填，仅用于备注"><forms.string /></layouts.group>
+            <layouts.group code="title" label="标题"><controls.string /></layouts.group>
+            <layouts.group code="release_revision" label="版本构建号" hint="*选填，仅用于备注"><controls.string /></layouts.group>
 
             <hr>
             <h5>待测用例</h5>
@@ -23,23 +23,21 @@
             <layouts.submit>确定进入下一轮</layouts.submit>
             <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close" @click.prevent>返回</button>
           </div>
-        </FormVertical>
+        </layouts.form_vertical>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { forms, layouts } from "@/components/simple_form"
-import _ from 'lodash'
-import { PropType, computed, getCurrentInstance, nextTick, ref } from 'vue'
-
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import FormVertical from "@/components/FormVertical.vue"
+import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
 import { Phase, PhaseInfo, Plan, TaskUpshotInfo } from '@/models'
 import { Modal } from 'bootstrap'
+import _ from 'lodash'
+import { PropType, computed, getCurrentInstance, nextTick, ref } from 'vue'
 import { useRoute } from "vue-router"
 
 const { proxy } = getCurrentInstance()

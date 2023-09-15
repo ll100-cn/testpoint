@@ -1,5 +1,5 @@
 <template>
-  <select v-model="model_value" class="form-select" :class="[{'is-invalid': validation?.isInvaild()}, custom_class]" :disabled="disabled" @change="emit('change', $event)">
+  <select v-model="model_value" class="form-select" v-bind="control_attrs" :disabled="disabled" @change="emit('change', $event)">
     <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
     <template v-if="(collection instanceof Array)">
       <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
@@ -18,10 +18,11 @@
 
 <script setup lang="ts">
 import { Validation } from "@/models"
-import * as helper from "./helper"
+import * as helper from "../helper"
+import { ControlProps } from "../helper"
+import { computed } from "vue"
 
-const props = withDefaults(defineProps<{
-  modelValue?: any
+interface Props extends ControlProps {
   validation?: Validation
 
   name?: string
@@ -31,8 +32,9 @@ const props = withDefaults(defineProps<{
   valueMethod: string
   include_blank?: string | boolean
   required?: boolean
-  custom_class?: string
-}>(), {
+}
+
+const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   include_blank: false,
   required: false,
@@ -45,4 +47,23 @@ const emit = defineEmits<{
 const define_model_value = defineModel<any>()
 const model_value = helper.modelValue(define_model_value)
 const validation = helper.validation(props)
+
+const options = helper.buildControlOptions(props)
+const control_attrs = computed(() => {
+  const attrs = { class: [] } as any
+
+  if (options.value.size == 'small') {
+    attrs.class.push('form-select-sm')
+  }
+
+  if (options.value.size == 'large') {
+    attrs.class.push('form-select-lg')
+  }
+
+  if (validation.value.isInvaild()) {
+    attrs.class.push("is-invalid")
+  }
+
+  return attrs
+})
 </script>

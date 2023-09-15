@@ -7,8 +7,8 @@ import { Validation } from '@/models'
 import 'codemirror/lib/codemirror.css'
 import EasyMDE from 'easymde'
 import 'easymde/src/css/easymde.css'
-import { PropType, Ref, inject, onMounted, ref } from 'vue'
-import * as helper from "./helper"
+import { PropType, onMounted, ref } from 'vue'
+import * as helper from "../helper"
 
 const props = defineProps({
   validation: { type: Object as PropType<Validation>, required: false },

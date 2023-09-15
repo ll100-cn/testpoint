@@ -1,13 +1,13 @@
 <template>
   <FormErrorAlert />
   <layouts.group code="content" label="内容">
-    <forms.markdown />
+    <controls.markdown />
   </layouts.group>
   <AttachmentUploader @change="emit('attachmentChange', $event)" />
 </template>
 
 <script setup lang="ts">
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import { Attachment } from "@/models"
 
 import AttachmentUploader from "@/components/AttachmentUploader.vue"
