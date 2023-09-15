@@ -78,11 +78,11 @@ export function createOrEditTimeInWords(created_at: Date, last_edited_at: Date) 
     if (dayjs(last_edited_at) < dayjs().subtract(10, 'minutes')) {
       return "修改于 " + dayjs(last_edited_at, DATE_LONG_FORMAT)
     } else {
-      return dayjs(last_edited_at).fromNow() + "前修改"
+      return dayjs(last_edited_at).fromNow() + "修改"
     }
   } else if (dayjs(created_at) < dayjs().subtract(10, 'minutes')) {
-    return "添加于 " + dayjs(created_at, DATE_LONG_FORMAT)
+    return "添加于 " + dayjs(created_at, DATE_LONG_FORMAT).fromNow()
   } else {
-    return dayjs(created_at).fromNow() + "前添加"
+    return dayjs(created_at).fromNow() + "添加"
   }
 }
