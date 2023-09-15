@@ -1,18 +1,12 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="名称">
-    <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.horizontal_group>
+  <layouts.group code="name" label="名称">
+    <forms.string />
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { Validations, forms, layouts } from "@/components/simple_form"
-
-const props = defineProps<{
-  form: any
-  validations: Validations
-  mode?: "edit" | "new"
-}>()
+import { forms, layouts } from "@/components/simple_form"
 </script>

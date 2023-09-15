@@ -5,6 +5,7 @@ import dayjs from '@/lib/dayjs'
 import qs from "qs"
 import { plainToClassFromExist } from 'class-transformer'
 import { DATE_LONG_FORMAT } from '@/constants'
+import { toValue } from 'vue'
 
 const color_cache = new Map<string, string>()
 
@@ -43,7 +44,8 @@ export function queryToPlain(query) {
 }
 
 export function plainToQuery(plain): any {
-  const querystring = qs.stringify(plain)
+  const data = toValue(plain)
+  const querystring = qs.stringify(data)
   return qs.parse(querystring, { depth: 0, ignoreQueryPrefix: true })
 }
 

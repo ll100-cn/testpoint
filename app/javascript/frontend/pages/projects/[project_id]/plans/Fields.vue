@@ -1,30 +1,24 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
-    <forms.string v-bind="{ ...slotProps, form }" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" :validation="validations.disconnect('platform_id')" label="平台">
-    <forms.select v-bind="{ ...slotProps, form, collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.horizontal_group>
+  <layouts.group code="title" label="标题"><forms.string /></layouts.group>
+  <layouts.group code="platform_id" label="平台">
+    <forms.select v-bind="{ collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
+  </layouts.group>
 
-  <layouts.horizontal_group v-if="test_case_stats && test_case_stats.length > 0" v-slot="slotProps" :validation="validations.disconnect('role_names')" label="角色">
-    <forms.checkboxes v-bind="{ ...slotProps, form, collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.horizontal_group>
+  <layouts.group v-if="test_case_stats && test_case_stats.length > 0" code="role_names" label="角色">
+    <forms.checkboxes v-bind="{ collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Validations, forms, layouts } from "@/components/simple_form"
-
-import _ from "lodash"
-import { Platform, TestCaseStat } from "@/models"
-
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { forms, layouts } from "@/components/simple_form"
+import { Platform, TestCaseStat } from "@/models"
+import _ from "lodash"
+import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{
-  form: object
-  validations: Validations
   platforms: Platform[]
   test_case_stats?: TestCaseStat[]
 }>(), {

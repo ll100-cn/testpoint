@@ -1,9 +1,9 @@
 <template>
   <div class="card page-card">
     <div class="card-header bg-white d-flex">
-      <FormInline :validations="validations" @submit.prevent="changeSearch(search)">
-        <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('platform_id')" label="平台">
-          <forms.dropdown v-bind="{ ...slotProps, form: search }" #default="{ Component }" @change="changeSearch(search)">
+      <FormInline v-bind="{ former }" @submit.prevent="former.submit">
+        <layouts.group code="platform_id" label="平台">
+          <forms.dropdown #default="{ Component }">
             <component v-for="platform in _platforms" :is="Component" :value="platform.id">
               <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
               {{ platform.name }}
@@ -11,19 +11,19 @@
             <div class="dropdown-divider" />
             <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
           </forms.dropdown>
-        </layouts.inline_group>
+        </layouts.group>
 
-        <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('label_id')" label="标签">
-          <forms.dropdown v-bind="{ ...slotProps, form: search }" #default="{ Component }" @change="changeSearch(search)">
+        <layouts.group code="label_id" label="标签">
+          <forms.dropdown #default="{ Component }">
             <component v-for="label in _labels" :is="Component" :value="label.id">{{ label.name }}</component>
             <div class="dropdown-divider" />
             <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
           </forms.dropdown>
-        </layouts.inline_group>
+        </layouts.group>
 
-        <layouts.inline_group v-slot="slotProps" :validation="validations.disconnect('group_name_search')" label="分组">
-          <forms.string v-bind="{ ...slotProps, form: search }" />
-        </layouts.inline_group>
+        <layouts.group code="group_name_search" label="分组">
+          <forms.string />
+        </layouts.group>
       </FormInline>
 
       <div class="d-flex ms-auto x-spacer-3 align-items-center">
@@ -45,19 +45,20 @@
 </template>
 
 <script setup lang="ts">
-import { ChangeFilterFunction, ColumnFilter, Filter } from '../types'
-import CardBody from './CardBody.vue'
-import { useRoute, useRouter } from 'vue-router'
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
-import * as requests from '@/lib/requests'
-import qs from "qs"
-import { plainToClass } from 'class-transformer'
-import _ from 'lodash'
-import { computed, getCurrentInstance, provide, ref } from 'vue'
-import CardNew from './CardNew.vue'
-import * as utils from '@/lib/utils'
-import { Validations, forms, layouts } from '@/components/simple_form'
 import FormInline from '@/components/FormInline.vue'
+import { forms, layouts } from '@/components/simple_form'
+import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
+import * as utils from '@/lib/utils'
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { Type, plainToClass } from 'class-transformer'
+import _ from 'lodash'
+import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ChangeFilterFunction, Filter } from '../types'
+import CardBody from './CardBody.vue'
+import CardNew from './CardNew.vue'
+import { number } from '@/components/simple_form/forms'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -66,24 +67,23 @@ const params = route.params as any
 const query = utils.queryToPlain(route.query)
 
 class Search {
-  group_name_search: string | null
-  platform_id: string | null
-  label_id: string | null
+  @Type(() => String) group_name_search?: string = undefined
+  @Type(() => Number) platform_id?: number = undefined
+  @Type(() => Number) label_id?: number = undefined
 }
 
-const validations = ref(new Validations())
 const search = ref(plainToClass(Search, query))
 const filter = plainToClass(Filter, query.f ?? {})
-const reset_search = {
-  role_name: null,
-  archived: null,
-  scene_path: null
-}
 
-function changeSearch(data) {
+console.log(utils.instance(Search, query))
+
+const former = Former.build(search.value)
+former.perform = async function() {
+  const data = utils.compactObject(this.form)
   router.push({ query: utils.plainToQuery(data) })
 }
 
+watch(computed(() => [ former.form.platform_id, former.form.label_id ]), former.submit)
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void

@@ -7,14 +7,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { PropType, inject } from 'vue'
 import { Validations } from './simple_form';
+import Former from './simple_form/Former'
 
-defineProps({
-  validations: {
-    type: Object as PropType<Validations>,
-    required: true,
-  },
-})
+const props = defineProps<{
+  validations?: Validations
+}>()
 
+const former = inject('former') as Former<Record<string, any>>
+const validations = props.validations || former.validations
 </script>

@@ -3,11 +3,11 @@
     <h2>修改问题模版</h2>
   </div>
 
-  <FormHorizontal :validations="validations">
-    <Fields :form="form" :project_id="project_id" :validations="validations" />
+  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <Fields :project_id="project_id" v-bind="{ former }" />
 
     <template #actions>
-      <SubmitButton submit_text="修改问题模版" :func="onSubmit" />
+      <layouts.submit>修改问题模版</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issue_templates`">取消</router-link>
     </template>
   </FormHorizontal>
@@ -16,11 +16,12 @@
 <script setup lang="ts">
 import FormHorizontal from '@/components/FormHorizontal.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
-import { Validations } from "@/components/simple_form"
+import { Validations, layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import Former from '@/components/simple_form/Former'
 
 const route = useRoute()
 const router = useRouter()
@@ -36,7 +37,7 @@ const issue_template = ref(await new requests.IssueTemplateReq.Get().setup(proxy
   req.interpolations.issue_template_id = issue_template_id
 }).perform())
 
-const form = ref({
+const former = Former.build({
   name: issue_template.value.name,
   content_suggestion: issue_template.value.content_suggestion,
   lookup_by_build_form: issue_template.value.lookup_by_build_form,
@@ -46,24 +47,11 @@ const form = ref({
   inputs_attributes: issue_template.value.inputs
 })
 
-async function onSubmit() {
-  validations.value.clear()
-
-  try {
-    const issue_template = await new requests.IssueTemplateReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-      req.interpolations.issue_template_id = issue_template_id
-    }).perform(form.value)
-    if (issue_template) {
-      router.push('/projects/' + project_id + '/issue_templates')
-    }
-  } catch (err) {
-    if (validations.value.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
+former.perform = async function() {
+  await new requests.IssueTemplateReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+    req.interpolations.issue_template_id = issue_template_id
+  }).perform(this.form)
+  router.push('/projects/' + project_id + '/issue_templates')
 }
-
 </script>

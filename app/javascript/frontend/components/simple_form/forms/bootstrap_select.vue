@@ -1,7 +1,7 @@
 <template>
   <select
     ref="el"
-    v-model="form[code]"
+    v-model="model_value"
     :data-live-search="live_search"
     class="selectpicker form-control"
     data-style-base="form-control"
@@ -16,19 +16,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from "vue"
-import $ from 'jquery'
-import 'bootstrap-select'
-// import 'bootstrap-select/dist/css/bootstrap-select.css'
-
 import { Validation } from '@/models'
+import 'bootstrap-select'
+import $ from 'jquery'
+import { nextTick, onMounted, ref } from "vue"
+import * as helper from "./helper"
 
 const props = withDefaults(defineProps<{
-  label?: string
-  code: string
-  name?: string
-  form: object
   validation?: Validation
+
+  name?: string
   disabled?: boolean
   collection: Object
   labelMethod: string
@@ -48,6 +45,10 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
   change: [evenvt: Event]
 }>()
+
+const define_model_value = defineModel<any>()
+const model_value = helper.modelValue(define_model_value)
+const validation = helper.validation(props)
 
 const el = ref(null! as HTMLElement)
 

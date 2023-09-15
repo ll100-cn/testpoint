@@ -24,12 +24,10 @@
 
     <div class="flex-column flex-grow-1">
       <div v-if="editing" class="d-flex x-actions">
-        <FormInline :validations="validations">
-          <layouts.inline_group v-slot="slotProps" class="mb-0" :validation="validations.disconnect('title')">
-            <forms.string v-bind="{ ...slotProps, form }" />
-          </layouts.inline_group>
+        <FormInline v-bind="{ former }" @submit.prevent="former.submit">
+          <layouts.group class="mb-0" code="title"><forms.string /></layouts.group>
           <div class="x-actions text-nowrap">
-            <button class="btn btn-primary" @click.prevent="editAttachment">更新</button>
+            <layouts.submit>更新</layouts.submit>
             <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
           </div>
         </FormInline>
@@ -64,6 +62,7 @@ import _ from "lodash"
 
 import { Attachment } from "@/models"
 import FormInline from "./FormInline.vue"
+import Former from "./simple_form/Former"
 
 const { proxy } = getCurrentInstance()
 
@@ -78,9 +77,19 @@ const emits = defineEmits<{
 const el = ref(null! as HTMLElement)
 const validations = ref(new Validations())
 const editing = ref(false)
-const form = ref({
+
+const former = Former.build({
   title: ""
 })
+
+former.perform = async function() {
+  const attachment = await new requests.AttachmentReq.Update().setup(proxy, (req) => {
+    req.interpolations.attachment_id = props.attachment.id
+  }).perform(this.form)
+
+  editing.value = false
+  emits('edited', attachment)
+}
 
 onMounted(() => {
   nextTick(() => {
@@ -98,7 +107,7 @@ function buildClipboard() {
 
 function onEdit() {
   editing.value = true
-  form.value.title = props.attachment.title
+  former.form.title = props.attachment.title
 }
 
 function cancelEdit() {
@@ -118,26 +127,6 @@ async function deleteAttachment() {
     }).perform()
     if (attachment) {
       emits('deleted', attachment)
-    }
-  } catch (err) {
-    if (validations.value.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
-}
-
-async function editAttachment() {
-  validations.value.clear()
-
-  try {
-    const attachment = await new requests.AttachmentReq.Update().setup(proxy, (req) => {
-      req.interpolations.attachment_id = props.attachment.id
-    }).perform(form.value)
-    editing.value = false
-    if (attachment) {
-      emits('edited', attachment)
     }
   } catch (err) {
     if (validations.value.handleError(err)) {

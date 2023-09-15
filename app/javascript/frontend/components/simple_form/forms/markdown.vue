@@ -1,33 +1,28 @@
 <template>
-  <textarea ref="el" v-model="form[code]" class="form-control" :name="name ?? code" :disabled="disabled" :class="{'is-invalid': validation?.isInvaild() }" />
+  <textarea ref="el" v-model="model_value" class="form-control" :name="name" :disabled="disabled" :class="{'is-invalid': validation?.isInvaild() }" />
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, ref } from 'vue'
-
 import { Validation } from '@/models'
-import EasyMDE from 'easymde'
-
 import 'codemirror/lib/codemirror.css'
+import EasyMDE from 'easymde'
 import 'easymde/src/css/easymde.css'
+import { PropType, Ref, inject, onMounted, ref } from 'vue'
+import * as helper from "./helper"
 
 const props = defineProps({
-  label: { type: String, required: false },
-  code: { type: String, required: true },
-  form: { type: Object, required: true },
-  name: { type: String, required: false },
   validation: { type: Object as PropType<Validation>, required: false },
+
+  name: { type: String, required: false },
   disabled: { type: Boolean, required: false, default: false },
 })
 
+const define_model_value = defineModel<any>()
+const model_value = helper.modelValue(define_model_value)
+const validation = helper.validation(props)
+
 const el = ref(null! as HTMLElement)
 const easyMDE = ref<EasyMDE>(null)
-
-// watch(() => props.form[props.code], (newVal, oldVal) => {
-//   if (easyMDE.value && !newVal) {
-//     easyMDE.value.value("")
-//   }
-// })
 
 onMounted(() => {
   easyMDE.value = new EasyMDE({
@@ -37,7 +32,7 @@ onMounted(() => {
     autoDownloadFontAwesome: false,
   })
   easyMDE.value.codemirror.on("update", () => {
-    props.form[props.code] = easyMDE.value.value()
+    model_value.value = easyMDE.value.value()
   })
 })
 </script>

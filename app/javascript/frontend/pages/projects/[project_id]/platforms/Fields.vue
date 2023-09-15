@@ -1,25 +1,23 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('name')" label="名称">
-    <forms.string v-bind="{ ...slotProps, form}" />
-  </layouts.horizontal_group>
-  <layouts.horizontal_group v-slot="slotProps" label_class="col-2" :validation="validations.disconnect('default_assignee_id')" label="建议工单受理人">
-    <forms.select v-bind="{ ...slotProps, form, collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.horizontal_group>
+  <layouts.group code="name" label="名称">
+    <forms.string />
+  </layouts.group>
+  <layouts.group code="default_assignee_id" label="建议工单受理人">
+    <forms.select v-bind="{ collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
+  </layouts.group>
 </template>
 
 <script setup lang="ts">
-import { Validations, forms, layouts } from "@/components/simple_form"
-import { computed } from "vue"
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { forms, layouts } from "@/components/simple_form"
 import { Member } from '@/models'
 import _ from 'lodash'
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { computed } from "vue"
 
 const props = defineProps<{
-  form: any
   project_id: string
-  validations: Validations
   members: Member[]
 }>()
 

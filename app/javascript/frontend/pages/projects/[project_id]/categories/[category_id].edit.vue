@@ -3,11 +3,11 @@
     <h2>修改分类</h2>
   </div>
 
-  <FormHorizontal :validations="validations">
-    <Fields :form="form" :project_id="project_id" :validations="validations" />
+  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <Fields />
 
     <template #actions>
-      <SubmitButton submit_text="修改分类" :func="onSubmit" />
+      <layouts.submit>修改分类</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/categories`">取消</router-link>
     </template>
   </FormHorizontal>
@@ -17,12 +17,12 @@
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { Validations, layouts } from "@/components/simple_form"
+import { layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
 
-import SubmitButton from '@/components/SubmitButton.vue'
-import Fields from './Fields.vue'
 import FormHorizontal from '@/components/FormHorizontal.vue'
+import Former from '@/components/simple_form/Former'
+import Fields from './Fields.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -31,36 +31,23 @@ const params = route.params as any
 
 const project_id = params.project_id
 const category_id = params.category_id
-const validations = ref(new Validations())
 const category = ref(await new requests.CategoryReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.category_id = category_id
 }).perform())
 
-const form = ref({
+const former = Former.build({
   name: category.value.name,
   description: category.value.description,
   color: category.value.color
 })
 
-async function onSubmit() {
-  validations.value.clear()
-
-  try {
-    const category = await new requests.CategoryReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = project_id
-      req.interpolations.category_id = category_id
-    }).perform(form.value)
-    if (category) {
-      router.push('/projects/' + project_id + '/categories')
-    }
-  } catch (err) {
-    if (validations.value.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
+former.perform = async function() {
+  await new requests.CategoryReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+    req.interpolations.category_id = category_id
+  }).perform(this.form)
+  router.push('/projects/' + project_id + '/categories')
 }
 
 </script>

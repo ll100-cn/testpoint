@@ -1,40 +1,41 @@
 <template>
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert />
 
-  <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('issue_template_id')" label="选择问题模版">
-    <forms.bootstrap_select v-bind="{ ...slotProps, form, collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
-  </layouts.vertical_group>
-  <template v-if="form['issue_template_id']">
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('title')" label="标题">
-      <forms.string v-bind="{ ...slotProps, form: form.issue_attributes }" />
-    </layouts.vertical_group>
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('creator_id')" label="创建人">
-      <forms.bootstrap_select v-bind="{ ...slotProps, form: form.issue_attributes, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
-    </layouts.vertical_group>
-    <layouts.vertical_group v-slot="slotProps" :validation="validations.disconnect('content')" label="内容">
-      <forms.markdown v-bind="{ ...slotProps, form: form.issue_attributes }" />
-    </layouts.vertical_group>
-    <layouts.vertical_group>
+  <layouts.group code="issue_template_id" label="选择问题模版">
+    <forms.bootstrap_select v-bind="{ collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
+  </layouts.group>
+  <template v-if="former.form['issue_template_id']">
+    <layouts.group code="title" label="标题">
+      <forms.string v-bind="{ form: former.form.issue_attributes }" />
+    </layouts.group>
+    <layouts.group code="creator_id" label="创建人">
+      <forms.bootstrap_select v-bind="{ form: former.form.issue_attributes, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
+    </layouts.group>
+    <layouts.group code="content" label="内容">
+      <forms.markdown v-bind="{ form: former.form.issue_attributes }" />
+    </layouts.group>
+    <layouts.group>
       <AttachmentUploader @change="emits('attachmentChange', $event)" />
-    </layouts.vertical_group>
+    </layouts.group>
   </template>
 
   <template v-if="current_issue_template">
     <hr>
-    <layouts.vertical_group v-for="(input, index) in current_issue_template.inputs" :key="index" v-slot="slotProps" :label="input.label">
-      <forms.string v-bind="{ ...slotProps, code: 'value', form: form.info_attributes.inputs_attributes[index] }" />
-    </layouts.vertical_group>
+    <layouts.group v-for="(input, index) in current_issue_template.inputs" :code="`info_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
+      <forms.string />
+    </layouts.group>
   </template>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
 
-import { Validations, forms, layouts } from "@/components/simple_form"
+import { forms, layouts } from "@/components/simple_form"
 import { Attachment, IssueTemplate, Member } from '@/models'
 
 import AttachmentUploader from '@/components/AttachmentUploader.vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import Former from "@/components/simple_form/Former"
 
 const router = useRouter()
 
@@ -44,8 +45,7 @@ const emits = defineEmits<{
 
 const props = withDefaults(defineProps<{
   issue_templates: IssueTemplate[]
-  validations: Validations
-  form: object | any
+  former: Former<Record<string, any>>
   members: Member[]
   current_issue_template: IssueTemplate
 }>(), {

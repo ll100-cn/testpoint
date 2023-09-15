@@ -5,72 +5,72 @@
         <div class="modal-header">
           <h5 class="modal-title">批量编辑</h5>
         </div>
-        <FormHorizontal :validations="validations" @submit="submitForm">
+        <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
-            <FormErrorAlert :validations="validations" />
+            <FormErrorAlert />
 
-            <component :is="layouts.horizontal_group" :validation="validations.disconnect('role_name')" label="角色" :disableds="form_disabled_mapping">
+            <layouts.group code="role_name" label="角色" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'role_name' }" /></template>
-            </component>
+              <template #default><forms.string /></template>
+            </layouts.group>
 
-            <component :is="layouts.horizontal_group" :validation="validations.disconnect('scene_name')" label="场景" :disableds="form_disabled_mapping">
+            <layouts.group code="scene_name" label="场景" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'scene_name' }" /></template>
-            </component>
+              <template #default><forms.string /></template>
+            </layouts.group>
 
-            <component :is="layouts.horizontal_group" :validation="validations.disconnect('group_name')" label="分组" :disableds="form_disabled_mapping">
+            <layouts.group code="group_name" label="分组" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'group_name' }" /></template>
-            </component>
+              <template #default><forms.string /></template>
+            </layouts.group>
 
-            <component :is="layouts.horizontal_group" :validation="validations.disconnect('title')" label="标题" :disableds="form_disabled_mapping">
+            <layouts.group code="title" label="标题" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'title' }" /></template>
-            </component>
+              <template #default><forms.string /></template>
+            </layouts.group>
 
-            <component :is="layouts.horizontal_group" :validation="validations.disconnect('content')" label="内容" :disableds="form_disabled_mapping">
+            <layouts.group code="content" label="内容" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default="slotProps"><component :is="forms.string" v-bind="{ ...slotProps, form, name: 'content' }" /></template>
-            </component>
+              <template #default><forms.string /></template>
+            </layouts.group>
 
-            <component :is="layouts.horizontal_group" :validation="validations.disconnect('platform_ids')" label="平台" :disableds="form_disabled_mapping">
+            <layouts.group code="platform_ids" label="平台" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
-            </component>
+              <template #default><forms.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+            </layouts.group>
 
-            <component :is="layouts.horizontal_group" :validation="validations.disconnect('label_ids')" label="标签" :disableds="form_disabled_mapping">
+            <layouts.group code="label_ids" label="标签" :disableds="form_disabled_mapping">
               <template #label-prepend="{ code }">
                 <div class="form-check col-auto form-switch">
                   <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
                 </div>
               </template>
-              <template #default="slotProps"><component :is="forms.checkboxes" v-bind="{ ...slotProps, form, name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
-            </component>
+              <template #default><forms.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
+            </layouts.group>
           </div>
 
           <div class="modal-footer">
@@ -81,7 +81,7 @@
       </div>
     </div>
 
-    <div v-if="state === 'submiting'" class="modal-dialog modal-lg">
+    <div v-if="state === 'submitting'" class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">提交中</h5>
@@ -130,10 +130,11 @@ import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 
 import FormErrorAlert from '@/components/FormErrorAlert.vue';
 import { Validations, forms, layouts } from "@/components/simple_form";
 import FormHorizontal from '@/components/FormHorizontal.vue'
+import Former from '@/components/simple_form/Former'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()
-const state = ref('pending') // [ pending, submiting, submited ]
+const state = ref('pending') // [ pending, submitting, submited ]
 
 const props = defineProps({
   platform_repo: {
@@ -156,14 +157,24 @@ const result = ref<{
   error: string | null
 }[]>([])
 
-async function submitForm(event: Event) {
-  event.preventDefault()
+const former = Former.build({
+  title: null as string | null | undefined,
+  content: null as string | null | undefined,
+  role_name: null as string | null | undefined,
+  scene_name: null as string | null | undefined,
+  group_name: null as string | null | undefined,
+  platform_ids: [] as number[] | null | undefined,
+  label_ids: null as number[] | null | undefined
+})
 
+former.perform = async function() {
   result.value = []
-  state.value = 'submiting'
+  state.value = 'submitting'
   validations.clear()
 
-  const form_data = new FormData(event.target as HTMLFormElement)
+  const form_data = _.pickBy(former.form, (value, key) => {
+    return form_enabled_mapping.value[key]
+  })
 
   for (const test_case of test_cases.value) {
     const info: { test_case: TestCase, error: string | null } = {
@@ -195,16 +206,6 @@ async function submitForm(event: Event) {
   emit('batch_change')
 }
 
-const form = ref({
-  title: null as string | null | undefined,
-  content: null as string | null | undefined,
-  role_name: null as string | null | undefined,
-  scene_name: null as string | null | undefined,
-  group_name: null as string | null | undefined,
-  platform_ids: [] as number[] | null | undefined,
-  label_ids: null as number[] | null | undefined
-})
-
 const form_enabled_mapping = ref({
   title: false,
   content: false,
@@ -234,28 +235,28 @@ function show(all_test_cases: TestCase[]) {
 function resetForm() {
   for (let i = 0; i < test_cases.value.length; i++) {
     const test_case = test_cases.value[i]
-    for (const key in form.value) {
+    for (const key in former.form) {
       if (i === 0) {
-        form.value[key] = test_case[key]
+        former.form[key] = test_case[key]
         continue
       }
 
-      if (form.value[key] === undefined) {
+      if (former.form[key] === undefined) {
         continue
       }
 
-      if (!_.isEqual(test_case[key], form.value[key])) {
-        form.value[key] = undefined
+      if (!_.isEqual(test_case[key], former.form[key])) {
+        former.form[key] = undefined
         continue
       }
     }
   }
 
-  if (form.value.platform_ids === undefined) {
-    form.value.platform_ids = []
+  if (former.form.platform_ids === undefined) {
+    former.form.platform_ids = []
   }
-  if (form.value.label_ids === undefined) {
-    form.value.label_ids = []
+  if (former.form.label_ids === undefined) {
+    former.form.label_ids = []
   }
 
   for (const key in form_enabled_mapping.value) {
