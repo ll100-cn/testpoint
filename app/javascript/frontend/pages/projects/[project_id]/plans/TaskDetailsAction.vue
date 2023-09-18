@@ -29,10 +29,12 @@
     <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
       <IssueForm :issue_templates="issue_templates" :members="members" :categories="categories" :plan_id="plan.id" :project_id="project_id" />
 
-      <template #actions>
+      <hr class="x-form-divider-through">
+
+      <layouts.group control_wrap_class="x-actions x-spacer-2">
         <layouts.submit>提交</layouts.submit>
         <SubmitButton submit_text="取消" type="secondary" @click="emit('update:is_task_pass', false)" />
-      </template>
+      </layouts.group>
     </layouts.form_vertical>
   </div>
 </template>

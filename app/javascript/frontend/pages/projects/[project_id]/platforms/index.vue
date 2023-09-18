@@ -23,7 +23,7 @@
             <tr>
               <td>{{ platform.name }}</td>
               <td>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</td>
-              <td class="x-actions text-end">
+              <td class="x-actions justify-content-end x-spacer-3">
                 <router-link :to="`/projects/${project_id}/platforms/${platform.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>

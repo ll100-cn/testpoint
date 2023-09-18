@@ -1,9 +1,12 @@
 <template>
   <FormErrorAlert />
-  <layouts.group code="content" label="内容">
-    <controls.markdown />
-  </layouts.group>
-  <AttachmentUploader @change="emit('attachmentChange', $event)" />
+
+  <div class="row gy-3">
+    <layouts.group code="content" label="内容">
+      <controls.markdown />
+    </layouts.group>
+    <AttachmentUploader @change="emit('attachmentChange', $event)" />
+  </div>
 </template>
 
 <script setup lang="ts">

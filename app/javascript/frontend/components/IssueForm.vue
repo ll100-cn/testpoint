@@ -1,17 +1,19 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group code="category_id" label="分类">
-    <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.group>
-  <layouts.group code="title" label="工单标题"><controls.string /></layouts.group>
-  <layouts.group code="content" label="工单内容"><controls.markdown /></layouts.group>
-  <layouts.group code="state" label="状态">
-    <controls.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.group>
-  <layouts.group code="assignee_id" label="工单受理人">
-    <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-  </layouts.group>
+  <div class="row gy-3">
+    <layouts.group code="category_id" label="分类">
+      <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
+    </layouts.group>
+    <layouts.group code="title" label="工单标题"><controls.string /></layouts.group>
+    <layouts.group code="content" label="工单内容"><controls.markdown /></layouts.group>
+    <layouts.group code="state" label="状态">
+      <controls.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
+    </layouts.group>
+    <layouts.group code="assignee_id" label="工单受理人">
+      <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+    </layouts.group>
+  </div>
 </template>
 
 <script setup lang="ts">

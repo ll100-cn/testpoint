@@ -29,7 +29,7 @@
               <td>{{ member.email }}</td>
               <td>{{ member.role_text }}</td>
               <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
-              <td class="x-spacer-3 text-end">
+              <td class="x-actions justify-content-end x-spacer-3">
                 <router-link :to="`/projects/${project_id}/members/${member.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>

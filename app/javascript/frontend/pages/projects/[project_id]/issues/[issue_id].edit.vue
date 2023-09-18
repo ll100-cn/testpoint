@@ -6,22 +6,26 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <FormErrorAlert />
 
-    <layouts.group code="title" label="标题"><controls.string /></layouts.group>
-    <layouts.group code="category_id" label="分类">
-      <controls.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
-    </layouts.group>
-    <layouts.group code="creator_id" label="创建人">
-      <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', live_search: true }" include_blank />
-    </layouts.group>
-    <layouts.group code="assignee_id" label="受理人">
-      <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id' }" include_blank />
-    </layouts.group>
+    <div class="row gy-3">
+      <layouts.group code="title" label="标题"><controls.string /></layouts.group>
+      <layouts.group code="category_id" label="分类">
+        <controls.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
+      </layouts.group>
+      <layouts.group code="creator_id" label="创建人">
+        <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', live_search: true }" include_blank />
+      </layouts.group>
+      <layouts.group code="assignee_id" label="受理人">
+        <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id' }" include_blank />
+      </layouts.group>
+    </div>
 
-    <template #actions>
+    <hr class="x-form-divider-through">
+
+    <layouts.group control_wrap_class="x-actions x-spacer-2">
       <layouts.submit>更新问题</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
       <router-link class="btn btn-warning" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
-    </template>
+    </layouts.group>
   </layouts.form_horizontal>
 </template>
 

@@ -9,14 +9,16 @@
       <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
           <FormErrorAlert />
-          <layouts.group code="target_id" label="关联的问题ID">
-            <controls.number />
-          </layouts.group>
-          <layouts.group code="creator_subscribe_target_issue">
-            <controls.checkboxes v-bind="{ collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
-          </layouts.group>
+          <div class="row gy-3">
+            <layouts.group code="target_id" label="关联的问题ID">
+              <controls.number />
+            </layouts.group>
+            <layouts.group code="creator_subscribe_target_issue">
+              <controls.checkboxes v-bind="{ collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
+            </layouts.group>
+          </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <layouts.submit>新增关联问题</layouts.submit>
         </div>

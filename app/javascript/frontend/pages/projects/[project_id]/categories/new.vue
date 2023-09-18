@@ -6,10 +6,13 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <Fields />
 
-    <template #actions>
+
+    <hr class="x-form-divider-through">
+
+    <layouts.group control_wrap_class="x-actions x-spacer-2">
       <layouts.submit>新增分类</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/categories`">取消</router-link>
-    </template>
+    </layouts.group>
   </layouts.form_horizontal>
 </template>
 

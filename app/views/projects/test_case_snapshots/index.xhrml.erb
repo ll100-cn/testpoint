@@ -33,7 +33,7 @@
     </tbody>
   </table>
 </div>
-<div class="modal-footer">
+<div class="modal-footer x-spacer-2">
   <%= new_button [@project, :test_case_snapshot], data: { remote: true, type: :xhrml, target: ".modal-content" } if can? :new, TestCaseSnapshot %>
   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= action_i18n :close %></button>
 </div>

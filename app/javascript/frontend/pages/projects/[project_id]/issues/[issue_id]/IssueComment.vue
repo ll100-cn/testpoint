@@ -5,10 +5,12 @@
         <layouts.form_vertical v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
           <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" />
 
-          <template #actions>
+          <hr class="x-form-divider-through">
+
+          <layouts.group control_wrap_class="x-actions x-spacer-2">
             <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
             <layouts.submit class="ms-auto">提交修改</layouts.submit>
-          </template>
+          </layouts.group>
         </layouts.form_vertical>
       </div>
       <template v-else>
@@ -50,7 +52,7 @@
     </div>
 
     <div :id="`replyComment-${comment.id}`" class="collapse mt-3">
-      <div class="card-footer bg-white">
+      <div class="card-footer">
         <div class="d-flex">
           <span>回复 {{ comment.member.name }}:</span>
           <a class="btn btn-outline-secondary btn-sm ms-auto" data-bs-toggle="collapse" :data-bs-target="`#replyComment-${comment.id}`">
@@ -60,9 +62,11 @@
         <layouts.form_vertical v-bind="{ former: reply_former }" @submit.prevent="reply_former.submit">
           <IssueCommentForm  @attachment-change="replyAttachmentChange" />
 
-          <template #actions>
+          <hr class="x-form-divider-through">
+
+          <layouts.group control_wrap_class="x-actions x-spacer-2">
             <layouts.submit class="ms-auto">新增评论</layouts.submit>
-          </template>
+          </layouts.group>
         </layouts.form_vertical>
       </div>
     </div>
@@ -72,10 +76,12 @@
       <layouts.form_vertical v-if="editing" v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
         <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" />
 
-        <template #actions>
+        <hr class="x-form-divider-through">
+
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
           <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
           <layouts.submit class="ms-auto">提交修改</layouts.submit>
-        </template>
+        </layouts.group>
       </layouts.form_vertical>
       <template v-else>
         <div class="d-flex mb-2 align-items-center x-actions">

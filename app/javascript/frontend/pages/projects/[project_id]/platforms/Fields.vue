@@ -1,12 +1,14 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group code="name" label="名称">
-    <controls.string />
-  </layouts.group>
-  <layouts.group code="default_assignee_id" label="建议工单受理人">
-    <controls.select v-bind="{ collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.group>
+  <div class="row gy-3">
+    <layouts.group code="name" label="名称">
+      <controls.string />
+    </layouts.group>
+    <layouts.group code="default_assignee_id" label="建议工单受理人">
+      <controls.select v-bind="{ collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
+    </layouts.group>
+  </div>
 </template>
 
 <script setup lang="ts">

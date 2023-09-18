@@ -1,7 +1,7 @@
 import { Type } from "class-transformer"
 
 export default class Search {
-  @Type() filter?: string = undefined
+  @Type() stage?: string = undefined
   @Type() keyword?: string = undefined
   @Type() category_id_eq?: string = ""
   @Type() milestone_id_eq?: string = ""

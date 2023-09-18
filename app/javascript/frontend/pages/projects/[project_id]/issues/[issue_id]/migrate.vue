@@ -6,18 +6,22 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <FormErrorAlert />
 
-    <layouts.group code="project_id" label="项目">
-      <controls.select v-bind="{ collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
-    </layouts.group>
+    <div class="row gy-3">
+      <layouts.group code="project_id" label="项目">
+        <controls.select v-bind="{ collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
+      </layouts.group>
 
-    <layouts.group code="category_id" label="分类">
-      <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-    </layouts.group>
+      <layouts.group code="category_id" label="分类">
+        <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+      </layouts.group>
+    </div>
 
-    <template #actions>
+    <hr class="x-form-divider-through">
+
+    <layouts.group control_wrap_class="x-actions x-spacer-2">
       <layouts.submit>迁移</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
-    </template>
+    </layouts.group>
   </layouts.form_horizontal>
 </template>
 

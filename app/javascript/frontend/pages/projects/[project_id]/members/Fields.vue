@@ -1,16 +1,18 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group code="user_email" label="用户邮箱">
-    <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ former.form.user_email }}</div>
-    <controls.string v-else />
-  </layouts.group>
-  <layouts.group code="nickname" label="昵称">
-    <controls.string />
-  </layouts.group>
-  <layouts.group code="role" label="角色">
-    <controls.select v-bind="{ collection: role_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
-  </layouts.group>
+  <div class="row gy-3">
+    <layouts.group code="user_email" label="用户邮箱">
+      <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ former.form.user_email }}</div>
+      <controls.string v-else />
+    </layouts.group>
+    <layouts.group code="nickname" label="昵称">
+      <controls.string />
+    </layouts.group>
+    <layouts.group code="role" label="角色">
+      <controls.select v-bind="{ collection: role_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+    </layouts.group>
+  </div>
 </template>
 
 <script setup lang="ts">

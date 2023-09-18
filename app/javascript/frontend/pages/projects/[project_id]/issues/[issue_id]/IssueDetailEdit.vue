@@ -12,7 +12,7 @@
         <slot name="editable" />
       </div>
 
-      <div class="x-actions">
+      <div class="x-actions x-spacer-2">
         <layouts.submit class="btn-sm">更新</layouts.submit>
         <button class="btn btn-sm btn-secondary" @click="mode = 'show'">取消</button>
       </div>

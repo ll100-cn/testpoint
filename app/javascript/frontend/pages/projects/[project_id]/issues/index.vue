@@ -3,7 +3,7 @@
     <h2>问题列表（{{ project.name }}）</h2>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <form @submit="querySearch({ keyword: search.keyword, filter: 'all' })">
+      <form @submit="querySearch({ keyword: search.keyword })">
         <div class="input-group ms-auto">
           <input v-model="search.keyword" type="text" class="form-control" placeholder="搜索问题或评论">
           <button class="btn btn-primary" type="submit">搜索</button>
@@ -15,12 +15,10 @@
   </div>
 
   <ul class="nav nav-tabs border-bottom-0 zindex-999 position-relative">
-    <li v-for="option in filter_states_options" :key="option.name" class="nav-item">
-      <button
-        class="nav-link"
-        :class="{ 'active': current_issue_state == option.value }"
-        @click="router.push({ query: { filter: option.value } })">
-        {{ option.name }} ({{ issue_stats_count[option.value] }})
+    <button class="nav-link" :class="{ 'active': current_issue_stage === 'all' }" @click="router.push({ query: { stage: 'all' } })"> 全部 ({{ issue_stage_count['all'] }})
+    </button>
+    <li v-for="(name, code) in ENUM_ISSUE_STAGES" :key="code" class="nav-item">
+      <button class="nav-link" :class="{ 'active': current_issue_stage == code }" @click="router.push({ query: { stage: code } })"> {{ name }} ({{ issue_stage_count[code] }})
       </button>
     </li>
   </ul>
@@ -84,17 +82,16 @@ const page = utils.instance(Page, query)
 const search = reactive(utils.instance(Search, query))
 
 const project_id = params.project_id
-const filter_states_options = ref([
-  { name: "全部", value: "all", },
-  { name: "分配", value: "assign", conds: [{ state: "pending" }, { state: "waiting" }, { state: "confirmed", assignee_id_is: false }] },
-  { name: "开发", value: "develop", conds: [{ state: "confirmed", assignee_id_is: true }, { state: "processing" }] },
-  { name: "测试", value: "test", conds: [{ state: "processed" }] },
-  { name: "部署", value: "deploy", conds: [{ state: "deploying" }] },
-  { name: "解决", value: "resolve", conds: [{ state: "resolved", archived_at_is: false }] },
-  { name: "已关闭", value: "closed", conds: [{ state: "closed", archived_at_is: false }] },
-  { name: "归档", value: "archive", conds: [{ archived_at_is: true }] },
-])
-const current_issue_state = ref(search.filter ?? "assign")
+
+const ENUM_ISSUE_STAGES = {
+  pending: '分配',
+  developing: '开发',
+  testing: '测试',
+  deploying: '部署',
+  resolved: '解决',
+  closed: '已关闭',
+}
+const current_issue_stage = ref(search.stage ?? "pending")
 
 const project = ref(await new requests.ProjectReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
@@ -114,24 +111,14 @@ const issue_stats = ref(await new requests.IssueStats().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const issue_stats_count = computed(() => {
-  const result = _.reduce(filter_states_options.value, (result: any, value) => {
-    const conds = value.conds || []
-    const current_stats_count = _.sumBy(_.filter(issue_stats.value, (it) => cond_match(it, conds)), "count")
-    return { ...result, [value.value]: current_stats_count }
+const issue_stage_count = computed(() => {
+  const result = _.reduce(ENUM_ISSUE_STAGES, (result: any, name, code) => {
+    const current_stage_count = _.sumBy(_.filter(issue_stats.value, (it) => it.stage == code), "count")
+    return { ...result, [ code ]: current_stage_count }
   }, {})
   result.all = _.sumBy(issue_stats.value, "count")
   return result
 })
-
-function cond_match(data, conds) {
-  for (const cond of conds) {
-    if (_.some([ data ], cond)) {
-      return true
-    }
-  }
-  return false
-}
 
 function querySearch(search: Search | null) {
   if (search) {

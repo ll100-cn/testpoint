@@ -6,10 +6,12 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <Fields />
 
-    <template #actions>
+    <hr class="x-form-divider-through">
+
+    <layouts.group control_wrap_class="x-actions x-spacer-2">
       <layouts.submit>编辑里程碑</layouts.submit>
       <router-link :to="`/projects/${project_id}/milestones`" class="btn btn-secondary">取消</router-link>
-    </template>
+    </layouts.group>
   </layouts.form_horizontal>
 </template>
 

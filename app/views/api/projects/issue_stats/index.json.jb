@@ -1,2 +1,2 @@
-json = @issue_filter_state_counts
+json = @issue_filter_stage_counts
 json

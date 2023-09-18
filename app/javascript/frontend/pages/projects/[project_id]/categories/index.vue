@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <FormErrorAlert :validations="validations" />
+  <ActionerAlert :actioner="actioner" />
 
   <div class="card page-card card-x-table">
     <div class="card-body">
@@ -29,11 +29,11 @@
               </td>
               <td>{{ category.description }}</td>
               <td>{{ category.issue_count }}</td>
-              <td class="x-spacer-3 text-end">
+              <td class="x-actions justify-content-end x-spacer-3">
                 <router-link :to="`/projects/${project_id}/categories/${category.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" @click.prevent="onRemove(category.id)"><i class="far fa-trash-alt" /> 删除</a>
+                <a href="#" @click.prevent="deleteCategory(category.id)" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
               </td>
             </tr>
           </template>
@@ -47,51 +47,38 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref, reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import _ from 'lodash'
-import * as requests from '@/lib/requests'
-import { Validations } from "@/components/simple_form"
-import { PageQuery } from '@/types'
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import PaginationBar from "@/components/PaginationBar.vue"
+import { Actioner } from '@/components/Actioner'
+import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
+import PaginationBar from "@/components/PaginationBar.vue"
+import * as requests from '@/lib/requests'
+import { getCurrentInstance, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
-
-const currentQuery = ref<PageQuery>({
-  page: _.toInteger(route.query.page) || 1,
-})
 
 const categories = ref(await new requests.CategoryInfoReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-async function onRemove(id: number) {
-  if (!confirm("是否删除分类？")) {
-    return
-  }
+const actioner = Actioner.build()
 
-  try {
+function deleteCategory(id: number) {
+  actioner.perform(async function() {
     await new requests.CategoryReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.category_id = id
     }).perform()
 
     router.go(0)
-  } catch (error) {
-    if (validations.handleError(error)) {
-      return
-    }
-
-    throw error
-  }
+  })
 }
+
+
 
 </script>

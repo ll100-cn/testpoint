@@ -8,14 +8,16 @@
       <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
           <FormErrorAlert />
-          <layouts.group code="template_id" label="模版">
-            <controls.select v-bind="{ collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
-          </layouts.group>
-          <layouts.group code="remark" label="备注">
-            <controls.string />
-          </layouts.group>
+          <div class="row gy-3">
+            <layouts.group code="template_id" label="模版">
+              <controls.select v-bind="{ collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
+            </layouts.group>
+            <layouts.group code="remark" label="备注">
+              <controls.string />
+            </layouts.group>
+          </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <layouts.submit>新增模版化表单</layouts.submit>
         </div>

@@ -30,9 +30,11 @@
         <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
           <IssueCommentForm />
 
-          <template #actions>
+          <hr class="x-form-divider-through">
+
+          <layouts.group control_wrap_class="x-actions x-spacer-2">
             <layouts.submit>新增评论</layouts.submit>
-          </template>
+          </layouts.group>
         </layouts.form_vertical>
       </div>
     </div>

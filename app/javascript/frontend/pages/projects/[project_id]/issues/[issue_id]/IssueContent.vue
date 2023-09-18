@@ -22,10 +22,12 @@
               <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
                 <IssueCommentForm :attachments="issue_attachments" @attachment-change="attachmentChange" />
 
-                <template #actions>
+                <hr class="x-form-divider-through">
+
+                <layouts.group control_wrap_class="x-actions x-spacer-2">
                   <button class="btn btn-secondary" type="button" @click.prevent="finishedEditing">取消</button>
                   <layouts.submit class="ms-auto">提交修改</layouts.submit>
-                </template>
+                </layouts.group>
               </layouts.form_vertical>
             </template>
             <div v-else>

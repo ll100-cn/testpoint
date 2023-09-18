@@ -10,12 +10,14 @@
         <div class="modal-body">
           <FormErrorAlert />
 
-          <layouts.group label="备注"><span>{{ issue_info.remark }}</span></layouts.group>
-          <layouts.group v-for="(input, index) in current_issue_template?.inputs" :code="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
-            <controls.string />
-          </layouts.group>
+          <div class="row gy-3">
+            <layouts.group label="备注"><span>{{ issue_info.remark }}</span></layouts.group>
+            <layouts.group v-for="(input, index) in current_issue_template?.inputs" :code="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
+              <controls.string />
+            </layouts.group>
+          </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <SubmitButton :func="updateIssueInfo" submit_text="更新模版化表单" />
         </div>

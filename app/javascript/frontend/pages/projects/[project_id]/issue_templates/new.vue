@@ -6,10 +6,12 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <Fields :project_id="project_id" v-bind="{ former }" />
 
-    <template #actions>
+    <hr class="x-form-divider-through">
+
+    <layouts.group control_wrap_class="x-actions x-spacer-2">
       <layouts.submit>新增问题模版</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issue_templates`">取消</router-link>
-    </template>
+    </layouts.group>
   </layouts.form_horizontal>
 </template>
 

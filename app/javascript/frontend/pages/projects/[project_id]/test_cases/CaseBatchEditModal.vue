@@ -9,37 +9,39 @@
           <div class="modal-body">
             <FormErrorAlert />
 
-            <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping">
-              <controls.string />
-            </SwitchFormGroup>
+            <div class="row gy-3">
+              <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping">
+                <controls.string />
+              </SwitchFormGroup>
 
-            <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
-              <controls.string />
-            </SwitchFormGroup>
+              <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
+                <controls.string />
+              </SwitchFormGroup>
 
-            <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping">
-              <controls.string />
-            </SwitchFormGroup>
+              <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping">
+                <controls.string />
+              </SwitchFormGroup>
 
-            <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping">
-              <controls.string />
-            </SwitchFormGroup>
+              <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping">
+                <controls.string />
+              </SwitchFormGroup>
 
-            <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping">
-              <controls.string />
-            </SwitchFormGroup>
+              <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping">
+                <controls.string />
+              </SwitchFormGroup>
 
-            <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping">
-              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
-            </SwitchFormGroup>
+              <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping">
+                <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              </SwitchFormGroup>
 
-            <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping">
-              <controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
-            </SwitchFormGroup>
+              <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping">
+                <controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              </SwitchFormGroup>
+            </div>
 
           </div>
 
-          <div class="modal-footer">
+          <div class="modal-footer x-spacer-2">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <layouts.submit>保存</layouts.submit>
           </div>
@@ -77,7 +79,7 @@
             </div>
           </template>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" @click="state = 'pending'">重新编辑</button>
         </div>

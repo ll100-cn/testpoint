@@ -4,14 +4,20 @@
   </div>
 
   <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields v-bind="{ former }" :members="members" :issue_templates="issue_templates" :current_issue_template="current_issue_template" @attachment-change="onAttachmentChange" />
-    <template v-if="current_issue_template">
-      <hr>
-      <div class="x-actions">
-        <layouts.submit>新增问题</layouts.submit>
-        <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/issues`">取消</router-link>
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <Fields v-bind="{ former }" :members="members" :issue_templates="issue_templates" :current_issue_template="current_issue_template" @attachment-change="onAttachmentChange" />
+
+        <template v-if="current_issue_template">
+          <hr class="x-form-divider-through">
+
+          <layouts.group control_wrap_class="x-actions x-spacer-2">
+            <layouts.submit>新增问题</layouts.submit>
+            <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/issues`">取消</router-link>
+          </layouts.group>
+        </template>
       </div>
-    </template>
+    </div>
   </layouts.form_vertical>
 </template>
 

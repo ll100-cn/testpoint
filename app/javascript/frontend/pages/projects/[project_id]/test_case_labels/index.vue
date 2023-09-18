@@ -25,7 +25,7 @@
               <td>{{ test_case_label.name }}</td>
               <td>{{ test_case_label.description }}</td>
               <td>{{ test_case_label.test_case_count }}</td>
-              <td class="x-spacer-3 text-end">
+              <td class="x-actions justify-content-end x-spacer-3">
                 <router-link :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>

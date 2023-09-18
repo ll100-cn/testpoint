@@ -147,9 +147,3 @@ article {
 a {
   text-decoration: none !important;
 }
-
-.x-actions {
-  > * + * {
-    margin-left: 0.5rem;
-  }
-}

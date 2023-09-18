@@ -18,9 +18,9 @@
             <td>{{ project.name }}</td>
 
             <td v-for="(_, code) in ENUM_ISSUE_STAGES">
-              <span v-for="issue_stat in issue_stats_mapping.get(code) ?? []" class="text-nowrap mb-1 me-2">
-                <span class="badge text-white" :style="`background-color: ${issue_stat.category?.color ?? '#212529'}`">{{ issue_stat.category?.name ?? "未分配" }} {{ issue_stat.count }}</span>
-              </span>
+              <router-link :to="`/projects/${project.id}/issues?stage=${code}`">
+                <CategoryBadge v-for="issue_stat in issue_stats_mapping.get(code) ?? []" class="text-nowrap mb-1 me-2" :category="issue_stat.category" :count="issue_stat.count" />
+              </router-link>
             </td>
           </tr>
         </tbody>
@@ -34,6 +34,7 @@ import { IssueStat2, Project } from '@/models'
 import * as requests from '@/lib/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
+import CategoryBadge from '@/components/CategoryBadge.vue'
 
 const proxy = getCurrentInstance()!.proxy!
 

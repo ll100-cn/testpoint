@@ -1,5 +1,5 @@
 <template>
-  <component :is="GroupComponent" v-bind="{ ...props, options, label_options }">
+  <component :is="GroupComponent" v-bind="{ ...props, ...options }">
     <template #label-prepend="slot_attrs" v-if="slots['label-prepend']"><slot name="label-prepend" v-bind="slot_attrs" /></template>
     <template #default="slot_attrs" v-if="slots['default']"><slot name="default" v-bind="slot_attrs" /></template>
   </component>
@@ -10,19 +10,17 @@ import { Validation } from '@/models'
 import _ from 'lodash'
 import { DefineComponent, Ref, computed, inject, provide, useSlots } from 'vue'
 import Former from '../Former'
-import { ControlOptions, LabelOptions, WrapperOptions } from '../helper'
+import { ControlOptions, WrapperOptions } from '../helper'
 
 
-interface Props {
+interface Props extends WrapperOptions {
   validation?: Validation
   code?: string
 
   label?: string
-  label_options?: LabelOptions
 
   hint?: string
-  disableds?: any
-  options?: WrapperOptions
+  // options?: WrapperOptions
 }
 
 const slots = useSlots()
@@ -30,6 +28,8 @@ const props = defineProps<Props>()
 
 const GroupComponent = inject("GroupComponent") as DefineComponent
 const former = inject('former') as Former<Record<string, any>>
+
+const control_id = _.uniqueId("x-form-control-")
 
 const validation = computed(() => {
   return props.validation ?? former.validations.disconnect(props.code!)
@@ -44,18 +44,16 @@ provide("model_value", model_value)
 
 const default_wrapper_options = inject("default_wrapper_options") as Ref<WrapperOptions>
 const options = computed(() => {
-  return _.merge(<WrapperOptions>{ size: 'default' }, default_wrapper_options.value, props.options)
-})
-
-const default_label_options = inject("default_label_options") as Ref<LabelOptions>
-const label_options = computed(() => {
-  return _.merge(<LabelOptions>{}, default_label_options.value, props.label_options)
+  const result = _.merge(<WrapperOptions>{ size: 'default' }, default_wrapper_options.value, props)
+  result.control_id = control_id
+  return result
 })
 
 const default_control_options = inject('default_control_options') as Ref<ControlOptions>
 const control_options = computed(() => {
   return <ControlOptions>{
     size: options.value.size,
+    control_id: options.value.control_id,
     disabled: options.value.disabled,
     ...default_control_options.value
   }

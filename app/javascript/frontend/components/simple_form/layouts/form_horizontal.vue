@@ -1,5 +1,5 @@
 <template>
-  <form class="horizontal-form">
+  <form class="x-form-horizontal">
     <slot></slot>
 
     <template v-if="slots.actions">
@@ -18,22 +18,20 @@
 import { Validation } from '@/models'
 import { provide, ref, useSlots } from 'vue'
 import Former from '../Former'
+import { ControlOptions, WrapperOptions } from '../helper'
 import HorizontalGroup from './HorizontalGroup.vue'
 import group from './group.vue'
-import { ControlOptions, LabelOptions, WrapperOptions } from '../helper'
 
 const slots = useSlots()
 
 const props = defineProps<{
   former: Former<any>
   default_wrapper_options?: WrapperOptions
-  default_label_options?: LabelOptions
   default_control_options?: ControlOptions
 }>()
 
 provide("GroupComponent", HorizontalGroup)
 provide("former", props.former)
-provide("default_wrapper_options", ref(<WrapperOptions>{ ...props.default_wrapper_options }))
-provide("default_label_options", ref(<LabelOptions>{ wrap_class: "col-2", ...props.default_label_options }))
+provide("default_wrapper_options", ref(<WrapperOptions>{ label_wrap_class: 'col-2', ...props.default_wrapper_options }))
 provide("default_control_options", ref(<ControlOptions>{ ...props.default_control_options }))
 </script>

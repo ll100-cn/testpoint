@@ -62,6 +62,10 @@ const control_attrs = computed(() => {
     attrs.disabled = true
   }
 
+  if (options.value.control_id) {
+    attrs.id = options.value.control_id
+  }
+
   return attrs
 })
 

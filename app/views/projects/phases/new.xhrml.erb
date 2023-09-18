@@ -14,7 +14,7 @@
       <p class="text-muted small"><span class="text-success"><%= @plan.phases.ranked.last.tasks.where(state: :pass).count %></span> 个成功用例将不显示</p>
   </div>
 
-  <div class="modal-footer">
+  <div class="modal-footer x-spacer-2">
     <div class="text-end">
       <%= f.submit "确定进入下一轮", class: "btn btn-success" %>
       <%= link_to "返回", [@project, @plan], class: "btn btn-secondary" %>

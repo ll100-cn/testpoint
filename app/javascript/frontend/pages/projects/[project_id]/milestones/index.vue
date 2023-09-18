@@ -23,7 +23,7 @@
             <td>{{ milestone.title }}</td>
             <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
             <td><span v-if="milestone.isArchived()">已归档</span></td>
-            <td class="x-spacer-3 text-end">
+            <td class="x-actions justify-content-end x-spacer-3">
               <router-link :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
                 <i class="far fa-pencil-alt" /> 修改
               </router-link>
