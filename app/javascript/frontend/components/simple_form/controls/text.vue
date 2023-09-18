@@ -1,5 +1,5 @@
 <template>
-  <textarea v-model="model_value" class="form-control" :name="name" :disabled="disabled" v-bind="control_attrs" />
+  <textarea v-model="model_value" class="form-control" :name="name" v-bind="control_attrs" />
 </template>
 
 <script setup lang="ts">
@@ -10,7 +10,6 @@ import { ControlProps } from '../helper'
 interface Props extends ControlProps {
   validation?: Validation
   name?: string
-  disabled?: boolean
 }
 
 const props = defineProps<Props>()

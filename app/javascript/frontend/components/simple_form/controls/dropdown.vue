@@ -28,7 +28,6 @@ import { ControlProps } from '../helper'
 interface Props extends ControlProps {
   validation?: Validation
 
-  disabled?: boolean
   include_blank?: boolean | string
 }
 
@@ -57,6 +56,10 @@ const control_attrs = computed(() => {
     attrs.class.push("btn-outline-danger")
   } else {
     attrs.class.push("btn-outline-secondary")
+  }
+
+  if (options.value.disabled) {
+    attrs.disabled = true
   }
 
   return attrs

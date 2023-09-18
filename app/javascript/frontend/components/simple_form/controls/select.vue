@@ -1,5 +1,5 @@
 <template>
-  <select v-model="model_value" class="form-select" v-bind="control_attrs" :disabled="disabled" @change="emit('change', $event)">
+  <select v-model="model_value" class="form-select" v-bind="control_attrs" @change="emit('change', $event)">
     <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
     <template v-if="(collection instanceof Array)">
       <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
@@ -26,12 +26,10 @@ interface Props extends ControlProps {
   validation?: Validation
 
   name?: string
-  disabled?: boolean
   collection: object
   labelMethod: string
   valueMethod: string
   include_blank?: string | boolean
-  required?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -54,14 +52,16 @@ const control_attrs = computed(() => {
 
   if (options.value.size == 'small') {
     attrs.class.push('form-select-sm')
-  }
-
-  if (options.value.size == 'large') {
+  } else if (options.value.size == 'large') {
     attrs.class.push('form-select-lg')
   }
 
   if (validation.value.isInvaild()) {
     attrs.class.push("is-invalid")
+  }
+
+  if (options.value.disabled) {
+    attrs.disabled = true
   }
 
   return attrs

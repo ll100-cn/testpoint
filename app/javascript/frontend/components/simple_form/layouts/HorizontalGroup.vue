@@ -1,9 +1,9 @@
 <template>
   <div class="container mb-3" :class="{ 'has-errors': validation.isInvaild() }">
     <div class="row align-items-start">
-      <div class="row align-items-center" v-bind="label_wrap_attrs">
+      <div class="row align-items-center justify-content-end" v-bind="label_wrap_attrs">
         <slot name="label-prepend" :code="code" />
-        <label :for="code" class="col-form-label col text-end text-nowrap" v-bind="label_attrs">
+        <label :for="code" class="col-form-label col-auto px-0" v-bind="label_attrs">
           <span v-if="label">{{ label }}</span>
         </label>
       </div>
@@ -29,16 +29,18 @@ interface Props extends GroupProps {
   validation?: Validation
   disableds?: any
   hint?: string
+  code?: string
 }
 
 const props = defineProps<Props>()
 
 const validation = helper.validation(props)
-const code = computed(() => validation.value.code)
+const code = computed(() => props.code ?? validation.value.code)
 const disabled = computed(() => {
-//   if (code.value) {
-//     return props.disableds[code.value]
-//   }
+  // if (code.value) {
+  //   return props.disableds[code.value]
+  // }
+
   return false
 })
 

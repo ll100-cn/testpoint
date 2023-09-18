@@ -54,7 +54,11 @@ const label_options = computed(() => {
 
 const default_control_options = inject('default_control_options') as Ref<ControlOptions>
 const control_options = computed(() => {
-  return <ControlOptions>{ size: options.value.size, ...default_control_options.value }
+  return <ControlOptions>{
+    size: options.value.size,
+    disabled: options.value.disabled,
+    ...default_control_options.value
+  }
 })
 provide("default_control_options", control_options)
 

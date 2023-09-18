@@ -3,6 +3,7 @@ import { Ref, computed, inject, ref } from "vue"
 
 export interface WrapperOptions {
   size?: 'default' | 'small' | 'large'
+  disabled?: boolean
 }
 
 export interface LabelOptions {
@@ -11,6 +12,7 @@ export interface LabelOptions {
 
 export interface ControlOptions {
   size?: 'default' | 'small' | 'large'
+  disabled?: boolean
 }
 
 export interface GroupProps {
@@ -70,6 +72,10 @@ export function buildControlAttrs(options: Ref<ControlOptions>, validation: Ref<
 
     if (validation.value.isInvaild()) {
       attrs.class.push("is-invalid")
+    }
+
+    if (options.value.disabled) {
+      attrs.disabled = true
     }
 
     return attrs

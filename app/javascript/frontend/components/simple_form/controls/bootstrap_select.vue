@@ -1,5 +1,5 @@
 <template>
-  <select ref="el" v-model="model_value" :data-live-search="live_search" class="selectpicker form-control" v-bind="control_attrs" data-style-base="form-control" :disabled="disabled">
+  <select ref="el" v-model="model_value" :data-live-search="live_search" class="selectpicker form-control" v-bind="control_attrs" data-style-base="form-control">
     <option v-if="include_blank || include_blank == ''" value>{{ include_blank }}</option>
     <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
       {{ item[labelMethod] }}
@@ -19,7 +19,6 @@ interface Props extends ControlProps {
   validation?: Validation
 
   name?: string
-  disabled?: boolean
   collection: Object
   labelMethod: string
   valueMethod: string

@@ -1,8 +1,8 @@
 <template>
   <div class="pt-2">
-    <input type="hidden" :name="name" value="" :disabled="disabled">
+    <input type="hidden" :name="name" value="" :disabled="options.disabled">
     <div v-for="item in collection" class="form-check form-check-inline">
-      <input v-model="model_value" class="form-check-input" type="checkbox" :value="item[valueMethod]" :name="name" :disabled="disabled">
+      <input v-model="model_value" class="form-check-input" type="checkbox" :value="item[valueMethod]" :name="name" v-bind="control_attrs">
       <label class="form-check-label">{{ item[labelMethod] }}</label>
     </div>
   </div>
@@ -12,19 +12,23 @@
 import { Validation } from '@/models'
 import { PropType } from 'vue'
 import * as helper from "../helper"
+import { ControlProps } from '../helper'
 
-const props = defineProps({
-  validation: { type: Object as PropType<Validation>, required: false },
+interface Props extends ControlProps {
+  validation?: Validation
 
-  name: { type: String, required: false },
-  disabled: { type: Boolean, required: false, default: false },
-  collection: { type: Array, required: true },
-  labelMethod: { type: String, required: true },
-  valueMethod: { type: String, required: true },
-})
+  name?: string
+  collection: Object
+  labelMethod: string
+  valueMethod: string
+}
+
+const props = defineProps<Props>()
 
 const define_model_value = defineModel<any>()
 const model_value = helper.modelValue(define_model_value)
 const validation = helper.validation(props)
 
+const options = helper.buildControlOptions(props)
+const control_attrs = helper.buildControlAttrs(options, validation)
 </script>

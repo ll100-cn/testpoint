@@ -1,5 +1,5 @@
 <template>
-  <input v-model="model_value" class="form-control" :name="name" :disabled="disabled" v-bind="control_attrs">
+  <input v-model="model_value" class="form-control" :name="name" v-bind="control_attrs">
 </template>
 
 <script setup lang="ts">
@@ -12,12 +12,9 @@ export interface Props extends ControlProps {
   validation?: Validation
 
   name?: string
-  disabled?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  disabled: false
-})
+const props = defineProps<Props>()
 
 const define_model_value = defineModel<any>()
 const model_value = helper.modelValue(define_model_value)
