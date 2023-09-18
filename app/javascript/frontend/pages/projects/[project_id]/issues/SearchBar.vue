@@ -1,26 +1,25 @@
 <template>
-  <FormInline v-bind="{ former }" @submit.prevent="former.submit">
+  <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
     <layouts.group label="分类" code="category_id_eq">
-      <forms.bootstrap_select v-bind="{ collection: category_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '全部' }" @change="former.submit" />
+      <controls.bootstrap_select v-bind="{ collection: category_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '全部' }" @change="former.submit" />
     </layouts.group>
     <layouts.group label="里程碑" code="milestone_id_eq">
-      <forms.bootstrap_select v-bind="{ collection: milestone_collection, labelMethod: 'title', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
+      <controls.bootstrap_select v-bind="{ collection: milestone_collection, labelMethod: 'title', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
     </layouts.group>
     <layouts.group label="受理人" code="assignee_id_eq">
-      <forms.bootstrap_select v-bind="{ collection: assignee_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
+      <controls.bootstrap_select v-bind="{ collection: assignee_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
     </layouts.group>
     <layouts.group label="创建人" code="creator_id_eq">
-      <forms.bootstrap_select v-bind="{ collection: creator_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
+      <controls.bootstrap_select v-bind="{ collection: creator_collection, labelMethod: 'name', valueMethod: 'id', include_blank: '任意' }" @change="former.submit" />
     </layouts.group>
     <layouts.group label="问题类型" code="task_id_is">
-      <forms.bootstrap_select v-bind="{ collection: issue_type_collection, labelMethod: 'label', valueMethod: 'value', include_blank: '所有' }" @change="former.submit" />
+      <controls.bootstrap_select v-bind="{ collection: issue_type_collection, labelMethod: 'label', valueMethod: 'value', include_blank: '所有' }" @change="former.submit" />
     </layouts.group>
-  </FormInline>
+  </layouts.form_inline>
 </template>
 
 <script setup lang="ts">
-import FormInline from "@/components/FormInline.vue"
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as utils from "@/lib/utils"
 import { IssueSummary } from "@/models"

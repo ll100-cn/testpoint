@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import * as helper from "./helper"
+import * as helper from "../helper"
 import Component, { Props } from './string.vue'
 
 const props = defineProps<Props>()

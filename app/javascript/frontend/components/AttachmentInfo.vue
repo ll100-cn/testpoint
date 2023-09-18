@@ -24,13 +24,13 @@
 
     <div class="flex-column flex-grow-1">
       <div v-if="editing" class="d-flex x-actions">
-        <FormInline v-bind="{ former }" @submit.prevent="former.submit">
-          <layouts.group class="mb-0" code="title"><forms.string /></layouts.group>
+        <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
+          <layouts.group class="mb-0" code="title"><controls.string /></layouts.group>
           <div class="x-actions text-nowrap">
             <layouts.submit>更新</layouts.submit>
             <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
           </div>
-        </FormInline>
+        </layouts.form_inline>
       </div>
       <template v-else>
         <div class="d-flex align-items-center">
@@ -52,16 +52,13 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, forms, layouts } from "@/components/simple_form"
-import { getCurrentInstance, nextTick, onMounted, onUpdated, ref } from "vue"
-
+import { Validations, controls, layouts } from "@/components/simple_form"
 import * as requests from '@/lib/requests'
-import ClipboardJS from "clipboard"
-import prettyBytes from "pretty-bytes"
-import _ from "lodash"
-
 import { Attachment } from "@/models"
-import FormInline from "./FormInline.vue"
+import ClipboardJS from "clipboard"
+import _ from "lodash"
+import prettyBytes from "pretty-bytes"
+import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import Former from "./simple_form/Former"
 
 const { proxy } = getCurrentInstance()

@@ -5,79 +5,45 @@
         <div class="modal-header">
           <h5 class="modal-title">批量编辑</h5>
         </div>
-        <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+        <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
             <FormErrorAlert />
 
-            <layouts.group code="role_name" label="角色" :disableds="form_disabled_mapping">
-              <template #label-prepend="{ code }">
-                <div class="form-check col-auto form-switch">
-                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </template>
-              <template #default><forms.string /></template>
-            </layouts.group>
+            <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
 
-            <layouts.group code="scene_name" label="场景" :disableds="form_disabled_mapping">
-              <template #label-prepend="{ code }">
-                <div class="form-check col-auto form-switch">
-                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </template>
-              <template #default><forms.string /></template>
-            </layouts.group>
+            <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
 
-            <layouts.group code="group_name" label="分组" :disableds="form_disabled_mapping">
-              <template #label-prepend="{ code }">
-                <div class="form-check col-auto form-switch">
-                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </template>
-              <template #default><forms.string /></template>
-            </layouts.group>
+            <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
 
-            <layouts.group code="title" label="标题" :disableds="form_disabled_mapping">
-              <template #label-prepend="{ code }">
-                <div class="form-check col-auto form-switch">
-                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </template>
-              <template #default><forms.string /></template>
-            </layouts.group>
+            <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
 
-            <layouts.group code="content" label="内容" :disableds="form_disabled_mapping">
-              <template #label-prepend="{ code }">
-                <div class="form-check col-auto form-switch">
-                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </template>
-              <template #default><forms.string /></template>
-            </layouts.group>
+            <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
 
-            <layouts.group code="platform_ids" label="平台" :disableds="form_disabled_mapping">
-              <template #label-prepend="{ code }">
-                <div class="form-check col-auto form-switch">
-                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </template>
-              <template #default><forms.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
-            </layouts.group>
+            <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping">
+              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+            </SwitchFormGroup>
 
-            <layouts.group code="label_ids" label="标签" :disableds="form_disabled_mapping">
-              <template #label-prepend="{ code }">
-                <div class="form-check col-auto form-switch">
-                  <input v-model="form_enabled_mapping[code]" class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </template>
-              <template #default><forms.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" /></template>
-            </layouts.group>
+            <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping">
+              <controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+            </SwitchFormGroup>
+
           </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">保存</button>
+            <layouts.submit>保存</layouts.submit>
           </div>
-        </FormHorizontal>
+        </layouts.form_horizontal>
       </div>
     </div>
 
@@ -121,16 +87,15 @@
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/lib/requests';
-import { Modal } from 'bootstrap';
-import _ from 'lodash';
-import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue';
-
-import FormErrorAlert from '@/components/FormErrorAlert.vue';
-import { Validations, forms, layouts } from "@/components/simple_form";
-import FormHorizontal from '@/components/FormHorizontal.vue'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
+import * as requests from '@/lib/requests'
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { Modal } from 'bootstrap'
+import _ from 'lodash'
+import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue'
+import SwitchFormGroup from './SwitchFormGroup.vue'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()
@@ -214,10 +179,6 @@ const form_enabled_mapping = ref({
   group_name: false,
   platform_ids: false,
   label_ids: false
-})
-
-const form_disabled_mapping = computed(() => {
-  return _.mapValues(form_enabled_mapping.value, (value) => !value)
 })
 
 const test_cases = ref<TestCase[]>([])

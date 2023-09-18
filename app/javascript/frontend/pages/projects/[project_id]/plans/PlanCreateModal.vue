@@ -6,7 +6,7 @@
           <h5 class="modal-title">新增计划</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
         </div>
-        <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+        <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
             <Fields :platforms="platforms" :test_case_stats="test_case_stats" />
           </div>
@@ -14,14 +14,13 @@
             <layouts.submit>新增计划</layouts.submit>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
           </div>
-        </FormHorizontal>
+        </layouts.form_horizontal>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import FormHorizontal from "@/components/FormHorizontal.vue"
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'

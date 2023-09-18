@@ -2,22 +2,22 @@
   <FormErrorAlert />
 
   <layouts.group code="category_id" label="分类">
-    <forms.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
+    <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
   </layouts.group>
-  <layouts.group code="title" label="工单标题"><forms.string /></layouts.group>
-  <layouts.group code="content" label="工单内容"><forms.markdown /></layouts.group>
+  <layouts.group code="title" label="工单标题"><controls.string /></layouts.group>
+  <layouts.group code="content" label="工单内容"><controls.markdown /></layouts.group>
   <layouts.group code="state" label="状态">
-    <forms.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
+    <controls.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
   </layouts.group>
   <layouts.group code="assignee_id" label="工单受理人">
-    <forms.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+    <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
   </layouts.group>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import { ISSUE_STATE_MAPPING } from '@/constants'
 import { Category, IssueTemplate, Member, TaskUpshot } from '@/models'
 import _ from "lodash"

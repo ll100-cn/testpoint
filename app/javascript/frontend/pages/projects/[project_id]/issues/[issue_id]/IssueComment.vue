@@ -2,14 +2,14 @@
   <div v-if="comment.comment_id === null" class="card flex-grow-1 issue-comment">
     <div :id="`comment${comment.id}_content`" class="card-body">
       <div v-if="editing" class="no-margin-bottom">
-        <FormVertical v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
+        <layouts.form_vertical v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
           <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" />
 
           <template #actions>
             <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
             <layouts.submit class="ms-auto">提交修改</layouts.submit>
           </template>
-        </FormVertical>
+        </layouts.form_vertical>
       </div>
       <template v-else>
         <div class="card-title d-flex align-items-center x-actions">
@@ -57,26 +57,26 @@
             <i class="fa fa-times me-1" />取消回复
           </a>
         </div>
-        <FormVertical v-bind="{ former: reply_former }" @submit.prevent="reply_former.submit">
+        <layouts.form_vertical v-bind="{ former: reply_former }" @submit.prevent="reply_former.submit">
           <IssueCommentForm  @attachment-change="replyAttachmentChange" />
 
           <template #actions>
             <layouts.submit class="ms-auto">新增评论</layouts.submit>
           </template>
-        </FormVertical>
+        </layouts.form_vertical>
       </div>
     </div>
   </div>
   <template v-else>
     <li class="list-group-item px-0">
-      <FormVertical v-if="editing" v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
+      <layouts.form_vertical v-if="editing" v-bind="{ former: edit_former }" @submit.prevent="edit_former.submit">
         <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" />
 
         <template #actions>
           <button type="button" class="btn btn-secondary" @click.prevent="finishedEditing">取消</button>
           <layouts.submit class="ms-auto">提交修改</layouts.submit>
         </template>
-      </FormVertical>
+      </layouts.form_vertical>
       <template v-else>
         <div class="d-flex mb-2 align-items-center x-actions">
           <img class="rounded-circle avatar" :src="comment.member.avatarUrl()" width="20">
@@ -101,24 +101,19 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, nextTick, ref } from "vue"
-import { useSessionStore } from "@/store/session"
-
-import { Validations, layouts } from "@/components/simple_form"
-import * as utils from "@/lib/utils"
-import { Attachment, Comment, Issue } from "@/models"
-import * as requests from '@/lib/requests'
-import { Collapse } from "bootstrap"
-import _ from "lodash"
-import { DATE_SHORT_FORMAT } from "@/constants"
-
 import AttachmentBox from "@/components/AttachmentBox.vue"
 import PageContent from "@/components/PageContent.vue"
-import SubmitButton from "@/components/SubmitButton.vue"
-import IssueCommentForm from "./IssueCommentForm.vue"
-import FormVertical from "@/components/FormVertical.vue"
+import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { DATE_SHORT_FORMAT } from "@/constants"
+import * as requests from '@/lib/requests'
+import * as utils from "@/lib/utils"
+import { Attachment, Comment, Issue } from "@/models"
+import { useSessionStore } from "@/store/session"
+import { Collapse } from "bootstrap"
+import _ from "lodash"
+import { getCurrentInstance, nextTick, ref } from "vue"
+import IssueCommentForm from "./IssueCommentForm.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

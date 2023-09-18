@@ -3,19 +3,19 @@
 
   <layouts.group code="user_email" label="用户邮箱">
     <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ former.form.user_email }}</div>
-    <forms.string v-else />
+    <controls.string v-else />
   </layouts.group>
   <layouts.group code="nickname" label="昵称">
-    <forms.string />
+    <controls.string />
   </layouts.group>
   <layouts.group code="role" label="角色">
-    <forms.select v-bind="{ collection: role_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+    <controls.select v-bind="{ collection: role_collection, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
   </layouts.group>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import { ref } from "vue"
 

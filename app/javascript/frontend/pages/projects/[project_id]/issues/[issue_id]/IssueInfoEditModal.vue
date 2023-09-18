@@ -6,37 +6,34 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
 
-      <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
           <FormErrorAlert />
 
           <layouts.group label="备注"><span>{{ issue_info.remark }}</span></layouts.group>
           <layouts.group v-for="(input, index) in current_issue_template?.inputs" :code="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
-            <forms.string />
+            <controls.string />
           </layouts.group>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <SubmitButton :func="updateIssueInfo" submit_text="更新模版化表单" />
         </div>
-      </FormVertical>
+      </layouts.form_vertical>
     </template>
   </CommonModal>
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from "vue"
-
-import { Validations, forms, layouts } from "@/components/simple_form"
-import { Issue, IssueInfo, IssueTemplate } from "@/models"
-import * as requests from '@/lib/requests'
-import _ from "lodash"
-
 import CommonModal from "@/components/CommonModal.vue"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import SubmitButton from "@/components/SubmitButton.vue"
-import FormVertical from "@/components/FormVertical.vue"
+import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
+import * as requests from '@/lib/requests'
+import { Issue, IssueInfo, IssueTemplate } from "@/models"
+import _ from "lodash"
+import { getCurrentInstance, ref } from "vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

@@ -7,7 +7,7 @@
   </div>
 
   <div v-if="mode == 'edit'">
-    <FormVertical v-bind="{ former }" @submit.prevent="onSubmit">
+    <layouts.form_vertical v-bind="{ former }" @submit.prevent="onSubmit" :default_wrapper_options="{ size: 'small' }">
       <div class="mb-2">
         <slot name="editable" />
       </div>
@@ -16,7 +16,7 @@
         <layouts.submit class="btn-sm">更新</layouts.submit>
         <button class="btn btn-sm btn-secondary" @click="mode = 'show'">取消</button>
       </div>
-    </FormVertical>
+    </layouts.form_vertical>
   </div>
   <template v-else>
     <slot />
@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import FormVertical from "@/components/FormVertical.vue"
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import { ref } from "vue"

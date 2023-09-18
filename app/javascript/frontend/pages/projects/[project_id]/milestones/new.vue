@@ -3,18 +3,17 @@
     <h2>新增里程碑</h2>
   </div>
 
-  <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+  <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
     <Fields />
 
     <template #actions>
       <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">
       <router-link :to="`/projects/${params.project_id}/milestones`" class="btn btn-secondary">取消</router-link>
     </template>
-  </FormVertical>
+  </layouts.form_vertical>
 </template>
 
 <script setup lang="ts">
-import FormVertical from '@/components/FormVertical.vue'
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import { getCurrentInstance } from 'vue'

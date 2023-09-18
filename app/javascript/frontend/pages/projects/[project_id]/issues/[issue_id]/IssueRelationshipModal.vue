@@ -6,21 +6,21 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
 
-      <FormVertical v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
           <FormErrorAlert />
           <layouts.group code="target_id" label="关联的问题ID">
-            <forms.number />
+            <controls.number />
           </layouts.group>
           <layouts.group code="creator_subscribe_target_issue">
-            <forms.checkboxes v-bind="{ collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
+            <controls.checkboxes v-bind="{ collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
           </layouts.group>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <layouts.submit>新增关联问题</layouts.submit>
         </div>
-      </FormVertical>
+      </layouts.form_vertical>
     </template>
   </CommonModal>
 </template>
@@ -28,8 +28,7 @@
 <script setup lang="ts">
 import CommonModal from "@/components/CommonModal.vue"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import FormVertical from "@/components/FormVertical.vue"
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
 import { Issue, IssueRelationship } from "@/models"

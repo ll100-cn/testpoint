@@ -13,6 +13,7 @@ export default class Validations {
       return this.data[code]
     }
 
+    console.log(code)
     this.data[code] = plainToInstance(Validation, {
       code,
       state: null,

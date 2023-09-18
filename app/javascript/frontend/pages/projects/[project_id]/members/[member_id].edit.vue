@@ -3,18 +3,17 @@
     <h2>修改成员</h2>
   </div>
 
-  <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <Fields mode="edit" :project_id="project_id" v-bind="{ former }" />
 
     <template #actions>
       <layouts.submit>修改成员</layouts.submit>
       <router-link class="btn btn-secondary" :to="`/projects/${project_id}/members`">取消</router-link>
     </template>
-  </FormHorizontal>
+  </layouts.form_horizontal>
 </template>
 
 <script setup lang="ts">
-import FormHorizontal from '@/components/FormHorizontal.vue'
 import { Validations, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'

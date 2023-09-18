@@ -6,7 +6,7 @@
         <a href="#" class="text-danger small" @click="archiveTestCase">归档</a>
       </div>
 
-      <FormHorizontal v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
         <div class="modal-body">
           <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
         </div>
@@ -15,21 +15,20 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <layouts.submit>保存</layouts.submit>
         </div>z
-      </FormHorizontal>
+      </layouts.form_horizontal>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Validations, layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import { Modal } from 'bootstrap'
 import $ from 'jquery'
 import { PropType, getCurrentInstance, reactive } from 'vue'
 import CaseForm from './CaseForm.vue'
-import FormHorizontal from '@/components/FormHorizontal.vue'
-import { Validations, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()

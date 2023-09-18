@@ -2,16 +2,16 @@
   <FormErrorAlert />
 
   <layouts.group code="name" label="名称">
-    <forms.string />
+    <controls.string />
   </layouts.group>
   <layouts.group code="default_assignee_id" label="建议工单受理人">
-    <forms.select v-bind="{ collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
+    <controls.select v-bind="{ collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
   </layouts.group>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { forms, layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import { Member } from '@/models'
 import _ from 'lodash'
 import { computed } from "vue"
