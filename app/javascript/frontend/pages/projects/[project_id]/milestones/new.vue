@@ -4,14 +4,18 @@
   </div>
 
   <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields />
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <Fields />
 
-    <hr class="x-form-divider-through">
+        <hr class="x-form-divider-through">
 
-    <layouts.group control_wrap_class="x-actions x-spacer-2">
-      <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">
-      <router-link :to="`/projects/${params.project_id}/milestones`" class="btn btn-secondary">取消</router-link>
-    </layouts.group>
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
+          <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">
+          <router-link :to="`/projects/${params.project_id}/milestones`" class="btn btn-secondary">取消</router-link>
+        </layouts.group>
+      </div>
+    </div>
   </layouts.form_vertical>
 </template>
 

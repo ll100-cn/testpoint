@@ -2,30 +2,33 @@
   <div class="page-header">
     <h2>问题列表（{{ project.name }}）</h2>
 
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <form @submit="querySearch({ keyword: search.keyword })">
-        <div class="input-group ms-auto">
-          <input v-model="search.keyword" type="text" class="form-control" placeholder="搜索问题或评论">
-          <button class="btn btn-primary" type="submit">搜索</button>
-        </div>
-      </form>
+    <div class="d-flex ms-auto x-spacer-4 align-items-center">
+      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)">
+        <layouts.group code="keyword">
+          <controls.string placeholder="搜索问题或评论" />
+        </layouts.group>
+
+        <layouts.submit class="w-auto">搜索</layouts.submit>
+      </layouts.form_inline>
 
       <router-link class="btn btn-primary" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
     </div>
   </div>
 
-  <ul class="nav nav-tabs border-bottom-0 zindex-999 position-relative">
-    <button class="nav-link" :class="{ 'active': current_issue_stage === 'all' }" @click="router.push({ query: { stage: 'all' } })"> 全部 ({{ issue_stage_count['all'] }})
-    </button>
-    <li v-for="(name, code) in ENUM_ISSUE_STAGES" :key="code" class="nav-item">
-      <button class="nav-link" :class="{ 'active': current_issue_stage == code }" @click="router.push({ query: { stage: code } })"> {{ name }} ({{ issue_stage_count[code] }})
-      </button>
-    </li>
-  </ul>
+  <div class="nav nav-tabs mb-n1px position-relative zindex-999">
+    <router-link class="nav-link" :class="{ 'active': search2.stage === 'all' }" :to="{ query: utils.plainToQuery({ ...search2, stage: 'all' }, true) }">
+      全部 ({{ _(issue_stage_count).values().sum() }})
+    </router-link>
+    <template v-for="(name, code) in ENUM_ISSUE_STAGES">
+      <router-link class="nav-link" :class="{ 'active': search2.stage === code }" :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }">
+        {{ name }} ({{ issue_stage_count[code] }})
+      </router-link>
+    </template>
+  </div>
 
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
-      <SearchBar :summary="issue_summary" />
+      <FilterBar :summary="issue_summary" />
       <table class="table">
         <thead>
           <tr>
@@ -58,19 +61,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, reactive, ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
-
-import * as utils from "@/lib/utils"
-import Page from "@/pages/Page"
-import * as requests from '@/lib/requests'
-import _ from "lodash"
-import Search from "./Search"
-
 import CategoryBadge from "@/components/CategoryBadge.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
-import SearchBar from "./SearchBar.vue"
+import { controls, layouts } from "@/components/simple_form"
+import Former from "@/components/simple_form/Former"
+import * as requests from '@/lib/requests'
+import * as utils from "@/lib/utils"
+import Page from "@/pages/Page"
+import _ from "lodash"
+import { computed, getCurrentInstance, reactive, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import FilterBar from "./FilterBar.vue"
+import { Filter2, Search2 } from "./types"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -79,7 +82,8 @@ const query = utils.queryToPlain(route.query)
 const params = route.params as any
 
 const page = utils.instance(Page, query)
-const search = reactive(utils.instance(Search, query))
+const search2 = reactive(utils.instance(Search2, query))
+const filter2 = reactive(utils.instance(Filter2, query))
 
 const project_id = params.project_id
 
@@ -91,7 +95,16 @@ const ENUM_ISSUE_STAGES = {
   resolved: '解决',
   closed: '已关闭',
 }
-const current_issue_stage = ref(search.stage ?? "pending")
+
+const former = Former.build(search2)
+former.perform = async function(search: Search2 | null) {
+  if (search) {
+    const data = utils.compactObject(search)
+    router.push({ query: utils.plainToQuery(data) })
+  } else {
+    router.push({ query: null })
+  }
+}
 
 const project = ref(await new requests.ProjectReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
@@ -99,34 +112,20 @@ const project = ref(await new requests.ProjectReq.Get().setup(proxy, (req) => {
 
 const issues = ref(await new requests.ProjectIssueReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...page, ...search })
+  req.query = utils.compactObject({ ...search2, ...filter2, ...page })
 }).perform())
 
-const issue_summary = ref(await new requests.IssueSummaryReq.Get().setup(proxy, (req) => {
+const issue_summary = ref(await new requests.project.IssueSummaryReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...search })
+  req.query = utils.compactObject({ ...search2, ...filter2 })
 }).perform())
 
-const issue_stats = ref(await new requests.IssueStats().setup(proxy, (req) => {
+const issue_stats = ref(await new requests.project.IssueStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
+  req.query = utils.compactObject({ keyword: search2.keyword })
 }).perform())
 
 const issue_stage_count = computed(() => {
-  const result = _.reduce(ENUM_ISSUE_STAGES, (result: any, name, code) => {
-    const current_stage_count = _.sumBy(_.filter(issue_stats.value, (it) => it.stage == code), "count")
-    return { ...result, [ code ]: current_stage_count }
-  }, {})
-  result.all = _.sumBy(issue_stats.value, "count")
-  return result
+  return _(issue_stats.value).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
 })
-
-function querySearch(search: Search | null) {
-  if (search) {
-    const data = utils.compactObject(search)
-    router.push({ query: utils.plainToQuery(data) })
-  } else {
-    router.push({ query: undefined })
-  }
-}
-
 </script>

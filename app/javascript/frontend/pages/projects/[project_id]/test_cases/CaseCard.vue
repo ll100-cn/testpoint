@@ -48,9 +48,10 @@
 import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
+import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
-import { Type, plainToClass } from 'class-transformer'
+import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -65,15 +66,13 @@ const params = route.params as any
 const query = utils.queryToPlain(route.query)
 
 class Search {
-  @Type(() => String) group_name_search?: string = undefined
-  @Type(() => Number) platform_id?: number = undefined
-  @Type(() => Number) label_id?: number = undefined
+  @t.String group_name_search?: string = undefined
+  @t.Number platform_id?: number = undefined
+  @t.Number label_id?: number = undefined
 }
 
 const search = ref(plainToClass(Search, query))
 const filter = plainToClass(Filter, query.f ?? {})
-
-console.log(utils.instance(Search, query))
 
 const former = Former.build(search.value)
 former.perform = async function() {

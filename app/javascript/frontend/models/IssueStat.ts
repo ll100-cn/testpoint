@@ -1,6 +1,15 @@
+import { Type } from "class-transformer"
+import { Category, Project } from "."
+
 export class IssueStat {
-  archived_at_is: boolean
-  assignee_id_is: boolean
-  stage: string
+  project_id: number
+  category_id: number
+  stage: "pending" | "developing" | "testing" | "deploying" | "resolved" | "closed"
   count: number
+
+  @Type(() => Project)
+  project: Project
+
+  @Type(() => Category)
+  category?: Category
 }

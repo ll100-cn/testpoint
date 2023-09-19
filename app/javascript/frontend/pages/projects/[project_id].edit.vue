@@ -4,14 +4,18 @@
   </div>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields />
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <Fields />
 
-    <hr class="x-form-divider-through">
+        <hr class="x-form-divider-through">
 
-    <layouts.group control_wrap_class="x-actions x-spacer-2">
-      <layouts.submit>编辑项目</layouts.submit>
-      <router-link :to="`/projects`" class="btn btn-secondary">返回</router-link>
-    </layouts.group>
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
+          <layouts.submit>编辑项目</layouts.submit>
+          <router-link :to="`/projects`" class="btn btn-secondary">返回</router-link>
+        </layouts.group>
+      </div>
+    </div>
   </layouts.form_horizontal>
 </template>
 

@@ -60,4 +60,39 @@ class IssueSearcher
     @creator_counts ||= build_scope(except: [:creator_id_eq]).group(:creator).count
   end
 
+
+  def self.build_scope(base, params)
+    issues_scope = base
+
+    if params[:stage].present?
+      issues_scope = issues_scope.where(stage: params[:stage]) if params[:stage] != "all"
+    end
+
+    if params[:keyword].present?
+      keyword = params[:keyword].presence
+
+      issues_scope = issues_scope.where_any_of(
+        Issue.where_exists(Comment.where("content LIKE ?", "%#{keyword}%").where_table(:issue)),
+        Issue.where("title LIKE ? or content LIKE ?", "%#{keyword}%", "%#{keyword}%")
+      )
+    end
+
+    if params[:category_id_eq].present?
+      issues_scope = issues_scope.where(category_id: params[:category_id_eq])
+    end
+
+    if params[:milestone_id_eq].present?
+      issues_scope = issues_scope.where(milestone_id: params[:milestone_id_eq])
+    end
+
+    if params[:assignee_id_eq].present?
+      issues_scope = issues_scope.where(assignee_id: params[:assignee_id_eq])
+    end
+
+    if params[:creator_id_eq].present?
+      issues_scope = issues_scope.where(creator_id: params[:creator_id_eq])
+    end
+
+    issues_scope
+  end
 end

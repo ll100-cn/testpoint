@@ -1,29 +1,21 @@
-import { Type } from "class-transformer"
+import * as t from '@/lib/transforms'
+import { Attachment } from "./Attachment"
 import { Member } from "./Member"
 
-import { Attachment } from "./Attachment"
-
 export class Comment {
-  id : number
-  content : string
+  @t.Number id : number
+  @t.String content : string
 
-  @Type(() => Date)
-  created_at : Date
+  @t.Date created_at : Date
+  @t.Date updated_at : Date
+  @t.Date last_edited_at: Date
 
-  @Type(() => Date)
-  updated_at : Date
+  @t.Number issue_id : number
+  @t.Boolean collapsed : boolean
+  @t.Number member_id : number
+  @t.Klass(Member) member: Member
 
-  @Type(() => Date)
-  last_edited_at: Date
+  @t.Number comment_id : number
 
-  issue_id : number
-  collapsed : boolean
-  member_id : number
-  @Type(() => Member)
-  member: Member
-
-  comment_id : number
-
-  @Type(() => Attachment)
-  attachments: Attachment[]
+  @t.Klass(Attachment) attachments: Attachment[]
 }

@@ -64,6 +64,7 @@ import _ from 'lodash'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PlanCreateModal from './PlanCreateModal.vue'
+import * as t from '@/lib/transforms'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -74,7 +75,7 @@ const query = route.query
 const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
 
 class Search {
-  @Type(() => Number) creator_id_eq?: number = undefined
+  @t.Number creator_id_eq?: number = undefined
 }
 
 const search = utils.instance(Search, query)

@@ -175,6 +175,7 @@ Rails.application.routes.draw do
           end
         end
         resources :issue_stats
+        resources :issue_summaries
       end
     end
 

@@ -16,11 +16,8 @@ import { ControlOptions, WrapperOptions } from '../helper'
 interface Props extends WrapperOptions {
   validation?: Validation
   code?: string
-
   label?: string
-
   hint?: string
-  // options?: WrapperOptions
 }
 
 const slots = useSlots()

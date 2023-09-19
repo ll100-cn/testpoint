@@ -34,6 +34,16 @@
   }
 }
 
+.x-spacer-4 {
+  > * {
+    margin-left: $spacer * 1.5;
+  }
+
+  > *:first-child {
+    margin-left: 0;
+  }
+}
+
 .x-actions {
   display: flex;
   align-items: center;

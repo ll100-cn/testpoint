@@ -1,2 +1,1 @@
-json = @issue_filter_stage_counts
-json
+render partial: "api/shared/issue_state", collection: @project_issues_mapping, as: :issue_stat
