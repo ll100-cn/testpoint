@@ -32,7 +32,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
-import { Issue, IssueInfo } from "@/models"
+import { Issue, IssueSurvey } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 
@@ -41,7 +41,7 @@ const props = defineProps<{
   issue: Issue
 }>()
 const emits = defineEmits<{
-  addIssueInfo: [issue_info: IssueInfo]
+  addIssueSurvey: [issue_survey: IssueSurvey]
 }>()
 
 const modal = ref<InstanceType<typeof CommonModal>>()
@@ -52,12 +52,12 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const issue_info = await new requests.IssueInfoReq.Create().setup(proxy, (req) => {
+  const issue_survey = await new requests.IssueSurveyReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
   }).perform(this.form)
 
-  emits("addIssueInfo", issue_info)
+  emits("addIssueSurvey", issue_survey)
   resetForm()
   modal.value.hide()
 }

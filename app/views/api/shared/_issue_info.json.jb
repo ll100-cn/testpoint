@@ -1,2 +1,0 @@
-json = issue_info.slice(:id, :issue_id, :template_id, :state, :values, :created_at, :updated_at, :remark)
-json

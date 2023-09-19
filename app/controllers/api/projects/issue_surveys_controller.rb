@@ -1,30 +1,30 @@
-class Api::Projects::IssueInfosController < Api::BaseController
+class Api::Projects::IssueSurveysController < Api::BaseController
   load_and_authorize_resource :project
   load_and_authorize_resource :issue
   load_and_authorize_resource through: :issue
 
   def index
-    @issue_infos = @issue.issue_infos.ranked
+    @issue_surveys = @issue.issue_surveys.ranked
   end
 
   def create
-    @issue_info.save
-    respond_with @issue_info
+    @issue_survey.save
+    respond_with @issue_survey
   end
 
   def update
-    @issue_info.assign_attributes(issue_info_params)
-    @issue_info.submit_and_save
-    respond_with @issue_info
+    @issue_survey.assign_attributes(issue_survey_params)
+    @issue_survey.submit_and_save
+    respond_with @issue_survey
   end
 
   def destroy
-    @issue_info.destroy
-    respond_with @issue_info, location: ok_url_or_default([@project, @issue])
+    @issue_survey.destroy
+    respond_with @issue_survey, location: ok_url_or_default([@project, @issue])
   end
 
 protected
-  def issue_info_params
+  def issue_survey_params
     params.permit(*permit_attributes)
   end
 

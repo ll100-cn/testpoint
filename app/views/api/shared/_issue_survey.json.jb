@@ -1,0 +1,2 @@
+json = issue_survey.slice(:id, :issue_id, :template_id, :state, :values, :created_at, :updated_at, :remark)
+json

@@ -21,7 +21,7 @@ import CommonModal from "@/components/CommonModal.vue"
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
-import { Issue, IssueInfo } from "@/models"
+import { Issue, IssueSurvey } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
@@ -31,7 +31,7 @@ const props = defineProps<{
   issue: Issue
 }>()
 const emit = defineEmits<{
-  addIssueInfo: [issue_info: IssueInfo]
+  addIssueSurvey: [issue_survey: IssueSurvey]
   updateIssue: [issue: Issue]
 }>()
 

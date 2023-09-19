@@ -1,6 +1,6 @@
 import { Type } from "class-transformer"
 
-export class IssueInfo {
+export class IssueSurvey {
   id: number
   issue_id: number
   template_id: number

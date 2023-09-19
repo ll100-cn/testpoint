@@ -9,7 +9,7 @@
         <button class="btn btn-sm btn-primary" @click="issue_relationship_modal.show()">
           <i class="far fa-link fa-fw" /> 关联其它问题
         </button>
-        <button class="btn btn-sm btn-primary" @click="issue_info_create_modal.show()">
+        <button class="btn btn-sm btn-primary" @click="issue_survey_create_modal.show()">
           <i class="far fa-file-lines fa-fw" /> 新增问题模版
         </button>
 
@@ -39,7 +39,7 @@
       </div>
     </div>
     <IssueRelationshipModal ref="issue_relationship_modal" :issue="issue" @add-relationship="emits('addRelationship', $event)" />
-    <IssueInfoCreateModal ref="issue_info_create_modal" :issue="issue" @add-issue-info="emits('addIssueInfo', $event)" />
+    <IssueSurveyCreateModal ref="issue_survey_create_modal" :issue="issue" @add-issue-info="emits('addIssueSurvey', $event)" />
     <IssueUnresolveModal ref="issue_unresolve_modal" :issue="issue" @update-issue="emits('updateIssue', $event)" />
   </div>
 </template>
@@ -48,12 +48,12 @@
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import * as requests from '@/lib/requests'
-import { Comment, Issue, IssueInfo, IssueRelationship } from "@/models"
+import { Comment, Issue, IssueSurvey, IssueRelationship } from "@/models"
 import { Collapse } from "bootstrap"
 import _ from "lodash"
 import { getCurrentInstance, nextTick, ref } from "vue"
 import IssueCommentForm from "./IssueCommentForm.vue"
-import IssueInfoCreateModal from "./IssueInfoCreateModal.vue"
+import IssueSurveyCreateModal from "./IssueSurveyCreateModal.vue"
 import IssueRelationshipModal from "./IssueRelationshipModal.vue"
 import IssueUnresolveModal from "./IssueUnresolveModal.vue"
 
@@ -63,13 +63,13 @@ const props = defineProps<{
 }>()
 const emits = defineEmits<{
   addRelationship: [issue_relationship: IssueRelationship]
-  addIssueInfo: [issue_info: IssueInfo]
+  addIssueSurvey: [issue_survey: IssueSurvey]
   addComment: [comment: Comment]
   updateIssue: [issue: Issue]
 }>()
 
 const issue_relationship_modal = ref<InstanceType<typeof IssueRelationshipModal>>()
-const issue_info_create_modal = ref<InstanceType<typeof IssueInfoCreateModal>>()
+const issue_survey_create_modal = ref<InstanceType<typeof IssueSurveyCreateModal>>()
 const issue_unresolve_modal = ref<InstanceType<typeof IssueUnresolveModal>>()
 
 const former = Former.build({

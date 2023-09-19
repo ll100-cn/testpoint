@@ -17,13 +17,12 @@
   <div class="row">
     <div class="col-12 col-md-9 order-1 order-md-0 mb-5">
       <IssueRelatedTask v-if="issue.task" :task="issue.task" :project_id="project_id" />
-      <IssueInfoCard
-        v-for="issue_info in issue_infos"
-        :key="issue_info.id"
+      <IssueSurveyCard
+        v-for="issue_survey in issue_surveys"
         :issue="issue"
-        :issue_info="issue_info"
-        @update-issue-info="updateIssueInfo"
-        @destory-issue-info="destoryIssueInfo" />
+        :issue_survey="issue_survey"
+        @update-issue-info="updateIssueSurvey"
+        @destory-issue-info="destoryIssueSurvey" />
       <IssueContent
         :issue="issue"
         :user="user"
@@ -44,7 +43,7 @@
         :issue="issue"
         @update-issue="updateIssue"
         @add-comment="addComment"
-        @add-issue-info="addIssueInfo"
+        @add-issue-info="addIssueSurvey"
         @add-relationship="addRelationship" />
     </div>
     <IssueDetailsSideBar :issue="issue" @update-issue="updateIssue" @refresh-issue="refreshIssue" />
@@ -54,14 +53,14 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { IssueInfo, IssueRelationship, Comment } from "@/models"
+import { IssueSurvey, IssueRelationship, Comment } from "@/models"
 import * as requests from '@/lib/requests'
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import IssueContent from "./IssueContent.vue"
 import IssueDetailsSideBar from "./IssueDetailsSideBar.vue"
-import IssueInfoCard from "./IssueInfoCard.vue"
+import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueOtherActions from "./IssueOtherActions.vue"
 import IssueRelatedTask from "./IssueRelatedTask.vue"
 import IssueTimeLineList from "./IssueTimeLineList.vue"
@@ -86,7 +85,7 @@ const issue_attachments = ref(await new requests.IssueAttachments().setup(proxy,
   req.interpolations.issue_id = issue.value.id
 }).perform())
 
-const issue_infos = ref(await new requests.IssueInfoReq.List().setup(proxy, (req) => {
+const issue_surveys = ref(await new requests.IssueSurveyReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue.value.id
 }).perform())
@@ -156,21 +155,21 @@ async function refreshIssue() {
   }).perform()
 }
 
-function addIssueInfo(issue_info: IssueInfo) {
-  issue_infos.value.push(issue_info)
+function addIssueSurvey(issue_survey: IssueSurvey) {
+  issue_surveys.value.push(issue_survey)
 }
 
-function destoryIssueInfo(issue_info: IssueInfo) {
-  _.remove(issue_infos.value, (item) => {
-    return item.id == issue_info.id
+function destoryIssueSurvey(issue_survey: IssueSurvey) {
+  _.remove(issue_surveys.value, (item) => {
+    return item.id == issue_survey.id
   })
 }
 
-function updateIssueInfo(issue_info: IssueInfo) {
-  const index = _.findIndex(issue_infos.value, (item) => {
-    return item.id == issue_info.id
+function updateIssueSurvey(issue_survey: IssueSurvey) {
+  const index = _.findIndex(issue_surveys.value, (item) => {
+    return item.id == issue_survey.id
   })
-  issue_infos.value[index] = issue_info
+  issue_surveys.value[index] = issue_survey
 }
 
 function addComment(comment: Comment) {

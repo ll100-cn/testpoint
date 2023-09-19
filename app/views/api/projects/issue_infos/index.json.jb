@@ -1,1 +1,0 @@
-render partial: "api/shared/issue_info", collection: @issue_infos, as: :issue_info
