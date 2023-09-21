@@ -45,18 +45,18 @@ import * as utils from '@/lib/utils';
 import { Milestone } from '@/models';
 import * as requests from '@/lib/requests';
 import _ from 'lodash';
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const page = usePageStore()
 
 const project_id = _.toNumber(params.project_id)
-const milestones = await new requests.MilestoneReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform()
+const milestones = ref(await page.inProject().request(requests.MilestoneReq.List).setup(proxy).perform())
 
 function milestoneDestroy(milestone: Milestone) {
   if (!confirm('确定要删除吗？')) {

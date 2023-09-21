@@ -1,12 +1,12 @@
 <template>
-  <CommonModal ref="modal" close_btn_text="取消">
-    <template #content>
+  <div ref="el" class="modal-dialog modal-lg">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="mb-0">关联问题</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
 
-      <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit" v-if="!loading">
         <div class="modal-body">
           <FormErrorAlert />
           <div class="row gy-3">
@@ -23,56 +23,52 @@
           <layouts.submit>新增关联问题</layouts.submit>
         </div>
       </layouts.form_vertical>
-    </template>
-  </CommonModal>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import CommonModal from "@/components/CommonModal.vue"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
+import BootstrapHelper from "@/lib/BootstrapHelper"
 import * as requests from '@/lib/requests'
-import { Issue, IssueRelationship } from "@/models"
-import _ from "lodash"
+import { IssueInfo, IssueRelationship } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 
+const el = ref(null! as HTMLElement)
 const { proxy } = getCurrentInstance()
-const props = defineProps<{
-  issue: Issue
-}>()
-const emits = defineEmits<{
-  addRelationship: [issue_relationship: IssueRelationship]
+
+const emit = defineEmits<{
+  changed: [ IssueInfo ]
 }>()
 
-const modal = ref<InstanceType<typeof CommonModal>>()
+const props = defineProps<{
+  issue_info: IssueInfo
+}>()
+
 const former = Former.build({
   target_id: undefined,
   creator_subscribe_target_issue: true
 })
 
 former.perform = async function() {
-  const issue_relationship = await new requests.IssueRelationshipReq.Create().setup(proxy, (req) => {
-    req.interpolations.project_id = props.issue.project_id
-    req.interpolations.issue_id = props.issue.id
+  const a_issue_relationship = await new requests.IssueRelationshipReq.Create().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue_info.project_id
+    req.interpolations.issue_id = props.issue_info.id
   }).perform(former.form)
 
-  emits("addRelationship", issue_relationship)
-  resetForm()
-  modal.value.hide()
+  props.issue_info.source_relationships.push(a_issue_relationship)
+  emit('changed', props.issue_info)
+
+  BootstrapHelper.modal(el).hide()
 }
 
-const _form = _.cloneDeep(former.form)
+const loading = ref(true)
 
-function resetForm() {
-  former.form = _form
+function reset() {
+  loading.value = false
 }
 
-function show() {
-  modal.value.show()
-}
-
-defineExpose({
-  show
-})
+defineExpose({ reset })
 </script>

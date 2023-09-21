@@ -47,9 +47,6 @@ export class Issue {
   @Type(() => Task)
   task: Task
 
-  @Type(() => User)
-  subscribed_users: User[]
-
   titleWithPriority() {
     const prefix = this.priority == "important" ? "!!" : ""
     return `${prefix}${this.title}`

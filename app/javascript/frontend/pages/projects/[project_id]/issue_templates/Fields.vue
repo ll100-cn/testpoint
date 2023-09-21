@@ -53,8 +53,11 @@ import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 import * as requests from '@/lib/requests'
+import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
+const page = usePageStore()
+
 const props = defineProps<{
   former: Former<Record<string, any>>
   project_id: string
@@ -64,9 +67,7 @@ const lookup_by_build_form_collection = ref([
   { label: "", value: true },
 ])
 
-const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = props.project_id
-}).perform())
+const categories = await page.inProject().request(requests.CategoryReq.List).setup(proxy).perform()
 
 async function onRemoveInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)

@@ -1,0 +1,11 @@
+json = render partial: "api/shared/issue", locals: { issue: issue }
+
+json[:attachments] = render partial: "api/shared/attachment", collection: issue.attachments, as: :attachment
+
+json[:surveys] = render partial: "api/shared/issue_survey", collection: issue.issue_surveys, as: :issue_survey
+json[:activities] = render partial: "api/shared/issue_activity", collection: issue.activities, as: :issue_activity
+json[:source_relationships] = render partial: "api/shared/issue_relationship", collection: issue.source_relationships, as: :issue_relationship
+json[:target_relationships] = render partial: "api/shared/issue_relationship", collection: issue.target_relationships, as: :issue_relationship
+json[:subscriptions] = render partial: "api/shared/subscription", collection: issue.subscriptions, as: :subscription
+
+json

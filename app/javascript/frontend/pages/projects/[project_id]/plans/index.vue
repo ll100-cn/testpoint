@@ -65,12 +65,14 @@ import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PlanCreateModal from './PlanCreateModal.vue'
 import * as t from '@/lib/transforms'
+import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const query = route.query
+const page = usePageStore()
 
 const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
 
@@ -95,9 +97,7 @@ const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) =
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
 
 const test_case_stats = ref(await new requests.TestCaseStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id

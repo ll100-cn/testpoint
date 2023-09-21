@@ -97,7 +97,7 @@ const _labels = ref(await new requests.TestCaseLabelReq.List().setup(proxy, (req
 }).perform())
 
 const lable_repo = computed(() => {
-  return new EntityRepo<TestCaseLabel>(_labels.value)
+  return new EntityRepo<TestCaseLabel>().setup(_labels.value)
 })
 
 const _platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
@@ -105,7 +105,7 @@ const _platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) 
 }).perform())
 
 const platform_repo = computed(() => {
-  return new EntityRepo<Platform>(_platforms.value)
+  return new EntityRepo<Platform>().setup(_platforms.value)
 })
 
 

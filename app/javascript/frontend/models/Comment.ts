@@ -1,6 +1,7 @@
 import * as t from '@/lib/transforms'
 import { Attachment } from "./Attachment"
 import { Member } from "./Member"
+import { EntityIndex, EntityRepo } from './EntityRepo'
 
 export class Comment {
   @t.Number id : number
@@ -18,4 +19,12 @@ export class Comment {
   @t.Number comment_id : number
 
   @t.Klass(Attachment) attachments: Attachment[]
+}
+
+export class CommentRepo extends EntityRepo<Comment> {
+  parent_id = new EntityIndex<number, Comment>(it => it.comment_id)
+
+  override buildIndex(entity: Comment): void {
+    this.parent_id.add(entity)
+  }
 }

@@ -20,7 +20,7 @@ class Api::Projects::IssueSurveysController < Api::BaseController
 
   def destroy
     @issue_survey.destroy
-    respond_with @issue_survey, location: ok_url_or_default([@project, @issue])
+    respond_with @issue_survey
   end
 
 protected

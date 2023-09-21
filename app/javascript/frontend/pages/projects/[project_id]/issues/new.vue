@@ -30,16 +30,16 @@ import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import Fields from "./Fields.vue"
+import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const issue_template_id = route.query.issue_template_id ?? ""
+const page = usePageStore()
 
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = params.project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
 
 const issue_templates = ref(await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id

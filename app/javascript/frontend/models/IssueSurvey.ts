@@ -1,17 +1,16 @@
-import { Type } from "class-transformer"
+import * as t from '@/lib/transforms'
+import { IssueTemplate } from './IssueTemplate'
 
 export class IssueSurvey {
-  id: number
-  issue_id: number
-  template_id: number
-  state: string
+  @t.Number id: number
+  @t.Number issue_id: number
+  @t.Number template_id: number
+  @t.String state: string
   values: Record<number, string>
 
-  @Type(() => Date)
-  created_at: Date
+  @t.Date created_at: Date
+  @t.Date updated_at: Date
+  @t.String remark: string
 
-  @Type(() => Date)
-  updated_at: Date
-
-  remark: string
+  @t.Klass(IssueTemplate) template: IssueTemplate
 }

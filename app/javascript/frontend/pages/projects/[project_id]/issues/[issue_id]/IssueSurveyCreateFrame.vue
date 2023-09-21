@@ -1,16 +1,16 @@
 <template>
-  <CommonModal ref="modal" close_btn_text="取消">
-    <template #content>
+  <div ref="el" class="modal-dialog modal-lg">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="mb-0">选择问题模版</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
-      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit" v-if="!loading">
         <div class="modal-body">
           <FormErrorAlert />
           <div class="row gy-3">
             <layouts.group code="template_id" label="模版">
-              <controls.select v-bind="{ collection: issue_templates, valueMethod: 'id', labelMethod: 'name' }" />
+              <controls.select :collection="issue_templates" v-bind="{ valueMethod: 'id', labelMethod: 'name' }" />
             </layouts.group>
             <layouts.group code="remark" label="备注">
               <controls.string />
@@ -22,29 +22,29 @@
           <layouts.submit>新增模版化表单</layouts.submit>
         </div>
       </layouts.form_horizontal>
-    </template>
-  </CommonModal>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import CommonModal from "@/components/CommonModal.vue"
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
+import BootstrapHelper from "@/lib/BootstrapHelper"
 import * as requests from '@/lib/requests'
-import { Issue, IssueSurvey } from "@/models"
-import _ from "lodash"
+import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 
+const el = ref(null! as HTMLElement)
 const { proxy } = getCurrentInstance()
-const props = defineProps<{
-  issue: Issue
-}>()
-const emits = defineEmits<{
-  addIssueSurvey: [issue_survey: IssueSurvey]
+
+const emit = defineEmits<{
+  changed: [ IssueInfo ]
 }>()
 
-const modal = ref<InstanceType<typeof CommonModal>>()
+const props = defineProps<{
+  issue_info: IssueInfo
+}>()
 
 const former = Former.build({
   template_id: undefined,
@@ -52,31 +52,35 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const issue_survey = await new requests.IssueSurveyReq.Create().setup(proxy, (req) => {
-    req.interpolations.project_id = props.issue.project_id
-    req.interpolations.issue_id = props.issue.id
+  const a_issue_survey = await new requests.IssueSurveyReq.Create().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue_info.project_id
+    req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
 
-  emits("addIssueSurvey", issue_survey)
-  resetForm()
-  modal.value.hide()
+  props.issue_info.surveys.push(a_issue_survey)
+  emit('changed', props.issue_info)
+
+  BootstrapHelper.modal(el).hide()
 }
 
 const issue_templates = ref([])
-const _form = _.cloneDeep(former.form)
 
-function resetForm() {
-  former.form = _form
-}
+const loading = ref(true)
+async function reset() {
+  loading.value = true
 
-async function show() {
-  modal.value.show()
-  issue_templates.value = await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = props.issue.project_id
-  }).perform()
+  try {
+    issue_templates.value = await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
+      req.interpolations.project_id = props.issue_info.project_id
+    }).perform()
+  } finally {
+    loading.value = false
+  }
 }
 
 defineExpose({
-  show
+  reset
 })
+
+
 </script>

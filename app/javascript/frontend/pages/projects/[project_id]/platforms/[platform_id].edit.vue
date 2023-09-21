@@ -26,11 +26,13 @@ import * as requests from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import { usePageStore } from "@/store"
 
 const route = useRoute()
 const router = useRouter()
 const { proxy } = getCurrentInstance()
 const params = route.params as any
+const page = usePageStore()
 
 const project_id = params.project_id
 const platform_id = params.platform_id
@@ -39,9 +41,7 @@ const platform = ref(await new requests.PlatformReq.Get().setup(proxy, (req) => 
   req.interpolations.platform_id = platform_id
 }).perform())
 
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
 
 const former = Former.build({
   name: platform.value.name,

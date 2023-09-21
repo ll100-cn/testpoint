@@ -1,21 +1,21 @@
 <template>
-  <div class="issue-relationship d-flex align-items-center">
-    <img class="rounded-circle avatar me-1" :src="issue_relationship.member.avatarUrl()" width="20">
-    <span>{{ issue_relationship.member.name }}</span>
+  <div class="issue-relationship d-flex align-items-center x-spacer-2">
+    <MemberLabel :member="issue_relationship.member" />
 
-    <span class="text-primary">
-      <router-link class="mx-1" :to="`/projects/${target.project_id}/issues/${target.project_id}`">#{{ target.id }} {{ target.titleWithPriority() }}</router-link>
-    </span>
-    <span :class="`text text-issue-${target.state} small me-2`">({{ target.state_text }})</span>
-    <span>标记为该问题的相关问题</span>
-    <span class="small text-muted ms-auto">{{ utils.humanize(issue_relationship.created_at, DATE_LONG_FORMAT) }}</span>
+    <span>将问题</span>
+    <span v-if="direction === 'source'">关联到</span>
+    <span v-else>关联自</span>
 
-    <div class="dropdown dropdown-no-arrow ms-1">
+    <router-link :to="`/projects/${other.project_id}/issues/${other.id}`">#{{ other.id }} {{ other.titleWithPriority() }}</router-link>
+
+    <span class="small text-muted">{{ utils.humanize(issue_relationship.created_at, DATE_LONG_FORMAT) }}</span>
+
+    <div class="dropdown dropdown-no-arrow ms-auto">
       <button class="btn btn-sm btn-light dropdown-toggle text-muted" data-bs-toggle="dropdown" style="background: transparent;">
         <i class="far fa-ellipsis-h" aria-hidden="true" />
       </button>
       <div class="dropdown-menu dropdown-menu-end" style="min-width: auto;">
-        <a class="small dropdown-item" @click="destoryIssueRelationShip">取消关联</a>
+        <a class="small dropdown-item" @click="deleteIssueRelationShip">取消关联</a>
       </div>
     </div>
   </div>
@@ -24,45 +24,48 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance } from "vue"
 
+import MemberLabel from "@/components/MemberLabel.vue"
 import { DATE_LONG_FORMAT } from '@/constants'
-import * as utils from "@/lib/utils"
-import { IssueRelationship } from "@/models"
 import * as requests from '@/lib/requests'
+import * as utils from "@/lib/utils"
+import { IssueInfo, IssueRelationship } from "@/models"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
+  issue_info: IssueInfo
   issue_relationship: IssueRelationship
-  project_id: number
-  issue_id: number
 }>()
-const emits = defineEmits<{
-  destoryRelationship: [issue_relationship: IssueRelationship]
+const emit = defineEmits<{
+  changed: [ IssueInfo ]
 }>()
 
-const issue = computed(() => {
-  return props.issue_relationship.source
+const direction = computed(() => {
+  return props.issue_relationship.source.id === props.issue_info.id ? "source" : "target"
 })
 
-const target = computed(() => {
-  if (issue.value == props.issue_relationship.source) {
-    return props.issue_relationship.target
-  } else {
-    return props.issue_relationship.source
-  }
+const other = computed(() => {
+  return direction.value === 'source' ? props.issue_relationship.target : props.issue_relationship.source
 })
 
-async function destoryIssueRelationShip() {
+async function deleteIssueRelationShip() {
   if (!confirm("确认删除问题的关联？")) {
     return
   }
-  const issue_relationship = await new requests.IssueRelationshipReq.Destroy().setup(proxy, (req) => {
-    req.interpolations.project_id = props.project_id
-    req.interpolations.issue_id = props.issue_id
+
+  await new requests.IssueRelationshipReq.Destroy().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue_info.project_id
+    req.interpolations.issue_id = props.issue_info.id
     req.interpolations.issue_relationship_id = props.issue_relationship.id
   }).perform()
 
-  if (issue_relationship) {
-    emits("destoryRelationship", issue_relationship)
+  if (direction.value === 'source') {
+    const source_index = props.issue_info.source_relationships.findIndex(it => it.id == props.issue_relationship.id)
+    props.issue_info.source_relationships.splice(source_index, 1)
+  } else {
+    const target_index = props.issue_info.target_relationships.findIndex(it => it.id == props.issue_relationship.id)
+    props.issue_info.target_relationships.splice(target_index, 1)
   }
+
+  emit("changed", props.issue_info)
 }
 </script>
