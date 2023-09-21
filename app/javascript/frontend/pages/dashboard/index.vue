@@ -18,9 +18,9 @@
             <td>{{ project.name }}</td>
 
             <td v-for="(_, code) in ENUM_ISSUE_STAGES">
-              <span v-for="issue_stat in issue_stats_mapping.get(code) ?? []" class="text-nowrap mb-1 me-2">
-                <span class="badge text-white" :style="`background-color: ${issue_stat.category?.color ?? '#212529'}`">{{ issue_stat.category?.name ?? "未分配" }} {{ issue_stat.count }}</span>
-              </span>
+              <router-link :to="`/projects/${project.id}/issues?stage=${code}`">
+                <CategoryBadge v-for="issue_stat in issue_stats_mapping.get(code) ?? []" class="text-nowrap mb-1 me-2" :category="issue_stat.category" :count="issue_stat.count" />
+              </router-link>
             </td>
           </tr>
         </tbody>
@@ -30,14 +30,15 @@
 </template>
 
 <script setup lang="ts">
-import { IssueStat2, Project } from '@/models'
+import { IssueStat, Project } from '@/models'
 import * as requests from '@/lib/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
+import CategoryBadge from '@/components/CategoryBadge.vue'
 
 const proxy = getCurrentInstance()!.proxy!
 
-const issue_stats = ref(await new requests.profile.IssueStat2Req.List().setup(proxy).perform())
+const issue_stats = ref(await new requests.profile.IssueStatReq.List().setup(proxy).perform())
 
 const ENUM_ISSUE_STAGES = {
   pending: '分配',
@@ -50,7 +51,7 @@ const ENUM_ISSUE_STAGES = {
 
 const grouped_issue_stats = computed(() => {
   const project_repo = new Map<number, Project>()
-  const result = new Map<Project, Map<string, IssueStat2[]>>()
+  const result = new Map<Project, Map<string, IssueStat[]>>()
 
   for (const issue_stat of issue_stats.value) {
     const project = project_repo.get(issue_stat.project_id) || issue_stat.project
@@ -58,7 +59,7 @@ const grouped_issue_stats = computed(() => {
 
     let issue_stats_mapping = result.get(project)
     if (!issue_stats_mapping) {
-      issue_stats_mapping = new Map<string, IssueStat2[]>()
+      issue_stats_mapping = new Map<string, IssueStat[]>()
       result.set(project, issue_stats_mapping)
     }
 

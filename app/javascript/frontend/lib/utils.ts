@@ -43,8 +43,11 @@ export function queryToPlain(query) {
   return qs.parse(querystring, { ignoreQueryPrefix: true })
 }
 
-export function plainToQuery(plain): any {
-  const data = toValue(plain)
+export function plainToQuery(plain, compact: boolean = false): any {
+  let data = toValue(plain)
+  if (compact) {
+    data = compactObject(data)
+  }
   const querystring = qs.stringify(data)
   return qs.parse(querystring, { depth: 0, ignoreQueryPrefix: true })
 }

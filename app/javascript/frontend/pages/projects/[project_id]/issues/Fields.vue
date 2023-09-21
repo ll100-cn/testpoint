@@ -1,26 +1,28 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group code="issue_template_id" label="选择问题模版">
-    <controls.bootstrap_select v-bind="{ collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
-  </layouts.group>
-  <template v-if="former.form['issue_template_id']">
-    <layouts.group code="title" label="标题">
-      <controls.string v-bind="{ form: former.form.issue_attributes }" />
+  <div class="row gy-3">
+    <layouts.group code="issue_template_id" label="选择问题模版">
+      <controls.bootstrap_select v-bind="{ collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
     </layouts.group>
-    <layouts.group code="creator_id" label="创建人">
-      <controls.bootstrap_select v-bind="{ form: former.form.issue_attributes, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
-    </layouts.group>
-    <layouts.group code="content" label="内容">
-      <controls.markdown v-bind="{ form: former.form.issue_attributes }" />
-    </layouts.group>
-    <layouts.group>
-      <AttachmentUploader @change="emits('attachmentChange', $event)" />
-    </layouts.group>
-  </template>
+    <template v-if="former.form['issue_template_id']">
+      <layouts.group code="title" label="标题">
+        <controls.string v-bind="{ form: former.form.issue_attributes }" />
+      </layouts.group>
+      <layouts.group code="creator_id" label="创建人">
+        <controls.bootstrap_select v-bind="{ form: former.form.issue_attributes, collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
+      </layouts.group>
+      <layouts.group code="content" label="内容">
+        <controls.markdown v-bind="{ form: former.form.issue_attributes }" />
+      </layouts.group>
+      <layouts.group>
+        <AttachmentUploader @change="emits('attachmentChange', $event)" />
+      </layouts.group>
+    </template>
+  </div>
 
   <template v-if="current_issue_template">
-    <hr>
+    <hr class="x-form-divider-through">
     <layouts.group v-for="(input, index) in current_issue_template.inputs" :code="`info_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
       <controls.string />
     </layouts.group>

@@ -10,9 +10,9 @@
           <div class="modal-body">
             <Fields :platforms="platforms" :test_case_stats="test_case_stats" />
           </div>
-          <div class="modal-footer">
-            <layouts.submit>新增计划</layouts.submit>
+          <div class="modal-footer x-spacer-2">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            <layouts.submit>新增计划</layouts.submit>
           </div>
         </layouts.form_horizontal>
       </div>

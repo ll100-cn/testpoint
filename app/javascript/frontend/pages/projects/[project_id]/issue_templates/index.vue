@@ -23,7 +23,7 @@
               <td>{{ item.id }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</td>
-              <td class="x-spacer-3 text-end">
+              <td class="x-actions justify-content-end x-spacer-3">
                 <router-link :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-auto d-flex" :class="{ 'has-errors': validation.isInvaild() }">
+  <div class="x-form-group col-auto d-flex" :class="{ 'has-errors': validation.isInvaild() }">
     <label v-if="label" :for="code" class="col-form-label col text-end text-nowrap me-1" v-bind="label_attrs">{{ label }}</label>
 
     <div class="d-flex align-items-center">
@@ -11,23 +11,24 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed } from 'vue'
-import _ from "lodash"
-import * as helper from '../helper'
 import { Validation } from '@/models'
-import { GroupProps, LabelOptions, WrapperOptions } from '../helper'
+import _ from "lodash"
+import { computed } from 'vue'
+import * as helper from '../helper'
+import { GroupProps } from '../helper'
 
 interface Props extends GroupProps {
   label?: string
   validation?: Validation
   disableds?: any
   hint?: string
+  code?: string
 }
 
 const props = defineProps<Props>()
 
 const validation = helper.validation(props)
-const code = computed(() => validation.value.code)
+const code = computed(() => props.code ?? validation.value.code)
 
 const label_attrs = helper.buildLabelAttrs(props)
 </script>

@@ -25,6 +25,7 @@ export abstract class BaseRequest<T> {
   headers = {}
   conifg: AxiosRequestConfig = {}
   ctx: PerformContext = { $axios: null, $keyv: null }
+  subject: rxjs.Subject<T>
 
   setup(ctx: { $axios: any, $keyv: any }, callback: (instance: this) => void | null = null): this {
     this.ctx = ctx
@@ -37,6 +38,27 @@ export abstract class BaseRequest<T> {
   }
 
   async perform(data?): Promise<T> {
+    const subject = this.doPerformSubject(data)
+    return await rxjs.lastValueFrom(subject)
+  }
+
+  doPerformSubject(data?) {
+    if (this.subject) {
+      return this.subject
+    }
+
+    this.subject = new rxjs.ReplaySubject()
+    this.doPerform(data).then(it => {
+      this.subject.next(it)
+      this.subject.complete()
+    }).catch(e => {
+      this.subject.error(e)
+    })
+
+    return this.subject
+  }
+
+  async doPerform(data?): Promise<T> {
     this.data = data
 
     try {
@@ -44,11 +66,11 @@ export abstract class BaseRequest<T> {
       const result = this.processResponse(resp)
       return result
     } catch (e) {
-      await this.processError(e)
+      return await this.processError(e)
     }
   }
 
-  async processError(e: Error) {
+  async processError(e: Error): Promise<T> {
     if (e instanceof AxiosError && e.response?.status === 403) {
       throw new ErrorAccessDenied()
     } else if (e instanceof AxiosError && e.response?.status === 401) {
@@ -99,6 +121,8 @@ export abstract class BaseRequest<T> {
       const formData = data instanceof FormData ? data : this.buildFormData(data)
       config.data = formData
     }
+
+    console.log(config.method, config.url)
 
     if (config.method === "GET") {
       const key = config.url

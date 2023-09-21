@@ -1,0 +1,5 @@
+json = issue_stat.slice(:project_id, :stage, :category_id, :count)
+json[:project] = render partial: 'api/shared/project', locals: { project: issue_stat.project }
+json[:category] = render partial: 'api/shared/category', locals: { category: issue_stat.category } if issue_stat.category_id?
+
+json

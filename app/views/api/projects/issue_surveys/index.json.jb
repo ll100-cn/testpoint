@@ -1,0 +1,1 @@
+render partial: "api/shared/issue_survey", collection: @issue_surveys, as: :issue_survey

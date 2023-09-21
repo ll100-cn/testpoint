@@ -3,13 +3,19 @@
     <h2>修改分类</h2>
   </div>
 
-  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit" :default_wrapper_options="{ size: 'small' }">
-    <Fields />
+  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <Fields />
 
-    <template #actions>
-      <layouts.submit>修改分类</layouts.submit>
-      <router-link class="btn btn-secondary" :to="`/projects/${project_id}/categories`">取消</router-link>
-    </template>
+        <hr class="x-form-divider-through">
+
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
+          <layouts.submit>修改分类</layouts.submit>
+          <router-link class="btn btn-secondary" :to="`/projects/${project_id}/categories`">取消</router-link>
+        </layouts.group>
+      </div>
+    </div>
   </layouts.form_horizontal>
 </template>
 

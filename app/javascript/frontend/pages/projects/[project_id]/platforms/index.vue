@@ -23,7 +23,7 @@
             <tr>
               <td>{{ platform.name }}</td>
               <td>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</td>
-              <td class="x-actions text-end">
+              <td class="x-actions justify-content-end x-spacer-3">
                 <router-link :to="`/projects/${project_id}/platforms/${platform.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
@@ -46,11 +46,13 @@ import * as requests from '@/lib/requests'
 import _ from 'lodash'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const page = usePageStore()
 
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
@@ -59,9 +61,7 @@ const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) =
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
 
 async function onRemove(id: number) {
   if (!confirm("是否删除平台？")) {

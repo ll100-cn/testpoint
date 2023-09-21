@@ -157,7 +157,7 @@ Rails.application.routes.draw do
         resources :issues do
           resource :subscription
           resources :issue_relationships
-          resources :issue_infos
+          resources :issue_surveys
 
           get :summary, on: :collection
           patch :unresolve, on: :member
@@ -175,6 +175,8 @@ Rails.application.routes.draw do
           end
         end
         resources :issue_stats
+        resources :issue_infos
+        resources :issue_summaries
       end
     end
 

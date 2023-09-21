@@ -1,7 +1,8 @@
 json = issue.slice(
   :id, :title, :content, :state, :state_text, :created_at, :updated_at,
   :project_id, :last_edited_at, :creator_id, :assignee_id, :priority, :priority_text,
-  :task_id, :category_id, :archived_at, :milestone_id, :subscribed_users
+  :task_id, :category_id, :archived_at, :milestone_id, :subscribed_users,
+  :stage, :stage_text
 )
 
 json[:creator] = render partial: "api/shared/member", locals: { member: issue.creator }

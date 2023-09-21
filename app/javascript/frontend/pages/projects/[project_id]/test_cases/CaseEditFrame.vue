@@ -11,7 +11,7 @@
           <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
         </div>
 
-        <div class="modal-footer">
+        <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <layouts.submit>保存</layouts.submit>
         </div>z

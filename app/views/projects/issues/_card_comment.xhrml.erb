@@ -48,7 +48,7 @@
   <% end %>
 
   <div class="collapse mt-3" id="newCommentComment2-<%= comment.id %>">
-    <div class="card-footer bg-white">
+    <div class="card-footer">
       <div class="d-flex">
         <span>回复 <%= comment.member.name %>:</span>
         <%= link_to "#", class: "btn btn-outline-secondary btn-sm ms-auto", data: { bs_toggle: "collapse", bs_target: "#newCommentComment2-#{comment.id}" } do %>

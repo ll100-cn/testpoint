@@ -1,9 +1,11 @@
 <template>
   <span v-if="category" class="badge" :style="`background-color: ${category.color}`">
     {{ category.name }}
+    <template v-if="count">{{ count }}</template>
   </span>
-  <span v-else>
-    无
+  <span v-else class="badge" style="background-color: #212529;">
+    未分配
+    <template v-if="count">{{ count }}</template>
   </span>
 </template>
 
@@ -11,7 +13,8 @@
 import { Category } from '@/models'
 
 const props = defineProps<{
-  category: Category
+  category?: Category
+  count?: number
 }>()
 
 </script>

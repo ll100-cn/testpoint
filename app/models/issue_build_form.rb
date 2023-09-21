@@ -3,7 +3,7 @@ class IssueBuildForm
 
   attribute :template
   attribute :issue
-  attribute :info
+  attribute :survey
   attribute :from_task_id
 
   def submit(params)
@@ -31,8 +31,8 @@ class IssueBuildForm
 
       if template
         if !self.template.content_blank?
-          if !self.info.submit_and_save
-            self.errors.add(:issue, self.info.errors.full_messages.first)
+          if !self.survey.submit_and_save
+            self.errors.add(:issue, self.survey.errors.full_messages.first)
             raise ActiveRecord::Rollback
           end
         end
@@ -45,11 +45,11 @@ class IssueBuildForm
   end
 
   def info_attributes=(attrs)
-    self.info.assign_attributes(attrs)
+    self.survey.assign_attributes(attrs)
   end
 
   def prepare
-    self.info = IssueInfo.new(template: self.template, issue: self.issue)
+    self.survey = IssueSurvey.new(template: self.template, issue: self.issue)
     if self.template
       self.issue.title = self.template.title_suggestion
       self.issue.content = self.template.content_suggestion

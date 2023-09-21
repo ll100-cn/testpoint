@@ -4,14 +4,20 @@
   </div>
 
   <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields v-bind="{ former }" :members="members" :issue_templates="issue_templates" :current_issue_template="current_issue_template" @attachment-change="onAttachmentChange" />
-    <template v-if="current_issue_template">
-      <hr>
-      <div class="x-actions">
-        <layouts.submit>新增问题</layouts.submit>
-        <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/issues`">取消</router-link>
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <Fields v-bind="{ former }" :members="members" :issue_templates="issue_templates" :current_issue_template="current_issue_template" @attachment-change="onAttachmentChange" />
+
+        <template v-if="current_issue_template">
+          <hr class="x-form-divider-through">
+
+          <layouts.group control_wrap_class="x-actions x-spacer-2">
+            <layouts.submit>新增问题</layouts.submit>
+            <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/issues`">取消</router-link>
+          </layouts.group>
+        </template>
       </div>
-    </template>
+    </div>
   </layouts.form_vertical>
 </template>
 
@@ -24,16 +30,16 @@ import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import Fields from "./Fields.vue"
+import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const issue_template_id = route.query.issue_template_id ?? ""
+const page = usePageStore()
 
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = params.project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
 
 const issue_templates = ref(await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id

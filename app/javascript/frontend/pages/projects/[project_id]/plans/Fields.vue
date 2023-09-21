@@ -1,14 +1,16 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group code="title" label="标题"><controls.string /></layouts.group>
-  <layouts.group code="platform_id" label="平台">
-    <controls.select v-bind="{ collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
-  </layouts.group>
+  <div class="row gy-3">
+    <layouts.group code="title" label="标题"><controls.string /></layouts.group>
+    <layouts.group code="platform_id" label="平台">
+      <controls.select v-bind="{ collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
+    </layouts.group>
 
-  <layouts.group v-if="test_case_stats && test_case_stats.length > 0" code="role_names" label="角色">
-    <controls.checkboxes v-bind="{ collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
-  </layouts.group>
+    <layouts.group v-if="test_case_stats && test_case_stats.length > 0" code="role_names" label="角色">
+      <controls.checkboxes v-bind="{ collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
+    </layouts.group>
+  </div>
 </template>
 
 <script setup lang="ts">

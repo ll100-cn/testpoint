@@ -10,8 +10,10 @@
           <div class="modal-body">
             <FormErrorAlert />
 
-            <layouts.group code="title" label="标题"><controls.string /></layouts.group>
-            <layouts.group code="release_revision" label="版本构建号" hint="*选填，仅用于备注"><controls.string /></layouts.group>
+            <div class="row gy-3">
+              <layouts.group code="title" label="标题"><controls.string /></layouts.group>
+              <layouts.group code="release_revision" label="版本构建号" hint="*选填，仅用于备注"><controls.string /></layouts.group>
+            </div>
 
             <hr>
             <h5>待测用例</h5>
@@ -19,7 +21,7 @@
             <p class="text-muted small"><span class="text-body">{{ upshots_state_counts['pending'] ?? 0 }}</span> 个未测试用例, 将添加到本轮</p>
             <p class="text-muted small"><span class="text-success">{{ upshots_state_counts['pass'] ?? 0 }}</span> 个成功用例将不显示</p>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer x-spacer-2">
             <layouts.submit>确定进入下一轮</layouts.submit>
             <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close" @click.prevent>返回</button>
           </div>

@@ -1,23 +1,22 @@
 import { Validation } from "@/models"
-import { Ref, computed, inject, ref } from "vue"
+import { LabelHTMLAttributes, Ref, computed, inject, ref } from "vue"
 
 export interface WrapperOptions {
   size?: 'default' | 'small' | 'large'
   disabled?: boolean
-}
+  control_id?: string
 
-export interface LabelOptions {
-  wrap_class?: string
+  label_wrap_class?: string
+  control_wrap_class?: string
 }
 
 export interface ControlOptions {
   size?: 'default' | 'small' | 'large'
   disabled?: boolean
+  control_id?: string
 }
 
-export interface GroupProps {
-  options: WrapperOptions
-  label_options: LabelOptions
+export interface GroupProps extends WrapperOptions {
 }
 
 export interface ControlProps {
@@ -43,15 +42,17 @@ export function modelValue(define_model_value: Ref<any>) {
   return inject_model_value
 }
 
-export function buildLabelAttrs(props: GroupProps) {
+export function buildLabelAttrs(options: WrapperOptions) {
   return computed(() => {
-    const attrs: any = {}
-    if (props.options.size == 'small') {
-      attrs.class += ' col-form-label-sm'
+    const attrs =  <LabelHTMLAttributes>{ class: [] }
+    if (options.size == 'small') {
+      attrs.class.push('col-form-label-sm')
+    } else if (options.size == 'large') {
+      attrs.class.push('col-form-label-lg')
     }
 
-    if (props.options.size == 'large') {
-      attrs.class += ' col-form-label-lg'
+    if (options.control_id) {
+      attrs.for = options.control_id
     }
 
     return attrs
@@ -78,6 +79,10 @@ export function buildControlAttrs(options: Ref<ControlOptions>, validation: Ref<
       attrs.disabled = true
     }
 
+    if (options.value.control_id) {
+      attrs.id = options.value.control_id
+    }
+
     return attrs
   })
 }
@@ -86,6 +91,6 @@ export function buildControlOptions(props: ControlProps) {
   const default_control_options = inject('default_control_options') as Ref<ControlOptions>
 
   return computed(() => {
-    return { ...default_control_options.value, ...props.options }
+    return { ...default_control_options?.value, ...props.options }
   })
 }

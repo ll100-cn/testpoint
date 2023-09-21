@@ -3,7 +3,7 @@ class Api::Projects::IssuesController < Api::BaseController
   load_and_authorize_resource through: :project
 
   def index
-    @filter = params[:filter] || "assign"
+    @stage = params[:stage] || "pending"
     @keyword = params[:keyword].presence
 
     @issues = @issues.includes(:assignee).references(:assignee)
@@ -11,7 +11,7 @@ class Api::Projects::IssuesController < Api::BaseController
     @issues = @issues.includes(:category).references(:category)
     issues_scope = @issues
 
-    issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
+    issues_scope = issues_scope.where(stage: @stage) if @stage != "all"
     if @keyword
       issues_scope = issues_scope.where_exists(Comment.where("content LIKE ?", "%#{@keyword}%").where_table(:issue))
         .or(issues_scope.where("title LIKE ? or content LIKE ?", "%#{@keyword}%", "%#{@keyword}%"))
@@ -66,7 +66,7 @@ class Api::Projects::IssuesController < Api::BaseController
   end
 
   def summary
-    @filter = params[:filter] || "assign"
+    @stage = params[:filter] || "assign"
     @keyword = params[:keyword].presence
 
     @issues = @issues.includes(:assignee).references(:assignee)
@@ -74,7 +74,7 @@ class Api::Projects::IssuesController < Api::BaseController
     @issues = @issues.includes(:category).references(:category)
     issues_scope = @issues
 
-    issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
+    issues_scope = issues_scope.where(stage: @stage) if @stage != "all"
     if @keyword
       issues_scope = issues_scope.where_exists(Comment.where("content LIKE ?", "%#{@keyword}%").where_table(:issue))
         .or(issues_scope.where("title LIKE ? or content LIKE ?", "%#{@keyword}%", "%#{@keyword}%"))

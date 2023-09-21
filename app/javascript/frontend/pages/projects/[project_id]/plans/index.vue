@@ -6,23 +6,16 @@
       <button class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
     </div>
   </div>
-  <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="getData" />
+  <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="onCreated" />
 
-  <div class="page-filter x-actions">
-    <div class="d-flex align-items-center">
-      <label class="text-nowrap me-2">成员</label>
-      <controls.select
-        class="bg-light"
-        v-bind="{
-          form: { creator_id: current_creator_id },
-          code: 'creator_id',
-          collection: availiable_members,
-          labelMethod: 'name',
-          valueMethod: 'id',
-          includeBlank: true
-        }" @change="queryChange({ page: 1, q: { creator_id_eq: ($event.target as HTMLInputElement).value } })" />
-    </div>
+  <div class="page-filter">
+    <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)" @input="onSearchInput">
+      <layouts.group code="creator_id_eq" label="成员">
+        <controls.select :collection="availiable_members" labelMethod="name" valueMethod="id" include_blank />
+      </layouts.group>
+    </layouts.form_inline>
   </div>
+
   <div class="row mb-3">
     <div v-for="plan in plans?.list" :key="plan.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
       <router-link :to="{ path: `plans/${plan.id}` }">
@@ -47,7 +40,7 @@
             </div>
           </div>
 
-          <div class="card-footer d-flex justify-content-between align-items-center bg-white">
+          <div class="card-footer x-spacer-2">
             <small>{{ dayjs(plan.created_at).fromNow() }} {{ plan.creator_name }} 创建</small>
             <button class="btn btn-outline-primary btn-sm py-1 ms-auto text-nowrap">进入测试</button>
           </div>
@@ -61,44 +54,50 @@
 
 <script setup lang="ts">
 import PaginationBar from '@/components/PaginationBar.vue'
-import { controls } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
+import Former from '@/components/simple_form/Former'
 import dayjs from '@/lib/dayjs'
 import * as requests from '@/lib/requests'
 import * as utils from '@/lib/utils'
-import { PageQuery } from '@/types'
+import { Type } from 'class-transformer'
 import _ from 'lodash'
-import qs from 'qs'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PlanCreateModal from './PlanCreateModal.vue'
+import * as t from '@/lib/transforms'
+import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const query = route.query
+const page = usePageStore()
 
 const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
-const querystring = qs.stringify(route.query)
-const query: PageQuery = qs.parse(querystring, { ignoreQueryPrefix: true })
-const current_creator_id = ref(query.q?.creator_id_eq)
+
+class Search {
+  @t.Number creator_id_eq?: number = undefined
+}
+
+const search = utils.instance(Search, query)
+const former = Former.build(search)
+former.perform = async function(data) {
+  data = utils.compactObject(data)
+  router.push({ query: utils.plainToQuery(data) })
+}
 
 const project_id = _.toNumber(params.project_id)
-const plans = ref()
+const plans = ref(await new requests.PlanReq.Page().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+  req.query.q = search
+}).perform())
 
-const getData = async () => {
-  plans.value = await new requests.PlanReq.Page().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-    req.query = query
-  }).perform()
-}
-await getData()
 const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
 
 const test_case_stats = ref(await new requests.TestCaseStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
@@ -110,7 +109,13 @@ const availiable_members = computed(() => {
   return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()
 })
 
-function queryChange(data) {
-  router.push({ query: data })
+function onSearchInput(event) {
+  setTimeout(() => {
+    former.submit(former.form)
+  }, 0);
+}
+
+function onCreated() {
+  router.go(0)
 }
 </script>

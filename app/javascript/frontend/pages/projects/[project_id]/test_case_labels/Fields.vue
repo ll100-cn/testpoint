@@ -1,8 +1,10 @@
 <template>
   <FormErrorAlert />
 
-  <layouts.group code="name" label="名称"><controls.string /></layouts.group>
-  <layouts.group code="description" label="描述"><controls.text /></layouts.group>
+  <div class="row gy-3">
+    <layouts.group code="name" label="名称"><controls.string /></layouts.group>
+    <layouts.group code="description" label="描述"><controls.text /></layouts.group>
+  </div>
 </template>
 
 <script setup lang="ts">

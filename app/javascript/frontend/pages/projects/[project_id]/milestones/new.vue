@@ -4,12 +4,18 @@
   </div>
 
   <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields />
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <Fields />
 
-    <template #actions>
-      <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">
-      <router-link :to="`/projects/${params.project_id}/milestones`" class="btn btn-secondary">取消</router-link>
-    </template>
+        <hr class="x-form-divider-through">
+
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
+          <input type="submit" name="commit" value="新增里程碑" class="btn btn-primary">
+          <router-link :to="`/projects/${params.project_id}/milestones`" class="btn btn-secondary">取消</router-link>
+        </layouts.group>
+      </div>
+    </div>
   </layouts.form_vertical>
 </template>
 
@@ -19,6 +25,7 @@ import * as requests from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import { layouts } from '@/components/simple_form'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

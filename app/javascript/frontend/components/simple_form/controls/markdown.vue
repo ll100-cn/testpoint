@@ -1,5 +1,7 @@
 <template>
-  <textarea ref="el" v-model="model_value" class="form-control" :name="name" v-bind="control_attrs" />
+  <div v-show="easy_mde">
+    <textarea ref="el" class="form-control" :name="name" v-bind="control_attrs">{{ local_value }}</textarea>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -7,7 +9,7 @@ import { Validation } from '@/models'
 import 'codemirror/lib/codemirror.css'
 import EasyMDE from 'easymde'
 import 'easymde/src/css/easymde.css'
-import { PropType, computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import * as helper from "../helper"
 import { ControlProps } from '../helper'
 
@@ -41,22 +43,59 @@ const control_attrs = computed(() => {
     attrs.disabled = true
   }
 
+  if (options.value.control_id) {
+    attrs.id = options.value.control_id
+  }
+
   return attrs
 })
 
 const el = ref(null! as HTMLElement)
-const easyMDE = ref<EasyMDE>(null)
+const easy_mde = ref(null as EasyMDE | null)
+const local_value = ref(model_value.value)
+const delay_render_id = ref(null as any)
+
+function delayRenderEasyMDE() {
+  if (delay_render_id.value) {
+    clearTimeout(delay_render_id.value)
+  }
+
+  if (easy_mde.value) {
+    easy_mde.value.toTextArea()
+    easy_mde.value = null
+  }
+
+  nextTick(() => {
+    delay_render_id.value = setTimeout(() => {
+      buildEasyMDE()
+    }, 500)
+  })
+}
 
 onMounted(() => {
-  easyMDE.value = new EasyMDE({
+  delayRenderEasyMDE()
+})
+
+function buildEasyMDE() {
+  easy_mde.value = new EasyMDE({
     element: el.value,
+    initialValue: local_value.value,
     status: false,
-    autoRefresh: { delay: 250 },
-    autoDownloadFontAwesome: false,
+    autoDownloadFontAwesome: false
   })
-  easyMDE.value.codemirror.on("update", () => {
-    model_value.value = easyMDE.value.value()
+
+  easy_mde.value.codemirror.on("update", () => {
+    local_value.value = easy_mde.value.value()
+    model_value.value = local_value.value
   })
+}
+
+watch(model_value, (new_value) => {
+  if (local_value.value != new_value) {
+    local_value.value = new_value
+
+    delayRenderEasyMDE()
+  }
 })
 </script>
 

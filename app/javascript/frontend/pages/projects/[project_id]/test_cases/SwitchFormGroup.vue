@@ -1,7 +1,7 @@
 <template>
-  <layouts.group :code="code" :label="label" :options="{ disabled: !enableds[code] }">
+  <layouts.group :code="code" :label="label" :disabled="!enableds[code]">
     <template #label-prepend>
-      <div class="col-auto p-0 me-auto">
+      <div class="col-auto pe-0 me-auto">
         <div class="form-check form-switch">
           <input v-model="enableds[code]" class="form-check-input" type="checkbox" role="switch">
         </div>

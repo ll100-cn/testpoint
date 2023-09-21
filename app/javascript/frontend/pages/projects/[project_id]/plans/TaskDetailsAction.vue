@@ -29,10 +29,12 @@
     <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
       <IssueForm :issue_templates="issue_templates" :members="members" :categories="categories" :plan_id="plan.id" :project_id="project_id" />
 
-      <template #actions>
+      <hr class="x-form-divider-through">
+
+      <layouts.group control_wrap_class="x-actions x-spacer-2">
         <layouts.submit>提交</layouts.submit>
         <SubmitButton submit_text="取消" type="secondary" @click="emit('update:is_task_pass', false)" />
-      </template>
+      </layouts.group>
     </layouts.form_vertical>
   </div>
 </template>
@@ -44,10 +46,12 @@ import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
 import { IssueTemplate, PhaseInfo, Plan, TaskUpshot, TaskUpshotInfo } from '@/models'
+import { usePageStore } from "@/store"
 import _ from 'lodash'
 import { getCurrentInstance, reactive, ref } from 'vue'
 
 const { proxy } = getCurrentInstance()
+const page = usePageStore()
 
 const props = withDefaults(defineProps<{
   // platforms: Platform[]
@@ -70,13 +74,8 @@ const emit = defineEmits<{
   "update:is_task_pass": [is_task_pass: boolean]
 }>()
 
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = props.project_id
-}).perform())
-
-const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = props.project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
+const categories = ref(await page.inProject().request(requests.CategoryReq.List).setup(proxy).perform())
 
 const validations = reactive<Validations>(new Validations())
 const is_bind_issue = ref(false)

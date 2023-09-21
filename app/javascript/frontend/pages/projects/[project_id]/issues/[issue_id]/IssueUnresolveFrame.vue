@@ -1,41 +1,40 @@
 <template>
-  <CommonModal ref="modal" close_btn_text="取消">
-    <template #content>
+  <div ref="el" class="modal-dialog modal-lg">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="mb-0">请在下方详细注明未解决的原因</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
-      <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
+      <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit" v-if="!loading">
         <div class="modal-body"><IssueCommentForm /></div>
-        <div class="modal-footer">
+        <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <layouts.submit>提交</layouts.submit>
         </div>
       </layouts.form_vertical>
-    </template>
-  </CommonModal>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import CommonModal from "@/components/CommonModal.vue"
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
+import BootstrapHelper from "@/lib/BootstrapHelper"
 import * as requests from '@/lib/requests'
-import { Issue, IssueInfo } from "@/models"
-import _ from "lodash"
+import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 
+const el = ref(null! as HTMLElement)
 const { proxy } = getCurrentInstance()
-const props = defineProps<{
-  issue: Issue
-}>()
+
 const emit = defineEmits<{
-  addIssueInfo: [issue_info: IssueInfo]
-  updateIssue: [issue: Issue]
+  changed: [ IssueInfo ]
 }>()
 
-const modal = ref<InstanceType<typeof CommonModal>>()
+const props = defineProps<{
+  issue_info: IssueInfo
+}>()
 
 const former = Former.build({
   content: "",
@@ -43,26 +42,21 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const issue = await new requests.IssueUnresolve().setup(proxy, (req) => {
-    req.interpolations.project_id = props.issue.project_id
-    req.interpolations.issue_id = props.issue.id
+  const a_issue = await new requests.IssueUnresolve().setup(proxy, (req) => {
+    req.interpolations.project_id = props.issue_info.project_id
+    req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
 
-  emit("updateIssue", issue)
-  resetForm()
-  modal.value.hide()
+  Object.assign(props.issue_info, a_issue)
+  emit('changed', props.issue_info)
+  BootstrapHelper.modal(el).hide()
 }
 
-const _form = _.cloneDeep(former.form)
-function resetForm() {
-  former.form = _form
+const loading = ref(true)
+
+function reset() {
+  loading.value = false
 }
 
-async function show() {
-  modal.value.show()
-}
-
-defineExpose({
-  show
-})
+defineExpose({ reset })
 </script>

@@ -1,10 +1,10 @@
-import { Type } from "class-transformer"
+import * as t from '@/lib/transforms'
+import { Member } from './Member'
 
 export class Subscription {
-  id: number
-  user_id: number
-  issue_id: number
+  @t.Number id: number
+  @t.Number user_id: number
 
-  @Type(() => Date)
-  updated_at: Date
+  @t.Date updated_at: Date
+  @t.Klass(Member) member: Member
 }

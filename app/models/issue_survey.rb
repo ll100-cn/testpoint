@@ -12,7 +12,7 @@
 #  remark      :string
 #
 
-class IssueInfo < ApplicationRecord
+class IssueSurvey < ApplicationRecord
   belongs_to :issue, touch: true
   belongs_to :template, class_name: "IssueTemplate"
 

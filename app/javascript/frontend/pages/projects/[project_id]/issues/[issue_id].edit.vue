@@ -4,24 +4,33 @@
   </div>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <FormErrorAlert />
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <FormErrorAlert />
 
-    <layouts.group code="title" label="标题"><controls.string /></layouts.group>
-    <layouts.group code="category_id" label="分类">
-      <controls.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
-    </layouts.group>
-    <layouts.group code="creator_id" label="创建人">
-      <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', live_search: true }" include_blank />
-    </layouts.group>
-    <layouts.group code="assignee_id" label="受理人">
-      <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id' }" include_blank />
-    </layouts.group>
+        <div class="row gy-3">
+          <layouts.group code="title" label="标题"><controls.string /></layouts.group>
+          <layouts.group code="category_id" label="分类">
+            <controls.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
+          </layouts.group>
+          <layouts.group code="creator_id" label="创建人">
+            <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', live_search: true }" include_blank />
+          </layouts.group>
+          <layouts.group code="assignee_id" label="受理人">
+            <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id' }" include_blank />
+          </layouts.group>
+        </div>
 
-    <template #actions>
-      <layouts.submit>更新问题</layouts.submit>
-      <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
-      <router-link class="btn btn-warning" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
-    </template>
+        <hr class="x-form-divider-through">
+
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
+          <layouts.submit>更新问题</layouts.submit>
+          <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
+          <router-link class="btn btn-warning" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
+        </layouts.group>
+      </div>
+    </div>
+
   </layouts.form_horizontal>
 </template>
 
@@ -30,6 +39,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
+import { usePageStore } from '@/store'
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
@@ -40,6 +50,7 @@ const router = useRouter()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
+const page = usePageStore()
 
 const issue = ref(await new requests.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
@@ -62,13 +73,8 @@ former.perform = async function() {
   router.push({ path: `/projects/${project_id}/issues/${issue_id}` })
 }
 
-const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
-
-const members = ref(await new requests.MemberReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
+const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
+const categories = ref(await page.inProject().request(requests.CategoryReq.List).setup(proxy).perform())
 
 const assignees_collection = computed(() => {
   return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()

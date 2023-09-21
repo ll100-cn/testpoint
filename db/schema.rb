@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_12_034651) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_19_045541) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -135,18 +135,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_034651) do
     t.index ["issue_id"], name: "index_issue_attachments_on_issue_id"
   end
 
-  create_table "issue_infos", force: :cascade do |t|
-    t.bigint "issue_id", null: false
-    t.bigint "template_id", null: false
-    t.string "state"
-    t.json "values", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "remark"
-    t.index ["issue_id"], name: "index_issue_infos_on_issue_id"
-    t.index ["template_id"], name: "index_issue_infos_on_template_id"
-  end
-
   create_table "issue_relationships", force: :cascade do |t|
     t.bigint "target_id"
     t.bigint "source_id"
@@ -157,6 +145,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_034651) do
     t.index ["member_id"], name: "index_issue_relationships_on_member_id"
     t.index ["source_id"], name: "index_issue_relationships_on_source_id"
     t.index ["target_id"], name: "index_issue_relationships_on_target_id"
+  end
+
+  create_table "issue_surveys", force: :cascade do |t|
+    t.bigint "issue_id", null: false
+    t.bigint "template_id", null: false
+    t.string "state"
+    t.json "values", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "remark"
+    t.index ["issue_id"], name: "index_issue_surveys_on_issue_id"
+    t.index ["template_id"], name: "index_issue_surveys_on_template_id"
   end
 
   create_table "issue_template_inputs", force: :cascade do |t|
@@ -453,11 +453,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_034651) do
   add_foreign_key "comments", "issues"
   add_foreign_key "comments", "members"
   add_foreign_key "folders", "projects"
-  add_foreign_key "issue_infos", "issue_templates", column: "template_id"
-  add_foreign_key "issue_infos", "issues"
   add_foreign_key "issue_relationships", "issues", column: "source_id"
   add_foreign_key "issue_relationships", "issues", column: "target_id"
   add_foreign_key "issue_relationships", "members"
+  add_foreign_key "issue_surveys", "issue_templates", column: "template_id"
+  add_foreign_key "issue_surveys", "issues"
   add_foreign_key "issue_templates", "projects"
   add_foreign_key "issues", "members", column: "assignee_id"
   add_foreign_key "issues", "members", column: "creator_id"

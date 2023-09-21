@@ -4,12 +4,18 @@
   </div>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <Fields />
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <Fields />
 
-    <template #actions>
-      <layouts.submit>编辑里程碑</layouts.submit>
-      <router-link :to="`/projects/${project_id}/milestones`" class="btn btn-secondary">取消</router-link>
-    </template>
+        <hr class="x-form-divider-through">
+
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
+          <layouts.submit>编辑里程碑</layouts.submit>
+          <router-link :to="`/projects/${project_id}/milestones`" class="btn btn-secondary">取消</router-link>
+        </layouts.group>
+      </div>
+    </div>
   </layouts.form_horizontal>
 </template>
 
@@ -32,7 +38,7 @@ const project_id = params.project_id
 
 const former = Former.build({
   title: null as string | null,
-  published_at: null as string | null,
+  published_at: null as Date | null,
   description: null as string | null,
 })
 
@@ -51,8 +57,6 @@ const milestone = await new requests.MilestoneReq.Get().setup(proxy, (req) => {
 }).perform()
 
 former.form.title = milestone.title
-if (milestone.published_at != null) {
-  former.form.published_at = dayjs(milestone.published_at).format('YYYY-MM-DD HH:mm')
-}
+former.form.published_at = milestone.published_at
 former.form.description = milestone.description
 </script>

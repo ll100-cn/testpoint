@@ -42,5 +42,4 @@ const milestones = await new requests.MilestoneReq.List().setup(proxy, (req) => 
   req.interpolations.project_id = project_id
   req.query.filter = "available"
 }).perform()
-
 </script>
