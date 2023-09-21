@@ -1,8 +1,9 @@
 <template>
   <div class="d-flex mb-2">
     <span class="small text-muted">{{ title }}</span>
-    <span class="ms-auto" v-if="mode != 'edit'">
-      <a href="#" @click.prevent="mode = 'edit'"><i class="far fa-edit"></i></a>
+    <span class="ms-auto">
+      <a href="#" @click.prevent="mode = 'edit'" v-if="mode != 'edit'"><i class="far fa-edit"></i></a>
+      <a href="#" @click.prevent="mode = 'show'" v-else><i class="far fa-times text-muted"></i></a>
     </span>
   </div>
 

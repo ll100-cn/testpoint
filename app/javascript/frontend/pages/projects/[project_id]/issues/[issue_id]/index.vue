@@ -18,7 +18,7 @@
     <div class="col order-1 order-md-0 mb-5">
       <IssueRelatedTask v-if="issue.task" :task="issue.task" :project_id="project_id" />
       <IssueContent :issue_info="issue_info" @changed="updateIssueInfo" />
-      <IssueSurveyCard :issue_info="issue_info" @changed="updateIssueInfo" />
+      <IssueSurveyCard :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @changed="updateIssueInfo" />
 
       <div v-for="item in timelines" class="mb-2">
         <template v-if="(item instanceof Comment)">
