@@ -25,7 +25,7 @@ export const usePageStore = defineStore('page', () => {
 
   const caches = new Map<any, any>()
 
-  function global<T>(key: any, callback: () => T) {
+  function cache<T>(key: any, callback: () => T): T {
     if (caches.has(key)) {
       return caches.get(key)
     } else {
@@ -35,16 +35,20 @@ export const usePageStore = defineStore('page', () => {
     }
   }
 
-  function inProject(): ProjectCache {
+  function singleton<T>(klass: new() => T) {
+    return cache(klass, () => new klass())
+  }
+
+  function inProject(): ProjectCache | null {
     const route = useRoute()
     const params = route.params as any
 
     if (!params.project_id) {
-      throw `no project_id in path ${route.path}`
+      return null
     }
 
     const key = `project-${params.project_id}`
-    return global(key, () => {
+    return cache(key, () => {
       const result = new ProjectCache()
       result.project_id = _.toNumber(params.project_id)
       return result
@@ -56,5 +60,5 @@ export const usePageStore = defineStore('page', () => {
     caches.clear()
   }
 
-  return { errors, inProject, global, clear }
+  return { errors, inProject, singleton, clear }
 })

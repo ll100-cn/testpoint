@@ -44,7 +44,7 @@
               {{ account?.user.name }}
             </a>
             <div class="dropdown-menu dropdown-menu-end">
-              <a class="dropdown-item" href="/testpoint/profiles/basic?ok_url=%2Ftestpoint%2Fissues%2Fdashboard">个人中心</a>
+              <router-link class="dropdown-item" to="/profile/basic">个人中心</router-link>
               <a class="dropdown-item" rel="nofollow" href="#" @click="signOut">退出</a>
             </div>
           </div>
@@ -60,26 +60,32 @@ import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
-import { Project } from '@/models'
+import { MemberInfo, Project } from '@/models'
+import { usePageStore } from '@/store'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
 const router = useRouter()
 const session = useSessionStore()
+const page = usePageStore()
 
 const account = session.account
-let projects = ref([] as Project[])
+const member_infos = ref([] as MemberInfo[])
+
+const projects = computed(() => {
+  return member_infos.value.map(it => it.project).filter(it => !it.archived)
+})
 
 if (account) {
-  projects.value = (await new requests.ProjectReq.Page().setup(proxy).perform()).list
+  member_infos.value = (await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
 }
 const project = computed(() => {
-  const project_id = route.path.match(/\/projects\/(\d+)/)?.[1]
+  const project_id = page.inProject()?.project_id
   if (project_id == null) {
     return null
   }
 
-  return projects.value.find((it) => it.id.toString() === project_id)
+  return projects.value.find((it) => it.id === project_id)
 })
 
 async function signOut() {

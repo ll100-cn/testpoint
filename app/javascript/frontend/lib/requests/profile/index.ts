@@ -2,3 +2,5 @@
 
 export { default as IssueReq } from "./IssueReq"
 export { default as IssueStatReq } from "./IssueStatReq"
+export { default as MemberInfoReq } from "./MemberInfoReq"
+export { default as UserReq } from "./UserReq"

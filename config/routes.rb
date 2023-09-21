@@ -184,6 +184,9 @@ Rails.application.routes.draw do
       root to: "main#root"
       resources :issues
       resources :issue_stats
+
+      resource :user
+      resources :member_infos
     end
 
     devise_scope :user do

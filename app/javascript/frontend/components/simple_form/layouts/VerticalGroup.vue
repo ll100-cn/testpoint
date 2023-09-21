@@ -1,7 +1,7 @@
 <template>
   <div class="x-form-group" :class="{ 'has-errors': validation.isInvaild() }">
     <div class="row align-items-start">
-      <div class="row col-auto align-items-center">
+      <div class="row col-auto align-items-center mb-1">
         <slot name="label-prepend" />
         <label v-if="label" :for="code" class="col-form-label col text-nowrap py-0" v-bind="label_attrs">
           <span>{{ label }}</span>

@@ -1,7 +1,7 @@
 <template>
-  <FormErrorAlert />
-
   <div class="row gy-3">
+    <FormErrorAlert />
+
     <layouts.group code="name" label="名称">
       <controls.string />
     </layouts.group>

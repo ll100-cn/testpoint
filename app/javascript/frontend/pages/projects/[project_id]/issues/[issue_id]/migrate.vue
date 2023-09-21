@@ -30,6 +30,7 @@ import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as requests from '@/lib/requests'
+import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
@@ -38,6 +39,8 @@ const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const page = usePageStore()
+
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 
@@ -60,10 +63,13 @@ former.perform = async function() {
   router.push({ path: `/projects/${issue.project_id}/issues/${issue_id}` })
 }
 
-const projects = ref(await new requests.ProjectReq.Page().setup(proxy).perform()).value.list
+const member_infos = ref(await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
+const projects = computed(() => {
+  return member_infos.value.map(it => it.project).filter(it => !it.archived)
+})
 
 const project_collection = computed(() => {
-  return _.filter(projects, { archived: false })
+  return projects.value.filter(it => it.id != project_id)
 })
 
 const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {

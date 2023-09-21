@@ -27,6 +27,7 @@ class Project < ApplicationRecord
   has_many :users, through: :members
 
   scope :available, -> { where(archived: false) }
+  scope :ranked, -> { order("name") }
 
   def subscribed_users
     members.where(receive_mail: true).map(&:user)

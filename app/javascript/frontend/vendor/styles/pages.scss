@@ -47,3 +47,21 @@
 .page-card {
   margin-bottom: 1.5rem;
 }
+
+.page-card-tabs {
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 999;
+
+  &:has(.nav-link:first-child.active) + .card {
+    border-top-left-radius: 0;
+  }
+}
+
+.page-md-box {
+  @media (min-width: 768px) {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+  }
+}
