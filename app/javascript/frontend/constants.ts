@@ -16,3 +16,13 @@ export const ISSUE_PRIORITY_OPTIONS = [
   { label: "普通", value: "normal" },
   { label: "重要", value: "important" },
 ]
+
+export const ENUM_ISSUE_STAGES = {
+  pending: '分配',
+  developing: '开发',
+  testing: '测试',
+  deploying: '部署',
+  resolved: '解决',
+  closed: '已关闭',
+  archived: '已归档',
+}

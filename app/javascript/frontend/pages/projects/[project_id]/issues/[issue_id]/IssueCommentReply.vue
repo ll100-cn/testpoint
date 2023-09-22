@@ -4,15 +4,11 @@
       <MemberLabel :member="comment.member" />
 
       <span class="text-muted ">回复评论：</span>
-      <div class="dropdown dropdown-no-arrow ms-auto">
-        <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
-          <i class="far fa-ellipsis-h" aria-hidden="true" />
-        </button>
-        <div class="dropdown-menu dropdown-menu-end">
-          <a v-if="comment.member.user_id == user.id" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-          <a class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
-        </div>
-      </div>
+
+      <MoreDropdown class="ms-auto">
+        <a v-if="comment.member.user_id == user.id" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
+        <a class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
+      </MoreDropdown>
     </div>
     <PageContent :content="comment.content" />
     <AttachmentBox :attachments="comment.attachments" @edited="onAttachmentChanged" @deleted="onAttachmentDestroyed" />
@@ -31,6 +27,7 @@ import { Attachment, Comment, Issue } from "@/models"
 import { useSessionStore } from "@/store/session"
 import { Component, getCurrentInstance } from "vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
+import MoreDropdown from "@/components/MoreDropdown.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

@@ -6,20 +6,20 @@
       <table class="table">
         <thead>
           <tr>
-            <th>项目名称</th>
+            <th class="text-nowrap">项目名称</th>
 
-            <th v-for="(text, code) in ENUM_ISSUE_STAGES">
+            <th class="text-nowrap" v-for="[code, text] of enum_issue_stages">
               {{ text }} ({{ issue_stages_counts.get(code) ?? 0 }})
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="[project, issue_stats_mapping] in grouped_issue_stats">
-            <td>{{ project.name }}</td>
+          <tr v-for="[project, issue_stats_mapping] of grouped_issue_stats">
+            <td class="text-nowrap"><router-link :to="`/projects/${project.id}`">{{ project.name }}</router-link></td>
 
-            <td v-for="(_, code) in ENUM_ISSUE_STAGES">
-              <router-link :to="`/projects/${project.id}/issues?stage=${code}`">
-                <CategoryBadge v-for="issue_stat in issue_stats_mapping.get(code) ?? []" class="text-nowrap mb-1 me-2" :category="issue_stat.category" :count="issue_stat.count" />
+            <td v-for="[code, text] of enum_issue_stages">
+              <router-link v-for="issue_stat in issue_stats_mapping.get(code) ?? []" :to="{ path: `/projects/${project.id}/issues`, query: { stage: code, category_id_eq: issue_stat.category?.id } }">
+                <CategoryBadge class="text-nowrap mb-1 me-2" :category="issue_stat.category" :count="issue_stat.count" />
               </router-link>
             </td>
           </tr>
@@ -30,32 +30,34 @@
 </template>
 
 <script setup lang="ts">
-import { IssueStat, Project } from '@/models'
+import { EntityRepo, IssueStat, Project } from '@/models'
 import * as requests from '@/lib/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
 import CategoryBadge from '@/components/CategoryBadge.vue'
+import { ENUM_ISSUE_STAGES } from "@/constants"
+import { usePageStore } from '@/store'
+import _ from 'lodash'
 
 const proxy = getCurrentInstance()!.proxy!
+const page = usePageStore()
 
+
+const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
 const issue_stats = ref(await new requests.profile.IssueStatReq.List().setup(proxy).perform())
 
-const ENUM_ISSUE_STAGES = {
-  pending: '分配',
-  developing: '开发',
-  testing: '测试',
-  deploying: '部署',
-  resolved: '解决',
-  closed: '已关闭',
-}
+const member_infos = ref(await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
+const project_repo = computed(() => new EntityRepo<Project>().setup(member_infos.value.map(it => it.project)))
 
 const grouped_issue_stats = computed(() => {
-  const project_repo = new Map<number, Project>()
   const result = new Map<Project, Map<string, IssueStat[]>>()
 
+  for (const project of project_repo.value.values()) {
+    result.set(project, new Map<string, IssueStat[]>())
+  }
+
   for (const issue_stat of issue_stats.value) {
-    const project = project_repo.get(issue_stat.project_id) || issue_stat.project
-    project_repo.set(issue_stat.project_id, project)
+    const project = project_repo.value.id.find(issue_stat.project_id)
 
     let issue_stats_mapping = result.get(project)
     if (!issue_stats_mapping) {

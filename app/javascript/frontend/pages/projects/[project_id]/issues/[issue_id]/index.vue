@@ -25,7 +25,7 @@
           <IssueComment :issue="issue" :comment="item" :comment_repo="comment_repo" @changed="onCommentChanged" @destroyed="onCommentDestroyed" @modal="(...args) => comment_modal.show(...args)" />
         </template>
         <template v-else-if="(item instanceof IssueActivity)">
-          <IssueActivityInfo :issue="issue_info" :projects="projects" :issue_activity="item" />
+          <IssueActivityInfo :issue="issue_info" :issue_activity="item" />
         </template>
         <template v-else-if="(item instanceof IssueRelationship)">
           <IssueRelationshipInfo :issue_info="issue_info" :issue_relationship="item" @changed="updateIssueInfo" />
@@ -120,10 +120,6 @@ function updateIssueInfo(new_issue_info: IssueInfo) {
   issue_info.value = new_issue_info
   issue.value = issue_info.value
 }
-
-const projects = ref(await new requests.ProjectReq.Page().setup(proxy, (req) => {
-  req.interpolations.project_id = issue.value.project_id
-}).perform()).value.list
 
 function onCommentCreated(comment: Comment) {
   comments.value.push(comment)

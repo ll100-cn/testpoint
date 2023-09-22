@@ -1,6 +1,6 @@
 <template>
   <div class="page-header">
-    <h2>问题列表（{{ project.name }}）</h2>
+    <h2>问题列表</h2>
 
     <div class="d-flex ms-auto x-spacer-4 align-items-center">
       <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)">
@@ -21,7 +21,7 @@
     </router-link>
     <template v-for="(name, code) in ENUM_ISSUE_STAGES">
       <router-link class="nav-link" :class="{ 'active': search2.stage === code }" :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }">
-        {{ name }} ({{ issue_stage_count[code] }})
+        {{ name }} ({{ issue_stage_count[code] ?? 0 }})
       </router-link>
     </template>
   </div>
@@ -44,7 +44,7 @@
         <tbody>
           <tr v-for="issue in issues.list" :key="issue.id" :class="{ 'block-discard': issue.state == 'closed' }">
             <td>{{ issue.id }}</td>
-            <td><router-link :to="`/projects/${project.id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
+            <td><router-link :to="`/projects/${project_id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
             <td><CategoryBadge :category="issue.category" /></td>
             <td><IssueStateBadge :state="issue.state" /></td>
             <td>{{ issue.milestone?.title }}</td>
@@ -74,6 +74,7 @@ import { computed, getCurrentInstance, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
 import { Filter2, Search2 } from "./types"
+import { ENUM_ISSUE_STAGES } from "@/constants"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -87,15 +88,6 @@ const filter2 = reactive(utils.instance(Filter2, query))
 
 const project_id = params.project_id
 
-const ENUM_ISSUE_STAGES = {
-  pending: '分配',
-  developing: '开发',
-  testing: '测试',
-  deploying: '部署',
-  resolved: '解决',
-  closed: '已关闭',
-}
-
 const former = Former.build(search2)
 former.perform = async function(search: Search2 | null) {
   if (search) {
@@ -105,10 +97,6 @@ former.perform = async function(search: Search2 | null) {
     router.push({ query: null })
   }
 }
-
-const project = ref(await new requests.ProjectReq.Get().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
 
 const issues = ref(await new requests.ProjectIssueReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id

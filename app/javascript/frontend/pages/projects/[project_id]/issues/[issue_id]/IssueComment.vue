@@ -11,20 +11,16 @@
           <MemberLabel :member="comment.member" class="me-1" />
 
           <span class="ms-1 small text-muted">添加于 {{ utils.humanize(comment.created_at, DATE_LONG_FORMAT) }}</span>
-          <div class="dropdown dropdown-no-arrow ms-auto">
-            <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
-              <i class="far fa-ellipsis-h" aria-hidden="true" />
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
-              <a class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
-              <template v-if="comment.member.user_id == user.id">
-                <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-                <!-- <a class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
-                <a v-if="comment.collapsed" class="small dropdown-item" @click.prevent="foldComment" href="#">显示</a>
-                <a v-else class="small dropdown-item" href="#" @click.prevent="unfoldComment">隐藏</a>
-              </template>
-            </div>
-          </div>
+
+          <MoreDropdown class="ms-auto">
+            <a class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
+            <template v-if="comment.member.user_id == user.id">
+              <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
+              <!-- <a class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
+              <a v-if="comment.collapsed" class="small dropdown-item" @click.prevent="foldComment" href="#">显示</a>
+              <a v-else class="small dropdown-item" href="#" @click.prevent="unfoldComment">隐藏</a>
+            </template>
+          </MoreDropdown>
         </div>
         <div class="card-body">
           <div class="no-margin-bottom">
@@ -54,6 +50,7 @@ import { Component, computed, getCurrentInstance } from "vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyFrame from "./IssueCommentReplyFrame.vue"
+import MoreDropdown from "@/components/MoreDropdown.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

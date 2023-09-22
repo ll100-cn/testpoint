@@ -10,14 +10,9 @@
 
     <span class="small text-muted">{{ utils.humanize(issue_relationship.created_at, DATE_LONG_FORMAT) }}</span>
 
-    <div class="dropdown dropdown-no-arrow ms-auto">
-      <button class="btn btn-sm btn-light dropdown-toggle text-muted" data-bs-toggle="dropdown" style="background: transparent;">
-        <i class="far fa-ellipsis-h" aria-hidden="true" />
-      </button>
-      <div class="dropdown-menu dropdown-menu-end" style="min-width: auto;">
-        <a class="small dropdown-item" @click="deleteIssueRelationShip">取消关联</a>
-      </div>
-    </div>
+    <MoreDropdown class="ms-auto">
+      <a class="small dropdown-item" href="#" @click.prevent="deleteIssueRelationShip">取消关联</a>
+    </MoreDropdown>
   </div>
 </template>
 
@@ -29,6 +24,7 @@ import { DATE_LONG_FORMAT } from '@/constants'
 import * as requests from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { IssueInfo, IssueRelationship } from "@/models"
+import MoreDropdown from "@/components/MoreDropdown.vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

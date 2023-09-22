@@ -3,21 +3,20 @@
     <div class="card flex-grow-1 mb-3">
       <div :id="`issue${issue_info.id}_content`" class="card-body">
         <div class="card-title d-flex bg-white align-items-center">
-          <img class="rounded-circle avatar me-1" :src=" issue_info.creator.avatarUrl()" width="20">
+          <img class="rounded-circle avatar me-1" :src="issue_info.creator.avatar_url" width="20">
           <span>{{ issue_info.creator.name }}</span>
-          <span class="ms-1 small text-muted">{{ utils.createOrEditTimeInWords(issue_info.created_at, issue_info.last_edited_at) }}</span>
-          <div class="dropdown dropdown-no-arrow ms-auto">
-            <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
-              <i class="far fa-ellipsis-h" aria-hidden="true" />
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" style="min-width: 3px;">
-              <button class="small dropdown-item" @click="blank_modal.show(IssueContentEditFrame, issue_info)">修改</button>
-            </div>
-          </div>
+          <span class="ms-1 small text-muted">创建于 {{ utils.humanize(issue_info.created_at, DATE_LONG_FORMAT) }}</span>
+
+          <MoreDropdown class="ms-auto">
+            <a href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
+          </MoreDropdown>
         </div>
 
         <div class="no-margin-bottom">
           <PageContent :content="issue_info.content" />
+          <span v-if="issue_info.created_at != issue_info.last_edited_at" class="text-muted small">
+            最后修改于: {{ utils.humanize(issue_info.last_edited_at, DATE_LONG_FORMAT) }}
+          </span>
           <AttachmentBox :attachments="issue_info.attachments" @deleted="onAttachmentDestroyed" @edited="onAttachmentChanged" />
         </div>
       </div>
@@ -32,7 +31,9 @@
 <script setup lang="ts">
 import AttachmentBox from "@/components/AttachmentBox.vue"
 import BlankModal from "@/components/BlankModal.vue"
+import MoreDropdown from "@/components/MoreDropdown.vue"
 import PageContent from "@/components/PageContent.vue"
+import { DATE_LONG_FORMAT } from "@/constants"
 import * as utils from "@/lib/utils"
 import { Attachment, Issue, IssueInfo } from "@/models"
 import { ref } from "vue"

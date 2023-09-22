@@ -1,10 +1,10 @@
 <template>
   <div class="page-header">
-    <h2>成员列表</h2>
+    <h2>用户列表</h2>
     <router-link to="/projects" class="ms-3">项目</router-link>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link to="/users/new" class="btn btn-primary">新增成员</router-link>
+      <router-link to="/users/new" class="btn btn-primary">新增用户</router-link>
     </div>
   </div>
 
@@ -51,7 +51,7 @@ const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
 const validations = reactive<Validations>(new Validations())
 
-const users = ref(await new requests.UserReq.Page().setup(proxy).perform())
+const users = ref(await new requests.admin.UserReq.Page().setup(proxy).perform())
 
 async function onRemove(user_id) {
   if (!confirm("是否删除用户？")) {
@@ -59,7 +59,7 @@ async function onRemove(user_id) {
   }
 
   try {
-    await new requests.UserReq.Destroy().setup(proxy, (req) => {
+    await new requests.admin.UserReq.Destroy().setup(proxy, (req) => {
       req.interpolations.id = user_id
     }).perform()
 

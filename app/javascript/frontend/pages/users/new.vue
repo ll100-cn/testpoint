@@ -36,7 +36,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const user = await new requests.UserReq.Create().setup(proxy).perform(this.form)
+  const user = await new requests.admin.UserReq.Create().setup(proxy).perform(this.form)
   router.push("/users")
 }
 

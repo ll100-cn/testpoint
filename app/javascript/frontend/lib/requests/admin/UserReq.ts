@@ -1,14 +1,14 @@
 import { User } from "@/models"
-import BaseObjectRequest from "./BaseObjectRequest"
-import BaseArrayRequest from "./BaseArrayRequest"
-import BasePaginationRequest from "./BasePaginationRequest"
+import BaseObjectRequest from "../BaseObjectRequest"
+import BaseArrayRequest from "../BaseArrayRequest"
+import BasePaginationRequest from "../BasePaginationRequest"
 
 export default {
   Update: class extends BaseObjectRequest<User> {
     constructor() {
       super()
       this.method = "PATCH"
-      this.endpoint = "/api/users/{id}"
+      this.endpoint = "/api/admin/users/{id}"
       this.klass = User
     }
   },
@@ -17,7 +17,7 @@ export default {
     constructor() {
       super()
       this.method = "GET"
-      this.endpoint = "/api/users/{id}"
+      this.endpoint = "/api/admin/users/{id}"
       this.klass = User
     }
   },
@@ -26,7 +26,7 @@ export default {
     constructor() {
       super()
       this.method = "GET"
-      this.endpoint = "/api/users"
+      this.endpoint = "/api/admin/users"
       this.klass = User
     }
   },
@@ -35,7 +35,7 @@ export default {
     constructor() {
       super()
       this.method = "DELETE"
-      this.endpoint = "/api/users/{id}"
+      this.endpoint = "/api/admin/users/{id}"
       this.klass = User
     }
   },
@@ -44,7 +44,7 @@ export default {
     constructor() {
       super()
       this.method = "POST"
-      this.endpoint = "/api/users"
+      this.endpoint = "/api/admin/users"
       this.klass = User
     }
   },
@@ -53,7 +53,7 @@ export default {
     constructor() {
       super()
       this.method = "GET"
-      this.endpoint = "/api/users"
+      this.endpoint = "/api/admin/users"
       this.klass = User
     }
   }

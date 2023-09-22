@@ -39,9 +39,8 @@
         <div v-if="account" class="navbar-nav ms-md-auto">
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuUser" role="button" href="#">
-              <img height="25" class="rounded-circle"
-                src="https://www.gravatar.com/avatar/5afcacceca8e038dcdcbd94c1b93fb0f.png?s=200">
-              {{ account?.user.name }}
+              <img height="25" class="rounded-circle" :src="account.avatarUrl()">
+              {{ account.name }}
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <router-link class="dropdown-item" to="/profile/basic">个人中心</router-link>
@@ -56,12 +55,12 @@
 
 <script setup lang="ts">
 import * as requests from '@/lib/requests'
+import { MemberInfo } from '@/models'
+import { usePageStore } from '@/store'
 import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
-import { MemberInfo, Project } from '@/models'
-import { usePageStore } from '@/store'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
@@ -69,14 +68,12 @@ const router = useRouter()
 const session = useSessionStore()
 const page = usePageStore()
 
-const account = session.account
+const account = computed(() => session.account)
 const member_infos = ref([] as MemberInfo[])
 
-const projects = computed(() => {
-  return member_infos.value.map(it => it.project).filter(it => !it.archived)
-})
+const projects = computed(() => member_infos.value.map(it => it.project))
 
-if (account) {
+if (account.value) {
   member_infos.value = (await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
 }
 const project = computed(() => {

@@ -3,7 +3,7 @@ class Api::Profile::MemberInfosController < Api::BaseController
   load_and_authorize_resource :member, parent: false, through: :user
 
   def index
-    @members = @members.available.joins(:project).merge(Project.ranked)
+    @members = @members.available.joins(:project).merge(Project.available.ranked)
   end
 
   def update

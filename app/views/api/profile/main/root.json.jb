@@ -1,5 +1,1 @@
-json = {}
-
-json[:user] = render partial: 'api/shared/user', locals: { user: @user }
-
-json
+render partial: "api/shared/account", locals: { user: @user }

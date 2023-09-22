@@ -7,9 +7,6 @@ export class IssueStat {
   stage: "pending" | "developing" | "testing" | "deploying" | "resolved" | "closed"
   count: number
 
-  @Type(() => Project)
-  project: Project
-
   @Type(() => Category)
   category?: Category
 }

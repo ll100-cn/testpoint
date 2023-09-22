@@ -4,6 +4,12 @@
       <%= image_tag comment.member.user.avatar_url, width: 20, class: "rounded-circle avatar me-1" %>
       <%= comment.member.name %><%= "（#{comment.member.project.name}）" if comment.member.project_id != @project.id %>
       <span class="ms-1 small text-muted"><%= create_or_edit_time_in_words(comment) %></span>
+
+      <MoreDropdown
+      <MoreDropdown class="ms-auto">
+
+      </MoreDropdown>
+
       <div class="dropdown dropdown-no-arrow ms-auto">
         <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
           <i class="far fa-ellipsis-h" aria-hidden="true"></i>

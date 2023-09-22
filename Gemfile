@@ -34,6 +34,7 @@ gem "devise", "4.9.2"
 gem "devise-i18n", "1.11.0"
 gem "devise_code_authenticatable", '0.2.3'
 gem "cancancan", "3.5.0"
+gem 'fume-cancan', '0.1.0'
 gem "enumerize", "2.7.0"
 gem 'ancestry', '3.2.1'
 gem "ransack", "4.0.0", require: false

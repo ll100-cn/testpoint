@@ -35,7 +35,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.ProjectReq.Create().setup(proxy).perform(this.form)
+  await new requests.admin.ProjectReq.Create().setup(proxy).perform(this.form)
   router.push("/projects")
 }
 </script>
