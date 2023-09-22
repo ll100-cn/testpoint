@@ -37,7 +37,7 @@ class Issue < ApplicationRecord
   belongs_to :project
   belongs_to :category, optional: true
   belongs_to :task, optional: true
-  has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
+  has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable, autosave: true
   has_many :activities, class_name: IssueActivity.to_s, dependent: :destroy
   has_many :source_relationships, class_name: IssueRelationship.to_s, foreign_key: :source_id, dependent: :destroy
   has_many :target_relationships, class_name: IssueRelationship.to_s, foreign_key: :target_id, dependent: :destroy
@@ -90,6 +90,24 @@ class Issue < ApplicationRecord
     else
       self.stage = nil
     end
+  end
+
+  def attachments_params=(raw)
+    array = raw.is_a?(Array) ? raw : raw.values
+    new_attachment_ids = array.map { |it| it.symbolize_keys[:id] }
+    attachment_repo = Attachment.where_any_of(
+      Attachment.where(attachmentable_type: self.class.name, attachmentable_id: self.id),
+      Attachment.where(attachmentable_id: nil)
+    ).where(id: new_attachment_ids).index_by(&:id)
+
+    new_attachments = array.map do |attrs|
+      attrs = attrs.symbolize_keys
+      attachment = attachment_repo[attrs[:id].to_i]
+      attachment.assign_attributes(attrs)
+      attachment
+    end
+
+    self.attachments = new_attachments
   end
 
   def title_with_priority

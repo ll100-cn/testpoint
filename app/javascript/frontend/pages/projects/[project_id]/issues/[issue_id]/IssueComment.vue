@@ -23,13 +23,13 @@
           </MoreDropdown>
         </div>
         <div class="card-body">
-          <div class="no-margin-bottom">
-            <PageContent :content="comment.content" />
-            <AttachmentBox :attachments="comment.attachments" @edited="onAttachmentChanged" @deleted="onAttachmentDestroyed" />
+          <ContentBody :body="comment" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+          <div class="x-callout mt-3 py-1" v-if="children.length > 0">
+            <template v-for="(child, index) in children">
+              <div class="mt-4" v-if="index != 0"></div>
+              <IssueCommentReply :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
+            </template>
           </div>
-          <ul v-if="children.length > 0" class="list-group list-group-flush border-top">
-            <IssueCommentReply :issue="issue" v-for="child in children" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
-          </ul>
         </div>
       </div>
     </div>
@@ -37,9 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import AttachmentBox from "@/components/AttachmentBox.vue"
 import MemberLabel from "@/components/MemberLabel.vue"
-import PageContent from "@/components/PageContent.vue"
+import MoreDropdown from "@/components/MoreDropdown.vue"
 import { DATE_LONG_FORMAT } from "@/constants"
 import * as requests from '@/lib/requests'
 import * as utils from "@/lib/utils"
@@ -47,10 +46,10 @@ import { Attachment, Comment, CommentRepo, Issue } from "@/models"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { Component, computed, getCurrentInstance } from "vue"
+import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyFrame from "./IssueCommentReplyFrame.vue"
-import MoreDropdown from "@/components/MoreDropdown.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
@@ -112,7 +111,7 @@ async function unfoldComment() {
   emit('changed', comment)
 }
 
-function onAttachmentChanged(attachment: Attachment) {
+function onAttachmentUpdated(attachment: Attachment) {
   const index = props.comment.attachments.findIndex(it => it.id === attachment.id)
   props.comment.attachments[index] = attachment
   emit('changed', props.comment)

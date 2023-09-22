@@ -168,6 +168,7 @@ Rails.application.routes.draw do
           get :source_relationships, on: :member
           get :target_relationships, on: :member
           get :attachments, on: :member
+          patch :body, on: :member
 
           resources :comments do
             member do

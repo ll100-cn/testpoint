@@ -1,0 +1,6 @@
+json = {}
+
+json[:issue] = render 'api/shared/issue', issue: @issue
+json[:attachments] = render partial: "api/shared/attachment", collection: @issue.attachments, as: :attachment
+
+json

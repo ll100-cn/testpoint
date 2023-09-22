@@ -1,5 +1,5 @@
 <template>
-  <div ref="el" class="d-flex border bg-light p-2 align-items-center">
+  <div class="d-flex border bg-light p-2 align-items-center">
     <div class="me-2" style="width: 3rem">
       <template v-if="attachment.isImage() && attachment.file_url">
         <a :href="attachment.file_url" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
@@ -27,15 +27,15 @@
         <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
           <layouts.group class="mb-0" code="title"><controls.string /></layouts.group>
           <div class="x-actions x-spacer-2 text-nowrap">
-            <layouts.submit>更新</layouts.submit>
-            <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
+            <layouts.submit>确定</layouts.submit>
+            <button class="btn btn-secondary" @click.prevent="exitEditing">取消</button>
           </div>
         </layouts.form_inline>
       </div>
       <template v-else>
         <div class="d-flex align-items-center">
           <span class="me-2">{{ _.truncate(attachment.title, { length: 20 }) }}</span>
-          <span role="button" class="far fa-fw fa-edit ms-auto" @click="onEdit" />
+          <span role="button" class="far fa-fw fa-edit ms-auto" @click="enterEditing" />
         </div>
         <div class="d-flex align-items-center x-actions">
           <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
@@ -52,40 +52,36 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, controls, layouts } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
+import { controls, layouts } from "@/components/simple_form"
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"
 import prettyBytes from "pretty-bytes"
-import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
+import { nextTick, onMounted, ref } from "vue"
 import Former from "./simple_form/Former"
-
-const { proxy } = getCurrentInstance()
 
 const props = defineProps<{
   attachment: Attachment
 }>()
-const emits = defineEmits<{
-  deleted: [attachment: Attachment]
-  edited: [attachment: Attachment]
+
+const emit = defineEmits<{
+  changed: [Attachment, Partial<Attachment>]
 }>()
 
-const el = ref(null! as HTMLElement)
-const validations = ref(new Validations())
 const editing = ref(false)
 
 const former = Former.build({
-  title: ""
+  title: props.attachment.title
 })
 
 former.perform = async function() {
-  const attachment = await new requests.AttachmentReq.Update().setup(proxy, (req) => {
-    req.interpolations.attachment_id = props.attachment.id
-  }).perform(this.form)
+  const changes = <Partial<Attachment>>{ id: props.attachment.id }
+  if (props.attachment.title != this.form.title) {
+    changes.title = this.form.title
+  }
 
   editing.value = false
-  emits('edited', attachment)
+  emit('changed', props.attachment, changes)
 }
 
 onMounted(() => {
@@ -102,35 +98,19 @@ function buildClipboard() {
   })
 }
 
-function onEdit() {
+function enterEditing() {
   editing.value = true
-  former.form.title = props.attachment.title
 }
 
-function cancelEdit() {
+function exitEditing() {
   editing.value = false
-  validations.value.clear()
 }
 
 async function deleteAttachment() {
   if (!confirm("确认删除附件？")) {
     return
   }
-  validations.value.clear()
 
-  try {
-    const attachment = await new requests.AttachmentReq.Destroy().setup(proxy, (req) => {
-      req.interpolations.attachment_id = props.attachment.id
-    }).perform()
-    if (attachment) {
-      emits('deleted', attachment)
-    }
-  } catch (err) {
-    if (validations.value.handleError(err)) {
-      return
-    }
-
-    throw err
-  }
+  emit('changed', props.attachment, { id: undefined })
 }
 </script>
