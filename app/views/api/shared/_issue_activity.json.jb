@@ -4,4 +4,29 @@ if issue_activity.member
   json[:member] = render partial: "api/shared/member", locals: { member: issue_activity.member }
 end
 
+if issue_activity.property == 'category_id'
+  json[:before_category] = render partial: "api/shared/category", locals: { category: issue_activity.before_category } if issue_activity.before_category
+  json[:after_category] = render partial: "api/shared/category", locals: { category: issue_activity.after_category } if issue_activity.after_category
+end
+
+if issue_activity.property == 'creator_id'
+  json[:before_creator] = render partial: "api/shared/member", locals: { member: issue_activity.before_creator } if issue_activity.before_creator
+  json[:after_creator] = render partial: "api/shared/member", locals: { member: issue_activity.after_creator } if issue_activity.after_creator
+end
+
+if issue_activity.property == 'assignee_id'
+  json[:before_assignee] = render partial: "api/shared/member", locals: { member: issue_activity.before_assignee } if issue_activity.before_assignee
+  json[:after_assignee] = render partial: "api/shared/member", locals: { member: issue_activity.after_assignee } if issue_activity.after_assignee
+end
+
+if issue_activity.property == 'milestone_id'
+  json[:before_milestone] = render partial: "api/shared/milestone", locals: { milestone: issue_activity.before_milestone } if issue_activity.before_milestone
+  json[:after_milestone] = render partial: "api/shared/milestone", locals: { milestone: issue_activity.after_milestone } if issue_activity.after_milestone
+end
+
+if issue_activity.property == 'project_id'
+  json[:before_project] = render partial: "api/shared/project", locals: { project: issue_activity.before_project } if issue_activity.before_project
+  json[:after_project] = render partial: "api/shared/project", locals: { project: issue_activity.after_project } if issue_activity.after_project
+end
+
 json

@@ -19,7 +19,7 @@
                 </layouts.group>
 
                 <layouts.group code="avatar" label="头像">
-                  <img :src="account.user.avatarUrl()" class="me-1" width="64" />
+                  <img :src="account.avatarUrl()" class="me-1" width="64" />
                   <a href="https://gravatar.com" target="_blank">修改</a>
                 </layouts.group>
               </div>
@@ -47,8 +47,9 @@ import PageHeader from './PageHeader.vue'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
+const session = useSessionStore()
 
-const account = useSessionStore().account
+const account = session.account
 const former = Former.build({
   name: account.user.name
 })
@@ -59,8 +60,8 @@ watch(former.form, () => {
 })
 
 former.perform = async function() {
-  const user = await new requests.profile.UserReq.Update().setup(proxy).perform(this.form)
-  account.user = user
+  const account = await new requests.profile.BasicReq.Update().setup(proxy).perform(this.form)
+  session.account = account
 
   success.value = true
 }

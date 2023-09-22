@@ -79,7 +79,7 @@
             <button v-else class="btn border border-secondary bg-light w-100 text-dark" @click="subscribe">订阅问题</button>
             <div class="mt-2 small text-muted">{{ issue_info.subscriptions.length }} 人订阅:</div>
             <div class="x-actions">
-              <img v-for="subscription in issue_info.subscriptions" v-tooltip:top="subscription.member.name" class="rounded-circle avatar" :src="subscription.member.avatarUrl()" width="30">
+              <img v-for="subscription in issue_info.subscriptions" v-tooltip:top="subscription.member.name" class="rounded-circle avatar" :src="subscription.member.avatar_url" width="30">
             </div>
           </div>
         </div>
@@ -128,12 +128,13 @@ const former = Former.build({
 })
 
 former.perform = async function(code: string) {
-  const a_issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
+  const a_issue_action = await new requests.IssueActionReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform({ [code]: this.form[code] })
 
-  Object.assign(props.issue_info, a_issue)
+  Object.assign(props.issue_info, a_issue_action.issue)
+  props.issue_info.activities.push(...a_issue_action.activities)
   emit('changed', props.issue_info)
 }
 

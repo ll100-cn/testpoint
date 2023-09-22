@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import BootstrapHelper from '@/lib/BootstrapHelper'
-import { type Component, markRaw, nextTick, ref, useAttrs } from "vue"
+import { type Component, markRaw, nextTick, ref, useAttrs, onMounted } from "vue"
 
 const attrs = useAttrs()
 const el = ref(null! as HTMLElement)
@@ -20,7 +20,7 @@ type Frame = {
 }
 
 const frame = ref(null! as Frame)
-const frame_component = ref(null! as Component)
+const frame_component = ref(null as Component | null)
 
 function show(a_frame: Component<Frame>, ...args: any[]) {
   frame_component.value = markRaw(a_frame)
@@ -44,4 +44,10 @@ function onSwitch(key: string | Component, ...args: any[]) {
 }
 
 defineExpose({ show })
+
+onMounted(() => {
+  el.value.addEventListener('hide.bs.modal', () => {
+    frame_component.value = null
+  })
+})
 </script>

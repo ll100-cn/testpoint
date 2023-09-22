@@ -64,9 +64,7 @@ former.perform = async function() {
 }
 
 const member_infos = ref(await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
-const projects = computed(() => {
-  return member_infos.value.map(it => it.project).filter(it => !it.archived)
-})
+const projects = computed(() => member_infos.value.map(it => it.project))
 
 const project_collection = computed(() => {
   return projects.value.filter(it => it.id != project_id)

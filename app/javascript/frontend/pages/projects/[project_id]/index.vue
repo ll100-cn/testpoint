@@ -8,5 +8,5 @@ const params = route.params as any
 
 const project_id = params.project_id
 
-router.push(`/projects/${project_id}/test_cases`)
+router.push(`/projects/${project_id}/issues`)
 </script>

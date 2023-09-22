@@ -1,8 +1,7 @@
 <template>
   <paginate
-    v-if="pagination.total_count > 1"
     :value="pagination.current_page"
-    :page-count="pagination.total_count"
+    :page-count="pagination.total_pages"
     first-last-button
     first-button-text="<i class='fal fa-angle-double-left'>"
     last-button-text="<i class='fal fa-angle-double-right'>"

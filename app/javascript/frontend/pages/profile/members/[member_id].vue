@@ -15,7 +15,7 @@
                 </layouts.group>
 
                 <layouts.group code="nickname" label="昵称">
-                  <controls.string :placeholder="`${account.user.name} (默认值)`" />
+                  <controls.string :placeholder="`${account.name} (默认值)`" />
                 </layouts.group>
               </div>
             </div>

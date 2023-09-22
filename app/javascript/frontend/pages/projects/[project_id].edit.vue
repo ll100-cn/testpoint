@@ -32,7 +32,7 @@ const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const project = await new requests.ProjectReq.Get().setup(proxy, (req) => {
+const project = await new requests.admin.ProjectReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id
 }).perform()
 
@@ -41,7 +41,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.ProjectReq.Update().setup(proxy, (req) => {
+  await new requests.admin.ProjectReq.Update().setup(proxy, (req) => {
     req.interpolations.id = project.id
   }).perform(this.form)
 

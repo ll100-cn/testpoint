@@ -1,4 +1,4 @@
-class Api::Profile::UsersController < Api::BaseController
+class Api::Profile::BasicsController < Api::BaseController
   before_action -> { @user = current_user }
   before_action -> { authorize! :manage, :profile }
 

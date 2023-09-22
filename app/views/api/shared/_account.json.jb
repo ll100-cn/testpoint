@@ -1,0 +1,8 @@
+json = {}
+
+json[:user] = render partial: 'api/shared/user', locals: { user: user }
+
+json[:name] = user.name
+json[:email] = user.email
+
+json

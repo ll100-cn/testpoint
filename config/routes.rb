@@ -158,6 +158,7 @@ Rails.application.routes.draw do
           resource :subscription
           resources :issue_relationships
           resources :issue_surveys
+          resources :issue_actions
 
           get :summary, on: :collection
           patch :unresolve, on: :member
@@ -167,6 +168,7 @@ Rails.application.routes.draw do
           get :source_relationships, on: :member
           get :target_relationships, on: :member
           get :attachments, on: :member
+          patch :body, on: :member
 
           resources :comments do
             member do
@@ -185,7 +187,7 @@ Rails.application.routes.draw do
       resources :issues
       resources :issue_stats
 
-      resource :user
+      resource :basic
       resources :member_infos
     end
 
@@ -195,8 +197,10 @@ Rails.application.routes.draw do
       delete :sign_out, to: "sessions#destroy"
     end
 
-    resources :users
-    resources :projects
+    namespace :admin do
+      resources :users
+      resources :projects
+    end
   end
 
   root to: "main#vue"

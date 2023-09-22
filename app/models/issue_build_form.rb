@@ -7,9 +7,9 @@ class IssueBuildForm
   attribute :from_task_id
 
   def submit(params)
-    self.assign_attributes(params)
-
     ActiveRecord::Base.transaction do
+      self.assign_attributes(params)
+
       if template
         self.issue.priority = self.template.default_priority
         self.issue.category = self.template.default_category

@@ -5,22 +5,24 @@
     <layouts.group code="content" label="内容">
       <controls.markdown />
     </layouts.group>
-    <AttachmentUploader @change="emit('attachmentChange', $event)" />
+
+    <AttachmentsUploader @changed="onAttachmentsChanged" :attachments="attachments" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { controls, layouts } from "@/components/simple_form"
 import { Attachment } from "@/models"
-
-import AttachmentUploader from "@/components/AttachmentUploader.vue"
+import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import Former from "@/components/simple_form/Former"
 
 const props = defineProps<{
-  attachments?: Attachment[]
+  former: Former<any>
+  attachments: Attachment[]
 }>()
 
-const emit = defineEmits<{
-  attachmentChange: [attachments: Attachment[]]
-}>()
+function onAttachmentsChanged(changes_list: Partial<Attachment>[]) {
+  props.former.form.attachments_params = changes_list
+}
 </script>

@@ -1,6 +1,6 @@
 class Api::Projects::IssuesController < Api::BaseController
   load_and_authorize_resource :project
-  load_and_authorize_resource through: :project
+  load_resource through: :project
 
   def index
     @stage = params[:stage] || "pending"
@@ -106,9 +106,17 @@ class Api::Projects::IssuesController < Api::BaseController
     respond_with @issue
   end
 
+  def body
+    with_email_notification do
+      @issue.update_with_author(body_params, current_member)
+    end
+
+    respond_with @issue
+  end
+
 protected
   def unresolve_params
-    params.permit(:content, attachment_ids: [])
+    params.permit(:content, attachments_params: [ :id, :title ])
   end
 
   def migrate_params
@@ -118,7 +126,10 @@ protected
   def issue_build_form_params
     params.permit(
       :from_task_id,
-      issue_attributes: [:priority, :title, :creator_id, :content],
+      issue_attributes: [
+        :priority, :title, :creator_id, :content,
+        attachments_params: [ :id, :title ]
+      ],
       info_attributes: [inputs_attributes: [:template_input_id, :value]]
     )
   end
@@ -129,7 +140,8 @@ protected
       :template_id, :project_id, :category_id, :task_id, :targert_project_id,
       attachment_ids: [],
       subscribed_user_ids: [],
-      template_ids: []
+      template_ids: [],
+      attachments_params: [ :id, :title ]
     ]
     names += [ :creator_id ] if can? :critical, Issue
     names
@@ -137,6 +149,10 @@ protected
 
   def issue_params
     params.permit(*issue_params_names)
+  end
+
+  def body_params
+    params.permit(:content, attachments_params: [ :id, :title ])
   end
 
   def with_email_notification

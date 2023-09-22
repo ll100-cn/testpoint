@@ -10,21 +10,16 @@
             工单模版：{{ issue_survey.template.name }}
             <span class="ms-3 small text-muted">修改于 {{ utils.humanize(issue_survey.updated_at, DATE_LONG_FORMAT) }}</span>
 
-            <div class="dropdown ms-auto dropdown-no-arrow">
-              <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
-                <i class="far fa-ellipsis-h" aria-hidden="true" />
-              </button>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="small dropdown-item" @click="blank_modal.show(IssueSurveyEditFrame, issue_info, issue_survey)">修改</a>
-                <a class="small dropdown-item" @click="deleteIssueSurvey(issue_survey)">删除</a>
-              </div>
-            </div>
+            <MoreDropdown class="ms-auto">
+              <a class="small dropdown-item" href="#" @click.prevent="blank_modal.show(IssueSurveyEditFrame, issue_info, issue_survey)">修改</a>
+              <a class="small dropdown-item" href="#" @click.prevent="deleteIssueSurvey(issue_survey)">删除</a>
+            </MoreDropdown>
           </div>
 
           <div v-if="issue_survey.state == 'pending'" class="alert alert-danger mb-0">
             <p class="mb-2">该工单需要提供更多信息，请按照模版</p>
             <div>
-              <a class="btn btn-danger btn-sm" @click="blank_modal.show(IssueSurveyEditFrame, issue_info, issue_survey)">补充工单</a>
+              <a class="btn btn-danger btn-sm" href="#" @click.prevent="blank_modal.show(IssueSurveyEditFrame, issue_info, issue_survey)">补充工单</a>
             </div>
           </div>
           <div v-else>
@@ -52,6 +47,7 @@ import * as utils from "@/lib/utils"
 import { Issue, IssueInfo, IssueSurvey } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import IssueSurveyEditFrame from "./IssueSurveyEditFrame.vue"
+import MoreDropdown from "@/components/MoreDropdown.vue"
 
 const blank_modal = ref(null as InstanceType<typeof BlankModal>)
 const { proxy } = getCurrentInstance()

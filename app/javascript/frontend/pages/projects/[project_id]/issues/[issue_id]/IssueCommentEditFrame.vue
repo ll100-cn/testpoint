@@ -8,7 +8,7 @@
 
       <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit" v-if="!loading">
         <div class="modal-body">
-          <IssueCommentForm :attachments="comment.attachments" @attachment-change="attachmentChange" />
+          <IssueCommentForm :former="former" :attachments="comment.attachments" />
         </div>
         <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>

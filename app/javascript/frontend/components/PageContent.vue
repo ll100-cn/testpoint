@@ -1,5 +1,9 @@
 <template>
-  <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="d-none" :value="content" />
+  <div>
+    <div class="no-margin-bottom">
+      <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="d-none" :value="content" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

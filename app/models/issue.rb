@@ -25,7 +25,7 @@
 class Issue < ApplicationRecord
   enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :closed ],
                     default: :pending, scope: true
-  enumerize :stage, in: [ :pending, :developing, :testing, :deploying, :resolved, :closed ], scope: true
+  enumerize :stage, in: [ :pending, :developing, :testing, :deploying, :resolved, :closed, :archived ], scope: true
   enumerize :priority, in: { low: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
 
   has_many :comments, dependent: :destroy
@@ -37,7 +37,7 @@ class Issue < ApplicationRecord
   belongs_to :project
   belongs_to :category, optional: true
   belongs_to :task, optional: true
-  has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable
+  has_many :attachments, as: :attachmentable, dependent: :nullify, inverse_of: :attachmentable, autosave: true
   has_many :activities, class_name: IssueActivity.to_s, dependent: :destroy
   has_many :source_relationships, class_name: IssueRelationship.to_s, foreign_key: :source_id, dependent: :destroy
   has_many :target_relationships, class_name: IssueRelationship.to_s, foreign_key: :target_id, dependent: :destroy
@@ -71,7 +71,9 @@ class Issue < ApplicationRecord
   }
 
   def generate_stage
-    if state.pending? || state.waiting?
+    if archived_at?
+      self.stage = :archived
+    elsif state.pending? || state.waiting?
       self.stage = :pending
     elsif state.confirmed?
       self.stage = assignee_id? ? :developing : :pending
@@ -88,6 +90,24 @@ class Issue < ApplicationRecord
     else
       self.stage = nil
     end
+  end
+
+  def attachments_params=(raw)
+    array = raw.is_a?(Array) ? raw : raw.values
+    new_attachment_ids = array.map { |it| it.symbolize_keys[:id] }
+    attachment_repo = Attachment.where_any_of(
+      Attachment.where(attachmentable_type: self.class.name, attachmentable_id: self.id),
+      Attachment.where(attachmentable_id: nil)
+    ).where(id: new_attachment_ids).index_by(&:id)
+
+    new_attachments = array.map do |attrs|
+      attrs = attrs.symbolize_keys
+      attachment = attachment_repo[attrs[:id].to_i]
+      attachment.assign_attributes(attrs)
+      attachment
+    end
+
+    self.attachments = new_attachments
   end
 
   def title_with_priority
@@ -132,13 +152,14 @@ class Issue < ApplicationRecord
   end
 
   def record_property_changes!(member)
-    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :category_id, :archived_at).each do |property, (before_value, after_value)|
+    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :category_id, :archived_at).map do |property, (before_value, after_value)|
       activity = self.activities.new
       activity.property = property
       activity.before_value = before_value
       activity.after_value = after_value
       activity.member_id = member.id
       activity.save!
+      activity
     end
   end
 

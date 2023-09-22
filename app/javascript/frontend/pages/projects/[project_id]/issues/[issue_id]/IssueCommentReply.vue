@@ -1,35 +1,30 @@
 <template>
-  <li class="list-group-item px-0 small">
-    <div class="d-flex mb-2 align-items-center x-actions x-spacer-2">
+  <div class="small">
+    <div class="d-flex align-items-center x-actions x-spacer-2">
       <MemberLabel :member="comment.member" />
 
-      <span class="text-muted ">回复评论：</span>
-      <div class="dropdown dropdown-no-arrow ms-auto">
-        <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" style="background: transparent;">
-          <i class="far fa-ellipsis-h" aria-hidden="true" />
-        </button>
-        <div class="dropdown-menu dropdown-menu-end">
-          <a v-if="comment.member.user_id == user.id" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-          <a class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
-        </div>
-      </div>
+      <span class="text-muted">回复于 {{ utils.humanize(comment.created_at, DATE_SHORT_FORMAT) }}</span>
+
+      <MoreDropdown class="ms-auto">
+        <a v-if="comment.member.user_id == user.id" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
+        <a class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
+      </MoreDropdown>
     </div>
-    <PageContent :content="comment.content" />
-    <AttachmentBox :attachments="comment.attachments" @edited="onAttachmentChanged" @deleted="onAttachmentDestroyed" />
-    <span class="text-muted">回复于 {{ utils.humanize(comment.created_at, DATE_SHORT_FORMAT) }}</span>
-  </li>
+
+    <ContentBody :body="comment" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import AttachmentBox from "@/components/AttachmentBox.vue"
 import MemberLabel from "@/components/MemberLabel.vue"
-import PageContent from "@/components/PageContent.vue"
+import MoreDropdown from "@/components/MoreDropdown.vue"
 import { DATE_SHORT_FORMAT } from "@/constants"
-import * as utils from "@/lib/utils"
 import * as requests from '@/lib/requests'
+import * as utils from "@/lib/utils"
 import { Attachment, Comment, Issue } from "@/models"
 import { useSessionStore } from "@/store/session"
 import { Component, getCurrentInstance } from "vue"
+import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 
 const { proxy } = getCurrentInstance()
@@ -48,7 +43,7 @@ const emit = defineEmits<{
   modal: [ component: Component, ...args: any[] ]
 }>()
 
-function onAttachmentChanged(attachment: Attachment) {
+function onAttachmentUpdated(attachment: Attachment) {
   const index = props.comment.attachments.findIndex(it => it.id === attachment.id)
   props.comment.attachments[index] = attachment
   emit('changed', props.comment)

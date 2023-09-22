@@ -26,7 +26,7 @@
       <div v-if="editing" class="d-flex x-actions">
         <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
           <layouts.group class="mb-0" code="title"><controls.string /></layouts.group>
-          <div class="x-actions text-nowrap">
+          <div class="x-actions x-spacer-2 text-nowrap">
             <layouts.submit>更新</layouts.submit>
             <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
           </div>

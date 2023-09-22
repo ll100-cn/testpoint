@@ -59,7 +59,8 @@ const former = Former.build({
   issue_attributes: {
     creator_id: _.find(members.value, { user_id: account.value.user.id })?.id ?? _.first(members.value).id,
     content: current_issue_template.value?.content_suggestion,
-    title: current_issue_template.value?.title_suggestion
+    title: current_issue_template.value?.title_suggestion,
+    attachments_params: []
   },
   info_attributes: { inputs_attributes: build_inputs_attributes() },
   attachment_ids: []
