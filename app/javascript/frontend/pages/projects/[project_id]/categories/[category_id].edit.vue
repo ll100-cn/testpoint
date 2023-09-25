@@ -23,7 +23,7 @@
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { layouts } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import Former from '@/components/simple_form/Former'
 import Fields from './Fields.vue'
 
@@ -34,7 +34,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 const category_id = params.category_id
-const category = ref(await new requests.CategoryReq.Get().setup(proxy, (req) => {
+const category = ref(await new q.project.CategoryInfoReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.category_id = category_id
 }).perform())
@@ -46,7 +46,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.CategoryReq.Update().setup(proxy, (req) => {
+  await new q.project.CategoryInfoReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.category_id = category_id
   }).perform(this.form)

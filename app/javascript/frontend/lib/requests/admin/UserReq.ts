@@ -22,15 +22,6 @@ export default {
     }
   },
 
-  List: class extends BaseArrayRequest<User> {
-    constructor() {
-      super()
-      this.method = "GET"
-      this.endpoint = "/api/admin/users"
-      this.klass = User
-    }
-  },
-
   Destroy: class extends BaseObjectRequest<User> {
     constructor() {
       super()

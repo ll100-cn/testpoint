@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { Validations, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import { Modal } from 'bootstrap'
 import $ from 'jquery'
@@ -64,7 +64,7 @@ const former = Former.build({
 })
 
 former.perform = async function(event) {
-  const new_test_case = await new requests.TestCaseReq.Update().setup(proxy, (req) => {
+  const new_test_case = await new q.case.TestCaseReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = 1
     req.interpolations.id = props.test_case.id
   }).perform(this.form)
@@ -85,7 +85,7 @@ async function archiveTestCase(event: Event) {
   }
 
   try {
-    const new_test_case = await new requests.TestCaseReq.Destroy().setup(proxy, (req) => {
+    const new_test_case = await new q.case.TestCaseReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = props.test_case.project_id
       req.interpolations.id = props.test_case.id
     }).perform()

@@ -31,7 +31,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import BootstrapHelper from "@/lib/BootstrapHelper"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 
@@ -52,7 +52,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const a_issue_survey = await new requests.IssueSurveyReq.Create().setup(proxy, (req) => {
+  const a_issue_survey = await new q.bug.IssueSurveyReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
@@ -70,7 +70,7 @@ async function reset() {
   loading.value = true
 
   try {
-    issue_templates.value = await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
+    issue_templates.value = await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue_info.project_id
     }).perform()
   } finally {

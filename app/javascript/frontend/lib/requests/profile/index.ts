@@ -3,4 +3,7 @@
 export { default as BasicReq } from "./BasicReq"
 export { default as IssueReq } from "./IssueReq"
 export { default as IssueStatReq } from "./IssueStatReq"
+export { default as LoginCodeDeliver } from "./LoginCodeDeliver"
+export { default as LoginCodeVerify } from "./LoginCodeVerify"
+export { default as Logout } from "./Logout"
 export { default as MemberInfoReq } from "./MemberInfoReq"

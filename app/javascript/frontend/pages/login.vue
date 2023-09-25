@@ -55,7 +55,7 @@
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { LoginCode } from "@/models"
 import { useSessionStore } from "@/store/session"
 import { getCurrentInstance, ref } from "vue"
@@ -71,7 +71,7 @@ const code_former = Former.build({
 const login_code = ref(null as LoginCode | null)
 
 code_former.perform = async function() {
-  login_code.value = await new requests.LoginCodeDeliver().setup(proxy).perform(this.form)
+  login_code.value = await new q.profile.LoginCodeDeliver().setup(proxy).perform(this.form)
   former.form.email = this.form.email
 }
 
@@ -82,12 +82,12 @@ const former = Former.build({
 
 former.perform = async function() {
   try {
-    await new requests.LoginCodeVerify().setup(proxy).perform({ user: this.form })
+    await new q.profile.LoginCodeVerify().setup(proxy).perform({ user: this.form })
     session.account = undefined
     await session.prepare(proxy)
     router.push("/")
   } catch(err) {
-    if (err instanceof requests.ErrorUnauthorized) {
+    if (err instanceof q.ErrorUnauthorized) {
       this.validations.invalid("login_code", "验证码错误")
       return
     }

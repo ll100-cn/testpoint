@@ -57,7 +57,7 @@ import PaginationBar from '@/components/PaginationBar.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import dayjs from '@/lib/dayjs'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from '@/lib/utils'
 import { Type } from 'class-transformer'
 import _ from 'lodash'
@@ -88,18 +88,18 @@ former.perform = async function(data) {
 }
 
 const project_id = _.toNumber(params.project_id)
-const plans = ref(await new requests.PlanReq.Page().setup(proxy, (req) => {
+const plans = ref(await new q.test.PlanReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.q = search
 }).perform())
 
-const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
+const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
 
-const test_case_stats = ref(await new requests.TestCaseStatReq.List().setup(proxy, (req) => {
+const test_case_stats = ref(await new q.case.TestCaseStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

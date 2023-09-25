@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
-import * as requests from "@/lib/requests"
+import * as q from "@/lib/requests"
 import { useSessionStore } from '@/store'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -60,7 +60,7 @@ watch(former.form, () => {
 })
 
 former.perform = async function() {
-  const account = await new requests.profile.BasicReq.Update().setup(proxy).perform(this.form)
+  const account = await new q.profile.BasicReq.Update().setup(proxy).perform(this.form)
   session.account = account
 
   success.value = true

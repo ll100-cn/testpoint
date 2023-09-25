@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import BlankModal from "@/components/BlankModal.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship } from "@/models"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
@@ -97,13 +97,13 @@ const route = useRoute()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 
-const issue_info = ref(await new requests.project.IssueInfoReq.Get().setup(proxy, (req) => {
+const issue_info = ref(await new q.bug.IssueInfoReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).perform())
 const issue = ref(issue_info.value as Issue)
 
-const comments = ref(await new requests.IssueCommentReq.List().setup(proxy, (req) => {
+const comments = ref(await new q.bug.IssueCommentReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue.value.id
 }).perform())

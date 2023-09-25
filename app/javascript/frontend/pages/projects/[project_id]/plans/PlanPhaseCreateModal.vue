@@ -35,7 +35,7 @@
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Phase, PhaseInfo, Plan, TaskUpshotInfo } from '@/models'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
@@ -69,7 +69,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const phase = await new requests.PlanPhaseReq.Create().setup(proxy, (req) => {
+  const phase = await new q.test.PlanPhaseReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.plan_id = params.plan_id
   }).perform(this.form)

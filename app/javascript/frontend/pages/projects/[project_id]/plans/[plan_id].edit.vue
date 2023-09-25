@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { Validations, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import _ from 'lodash'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -39,12 +39,12 @@ const params = route.params as any
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan = ref(await new requests.PlanReq.Get().setup(proxy, (req) => {
+const plan = ref(await new q.test.PlanReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
 
-const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
+const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -56,7 +56,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.PlanReq.Update().setup(proxy, (req) => {
+  await new q.test.PlanReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.plan_id = plan_id
   }).perform(this.form)
@@ -74,7 +74,7 @@ async function onDestroy() {
     return
   }
 
-  const plan = await new requests.PlanReq.Destroy().setup(proxy, (req) => {
+  const plan = await new q.test.PlanReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.plan_id = plan_id
   }).perform()

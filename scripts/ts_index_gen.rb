@@ -78,6 +78,7 @@ def gen_folder_index(path)
 end
 
 folders.each do |folder|
-  path = Pathname.new(folder)
-  gen_folder_index(path)
+  Pathname.glob(folder) do |path|
+    gen_folder_index(path)
+  end
 end

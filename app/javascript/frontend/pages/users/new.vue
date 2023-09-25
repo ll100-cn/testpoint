@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -36,7 +36,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const user = await new requests.admin.UserReq.Create().setup(proxy).perform(this.form)
+  const user = await new q.admin.UserReq.Create().setup(proxy).perform(this.form)
   router.push("/users")
 }
 

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import { Modal } from 'bootstrap'
 import { PropType, getCurrentInstance, nextTick, ref } from 'vue'
@@ -53,7 +53,7 @@ const former = Former.build({
 })
 
 former.perform = async function(event: SubmitEvent) {
-  const new_test_case = await new requests.TestCaseReq.Create().setup(proxy, (req) => {
+  const new_test_case = await new q.case.TestCaseReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id.value
   }).perform(this.form)
 

@@ -29,7 +29,7 @@
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -44,7 +44,7 @@ const page = usePageStore()
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 
-const issue = ref(await new requests.IssueReq.Get().setup(proxy, (req) => {
+const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).perform())
@@ -55,7 +55,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const issue = await new requests.IssueMigrate().setup(proxy, (req) => {
+  const issue = await new q.bug.IssueMigrate().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue_id
   }).perform({ targert_project_id: former.form.project_id, category_id: former.form.category_id })
@@ -63,19 +63,19 @@ former.perform = async function() {
   router.push({ path: `/projects/${issue.project_id}/issues/${issue_id}` })
 }
 
-const member_infos = ref(await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
+const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
 const projects = computed(() => member_infos.value.map(it => it.project))
 
 const project_collection = computed(() => {
   return projects.value.filter(it => it.id != project_id)
 })
 
-const categories = ref(await new requests.CategoryReq.List().setup(proxy, (req) => {
+const categories = ref(await new q.project.CategoryReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = former.form.project_id
 }).perform())
 
 async function getCategories() {
-  categories.value = await new requests.CategoryReq.List().setup(proxy, (req) => {
+  categories.value = await new q.project.CategoryReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = former.form.project_id
   }).perform()
   former.form.category_id = undefined

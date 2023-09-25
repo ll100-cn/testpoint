@@ -38,7 +38,7 @@
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { usePageStore } from '@/store'
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -52,7 +52,7 @@ const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 const page = usePageStore()
 
-const issue = ref(await new requests.IssueReq.Get().setup(proxy, (req) => {
+const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).perform())
@@ -65,7 +65,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
+  const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue_id
   }).perform(this.form)
@@ -73,8 +73,8 @@ former.perform = async function() {
   router.push({ path: `/projects/${project_id}/issues/${issue_id}` })
 }
 
-const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
-const categories = ref(await page.inProject().request(requests.CategoryReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
 
 const assignees_collection = computed(() => {
   return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()

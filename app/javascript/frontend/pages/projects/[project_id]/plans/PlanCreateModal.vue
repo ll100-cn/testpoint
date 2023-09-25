@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Plan, Platform, TestCaseStat } from '@/models'
 import { Modal } from 'bootstrap'
@@ -58,7 +58,7 @@ const former = Former.build({
 const _form = _.cloneDeep(former.form)
 
 former.perform = async function() {
-  const plan = await new requests.PlanReq.Create().setup(proxy, (req) => {
+  const plan = await new q.test.PlanReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = 1
   }).perform(this.form)
 

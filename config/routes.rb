@@ -164,10 +164,6 @@ Rails.application.routes.draw do
           patch :unresolve, on: :member
           patch :archive, on: :member
           patch :migrate, on: :member
-          get :activities, on: :member
-          get :source_relationships, on: :member
-          get :target_relationships, on: :member
-          get :attachments, on: :member
           patch :body, on: :member
 
           resources :comments do

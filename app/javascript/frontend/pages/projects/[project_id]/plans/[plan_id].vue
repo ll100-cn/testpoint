@@ -107,7 +107,7 @@ import { computed, getCurrentInstance, provide, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { TaskUpshotInfo, TestCaseStat } from '@/models';
-import * as requests from '@/lib/requests';
+import * as q from '@/lib/requests';
 import { plainToClass } from 'class-transformer';
 import _ from 'lodash';
 import { ChangeFilterFunction, ColumnFilter, Filter } from '../types';
@@ -142,7 +142,7 @@ const state_modify_is_dropdown_options = {
   overrided: '已操作',
 }
 
-const phase_infos = ref(await new requests.PlanPhaseInfoReq.List().setup(proxy, (req) => {
+const phase_infos = ref(await new q.test.PlanPhaseInfoReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
@@ -151,18 +151,18 @@ const currentQuery = ref({
   phase_index: _.toNumber(route.query.phase_index ?? phase_infos.value.length - 1 ?? 0),
 })
 
-const task_upshot_infos = ref(await new requests.TaskUpshotInfoReq.List().setup(proxy, (req) => {
+const task_upshot_infos = ref(await new q.test.TaskUpshotInfoReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_index = currentQuery.value.phase_index
 }).perform())
 
-const plan = ref(await new requests.PlanReq.Get().setup(proxy, (req) => {
+const plan = ref(await new q.test.PlanReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
 
-const issue_templates = ref(await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
+const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -226,7 +226,7 @@ provide("changeFilter", changeFilter)
 
 async function onTaskChanged(old_task_upshot_info: TaskUpshotInfo) {
   const id = old_task_upshot_info.id
-  const task_upshot_info = await new requests.TaskUpshotInfoReq.Get().setup(proxy, (req) => {
+  const task_upshot_info = await new q.test.TaskUpshotInfoReq.Get().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.plan_id = plan_id
     req.interpolations.phase_index = currentQuery.value.phase_index

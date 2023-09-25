@@ -42,7 +42,7 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { Validations } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import _ from 'lodash'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -57,11 +57,11 @@ const page = usePageStore()
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
 
-const platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
+const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
 
 async function onRemove(id: number) {
   if (!confirm("是否删除平台？")) {
@@ -69,7 +69,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new requests.PlatformReq.Destroy().setup(proxy, (req) => {
+    await new q.project.PlatformReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.platform_id = id
     }).perform()

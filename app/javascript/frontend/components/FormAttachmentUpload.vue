@@ -21,12 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import * as requests from '@/lib/requests'
-import { AxiosProgressEvent } from 'axios'
 import prettyBytes from 'pretty-bytes'
-import { getCurrentInstance, reactive } from 'vue'
-import { plainToInstance } from 'class-transformer'
-import { Attachment } from '@/models'
+import { getCurrentInstance } from 'vue'
 import { UploadFile } from './types'
 
 const proxy = getCurrentInstance()!.proxy!

@@ -66,7 +66,7 @@ import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import Page from "@/pages/Page"
 import _ from "lodash"
@@ -98,17 +98,17 @@ former.perform = async function(search: Search2 | null) {
   }
 }
 
-const issues = ref(await new requests.ProjectIssueReq.Page().setup(proxy, (req) => {
+const issues = ref(await new q.bug.IssueReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2, ...page })
 }).perform())
 
-const issue_summary = ref(await new requests.project.IssueSummaryReq.Get().setup(proxy, (req) => {
+const issue_summary = ref(await new q.bug.IssueSummaryReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2 })
 }).perform())
 
-const issue_stats = ref(await new requests.project.IssueStatReq.List().setup(proxy, (req) => {
+const issue_stats = ref(await new q.bug.IssueStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ keyword: search2.keyword })
 }).perform())

@@ -41,7 +41,7 @@
 import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Validations } from "@/components/simple_form"
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -53,7 +53,7 @@ const params = route.params as any
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
 
-const issue_templates = ref(await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
+const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -63,7 +63,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new requests.IssueTemplateReq.Destroy().setup(proxy, (req) => {
+    await new q.project.IssueTemplateReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_template_id = id
     }).perform()

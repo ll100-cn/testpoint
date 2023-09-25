@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -34,7 +34,7 @@ const params = route.params as any
 
 const project_id = params.project_id as string
 const test_case_label_id = params.test_case_label_id
-const test_case_label = ref(await new requests.TestCaseLabelReq.Get().setup(proxy, (req) => {
+const test_case_label = ref(await new q.project.TestCaseLabelInfoReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.test_case_label_id = test_case_label_id
 }).perform())
@@ -45,7 +45,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.TestCaseLabelReq.Update().setup(proxy, (req) => {
+  await new q.project.TestCaseLabelInfoReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.test_case_label_id = test_case_label_id
   }).perform(this.form)

@@ -32,8 +32,8 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import BootstrapHelper from "@/lib/BootstrapHelper"
-import * as requests from '@/lib/requests'
-import { IssueInfo, IssueRelationship } from "@/models"
+import * as q from '@/lib/requests'
+import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 
 const el = ref(null! as HTMLElement)
@@ -53,7 +53,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const a_issue_relationship = await new requests.IssueRelationshipReq.Create().setup(proxy, (req) => {
+  const a_issue_relationship = await new q.bug.IssueRelationshipReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(former.form)

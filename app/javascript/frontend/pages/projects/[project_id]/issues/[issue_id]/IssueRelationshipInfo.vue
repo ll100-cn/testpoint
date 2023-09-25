@@ -21,7 +21,7 @@ import { computed, getCurrentInstance } from "vue"
 
 import MemberLabel from "@/components/MemberLabel.vue"
 import { DATE_LONG_FORMAT } from '@/constants'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { IssueInfo, IssueRelationship } from "@/models"
 import MoreDropdown from "@/components/MoreDropdown.vue"
@@ -48,7 +48,7 @@ async function deleteIssueRelationShip() {
     return
   }
 
-  await new requests.IssueRelationshipReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.IssueRelationshipReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
     req.interpolations.issue_relationship_id = props.issue_relationship.id

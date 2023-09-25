@@ -19,7 +19,7 @@
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import { DATE_SHORT_FORMAT } from "@/constants"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Attachment, Comment, Issue } from "@/models"
 import { useSessionStore } from "@/store/session"
@@ -59,7 +59,7 @@ async function deleteComment() {
   if (!confirm("确认删除该评论？")) {
     return
   }
-  await new requests.IssueCommentReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.IssueCommentReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id

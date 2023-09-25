@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -36,7 +36,7 @@ const page = usePageStore()
 
 const project_id = params.project_id as string
 
-const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
 
 const former = Former.build({
   name: "",
@@ -44,7 +44,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.PlatformReq.Create().setup(proxy, (req) => {
+  await new q.project.PlatformReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
 

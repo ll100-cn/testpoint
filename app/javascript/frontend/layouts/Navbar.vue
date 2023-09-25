@@ -54,16 +54,15 @@
 </template>
 
 <script setup lang="ts">
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { MemberInfo } from '@/models'
 import { usePageStore } from '@/store'
 import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
 
 const proxy = getCurrentInstance()!.proxy!
-const route = useRoute()
 const router = useRouter()
 const session = useSessionStore()
 const page = usePageStore()
@@ -74,7 +73,7 @@ const member_infos = ref([] as MemberInfo[])
 const projects = computed(() => member_infos.value.map(it => it.project))
 
 if (account.value) {
-  member_infos.value = (await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
+  member_infos.value = (await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
 }
 const project = computed(() => {
   const project_id = page.inProject()?.project_id
@@ -86,7 +85,7 @@ const project = computed(() => {
 })
 
 async function signOut() {
-  await new requests.AccountSignOut().setup(proxy).perform()
+  await new q.profile.Logout().setup(proxy).perform()
   session.clear()
   router.push('/')
 }

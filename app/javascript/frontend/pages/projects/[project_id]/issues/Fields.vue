@@ -9,9 +9,6 @@
       <layouts.group code="issue_attributes.title" label="标题">
         <controls.string />
       </layouts.group>
-      <layouts.group code="issue_attributes.creator_id" label="创建人">
-        <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', includeBlank: true, live_search: true }" />
-      </layouts.group>
       <layouts.group code="issue_attributes.content" label="内容">
         <controls.markdown />
       </layouts.group>

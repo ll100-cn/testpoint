@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Attachment } from "@/models"
 import { AxiosProgressEvent } from "axios"
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue"
@@ -67,7 +67,7 @@ async function upload(file: File) {
   items.value.push(item)
 
   try {
-    const attachment = await new requests.AttachmentReq.Create().setup(proxy, (req) => {
+    const attachment = await new q.project.AttachmentReq.Create().setup(proxy, (req) => {
       req.conifg = {
         onUploadProgress: (progressEvent: AxiosProgressEvent) => {
           upload_file.state = "uploading"

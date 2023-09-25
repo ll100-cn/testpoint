@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import BlankModal from "@/components/BlankModal.vue"
 import { DATE_LONG_FORMAT } from '@/constants'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Issue, IssueInfo, IssueSurvey } from "@/models"
 import { getCurrentInstance, ref } from "vue"
@@ -61,7 +61,7 @@ const emits = defineEmits<{
 }>()
 
 async function deleteIssueSurvey(issue_survey: IssueSurvey) {
-  await new requests.IssueSurveyReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.IssueSurveyReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
     req.interpolations.issue_survey_id = issue_survey.id

@@ -51,7 +51,7 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { Validations } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { PageQuery } from '@/types'
 import _ from 'lodash'
 
@@ -70,7 +70,7 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const members = ref(await new requests.MemberReq.Page().setup(proxy, (req) => {
+const members = ref(await new q.project.MemberReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = currentQuery.value
 }).perform())
@@ -81,7 +81,7 @@ async function onArchive(id: number) {
   }
 
   try {
-    await new requests.MemberArchive().setup(proxy, (req) => {
+    await new q.project.MemberReq.Archive().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.member_id = id
     }).perform()

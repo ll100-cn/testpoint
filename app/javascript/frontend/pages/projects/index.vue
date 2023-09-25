@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import Validations from '@/components/simple_form/Validations'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PaginationBar from '@/components/PaginationBar.vue'
@@ -51,7 +51,7 @@ const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
 const validations = reactive<Validations>(new Validations())
 
-const projects = ref(await new requests.admin.ProjectReq.Page().setup(proxy).perform())
+const projects = ref(await new q.admin.ProjectReq.Page().setup(proxy).perform())
 
 async function onRemove(project_id) {
   if (!confirm("是否归档项目？")) {
@@ -59,7 +59,7 @@ async function onRemove(project_id) {
   }
 
   try {
-    await new requests.admin.ProjectReq.Destroy().setup(proxy, (req) => {
+    await new q.admin.ProjectReq.Destroy().setup(proxy, (req) => {
       req.interpolations.id = project_id
     }).perform()
 

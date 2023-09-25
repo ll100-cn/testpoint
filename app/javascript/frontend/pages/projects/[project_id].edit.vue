@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -32,7 +32,7 @@ const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const project = await new requests.admin.ProjectReq.Get().setup(proxy, (req) => {
+const project = await new q.admin.ProjectReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id
 }).perform()
 
@@ -41,7 +41,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.admin.ProjectReq.Update().setup(proxy, (req) => {
+  await new q.admin.ProjectReq.Update().setup(proxy, (req) => {
     req.interpolations.id = project.id
   }).perform(this.form)
 

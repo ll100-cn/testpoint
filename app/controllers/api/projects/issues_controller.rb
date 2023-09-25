@@ -65,39 +65,6 @@ class Api::Projects::IssuesController < Api::BaseController
     respond_with @issue
   end
 
-  def summary
-    @stage = params[:filter] || "assign"
-    @keyword = params[:keyword].presence
-
-    @issues = @issues.includes(:assignee).references(:assignee)
-    @issues = @issues.includes(:creator).references(:creator)
-    @issues = @issues.includes(:category).references(:category)
-    issues_scope = @issues
-
-    issues_scope = issues_scope.where(stage: @stage) if @stage != "all"
-    if @keyword
-      issues_scope = issues_scope.where_exists(Comment.where("content LIKE ?", "%#{@keyword}%").where_table(:issue))
-        .or(issues_scope.where("title LIKE ? or content LIKE ?", "%#{@keyword}%", "%#{@keyword}%"))
-    end
-    @issue_searcher = IssueSearcher.from(issues_scope, params)
-  end
-
-  def activities
-    @issue_activities = @issue.activities
-  end
-
-  def target_relationships
-    @issue_target_relationships = @issue.target_relationships
-  end
-
-  def source_relationships
-    @issue_source_relationships = @issue.source_relationships
-  end
-
-  def attachments
-    @attachments = @issue.attachments
-  end
-
   def migrate
     with_email_notification do
       @issue.change_project_with_author(migrate_params, current_member)

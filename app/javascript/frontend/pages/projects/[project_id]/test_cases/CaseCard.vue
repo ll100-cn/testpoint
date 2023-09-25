@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
@@ -87,12 +87,12 @@ const emit = defineEmits<{
 }>()
 
 const project_id = _.toNumber(params.project_id)
-const test_cases = await new requests.TestCaseReq.List().setup(proxy, (req) => {
+const test_cases = await new q.case.TestCaseReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.milestone_id = route.query.milestone_id
 }).perform()
 
-const _labels = ref(await new requests.TestCaseLabelReq.List().setup(proxy, (req) => {
+const _labels = ref(await new q.project.TestCaseLabelReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -100,7 +100,7 @@ const lable_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>().setup(_labels.value)
 })
 
-const _platforms = ref(await new requests.PlatformReq.List().setup(proxy, (req) => {
+const _platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

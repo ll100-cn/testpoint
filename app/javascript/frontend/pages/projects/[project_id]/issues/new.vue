@@ -24,13 +24,13 @@
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Attachment } from "@/models"
+import { usePageStore } from "@/store"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import Fields from "./Fields.vue"
-import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -39,13 +39,12 @@ const params = route.params as any
 const issue_template_id = route.query.issue_template_id ?? ""
 const page = usePageStore()
 
-const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
 
-const issue_templates = ref(await new requests.IssueTemplateReq.List().setup(proxy, (req) => {
+const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id
 }).perform())
 
-const account = ref(await new requests.AccountReq.Get().setup(proxy).perform())
 const current_issue_template = ref(_.find(issue_templates.value, { id: _.toNumber(issue_template_id) }))
 
 function build_inputs_attributes() {
@@ -57,7 +56,6 @@ function build_inputs_attributes() {
 const former = Former.build({
   issue_template_id,
   issue_attributes: {
-    creator_id: _.find(members.value, { user_id: account.value.user.id })?.id ?? _.first(members.value).id,
     content: current_issue_template.value?.content_suggestion,
     title: current_issue_template.value?.title_suggestion,
     attachments_params: []
@@ -67,7 +65,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const issue = await new requests.IssueReq.Create().setup(proxy, (req) => {
+  const issue = await new q.bug.IssueReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)
 

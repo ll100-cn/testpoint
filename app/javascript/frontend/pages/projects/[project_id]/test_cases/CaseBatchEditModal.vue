@@ -92,7 +92,7 @@
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
@@ -150,7 +150,7 @@ former.perform = async function() {
     }
 
     try {
-      await new requests.TestCaseReq.Update().setup(proxy, (req) => {
+      await new q.case.TestCaseReq.Update().setup(proxy, (req) => {
         req.interpolations.project_id = test_case.project_id
         req.interpolations.id = test_case.id
       }).perform(form_data)

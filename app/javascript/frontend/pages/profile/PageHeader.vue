@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { usePageStore } from "@/store"
 import { getCurrentInstance, ref } from "vue"
 
@@ -25,5 +25,5 @@ defineProps<{
   current: string | number
 }>()
 
-const member_infos = ref(await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
+const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
 </script>

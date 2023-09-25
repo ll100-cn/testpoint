@@ -72,7 +72,7 @@ import { computed, getCurrentInstance, nextTick, onMounted, onUpdated, reactive,
 
 import { Validations } from "@/components/simple_form"
 import { IssueTemplate, PhaseInfo, Plan, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
 
@@ -137,7 +137,7 @@ async function submitContent(event: InputEvent) {
   const formData = new FormData(event.currentTarget as HTMLFormElement)
 
   try {
-    const task_upshot = await new requests.TaskUpshotContentReq.Update().setup(proxy, (req) => {
+    const task_upshot = await new q.test.TaskUpshotContentReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
       req.interpolations.plan_id = props.plan.id
       req.interpolations.task_id = current_task_upshot_info.value.task.id
@@ -156,14 +156,14 @@ async function submitContent(event: InputEvent) {
 }
 
 async function getData(id: number) {
-  current_task_upshot_info.value = await new requests.TaskUpshotInfoReq.Get().setup(proxy, (req) => {
+  current_task_upshot_info.value = await new q.test.TaskUpshotInfoReq.Get().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.plan_id = props.plan.id
     req.interpolations.phase_index = _.findIndex(props.phase_infos, { id: props.current_phase_id })
     req.interpolations.id = id
   }).perform()
 
-  task_info.value = await new requests.TaskInfoReq.Get().setup(proxy, (req) => {
+  task_info.value = await new q.test.TaskInfoReq.Get().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.plan_id = props.plan.id
     req.interpolations.task_id = current_task_upshot_info.value.task.id
@@ -177,7 +177,7 @@ async function updated(task_upshot: TaskUpshot) {
 
 async function ignore(task_upshot_info: TaskUpshotInfo) {
   try {
-    const task = await new requests.TaskIgnore().setup(proxy, (req) => {
+    const task = await new q.test.TaskReq.Ignore().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
       req.interpolations.plan_id = props.plan.id
       req.interpolations.id = task_upshot_info.task.id
@@ -198,7 +198,7 @@ async function ignore(task_upshot_info: TaskUpshotInfo) {
 
 async function unignore(task_upshot_info: TaskUpshotInfo) {
   try {
-    const task = await new requests.TaskUnignore().setup(proxy, (req) => {
+    const task = await new q.test.TaskReq.Unignore().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
       req.interpolations.plan_id = props.plan.id
       req.interpolations.id = task_upshot_info.task.id

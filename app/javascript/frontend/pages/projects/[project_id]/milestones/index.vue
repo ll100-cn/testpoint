@@ -43,7 +43,7 @@
 import { DATE_FORMAT } from '@/constants';
 import * as utils from '@/lib/utils';
 import { Milestone } from '@/models';
-import * as requests from '@/lib/requests';
+import * as q from '@/lib/requests';
 import _ from 'lodash';
 import { getCurrentInstance, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -56,14 +56,14 @@ const params = route.params as any
 const page = usePageStore()
 
 const project_id = _.toNumber(params.project_id)
-const milestones = ref(await page.inProject().request(requests.MilestoneReq.List).setup(proxy).perform())
+const milestones = ref(await page.inProject().request(q.project.MilestoneReq.List).setup(proxy).perform())
 
 function milestoneDestroy(milestone: Milestone) {
   if (!confirm('确定要删除吗？')) {
     return
   }
 
-  new requests.MilestoneReq.Destroy().setup(proxy, (req) => {
+  new q.project.MilestoneReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()
@@ -76,7 +76,7 @@ function milestoneArchive(milestone: Milestone) {
     return
   }
 
-  new requests.MilestoneArchive().setup(proxy, (req) => {
+  new q.project.MilestoneReq.Archive().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()

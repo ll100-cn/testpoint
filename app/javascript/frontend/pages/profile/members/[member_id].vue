@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
-import * as requests from "@/lib/requests"
+import * as q from "@/lib/requests"
 import { usePageStore, useSessionStore } from '@/store'
 import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -48,7 +48,7 @@ const session = useSessionStore()
 const params = route.params as any
 
 const account = ref(session.account)
-const member_infos = ref(await page.singleton(requests.profile.MemberInfoReq.List).setup(proxy).perform())
+const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
 const member_info = computed(() => member_infos.value.find(it => it.id.toString() === params.member_id))
 
 const former = Former.build({
@@ -61,7 +61,7 @@ watch(former.form, () => {
 })
 
 former.perform = async function() {
-  const a_member_info = await new requests.profile.MemberInfoReq.Update().setup(proxy, req => {
+  const a_member_info = await new q.profile.MemberInfoReq.Update().setup(proxy, req => {
     req.interpolations.id = member_info.value.id
   }).perform(this.form)
 

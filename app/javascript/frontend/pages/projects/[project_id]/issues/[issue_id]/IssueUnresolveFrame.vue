@@ -20,7 +20,7 @@
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import BootstrapHelper from "@/lib/BootstrapHelper"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
@@ -42,7 +42,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const a_issue = await new requests.IssueUnresolve().setup(proxy, (req) => {
+  const a_issue = await new q.bug.IssueUnresolve().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)

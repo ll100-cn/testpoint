@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -41,7 +41,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.MemberReq.Create().setup(proxy, (req) => {
+  await new q.project.MemberReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
   router.push('/projects/' + project_id + '/members')

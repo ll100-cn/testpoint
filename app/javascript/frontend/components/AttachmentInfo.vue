@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { Validations, controls, layouts } from "@/components/simple_form"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"
@@ -80,7 +80,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const attachment = await new requests.AttachmentReq.Update().setup(proxy, (req) => {
+  const attachment = await new q.project.AttachmentReq.Update().setup(proxy, (req) => {
     req.interpolations.attachment_id = props.attachment.id
   }).perform(this.form)
 
@@ -119,7 +119,7 @@ async function deleteAttachment() {
   validations.value.clear()
 
   try {
-    const attachment = await new requests.AttachmentReq.Destroy().setup(proxy, (req) => {
+    const attachment = await new q.project.AttachmentReq.Destroy().setup(proxy, (req) => {
       req.interpolations.attachment_id = props.attachment.id
     }).perform()
     if (attachment) {

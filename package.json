@@ -7,7 +7,7 @@
     "build-index-0": "scripts/ts_index_gen.rb app/javascript/frontend/initializers",
     "build-index-1": "scripts/ts_index_gen.rb app/javascript/frontend/models",
     "build-index-2": "scripts/ts_index_gen.rb --ext=vue app/javascript/frontend/components/simple_form/layouts app/javascript/frontend/components/simple_form/controls",
-    "build-index-3": "scripts/ts_index_gen.rb app/javascript/frontend/lib/requests/profile app/javascript/frontend/lib/requests/project app/javascript/frontend/lib/requests/admin app/javascript/frontend/lib/requests",
+    "build-index-3": "scripts/ts_index_gen.rb app/javascript/frontend/lib/requests/{profile,bug,admin,case,test,profile}",
     "build-index": "yarn build-index-0 && yarn build-index-1 && yarn build-index-2 && yarn build-index-3"
   },
   "dependencies": {

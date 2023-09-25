@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as requests from '@/lib/requests';
+import * as q from '@/lib/requests';
 import { Modal } from 'bootstrap';
 import { PropType, getCurrentInstance, nextTick, ref } from 'vue';
 import CardShow from './CardShow.vue';
@@ -48,7 +48,7 @@ async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
 
-  history.value = await new requests.TestCaseHistory().setup(proxy, (req) => {
+  history.value = await new q.case.TestCaseHistory().setup(proxy, (req) => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform()

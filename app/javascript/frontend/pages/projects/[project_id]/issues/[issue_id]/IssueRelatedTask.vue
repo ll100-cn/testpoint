@@ -10,7 +10,7 @@
 import { getCurrentInstance, ref } from "vue"
 
 import { Task } from "@/models"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{
@@ -18,12 +18,12 @@ const props = defineProps<{
   project_id: number
 }>()
 
-const test_case = ref(await new requests.TestCaseReq.Get().setup(proxy, (req) => {
+const test_case = ref(await new q.case.TestCaseReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.test_case_id = props.task.test_case_id
 }).perform())
 
-const plan = ref(await new requests.PlanReq.Get().setup(proxy, (req) => {
+const plan = ref(await new q.test.PlanReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.plan_id = props.task.plan_id
 }).perform())

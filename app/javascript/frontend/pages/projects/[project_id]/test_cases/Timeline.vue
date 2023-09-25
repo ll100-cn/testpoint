@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from '@/lib/utils'
 import { DATE_FORMAT } from '@/constants'
 import _ from 'lodash'
@@ -38,7 +38,7 @@ const RAILS_RELATIVE_URL_ROOT = import.meta.env.VITE_RUBY_BASE ?? '/'
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null
-const milestones = await new requests.MilestoneReq.List().setup(proxy, (req) => {
+const milestones = await new q.project.MilestoneReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.filter = "available"
 }).perform()

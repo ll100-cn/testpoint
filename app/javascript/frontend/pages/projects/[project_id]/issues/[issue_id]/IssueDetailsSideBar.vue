@@ -97,7 +97,7 @@ import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { IssueInfo } from "@/models"
 import { usePageStore } from "@/store"
@@ -128,7 +128,7 @@ const former = Former.build({
 })
 
 former.perform = async function(code: string) {
-  const a_issue_action = await new requests.IssueActionReq.Create().setup(proxy, (req) => {
+  const a_issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform({ [code]: this.form[code] })
@@ -138,9 +138,9 @@ former.perform = async function(code: string) {
   emit('changed', props.issue_info)
 }
 
-const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
-const categories = ref(await page.inProject().request(requests.CategoryReq.List).setup(proxy).perform())
-const milestones = ref(await page.inProject().request(requests.MilestoneReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
+const milestones = ref(await page.inProject().request(q.project.MilestoneReq.List).setup(proxy).perform())
 
 const issue_state_mapping_collection = computed(() => {
   return _.map(ISSUE_STATE_MAPPING, (value, key) => {
@@ -157,7 +157,7 @@ const assignee_collection = computed(() => {
 })
 
 async function subscribe() {
-  const a_subscription = await new requests.SubscriptionReq.Create().setup(proxy, (req) => {
+  const a_subscription = await new q.bug.SubscriptionReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform()
@@ -167,7 +167,7 @@ async function subscribe() {
 }
 
 async function unsubscribe() {
-  await new requests.SubscriptionReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.SubscriptionReq.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform()

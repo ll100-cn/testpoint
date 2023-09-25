@@ -17,7 +17,7 @@
       <button v-if="!is_bind_issue" class="btn btn-primary" @click="is_bind_issue = !is_bind_issue">关联问题</button>
       <template v-else>
         <div class="d-flex x-actions">
-          <controls.number v-bind="{ code: 'id', form: issue_former.form }" />
+          <controls.number v-model="issue_former.form.id" />
           <SubmitButton :func="bindIssue" submit_text="关联" />
           <button class="btn btn-secondary text-nowrap" @click="is_bind_issue = !is_bind_issue">取消</button>
         </div>
@@ -44,7 +44,7 @@ import IssueForm from "@/components/IssueForm.vue"
 import SubmitButton from "@/components/SubmitButton.vue"
 import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { IssueTemplate, PhaseInfo, Plan, TaskUpshot, TaskUpshotInfo } from '@/models'
 import { usePageStore } from "@/store"
 import _ from 'lodash'
@@ -74,8 +74,8 @@ const emit = defineEmits<{
   "update:is_task_pass": [is_task_pass: boolean]
 }>()
 
-const members = ref(await page.inProject().request(requests.MemberReq.List).setup(proxy).perform())
-const categories = ref(await page.inProject().request(requests.CategoryReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
 
 const validations = reactive<Validations>(new Validations())
 const is_bind_issue = ref(false)
@@ -85,7 +85,7 @@ const issue_former = Former.build({
 })
 
 issue_former.perform = async function() {
-  const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
+  const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.issue_id = issue_former.form.id
   }).perform({ task_id: props.task_upshot_info.task.id })
@@ -105,11 +105,11 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.IssueReq.Create().setup(proxy, (req) => {
+  await new q.bug.IssueReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
   }).perform(this.form)
 
-  await new requests.TaskUpshotStateReq.Update().setup(proxy, (req) => {
+  await new q.test.TaskUpshotStateReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.plan_id = props.plan.id
     req.interpolations.task_id = props.task_upshot_info.task.id
@@ -139,7 +139,7 @@ async function updateStateOverride(state_override: "pass" | "pending" | "failure
   validations.clear()
 
   try {
-    const task_upshot = await new requests.TaskUpshotStateReq.Update().setup(proxy, (req) => {
+    const task_upshot = await new q.test.TaskUpshotStateReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.project_id
       req.interpolations.plan_id = props.plan.id
       req.interpolations.task_id = props.task_upshot_info.task.id
@@ -163,7 +163,7 @@ async function updateStateOverride(state_override: "pass" | "pending" | "failure
 }
 
 async function bindIssue() {
-  const issue = await new requests.IssueReq.Update().setup(proxy, (req) => {
+  const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.project_id
     req.interpolations.issue_id = issue_former.form.id
   }).perform({ task_id: props.task_upshot_info.task.id })

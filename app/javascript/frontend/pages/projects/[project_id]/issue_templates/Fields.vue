@@ -52,7 +52,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
@@ -67,7 +67,7 @@ const lookup_by_build_form_collection = ref([
   { label: "", value: true },
 ])
 
-const categories = await page.inProject().request(requests.CategoryReq.List).setup(proxy).perform()
+const categories = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
 
 async function onRemoveInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)

@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, layouts } from "@/components/simple_form"
+import { layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -34,8 +34,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 const member_id = params.member_id
-const validations = ref(new Validations())
-const member = ref(await new requests.MemberReq.Get().setup(proxy, (req) => {
+const member = ref(await new q.project.MemberReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.member_id = member_id
 }).perform())
@@ -47,7 +46,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.MemberReq.Update().setup(proxy, (req) => {
+  await new q.project.MemberReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.member_id = member_id
   }).perform(this.form)

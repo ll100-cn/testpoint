@@ -9,5 +9,14 @@ export default {
       this.endpoint = "/api/profile/basic"
       this.klass = Account
     }
+  },
+
+  Get: class extends BaseObjectRequest<Account> {
+    constructor() {
+      super()
+      this.method = "GET"
+      this.endpoint = "/api/profile"
+      this.klass = Account
+    }
   }
 }

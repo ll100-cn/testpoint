@@ -23,7 +23,7 @@
 import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import BootstrapHelper from "@/lib/BootstrapHelper"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { Attachment, Comment, Issue } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
@@ -42,7 +42,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const a_comment = await new requests.IssueCommentReq.Update().setup(proxy, (req) => {
+  const a_comment = await new q.bug.IssueCommentReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = issue.value.project_id
     req.interpolations.issue_id = issue.value.id
     req.interpolations.comment_id = comment.value.id

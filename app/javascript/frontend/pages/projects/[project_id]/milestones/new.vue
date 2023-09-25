@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import Former from '@/components/simple_form/Former'
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -39,7 +39,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  await new requests.MilestoneReq.Create().setup(proxy, (req) => {
+  await new q.project.MilestoneReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)
 

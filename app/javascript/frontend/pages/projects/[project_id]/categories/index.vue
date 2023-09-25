@@ -51,7 +51,7 @@ import { Actioner } from '@/components/Actioner'
 import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import PaginationBar from "@/components/PaginationBar.vue"
-import * as requests from '@/lib/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -62,7 +62,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 
-const categories = ref(await new requests.CategoryInfoReq.Page().setup(proxy, (req) => {
+const categories = ref(await new q.project.CategoryInfoReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -70,7 +70,7 @@ const actioner = Actioner.build()
 
 function deleteCategory(id: number) {
   actioner.perform(async function() {
-    await new requests.CategoryReq.Destroy().setup(proxy, (req) => {
+    await new q.project.CategoryInfoReq.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.category_id = id
     }).perform()
