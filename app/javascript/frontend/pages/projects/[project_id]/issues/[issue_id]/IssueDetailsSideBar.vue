@@ -115,7 +115,7 @@ const props = defineProps<{
   issue_info: IssueInfo
 }>()
 const emit = defineEmits<{
-  changed: [ IssueInfo ]
+  updated: [ IssueInfo ]
 }>()
 
 const former = Former.build({
@@ -135,7 +135,7 @@ former.perform = async function(code: string) {
 
   Object.assign(props.issue_info, a_issue_action.issue)
   props.issue_info.activities.push(...a_issue_action.activities)
-  emit('changed', props.issue_info)
+  emit('updated', props.issue_info)
 }
 
 const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
@@ -163,7 +163,7 @@ async function subscribe() {
   }).perform()
 
   props.issue_info.subscriptions.push(a_subscription)
-  emit("changed", props.issue_info)
+  emit("updated", props.issue_info)
 }
 
 async function unsubscribe() {
@@ -174,7 +174,7 @@ async function unsubscribe() {
 
   const index = props.issue_info.subscriptions.findIndex(it => it.user_id == current_user.id)
   props.issue_info.subscriptions.splice(index, 1)
-  emit("changed", props.issue_info)
+  emit("updated", props.issue_info)
 }
 
 </script>

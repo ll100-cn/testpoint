@@ -32,7 +32,7 @@ const props = defineProps<{
   issue_relationship: IssueRelationship
 }>()
 const emit = defineEmits<{
-  changed: [ IssueInfo ]
+  updated: [ IssueInfo ]
 }>()
 
 const direction = computed(() => {
@@ -62,6 +62,6 @@ async function deleteIssueRelationShip() {
     props.issue_info.target_relationships.splice(target_index, 1)
   }
 
-  emit("changed", props.issue_info)
+  emit("updated", props.issue_info)
 }
 </script>

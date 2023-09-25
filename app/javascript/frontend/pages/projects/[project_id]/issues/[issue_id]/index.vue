@@ -17,18 +17,18 @@
   <div class="row">
     <div class="col order-1 order-md-0 mb-5">
       <IssueRelatedTask v-if="issue.task" :task="issue.task" :project_id="project_id" />
-      <IssueContent :issue_info="issue_info" @changed="updateIssueInfo" />
-      <IssueSurveyCard :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @changed="updateIssueInfo" />
+      <IssueContent :issue_info="issue_info" @updated="onIssueInfoUpdated" />
+      <IssueSurveyCard :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_modal.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
         <template v-if="(item instanceof Comment)">
-          <IssueComment :issue="issue" :comment="item" :comment_repo="comment_repo" @changed="onCommentChanged" @destroyed="onCommentDestroyed" @modal="(...args) => comment_modal.show(...args)" />
+          <IssueComment :issue="issue" :comment="item" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_modal.show(...args)" />
         </template>
         <template v-else-if="(item instanceof IssueActivity)">
           <IssueActivityInfo :issue="issue_info" :issue_activity="item" />
         </template>
         <template v-else-if="(item instanceof IssueRelationship)">
-          <IssueRelationshipInfo :issue_info="issue_info" :issue_relationship="item" @changed="updateIssueInfo" />
+          <IssueRelationshipInfo :issue_info="issue_info" :issue_relationship="item" @updated="onIssueInfoUpdated" />
         </template>
       </div>
 
@@ -61,11 +61,11 @@
         </div>
       </div>
     </div>
-    <IssueDetailsSideBar class="col-12 col-md-3 order-0 order-md-1" :issue_info="issue_info" @changed="updateIssueInfo" />
+    <IssueDetailsSideBar class="col-12 col-md-3 order-0 order-md-1" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
   </div>
   <teleport to="body">
-    <BlankModal ref="comment_modal" @created="onCommentCreated" @changed="onCommentChanged" @destroyed="onCommentDestroyed" />
-    <BlankModal ref="issue_info_modal" @changed="updateIssueInfo" v-bind="{ issue_info }" />
+    <BlankModal ref="comment_modal" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
+    <BlankModal ref="issue_info_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
   </teleport>
 </template>
 
@@ -116,7 +116,7 @@ const timelines = computed(() => {
   return _.orderBy([ ...comment_repo.value.parent_id.findAll(null), ...issue_info.value.activities, ...issue_info.value.target_relationships, ...issue_info.value.source_relationships ], [ "created_at" ])
 })
 
-function updateIssueInfo(new_issue_info: IssueInfo) {
+function onIssueInfoUpdated(new_issue_info: IssueInfo) {
   issue_info.value = new_issue_info
   issue.value = issue_info.value
 }
@@ -130,8 +130,7 @@ function onCommentDestroyed(comment: Comment) {
   comments.value.splice(index, 1)
 }
 
-async function onCommentChanged(comment: Comment) {
-  console.log(comment)
+async function onCommentUpdated(comment: Comment) {
   const index = comments.value.findIndex(it => it.id === comment.id)
   comments.value[index] = comment
 }

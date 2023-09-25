@@ -63,7 +63,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   destroyed: [ Comment ]
-  changed: [ Comment ]
+  updated: [ Comment ]
 
   modal: [ component: Component, ...args: any[] ]
 }>()
@@ -96,7 +96,7 @@ async function foldComment() {
     collapsed: false
   })
 
-  emit('changed', comment)
+  emit('updated', comment)
 }
 
 async function unfoldComment() {
@@ -108,18 +108,18 @@ async function unfoldComment() {
     collapsed: true
   })
 
-  emit('changed', comment)
+  emit('updated', comment)
 }
 
 function onAttachmentUpdated(attachment: Attachment) {
   const index = props.comment.attachments.findIndex(it => it.id === attachment.id)
   props.comment.attachments[index] = attachment
-  emit('changed', props.comment)
+  emit('updated', props.comment)
 }
 
 function onAttachmentDestroyed(attachment: Attachment) {
   const index = props.comment.attachments.findIndex(it => it.id === attachment.id)
   props.comment.attachments.splice(index, 1)
-  emit('changed', props.comment)
+  emit('updated', props.comment)
 }
 </script>

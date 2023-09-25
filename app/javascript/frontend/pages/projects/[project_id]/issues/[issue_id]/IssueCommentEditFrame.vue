@@ -33,7 +33,7 @@ const el = ref(null! as HTMLElement)
 const { proxy } = getCurrentInstance()
 
 const emit = defineEmits<{
-  changed: [ Comment ]
+  updated: [ Comment ]
 }>()
 
 const former = Former.build({
@@ -48,7 +48,7 @@ former.perform = async function() {
     req.interpolations.comment_id = comment.value.id
   }).perform(this.form)
 
-  emit("changed", a_comment)
+  emit("updated", a_comment)
   BootstrapHelper.modal(el).hide()
 }
 

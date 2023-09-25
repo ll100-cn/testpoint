@@ -31,7 +31,7 @@ const { proxy } = getCurrentInstance()
 const el = ref(null! as HTMLElement)
 
 const emit = defineEmits<{
-  changed: [IssueInfo]
+  updated: [IssueInfo]
 }>()
 
 const issue_info = ref(null as IssueInfo | null)
@@ -50,7 +50,7 @@ former.perform = async function() {
   Object.assign(issue_info.value, a_issue_body.issue)
   issue_info.value.attachments = a_issue_body.attachments
 
-  emit("changed", issue_info.value)
+  emit("updated", issue_info.value)
   BootstrapHelper.modal(el).hide()
 }
 

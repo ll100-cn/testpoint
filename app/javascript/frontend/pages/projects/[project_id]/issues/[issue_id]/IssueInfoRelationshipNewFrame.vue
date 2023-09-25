@@ -40,7 +40,7 @@ const el = ref(null! as HTMLElement)
 const { proxy } = getCurrentInstance()
 
 const emit = defineEmits<{
-  changed: [ IssueInfo ]
+  updated: [ IssueInfo ]
 }>()
 
 const props = defineProps<{
@@ -59,7 +59,7 @@ former.perform = async function() {
   }).perform(former.form)
 
   props.issue_info.source_relationships.push(a_issue_relationship)
-  emit('changed', props.issue_info)
+  emit('updated', props.issue_info)
 
   BootstrapHelper.modal(el).hide()
 }

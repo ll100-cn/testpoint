@@ -17,7 +17,7 @@
   </div>
 
   <teleport to="body">
-    <BlankModal ref="blank_modal" @changed="onIssueChanged" />
+    <BlankModal ref="blank_modal" @updated="onIssueUpdated" />
   </teleport>
 </template>
 
@@ -39,23 +39,23 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  changed: [IssueInfo]
+  updated: [IssueInfo]
 }>()
 
-function onIssueChanged(issue: Issue) {
+function onIssueUpdated(issue: Issue) {
   Object.assign(props.issue_info, issue)
-  emit('changed', props.issue_info)
+  emit('updated', props.issue_info)
 }
 
 function onAttachmentUpdated(attachment: Attachment) {
   const index = props.issue_info.attachments.findIndex(a => a.id == attachment.id)
   props.issue_info.attachments[index] = attachment
-  emit('changed', props.issue_info)
+  emit('updated', props.issue_info)
 }
 
 function onAttachmentDestroyed(attachment: Attachment) {
   const index = props.issue_info.attachments.findIndex(a => a.id == attachment.id)
   props.issue_info.attachments.splice(index, 1)
-  emit('changed', props.issue_info)
+  emit('updated', props.issue_info)
 }
 </script>
