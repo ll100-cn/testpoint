@@ -62,7 +62,7 @@
       <span class="text-primary">{{ issue_activity.after_project!.name }}</span>
     </span>
 
-    <span class="small text-muted ms-2">{{ utils.humanize(issue_activity.created_at, DATE_LONG_FORMAT) }}</span>
+    <span class="small text-muted ms-2">{{ h.datetime(issue_activity.created_at) }}</span>
   </div>
 </template>
 
@@ -70,9 +70,10 @@
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import MemberLabel from '@/components/MemberLabel.vue'
-import { DATE_LONG_FORMAT } from '@/constants'
+import { DATETIME_LONG_FORMAT } from '@/constants'
 import * as utils from "@/lib/utils"
 import { Issue, IssueActivity } from "@/models"
+import * as h from '@/lib/humanize'
 
 const props = defineProps<{
   issue: Issue

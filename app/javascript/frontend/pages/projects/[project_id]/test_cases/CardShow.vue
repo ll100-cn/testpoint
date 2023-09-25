@@ -23,7 +23,7 @@
             <div v-for="(version_case, index) in props.history" :key="version_case.id" class="accordion-item">
               <h2 :id="`test_case_version_${index}_header`" class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#test_case_version_${index}_body`" aria-expanded="false" :aria-controls="`test_case_version_${index}_body`">
-                  {{ utils.humanize(version_case.updated_at, DATE_FORMAT) }}
+                  {{ h.datetime(version_case.updated_at) }}
                 </button>
               </h2>
 
@@ -44,10 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import { DATE_FORMAT } from '@/constants';
-import * as utils from '@/lib/utils';
-import { TestCase } from '@/models';
-import { PropType, onUpdated, ref } from 'vue';
+import { DATETIME_LONG_FORMAT } from '@/constants'
+import * as h from '@/lib/humanize'
+import { TestCase } from '@/models'
+import { PropType, onUpdated, ref } from 'vue'
 
 const props = defineProps({
   test_case: {

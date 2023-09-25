@@ -6,7 +6,7 @@
 
     <div id="issueDetailCollapse" class="collapse d-md-block">
       <span class="small text-muted mt-2 d-flex">创建时间</span>
-      <span>{{ utils.humanize(issue_info.created_at, DATE_LONG_FORMAT) }}</span>
+      <span>{{ h.datetime(issue_info.created_at) }}</span>
       <hr>
 
       <div>
@@ -96,7 +96,7 @@ import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import { DATE_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
+import { DATETIME_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { IssueInfo } from "@/models"
@@ -105,6 +105,7 @@ import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
+import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

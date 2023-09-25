@@ -30,6 +30,7 @@ import { Modal } from 'bootstrap'
 import _ from 'lodash'
 import { getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
+import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 
@@ -49,7 +50,7 @@ const mode = ref('show')
 const test = ref(true)
 
 const former = Former.build({
-  title: `Test Plan: ${utils.humanize(new Date(), "YYYY-MM-DD")}` as string | null | undefined,
+  title: `Test Plan: ${h.datetime(new Date(), "YYYY-MM-DD")}` as string | null | undefined,
   platform_id: _.first(props.platforms).id as number | null | undefined,
   milestone_id: null as number | null | undefined,
   role_names: [],

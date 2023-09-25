@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex align-items-baseline text-muted" v-if="comment.collapsed">
       <MemberLabel :member="comment.member" class="me-1" />
-      <span>在 {{ utils.humanize(comment.created_at, DATE_LONG_FORMAT) }} 发表了评论</span>
+      <span>在 {{ h.datetime(comment.created_at) }} 发表了评论</span>
       <a :href="`#${content_id}`" data-bs-toggle="collapse" class="small text-muted ms-auto">展开</a>
     </div>
     <div :id="content_id" class="collapse" :class="{ show: !comment.collapsed }">
@@ -10,7 +10,7 @@
         <div class="card-header d-flex align-items-center">
           <MemberLabel :member="comment.member" class="me-1" />
 
-          <span class="ms-1 small text-muted">添加于 {{ utils.humanize(comment.created_at, DATE_LONG_FORMAT) }}</span>
+          <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
 
           <MoreDropdown class="ms-auto">
             <a class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATE_LONG_FORMAT } from "@/constants"
+import { DATETIME_LONG_FORMAT } from "@/constants"
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Attachment, Comment, CommentRepo, Issue } from "@/models"
@@ -50,6 +50,7 @@ import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyFrame from "./IssueCommentReplyFrame.vue"
+import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

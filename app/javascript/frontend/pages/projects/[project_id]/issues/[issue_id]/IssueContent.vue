@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="card-title d-flex bg-white align-items-center">
           <MemberLabel :member="issue_info.creator" class="me-1" />
-          <span class="ms-1 small text-muted">创建于 {{ utils.humanize(issue_info.created_at, DATE_LONG_FORMAT) }}</span>
+          <span class="ms-1 small text-muted">创建于 {{ h.datetime(issue_info.created_at) }}</span>
 
           <MoreDropdown class="ms-auto">
             <a href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
@@ -24,13 +24,14 @@
 <script setup lang="ts">
 import BlankModal from "@/components/BlankModal.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATE_LONG_FORMAT } from "@/constants"
+import { DATETIME_LONG_FORMAT } from "@/constants"
 import * as utils from "@/lib/utils"
 import { Attachment, Issue, IssueInfo } from "@/models"
 import { ref } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueContentEditFrame from "./IssueContentEditFrame.vue"
 import MemberLabel from "@/components/MemberLabel.vue"
+import * as h from '@/lib/humanize'
 
 const blank_modal = ref(null as InstanceType<typeof BlankModal>)
 

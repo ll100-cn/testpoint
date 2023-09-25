@@ -8,7 +8,7 @@
 
     <router-link :to="`/projects/${other.project_id}/issues/${other.id}`">#{{ other.id }} {{ other.titleWithPriority() }}</router-link>
 
-    <span class="small text-muted">{{ utils.humanize(issue_relationship.created_at, DATE_LONG_FORMAT) }}</span>
+    <span class="small text-muted">{{ h.datetime(issue_relationship.created_at) }}</span>
 
     <MoreDropdown class="ms-auto">
       <a class="small dropdown-item" href="#" @click.prevent="deleteIssueRelationShip">取消关联</a>
@@ -17,14 +17,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance } from "vue"
-
 import MemberLabel from "@/components/MemberLabel.vue"
-import { DATE_LONG_FORMAT } from '@/constants'
-import * as q from '@/lib/requests'
-import * as utils from "@/lib/utils"
-import { IssueInfo, IssueRelationship } from "@/models"
 import MoreDropdown from "@/components/MoreDropdown.vue"
+import { DATETIME_LONG_FORMAT } from '@/constants'
+import * as h from '@/lib/humanize'
+import * as q from '@/lib/requests'
+import { IssueInfo, IssueRelationship } from "@/models"
+import { computed, getCurrentInstance } from "vue"
 
 const { proxy } = getCurrentInstance()
 const props = defineProps<{

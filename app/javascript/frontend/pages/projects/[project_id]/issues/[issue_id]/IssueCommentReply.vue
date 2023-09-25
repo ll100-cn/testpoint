@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center x-actions x-spacer-2">
       <MemberLabel :member="comment.member" />
 
-      <span class="text-muted">回复于 {{ utils.humanize(comment.created_at, DATE_SHORT_FORMAT) }}</span>
+      <span class="text-muted">回复于 {{ h.datetime(comment.created_at) }}</span>
 
       <MoreDropdown class="ms-auto">
         <a v-if="comment.member.user_id == user.id" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATE_SHORT_FORMAT } from "@/constants"
+import { DATETIME_SHORT_FORMAT } from "@/constants"
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Attachment, Comment, Issue } from "@/models"
@@ -26,6 +26,7 @@ import { useSessionStore } from "@/store/session"
 import { Component, getCurrentInstance } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
+import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

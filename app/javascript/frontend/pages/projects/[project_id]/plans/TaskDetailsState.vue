@@ -12,7 +12,7 @@
             </template>
           </template>
           <span v-else>未操作</span>
-          <small class="text-muted ms-auto">{{ utils.humanize(line.state_changed_at, DATE_SHORT_FORMAT) }}</small>
+          <small class="text-muted ms-auto">{{ h.datetime(line.state_changed_at) }}</small>
         </div>
       </li>
       <li v-if="(line instanceof Issue)" class="ms-3">
@@ -24,18 +24,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance } from 'vue'
-import { useRoute } from "vue-router"
-
-import { DATE_SHORT_FORMAT } from '@/constants'
+import IssueStateBadge from '@/components/IssueStateBadge.vue'
+import { DATETIME_SHORT_FORMAT } from '@/constants'
 import * as utils from "@/lib/utils"
 import { Issue, PhaseInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import _ from 'lodash'
-
-import IssueStateBadge from '@/components/IssueStateBadge.vue'
-
-const { proxy } = getCurrentInstance()
-const route = useRoute()
+import { computed } from 'vue'
+import * as h from '@/lib/humanize'
 
 const props = withDefaults(defineProps<{
   task_info: TaskInfo

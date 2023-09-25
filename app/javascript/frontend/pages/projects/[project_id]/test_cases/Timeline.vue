@@ -9,7 +9,7 @@
         <template v-for="milestone in milestones" :key="milestone.id">
           <li class="timeline-item mb-5" :class="{ 'active': milestone.id == milestone_id }">
             <div class="small mb-2" :class="{ 'text-muted': milestone.id != milestone_id }">
-              <a :href="`${RAILS_RELATIVE_URL_ROOT}projects/${project_id}/test_cases?milestone_id=${milestone.id}`">{{ milestone.published_at == null ? '尚未发布' : utils.humanize(milestone.published_at, DATE_FORMAT) }}</a>
+              <a :href="`${RAILS_RELATIVE_URL_ROOT}projects/${project_id}/test_cases?milestone_id=${milestone.id}`">{{ h.datetime(milestone.published_at) ?? '尚未发布' }}</a>
             </div>
             {{ milestone.title }}
             <p class="text-muted">
@@ -25,10 +25,11 @@
 <script setup lang="ts">
 import * as q from '@/lib/requests'
 import * as utils from '@/lib/utils'
-import { DATE_FORMAT } from '@/constants'
+import { DATETIME_LONG_FORMAT, DATE_FORMAT } from '@/constants'
 import _ from 'lodash'
 import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
+import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

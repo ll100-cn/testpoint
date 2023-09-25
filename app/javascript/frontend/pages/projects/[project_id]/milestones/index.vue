@@ -21,7 +21,7 @@
         <tbody>
           <tr v-for="milestone in milestones" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
             <td>{{ milestone.title }}</td>
-            <td>{{ utils.humanize(milestone.published_at, DATE_FORMAT) }}</td>
+            <td>{{ h.datetime(milestone.published_at) }}</td>
             <td><span v-if="milestone.isArchived()">已归档</span></td>
             <td class="x-actions justify-content-end x-spacer-3">
               <router-link :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { DATE_FORMAT } from '@/constants';
+import { DATETIME_LONG_FORMAT, DATE_FORMAT } from '@/constants';
 import * as utils from '@/lib/utils';
 import { Milestone } from '@/models';
 import * as q from '@/lib/requests';
@@ -48,6 +48,7 @@ import _ from 'lodash';
 import { getCurrentInstance, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { usePageStore } from '@/store'
+import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

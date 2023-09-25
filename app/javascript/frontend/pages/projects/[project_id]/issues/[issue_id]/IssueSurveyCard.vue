@@ -8,7 +8,7 @@
           <div class="d-flex align-items-center mb-1">
             <span>备注：{{ issue_survey.remark }}</span>
             工单模版：{{ issue_survey.template.name }}
-            <span class="ms-3 small text-muted">修改于 {{ utils.humanize(issue_survey.updated_at, DATE_LONG_FORMAT) }}</span>
+            <span class="ms-3 small text-muted">修改于 {{ h.datetime(issue_survey.updated_at) }}</span>
 
             <MoreDropdown class="ms-auto">
               <a class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">修改</a>
@@ -38,12 +38,13 @@
 <script setup lang="ts">
 import BlankModal from "@/components/BlankModal.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATE_LONG_FORMAT } from '@/constants'
+import { DATETIME_LONG_FORMAT } from '@/constants'
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { IssueInfo, IssueSurvey } from "@/models"
 import { Component, getCurrentInstance, ref } from "vue"
 import IssueSurveyEditFrame from "./IssueSurveyEditFrame.vue"
+import * as h from '@/lib/humanize'
 
 const blank_modal = ref(null as InstanceType<typeof BlankModal>)
 const { proxy } = getCurrentInstance()

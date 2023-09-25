@@ -4,7 +4,7 @@ import { colord } from "colord"
 import dayjs from '@/lib/dayjs'
 import qs from "qs"
 import { plainToClassFromExist } from 'class-transformer'
-import { DATE_LONG_FORMAT } from '@/constants'
+import { DATETIME_LONG_FORMAT } from '@/constants'
 import { toValue } from 'vue'
 
 const color_cache = new Map<string, string>()
@@ -19,14 +19,6 @@ export function calcColorHex(text: string) {
   }
 
   return color_cache.get(text)
-}
-
-export function humanize(time: Date | null, pattern: string) {
-  if (time == null) {
-    return ""
-  }
-
-  return dayjs(time).format(pattern)
 }
 
 export function redirect(path: string) {
@@ -79,12 +71,12 @@ export function instance<T>(klass: { new(): T }, raw_data: any, options: { exclu
 export function createOrEditTimeInWords(created_at: Date, last_edited_at: Date) {
   if (last_edited_at) {
     if (dayjs(last_edited_at) < dayjs().subtract(10, 'minutes')) {
-      return "修改于 " + dayjs(last_edited_at, DATE_LONG_FORMAT)
+      return "修改于 " + dayjs(last_edited_at, DATETIME_LONG_FORMAT)
     } else {
       return dayjs(last_edited_at).fromNow() + "修改"
     }
   } else if (dayjs(created_at) < dayjs().subtract(10, 'minutes')) {
-    return "添加于 " + dayjs(created_at, DATE_LONG_FORMAT).fromNow()
+    return "添加于 " + dayjs(created_at, DATETIME_LONG_FORMAT).fromNow()
   } else {
     return dayjs(created_at).fromNow() + "添加"
   }

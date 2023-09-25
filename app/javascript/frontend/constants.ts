@@ -1,6 +1,8 @@
-export const DATE_FORMAT = 'YYYY-MM-DD HH:mm'
-export const DATE_SHORT_FORMAT = 'MM[月]DD[日] HH:mm'
-export const DATE_LONG_FORMAT = 'YYYY[年]MM[月]DD[日] HH:mm'
+export const DATE_FORMAT = 'YYYY-MM-DD'
+
+export const DATETIME_SHORT_FORMAT = 'MM[月]DD[日] HH:mm'
+export const DATETIME_LONG_FORMAT = 'YYYY[年]MM[月]DD[日] HH:mm'
+
 export const ISSUE_STATE_MAPPING = {
   pending: "待确认",
   waiting: "等待反馈",

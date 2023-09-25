@@ -2,7 +2,7 @@
   <div>
     <PageContent :content="body.content" />
     <span v-if="is_edited" class="text-muted small mt-1">
-      最后修改于: {{ utils.humanize(body.last_edited_at, DATE_LONG_FORMAT) }}
+      最后修改于: {{ h.datetime(body.last_edited_at) }}
     </span>
 
     <div class="row mt-2" v-if="body.attachments.length > 0">
@@ -16,10 +16,11 @@
 <script setup lang="ts">
 import { Attachment } from '@/models'
 import * as utils from "@/lib/utils"
-import { DATE_LONG_FORMAT } from '@/constants'
+import { DATETIME_LONG_FORMAT } from '@/constants'
 import PageContent from '@/components/PageContent.vue'
 import { computed } from 'vue'
 import AttachmentInfo from '@/components/AttachmentInfo.vue'
+import * as h from '@/lib/humanize'
 
 interface ContentBody {
   content: string
