@@ -13,7 +13,7 @@
         <controls.markdown />
       </layouts.group>
       <layouts.group>
-        <AttachmentsUploader @changed="onAttachmentsChanged" />
+        <AttachmentsUploader @changed="onAttachmentsChanged" :attachments="[]" />
       </layouts.group>
     </template>
   </div>
