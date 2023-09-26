@@ -6,8 +6,8 @@
       <span class="text-muted">回复于 {{ h.datetime(comment.created_at) }}</span>
 
       <MoreDropdown class="ms-auto">
-        <a v-if="comment.member.user_id == user.id" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-        <a class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
+        <a v-if="comment.member.user_id == user.id && allow('update', comment)" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
+        <a v-if="allow('destroy', comment)" class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
       </MoreDropdown>
     </div>
 
@@ -27,10 +27,13 @@ import { Component, getCurrentInstance } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 import * as h from '@/lib/humanize'
+import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
 const user = store.account.user
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const props = defineProps<{
   issue: Issue

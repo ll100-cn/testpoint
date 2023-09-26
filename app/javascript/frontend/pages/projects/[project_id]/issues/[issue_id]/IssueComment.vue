@@ -13,10 +13,10 @@
           <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
 
           <MoreDropdown class="ms-auto">
-            <a class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
-            <template v-if="comment.member.user_id == user.id">
+            <a v-if="allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
+            <template v-if="comment.member.user_id == user.id && allow('update', comment)">
               <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-              <!-- <a class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
+              <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
               <a v-if="comment.collapsed" class="small dropdown-item" @click.prevent="foldComment" href="#">显示</a>
               <a v-else class="small dropdown-item" href="#" @click.prevent="unfoldComment">隐藏</a>
             </template>
@@ -39,10 +39,10 @@
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATETIME_LONG_FORMAT } from "@/constants"
+import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
-import * as utils from "@/lib/utils"
 import { Attachment, Comment, CommentRepo, Issue } from "@/models"
+import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { Component, computed, getCurrentInstance } from "vue"
@@ -50,11 +50,12 @@ import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyFrame from "./IssueCommentReplyFrame.vue"
-import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
 const user = store.account.user
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const props = defineProps<{
   issue: Issue

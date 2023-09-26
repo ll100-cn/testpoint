@@ -1,6 +1,6 @@
-class Api::Projects::IssuesController < Api::BaseController
-  load_and_authorize_resource :project
-  load_resource through: :project
+class Api::Projects::IssuesController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
+  load_and_authorize_resource through: :project
 
   def index
     @stage = params[:stage] || "pending"

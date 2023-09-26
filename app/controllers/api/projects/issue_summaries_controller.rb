@@ -1,6 +1,5 @@
-class Api::Projects::IssueSummariesController < Api::BaseController
-  before_action -> { @user = current_user }
-  load_and_authorize_resource :project, through: :user
+class Api::Projects::IssueSummariesController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
   load_and_authorize_resource :issue, parent: false, through: :project
 
   def index

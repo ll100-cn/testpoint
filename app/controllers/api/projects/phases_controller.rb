@@ -1,6 +1,6 @@
-class Api::Projects::PhasesController < Api::BaseController
-  load_and_authorize_resource :project
-  load_and_authorize_resource :plan
+class Api::Projects::PhasesController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
+  load_and_authorize_resource :plan, through: :project
   load_and_authorize_resource through: :plan
 
   def create

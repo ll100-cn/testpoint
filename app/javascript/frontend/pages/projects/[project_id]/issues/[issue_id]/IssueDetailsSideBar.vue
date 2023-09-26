@@ -12,7 +12,7 @@
       <div>
         <FormErrorAlert :validations="former.validations" />
 
-        <IssueDetailEdit v-bind="{ former }" code="state" title="状态">
+        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="state" title="状态">
           <template #editable>
             <layouts.group code="state">
               <controls.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
@@ -22,7 +22,7 @@
           <IssueStateBadge :state="issue_info.state" />
         </IssueDetailEdit>
 
-        <IssueDetailEdit v-bind="{ former }" code="priority" title="优先级">
+        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="priority" title="优先级">
           <template #editable>
             <layouts.group code="priority">
               <controls.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
@@ -32,7 +32,7 @@
           <span :class="{'text-danger': issue_info.priority == 'important'}">{{ issue_info.priority_text }}</span>
         </IssueDetailEdit>
 
-        <IssueDetailEdit v-bind="{ former }" code="creator_id" title="创建人">
+        <IssueDetailEdit :editable="allow('manage', issue_info)" v-bind="{ former }" code="creator_id" title="创建人">
           <template #editable>
             <layouts.group code="creator_id">
               <controls.select v-bind="{ collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
@@ -42,7 +42,7 @@
           {{ issue_info.creator.name }}
         </IssueDetailEdit>
 
-        <IssueDetailEdit v-bind="{ former }" code="assignee_id" title="受理人">
+        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="assignee_id" title="受理人">
           <template #editable>
             <layouts.group code="assignee_id">
               <controls.select v-bind="{ collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
@@ -52,7 +52,7 @@
           {{ issue_info.assignee?.name ?? '无' }}
         </IssueDetailEdit>
 
-        <IssueDetailEdit v-bind="{ former }" code="category_id" title="分类">
+        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="category_id" title="分类">
           <template #editable>
             <layouts.group code="category_id">
               <controls.bootstrap_select v-bind="{ live_search: true, collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
@@ -62,7 +62,7 @@
           <CategoryBadgeVue :category="_.find(categories, { id: issue_info.category_id })" />
         </IssueDetailEdit>
 
-        <IssueDetailEdit v-bind="{ former }" code="milestone_id" title="里程碑">
+        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="milestone_id" title="里程碑">
           <template #editable>
             <layouts.group code="milestone_id">
               <controls.select v-bind="{ collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
@@ -96,21 +96,21 @@ import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import { DATETIME_LONG_FORMAT, ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
+import { ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
+import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
-import * as utils from "@/lib/utils"
 import { IssueInfo } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
-import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
 const current_user = store.account.user
 const page = usePageStore()
+const allow = page.inProject().allow
 
 const props = defineProps<{
   issue_info: IssueInfo

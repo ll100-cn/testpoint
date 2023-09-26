@@ -1,10 +1,9 @@
 class Api::Profile::IssueStatsController < Api::BaseController
+  before_action -> { authorize! :manage, :profile }
   before_action -> { @user = current_user }
 
-  load_and_authorize_resource :project, parent: false, through: :user
-  load_and_authorize_resource :issue, parent: false, with_scope: ->(base) { base.where(project_id: @projects.ids) }
-
   def index
-    @project_issues_mapping = @issues.group(:project_id, :stage, :category_id).select(:project_id, :stage, :category_id, "COUNT(*) as count")
+    @issues_scope = Issue.where(project_id: @user.available_projects)
+    @project_issues_mapping = @issues_scope.group(:project_id, :stage, :category_id).select(:project_id, :stage, :category_id, "COUNT(*) as count")
   end
 end

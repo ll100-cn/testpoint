@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>问题模版列表</h2>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <button class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
+      <button v-if="allow('create', IssueTemplate)" class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
     </div>
   </div>
   <FormErrorAlert :validations="validations" />
@@ -23,11 +23,13 @@
               <td>{{ item.id }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</td>
-              <td class="x-actions justify-content-end x-spacer-3">
-                <router-link :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
-                  <i class="far fa-pencil-alt" /> 修改
-                </router-link>
-                <a href="#" @click.prevent="onRemove(item.id)"><i class="far fa-trash-alt" /> 删除</a>
+              <td>
+                <div class="x-actions justify-content-end x-spacer-3">
+                  <router-link v-if="allow('update', item)" :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
+                    <i class="far fa-pencil-alt" /> 修改
+                  </router-link>
+                  <a v-if="allow('destroy', item)" href="#" @click.prevent="onRemove(item.id)"><i class="far fa-trash-alt" /> 删除</a>
+                </div>
               </td>
             </tr>
           </template>
@@ -45,11 +47,16 @@ import * as q from '@/lib/requests'
 import { Validations } from "@/components/simple_form"
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { usePageStore } from '@/store'
+import { IssueTemplate } from '@/models'
 
 const route = useRoute()
 const router = useRouter()
 const { proxy } = getCurrentInstance()
 const params = route.params as any
+const page = usePageStore()
+const allow = page.inProject().allow
+
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id
 

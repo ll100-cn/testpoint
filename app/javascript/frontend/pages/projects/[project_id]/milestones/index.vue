@@ -3,7 +3,7 @@
     <h2>里程碑列表</h2>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</router-link>
+      <router-link v-if="allow('create', Milestone)" class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</router-link>
     </div>
   </div>
 
@@ -23,14 +23,15 @@
             <td>{{ milestone.title }}</td>
             <td>{{ h.datetime(milestone.published_at) }}</td>
             <td><span v-if="milestone.isArchived()">已归档</span></td>
-            <td class="x-actions justify-content-end x-spacer-3">
-              <router-link :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
-                <i class="far fa-pencil-alt" /> 修改
-              </router-link>
+            <td>
+              <div class="x-actions justify-content-end x-spacer-3">
+                <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
+                  <i class="far fa-pencil-alt" /> 修改
+                </router-link>
 
-              <a href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive" /> 归档</a>
-
-              <a href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('archive', milestone)" href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive" /> 归档</a>
+                <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-trash-alt" /> 删除</a>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -40,21 +41,20 @@
 </template>
 
 <script setup lang="ts">
-import { DATETIME_LONG_FORMAT, DATE_FORMAT } from '@/constants';
-import * as utils from '@/lib/utils';
-import { Milestone } from '@/models';
-import * as q from '@/lib/requests';
-import _ from 'lodash';
-import { getCurrentInstance, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { usePageStore } from '@/store'
 import * as h from '@/lib/humanize'
+import * as q from '@/lib/requests'
+import { Milestone } from '@/models'
+import { usePageStore } from '@/store'
+import _ from 'lodash'
+import { getCurrentInstance, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
+const allow = page.inProject().allow
 
 const project_id = _.toNumber(params.project_id)
 const milestones = ref(await page.inProject().request(q.project.MilestoneReq.List).setup(proxy).perform())

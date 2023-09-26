@@ -1,4 +1,4 @@
-class Api::Projects::UpshotsController < Api::BaseController
+class Api::Projects::UpshotsController < Api::Projects::BaseController
   load_and_authorize_resource :project
   load_and_authorize_resource :plan
   load_and_authorize_resource :task, through: :plan

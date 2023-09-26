@@ -1,8 +1,14 @@
-class Api::Profile::BasicsController < Api::BaseController
+class Api::Profile::AccountsController < Api::BaseController
   before_action -> { @user = current_user }
-  before_action -> { authorize! :manage, :profile }
+
+  def show
+    if @user.nil?
+      render json: {}, status: :unauthorized
+    end
+  end
 
   def update
+    authorize! :manage, :profile
     @user.update(user_params)
     respond_with @user
   end

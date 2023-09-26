@@ -9,7 +9,7 @@
         <template v-for="milestone in milestones" :key="milestone.id">
           <li class="timeline-item mb-5" :class="{ 'active': milestone.id == milestone_id }">
             <div class="small mb-2" :class="{ 'text-muted': milestone.id != milestone_id }">
-              <a :href="`${RAILS_RELATIVE_URL_ROOT}projects/${project_id}/test_cases?milestone_id=${milestone.id}`">{{ h.datetime(milestone.published_at) ?? '尚未发布' }}</a>
+              <router-link :to="{ query: { milestone_id: milestone.id }}">{{ h.datetime(milestone.published_at) ?? '尚未发布' }}</router-link>
             </div>
             {{ milestone.title }}
             <p class="text-muted">

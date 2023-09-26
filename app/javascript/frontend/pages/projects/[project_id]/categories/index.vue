@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>分类列表</h2>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/categories/new`">新增分类</router-link>
+      <router-link v-if="allow('create', Category)" class="btn btn-primary" :to="`/projects/${project_id}/categories/new`">新增分类</router-link>
     </div>
   </div>
 
@@ -29,11 +29,13 @@
               </td>
               <td>{{ category.description }}</td>
               <td>{{ category.issue_count }}</td>
-              <td class="x-actions justify-content-end x-spacer-3">
-                <router-link :to="`/projects/${project_id}/categories/${category.id}/edit`">
-                  <i class="far fa-pencil-alt" /> 修改
-                </router-link>
-                <a href="#" @click.prevent="deleteCategory(category.id)" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
+              <td>
+                <div class="x-actions justify-content-end x-spacer-3">
+                  <router-link v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
+                    <i class="far fa-pencil-alt" /> 修改
+                  </router-link>
+                  <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
+                </div>
               </td>
             </tr>
           </template>
@@ -52,6 +54,8 @@ import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import PaginationBar from "@/components/PaginationBar.vue"
 import * as q from '@/lib/requests'
+import { Category } from '@/models'
+import { usePageStore } from '@/store'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -59,6 +63,8 @@ const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const project_id = params.project_id
 
@@ -78,7 +84,5 @@ function deleteCategory(id: number) {
     router.go(0)
   })
 }
-
-
 
 </script>

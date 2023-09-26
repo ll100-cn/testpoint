@@ -1,4 +1,4 @@
-class Api::Projects::IssueRelationshipsController < Api::BaseController
+class Api::Projects::IssueRelationshipsController < Api::Projects::BaseController
   load_and_authorize_resource :project
   load_and_authorize_resource :issue, through: :project
   load_and_authorize_resource through: :issue, through_association: :source_relationships, parent: false

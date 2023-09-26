@@ -69,13 +69,11 @@
 
 <script setup lang="ts">
 import { computed, getCurrentInstance, nextTick, onMounted, onUpdated, reactive, ref } from 'vue'
-
 import { Validations } from "@/components/simple_form"
 import { IssueTemplate, PhaseInfo, Plan, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import * as q from '@/lib/requests'
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
-
 import TaskDetailsAction from './TaskDetailsAction.vue'
 import TaskDetailsState from './TaskDetailsState.vue'
 

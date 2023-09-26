@@ -23,12 +23,14 @@
                   <i class="fal fa-sign-in-alt"></i>
                 </router-link>
 
-                <div class="dropdown-divider"></div>
+                <template v-if="account?.admin">
+                  <div class="dropdown-divider"></div>
 
-                <router-link class="small dropdown-item d-flex align-items-center" to="/projects">
-                  <span class="me-auto">项目设置</span>
-                  <i class="fal fa-cogs"></i>
-                </router-link>
+                  <router-link class="small dropdown-item d-flex align-items-center" to="/projects">
+                    <span class="me-auto">项目设置</span>
+                    <i class="fal fa-cogs"></i>
+                  </router-link>
+                </template>
               </div>
             </div>
 

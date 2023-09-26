@@ -1,6 +1,6 @@
-class Api::Projects::TestCasesController < Api::BaseController
-  load_and_authorize_resource :project
-  load_and_authorize_resource through: :project
+class Api::Projects::TestCasesController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
+  load_and_authorize_resource through: :project, authorization_action: ->(action) { { history: :index }[action] }
 
   def index
     @milestone = @project.milestones.where(id: params[:milestone_id]).first

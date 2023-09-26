@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>平台列表</h2>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/platforms/new`">新增平台</router-link>
+      <router-link v-if="allow('create', Platform)" class="btn btn-primary" :to="`/projects/${project_id}/platforms/new`">新增平台</router-link>
     </div>
   </div>
 
@@ -23,11 +23,13 @@
             <tr>
               <td>{{ platform.name }}</td>
               <td>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</td>
-              <td class="x-actions justify-content-end x-spacer-3">
-                <router-link :to="`/projects/${project_id}/platforms/${platform.id}/edit`">
-                  <i class="far fa-pencil-alt" /> 修改
-                </router-link>
-                <a href="#" @click.prevent="onRemove(platform.id)"><i class="far fa-trash-alt" /> 删除</a>
+              <td>
+                <div class="x-actions justify-content-end x-spacer-3">
+                  <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`">
+                    <i class="far fa-pencil-alt" /> 修改
+                  </router-link>
+                  <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)"><i class="far fa-trash-alt" /> 删除</a>
+                </div>
               </td>
             </tr>
           </template>
@@ -47,12 +49,14 @@ import _ from 'lodash'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
+import { Platform } from '@/models'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
+const allow = page.inProject().allow
 
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id

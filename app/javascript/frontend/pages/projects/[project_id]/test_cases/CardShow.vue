@@ -7,7 +7,7 @@
           <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
           {{ test_case.title }}
         </h5>
-        <a href="#" @click="emit('changeMode', 'edit')">编辑</a>
+        <a v-if="allow('update', test_case)" href="#" @click="emit('changeMode', 'edit')">编辑</a>
       </div>
       <div class="modal-body">
         <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="d-none">{{ test_case.content }}</textarea>
@@ -47,7 +47,12 @@
 import { DATETIME_LONG_FORMAT } from '@/constants'
 import * as h from '@/lib/humanize'
 import { TestCase } from '@/models'
+import { usePageStore } from '@/store'
+import test from 'node:test'
 import { PropType, onUpdated, ref } from 'vue'
+
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const props = defineProps({
   test_case: {

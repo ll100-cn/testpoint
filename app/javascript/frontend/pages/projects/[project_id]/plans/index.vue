@@ -3,7 +3,7 @@
     <h2>计划列表</h2>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <button class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
+      <button v-if="allow('create', Plan)" class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
     </div>
   </div>
   <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="onCreated" />
@@ -40,7 +40,7 @@
             </div>
           </div>
 
-          <div class="card-footer x-spacer-2">
+          <div class="card-footer x-actions x-spacer-2">
             <small>{{ dayjs(plan.created_at).fromNow() }} {{ plan.creator_name }} 创建</small>
             <button class="btn btn-outline-primary btn-sm py-1 ms-auto text-nowrap">进入测试</button>
           </div>
@@ -66,6 +66,7 @@ import { useRoute, useRouter } from 'vue-router'
 import PlanCreateModal from './PlanCreateModal.vue'
 import * as t from '@/lib/transforms'
 import { usePageStore } from '@/store'
+import { Plan } from '@/models'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -73,6 +74,7 @@ const router = useRouter()
 const params = route.params as any
 const query = route.query
 const page = usePageStore()
+const allow = page.inProject().allow
 
 const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
 

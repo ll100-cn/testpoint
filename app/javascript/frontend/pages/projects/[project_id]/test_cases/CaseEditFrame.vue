@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ test_case.title }}</h5>
-        <a href="#" class="text-danger small" @click="archiveTestCase">归档</a>
+        <a v-if="allow('destroy', test_case)" href="#" class="text-danger small" @click="archiveTestCase">归档</a>
       </div>
 
       <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
@@ -29,9 +29,13 @@ import { Modal } from 'bootstrap'
 import $ from 'jquery'
 import { PropType, getCurrentInstance, reactive } from 'vue'
 import CaseForm from './CaseForm.vue'
-const validations = reactive<Validations>(new Validations())
+import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
+const page = usePageStore()
+const allow = page.inProject().allow
+
+const validations = reactive<Validations>(new Validations())
 
 const props = defineProps({
   platform_repo: {

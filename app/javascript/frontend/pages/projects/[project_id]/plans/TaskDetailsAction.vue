@@ -1,24 +1,25 @@
 <template>
   <div v-if="task_upshot_info.is_ignored()">
-    <SubmitButton type="primary" submit_text="不忽略" @click="emit('unignore', props.task_upshot_info)" />
+    <SubmitButton :disabled="!allow('update', TaskUpshot)" type="primary" submit_text="不忽略" @click="emit('unignore', props.task_upshot_info)" />
   </div>
-  <div v-else-if="!is_task_pass" class="d-flex x-actions">
+  <div v-else-if="!is_task_pass" class="d-flex x-actions x-spacer-2">
     <SubmitButton
       v-if="_.includes(['pass', 'failure'], task_upshot_info.state_override)"
       type="primary"
+      :disabled="!allow('update', TaskUpshot)"
       :func="() => updateStateOverride('pending')"
       submit_text="撤销测试结果" />
     <template v-else>
-      <SubmitButton type="success" :func="() => updateStateOverride('pass')" submit_text="全部通过" />
-      <SubmitButton type="danger" submit_text="不通过" @click="emit('update:is_task_pass', true)" />
-      <SubmitButton type="secondary" submit_text="忽略" @click="emit('ignore', props.task_upshot_info)" />
+      <SubmitButton type="success" :disabled="!allow('update', TaskUpshot)" :func="() => updateStateOverride('pass')" submit_text="全部通过" />
+      <SubmitButton type="danger" :disabled="!allow('update', TaskUpshot)" submit_text="不通过" @click="emit('update:is_task_pass', true)" />
+      <SubmitButton type="secondary" :disabled="!allow('update', TaskUpshot)" submit_text="忽略" @click="emit('ignore', props.task_upshot_info)" />
     </template>
     <div class="ms-auto">
-      <button v-if="!is_bind_issue" class="btn btn-primary" @click="is_bind_issue = !is_bind_issue">关联问题</button>
+      <button v-if="!is_bind_issue" :disabled="!allow('update', TaskUpshot)" class="btn btn-primary" @click="is_bind_issue = !is_bind_issue">关联问题</button>
       <template v-else>
         <div class="d-flex x-actions">
           <controls.number v-model="issue_former.form.id" />
-          <SubmitButton :func="bindIssue" submit_text="关联" />
+          <SubmitButton :disabled="!allow('update', TaskUpshot)" :func="bindIssue" submit_text="关联" />
           <button class="btn btn-secondary text-nowrap" @click="is_bind_issue = !is_bind_issue">取消</button>
         </div>
       </template>
@@ -52,6 +53,7 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()
+const allow = page.inProject().allow
 
 const props = withDefaults(defineProps<{
   // platforms: Platform[]

@@ -1,0 +1,29 @@
+json = {}
+
+json[:project_id] = member.project_id
+json[:role] = member.role
+json[:nickname] = member.nickname
+
+json[:project_name] = member.project.name
+
+json[:permissions] = {
+  Member => [ :read, :create, :update, :manage ],
+  Category => [ :read, :create, :update, :manage ],
+  IssueTemplate => [ :read, :create, :update, :manage ],
+  TestCaseLabel => [ :read, :create, :update, :manage ],
+  Platform => [ :read, :create, :update, :manage ],
+  ::TestCase => [ :read, :create, :update, :manage ],
+  Plan => [ :read, :create, :update, :manage ],
+  Task => [ :read, :create, :update, :manage ],
+  Milestone => [ :read, :manage ],
+  Issue => [ :read, :create, :update, :manage ],
+  IssueSurvey => [ :read, :create, :update, :manage ],
+  IssueRelationship => [ :read, :create, :update, :manage ],
+  Comment => [ :read, :create, :update, :manage ],
+}.map do |klass, actions|
+  allow_actions = actions.filter { |action| can? action, klass }
+  [ klass, allow_actions ]
+end.to_h
+
+
+json

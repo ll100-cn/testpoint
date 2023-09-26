@@ -7,7 +7,7 @@
           <span class="ms-1 small text-muted">创建于 {{ h.datetime(issue_info.created_at) }}</span>
 
           <MoreDropdown class="ms-auto">
-            <a href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
+            <a v-if="allow('update', issue_info)" href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
           </MoreDropdown>
         </div>
 
@@ -23,17 +23,19 @@
 
 <script setup lang="ts">
 import BlankModal from "@/components/BlankModal.vue"
+import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATETIME_LONG_FORMAT } from "@/constants"
-import * as utils from "@/lib/utils"
+import * as h from '@/lib/humanize'
 import { Attachment, Issue, IssueInfo } from "@/models"
 import { ref } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueContentEditFrame from "./IssueContentEditFrame.vue"
-import MemberLabel from "@/components/MemberLabel.vue"
-import * as h from '@/lib/humanize'
+import { usePageStore } from "@/store"
+import { all } from "axios"
 
 const blank_modal = ref(null as InstanceType<typeof BlankModal>)
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const props = defineProps<{
   issue_info: IssueInfo

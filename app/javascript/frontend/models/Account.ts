@@ -7,6 +7,7 @@ export class Account {
 
   @t.String name: string
   @t.String email: string
+  @t.Boolean admin: boolean
 
   avatarUrl() {
     const hash = md5(this.email.trim().toLowerCase())

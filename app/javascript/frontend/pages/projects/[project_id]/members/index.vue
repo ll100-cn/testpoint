@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>项目成员列表</h2>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/members/new`">新增成员</router-link>
+      <router-link v-if="allow('create', Member)" class="btn btn-primary" :to="`/projects/${project_id}/members/new`">新增成员</router-link>
     </div>
   </div>
 
@@ -29,11 +29,13 @@
               <td>{{ member.email }}</td>
               <td>{{ member.role_text }}</td>
               <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
-              <td class="x-actions justify-content-end x-spacer-3">
-                <router-link :to="`/projects/${project_id}/members/${member.id}/edit`">
-                  <i class="far fa-pencil-alt" /> 修改
-                </router-link>
-                <a href="#" @click.prevent="onArchive(member.id)"><i class="far fa-archive" /> 归档</a>
+              <td>
+                <div class="x-actions justify-content-end x-spacer-3">
+                  <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`">
+                    <i class="far fa-pencil-alt" /> 修改
+                  </router-link>
+                  <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)"><i class="far fa-archive" /> 归档</a>
+                </div>
               </td>
             </tr>
           </template>
@@ -49,19 +51,21 @@
 <script setup lang="ts">
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
 import { Validations } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { PageQuery } from '@/types'
 import _ from 'lodash'
-
+import { Member } from '@/models'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import PaginationBar from '@/components/PaginationBar.vue'
+import { usePageStore, useSessionStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id

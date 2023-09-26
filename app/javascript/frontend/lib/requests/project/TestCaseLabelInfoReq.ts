@@ -16,7 +16,7 @@ export default {
     constructor() {
       super()
       this.method = "POST"
-      this.endpoint = "/api/projects/{project_id}/test_case_labels"
+      this.endpoint = "/api/projects/{project_id}/test_case_label_infos"
       this.klass = TestCaseLabelInfo
     }
   },
@@ -25,7 +25,7 @@ export default {
     constructor() {
       super()
       this.method = "PATCH"
-      this.endpoint = "/api/projects/{project_id}/test_case_labels/{test_case_label_id}"
+      this.endpoint = "/api/projects/{project_id}/test_case_label_infos/{test_case_label_id}"
       this.klass = TestCaseLabelInfo
     }
   },
@@ -34,7 +34,7 @@ export default {
     constructor() {
       super()
       this.method = "DELETE"
-      this.endpoint = "/api/projects/{project_id}/test_case_labels/{test_case_label_id}"
+      this.endpoint = "/api/projects/{project_id}/test_case_label_infos/{test_case_label_id}"
       this.klass = TestCaseLabelInfo
     }
   },
@@ -43,7 +43,7 @@ export default {
     constructor() {
       super()
       this.method = "GET"
-      this.endpoint = "/api/projects/{project_id}/test_case_labels/{test_case_label_id}"
+      this.endpoint = "/api/projects/{project_id}/test_case_label_infos/{test_case_label_id}"
       this.klass = TestCaseLabelInfo
     }
   }

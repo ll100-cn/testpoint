@@ -1,5 +1,5 @@
-class Api::Projects::PlansController < Api::BaseController
-  load_and_authorize_resource :project
+class Api::Projects::PlansController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
   load_and_authorize_resource :platform, through: :project
   load_and_authorize_resource through: :project
 

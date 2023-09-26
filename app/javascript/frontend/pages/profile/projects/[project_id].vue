@@ -1,5 +1,5 @@
 <template>
-  <PageHeader :current="member_info.id" />
+  <PageHeader :current="project_id" />
 
   <div class="card">
     <div class="card-body">
@@ -11,7 +11,7 @@
                 <FormErrorAlert />
 
                 <layouts.group label="项目">
-                  <controls.string v-model="member_info.project.name" readonly disabled />
+                  <controls.string v-model="profile.project_name" readonly disabled />
                 </layouts.group>
 
                 <layouts.group code="nickname" label="昵称">
@@ -31,14 +31,15 @@
 </template>
 
 <script setup lang="ts">
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
 import * as q from "@/lib/requests"
 import { usePageStore, useSessionStore } from '@/store'
-import { computed, getCurrentInstance, ref, watch } from 'vue'
+import _ from 'lodash'
+import { getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PageHeader from '../PageHeader.vue'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
@@ -47,12 +48,14 @@ const page = usePageStore()
 const session = useSessionStore()
 const params = route.params as any
 
+const project_id = _.toNumber(params.project_id)
 const account = ref(session.account)
-const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
-const member_info = computed(() => member_infos.value.find(it => it.id.toString() === params.member_id))
+const profile = ref(session.profiles.get(project_id) ?? await new q.project.ProfileReq.Get().setup(proxy, req => {
+  req.interpolations.project_id = project_id
+}).perform())
 
 const former = Former.build({
-  nickname: member_info.value.nickname
+  nickname: profile.value.nickname
 })
 
 const success = ref(false)
@@ -61,9 +64,11 @@ watch(former.form, () => {
 })
 
 former.perform = async function() {
-  const a_member_info = await new q.profile.MemberInfoReq.Update().setup(proxy, req => {
-    req.interpolations.id = member_info.value.id
+  const a_profile = await new q.project.ProfileReq.Update().setup(proxy, req => {
+    req.interpolations.project_id = project_id
   }).perform(this.form)
+
+  session.profiles.set(a_profile.project_id, a_profile)
 
   success.value = true
 }

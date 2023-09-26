@@ -1,5 +1,5 @@
-class Api::Projects::IssueTemplatesController < Api::BaseController
-  load_and_authorize_resource :project
+class Api::Projects::IssueTemplatesController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
   load_and_authorize_resource through: :project
 
   def index

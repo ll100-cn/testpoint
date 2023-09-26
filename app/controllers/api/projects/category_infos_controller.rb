@@ -1,5 +1,5 @@
-class Api::Projects::CategoryInfosController < Api::BaseController
-  load_and_authorize_resource :project
+class Api::Projects::CategoryInfosController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
   load_and_authorize_resource :category, through: :project, parent: false
 
   def index

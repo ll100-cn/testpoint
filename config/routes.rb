@@ -113,6 +113,8 @@ Rails.application.routes.draw do
 
     resources :projects do
       scope module: 'projects' do
+        resource :profile
+
         resources :members do
           get "list", on: :collection
           patch :archive, on: :member
@@ -179,11 +181,10 @@ Rails.application.routes.draw do
     end
 
     namespace :profile do
-      root to: "main#root"
+      resource :account
       resources :issues
       resources :issue_stats
 
-      resource :basic
       resources :member_infos
     end
 

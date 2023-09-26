@@ -1,9 +1,9 @@
 class Api::Profile::IssuesController < Api::BaseController
+  before_action -> { authorize! :manage, :profile }
   before_action -> { @user = current_user }
-  load_and_authorize_resource parent: false, with_scope: ->(base) { base.where(project_id: @user.available_projects) }
 
   def index
-    @issues_scope = @issues
+    @issues_scope = Issue.where(project_id: @user.available_projects)
 
     @issues_scope = @issues_scope.includes(:assignee).references(:assignee)
     @issues_scope = @issues_scope.includes(:creator).references(:creator)

@@ -27,7 +27,7 @@
       </layouts.form_inline>
 
       <div class="d-flex ms-auto x-spacer-3 align-items-center">
-        <a class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
+        <a v-if="allow('create', TestCase)" class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
       </div>
     </div>
 
@@ -58,12 +58,15 @@ import { useRoute, useRouter } from 'vue-router'
 import { ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import CardNew from './CardNew.vue'
+import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const query = utils.queryToPlain(route.query)
+const page = usePageStore()
+const allow = page.inProject().allow
 
 class Search {
   @t.String group_name_search?: string = undefined

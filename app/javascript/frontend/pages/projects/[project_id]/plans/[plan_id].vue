@@ -14,7 +14,7 @@
     </div>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
+      <router-link v-if="allow('update', plan)" class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
     </div>
   </div>
 
@@ -25,7 +25,7 @@
       </router-link>
     </li>
     <li class="nav-item mb-3 mx-3">
-      <a class="nav-link" href="javascript:void(0)" @click="PlanPhaseCreateModalRef.show()">
+      <a v-if="allow('create', Phase)" class="nav-link" href="javascript:void(0)" @click="PlanPhaseCreateModalRef.show()">
         <i class="far fa-plus-circle me-1" /><span>开始新一轮测试</span>
       </a>
     </li>
@@ -105,22 +105,23 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, provide, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
-import { TaskUpshotInfo, TestCaseStat } from '@/models';
+import { Phase, Plan, TaskUpshotInfo, TestCaseStat } from '@/models';
 import * as q from '@/lib/requests';
 import { plainToClass } from 'class-transformer';
 import _ from 'lodash';
 import { ChangeFilterFunction, ColumnFilter, Filter } from '../types';
-
 import FolderSide from '../FolderSide.vue';
 import PlanPhaseCreateModal from './PlanPhaseCreateModal.vue';
 import TaskModal from './TaskModal.vue';
 import TaskRow from './TaskRow.vue';
+import { usePageStore } from '@/store'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const state_eq = ref("")
 const state_modify_is = ref("")

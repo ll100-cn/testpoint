@@ -25,9 +25,11 @@
               <td>{{ project.id }}</td>
               <td>{{ project.name }}</td>
               <td>{{ project.archived ? "是" : "否" }}</td>
-              <td class="x-actions justify-content-end x-spacer-3">
-                <router-link :to="`/projects/${project.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
-                <a href="#" @click.prevent="onRemove(project.id)"><i class="far fa-trash-alt" /> 归档</a>
+              <td>
+                <div class="x-actions justify-content-end x-spacer-3">
+                  <router-link :to="`/projects/${project.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
+                  <a href="#" @click.prevent="onRemove(project.id)"><i class="far fa-trash-alt" /> 归档</a>
+                </div>
               </td>
             </tr>
           </template>

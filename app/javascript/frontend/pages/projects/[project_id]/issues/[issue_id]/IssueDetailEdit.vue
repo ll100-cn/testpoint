@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex mb-2">
     <span class="small text-muted">{{ title }}</span>
-    <span class="ms-auto">
+    <span class="ms-auto" v-if="editable">
       <a href="#" @click.prevent="mode = 'edit'" v-if="mode != 'edit'"><i class="far fa-edit"></i></a>
       <a href="#" @click.prevent="mode = 'show'" v-else><i class="far fa-times text-muted"></i></a>
     </span>
@@ -30,11 +30,14 @@ import { layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import { ref } from "vue"
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   code: string
   title: string
   former: Former<Record<string, any>>
-}>()
+  editable?: boolean
+}>(), {
+  editable: true
+})
 
 const mode = ref('show' as 'show' | 'edit')
 

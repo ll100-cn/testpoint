@@ -1,5 +1,5 @@
-class Api::Projects::TestCaseStatsController < Api::BaseController
-  load_and_authorize_resource :project
+class Api::Projects::TestCaseStatsController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
   load_and_authorize_resource through: :project, class: TestCase.to_s, instance_name: 'test_case', through_association: :test_cases
 
   def index

@@ -1,5 +1,5 @@
-class Api::Projects::TestCaseLabelInfosController < Api::BaseController
-  load_and_authorize_resource :project
+class Api::Projects::TestCaseLabelInfosController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
   load_and_authorize_resource :test_case_label, through: :project, parent: false
 
   def index

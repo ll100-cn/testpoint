@@ -2,7 +2,7 @@
   <div class="page-header">
     <h2>标签列表</h2>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</router-link>
+      <router-link v-if="allow('create', TestCaseLabel)" class="btn btn-primary" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</router-link>
     </div>
   </div>
 
@@ -25,11 +25,13 @@
               <td>{{ test_case_label.name }}</td>
               <td>{{ test_case_label.description }}</td>
               <td>{{ test_case_label.test_case_count }}</td>
-              <td class="x-actions justify-content-end x-spacer-3">
-                <router-link :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`">
-                  <i class="far fa-pencil-alt" /> 修改
-                </router-link>
-                <a href="#" @click.prevent="onRemove(test_case_label.id)"><i class="far fa-trash-alt" /> 删除</a>
+              <td>
+                <div class="x-actions justify-content-end x-spacer-3">
+                  <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`">
+                    <i class="far fa-pencil-alt" /> 修改
+                  </router-link>
+                  <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)"><i class="far fa-trash-alt" /> 删除</a>
+                </div>
               </td>
             </tr>
           </template>
@@ -47,11 +49,15 @@ import { Validations } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { usePageStore } from '@/store'
+import { TestCaseLabel } from '@/models'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const validations = reactive<Validations>(new Validations())
 const project_id = params.project_id

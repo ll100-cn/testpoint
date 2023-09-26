@@ -70,10 +70,8 @@
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import MemberLabel from '@/components/MemberLabel.vue'
-import { DATETIME_LONG_FORMAT } from '@/constants'
-import * as utils from "@/lib/utils"
-import { Issue, IssueActivity } from "@/models"
 import * as h from '@/lib/humanize'
+import { Issue, IssueActivity } from "@/models"
 
 const props = defineProps<{
   issue: Issue

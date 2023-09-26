@@ -32,7 +32,7 @@ import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import BootstrapHelper from "@/lib/BootstrapHelper"
 import * as q from '@/lib/requests'
-import { Issue, IssueSurvey, IssueTemplate } from "@/models"
+import { Issue, IssueInfo, IssueSurvey, IssueTemplate } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 
@@ -40,7 +40,7 @@ const { proxy } = getCurrentInstance()
 const el = ref(null! as HTMLElement)
 
 const emits = defineEmits<{
-  updated: [ IssueSurvey ]
+  updated: [ IssueInfo ]
 }>()
 
 const former = Former.build({
@@ -49,12 +49,15 @@ const former = Former.build({
 
 former.perform = async function() {
   const a_issue_survey = await new q.bug.IssueSurveyReq.Update().setup(proxy, (req) => {
-    req.interpolations.project_id = issue.value.project_id
-    req.interpolations.issue_id = issue.value.id
+    req.interpolations.project_id = issue_info.value.project_id
+    req.interpolations.issue_id = issue_info.value.id
     req.interpolations.issue_survey_id = issue_survey.value.id
   }).perform(this.form)
 
-  emits("updated", a_issue_survey)
+  const index = issue_info.value.surveys.findIndex(it => it.id == a_issue_survey.id)
+  issue_info.value.surveys[index] = a_issue_survey
+
+  emits("updated", issue_info.value)
   BootstrapHelper.modal(el).hide()
 }
 
@@ -66,18 +69,18 @@ function build_inputs_attributes() {
   })
 }
 
-const issue = ref(null as Issue)
+const issue_info = ref(null as IssueInfo)
 const issue_survey = ref(null as IssueSurvey)
 const loading = ref(true)
 
-async function reset(a_issue: Issue, a_issue_survey: IssueSurvey) {
+async function reset(a_issue_info: IssueInfo, a_issue_survey: IssueSurvey) {
   loading.value = true
-  issue.value = a_issue
+  issue_info.value = a_issue_info
   issue_survey.value = a_issue_survey
 
   try {
     current_issue_template.value = await new q.project.IssueTemplateReq.Get().setup(proxy, (req) => {
-      req.interpolations.project_id = issue.value.project_id
+      req.interpolations.project_id = issue_info.value.project_id
       req.interpolations.issue_template_id = issue_survey.value.template_id
     }).perform()
     former.form.inputs_attributes = build_inputs_attributes()

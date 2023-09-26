@@ -20,7 +20,6 @@ const children = slots.default()
 register(props.value, children)
 
 function onClick() {
-  console.log("onClick", props.value)
   model_value.value = props.value
 }
 

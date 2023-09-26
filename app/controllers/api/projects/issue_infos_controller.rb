@@ -1,4 +1,4 @@
-class Api::Projects::IssueInfosController < Api::BaseController
+class Api::Projects::IssueInfosController < Api::Projects::BaseController
   before_action { @user = current_user }
   load_and_authorize_resource :project, through: :user
   load_and_authorize_resource :issue, parent: false, through: :project

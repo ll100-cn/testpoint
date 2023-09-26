@@ -3,10 +3,17 @@ import _ from 'lodash'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useSessionStore } from '.'
+import { Profile } from '@/models'
 
 class ProjectCache {
   project_id: number
+  profile: Profile
   caches = new Map<any, any>()
+
+  constructor() {
+    this.allow = this.allow.bind(this)
+  }
 
   request<T extends BaseRequest<any>>(klass: new () => T) {
     if (this.caches.has(klass)) {
@@ -17,6 +24,14 @@ class ProjectCache {
       this.caches.set(klass, request)
       return request
     }
+  }
+
+  allow(action: string, resource: any) {
+    if (this.profile == null) {
+      return false
+    }
+
+    return this.profile.allow(action, resource)
   }
 }
 
@@ -47,10 +62,14 @@ export const usePageStore = defineStore('page', () => {
       return null
     }
 
-    const key = `project-${params.project_id}`
+    const project_id = _.toNumber(params.project_id)
+    const key = `project-${project_id}`
     return cache(key, () => {
       const result = new ProjectCache()
-      result.project_id = _.toNumber(params.project_id)
+      const session = useSessionStore()
+      const profile = session.profiles.get(project_id)
+      result.project_id = project_id
+      result.profile = profile
       return result
     })
   }

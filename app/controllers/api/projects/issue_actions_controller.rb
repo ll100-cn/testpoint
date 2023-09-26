@@ -1,5 +1,5 @@
-class Api::Projects::IssueActionsController < Api::BaseController
-  load_and_authorize_resource :project
+class Api::Projects::IssueActionsController < Api::Projects::BaseController
+  before_action -> { @project = current_project }
   load_and_authorize_resource :issue
 
   def create
@@ -21,7 +21,7 @@ protected
       subscribed_user_ids: [],
       template_ids: []
     ]
-    names += [ :creator_id ] if can? :critical, Issue
+    names += [ :creator_id ] if can? :manage, Issue
     names
   end
 

@@ -1,4 +1,5 @@
 class Api::Admin::UsersController < Api::BaseController
+  before_action -> { authorize! :manage, :admin }
   load_and_authorize_resource
 
   def index

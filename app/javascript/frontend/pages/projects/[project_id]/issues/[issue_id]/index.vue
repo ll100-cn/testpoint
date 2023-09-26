@@ -1,28 +1,28 @@
 <template>
   <div class="page-header">
-    <h2 class="me-1">{{ issue.titleWithPriority() }}</h2>
-    <div class="me-1">#{{ issue.id }}</div>
+    <h2 class="me-1">{{ issue_info.titleWithPriority() }}</h2>
+    <div class="me-1">#{{ issue_info.id }}</div>
     <span class="me-1">
-      <IssueStateBadge :state="issue.state" />
+      <IssueStateBadge :state="issue_info.state" />
     </span>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
+      <router-link v-if="allow('create', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
     </div>
   </div>
 
-  <div v-if="issue.archived_at" class="alert alert-danger">
+  <div v-if="issue_info.archived_at" class="alert alert-danger">
     该问题已归档
   </div>
 
   <div class="row">
     <div class="col order-1 order-md-0 mb-5">
-      <IssueRelatedTask v-if="issue.task" :task="issue.task" :project_id="project_id" />
+      <IssueRelatedTask v-if="issue_info.task" :task="issue_info.task" :project_id="project_id" />
       <IssueContent :issue_info="issue_info" @updated="onIssueInfoUpdated" />
       <IssueSurveyCard :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_modal.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
         <template v-if="(item instanceof Comment)">
-          <IssueComment :issue="issue" :comment="item" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_modal.show(...args)" />
+          <IssueComment :issue="issue_info" :comment="item" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_modal.show(...args)" />
         </template>
         <template v-else-if="(item instanceof IssueActivity)">
           <IssueActivityInfo :issue="issue_info" :issue_activity="item" />
@@ -36,23 +36,23 @@
         <div class="card-body">
           <h6 class="card-title">提供更多信息</h6>
           <div class="d-flex x-actions x-spacer-2">
-            <button class="btn btn-sm btn-primary" @click="comment_modal.show(IssueCommentCreateFrame, issue)">
+            <button v-if="allow('create', Comment)" class="btn btn-sm btn-primary" @click="comment_modal.show(IssueCommentCreateFrame, issue_info)">
               <i class="far fa-comment fa-fw" /> 新增评论
             </button>
             <button class="btn btn-sm btn-primary" @click="issue_info_modal.show(IssueInfoRelationshipNewFrame)">
               <i class="far fa-link fa-fw" /> 关联其它问题
             </button>
-            <button class="btn btn-sm btn-primary" @click="issue_info_modal.show(IssueSurveyCreateFrame)">
+            <button v-if="allow('create', IssueSurvey)" class="btn btn-sm btn-primary" @click="issue_info_modal.show(IssueSurveyCreateFrame)">
               <i class="far fa-file-lines fa-fw" /> 新增问题模版
             </button>
 
-            <template v-if="issue.state == 'resolved' && !issue.archived_at">
+            <template v-if="allow('update', issue_info) && issue_info.state == 'resolved' && !issue_info.archived_at">
               <div class="btn-group ms-auto" role="group">
                 <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />已解决</button>
                 <button class="btn btn-sm btn-outline-danger" @click="issue_info_modal.show(IssueUnresolveFrame)"><i class="far fa-times me-1" />未解决</button>
               </div>
             </template>
-            <template v-if="issue.state == 'closed' && !issue.archived_at">
+            <template v-if="allow('update', issue_info) && issue_info.state == 'closed' && !issue_info.archived_at">
               <div class="btn-group ms-auto" role="group">
                 <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />确认关闭</button>
               </div>
@@ -73,7 +73,7 @@
 import BlankModal from "@/components/BlankModal.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/lib/requests'
-import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship } from "@/models"
+import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
 import { useRoute } from "vue-router"
@@ -89,6 +89,7 @@ import IssueResolveFrame from "./IssueResolveFrame.vue"
 import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateFrame from "./IssueSurveyCreateFrame.vue"
 import IssueUnresolveFrame from "./IssueUnresolveFrame.vue"
+import { usePageStore } from "@/store"
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_info_modal = ref(null as InstanceType<typeof BlankModal>)
@@ -96,16 +97,17 @@ const { proxy } = getCurrentInstance()
 const route = useRoute()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const issue_info = ref(await new q.bug.IssueInfoReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).perform())
-const issue = ref(issue_info.value as Issue)
 
 const comments = ref(await new q.bug.IssueCommentReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
-  req.interpolations.issue_id = issue.value.id
+  req.interpolations.issue_id = issue_info.value.id
 }).perform())
 
 const comment_repo = computed(() => {
@@ -118,7 +120,6 @@ const timelines = computed(() => {
 
 function onIssueInfoUpdated(new_issue_info: IssueInfo) {
   issue_info.value = new_issue_info
-  issue.value = issue_info.value
 }
 
 function onCommentCreated(comment: Comment) {

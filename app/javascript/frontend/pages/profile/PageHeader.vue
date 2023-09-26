@@ -7,7 +7,7 @@
     <router-link class="nav-link" :class="{ 'active': current == 'basic' }" to="/profile/basic">
       基本信息
     </router-link>
-    <router-link v-for="member_info in member_infos" class="nav-link" :class="{ active: current == member_info.id }" :to="`/profile/members/${member_info.id}`">
+    <router-link v-for="member_info in member_infos" class="nav-link" :class="{ active: current == member_info.project_id }" :to="`/profile/projects/${member_info.project_id}`">
       {{ member_info.project.name }}
     </router-link>
   </div>

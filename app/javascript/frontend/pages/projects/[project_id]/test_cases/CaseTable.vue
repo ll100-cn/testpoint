@@ -1,10 +1,10 @@
 <template>
   <div id="tp-main">
-    <a href="#" @click="batchEdit()">编辑 ({{ select_test_case_ids.length }})</a>
+    <a v-if="allow('update', TestCase)" href="#" @click="batchEdit()">编辑 ({{ select_test_case_ids.length }})</a>
     <table class="table" data-controller="select-all">
       <thead>
         <tr>
-          <th><input type="checkbox" data-target="select-all.handle" data-action="select-all#toggleAll"></th>
+          <th v-if="allow('update', TestCase)"><input type="checkbox" data-target="select-all.handle" data-action="select-all#toggleAll"></th>
           <th scope="col">标题</th>
           <th scope="col">平台</th>
           <th scope="col">标签</th>
@@ -12,7 +12,7 @@
       </thead>
       <tbody>
         <tr v-for="test_case in test_cases" :key="test_case.id">
-          <td>
+          <td v-if="allow('update', test_case)">
             <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
           </td>
           <td>
@@ -49,6 +49,11 @@ import CaseLabelCell from "./CaseLabelCell.vue"
 import CaseModal from "./CaseModal.vue"
 import { PropType, computed, ref } from "vue";
 import CaseBatchEditModal from "./CaseBatchEditModal.vue"
+import { usePageStore } from "@/store"
+
+const page = usePageStore()
+const allow = page.inProject().allow
+
 const props = defineProps({
   label_repo: {
     type: Object as PropType<EntityRepo<TestCaseLabel>>,

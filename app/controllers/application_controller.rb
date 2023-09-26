@@ -1,4 +1,5 @@
 require "application_responder"
+require 'custom_cancan_controller_resource'
 
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
@@ -37,5 +38,11 @@ protected
 
   def current_ability
     @current_ability ||= Ability.new { |a| a.apply_user_permissions(current_user) }
+  end
+
+  class << self
+    def cancan_resource_class
+      CustomCancanControllerResource
+    end
   end
 end

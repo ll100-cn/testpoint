@@ -11,15 +11,15 @@
             <span class="ms-3 small text-muted">修改于 {{ h.datetime(issue_survey.updated_at) }}</span>
 
             <MoreDropdown class="ms-auto">
-              <a class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">修改</a>
-              <a class="small dropdown-item" href="#" @click.prevent="deleteIssueSurvey(issue_survey)">删除</a>
+              <a v-if="allow('update', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">修改</a>
+              <a v-if="allow('destroy', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="deleteIssueSurvey(issue_survey)">删除</a>
             </MoreDropdown>
           </div>
 
           <div v-if="issue_survey.state == 'pending'" class="alert alert-danger mb-0">
             <p class="mb-2">该工单需要提供更多信息，请按照模版</p>
             <div>
-              <a class="btn btn-danger btn-sm" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">补充工单</a>
+              <a v-if="allow('update', IssueSurvey)" class="btn btn-danger btn-sm" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">补充工单</a>
             </div>
           </div>
           <div v-else>
@@ -36,18 +36,17 @@
 </template>
 
 <script setup lang="ts">
-import BlankModal from "@/components/BlankModal.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATETIME_LONG_FORMAT } from '@/constants'
-import * as q from '@/lib/requests'
-import * as utils from "@/lib/utils"
-import { IssueInfo, IssueSurvey } from "@/models"
-import { Component, getCurrentInstance, ref } from "vue"
-import IssueSurveyEditFrame from "./IssueSurveyEditFrame.vue"
 import * as h from '@/lib/humanize'
+import * as q from '@/lib/requests'
+import { IssueInfo, IssueSurvey } from "@/models"
+import { usePageStore } from "@/store"
+import { Component, getCurrentInstance } from "vue"
+import IssueSurveyEditFrame from "./IssueSurveyEditFrame.vue"
 
-const blank_modal = ref(null as InstanceType<typeof BlankModal>)
 const { proxy } = getCurrentInstance()
+const page = usePageStore()
+const allow = page.inProject().allow
 
 const props = defineProps<{
   issue_info: IssueInfo

@@ -10,7 +10,7 @@
 
     <span class="small text-muted">{{ h.datetime(issue_relationship.created_at) }}</span>
 
-    <MoreDropdown class="ms-auto">
+    <MoreDropdown class="ms-auto" v-if="allow('destroy', IssueRelationship)">
       <a class="small dropdown-item" href="#" @click.prevent="deleteIssueRelationShip">取消关联</a>
     </MoreDropdown>
   </div>
@@ -19,13 +19,16 @@
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATETIME_LONG_FORMAT } from '@/constants'
 import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
 import { IssueInfo, IssueRelationship } from "@/models"
+import { usePageStore } from "@/store"
 import { computed, getCurrentInstance } from "vue"
 
 const { proxy } = getCurrentInstance()
+const page = usePageStore()
+const allow = page.inProject().allow
+
 const props = defineProps<{
   issue_info: IssueInfo
   issue_relationship: IssueRelationship

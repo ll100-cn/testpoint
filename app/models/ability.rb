@@ -4,21 +4,26 @@ class Ability
   def initialize(&block)
     alias_action :update, :destroy, to: :modify
     # rubocop:disable Performance/RedundantBlockCall
-    # block.(self)
-    can :manage, :all
+    block.(self)
   end
 
   def apply_user_permissions(user)
     return unless user
-    return apply_superadmin_permissions(user) if user.superadmin?
 
-    can [:read, :vue],                Project, members: { user_id: user.id }
     can :manage,              :profile
-    can :manage,              Attachment
+
+    if user.superadmin?
+      can :manage,              :all
+      cannot :destroy,          user
+    end
   end
 
   def apply_member_permissions(member)
-    return if member.nil? || member.user.superadmin?
+    return if member.nil?
+    return if member.archived_at?
+    return if member.user.superadmin?
+
+    can :profile, member
 
     apply_reporter_permissions(member)  if member.role.reporter?
     apply_developer_permissions(member) if member.role.developer?
@@ -26,50 +31,51 @@ class Ability
     apply_owner_permissions(member)     if member.role.owner?
   end
 
-  def apply_api_permissions(user)
-    can :manage, :all
-  end
-
   def apply_reporter_permissions(member)
+    can :read, Project
+    can [ :read, :create ], [ Issue, Comment, IssueSurvey, IssueRelationship ]
+    can :read, Member
+    can :read, Category
+    can :read, IssueTemplate
+    can :read, TestCaseLabel
+    can :read, Platform
     can :read, Milestone
-    can [:read, :create], Comment
-    can [:read, :create, :archive, :unresolve], Issue
-    can :update, Comment, member_id: member.id
-    can [:read, :create, :update], IssueInfo
   end
 
   def apply_developer_permissions(member)
     apply_reporter_permissions(member)
-    can [:fold, :unfold],       Comment
-    can :manage,                Issue
-    can [:read, :create],       IssueRelationship
-    can :manage,                [TestCase, TestCaseLabel, TestCaseSnapshot, Plan, Platform, Task, Phase, Milestone]
+
+    can :read, TestCase
+
+    can :read, Plan
+    can :read, Phase
+    can :read, Task
+    can :read, TaskUpshot
+
+    can :update, [ Issue, Comment, IssueSurvey, IssueRelationship ]
   end
 
   def apply_manager_permissions(member)
     apply_developer_permissions(member)
-    can :manage,                IssueRelationship
-    can :manage,                IssueInfo
-    can :manage,                Milestone
-    can :update,                member.project
-    can :manage,                Category
-    can :read,                  Member
-    can :modify,                Member, Member.where.not(role: "owner") do |m|
-      !m.role.owner?
-    end
-    can :manage,                IssueTemplate
-    can :manage,                Analytic
+
+    can :manage, Category
+    can :manage, IssueTemplate
+    can :manage, TestCaseLabel
+    can :manage, Platform
+    can :manage, TestCase
+    can :manage, Milestone
+
+    can :manage, Plan
+    can :manage, Phase
+    can :manage, Task
+    can :manage, TaskUpshot
+
+    can :manage, Milestone
+    can :manage, [ Issue, Comment, IssueSurvey, IssueRelationship ]
   end
 
   def apply_owner_permissions(member)
     apply_manager_permissions(member)
     can :manage,               Member
-    can :manage,               IssueTemplate
-    can :manage,               Analytic
-  end
-
-  def apply_superadmin_permissions(user)
-    can :manage,              :all
-    cannot :destroy,          user
   end
 end

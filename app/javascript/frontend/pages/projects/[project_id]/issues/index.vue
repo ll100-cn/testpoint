@@ -11,7 +11,7 @@
         <layouts.submit class="w-auto">搜索</layouts.submit>
       </layouts.form_inline>
 
-      <router-link class="btn btn-primary" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
+      <router-link v-if="allow('create', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
     </div>
   </div>
 
@@ -75,14 +75,18 @@ import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
 import { Filter2, Search2 } from "./types"
 import { ENUM_ISSUE_STAGES } from "@/constants"
+import { usePageStore } from "@/store"
+import { Issue } from "@/models"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const query = utils.queryToPlain(route.query)
 const params = route.params as any
+const page = usePageStore()
+const allow = page.inProject().allow
 
-const page = utils.instance(Page, query)
+const page2 = utils.instance(Page, query)
 const search2 = reactive(utils.instance(Search2, query))
 const filter2 = reactive(utils.instance(Filter2, query))
 
@@ -100,7 +104,7 @@ former.perform = async function(search: Search2 | null) {
 
 const issues = ref(await new q.bug.IssueReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...search2, ...filter2, ...page })
+  req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
 }).perform())
 
 const issue_summary = ref(await new q.bug.IssueSummaryReq.Get().setup(proxy, (req) => {
