@@ -12,7 +12,7 @@
       <div>
         <FormErrorAlert :validations="former.validations" />
 
-        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="state" title="状态">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="state" title="状态">
           <template #editable>
             <layouts.group code="state">
               <controls.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
@@ -22,7 +22,7 @@
           <IssueStateBadge :state="issue_info.state" />
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="priority" title="优先级">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="priority" title="优先级">
           <template #editable>
             <layouts.group code="priority">
               <controls.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
@@ -32,7 +32,7 @@
           <span :class="{'text-danger': issue_info.priority == 'important'}">{{ issue_info.priority_text }}</span>
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="allow('manage', issue_info)" v-bind="{ former }" code="creator_id" title="创建人">
+        <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former }" code="creator_id" title="创建人">
           <template #editable>
             <layouts.group code="creator_id">
               <controls.select v-bind="{ collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
@@ -42,7 +42,7 @@
           {{ issue_info.creator.name }}
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="assignee_id" title="受理人">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="assignee_id" title="受理人">
           <template #editable>
             <layouts.group code="assignee_id">
               <controls.select v-bind="{ collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
@@ -52,7 +52,7 @@
           {{ issue_info.assignee?.name ?? '无' }}
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="category_id" title="分类">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="category_id" title="分类">
           <template #editable>
             <layouts.group code="category_id">
               <controls.bootstrap_select v-bind="{ live_search: true, collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
@@ -62,7 +62,7 @@
           <CategoryBadgeVue :category="_.find(categories, { id: issue_info.category_id })" />
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="allow('update', issue_info)" v-bind="{ former }" code="milestone_id" title="里程碑">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="milestone_id" title="里程碑">
           <template #editable>
             <layouts.group code="milestone_id">
               <controls.select v-bind="{ collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
@@ -72,7 +72,7 @@
           {{ _.find(milestones, { id: issue_info.milestone_id })?.title ?? '无' }}
         </IssueDetailEdit>
 
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column" v-if="!readonly">
           <div class="h5">订阅</div>
           <div class="mt-1">
             <button v-if="_.find(issue_info.subscriptions, it => it.user_id == current_user.id)" class="btn border border-secondary bg-light w-100 text-dark" @click="unsubscribe">取消订阅</button>
@@ -114,6 +114,7 @@ const allow = page.inProject().allow
 
 const props = defineProps<{
   issue_info: IssueInfo
+  readonly: boolean
 }>()
 const emit = defineEmits<{
   updated: [ IssueInfo ]

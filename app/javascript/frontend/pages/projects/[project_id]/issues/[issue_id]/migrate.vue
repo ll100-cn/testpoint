@@ -4,35 +4,42 @@
   </div>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <FormErrorAlert />
+    <div class="row">
+      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
+        <FormErrorAlert />
 
-    <div class="row gy-3">
-      <layouts.group code="project_id" label="项目">
-        <controls.select v-bind="{ collection: project_collection, labelMethod: 'name', valueMethod: 'id' }" @change="getCategories" />
-      </layouts.group>
+        <div class="row gy-3">
+          <layouts.group code="target_project_id" label="项目">
+            <controls.select v-bind="{ collection: projects, labelMethod: 'name', valueMethod: 'id' }" include_blank />
+          </layouts.group>
 
-      <layouts.group code="category_id" label="分类">
-        <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
-      </layouts.group>
+          <layouts.group code="target_category_id" label="分类">
+            <span class="form-control-plaintext text-muted" v-if="actioner.processing">载入中...</span>
+            <controls.select v-else v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id' }" include_blank />
+          </layouts.group>
+        </div>
+
+        <hr class="x-form-divider-through">
+
+        <layouts.group control_wrap_class="x-actions x-spacer-2">
+          <layouts.submit :disabled="actioner.processing">迁移</layouts.submit>
+          <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
+        </layouts.group>
+      </div>
     </div>
-
-    <hr class="x-form-divider-through">
-
-    <layouts.group control_wrap_class="x-actions x-spacer-2">
-      <layouts.submit>迁移</layouts.submit>
-      <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
-    </layouts.group>
   </layouts.form_horizontal>
 </template>
 
 <script setup lang="ts">
+import { Actioner } from "@/components/Actioner"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
+import { Category } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
-import { computed, getCurrentInstance, ref } from 'vue'
+import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 
 const { proxy } = getCurrentInstance()
@@ -41,8 +48,8 @@ const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 
-const project_id = _.toInteger(params.project_id)
-const issue_id = _.toInteger(params.issue_id)
+const project_id = _.toNumber(params.project_id)
+const issue_id = _.toNumber(params.issue_id)
 
 const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
@@ -50,34 +57,43 @@ const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
 }).perform())
 
 const former = Former.build({
-  project_id: issue.value.project_id,
-  category_id: undefined
+  target_project_id: undefined,
+  target_category_id: undefined
 })
 
 former.perform = async function() {
-  const issue = await new q.bug.IssueMigrate().setup(proxy, (req) => {
+  await new q.bug.IssueMigrationReq().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
-    req.interpolations.issue_id = issue_id
-  }).perform({ targert_project_id: former.form.project_id, category_id: former.form.category_id })
+  }).perform({ ...this.form, source_issue_id: issue_id })
 
-  router.push({ path: `/projects/${issue.project_id}/issues/${issue_id}` })
+  router.push({ path: `/projects/${former.form.target_project_id}/issues/${issue_id}` })
 }
 
 const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
-const projects = computed(() => member_infos.value.map(it => it.project))
+const projects = computed(() => member_infos.value.filter(it => {
+  return ['manager', 'owner'].includes(it.role) && it.project_id != project_id
+}).map(it => it.project))
+const categories = ref([] as Category[])
 
-const project_collection = computed(() => {
-  return projects.value.filter(it => it.id != project_id)
-})
+const actioner = Actioner.build<{
+  loadCategories: (project_id: number) => void
+}>()
 
-const categories = ref(await new q.project.CategoryReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = former.form.project_id
-}).perform())
-
-async function getCategories() {
-  categories.value = await new q.project.CategoryReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = former.form.project_id
-  }).perform()
-  former.form.category_id = undefined
+actioner.loadCategories = function(project_id: number) {
+  this.perform(async function() {
+    categories.value = await new q.project.CategoryReq.List().setup(proxy, (req) => {
+      req.interpolations.project_id = project_id
+    }).perform()
+    former.form.target_category_id = undefined
+  }, { confirm_text: false })
 }
+
+watch(computed(() => former.form.target_project_id), function(new_value) {
+  if (new_value == null) {
+    categories.value = []
+    former.form.target_category_id = null
+  } else {
+    actioner.loadCategories(new_value)
+  }
+})
 </script>

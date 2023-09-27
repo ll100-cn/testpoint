@@ -5,13 +5,7 @@ class Api::Projects::MembersController < Api::Projects::BaseController
   def index
     @q = @project.members.ransack(params[:q])
     @q.sorts = "user_email" if @q.sorts.empty?
-    @members = @q.result.page(params[:page])
-
-    kaminari_headers(@members)
-  end
-
-  def list
-    @members = @project.members.available.ranked
+    @members = @q.result
   end
 
   def show

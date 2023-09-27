@@ -41,13 +41,15 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const a_issue = await new q.bug.IssueReq.Archive().setup(proxy, (req) => {
+  const a_issue_info = await new q.bug.IssueInfoReq.Resolve().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
-  }).perform()
+  }).perform({
+    action: 'resolve',
+    comment_attributes: this.form
+  })
 
-  Object.assign(props.issue_info, a_issue)
-  emit("updated", props.issue_info)
+  emit("updated", a_issue_info)
   BootstrapHelper.modal(el).hide()
 }
 

@@ -1,5 +1,6 @@
 json = {}
 
+json[:member_id] = member.id
 json[:project_id] = member.project_id
 json[:role] = member.role
 json[:nickname] = member.nickname
@@ -20,6 +21,8 @@ json[:permissions] = {
   IssueSurvey => [ :read, :create, :update, :manage ],
   IssueRelationship => [ :read, :create, :update, :manage ],
   Comment => [ :read, :create, :update, :manage ],
+  Attachment => [ :read, :create, :update, :manage ],
+  "IssueBody" => [ :read, :create, :update, :manage ],
 }.map do |klass, actions|
   allow_actions = actions.filter { |action| can? action, klass }
   [ klass, allow_actions ]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_21_082437) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_27_065249) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -201,11 +201,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_082437) do
     t.bigint "category_id"
     t.datetime "archived_at", precision: nil
     t.string "stage"
+    t.integer "legacy_project_ids", default: [], array: true
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
     t.index ["category_id"], name: "index_issues_on_category_id"
     t.index ["creator_id"], name: "index_issues_on_creator_id"
+    t.index ["legacy_project_ids"], name: "index_issues_on_legacy_project_ids"
     t.index ["milestone_id"], name: "index_issues_on_milestone_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["stage"], name: "index_issues_on_stage"

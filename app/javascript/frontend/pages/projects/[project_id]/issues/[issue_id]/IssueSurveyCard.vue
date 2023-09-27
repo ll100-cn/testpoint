@@ -11,15 +11,15 @@
             <span class="ms-3 small text-muted">修改于 {{ h.datetime(issue_survey.updated_at) }}</span>
 
             <MoreDropdown class="ms-auto">
-              <a v-if="allow('update', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">修改</a>
-              <a v-if="allow('destroy', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="deleteIssueSurvey(issue_survey)">删除</a>
+              <a v-if="!readonly && allow('update', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">修改</a>
+              <a v-if="!readonly && allow('destroy', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="deleteIssueSurvey(issue_survey)">删除</a>
             </MoreDropdown>
           </div>
 
           <div v-if="issue_survey.state == 'pending'" class="alert alert-danger mb-0">
             <p class="mb-2">该工单需要提供更多信息，请按照模版</p>
             <div>
-              <a v-if="allow('update', IssueSurvey)" class="btn btn-danger btn-sm" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">补充工单</a>
+              <a v-if="!readonly && allow('update', IssueSurvey)" class="btn btn-danger btn-sm" href="#" @click.prevent="emit('modal', IssueSurveyEditFrame, issue_info, issue_survey)">补充工单</a>
             </div>
           </div>
           <div v-else>
@@ -50,6 +50,7 @@ const allow = page.inProject().allow
 
 const props = defineProps<{
   issue_info: IssueInfo
+  readonly: boolean
 }>()
 
 const emit = defineEmits<{

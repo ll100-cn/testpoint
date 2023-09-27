@@ -6,28 +6,26 @@
       <span class="text-muted">回复于 {{ h.datetime(comment.created_at) }}</span>
 
       <MoreDropdown class="ms-auto">
-        <a v-if="comment.member.user_id == user.id && allow('update', comment)" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-        <a v-if="allow('destroy', comment)" class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
+        <a v-if="!readonly && comment.member.user_id == user.id && allow('update', comment)" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
+        <a v-if="!readonly && allow('destroy', comment)" class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
       </MoreDropdown>
     </div>
 
-    <ContentBody :body="comment" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+    <ContentBody :body="comment" :editable="!readonly && allow('update', comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
   </div>
 </template>
 
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import { DATETIME_SHORT_FORMAT } from "@/constants"
+import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
-import * as utils from "@/lib/utils"
 import { Attachment, Comment, Issue } from "@/models"
+import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import { Component, getCurrentInstance } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
-import * as h from '@/lib/humanize'
-import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
@@ -38,6 +36,7 @@ const allow = page.inProject().allow
 const props = defineProps<{
   issue: Issue
   comment: Comment
+  readonly: boolean
 }>()
 
 const emit = defineEmits<{

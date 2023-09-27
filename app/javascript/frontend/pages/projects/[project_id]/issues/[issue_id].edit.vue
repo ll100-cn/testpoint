@@ -26,7 +26,7 @@
         <layouts.group control_wrap_class="x-actions x-spacer-2">
           <layouts.submit>更新问题</layouts.submit>
           <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
-          <router-link class="btn btn-warning" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
+          <router-link v-if="allow('manage', issue)" class="btn btn-warning ms-auto" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
         </layouts.group>
       </div>
     </div>
@@ -39,6 +39,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
+import { Issue } from '@/models'
 import { usePageStore } from '@/store'
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -51,6 +52,7 @@ const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 const page = usePageStore()
+const allow = page.inProject().allow
 
 const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
@@ -65,7 +67,7 @@ const former = Former.build({
 })
 
 former.perform = async function() {
-  const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
+  const issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue_id
   }).perform(this.form)

@@ -6,12 +6,12 @@
           <MemberLabel :member="issue_info.creator" class="me-1" />
           <span class="ms-1 small text-muted">创建于 {{ h.datetime(issue_info.created_at) }}</span>
 
-          <MoreDropdown class="ms-auto">
-            <a v-if="allow('update', issue_info)" href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
+          <MoreDropdown class="ms-auto" v-if="!readonly">
+            <a v-if="allow('update', 'IssueBody')" href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
           </MoreDropdown>
         </div>
 
-        <ContentBody :body="issue_info" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+        <ContentBody :body="issue_info" :editable="!readonly && allow('update', issue_info)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
       </div>
     </div>
   </div>
@@ -31,7 +31,6 @@ import { ref } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueContentEditFrame from "./IssueContentEditFrame.vue"
 import { usePageStore } from "@/store"
-import { all } from "axios"
 
 const blank_modal = ref(null as InstanceType<typeof BlankModal>)
 const page = usePageStore()
@@ -39,6 +38,7 @@ const allow = page.inProject().allow
 
 const props = defineProps<{
   issue_info: IssueInfo
+  readonly: boolean
 }>()
 
 const emit = defineEmits<{

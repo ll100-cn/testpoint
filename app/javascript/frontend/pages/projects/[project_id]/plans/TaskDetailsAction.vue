@@ -87,13 +87,13 @@ const issue_former = Former.build({
 })
 
 issue_former.perform = async function() {
-  const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
-    req.interpolations.project_id = props.project_id
-    req.interpolations.issue_id = issue_former.form.id
-  }).perform({ task_id: props.task_upshot_info.task.id })
+  // const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
+  //   req.interpolations.project_id = props.project_id
+  //   req.interpolations.issue_id = issue_former.form.id
+  // }).perform({ task_id: props.task_upshot_info.task.id })
 
-  issue_former.form.id = null
-  emit('updated', props.task_upshot_info)
+  // issue_former.form.id = null
+  // emit('updated', props.task_upshot_info)
 }
 
 const former = Former.build({
@@ -165,14 +165,14 @@ async function updateStateOverride(state_override: "pass" | "pending" | "failure
 }
 
 async function bindIssue() {
-  const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
-    req.interpolations.project_id = props.project_id
-    req.interpolations.issue_id = issue_former.form.id
-  }).perform({ task_id: props.task_upshot_info.task.id })
-  issue_former.form.id = null
+  // const issue = await new q.bug.IssueReq.Update().setup(proxy, (req) => {
+  //   req.interpolations.project_id = props.project_id
+  //   req.interpolations.issue_id = issue_former.form.id
+  // }).perform({ task_id: props.task_upshot_info.task.id })
+  // issue_former.form.id = null
 
-  if (issue) {
-    emit('updated', props.task_upshot_info)
-  }
+  // if (issue) {
+  //   emit('updated', props.task_upshot_info)
+  // }
 }
 </script>

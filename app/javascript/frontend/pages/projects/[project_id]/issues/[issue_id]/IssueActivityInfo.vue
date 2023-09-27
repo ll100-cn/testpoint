@@ -57,9 +57,15 @@
     </span>
     <span v-else-if="issue_activity.property == 'project_id'" class="x-actions x-spacer-1">
       <span>将</span><span class="text-info">项目</span><span>从</span>
-      <span class="text-primary">{{ issue_activity.before_project!.name }}</span>
+      <router-link :to="`/projects/${issue_activity.before_value}/issues/${issue.id}`">
+        <span class="text-primary">{{ issue_activity.before_project!.name }}</span>
+      </router-link>
+
       <span>修改为</span>
-      <span class="text-primary">{{ issue_activity.after_project!.name }}</span>
+
+      <router-link :to="`/projects/${issue_activity.after_value}/issues/${issue.id}`">
+        <span class="text-primary">{{ issue_activity.after_project!.name }}</span>
+      </router-link>
     </span>
 
     <span class="small text-muted ms-2">{{ h.datetime(issue_activity.created_at) }}</span>

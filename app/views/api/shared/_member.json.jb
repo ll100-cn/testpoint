@@ -1,3 +1,3 @@
-json = member.slice(:id, :name, :nickname, :email, :role, :role_text, :receive_mail, :user_id, :project_id)
+json = member.slice(:id, :name, :nickname, :role, :role_text, :receive_mail, :user_id, :project_id, :archived_at)
 json[:avatar_url] = member.user.avatar_url
 json

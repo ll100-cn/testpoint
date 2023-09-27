@@ -1,8 +1,7 @@
-import md5 from "md5"
+import * as t from '@/lib/transforms'
 
 export class Member {
   id: number
-  email: string
   name: string
   nickname: string | null
   role: string
@@ -11,4 +10,6 @@ export class Member {
   user_id: number
   project_id: number
   avatar_url: string
+
+  @t.Date archived_at: Date | null
 }

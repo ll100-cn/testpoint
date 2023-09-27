@@ -44,7 +44,7 @@ class IssueBuildForm
     self.issue.assign_attributes(attrs)
   end
 
-  def info_attributes=(attrs)
+  def survey_attributes=(attrs)
     self.survey.assign_attributes(attrs)
   end
 

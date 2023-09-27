@@ -7,20 +7,18 @@
 
     <div class="row mt-2" v-if="body.attachments.length > 0">
       <div v-for="attachment in body.attachments" :key="attachment.id" class="col-lg-6">
-        <AttachmentInfo :attachment="attachment" @deleted="emit('attachment_destroyed', $event)" @edited="emit('attachment_updated', $event)" />
+        <AttachmentInfo :editable="editable" :attachment="attachment" @deleted="emit('attachment_destroyed', $event)" @edited="emit('attachment_updated', $event)" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Attachment } from '@/models'
-import * as utils from "@/lib/utils"
-import { DATETIME_LONG_FORMAT } from '@/constants'
-import PageContent from '@/components/PageContent.vue'
-import { computed } from 'vue'
 import AttachmentInfo from '@/components/AttachmentInfo.vue'
+import PageContent from '@/components/PageContent.vue'
 import * as h from '@/lib/humanize'
+import { Attachment } from '@/models'
+import { computed } from 'vue'
 
 interface ContentBody {
   content: string
@@ -35,7 +33,8 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps<{
-  body: ContentBody
+  body: ContentBody,
+  editable?: boolean
 }>()
 
 const is_edited = computed(() => props.body.last_edited_at && props.body.created_at != props.body.last_edited_at)

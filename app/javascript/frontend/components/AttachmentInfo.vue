@@ -35,14 +35,14 @@
       <template v-else>
         <div class="d-flex align-items-center">
           <span class="me-2">{{ _.truncate(attachment.title, { length: 20 }) }}</span>
-          <span role="button" class="far fa-fw fa-edit ms-auto" @click="onEdit" />
+          <span v-if="editable" role="button" class="far fa-fw fa-edit ms-auto" @click="onEdit" />
         </div>
         <div class="d-flex align-items-center x-actions">
           <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
           <a v-if="attachment.file_url" class="clipboard" :href="attachment.file_url" @click.prevent>
             <span class="far fa-fw fa-link text-muted" />
           </a>
-          <a class="ms-auto" href="#" @click.prevent="deleteAttachment">
+          <a v-if="editable" class="ms-auto" href="#" @click.prevent="deleteAttachment">
             <span class="far fa-fw fa-trash-alt text-muted" />
           </a>
         </div>
@@ -60,12 +60,18 @@ import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import Former from "./simple_form/Former"
+import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
+const page = usePageStore()
+const allow = page.inProject().allow
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   attachment: Attachment
-}>()
+  editable: boolean
+}>(), {
+  editable: false
+})
 const emits = defineEmits<{
   deleted: [attachment: Attachment]
   edited: [attachment: Attachment]

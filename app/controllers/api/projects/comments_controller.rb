@@ -1,9 +1,12 @@
 class Api::Projects::CommentsController < Api::Projects::BaseController
-  load_and_authorize_resource :project
-  load_and_authorize_resource :issue
+  before_action -> { @project = current_project }
+  load_and_authorize_resource :issue, with_scope: ->(base) {
+    params[:action] == "index" ? base.in_project(@project) : base.where(project_id: @project.id)
+  }
   load_and_authorize_resource through: :issue
 
   def index
+    @comments = @comments.joins(:member).where(members: { project_id: current_member.project_id })
   end
 
   def create

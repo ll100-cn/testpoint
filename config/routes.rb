@@ -157,16 +157,12 @@ Rails.application.routes.draw do
 
         resources :issue_templates
         resources :issues do
+          resource :body, controller: "issue_bodies"
+
           resource :subscription
           resources :issue_relationships
           resources :issue_surveys
           resources :issue_actions
-
-          get :summary, on: :collection
-          patch :unresolve, on: :member
-          patch :archive, on: :member
-          patch :migrate, on: :member
-          patch :body, on: :member
 
           resources :comments do
             member do
@@ -175,8 +171,12 @@ Rails.application.routes.draw do
           end
         end
         resources :issue_stats
-        resources :issue_infos
+        resources :issue_infos do
+          patch :resolve, on: :member
+          patch :process, to: "issue_infos#process2", on: :member
+        end
         resources :issue_summaries
+        resources :issue_migrations
       end
     end
 

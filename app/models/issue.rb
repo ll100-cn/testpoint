@@ -58,6 +58,10 @@ class Issue < ApplicationRecord
     conds = self.filter_states_options[code.to_sym][:conds]
     cond_any_of(conds)
   }
+  scope :in_project, ->(project) { where_any_of(
+    Issue.where(project_id: project.id),
+    Issue.where("? = ANY(legacy_project_ids)", project.id)
+  )}
 
   scope :state_filter, ->(text) {
     case text
@@ -136,28 +140,32 @@ class Issue < ApplicationRecord
   end
 
   def change_project_with_author(params, member)
-    project_id = params[:targert_project_id] || params[:project_id]
-    new_project = member.user.projects.find(project_id)
-    self.project_id = project_id
-    self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || self.creator
-    self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
-    self.category = new_project.categories.find_by(id: params[:category_id])
-    self.milestone_id = nil
-    transaction do
-      unless self.save
-        raise ActiveRecord::Rollback
-      end
-      record_property_changes!(member)
-    end
+    target_project_id = params[:project_id]
+    target_project = member.user.projects.find(target_project_id)
+
+    # project_id = params[:targert_project_id] || params[:project_id]
+    # new_project = member.user.projects.find(project_id)
+    # self.project_id = project_id
+    # self.creator = new_project.members.find_by(user_id: self.creator&.user_id) || self.creator
+    # self.assignee = new_project.members.find_by(user_id: self.assignee&.user_id)
+    # self.category = new_project.categories.find_by(id: params[:category_id])
+    # self.milestone_id = nil
+    # transaction do
+    #   unless self.save
+    #     raise ActiveRecord::Rollback
+    #   end
+    #   record_property_changes!(member)
+    # end
   end
 
   def record_property_changes!(member)
-    previous_changes.slice(:project_id, :creator_id, :assignee_id, :state, :milestone_id, :category_id, :archived_at).map do |property, (before_value, after_value)|
+    previous_changes.slice(:creator_id, :assignee_id, :state, :milestone_id, :category_id, :archived_at).map do |property, (before_value, after_value)|
       activity = self.activities.new
+      activity.member_id = member.id
+
       activity.property = property
       activity.before_value = before_value
       activity.after_value = after_value
-      activity.member_id = member.id
       activity.save!
       activity
     end
@@ -198,7 +206,34 @@ class Issue < ApplicationRecord
     end
   end
 
-  def unresolve(comment_params)
+  def process(params, member)
+    errors.add(:state, :invalid) and return false if ![:confirmed, :processing, :processed].include?(state.to_sym)
+
+    if params[:state] == "processed"
+      self.state = :processed
+    else
+      self.state = :processing
+    end
+
+    transaction do
+      raise ActiveRecord::Rollback if !self.save
+      record_property_changes!(member)
+    end
+
+    errors.empty?
+  end
+
+  def resolve(params, member)
+    errors.add(:stage, :invalid) and return false if !stage.closed? && !stage.resolved?
+
+    if params[:action] == "resolve"
+      archive(member)
+    else
+      unresolve(params[:comment_attributes], member)
+    end
+  end
+
+  def unresolve(comment_params, member)
     self.errors.add(:state, :invalid) and return false if self.state.pending?
 
     transaction do
@@ -206,9 +241,17 @@ class Issue < ApplicationRecord
       comment.assign_attributes(comment_params)
       self.state = :pending
 
-      raise ActiveRecord::Rollback unless comment.save! && self.save!
+      if !comment.save
+        self.errors.add(:comment, comment.errors.full_messages.first)
+        raise ActiveRecord::Rollback
+      end
+
+      raise ActiveRecord::Rollback if !save
+
+      record_property_changes!(member)
     end
-    true
+
+    errors.empty?
   end
 
   def archive(member)
@@ -219,6 +262,8 @@ class Issue < ApplicationRecord
       raise ActiveRecord::Rollback unless self.save
       record_property_changes!(member)
     end
+
+    errors.empty?
   end
 
   def self.filter_states_options

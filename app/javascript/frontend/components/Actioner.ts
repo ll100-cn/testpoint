@@ -1,13 +1,22 @@
 import { reactive } from "vue"
 import { Validations } from "./simple_form"
 
-export class Actioner<T extends any[]> {
+export class Actioner {
   confirm_text = "确定操作？"
   processing = false
   validations = reactive(new Validations())
 
-  async perform(callback: () => Promise<void>) {
-    if (!confirm(this.confirm_text)) {
+  async confirm(text: boolean | string) {
+    if (text === false) {
+      return true
+    }
+
+    const confirm_text = text === true ? this.confirm_text : this.confirm_text
+    return confirm(confirm_text)
+  }
+
+  async perform(callback: () => Promise<void>, config: { confirm_text: boolean | string } = { confirm_text: true }) {
+    if (!await this.confirm(config.confirm_text)) {
       return
     }
 
@@ -27,9 +36,9 @@ export class Actioner<T extends any[]> {
     }
   }
 
-  static build<T extends any[]>(props: Partial<Pick<Actioner<T>, 'confirm_text'>> = {}) {
+  static build<M>(props: Partial<Pick<Actioner, 'confirm_text'>> = {}) {
     const result = reactive(new Actioner())
     Object.assign(result, props)
-    return result
+    return result as Actioner & M
   }
 }

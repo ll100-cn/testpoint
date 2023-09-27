@@ -12,6 +12,8 @@ export class Issue {
   state: string
   state_text: string
 
+  stage: string
+
   @Type(() => Date)
   created_at: Date
 

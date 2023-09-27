@@ -15,18 +15,18 @@
           <tr>
             <th>ID</th>
             <th>名称</th>
-            <th>邮箱</th>
+            <th>归档</th>
             <th>角色</th>
             <th>默认接收邮箱</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <template v-for="member in members.list" :key="member.id">
-            <tr>
+          <template v-for="member in members" :key="member.id">
+            <tr :class="{ 'block-discard': member.archived_at }">
               <td>{{ member.id }}</td>
               <td>{{ member.name }}</td>
-              <td>{{ member.email }}</td>
+              <td>{{ h.datetime(member.archived_at) }}</td>
               <td>{{ member.role_text }}</td>
               <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
               <td>
@@ -42,23 +42,20 @@
         </tbody>
       </table>
     </div>
-    <div class="card-footer">
-      <PaginationBar :pagination="members" />
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { Validations } from "@/components/simple_form"
 import * as q from '@/lib/requests'
+import { Member } from '@/models'
+import { usePageStore } from '@/store'
 import { PageQuery } from '@/types'
 import _ from 'lodash'
-import { Member } from '@/models'
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import PaginationBar from '@/components/PaginationBar.vue'
-import { usePageStore, useSessionStore } from '@/store'
+import { getCurrentInstance, reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -74,7 +71,7 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const members = ref(await new q.project.MemberReq.Page().setup(proxy, (req) => {
+const members = ref(await new q.project.MemberReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = currentQuery.value
 }).perform())

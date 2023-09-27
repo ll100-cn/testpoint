@@ -6,7 +6,7 @@
       <IssueStateBadge :state="issue_info.state" />
     </span>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link v-if="allow('create', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
+      <router-link v-if="!readonly && allow('update', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
     </div>
   </div>
 
@@ -17,24 +17,25 @@
   <div class="row">
     <div class="col order-1 order-md-0 mb-5">
       <IssueRelatedTask v-if="issue_info.task" :task="issue_info.task" :project_id="project_id" />
-      <IssueContent :issue_info="issue_info" @updated="onIssueInfoUpdated" />
-      <IssueSurveyCard :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_modal.show(...args)" />
+      <IssueContent :readonly="readonly" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
+      <IssueSurveyCard :readonly="readonly" :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_modal.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
         <template v-if="(item instanceof Comment)">
-          <IssueComment :issue="issue_info" :comment="item" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_modal.show(...args)" />
+          <IssueComment :readonly="readonly" :issue="issue_info" :comment="item" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_modal.show(...args)" />
         </template>
         <template v-else-if="(item instanceof IssueActivity)">
           <IssueActivityInfo :issue="issue_info" :issue_activity="item" />
         </template>
         <template v-else-if="(item instanceof IssueRelationship)">
-          <IssueRelationshipInfo :issue_info="issue_info" :issue_relationship="item" @updated="onIssueInfoUpdated" />
+          <IssueRelationshipInfo :readonly="readonly" :issue_info="issue_info" :issue_relationship="item" @updated="onIssueInfoUpdated" />
         </template>
       </div>
 
-      <div class="card">
+      <div class="card" v-if="!readonly">
         <div class="card-body">
           <h6 class="card-title">提供更多信息</h6>
+          <ActionerAlert :actioner="actioner" />
           <div class="d-flex x-actions x-spacer-2">
             <button v-if="allow('create', Comment)" class="btn btn-sm btn-primary" @click="comment_modal.show(IssueCommentCreateFrame, issue_info)">
               <i class="far fa-comment fa-fw" /> 新增评论
@@ -46,22 +47,52 @@
               <i class="far fa-file-lines fa-fw" /> 新增问题模版
             </button>
 
-            <template v-if="allow('update', issue_info) && issue_info.state == 'resolved' && !issue_info.archived_at">
-              <div class="btn-group ms-auto" role="group">
-                <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />已解决</button>
-                <button class="btn btn-sm btn-outline-danger" @click="issue_info_modal.show(IssueUnresolveFrame)"><i class="far fa-times me-1" />未解决</button>
-              </div>
+            <template v-if="allow('manage', issue_info) || issue_info.assignee_id == profile.member_id">
+              <template v-if="['confirmed', 'processing', 'processed'].includes(issue_info.state)">
+                <div class="btn-group ms-auto" role="group">
+                  <template v-if="issue_info.state == 'confirmed'">
+                    <a class="btn btn-sm btn-outline-info" href="#" @click.prevent="changeIssueState('processing')">
+                      设置为处理中
+                    </a>
+                    <a class="btn btn-sm btn-outline-success" href="#" @click.prevent="changeIssueState('processed')">
+                      设置为已处理
+                    </a>
+                  </template>
+
+                  <template v-if="issue_info.state == 'processing'">
+                    <a class="btn btn-sm btn-outline-success" href="#" @click.prevent="changeIssueState('processed')">
+                      设置为已处理
+                    </a>
+                  </template>
+
+                  <template v-if="issue_info.state == 'processed'">
+                    <a class="btn btn-sm btn-outline-info" href="#" @click.prevent="changeIssueState('processing')">
+                      设置为处理中
+                    </a>
+                  </template>
+
+                </div>
+              </template>
             </template>
-            <template v-if="allow('update', issue_info) && issue_info.state == 'closed' && !issue_info.archived_at">
-              <div class="btn-group ms-auto" role="group">
-                <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />确认关闭</button>
-              </div>
+
+            <template v-if="allow('manage', issue_info) || issue_info.creator_id == profile.member_id">
+              <template v-if="issue_info.state == 'resolved' && !issue_info.archived_at">
+                <div class="btn-group ms-auto" role="group">
+                  <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />已解决</button>
+                  <button class="btn btn-sm btn-outline-danger" @click="issue_info_modal.show(IssueUnresolveFrame)"><i class="far fa-times me-1" />未解决</button>
+                </div>
+              </template>
+              <template v-if="issue_info.state == 'closed' && !issue_info.archived_at">
+                <div class="btn-group ms-auto" role="group">
+                  <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />确认关闭</button>
+                </div>
+              </template>
             </template>
           </div>
         </div>
       </div>
     </div>
-    <IssueDetailsSideBar class="col-12 col-md-3 order-0 order-md-1" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
+    <IssueDetailsSideBar :readonly="readonly" class="col-12 col-md-3 order-0 order-md-1" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
   </div>
   <teleport to="body">
     <BlankModal ref="comment_modal" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
@@ -90,6 +121,8 @@ import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateFrame from "./IssueSurveyCreateFrame.vue"
 import IssueUnresolveFrame from "./IssueUnresolveFrame.vue"
 import { usePageStore } from "@/store"
+import { Actioner } from "@/components/Actioner"
+import ActionerAlert from "@/components/ActionerAlert.vue"
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_info_modal = ref(null as InstanceType<typeof BlankModal>)
@@ -98,13 +131,15 @@ const route = useRoute()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const page = usePageStore()
-const allow = page.inProject().allow
+const profile = page.inProject().profile
+const allow = profile.allow
 
 const issue_info = ref(await new q.bug.IssueInfoReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).perform())
 
+const readonly = computed(() => issue_info.value.project_id.toString() !== params.project_id)
 const comments = ref(await new q.bug.IssueCommentReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_info.value.id
@@ -134,5 +169,18 @@ function onCommentDestroyed(comment: Comment) {
 async function onCommentUpdated(comment: Comment) {
   const index = comments.value.findIndex(it => it.id === comment.id)
   comments.value[index] = comment
+}
+
+const actioner = Actioner.build()
+
+async function changeIssueState(state: string) {
+  actioner.perform(async function() {
+    const a_issue_info = await new q.bug.IssueInfoReq.Process().setup(proxy, (req) => {
+      req.interpolations.project_id = project_id
+      req.interpolations.issue_id = params.issue_id
+    }).perform({ state })
+
+    issue_info.value = a_issue_info
+  })
 }
 </script>

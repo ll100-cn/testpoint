@@ -24,7 +24,9 @@ import * as q from '@/lib/requests'
 import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const el = ref(null! as HTMLElement)
 const { proxy } = getCurrentInstance()
 
@@ -38,18 +40,20 @@ const props = defineProps<{
 
 const former = Former.build({
   content: "",
-  attachment_ids: []
+  attachment_params: []
 })
 
 former.perform = async function() {
-  const a_issue = await new q.bug.IssueUnresolve().setup(proxy, (req) => {
+  const a_issue_info = await new q.bug.IssueInfoReq.Resolve().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
-  }).perform(this.form)
+  }).perform({
+    action: 'unresolve',
+    comment_attributes: this.form
+  })
 
-  Object.assign(props.issue_info, a_issue)
-  emit('updated', props.issue_info)
   BootstrapHelper.modal(el).hide()
+  router.go(0)
 }
 
 const loading = ref(true)

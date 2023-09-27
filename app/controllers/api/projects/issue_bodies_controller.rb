@@ -1,20 +1,21 @@
-class Api::Projects::IssueActionsController < Api::Projects::BaseController
+class Api::Projects::IssueBodiesController < Api::Projects::BaseController
   before_action -> { @project = current_project }
-  load_and_authorize_resource :issue, through: :project
+  load_resource :issue, parent: false, through: :project
 
-  def create
-    authorize! :update, @issue
+  def update
+    authorize! :update, 'IssueBody'
 
     with_email_notification do
-      @activities = @issue.update_with_author(issue_params, current_member)
+      @issue.update_with_author(body_params, current_member)
     end
 
     respond_with @issue
   end
 
 protected
-  def issue_params
-    params.permit(:title, :state, :priority, :creator_id, :assignee_id, :milestone_id, :category_id)
+
+  def body_params
+    params.permit(:content, attachments_params: [ :id, :title ])
   end
 
   def with_email_notification

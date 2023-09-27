@@ -1,5 +1,5 @@
 class Api::AttachmentsController < Api::BaseController
-  load_resource
+  load_and_authorize_resource
 
   def create
     @attachment.save
@@ -7,15 +7,16 @@ class Api::AttachmentsController < Api::BaseController
     respond_with @attachment
   end
 
-  def show
-  end
-
   def update
+    authorize! :update, @attachment.attachmentable
+
     @attachment.update(attachment_params)
     respond_with @attachment
   end
 
   def destroy
+    authorize! :update, @attachment.attachmentable
+
     @attachment.destroy
   end
 

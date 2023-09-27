@@ -13,8 +13,8 @@
           <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
 
           <MoreDropdown class="ms-auto">
-            <a v-if="allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
-            <template v-if="comment.member.user_id == user.id && allow('update', comment)">
+            <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
+            <template v-if="!readonly && comment.member.user_id == user.id && allow('update', comment)">
               <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
               <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
               <a v-if="comment.collapsed" class="small dropdown-item" @click.prevent="foldComment" href="#">显示</a>
@@ -23,11 +23,11 @@
           </MoreDropdown>
         </div>
         <div class="card-body">
-          <ContentBody :body="comment" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+          <ContentBody :body="comment" :editable="!readonly && allow('update', comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
           <div class="x-callout mt-3 py-1" v-if="children.length > 0">
             <template v-for="(child, index) in children">
               <div class="mt-4" v-if="index != 0"></div>
-              <IssueCommentReply :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
+              <IssueCommentReply :readonly="readonly" :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
             </template>
           </div>
         </div>
@@ -61,6 +61,7 @@ const props = defineProps<{
   issue: Issue
   comment: Comment
   comment_repo: CommentRepo
+  readonly: boolean
 }>()
 
 const emit = defineEmits<{

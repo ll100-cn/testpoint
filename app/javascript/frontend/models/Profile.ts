@@ -1,12 +1,17 @@
 import * as t from '@/lib/transforms'
 
 export class Profile {
+  member_id: number
   role: string
   nickname: string | null
   project_id: number
   project_name: string
 
   @t.Klass(Map<string, string[]>) permissions: Map<string, string[]>
+
+  constructor() {
+    this.allow = this.allow.bind(this)
+  }
 
   findKlass(resource: any) {
     if (typeof resource == 'string') {

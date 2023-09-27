@@ -1,6 +1,8 @@
 class Api::Projects::IssuesController < Api::Projects::BaseController
   before_action -> { @project = current_project }
-  load_and_authorize_resource through: :project
+  load_and_authorize_resource through: :project, authorization_action: ->(action) {
+    { archive: :create, unresolve: :create, body: :update }[action]
+  }
 
   def index
     @stage = params[:stage] || "pending"
@@ -42,84 +44,22 @@ class Api::Projects::IssuesController < Api::Projects::BaseController
     respond_with @issue_build_form, location: ok_url_or_default(action: :index)
   end
 
-  def update
-    with_email_notification do
-      @issue.update_with_author(issue_params, current_member)
-    end
-
-    respond_with @issue
-  end
-
   def destroy
     @issue.destroy
     respond_with @issue
   end
 
-  def archive
-    @issue.archive(current_member)
-    respond_with @issue
-  end
-
-  def unresolve
-    @success = @issue.unresolve(unresolve_params)
-    respond_with @issue
-  end
-
-  def migrate
-    with_email_notification do
-      @issue.change_project_with_author(migrate_params, current_member)
-    end
-
-    respond_with @issue
-  end
-
-  def body
-    with_email_notification do
-      @issue.update_with_author(body_params, current_member)
-    end
-
-    respond_with @issue
-  end
-
 protected
-  def unresolve_params
-    params.permit(:content, attachments_params: [ :id, :title ])
-  end
-
-  def migrate_params
-    params.permit(:targert_project_id, :category_id)
-  end
 
   def issue_build_form_params
+    issue_names = [ :priority, :title, :content, attachments_params: [ :id, :title ] ]
+    issue_names << :creator_id if can? :manage, Issue
+
     params.permit(
       :from_task_id,
-      issue_attributes: [
-        :priority, :title, :creator_id, :content,
-        attachments_params: [ :id, :title ]
-      ],
-      info_attributes: [inputs_attributes: [:template_input_id, :value]]
+      issue_attributes: issue_names,
+      survey_attributes: [inputs_attributes: [:template_input_id, :value]]
     )
-  end
-
-  def issue_params_names
-    names = [
-      :priority, :title, :content, :state, :milestone_id, :assignee_id,
-      :template_id, :project_id, :category_id, :task_id, :targert_project_id,
-      attachment_ids: [],
-      subscribed_user_ids: [],
-      template_ids: [],
-      attachments_params: [ :id, :title ]
-    ]
-    names += [ :creator_id ] if can? :critical, Issue
-    names
-  end
-
-  def issue_params
-    params.permit(*issue_params_names)
-  end
-
-  def body_params
-    params.permit(:content, attachments_params: [ :id, :title ])
   end
 
   def with_email_notification

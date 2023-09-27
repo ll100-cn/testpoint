@@ -10,7 +10,7 @@
 
     <span class="small text-muted">{{ h.datetime(issue_relationship.created_at) }}</span>
 
-    <MoreDropdown class="ms-auto" v-if="allow('destroy', IssueRelationship)">
+    <MoreDropdown class="ms-auto" v-if="!readonly && allow('destroy', IssueRelationship)">
       <a class="small dropdown-item" href="#" @click.prevent="deleteIssueRelationShip">取消关联</a>
     </MoreDropdown>
   </div>
@@ -32,6 +32,7 @@ const allow = page.inProject().allow
 const props = defineProps<{
   issue_info: IssueInfo
   issue_relationship: IssueRelationship
+  readonly: boolean
 }>()
 const emit = defineEmits<{
   updated: [ IssueInfo ]
