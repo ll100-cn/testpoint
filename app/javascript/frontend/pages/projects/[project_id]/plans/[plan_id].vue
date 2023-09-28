@@ -1,75 +1,56 @@
 <template>
   <div class="page-header">
-    <h2 class="me-3">{{ plan.title }}</h2>
+    <h2 class="me-3">{{ plan_info.title }}</h2>
 
     <div class="border-start px-2">
       <span class="text-dark fw-bold">
-        平台: {{ plan.platform.name }}
+        平台: {{ plan_info.platform.name }}
       </span>
     </div>
     <div class="border-start px-2">
       <span class="text-dark fw-bold">
-        创建人: {{ plan.creator_name }}
+        创建人: {{ plan_info.creator_name }}
       </span>
     </div>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link v-if="allow('update', plan)" class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
+      <router-link v-if="allow('update', plan_info)" class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
     </div>
   </div>
 
   <ul class="nav nav-pills">
-    <li v-for="(phase, index) in phase_infos" :key="phase.id" class="nav-item mb-3 mx-3">
-      <router-link :to="{ query: { phase_index: index } }" class="nav-link" :class="{ active: index == currentQuery.phase_index }">
+    <li v-for="(phase, index) in plan_info.phase_infos" :key="phase.id" class="nav-item mb-3 mx-3">
+      <router-link :to="{ query: { phase_index: index } }" class="nav-link" :class="{ active: phase.id == current_phase_info.id }">
         <span>{{ phase.title }}</span>
       </router-link>
     </li>
     <li class="nav-item mb-3 mx-3">
-      <a v-if="allow('create', Phase)" class="nav-link" href="javascript:void(0)" @click="PlanPhaseCreateModalRef.show()">
+      <a v-if="allow('create', Phase)" class="nav-link" href="#" @click.prevent="phase_modal.show(PlanPhaseCreateFrame)">
         <i class="far fa-plus-circle me-1" /><span>开始新一轮测试</span>
       </a>
     </li>
   </ul>
 
-  <PlanPhaseCreateModal
-    ref="PlanPhaseCreateModalRef"
-    :phase_infos="phase_infos"
-    :plan="plan"
-    :task_upshot_infos="task_upshot_infos"
-    @created="router.push({ query: { phase_index: phase_infos.length } })" />
   <div class="card page-card">
     <div class="card-header bg-white d-flex">
       <h4 class="me-auto my-auto">任务列表</h4>
 
-      <div class="dropdown ms-3">
-        状态：
-        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          {{ state_dropdown_options[state_eq ?? ""] }}
-        </button>
-        <div class="dropdown-menu">
-          <a
-            v-for="(option, key) in state_dropdown_options"
-            :key="key"
-            class="dropdown-item"
-            :class="{ active: key == state_eq }"
-            @click="state_eq = key">{{ option }}</a>
-        </div>
-      </div>
+      <layouts.form_inline :former="searcher" :default_wrapper_options="{ size: 'small' }">
+        <layouts.group code="state_eq" label="状态">
+          <controls.dropdown #default="{ Component }">
+            <component :is="Component" value="pending"><TaskStateLabel state="pending" /></component>
+            <component :is="Component" value="pass"><TaskStateLabel state="pass" /></component>
+            <component :is="Component" value="failure"><TaskStateLabel state="failure" /></component>
+          </controls.dropdown>
+        </layouts.group>
 
-      <div class="dropdown ms-3">
-        本轮操作：
-        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          {{ state_modify_is_dropdown_options[state_modify_is ?? ""] }}
-        </button>
-        <div class="dropdown-menu">
-          <a
-            v-for="(option, key) in state_modify_is_dropdown_options"
-            :key="key"
-            class="dropdown-item"
-            :class="{ active: key == state_modify_is }"
-            @click="state_modify_is = key">{{ option }}</a>
-        </div>
-      </div>
+        <layouts.group code="state_modify_is" label="本轮操作">
+          <controls.dropdown #default="{ Component }">
+            <component :is="Component" value="not_overrided">未操作</component>
+            <component :is="Component" value="overrided">已操作</component>
+          </controls.dropdown>
+        </layouts.group>
+      </layouts.form_inline>
     </div>
 
     <div class="card-body p-0 d-flex align-items-stretch">
@@ -80,41 +61,36 @@
       <div class="col-12 col-md-9 col-xl-10">
         <div id="tp-main">
           <div class="test_cases-cards">
-            <TaskRow
-              v-for="task_upshot_info in avaiable_task_upshot_infos"
-              :key="task_upshot_info.id"
-              :task_upshot_info="task_upshot_info"
-              @change="onTaskChanged"
-              @click="TaskModalRef.show($event.id)" />
+            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_modal.show(TaskUpshotInfoFrame, task_upshot_info)" />
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <TaskModal
-    ref="TaskModalRef"
-    :plan="plan"
-    :project_id="project_id"
-    :phase_infos="phase_infos"
-    :current_phase_id="phase_infos[currentQuery.phase_index].id"
-    :issue_templates="issue_templates"
-    @updated="onTaskChanged" />
+  <teleport to="body">
+    <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
+    <BlankModal ref="phase_modal" :plan_info="plan_info" @created="onPhaseCreated" />
+  </teleport>
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, provide, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { Phase, Plan, TaskUpshotInfo, TestCaseStat } from '@/models';
-import * as q from '@/lib/requests';
-import { plainToClass } from 'class-transformer';
-import _ from 'lodash';
-import { ChangeFilterFunction, ColumnFilter, Filter } from '../types';
-import FolderSide from '../FolderSide.vue';
-import PlanPhaseCreateModal from './PlanPhaseCreateModal.vue';
-import TaskModal from './TaskModal.vue';
-import TaskRow from './TaskRow.vue';
+import BlankModal from '@/components/BlankModal.vue'
+import { controls, layouts } from '@/components/simple_form'
+import Former from '@/components/simple_form/Former'
+import * as q from '@/lib/requests'
+import { Phase, TaskUpshotInfo, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
+import { plainToClass } from 'class-transformer'
+import _ from 'lodash'
+import { computed, getCurrentInstance, provide, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import FolderSide from '../FolderSide.vue'
+import { ChangeFilterFunction, ColumnFilter, Filter } from '../types'
+import PlanPhaseCreateFrame from './PlanPhaseCreateFrame.vue'
+import TaskRow from './TaskRow.vue'
+import TaskUpshotInfoFrame from './TaskUpshotInfoFrame.vue'
+import TaskStateLabel from '@/components/TaskStateLabel.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -122,49 +98,31 @@ const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow
+const query = route.query
+const task_upshot_info_modal = ref(null as InstanceType<typeof BlankModal>)
+const phase_modal = ref(null as InstanceType<typeof BlankModal>)
 
-const state_eq = ref("")
-const state_modify_is = ref("")
+const searcher = Former.build({
+  state_eq: null as string | null,
+  state_modify_is: null as string | null,
+})
 
-const PlanPhaseCreateModalRef = ref<InstanceType<typeof PlanPhaseCreateModal>>()
-const TaskModalRef = ref<InstanceType<typeof TaskModal>>()
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
-const state_dropdown_options = {
-  '': '全部',
-  pending: '待测试',
-  pass: '通过',
-  failure: '不通过',
-}
 
-const state_modify_is_dropdown_options = {
-  '': '全部',
-  not_overrided: '未操作',
-  overrided: '已操作',
-}
-
-const phase_infos = ref(await new q.test.PlanPhaseInfoReq.List().setup(proxy, (req) => {
+const plan_info = ref(await new q.test.PlanInfoReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
 
-const currentQuery = ref({
-  phase_index: _.toNumber(route.query.phase_index ?? phase_infos.value.length - 1 ?? 0),
+const current_phase_info = computed(() => {
+  return plan_info.value.phase_infos[_.toNumber(query.phase_index)] ?? plan_info.value.phase_infos[0]
 })
 
 const task_upshot_infos = ref(await new q.test.TaskUpshotInfoReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
-  req.interpolations.phase_index = currentQuery.value.phase_index
-}).perform())
-
-const plan = ref(await new q.test.PlanReq.Get().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-  req.interpolations.plan_id = plan_id
-}).perform())
-
-const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
+  req.interpolations.phase_id = current_phase_info.value.id
 }).perform())
 
 const filter = ref(new Filter())
@@ -185,22 +143,25 @@ const test_case_stats = computed(() => {
   return result
 })
 
-
 const columns = new ColumnFilter()
 const avaiable_task_upshot_infos = computed(() => {
   return _.filter(task_upshot_infos.value, (it) => {
     const test_case = it.test_case
-    if (state_eq.value !== '') {
-      if (it.state !== state_eq.value) {
+
+    if (searcher.form.state_eq) {
+      if (it.state !== searcher.form.state_eq) {
         return false
       }
     }
 
-    if (state_modify_is.value !== '') {
-      if (it.state_override !== null && state_modify_is.value === 'not_overrided') {
+    if (searcher.form.state_modify_is == 'not_overrided') {
+      if (it.state_override !== null) {
         return false
       }
-      if (!_.includes([ "pass", "failure", "pending" ], it.state_override) && state_modify_is.value === 'overrided') {
+    }
+
+    if (searcher.form.state_modify_is == 'overrided') {
+      if (it.state_override === null) {
         return false
       }
     }
@@ -225,16 +186,15 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 
 provide("changeFilter", changeFilter)
 
-async function onTaskChanged(old_task_upshot_info: TaskUpshotInfo) {
-  const id = old_task_upshot_info.id
-  const task_upshot_info = await new q.test.TaskUpshotInfoReq.Get().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-    req.interpolations.plan_id = plan_id
-    req.interpolations.phase_index = currentQuery.value.phase_index
-    req.interpolations.id = id
-  }).perform()
-
-  const index = _.findIndex(task_upshot_infos.value, (it) => it.id == task_upshot_info.id)
+function onTaskUpshotInfoUpdated(task_upshot_info: TaskUpshotInfo) {
+  const index = task_upshot_infos.value.findIndex(it => it.id == task_upshot_info.id)
   task_upshot_infos.value[index] = task_upshot_info
+
+  const counts = _.countBy(task_upshot_infos.value, it => it.state)
+  current_phase_info.value.upshots_state_counts = counts as any
+}
+
+function onPhaseCreated(phase: Phase) {
+  router.push({ query: { phase_index: plan_info.value.phase_infos.length } })
 }
 </script>

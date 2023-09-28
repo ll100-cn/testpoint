@@ -7,6 +7,6 @@ import { Actioner } from './Actioner'
 import FormErrorAlert from './FormErrorAlert.vue'
 
 defineProps<{
-  actioner: Actioner<any[]>
+  actioner: Actioner
 }>()
 </script>

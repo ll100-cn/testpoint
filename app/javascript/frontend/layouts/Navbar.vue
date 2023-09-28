@@ -14,7 +14,7 @@
           <template v-if="account">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" aria-expanded="false">
-                {{ project?.name ?? "选择项目" }}
+                {{ profile?.project_name ?? "选择项目" }}
               </a>
 
               <div class="dropdown-menu">
@@ -34,15 +34,22 @@
               </div>
             </div>
 
-            <ProjectNav v-if="project" :project="project" />
+            <ProjectNav v-if="profile" :project_id="profile.project_id" />
           </template>
         </div>
 
         <div v-if="account" class="navbar-nav ms-md-auto">
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuUser" role="button" href="#">
-              <img height="25" class="rounded-circle" :src="account.avatarUrl()">
-              {{ account.name }}
+              <template v-if="profile">
+                <img height="25" class="rounded-circle" :src="account.avatarUrl()">
+                {{ profile?.nickname ?? account.name }} ({{ profile.role_text }})
+              </template>
+
+              <template v-else>
+                <img height="25" class="rounded-circle" :src="account.avatarUrl()">
+                {{ account.name }}
+              </template>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <router-link class="dropdown-item" to="/profile/basic">个人中心</router-link>
@@ -70,6 +77,7 @@ const session = useSessionStore()
 const page = usePageStore()
 
 const account = computed(() => session.account)
+const profile = computed(() => page.inProject()?.profile)
 const member_infos = ref([] as MemberInfo[])
 
 const projects = computed(() => member_infos.value.map(it => it.project))
@@ -77,14 +85,6 @@ const projects = computed(() => member_infos.value.map(it => it.project))
 if (account.value) {
   member_infos.value = (await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
 }
-const project = computed(() => {
-  const project_id = page.inProject()?.project_id
-  if (project_id == null) {
-    return null
-  }
-
-  return projects.value.find((it) => it.id === project_id)
-})
 
 async function signOut() {
   await new q.profile.Logout().setup(proxy).perform()

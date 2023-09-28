@@ -20,9 +20,25 @@ class TaskUpshot < ApplicationRecord
   enumerize :state_override, in: [ :pending, :pass, :failure ]
 
   validates :phase_id, uniqueness: { scope: :task_id }
-  validates :state_override, presence: true, on: :submit
+  # validates :state_override, presence: true, on: :submit
 
   scope :state_modify_is, ->(value) { value == "overrided" ? where.not(state_override: nil) : where(state_override: nil) }
+
+  def do_submit_for_rollback(author)
+    prev_phase = task.plan.phases.where("index < ?", self.phase.index).order(index: :desc).first
+    prev_upshot = prev_phase.task_upshots.where(task_id: self.task_id).take if prev_phase
+    errors.add(:state_override, :invalid) and raise ActiveRecord::Rollback if prev_upshot.nil?
+
+    self.state = prev_upshot.state
+    self.state_changed_at = nil
+    raise ActiveRecord::Rollback if !self.save(context: :submit)
+
+    self.task.state = self.state
+    if !self.task.save
+      self.errors.add(:task_id, self.task.errors.full_messages.first)
+      raise ActiveRecord::Rollback
+    end
+  end
 
   def do_submit_for_failure(author)
     self.state = self.state_override
@@ -59,7 +75,9 @@ class TaskUpshot < ApplicationRecord
     end
 
     transaction do
-      if self.state_override.failure?
+      if self.state_override.nil?
+        do_submit_for_rollback(author)
+      elsif self.state_override.failure?
         do_submit_for_failure(author)
       else
         do_submit_for_not_failure(author)

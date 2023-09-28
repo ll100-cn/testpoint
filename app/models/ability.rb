@@ -57,10 +57,10 @@ class Ability
     can :read, TestCase
     can :process, Issue, assignee_id: member.id
 
-    can :read, Plan
+    can [ :read, :create ], Plan
     can :read, Phase
-    can :read, Task
-    can :read, TaskUpshot
+    can [ :read, :update ], Task
+    can [ :read, :update ], TaskUpshot
   end
 
   def apply_manager_permissions(member)

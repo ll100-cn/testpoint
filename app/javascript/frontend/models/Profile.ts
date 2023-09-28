@@ -3,6 +3,7 @@ import * as t from '@/lib/transforms'
 export class Profile {
   member_id: number
   role: string
+  role_text: string
   nickname: string | null
   project_id: number
   project_name: string

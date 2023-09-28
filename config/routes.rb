@@ -129,11 +129,11 @@ Rails.application.routes.draw do
         resources :test_case_labels
         resources :test_case_label_infos
 
+        resources :plan_infos
         resources :plans do
           resources :phases do
             resources :task_upshot_infos
           end
-          resources :phase_infos
           resources :tasks do
             member do
               patch :ignore

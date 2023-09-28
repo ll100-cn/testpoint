@@ -12,15 +12,6 @@ export default {
     }
   },
 
-  Get: class extends BaseObjectRequest<Plan> {
-    constructor() {
-      super()
-      this.method = "GET"
-      this.endpoint = "/api/projects/{project_id}/plans/{plan_id}"
-      this.klass = Plan
-    }
-  },
-
   Update: class extends BaseObjectRequest<Plan> {
     constructor() {
       super()

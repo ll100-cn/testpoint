@@ -36,8 +36,8 @@ class ProjectCache {
 }
 
 export const usePageStore = defineStore('page', () => {
+  const route = useRoute()
   const errors = ref([] as any[])
-
   const caches = new Map<any, any>()
 
   function cache<T>(key: any, callback: () => T): T {
@@ -55,7 +55,6 @@ export const usePageStore = defineStore('page', () => {
   }
 
   function inProject(): ProjectCache | null {
-    const route = useRoute()
     const params = route.params as any
 
     if (!params.project_id) {

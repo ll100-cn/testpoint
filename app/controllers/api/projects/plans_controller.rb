@@ -1,5 +1,5 @@
-class Api::Projects::PlansController < Api::Projects::BaseController
-  before_action -> { @project = current_project }
+class Api::Projects::PlansController < Api::BaseController
+  load_and_authorize_resource :project
   load_and_authorize_resource :platform, through: :project
   load_and_authorize_resource through: :project
 
@@ -23,9 +23,6 @@ class Api::Projects::PlansController < Api::Projects::BaseController
     @test_case_filter = TestCaseFilter.new(filter_params)
     @plan.submit(@test_case_filter)
     respond_with @plan
-  end
-
-  def show
   end
 
   def destroy

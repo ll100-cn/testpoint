@@ -1,69 +1,64 @@
 <template>
   <ul>
-    <template v-for="line in time_lines" :key="line.id">
-      <li v-if="(line instanceof TaskUpshotInfo)" :style="{ listStyleType: current_phase_id == line.phase_id ? 'disclosure-closed' : 'initial'}">
+    <template v-for="{ phase_info, task_upshot, issues } in items">
+      <li :style="{ listStyleType: current_phase_id == task_upshot.phase_id ? 'disclosure-closed' : 'initial'}">
         <div class="d-flex align-items-center">
-          <span class="me-2">{{ _.find(phase_infos, { id: line.phase_id }).title }}</span>
-          <template v-if="line.state_override">
-            <template v-for="(state, key) in task_state_style_mapping" :key="state">
-              <span v-if="key == line.state_override" :class="state.class_name">
-                {{ state.text }} <i :class="state.icon" />
-              </span>
-            </template>
-          </template>
+          <span class="me-2">{{ phase_info.title }}</span>
+
+          <TaskStateLabel v-if="task_upshot.state_override" :state="task_upshot.state_override" />
           <span v-else>未操作</span>
-          <small class="text-muted ms-auto">{{ h.datetime(line.state_changed_at) }}</small>
+
+          <small class="text-muted ms-auto">{{ h.datetime(task_upshot.state_changed_at) }}</small>
         </div>
-      </li>
-      <li v-if="(line instanceof Issue)" class="ms-3">
-        <router-link class="me-3" :to="`/projects/${project_id}/issues/${line.id}`">{{ `#${line.id} ${line.title}` }}</router-link>
-        <IssueStateBadge :state="line.state" />
+        <ul v-if="issues.length > 0">
+          <li v-for="issue in issues">
+            <IssueRichLink :issue="issue" />
+          </li>
+        </ul>
       </li>
     </template>
   </ul>
 </template>
 
 <script setup lang="ts">
-import IssueStateBadge from '@/components/IssueStateBadge.vue'
-import { DATETIME_SHORT_FORMAT } from '@/constants'
-import * as utils from "@/lib/utils"
-import { Issue, PhaseInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
+import IssueRichLink from '@/components/IssueRichLink.vue'
+import TaskStateLabel from '@/components/TaskStateLabel.vue'
+import * as h from '@/lib/humanize'
+import { Issue, PhaseInfo, TaskInfo, TaskUpshot } from '@/models'
 import _ from 'lodash'
 import { computed } from 'vue'
-import * as h from '@/lib/humanize'
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   task_info: TaskInfo
   current_phase_id: number
   phase_infos: PhaseInfo[]
-  project_id: number
-}>(), {
-})
-
-const emit = defineEmits<{
-  updated: [task_upshot: TaskUpshot]
-  "update:is_task_pass": [is_task_pass: boolean]
 }>()
 
-const task_state_style_mapping = {
-  "pass": {
-    icon: "far fa-check",
-    class_name: "text-success",
-    text: "通过"
-  },
-  "failure": {
-    icon: "far fa-times",
-    class_name: "text-danger",
-    text: "不通过"
-  },
-  "pending": {
-    icon: "far fa-circle",
-    class_name: "text-muted",
-    text: "待测试"
-  }
+interface Item {
+  phase_info: PhaseInfo
+  task_upshot: TaskUpshot
+  issues: Issue[]
 }
 
-const time_lines = computed(() => {
-  return _.orderBy([ ...props.task_info?.task_upshots ?? [], ...props.task_info?.issues ?? [] ], [ "created_at" ])
+const items = computed(() => {
+  const result = [] as Item[]
+  const phase_info_repo = _.keyBy(props.phase_infos, it => it.id)
+
+  for (const task_upshot of _.orderBy(props.task_info.task_upshots, it => it.created_at)) {
+    const phase_info = phase_info_repo[task_upshot.phase_id]
+    result.push({ phase_info, task_upshot, issues: []})
+  }
+
+  for (const issue of _.orderBy(props.task_info.issues, it => it.created_at)) {
+    const index = _.findLastIndex(result, it => it.task_upshot.created_at <= issue.created_at)
+    if (index == -1) {
+      result[0].issues.push(issue)
+    } else {
+      result[index].issues.push(issue)
+    }
+  }
+
+  return result
 })
+
 </script>

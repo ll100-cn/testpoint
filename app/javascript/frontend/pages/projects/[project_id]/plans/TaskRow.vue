@@ -7,41 +7,33 @@
       </span>
 
       <div class="small me-3" style="width: 4rem;">
-        <TaskStateWithIcon :state="task_upshot_info.is_ignored() ? 'ignore' : task_upshot_info.state" />
+        <span v-if="task_upshot_info.task.ignore_at" class="text-secondary">
+          已忽略 <i class="far fa-eye-slash"></i>
+        </span>
+        <TaskStateLabel v-else :state="task_upshot_info.state" />
+
       </div>
 
       <span class="me-auto">
         <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
         {{ test_case.title }}
       </span>
-
-      <a class="d-none" :class="`task_${task.id}_on`" href="#" @click.passive="onTaskChanged">refresh-self</a>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { TaskUpshotInfo } from '@/models';
-import { PropType, computed } from 'vue';
-import TaskStateWithIcon from './TaskStateWithIcon.vue';
+import { TaskUpshotInfo } from '@/models'
+import { computed } from 'vue'
+import TaskStateLabel from '@/components/TaskStateLabel.vue'
 
-const props = defineProps({
-  task_upshot_info: {
-    type: Object as PropType<TaskUpshotInfo>,
-    required: true
-  }
-})
+const props = defineProps<{
+  task_upshot_info: TaskUpshotInfo
+}>()
 
 const emit = defineEmits<{
   click: [task_upshot_info: TaskUpshotInfo]
-  change: [task_upshot_info: TaskUpshotInfo]
 }>()
 
 const test_case = computed(() => props.task_upshot_info.test_case)
-const task = computed(() => props.task_upshot_info.task)
-
-async function onTaskChanged() {
-  emit('change', props.task_upshot_info)
-}
-
 </script>

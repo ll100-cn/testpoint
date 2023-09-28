@@ -1,1 +1,0 @@
-render "api/shared/task_upshot_info", task_upshot: @task_upshot, test_case_mapping: @test_case_mapping

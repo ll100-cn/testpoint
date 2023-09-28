@@ -30,7 +30,14 @@ export default class extends Controller {
       return currentPosition == position ? newMark : mark
     })
 
+    const inputEvent = new Event('input', {
+      bubbles: true,
+      cancelable: true,
+    })
+    inputElement.dispatchEvent(inputEvent)
+
     $(inputElement).trigger("change")
+
   }
 
   buildView() {

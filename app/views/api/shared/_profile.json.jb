@@ -3,6 +3,7 @@ json = {}
 json[:member_id] = member.id
 json[:project_id] = member.project_id
 json[:role] = member.role
+json[:role_text] = member.role_text
 json[:nickname] = member.nickname
 
 json[:project_name] = member.project.name
@@ -13,10 +14,14 @@ json[:permissions] = {
   IssueTemplate => [ :read, :create, :update, :manage ],
   TestCaseLabel => [ :read, :create, :update, :manage ],
   Platform => [ :read, :create, :update, :manage ],
+  Milestone => [ :read, :manage ],
   ::TestCase => [ :read, :create, :update, :manage ],
+
   Plan => [ :read, :create, :update, :manage ],
   Task => [ :read, :create, :update, :manage ],
-  Milestone => [ :read, :manage ],
+  TaskUpshot => [ :read, :create, :update, :manage ],
+  Phase => [ :read, :create, :update, :manage ],
+
   Issue => [ :read, :create, :update, :manage ],
   IssueSurvey => [ :read, :create, :update, :manage ],
   IssueRelationship => [ :read, :create, :update, :manage ],
@@ -27,6 +32,5 @@ json[:permissions] = {
   allow_actions = actions.filter { |action| can? action, klass }
   [ klass, allow_actions ]
 end.to_h
-
 
 json

@@ -21,12 +21,12 @@ export default function({ app }: AppContext) {
 
   router.beforeEach(async (to, from) => {
     const params = to.params as any
-    const project_id = _.toNumber(params.project_id)
 
-    if (project_id == null) {
+    if (params.project_id == null) {
       return
     }
 
+    const project_id = _.toNumber(params.project_id)
     await session.prepareProject(project_id, app.config.globalProperties)
   })
 }

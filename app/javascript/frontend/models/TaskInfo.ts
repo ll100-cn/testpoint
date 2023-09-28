@@ -1,11 +1,11 @@
 import { Type } from "class-transformer"
-import { Task } from "./Task"
-import { TaskUpshotInfo } from "./TaskUpshotInfo"
 import { Issue } from "./Issue"
+import { Task } from "./Task"
+import { TaskUpshot } from "./TaskUpshot"
 
 export class TaskInfo extends Task {
-  @Type(() => TaskUpshotInfo)
-  task_upshots: TaskUpshotInfo[]
+  @Type(() => TaskUpshot)
+  task_upshots: TaskUpshot[]
 
   @Type(() => Issue)
   issues: Issue[]
