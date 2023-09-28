@@ -122,8 +122,6 @@ export abstract class BaseRequest<T> {
       config.data = formData
     }
 
-    console.log(config.method, config.url)
-
     if (config.method === "GET") {
       const key = config.url
       const cached = await $keyv.get(key)

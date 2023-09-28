@@ -69,7 +69,7 @@
   </div>
 
   <teleport to="body">
-    <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
+    <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" @updated="onTaskUpshotInfoUpdated" />
     <BlankModal ref="phase_modal" :plan_info="plan_info" @created="onPhaseCreated" />
   </teleport>
 </template>

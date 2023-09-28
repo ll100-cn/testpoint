@@ -77,7 +77,6 @@ const { proxy } = getCurrentInstance()
 const page = usePageStore()
 
 const props = defineProps<{
-  current_phase_id: number
   plan_info: PlanInfo
 }>()
 

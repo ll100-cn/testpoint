@@ -2,15 +2,13 @@
   <div ref="el" class="modal-dialog modal-lg" role="document">
     <div v-if="!loading" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">
-          测试指南 - <span>{{ task_upshot_info.test_case.title }}</span>
-        </h5>
+        <h5 class="modal-title">{{ task_upshot_info.test_case.title }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
 
       <div class="modal-body">
         <div>
-          <textarea v-if="content.length > 0" v-model="content" data-controller="markdown" data-action="render->markdown#render" class="d-none" />
+          <textarea v-if="content.length > 0" v-model="content" data-controller="markdown" data-action="render->markdown#render" class="d-none" :readonly="!is_last_phase || !allow('update', task_upshot_info)" />
           <small v-else class="text-muted">无详细信息</small>
 
           <hr>
@@ -18,7 +16,7 @@
         </div>
       </div>
 
-      <div v-if="_.last(plan_info.phase_infos)?.id == task_upshot_info.phase_id" class="modal-footer x-spacer-2">
+      <div v-if="!is_last_phase" class="modal-footer x-spacer-2">
         <template v-if="task_info.ignore_at != null">
           <a v-if="allow('update', task_info)" class="btn btn-primary" href="#" @click.prevent="actioner.unignoreTask">取消忽略</a>
         </template>
@@ -27,7 +25,7 @@
 
           <template v-if="allow('update', task_upshot_info)">
             <a  class="btn btn-success" href="#" @click.prevent="actioner.updateTaskUpshotState('pass')">设置为通过</a>
-            <a class="btn btn-danger" href="#" @click.prevent="emit('switch', TaskShotFailureFrame, task_upshot_info, task_info)">不通过</a>
+            <a class="btn btn-danger" href="#" @click.prevent="emit('switch', TaskUpshotFailureFrame, task_upshot_info, task_info)">不通过</a>
             <a v-if="task_upshot_info.state_override && prev_task_upshot" class="btn btn-secondary" href="#" @click.prevent="actioner.updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</a>
           </template>
         </template>
@@ -43,12 +41,12 @@
 import { Actioner } from "@/components/Actioner"
 import { TASK_UPSHOT_STATES } from "@/constants"
 import * as q from '@/lib/requests'
-import { PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshotInfo } from '@/models'
+import { PlanInfo, TaskInfo, TaskUpshotInfo } from '@/models'
 import { usePageStore } from "@/store"
 import _ from 'lodash'
 import { Component, computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
 import TaskDetailsState from './TaskDetailsState.vue'
-import TaskShotFailureFrame from "./TaskShotFailureFrame.vue"
+import TaskUpshotFailureFrame from "./TaskUpshotFailureFrame.vue"
 
 const { proxy } = getCurrentInstance()
 const el = ref(null! as HTMLElement)
@@ -56,7 +54,6 @@ const page = usePageStore()
 const allow = page.inProject().allow
 
 const props = defineProps<{
-  current_phase_id: number
   plan_info: PlanInfo
 }>()
 
@@ -67,10 +64,12 @@ const emit = defineEmits<{
 
 const task_upshot_info = ref(null as TaskUpshotInfo)
 const task_info = ref(null as TaskInfo)
-const textarea = ref()
+
+const is_last_phase = computed(() => {
+  return _.last(props.plan_info.phase_infos)?.id == task_upshot_info.value.phase_id
+})
 
 const content = ref("")
-
 watch(content, (new_value) => {
   if (loading.value) {
     return

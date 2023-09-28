@@ -3,10 +3,10 @@
     <h2>计划列表</h2>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <button v-if="allow('create', Plan)" class="btn btn-primary" @click="PlanCreateModalRef.show()">新增计划</button>
+      <button v-if="allow('create', Plan)" class="btn btn-primary" @click="plan_modal.show(PlanCreateFrame)">新增计划</button>
     </div>
   </div>
-  <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="onCreated" />
+  <!-- <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="onCreated" /> -->
 
   <div class="page-filter">
     <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)" @input="onSearchInput">
@@ -50,6 +50,9 @@
   </div>
 
   <PaginationBar :pagination="plans" />
+  <teleport to="body">
+    <BlankModal ref="plan_modal" :test_case_stats="test_case_stats" @created="onCreated" />
+  </teleport>
 </template>
 
 <script setup lang="ts">
@@ -66,6 +69,8 @@ import PlanCreateModal from './PlanCreateModal.vue'
 import * as t from '@/lib/transforms'
 import { usePageStore } from '@/store'
 import { Plan } from '@/models'
+import BlankModal from '@/components/BlankModal.vue'
+import PlanCreateFrame from './PlanCreateFrame.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -74,6 +79,7 @@ const params = route.params as any
 const query = route.query
 const page = usePageStore()
 const allow = page.inProject().allow
+const plan_modal = ref(null as InstanceType<typeof BlankModal>)
 
 const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
 
@@ -92,10 +98,6 @@ const project_id = _.toNumber(params.project_id)
 const plans = ref(await new q.test.PlanReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.q = search
-}).perform())
-
-const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
 }).perform())
 
 const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())

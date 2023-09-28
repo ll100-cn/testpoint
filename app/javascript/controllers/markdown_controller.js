@@ -26,6 +26,13 @@ export default class extends Controller {
     const newMark = checkbox.checked ? "[x]" : "[ ]"
     const currentPosition = parseInt(checkbox.dataset.position)
 
+    console.log(inputElement.readOnly)
+
+    if (inputElement.readOnly) {
+      event.preventDefault()
+      return
+    }
+
     inputElement.value = replaceMarkdownTaskList(inputElement.value, function(mark, position) {
       return currentPosition == position ? newMark : mark
     })
@@ -59,6 +66,7 @@ export default class extends Controller {
   }
 
   bindEvents() {
+    console.log("111111111111111111111")
     $(this.viewElement).on("change.tasklist", "input[type=checkbox][data-position]", this.toggleTaskList.bind(this))
   }
 }

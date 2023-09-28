@@ -31,13 +31,13 @@
       </tbody>
     </table>
   </div>
-  <Teleport to="body">
+  <teleport to="body">
     <CaseModal
       ref="modal" :platform_repo="platform_repo"
       :label_repo="label_repo"
       @change="emit('change', $event)"
       @destroy="emit('destroy', $event)" />
-  </Teleport>
+  </teleport>
 
   <CaseBatchEditModal ref="batch_edit_modal" :platform_repo="platform_repo" :label_repo="label_repo" @batch_change="emit('batch_change')" />
 </template>

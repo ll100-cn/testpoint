@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import BootstrapHelper from '@/lib/BootstrapHelper'
-import { type Component, markRaw, nextTick, ref, useAttrs, onMounted } from "vue"
+import { type Component, markRaw, nextTick, ref, useAttrs, onMounted, onUnmounted, onBeforeUnmount } from "vue"
 
 const attrs = useAttrs()
 const el = ref(null! as HTMLElement)
@@ -49,5 +49,9 @@ onMounted(() => {
   el.value.addEventListener('hide.bs.modal', () => {
     frame_component.value = null
   })
+})
+
+onBeforeUnmount(() => {
+  BootstrapHelper.modal(el).dispose()
 })
 </script>
