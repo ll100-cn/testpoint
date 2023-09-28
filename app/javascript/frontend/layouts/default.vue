@@ -32,6 +32,7 @@ onBeforeRouteLeave(() => {
 })
 
 onErrorCaptured((err, vm, info) => {
+  console.error(err)
   if (errors.value.length == 0) {
     errors.value.push(err)
   }
