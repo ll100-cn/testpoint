@@ -11,7 +11,9 @@
   <div class="page-filter">
     <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)" @input="onSearchInput">
       <layouts.group code="creator_id_eq" label="成员">
-        <controls.select :collection="availiable_members" labelMethod="name" valueMethod="id" include_blank />
+        <controls.select include_blank>
+          <OptionsForMember :collection="members" except_level="reporter" />
+        </controls.select>
       </layouts.group>
     </layouts.form_inline>
   </div>
@@ -71,6 +73,7 @@ import { usePageStore } from '@/store'
 import { Plan } from '@/models'
 import BlankModal from '@/components/BlankModal.vue'
 import PlanCreateFrame from './PlanCreateFrame.vue'
+import OptionsForMember from '@/components/OptionsForMember.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -107,10 +110,6 @@ const test_case_stats = ref(await new q.case.TestCaseStatReq.List().setup(proxy,
 }).perform())
 
 const progress_bg_mapping = ref({ pass: "bg-success", failure: "bg-danger" })
-
-const availiable_members = computed(() => {
-  return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()
-})
 
 function onSearchInput(event) {
   setTimeout(() => {

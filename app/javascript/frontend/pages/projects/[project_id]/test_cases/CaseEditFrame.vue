@@ -1,6 +1,6 @@
 <template>
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" v-if="!loading">
       <div class="modal-header">
         <h5 class="modal-title">{{ test_case.title }}</h5>
         <a v-if="allow('destroy', test_case)" href="#" class="text-danger small" @click="archiveTestCase">归档</a>
@@ -25,11 +25,11 @@ import { Validations, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { usePageStore } from "@/store"
 import { Modal } from 'bootstrap'
 import $ from 'jquery'
-import { PropType, getCurrentInstance, reactive } from 'vue'
+import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
-import { usePageStore } from "@/store"
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()
@@ -37,47 +37,39 @@ const allow = page.inProject().allow
 
 const validations = reactive<Validations>(new Validations())
 
-const props = defineProps({
-  platform_repo: {
-    type: Object as PropType<EntityRepo<Platform>>,
-    required: true
-  },
-  label_repo: {
-    type: Object as PropType<EntityRepo<TestCaseLabel>>,
-    required: true
-  },
-  test_case: {
-    type: Object as PropType<TestCase>,
-    required: true
-  }
-})
-
-const emit = defineEmits<{
-  (e: 'change', test_case: TestCase): void,
-  (e: 'destroy', test_case: TestCase): void,
+const props = defineProps<{
+  platform_repo: EntityRepo<Platform>,
+  label_repo: EntityRepo<TestCaseLabel>,
 }>()
 
+const emit = defineEmits<{
+  (e: 'updated', test_case: TestCase): void,
+  (e: 'destroyed', test_case: TestCase): void,
+}>()
+
+const test_case = ref(null as TestCase)
+
 const former = Former.build({
-  title: props.test_case.title,
-  content: props.test_case.content,
-  role_name: props.test_case.role_name,
-  scene_name: props.test_case.scene_name,
-  group_name: props.test_case.group_name,
-  platform_ids: props.test_case.platform_ids,
-  label_ids: props.test_case.label_ids
+  title: null,
+  content: null,
+  role_name: null,
+  scene_name: null,
+  group_name: null,
+  platform_ids: null,
+  label_ids: null
 })
 
 former.perform = async function(event) {
   const new_test_case = await new q.case.TestCaseReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = 1
-    req.interpolations.id = props.test_case.id
+    req.interpolations.id = test_case.value.id
   }).perform(this.form)
 
   const targe = event.target as HTMLElement
   const modal = Modal.getOrCreateInstance(targe.closest('.modal'))
   modal.hide()
 
-  emit('change', new_test_case)
+  emit('updated', new_test_case)
 }
 
 async function archiveTestCase(event: Event) {
@@ -90,12 +82,12 @@ async function archiveTestCase(event: Event) {
 
   try {
     const new_test_case = await new q.case.TestCaseReq.Destroy().setup(proxy, (req) => {
-      req.interpolations.project_id = props.test_case.project_id
-      req.interpolations.id = props.test_case.id
+      req.interpolations.project_id = test_case.value.project_id
+      req.interpolations.id = test_case.value.id
     }).perform()
 
     $(event.target).closest('.modal').modal('hide')
-    emit('destroy', new_test_case)
+    emit('destroyed', new_test_case)
   } catch (err) {
     if (validations.handleError(err)) {
       alert(JSON.stringify(validations.fullMessages, null, 2))
@@ -105,4 +97,25 @@ async function archiveTestCase(event: Event) {
     throw err
   }
 }
+
+const loading = ref(true)
+
+function reset(a_test_case: TestCase) {
+  loading.value = true
+  test_case.value = a_test_case
+
+  former.form.title = test_case.value.title
+  former.form.content = test_case.value.content
+  former.form.role_name = test_case.value.role_name
+  former.form.scene_name = test_case.value.scene_name
+  former.form.group_name = test_case.value.group_name
+  former.form.platform_ids = test_case.value.platform_ids
+  former.form.label_ids = test_case.value.label_ids
+
+  nextTick(() => {
+    loading.value = false
+  })
+}
+
+defineExpose({ reset })
 </script>

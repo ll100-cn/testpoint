@@ -14,10 +14,14 @@
             <controls.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
           </layouts.group>
           <layouts.group code="creator_id" label="创建人">
-            <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', live_search: true }" include_blank />
+            <controls.select include_blank>
+              <OptionsForMember :collection="members" />
+            </controls.select>
           </layouts.group>
           <layouts.group code="assignee_id" label="受理人">
-            <controls.select v-bind="{ collection: assignees_collection, labelMethod: 'name', valueMethod: 'id' }" include_blank />
+            <controls.select include_blank>
+              <OptionsForMember :collection="members" except_level="reporter" />
+            </controls.select>
           </layouts.group>
         </div>
 
@@ -36,6 +40,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import OptionsForMember from '@/components/OptionsForMember.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
@@ -77,8 +82,4 @@ former.perform = async function() {
 
 const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
 const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
-
-const assignees_collection = computed(() => {
-  return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()
-})
 </script>

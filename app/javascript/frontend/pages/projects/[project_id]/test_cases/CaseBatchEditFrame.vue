@@ -1,10 +1,11 @@
 <template>
-  <div ref="modal" class="modal" tabindex="-1">
-    <div v-if="state === 'pending'" class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">批量编辑</h5>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div v-if="!loading" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">批量编辑</h5>
+      </div>
+
+      <template v-if="state === 'pending'">
         <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
           <div class="modal-body">
             <FormErrorAlert />
@@ -46,27 +47,17 @@
             <layouts.submit>保存</layouts.submit>
           </div>
         </layouts.form_horizontal>
-      </div>
-    </div>
+      </template>
 
-    <div v-if="state === 'submitting'" class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">提交中</h5>
-        </div>
+      <template v-if="state === 'submitting'">
         <div class="modal-body">
           <h3>表单提交中</h3>
         </div>
-      </div>
-    </div>
+      </template>
 
-    <div v-if="state === 'submitted'" class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">提交结束, 错误数 {{ result.filter((it) => { return it.error != null }).length }} 个</h5>
-        </div>
+      <template v-if="state === 'submitted'">
         <div class="modal-body">
-          <h3>表单提交中</h3>
+          <h5>提交结束, 错误数 {{ result.filter((it) => { return it.error != null }).length }} 个</h5>
           <template v-for="info in result" :key="info">
             <div>
               <span>名称: {{ info.test_case.title }}</span>
@@ -83,7 +74,7 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" @click="state = 'pending'">重新编辑</button>
         </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -94,31 +85,23 @@ import { Validations, controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
-import { Modal } from 'bootstrap'
 import _ from 'lodash'
-import { PropType, computed, getCurrentInstance, nextTick, reactive, ref } from 'vue'
+import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
 const validations = reactive<Validations>(new Validations())
 
 const { proxy } = getCurrentInstance()
 const state = ref('pending') // [ pending, submitting, submited ]
 
-const props = defineProps({
-  platform_repo: {
-    type: Object as PropType<EntityRepo<Platform>>,
-    required: true
-  },
-  label_repo: {
-    type: Object as PropType<EntityRepo<TestCaseLabel>>,
-    required: true
-  }
-})
-
-const emit = defineEmits<{
-  (e: 'batch_change'): void
+const props = defineProps<{
+  platform_repo: EntityRepo<Platform>,
+  label_repo: EntityRepo<TestCaseLabel>,
 }>()
 
-const modal = ref<InstanceType<typeof HTMLElement>>()
+const emit = defineEmits<{
+  updated: []
+}>()
+
 const result = ref<{
   test_case: TestCase,
   error: string | null
@@ -170,7 +153,7 @@ former.perform = async function() {
     result.value.push(info)
   }
   state.value = 'submitted'
-  emit('batch_change')
+  emit('updated')
 }
 
 const form_enabled_mapping = ref({
@@ -183,17 +166,8 @@ const form_enabled_mapping = ref({
   label_ids: false
 })
 
-const test_cases = ref<TestCase[]>([])
-function show(all_test_cases: TestCase[]) {
-  test_cases.value = all_test_cases
 
-  resetForm()
-
-  nextTick(() => {
-    const $modal = Modal.getOrCreateInstance(modal.value)
-    $modal.show()
-  })
-}
+const test_cases = ref([] as TestCase[])
 
 function resetForm() {
   for (let i = 0; i < test_cases.value.length; i++) {
@@ -227,8 +201,18 @@ function resetForm() {
   }
 }
 
-defineExpose({
-  show
-})
+const loading = ref(true)
+function reset(a_test_cases: TestCase[]) {
+  loading.value = true
+  test_cases.value = a_test_cases
+
+  resetForm()
+
+  nextTick(() => {
+    loading.value = false
+  })
+}
+
+defineExpose({ reset })
 
 </script>

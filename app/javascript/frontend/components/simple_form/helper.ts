@@ -1,7 +1,7 @@
 import { Validation } from "@/models"
 import { LabelHTMLAttributes, Ref, computed, inject, ref } from "vue"
 
-export interface WrapperOptions {
+export interface WrapperConfig {
   size?: 'default' | 'small' | 'large'
   disabled?: boolean
   control_id?: string
@@ -10,17 +10,17 @@ export interface WrapperOptions {
   control_wrap_class?: string
 }
 
-export interface ControlOptions {
+export interface ControlConfig {
   size?: 'default' | 'small' | 'large'
   disabled?: boolean
   control_id?: string
 }
 
-export interface GroupProps extends WrapperOptions {
+export interface GroupProps extends WrapperConfig {
 }
 
 export interface ControlProps {
-  options?: ControlOptions
+  config?: ControlConfig
 }
 
 export function validation(props: { validation?: Validation }) {
@@ -42,7 +42,7 @@ export function modelValue(define_model_value: Ref<any>) {
   return inject_model_value
 }
 
-export function buildLabelAttrs(options: WrapperOptions) {
+export function buildLabelAttrs(options: WrapperConfig) {
   return computed(() => {
     const attrs =  <LabelHTMLAttributes>{ class: [] }
     if (options.size == 'small') {
@@ -59,7 +59,7 @@ export function buildLabelAttrs(options: WrapperOptions) {
   })
 }
 
-export function buildControlAttrs(options: Ref<ControlOptions>, validation: Ref<Validation>) {
+export function buildControlAttrs(options: Ref<ControlConfig>, validation: Ref<Validation>) {
   return computed(() => {
     const attrs = { class: [] } as any
 
@@ -87,10 +87,10 @@ export function buildControlAttrs(options: Ref<ControlOptions>, validation: Ref<
   })
 }
 
-export function buildControlOptions(props: ControlProps) {
-  const default_control_options = inject('default_control_options') as Ref<ControlOptions>
+export function buildControlConfig(props: ControlProps) {
+  const default_control_config = inject('default_control_config') as Ref<ControlConfig>
 
   return computed(() => {
-    return { ...default_control_options?.value, ...props.options }
+    return { ...default_control_config?.value, ...props.config }
   })
 }

@@ -1,3 +1,5 @@
+import _ from "lodash"
+
 export const DATE_FORMAT = 'YYYY-MM-DD'
 
 export const DATETIME_SHORT_FORMAT = 'MM[月]DD[日] HH:mm'
@@ -19,6 +21,11 @@ export const ISSUE_STATE_MAPPING = {
   resolved: "已解决",
   closed: "已关闭",
 }
+
+export const OPTIONS_FOR_ISSUE_STATE = _.map(ISSUE_STATE_MAPPING, (value, key) => {
+  return { label: value, value: key }
+})
+
 export const ISSUE_PRIORITY_OPTIONS = [
   { label: "低优先级", value: "low" },
   { label: "普通", value: "normal" },

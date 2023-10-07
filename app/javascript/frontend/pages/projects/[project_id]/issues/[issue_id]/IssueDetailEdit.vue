@@ -8,7 +8,7 @@
   </div>
 
   <div v-if="mode == 'edit'">
-    <layouts.form_vertical v-bind="{ former }" @submit.prevent="onSubmit" :default_wrapper_options="{ size: 'small' }">
+    <layouts.form_vertical v-bind="{ former }" @submit.prevent="onSubmit" :default_wrapper_config="{ size: 'small' }">
       <div class="mb-2">
         <slot name="editable" />
       </div>

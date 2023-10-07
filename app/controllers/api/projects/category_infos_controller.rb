@@ -3,8 +3,6 @@ class Api::Projects::CategoryInfosController < Api::Projects::BaseController
   load_and_authorize_resource :category, through: :project, parent: false
 
   def index
-    @categories = @categories.page(params[:page])
-    kaminari_headers(@categories)
   end
 
   def create

@@ -1,5 +1,4 @@
 <template>
-  <div ref="modal" class="modal" tabindex="-1">
     <template v-if="test_case">
       <CardShow v-if="mode == 'show'" :test_case="test_case" :history="history" @change-mode="onModeChange" />
       <CaseEditFrame
@@ -9,7 +8,6 @@
         @destroy="emit('destroy', $event)"
         @change="emit('change', $event)" />
     </template>
-  </div>
 </template>
 
 <script setup lang="ts">

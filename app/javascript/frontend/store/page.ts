@@ -15,7 +15,7 @@ class ProjectCache {
     this.allow = this.allow.bind(this)
   }
 
-  request<T extends BaseRequest<any>>(klass: new () => T) {
+  request<T extends BaseRequest<any>>(klass: new () => T): T {
     if (this.caches.has(klass)) {
       return this.caches.get(klass)
     } else {

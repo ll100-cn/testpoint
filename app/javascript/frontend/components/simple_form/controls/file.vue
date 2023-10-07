@@ -23,7 +23,7 @@ const define_model_value = defineModel<any>()
 const model_value = helper.modelValue(define_model_value)
 const validation = helper.validation(props)
 
-const options = helper.buildControlOptions(props)
+const options = helper.buildControlConfig(props)
 const control_attrs = helper.buildControlAttrs(options, validation)
 
 function onInputChanged(event: Event) {

@@ -1,6 +1,6 @@
 <template>
   <div id="tp-main">
-    <a v-if="allow('update', TestCase)" href="#" @click="batchEdit()">编辑 ({{ select_test_case_ids.length }})</a>
+    <a v-if="allow('update', TestCase)" href="#" @click="emit('batch', CaseBatchEditFrame, select_test_cases)">编辑 ({{ select_test_case_ids.length }})</a>
     <table class="table" data-controller="select-all">
       <thead>
         <tr>
@@ -16,7 +16,7 @@
             <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
           </td>
           <td>
-            <a href="#" @click="showModal(test_case)">
+            <a href="#" @click="emit('modal', CaseShowFrame, test_case)">
               <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
               {{ test_case.title }}
             </a>
@@ -31,25 +31,16 @@
       </tbody>
     </table>
   </div>
-  <teleport to="body">
-    <CaseModal
-      ref="modal" :platform_repo="platform_repo"
-      :label_repo="label_repo"
-      @change="emit('change', $event)"
-      @destroy="emit('destroy', $event)" />
-  </teleport>
-
-  <CaseBatchEditModal ref="batch_edit_modal" :platform_repo="platform_repo" :label_repo="label_repo" @batch_change="emit('batch_change')" />
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from "@/models";
-import CasePlatformCell from "./CasePlatformCell.vue"
-import CaseLabelCell from "./CaseLabelCell.vue"
-import CaseModal from "./CaseModal.vue"
-import { PropType, computed, ref } from "vue";
-import CaseBatchEditModal from "./CaseBatchEditModal.vue"
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from "@/models"
 import { usePageStore } from "@/store"
+import { Component, PropType, computed, ref } from "vue"
+import CaseBatchEditFrame from "./CaseBatchEditFrame.vue"
+import CaseLabelCell from "./CaseLabelCell.vue"
+import CasePlatformCell from "./CasePlatformCell.vue"
+import CaseShowFrame from "./CaseShowFrame.vue"
 
 const page = usePageStore()
 const allow = page.inProject().allow
@@ -69,16 +60,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits<{
-  (e: 'change', test_case: TestCase): void,
-  (e: 'destroy', test_case: TestCase): void,
-  (e: 'batch_change'): void
-}>()
-
-const modal = ref<InstanceType<typeof CaseModal>>()
-function showModal(test_case: TestCase) {
-  modal.value.show(test_case)
+export type Emits = {
+  modal: [ Component, TestCase ],
+  batch: [ Component, TestCase[] ],
 }
+
+const emit = defineEmits<Emits>()
 
 const select_test_case_ids = ref<number[]>([])
 
@@ -87,10 +74,4 @@ const select_test_cases = computed(() => {
     return select_test_case_ids.value.includes(it.id)
   })
 })
-
-const batch_edit_modal = ref<InstanceType<typeof CaseBatchEditModal>>()
-function batchEdit() {
-  batch_edit_modal.value.show(select_test_cases.value)
-}
-
 </script>

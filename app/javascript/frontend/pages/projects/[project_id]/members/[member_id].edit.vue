@@ -6,7 +6,7 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
       <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields mode="edit" :project_id="project_id" v-bind="{ former }" />
+        <Fields />
 
         <hr class="x-form-divider-through">
 
@@ -40,7 +40,6 @@ const member = ref(await new q.project.MemberReq.Get().setup(proxy, (req) => {
 }).perform())
 
 const former = Former.build({
-  user_email: member.value.email,
   nickname: member.value.name,
   role: member.value.role
 })

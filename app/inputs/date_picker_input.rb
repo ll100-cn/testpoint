@@ -1,6 +1,6 @@
 class DatePickerInput < SimpleForm::Inputs::Base
 
-  def input(wrapper_options)
+  def input(wrapper_config)
     value = object.send(attribute_name)
     input_html_options[:value] ||= localized(value, wrapper_attributes[:data]["alt-format"])
     input_html_options[:class] << "form-control"
