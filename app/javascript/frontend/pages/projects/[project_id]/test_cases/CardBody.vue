@@ -6,45 +6,25 @@
 
     <div class="col">
       <CaseTable
+        v-bind="props"
         :test_cases="avaiable_test_cases"
-        :platform_repo="platform_repo"
-        :label_repo="label_repo"
-        @modal="(...args) => emit('modal', ...args)"
-        @batch="(...args) => emit('batch', ...args)"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, Platform, TestCase, TestCaseLabel, TestCaseStat } from '@/models'
+import { TestCaseStat } from '@/models'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { PropType, computed } from 'vue'
-import CaseTable, { Emits } from './CaseTable.vue'
+import { computed } from 'vue'
 import FolderSide from '../FolderSide.vue'
 import { ColumnFilter, Filter } from '../types'
+import CaseTable, { Props, Listeners } from './CaseTable.vue'
 
-const props = defineProps({
-  label_repo: {
-    type: Object as PropType<EntityRepo<TestCaseLabel>>,
-    required: true
-  },
-  platform_repo: {
-    type: Object as PropType<EntityRepo<Platform>>,
-    required: true
-  },
-  test_cases: {
-    type: Array<TestCase>,
-    required: true
-  },
-  filter: {
-    type: Object as PropType<Filter>,
-    required: true
-  }
-})
-
-const emit = defineEmits<Emits>()
+const props = defineProps<Props & Listeners & {
+  filter: Filter
+}>()
 
 const test_case_stats = computed(() => {
   const result = _(props.test_cases).groupBy((it) => {

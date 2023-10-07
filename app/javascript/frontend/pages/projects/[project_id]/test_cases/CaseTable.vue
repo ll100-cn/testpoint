@@ -1,6 +1,6 @@
 <template>
   <div id="tp-main">
-    <a v-if="allow('update', TestCase)" href="#" @click="emit('batch', CaseBatchEditFrame, select_test_cases)">编辑 ({{ select_test_case_ids.length }})</a>
+    <a v-if="allow('update', TestCase)" href="#" @click="onBatch?.(CaseBatchEditFrame, select_test_cases)">编辑 ({{ select_test_case_ids.length }})</a>
     <table class="table" data-controller="select-all">
       <thead>
         <tr>
@@ -16,7 +16,7 @@
             <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
           </td>
           <td>
-            <a href="#" @click="emit('modal', CaseShowFrame, test_case)">
+            <a href="#" @click="onModal?.(CaseShowFrame, test_case)">
               <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
               {{ test_case.title }}
             </a>
@@ -45,27 +45,18 @@ import CaseShowFrame from "./CaseShowFrame.vue"
 const page = usePageStore()
 const allow = page.inProject().allow
 
-const props = defineProps({
-  label_repo: {
-    type: Object as PropType<EntityRepo<TestCaseLabel>>,
-    required: true
-  },
-  platform_repo: {
-    type: Object as PropType<EntityRepo<Platform>>,
-    required: true
-  },
-  test_cases: {
-    type: Array<TestCase>,
-    required: true
-  }
-})
-
-export type Emits = {
-  modal: [ Component, TestCase ],
-  batch: [ Component, TestCase[] ],
+export interface Listeners {
+  onModal?: (component: Component, test_case: TestCase) => void
+  onBatch?: (component: Component, test_cases: TestCase[]) => void
 }
 
-const emit = defineEmits<Emits>()
+export interface Props {
+  label_repo: EntityRepo<TestCaseLabel>
+  platform_repo: EntityRepo<Platform>
+  test_cases: TestCase[]
+}
+
+const props = defineProps<Props & Listeners>()
 
 const select_test_case_ids = ref<number[]>([])
 
