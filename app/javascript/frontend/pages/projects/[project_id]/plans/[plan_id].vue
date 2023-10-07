@@ -35,7 +35,7 @@
     <div class="card-header bg-white d-flex">
       <h4 class="me-auto my-auto">任务列表</h4>
 
-      <layouts.form_inline :former="searcher" :default_wrapper_options="{ size: 'small' }">
+      <layouts.form_inline :former="searcher" :default_wrapper_config="{ size: 'small' }">
         <layouts.group code="state_eq" label="状态">
           <controls.dropdown #default="{ Component }">
             <component :is="Component" value="pending"><TaskStateLabel state="pending" /></component>

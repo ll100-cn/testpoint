@@ -6,7 +6,7 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
       <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields :project_id="project_id" v-bind="{ former }" />
+        <Fields />
 
         <hr class="x-form-divider-through">
 

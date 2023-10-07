@@ -6,7 +6,9 @@
       <controls.string />
     </layouts.group>
     <layouts.group code="default_assignee_id" label="建议工单受理人">
-      <controls.select v-bind="{ collection: availiable_members, labelMethod: 'name', valueMethod: 'id' }" />
+      <controls.select include_blank>
+        <OptionsForMember :collection="members" except_level="reporter" />
+      </controls.select>
     </layouts.group>
   </div>
 </template>
@@ -15,15 +17,10 @@
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { controls, layouts } from "@/components/simple_form"
 import { Member } from '@/models'
-import _ from 'lodash'
-import { computed } from "vue"
+import OptionsForMember from "@/components/OptionsForMember.vue"
 
 const props = defineProps<{
   project_id: string
   members: Member[]
 }>()
-
-const availiable_members = computed(() => {
-  return _(props.members).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()
-})
 </script>

@@ -21,6 +21,16 @@ export const Decimal = Transform(({ value }) => {
   return Big(value)
 })
 
+export function Enum<T>(e: T) {
+  return Transform(({ value }) => {
+    if (value == null || value == "") {
+      return null
+    }
+
+    return e[value as keyof T]
+  })
+}
+
 export const Number = Klass(globalThis.Number)
 export const Date = Klass(globalThis.Date)
 export const String = Klass(globalThis.String)

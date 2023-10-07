@@ -10,7 +10,9 @@
           <FormErrorAlert />
           <div class="row gy-3">
             <layouts.group code="template_id" label="模版">
-              <controls.select :collection="issue_templates" v-bind="{ valueMethod: 'id', labelMethod: 'name' }" />
+              <controls.select>
+                <OptionsForSelect :collection="issue_templates.map(it => ({ label: it.name, value: it.id }))" />
+              </controls.select>
             </layouts.group>
             <layouts.group code="remark" label="备注">
               <controls.string />
@@ -28,6 +30,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
 import BootstrapHelper from "@/lib/BootstrapHelper"

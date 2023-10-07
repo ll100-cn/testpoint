@@ -15,7 +15,9 @@
         <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="state" title="状态">
           <template #editable>
             <layouts.group code="state">
-              <controls.select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
+              <controls.select>
+                <OptionsForSelect :collection="OPTIONS_FOR_ISSUE_STATE" />
+              </controls.select>
             </layouts.group>
           </template>
 
@@ -25,7 +27,9 @@
         <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="priority" title="优先级">
           <template #editable>
             <layouts.group code="priority">
-              <controls.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value' }" />
+              <controls.select>
+                <OptionsForSelect :collection="ISSUE_PRIORITY_OPTIONS" />
+              </controls.select>
             </layouts.group>
           </template>
 
@@ -35,7 +39,9 @@
         <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former }" code="creator_id" title="创建人">
           <template #editable>
             <layouts.group code="creator_id">
-              <controls.select v-bind="{ collection: creator_collection, labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.select include_blank>
+                <OptionsForMember :collection="members" />
+              </controls.select>
             </layouts.group>
           </template>
 
@@ -45,7 +51,9 @@
         <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="assignee_id" title="受理人">
           <template #editable>
             <layouts.group code="assignee_id">
-              <controls.select v-bind="{ collection: assignee_collection, labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.select include_blank>
+                <OptionsForMember :collection="members" except_level="reporter" />
+              </controls.select>
             </layouts.group>
           </template>
 
@@ -65,7 +73,9 @@
         <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="milestone_id" title="里程碑">
           <template #editable>
             <layouts.group code="milestone_id">
-              <controls.select v-bind="{ collection: milestones, labelMethod: 'title', valueMethod: 'id' }" />
+              <controls.select>
+                <OptionsForSelect :collection="milestones.map(it => ({ label: it.title, value: it.id }))" />
+              </controls.select>
             </layouts.group>
           </template>
 
@@ -96,15 +106,18 @@ import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import { ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING } from "@/constants"
+import { ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
-import { IssueInfo } from "@/models"
+import { IssueInfo, Member, Role } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
+import OptionsForMember from "@/components/OptionsForMember.vue"
+import OptionsForSelect from "@/components/OptionsForSelect.vue"
+import OptionsForSelect from "@/components/OptionsForSelect.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
@@ -143,20 +156,6 @@ former.perform = async function(code: string) {
 const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
 const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
 const milestones = ref(await page.inProject().request(q.project.MilestoneReq.List).setup(proxy).perform())
-
-const issue_state_mapping_collection = computed(() => {
-  return _.map(ISSUE_STATE_MAPPING, (value, key) => {
-    return { label: value, value: key }
-  })
-})
-
-const creator_collection = computed(() => {
-  return _(members.value).sortBy('developer').groupBy('role_text').value()
-})
-
-const assignee_collection = computed(() => {
-  return _(members.value).reject([ 'role', 'reporter' ]).sortBy('developer').groupBy('role_text').value()
-})
 
 async function subscribe() {
   const a_subscription = await new q.bug.SubscriptionReq.Create().setup(proxy, (req) => {

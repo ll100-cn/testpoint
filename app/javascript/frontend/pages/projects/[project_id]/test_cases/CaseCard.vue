@@ -1,7 +1,7 @@
 <template>
   <div class="card page-card">
     <div class="card-header bg-white d-flex">
-      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit" :default_wrapper_options="{ size: 'small' }">
+      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit" :default_wrapper_config="{ size: 'small' }">
         <layouts.group code="platform_id" label="平台">
           <controls.dropdown #default="{ Component }">
             <component v-for="platform in _platforms" :is="Component" :value="platform.id">

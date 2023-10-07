@@ -10,12 +10,16 @@
 
         <div class="row gy-3">
           <layouts.group code="target_project_id" label="项目">
-            <controls.select v-bind="{ collection: projects, labelMethod: 'name', valueMethod: 'id' }" include_blank />
+            <controls.select include_blank>
+              <OptionsForSelect :collection="projects.map(it => ({ label: it.name, value: it.id }))" />
+            </controls.select>
           </layouts.group>
 
           <layouts.group code="target_category_id" label="分类">
             <span class="form-control-plaintext text-muted" v-if="actioner.processing">载入中...</span>
-            <controls.select v-else v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id' }" include_blank />
+            <controls.select v-else include_blank>
+              <OptionsForCategory :collection="categories" />
+            </controls.select>
           </layouts.group>
         </div>
 
@@ -33,6 +37,8 @@
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import OptionsForCategory from "@/components/OptionsForCategory.vue"
+import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'

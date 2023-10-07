@@ -12,10 +12,14 @@
       <controls.string />
     </layouts.group>
     <layouts.group code="default_category_id" label="预设分类">
-      <controls.select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', includeBlank: true }" />
+      <controls.select include_blank>
+        <OptionsForCategory :collection="categories" />
+      </controls.select>
     </layouts.group>
     <layouts.group code="default_priority" label="预设优先级">
-      <controls.select v-bind="{ collection: ISSUE_PRIORITY_OPTIONS, labelMethod: 'label', valueMethod: 'value', includeBlank: true }" />
+      <controls.select include_blank>
+        <OptionsForSelect :collection="ISSUE_PRIORITY_OPTIONS" />
+      </controls.select>
     </layouts.group>
     <layouts.group code="content_suggestion" label="预设内容">
       <controls.markdown />
@@ -54,6 +58,8 @@ import Former from '@/components/simple_form/Former'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 import * as q from '@/lib/requests'
 import { usePageStore } from '@/store'
+import OptionsForCategory from '@/components/OptionsForCategory.vue'
+import OptionsForSelect from '@/components/OptionsForSelect.vue'
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()

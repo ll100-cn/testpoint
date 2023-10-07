@@ -18,7 +18,7 @@
 import { Validation } from '@/models'
 import { provide, ref, useSlots } from 'vue'
 import Former from '../Former'
-import { ControlOptions, WrapperOptions } from '../helper'
+import { ControlConfig, WrapperConfig } from '../helper'
 import HorizontalGroup from './HorizontalGroup.vue'
 import group from './group.vue'
 
@@ -26,12 +26,12 @@ const slots = useSlots()
 
 const props = defineProps<{
   former: Former<any>
-  default_wrapper_options?: WrapperOptions
-  default_control_options?: ControlOptions
+  default_wrapper_config?: WrapperConfig
+  default_control_config?: ControlConfig
 }>()
 
 provide("GroupComponent", HorizontalGroup)
 provide("former", props.former)
-provide("default_wrapper_options", ref(<WrapperOptions>{ label_wrap_class: 'col-2', ...props.default_wrapper_options }))
-provide("default_control_options", ref(<ControlOptions>{ ...props.default_control_options }))
+provide("default_wrapper_config", ref(<WrapperConfig>{ label_wrap_class: 'col-2', ...props.default_wrapper_config }))
+provide("default_control_config", ref(<ControlConfig>{ ...props.default_control_config }))
 </script>

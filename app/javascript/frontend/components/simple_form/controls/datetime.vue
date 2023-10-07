@@ -29,7 +29,7 @@ const define_model_value = defineModel<any>({ local: true })
 const model_value = helper.modelValue(define_model_value)
 const validation = helper.validation(props)
 
-const options = helper.buildControlOptions(props)
+const options = helper.buildControlConfig(props)
 const input_group_attrs = computed(() => {
   const attrs = { class: [] } as any
 
