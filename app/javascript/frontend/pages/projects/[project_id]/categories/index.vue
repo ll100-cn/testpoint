@@ -21,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="category in categories.list" :key="category.id">
+          <template v-for="category in categories" :key="category.id">
             <tr>
               <td>{{ category.id }}</td>
               <td>
@@ -42,9 +42,6 @@
         </tbody>
       </table>
     </div>
-    <div class="card-footer">
-      <PaginationBar :pagination="categories" />
-    </div>
   </div>
 </template>
 
@@ -52,7 +49,6 @@
 import { Actioner } from '@/components/Actioner'
 import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
-import PaginationBar from "@/components/PaginationBar.vue"
 import * as q from '@/lib/requests'
 import { Category } from '@/models'
 import { usePageStore } from '@/store'
@@ -68,7 +64,7 @@ const allow = page.inProject().allow
 
 const project_id = params.project_id
 
-const categories = ref(await new q.project.CategoryInfoReq.Page().setup(proxy, (req) => {
+const categories = ref(await new q.project.CategoryInfoReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

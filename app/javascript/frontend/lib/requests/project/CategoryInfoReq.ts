@@ -1,9 +1,9 @@
 import { Category, CategoryInfo } from "@/models"
-import BasePaginationRequest from "../BasePaginationRequest"
 import BaseObjectRequest from "../BaseObjectRequest"
+import BaseArrayRequest from "../BaseArrayRequest"
 
 export default {
-  Page: class extends BasePaginationRequest<CategoryInfo> {
+  List: class extends BaseArrayRequest<CategoryInfo> {
     constructor() {
       super()
       this.method = "GET"

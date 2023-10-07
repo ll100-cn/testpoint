@@ -14,6 +14,6 @@ export class Pagination<T> {
     this.limit = _.toInteger(headers['x-pagination-limit'])
     this.total_count = _.toInteger(headers['x-pagination-total-count'])
     this.current_page = Math.floor(this.offset / this.limit) + 1
-    this.total_pages = Math.ceil(this.total_count / this.limit)
+    this.total_pages = this.total_count == 0 ? 1 : Math.ceil(this.total_count / this.limit)
   }
 }
