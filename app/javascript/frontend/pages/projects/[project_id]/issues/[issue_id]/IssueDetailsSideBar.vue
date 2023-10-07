@@ -117,7 +117,6 @@ import { computed, getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
-import OptionsForSelect from "@/components/OptionsForSelect.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
