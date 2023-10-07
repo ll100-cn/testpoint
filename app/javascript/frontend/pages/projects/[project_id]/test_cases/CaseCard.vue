@@ -34,14 +34,18 @@
     <CardBody
       :test_cases="search_test_cases"
       :platform_repo="platform_repo"
-      :label_repo="lable_repo"
+      :label_repo="label_repo"
       :filter="filter"
-      @change="onTestCaseChanged"
-      @destroy="onTestCaseDestroyed"
-      @batch_change="onBatchChanged" />
+      @modal="(...args) => case_modal.show(...args)"
+      @batch="(...args) => case_batch_modal.show(...args)" />
 
-    <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="lable_repo" @create="onTestCaseCreated" />
+    <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
   </div>
+
+  <teleport to="body">
+    <BlankModal ref="case_modal" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankModal>
+    <BlankModal ref="case_batch_modal" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></BlankModal>
+  </teleport>
 </template>
 
 <script setup lang="ts">
@@ -59,6 +63,7 @@ import { ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import CardNew from './CardNew.vue'
 import { usePageStore } from '@/store'
+import BlankModal from '@/components/BlankModal.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -67,6 +72,8 @@ const params = route.params as any
 const query = utils.queryToPlain(route.query)
 const page = usePageStore()
 const allow = page.inProject().allow
+const case_modal = ref<InstanceType<typeof BlankModal>>()
+const case_batch_modal = ref<InstanceType<typeof BlankModal>>()
 
 class Search {
   @t.String group_name_search?: string = undefined
@@ -99,7 +106,7 @@ const _labels = ref(await new q.project.TestCaseLabelReq.List().setup(proxy, (re
   req.interpolations.project_id = project_id
 }).perform())
 
-const lable_repo = computed(() => {
+const label_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>().setup(_labels.value)
 })
 
@@ -111,7 +118,6 @@ const platform_repo = computed(() => {
   return new EntityRepo<Platform>().setup(_platforms.value)
 })
 
-
 const search_test_cases = computed(() => {
   let scope = _(test_cases)
 
@@ -120,7 +126,7 @@ const search_test_cases = computed(() => {
     scope = scope.filter(it => it.platform_ids.includes(platform.id))
   }
 
-  const label = lable_repo.value.find(_.toNumber(query.label_id))
+  const label = label_repo.value.find(_.toNumber(query.label_id))
   if (label) {
     scope = scope.filter(it => it.label_ids.includes(label.id))
   }
@@ -144,7 +150,11 @@ function showModal(project_id: number) {
   modal.value.show(project_id.toString())
 }
 
-function onTestCaseChanged(test_case: TestCase) {
+function onTestCaseSend(test_case: TestCase) {
+  console.log('onTestCaseSend', test_case)
+}
+
+function onTestCaseUpdated(test_case: TestCase) {
   router.go(0)
 }
 
@@ -152,7 +162,7 @@ function onTestCaseDestroyed(test_case: TestCase) {
   router.go(0)
 }
 
-function onBatchChanged() {
+function onBatchUpdated() {
   router.go(0)
 }
 

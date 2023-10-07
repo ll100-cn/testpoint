@@ -9,9 +9,9 @@
         :test_cases="avaiable_test_cases"
         :platform_repo="platform_repo"
         :label_repo="label_repo"
-        @change="emit('change', $event)"
-        @destroy="emit('destroy', $event)"
-        @batch_change="emit('batch_change')" />
+        @modal="(...args) => emit('modal', ...args)"
+        @batch="(...args) => emit('batch', ...args)"
+      />
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ import { EntityRepo, Platform, TestCase, TestCaseLabel, TestCaseStat } from '@/m
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { PropType, computed } from 'vue'
-import CaseTable from './CaseTable.vue'
+import CaseTable, { Emits } from './CaseTable.vue'
 import FolderSide from '../FolderSide.vue'
 import { ColumnFilter, Filter } from '../types'
 
@@ -44,11 +44,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits<{
-  (e: 'change', test_case: TestCase): void,
-  (e: 'destroy', test_case: TestCase): void,
-  (e: 'batch_change'): void
-}>()
+const emit = defineEmits<Emits>()
 
 const test_case_stats = computed(() => {
   const result = _(props.test_cases).groupBy((it) => {
