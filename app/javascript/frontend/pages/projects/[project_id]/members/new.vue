@@ -6,7 +6,13 @@
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
       <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields />
+        <Fields>
+          <template #default>
+            <layouts.group code="user_email" label="邮箱">
+              <controls.string />
+            </layouts.group>
+          </template>
+        </Fields>
 
         <hr class="x-form-divider-through">
 
@@ -20,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
+import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'

@@ -48,12 +48,18 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import Validations from '@/components/simple_form/Validations';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router'
+import * as utils from "@/lib/utils"
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
+const route = useRoute()
 const validations = reactive<Validations>(new Validations())
+const query = utils.queryToPlain(route.query)
 
-const users = ref(await new q.admin.UserReq.Page().setup(proxy).perform())
+const users = ref(await new q.admin.UserReq.Page().setup(proxy, req => {
+  req.query = utils.plainToQuery(query)
+}).perform())
 
 async function onRemove(user_id) {
   if (!confirm("是否删除用户？")) {

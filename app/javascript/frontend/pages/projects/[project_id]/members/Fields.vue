@@ -2,6 +2,7 @@
   <FormErrorAlert />
 
   <div class="row gy-3">
+    <slot />
     <layouts.group code="nickname" label="昵称">
       <controls.string />
     </layouts.group>
