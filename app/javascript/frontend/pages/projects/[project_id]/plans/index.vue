@@ -6,7 +6,6 @@
       <button v-if="allow('create', Plan)" class="btn btn-primary" @click="plan_modal.show(PlanCreateFrame)">新增计划</button>
     </div>
   </div>
-  <!-- <PlanCreateModal ref="PlanCreateModalRef" :platforms="platforms" :test_case_stats="test_case_stats" @created="onCreated" /> -->
 
   <div class="page-filter">
     <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)" @input="onSearchInput">

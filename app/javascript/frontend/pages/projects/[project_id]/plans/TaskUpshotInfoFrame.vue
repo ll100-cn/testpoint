@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div v-if="!is_last_phase" class="modal-footer x-spacer-2">
+      <div v-if="is_last_phase" class="modal-footer x-spacer-2">
         <template v-if="task_info.ignore_at != null">
           <a v-if="allow('update', task_info)" class="btn btn-primary" href="#" @click.prevent="actioner.unignoreTask">取消忽略</a>
         </template>
@@ -55,6 +55,7 @@ const allow = page.inProject().allow
 
 const props = defineProps<{
   plan_info: PlanInfo
+  current_phase_id: number
 }>()
 
 const emit = defineEmits<{

@@ -66,7 +66,6 @@ export default class extends Controller {
   }
 
   bindEvents() {
-    console.log("111111111111111111111")
     $(this.viewElement).on("change.tasklist", "input[type=checkbox][data-position]", this.toggleTaskList.bind(this))
   }
 }

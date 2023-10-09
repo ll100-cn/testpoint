@@ -1,6 +1,6 @@
 class Api::Projects::IssueBodiesController < Api::Projects::BaseController
   before_action -> { @project = current_project }
-  load_resource :issue, parent: false, through: :project
+  load_resource :issue, through: :project
 
   def update
     authorize! :update, 'IssueBody'

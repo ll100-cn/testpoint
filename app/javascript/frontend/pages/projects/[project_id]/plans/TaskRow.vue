@@ -11,7 +11,6 @@
           已忽略 <i class="far fa-eye-slash"></i>
         </span>
         <TaskStateLabel v-else :state="task_upshot_info.state" />
-
       </div>
 
       <span class="me-auto">

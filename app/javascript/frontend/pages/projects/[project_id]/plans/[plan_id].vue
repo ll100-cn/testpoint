@@ -19,7 +19,7 @@
   </div>
 
   <ul class="nav nav-pills">
-    <li v-for="(phase, index) in plan_info.phase_infos" :key="phase.id" class="nav-item mb-3 mx-3">
+    <li v-for="(phase, index) in plan_info.phase_infos" class="nav-item mb-3 mx-3">
       <router-link :to="{ query: { phase_index: index } }" class="nav-link" :class="{ active: phase.id == current_phase_info.id }">
         <span>{{ phase.title }}</span>
       </router-link>
@@ -69,7 +69,7 @@
   </div>
 
   <teleport to="body">
-    <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" @updated="onTaskUpshotInfoUpdated" />
+    <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
     <BlankModal ref="phase_modal" :plan_info="plan_info" @created="onPhaseCreated" />
   </teleport>
 </template>
@@ -116,7 +116,8 @@ const plan_info = ref(await new q.test.PlanInfoReq.Get().setup(proxy, (req) => {
 }).perform())
 
 const current_phase_info = computed(() => {
-  return plan_info.value.phase_infos[_.toNumber(query.phase_index)] ?? plan_info.value.phase_infos[0]
+  const phase_infos = plan_info.value.phase_infos
+  return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
 const task_upshot_infos = ref(await new q.test.TaskUpshotInfoReq.List().setup(proxy, (req) => {
