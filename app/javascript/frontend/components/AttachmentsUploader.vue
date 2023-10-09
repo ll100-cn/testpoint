@@ -15,6 +15,8 @@
           本地上传
           <input type="file" class="d-none" multiple @change="onInputFileSelected">
         </label>
+        或者
+        <a href="#" @click.prevent="onClipboardInput">剪贴板</a>
       </div>
     </div>
   </div>
@@ -131,6 +133,23 @@ function onInputFileSelected(event: Event) {
   }
 
   input.value = null
+}
+
+async function onClipboardInput() {
+  try {
+    const contents = await navigator.clipboard.read();
+    for (const item of contents) {
+      const type = item.types.find(it => it.startsWith("image/"))
+      if (type) {
+        const blob = await item.getType(type)
+        const ext = type.split("/")[1]
+        const file = new File([blob], `clipboard.${ext}`, { type: type })
+        upload(file)
+      }
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 onUnmounted(() => {
