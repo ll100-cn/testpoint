@@ -19,6 +19,14 @@
   </layouts.form_horizontal>
 </template>
 
+<route>
+{
+  "meta": {
+    "profile": false
+  }
+}
+</route>
+
 <script setup lang="ts">
 import { layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'

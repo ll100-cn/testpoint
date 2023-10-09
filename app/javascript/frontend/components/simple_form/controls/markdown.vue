@@ -1,5 +1,5 @@
 <template>
-  <div v-show="easy_mde">
+  <div v-show="easy_mde" :class="{ 'is-invalid': validation.isInvaild() }">
     <textarea ref="el" class="form-control" :name="name" v-bind="control_attrs">{{ local_value }}</textarea>
   </div>
 </template>
@@ -7,8 +7,7 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 import 'codemirror/lib/codemirror.css'
-import EasyMDE from 'easymde'
-import 'easymde/src/css/easymde.css'
+import EasyMDE from '@/vendor/easymde'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import * as helper from "../helper"
 import { ControlProps } from '../helper'

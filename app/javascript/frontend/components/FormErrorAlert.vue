@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, inject } from 'vue'
+import { PropType, inject, reactive } from 'vue'
 import { Validations } from './simple_form';
 import Former from './simple_form/Former'
 
@@ -16,5 +16,5 @@ const props = defineProps<{
 }>()
 
 const former = inject('former') as Former<Record<string, any>>
-const validations = props.validations || former.validations
+const validations = reactive(props.validations || former.validations)
 </script>

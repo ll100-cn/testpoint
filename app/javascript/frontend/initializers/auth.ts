@@ -26,6 +26,10 @@ export default function({ app }: AppContext) {
       return
     }
 
+    if (to.meta.profile === false) {
+      return
+    }
+
     const project_id = _.toNumber(params.project_id)
     await session.prepareProject(project_id, app.config.globalProperties)
   })

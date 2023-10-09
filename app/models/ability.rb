@@ -13,6 +13,7 @@ class Ability
     return if user.nil?
 
     can :manage,              :profile
+    can :create,              Attachment
 
     if user.superadmin?
       can :manage,              :all

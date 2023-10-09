@@ -15,13 +15,13 @@
           <tr>
             <th>ID</th>
             <th>名称</th>
-            <th>是否规定</th>
+            <th>是否归档</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <template v-for="project in projects.list">
-            <tr>
+            <tr :class="{ 'block-discard': project.archived }">
               <td>{{ project.id }}</td>
               <td>{{ project.name }}</td>
               <td>{{ project.archived ? "是" : "否" }}</td>
