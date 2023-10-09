@@ -103,7 +103,7 @@ const plans = ref(await new q.test.PlanReq.Page().setup(proxy, (req) => {
   req.query.q = search
 }).perform())
 
-const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
 
 const test_case_stats = ref(await new q.case.TestCaseStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id

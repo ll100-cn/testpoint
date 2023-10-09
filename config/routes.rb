@@ -115,6 +115,7 @@ Rails.application.routes.draw do
       scope module: 'projects' do
         resource :profile
 
+        resources :member_infos
         resources :members do
           get "list", on: :collection
           patch :archive, on: :member

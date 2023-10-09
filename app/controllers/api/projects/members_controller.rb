@@ -2,12 +2,6 @@ class Api::Projects::MembersController < Api::Projects::BaseController
   before_action -> { @project = current_project }
   load_and_authorize_resource through: :project, authorization_action: ->(action) { { list: :index }[action] }
 
-  def index
-    @q = @project.members.ransack(params[:q])
-    @q.sorts = "user_email" if @q.sorts.empty?
-    @members = @q.result
-  end
-
   def show
   end
 

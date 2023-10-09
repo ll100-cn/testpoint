@@ -41,7 +41,7 @@ const platform = ref(await new q.project.PlatformReq.Get().setup(proxy, (req) =>
   req.interpolations.platform_id = platform_id
 }).perform())
 
-const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
 
 const former = Former.build({
   name: platform.value.name,

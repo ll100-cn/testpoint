@@ -80,6 +80,6 @@ former.perform = async function() {
   router.push({ path: `/projects/${project_id}/issues/${issue_id}` })
 }
 
-const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
 const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
 </script>

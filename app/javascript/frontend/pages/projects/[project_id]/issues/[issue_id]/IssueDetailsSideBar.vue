@@ -152,7 +152,7 @@ former.perform = async function(code: string) {
   emit('updated', props.issue_info)
 }
 
-const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
 const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
 const milestones = ref(await page.inProject().request(q.project.MilestoneReq.List).setup(proxy).perform())
 

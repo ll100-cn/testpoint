@@ -36,7 +36,7 @@ const page = usePageStore()
 
 const project_id = params.project_id as string
 
-const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
 
 const former = Former.build({
   name: "",

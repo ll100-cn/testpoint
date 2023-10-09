@@ -160,7 +160,7 @@ async function reset(a_task_upshot_info: TaskUpshotInfo, a_task_info: TaskInfo) 
     req.interpolations.project_id = props.plan_info.project_id
   }).perform()
 
-  members.value = await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform()
+  members.value = await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform()
   categories.value = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
 
   issue_former.form.issue_attributes.title = `【${props.plan_info.platform.name} 测试失败】${task_upshot_info.value.test_case.title}`

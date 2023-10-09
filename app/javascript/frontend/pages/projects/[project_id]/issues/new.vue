@@ -70,7 +70,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow
 
-const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
 
 const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id

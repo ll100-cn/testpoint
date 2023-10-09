@@ -65,7 +65,7 @@ const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) 
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await page.inProject().request(q.project.MemberReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
 
 async function onRemove(id: number) {
   if (!confirm("是否删除平台？")) {

@@ -1,3 +1,4 @@
 json = render partial: "api/shared/member", locals: { member: member }
 json[:project] = render partial: "api/shared/project", locals: { project: member.project }
+json[:user] = render partial: "api/shared/user", locals: { user: member.user }
 json

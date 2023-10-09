@@ -8,39 +8,48 @@
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card page-card card-x-table">
-    <div class="card-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>归档</th>
-            <th>角色</th>
-            <th>默认接收邮箱</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="member in members" :key="member.id">
-            <tr :class="{ 'block-discard': member.archived_at }">
-              <td>{{ member.id }}</td>
-              <td>{{ member.name }}</td>
-              <td>{{ h.datetime(member.archived_at) }}</td>
-              <td>{{ member.role_text }}</td>
-              <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
-              <td>
-                <div class="x-actions justify-content-end x-spacer-3">
-                  <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`">
-                    <i class="far fa-pencil-alt" /> 修改
-                  </router-link>
-                  <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)"><i class="far fa-archive" /> 归档</a>
-                </div>
-              </td>
+  <div class="nav nav-tabs mb-n1px position-relative zindex-999">
+    <a href="#" class="nav-link active" data-bs-toggle="tab" data-bs-target="#normal_card">正常</a>
+    <a href="#" class="nav-link" data-bs-toggle="tab" data-bs-target="#archived_card">归档</a>
+  </div>
+
+  <div class="tab-content">
+    <div v-for="(group, key) in grouped_members" :id="`${key}_card`" class="card page-card card-x-table rounded-top-left-0 tab-pane fade" :class="{ show: key == 'normal', active: key == 'normal' }">
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>名称</th>
+              <th>邮箱</th>
+              <th>归档</th>
+              <th>角色</th>
+              <th>默认接收邮箱</th>
+              <th></th>
             </tr>
-          </template>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <template v-for="member in group" :key="member.id">
+              <tr :class="{ 'block-discard': member.archived_at }">
+                <td>{{ member.id }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.user.email }}</td>
+                <td>{{ h.datetime(member.archived_at) }}</td>
+                <td>{{ member.role_text }}</td>
+                <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
+                <td>
+                  <div class="x-actions justify-content-end x-spacer-3">
+                    <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`">
+                      <i class="far fa-pencil-alt" /> 修改
+                    </router-link>
+                    <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)"><i class="far fa-archive" /> 归档</a>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -71,10 +80,15 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const members = ref(await new q.project.MemberReq.List().setup(proxy, (req) => {
+const members = ref(await new q.project.MemberInfoReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = currentQuery.value
 }).perform())
+
+const grouped_members = ref(_.groupBy(members.value, (member) => {
+  return member.archived_at ? "archived" : "normal"
+}))
+console.log(grouped_members.value)
 
 async function onArchive(id: number) {
   if (!confirm("是否归档成员？")) {
