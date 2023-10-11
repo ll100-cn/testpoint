@@ -15,7 +15,9 @@
 
           <template v-if="issue_template">
             <layouts.group v-if="allow('manage', Issue)" code="issue_attributes.creator_id" label="创建人">
-              <controls.bootstrap_select v-bind="{ collection: members, labelMethod: 'name', valueMethod: 'id', live_search: true }" include_blank />
+              <controls.select include_blank>
+                <OptionsForMember :collection="members" />
+              </controls.select>
             </layouts.group>
             <layouts.group code="issue_attributes.title" label="标题">
               <controls.string />
@@ -53,13 +55,12 @@
 <script setup lang="ts">
 import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import OptionsForMember from "@/components/OptionsForMember.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import { number } from "@/components/simple_form/controls"
 import * as q from '@/lib/requests'
 import { Attachment, Issue } from "@/models"
 import { usePageStore } from "@/store"
-import _ from "lodash"
 import { computed, getCurrentInstance, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
@@ -68,6 +69,7 @@ const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
+const profile = page.inProject().profile
 const allow = page.inProject().allow
 
 const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
@@ -86,7 +88,7 @@ const former = Former.build({
     content: null,
     title: null,
     attachments_params: [],
-    creator_id: null,
+    creator_id: profile.member_id,
   },
   survey_attributes: { inputs_attributes: [] },
 })
