@@ -4,6 +4,9 @@ class Api::Projects::ProfilesController < Api::Projects::BaseController
   before_action -> { authorize! :profile, @member }
 
   def show
+    if @member.nil? && current_user.superadmin?
+      @member = Member.new(user_id: current_user.id, project_id: @project.id, role: "owner")
+    end
   end
 
   def update
