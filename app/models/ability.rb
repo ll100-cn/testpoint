@@ -79,7 +79,6 @@ class Ability
     can :manage, Task
     can :manage, TaskUpshot
 
-    can :manage, Milestone
     can :manage, [ Issue, Comment, IssueSurvey, IssueRelationship ]
     can :manage, "IssueBody"
   end

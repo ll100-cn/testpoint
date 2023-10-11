@@ -56,5 +56,14 @@ export default {
       this.endpoint = "/api/projects/{project_id}/milestones/{id}/archive"
       this.klass = Milestone
     }
+  },
+
+  Active: class extends BaseObjectRequest<Milestone> {
+    constructor() {
+      super()
+      this.method = "PATCH"
+      this.endpoint = "/api/projects/{project_id}/milestones/{id}/active"
+      this.klass = Milestone
+    }
   }
 }

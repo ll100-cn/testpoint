@@ -32,4 +32,8 @@ class Milestone < ApplicationRecord
   def archive
     update(archived_at: Time.current)
   end
+
+  def active
+    update(archived_at: nil)
+  end
 end

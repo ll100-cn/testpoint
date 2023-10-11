@@ -33,6 +33,11 @@ class Api::Projects::MilestonesController < Api::Projects::BaseController
     respond_with @milestone
   end
 
+  def active
+    @milestone.active
+    respond_with @milestone
+  end
+
 protected
   def milestone_params
     params.permit(:title, :description, :published_at)

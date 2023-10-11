@@ -154,6 +154,7 @@ Rails.application.routes.draw do
 
         resources :milestones do
           patch :archive, on: :member
+          patch :active, on: :member
         end
 
         resources :issue_templates

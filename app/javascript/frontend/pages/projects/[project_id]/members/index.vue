@@ -22,9 +22,7 @@
               <th>ID</th>
               <th>名称</th>
               <th>邮箱</th>
-              <th>归档</th>
               <th>角色</th>
-              <th>默认接收邮箱</th>
               <th></th>
             </tr>
           </thead>
@@ -34,9 +32,7 @@
                 <td>{{ member.id }}</td>
                 <td>{{ member.name }}</td>
                 <td>{{ member.user.email }}</td>
-                <td>{{ h.datetime(member.archived_at) }}</td>
                 <td>{{ member.role_text }}</td>
-                <td>{{ member.receive_mail ? "开启" : "关闭" }}</td>
                 <td>
                   <div class="x-actions justify-content-end x-spacer-3">
                     <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`">
