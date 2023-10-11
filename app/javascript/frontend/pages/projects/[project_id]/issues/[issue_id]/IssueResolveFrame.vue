@@ -6,7 +6,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
       <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit" v-if="!loading">
-        <div class="modal-body">确认后将归档该问题, 无法编辑, 是否确认问题已解决？</div>
+        <div class="modal-body">
+          确认后将归档该问题, 无法编辑, 是否确认问题已解决？
+        </div>
         <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
           <layouts.submit>确认</layouts.submit>
@@ -59,5 +61,13 @@ function reset() {
   loading.value = false
 }
 
-defineExpose({ reset })
+function confirm() {
+  if (former.submitting) {
+    return
+  }
+
+  former.submit()
+}
+
+defineExpose({ reset, confirm })
 </script>

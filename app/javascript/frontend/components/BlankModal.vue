@@ -1,5 +1,5 @@
 <template>
-  <div ref="el" class="modal fade" tabindex="-1" role="dialog">
+  <div ref="el" class="modal fade" tabindex="-1" role="dialog" @keypress.enter="onEnterPress">
     <frame_component ref="frame" v-if="frame_component" v-bind="attrs" @switch="onSwitch" />
   </div>
 </template>
@@ -17,6 +17,7 @@ const emit = defineEmits<{
 
 type Frame = {
   reset(...args: any[]): void
+  confirm?(): void
 }
 
 const frame = ref(null! as Frame)
@@ -54,4 +55,11 @@ onMounted(() => {
 onBeforeUnmount(() => {
   BootstrapHelper.modal(el).dispose()
 })
+
+function onEnterPress(event: Event) {
+  if (frame.value.confirm) {
+    event.preventDefault()
+    frame.value.confirm()
+  }
+}
 </script>
