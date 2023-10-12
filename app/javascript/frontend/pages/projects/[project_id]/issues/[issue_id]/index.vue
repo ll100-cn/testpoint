@@ -48,7 +48,7 @@
             </button>
 
             <template v-if="allow('manage', issue_info) || issue_info.assignee_id == profile.member_id">
-              <template v-if="['confirmed', 'processing', 'processed'].includes(issue_info.state)">
+              <template v-if="issue_info.assignee && ['confirmed', 'processing', 'processed'].includes(issue_info.state)">
                 <div class="btn-group ms-auto" role="group">
                   <template v-if="issue_info.state == 'confirmed'">
                     <a class="btn btn-sm btn-outline-info" href="#" @click.prevent="changeIssueState('processing')">
@@ -70,7 +70,6 @@
                       设置为处理中
                     </a>
                   </template>
-
                 </div>
               </template>
             </template>

@@ -18,7 +18,11 @@ class IssueSearcher
     scope = base
 
     if except.exclude?(:category_id_eq) && category_id_eq.present?
-      scope = scope.where(category_id: category_id_eq)
+      if category_id_eq.to_i == -1
+        scope = scope.where(category_id: nil)
+      else
+        scope = scope.where(category_id: category_id_eq)
+      end
     end
 
     if except.exclude?(:milestone_id_eq) && milestone_id_eq.present?

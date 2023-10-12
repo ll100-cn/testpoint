@@ -1,7 +1,11 @@
 <template>
   <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
     <layouts.group label="分类" code="category_id_eq">
-      <controls.bootstrap_select :collection="category_collection" include_blank="全部" v-bind="{ labelMethod: 'name', valueMethod: 'id' }" />
+      <controls.select include_blank="全部">
+        <template v-for="category_stat in summary.by_category">
+          <option v-if="category_stat.count > 0" :value="category_stat.category?.id ?? -1">{{ category_stat.category?.name ?? '未分配' }} ({{ category_stat.count }})</option>
+        </template>
+      </controls.select>
     </layouts.group>
     <layouts.group label="里程碑" code="milestone_id_eq">
       <controls.bootstrap_select :collection="milestone_collection" include_blank="任意" v-bind="{ labelMethod: 'title', valueMethod: 'id' }" />
