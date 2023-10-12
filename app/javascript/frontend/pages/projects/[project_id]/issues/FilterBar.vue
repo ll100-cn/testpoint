@@ -1,7 +1,8 @@
 <template>
   <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
     <layouts.group label="分类" code="category_id_eq">
-      <controls.select include_blank="全部">
+      <controls.select>
+        <option :value="undefined">全部</option>
         <template v-for="category_stat in summary.by_category">
           <option v-if="category_stat.count > 0" :value="category_stat.category?.id ?? -1">{{ category_stat.category?.name ?? '未分配' }} ({{ category_stat.count }})</option>
         </template>
@@ -46,6 +47,7 @@ const filter2 = reactive(utils.instance(Filter2, query))
 const former = Former.build(filter2)
 former.perform = async function() {
   const data = utils.compactObject({ ...search2, ...this.form })
+  console.log(utils.plainToQuery(data))
   router.push({ query: utils.plainToQuery(data) })
 }
 

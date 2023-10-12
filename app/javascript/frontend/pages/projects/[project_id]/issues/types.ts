@@ -3,6 +3,7 @@ import * as t from '@/lib/transforms'
 export class Search2 {
   @t.String stage?: string = 'pending'
   @t.String keyword?: string = undefined
+  @t.String sorts?: string = undefined
 }
 
 export class Filter2 {

@@ -32,7 +32,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th><SortLink :sorts="search2.sorts" code="id" @click.prevent="sork_link('id')">ID</SortLink></th>
             <th>标题</th>
             <th>分类</th>
             <th>状态</th>
@@ -77,6 +77,7 @@ import { Filter2, Search2 } from "./types"
 import { ENUM_ISSUE_STAGES } from "@/constants"
 import { usePageStore } from "@/store"
 import { Issue } from "@/models"
+import SortLink from "./SortLink.vue"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -100,6 +101,18 @@ former.perform = async function(search: Search2 | null) {
   } else {
     router.push({ query: null })
   }
+}
+
+function sork_link(code: string) {
+  const sort_data = search2.sorts?.split(" ") ?? []
+  if (sort_data[0] == code) {
+    search2.sorts = `${code} ${sort_data[1] == "asc" ? "desc" : "asc"}`
+  } else {
+    search2.sorts = `${code} asc`
+  }
+
+  const data = utils.compactObject({ ...search2, ...filter2 })
+  router.push({ query: utils.plainToQuery(data) })
 }
 
 const issues = ref(await new q.bug.IssueReq.Page().setup(proxy, (req) => {
