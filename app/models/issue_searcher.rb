@@ -73,12 +73,15 @@ class IssueSearcher
     end
 
     if params[:keyword].present?
-      keyword = params[:keyword].presence
-
-      issues_scope = issues_scope.where_any_of(
-        Issue.where_exists(Comment.where("content LIKE ?", "%#{keyword}%").where_table(:issue)),
-        Issue.where("title LIKE ? or content LIKE ?", "%#{keyword}%", "%#{keyword}%")
-      )
+      keyword_scope = issues_scope
+      words = params[:keyword].presence.split
+      conditions = words.map do |word|
+        keyword_scope.where_any_of(
+          Issue.where_exists(Comment.where("content LIKE ?", "%#{word}%").where_table(:issue)),
+          Issue.where("title LIKE ? or content LIKE ?", "%#{word}%", "%#{word}%")
+        )
+      end
+      issues_scope = issues_scope.where_any_of(*conditions)
     end
 
     if params[:category_id_eq].present?
