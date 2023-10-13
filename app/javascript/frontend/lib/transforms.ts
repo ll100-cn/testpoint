@@ -1,5 +1,6 @@
 import { Transform, Type } from "class-transformer"
 import Big from 'big.js'
+import _ from "lodash"
 
 export function Klass<T>(klass: new () => T) {
   return Type(() => klass)

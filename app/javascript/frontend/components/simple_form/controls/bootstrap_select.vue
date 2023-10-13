@@ -1,62 +1,57 @@
 <template>
-  <select ref="el" v-model="model_value" class="form-control" v-bind="control_attrs">
-    <option v-if="include_blank_text != null" :value="undefined">{{ include_blank_text }}</option>
-    <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
-      {{ item[labelMethod] }}
-    </option>
-  </select>
+  <div class="form-control p-0">
+    <select ref="el" v-model="model_value" v-bind="control_attrs" @change="emit('change', $event)">
+      <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
+      <slot />
+    </select>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Validation } from '@/models'
-import 'bootstrap-select'
-import $ from 'jquery'
-import { computed, nextTick, onMounted, ref } from "vue"
+import { Validation } from "@/models"
 import * as helper from "../helper"
-import { ControlProps } from '../helper'
+import { ControlProps } from "../helper"
+import { computed, onMounted, provide, ref } from "vue"
+import $ from 'jquery'
 
-interface Props extends ControlProps {
+export interface Props extends ControlProps {
   validation?: Validation
 
   name?: string
-  collection: Object
-  labelMethod: string
-  valueMethod: string
   include_blank?: string | boolean
-  live_search?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  include_blank: true,
-  live_search: false,
+  disabled: false,
+  include_blank: false,
+  required: false,
 })
 
-const el = ref(null! as HTMLElement)
+const emit = defineEmits<{
+  change: [evenvt: Event]
+}>()
+
 const define_model_value = defineModel<any>()
 const model_value = helper.modelValue(define_model_value)
-const validation = helper.validation(props)
+const el = ref(null as HTMLSelectElement)
 
-const options = helper.buildControlConfig(props)
-const control_attrs = helper.buildControlAttrs(options, validation)
+provide('model_value', model_value)
 
-const include_blank_text = computed(() => {
-  if (props.include_blank === false) {
-    return null
-  } else if (props.include_blank === true) {
-    return ""
-  } else {
-    return props.include_blank
-  }
+const control_attrs = computed(() => {
+  const attrs = { class: [] } as any
+  return attrs
 })
 
 onMounted(() => {
-  nextTick(() => {
+  setTimeout(() => {
     ($(el.value) as any).selectpicker({
       liveSearch: true,
-      styleBase: "form-control",
+      styleBase: "btn border-0 bg-transparent",
+      width: "100%",
+      style: "",
       noneSelectedText: "请选择"
     })
-  })
+  }, 0);
 })
 
 </script>

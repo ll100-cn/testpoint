@@ -11,7 +11,11 @@
         <div class="row gy-3">
           <layouts.group code="title" label="标题"><controls.string /></layouts.group>
           <layouts.group code="category_id" label="分类">
-            <controls.bootstrap_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id', live_search: true }" />
+            <controls.bootstrap_select>
+              <BSOption v-for="category in categories" :value="category.id">
+                {{ category.name }}
+              </BSOption>
+            </controls.bootstrap_select>
           </layouts.group>
           <layouts.group code="creator_id" label="创建人">
             <controls.select include_blank>
@@ -39,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+import BSOption from '@/components/BSOption.vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
 import { controls, layouts } from "@/components/simple_form"

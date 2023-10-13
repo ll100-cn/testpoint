@@ -3,7 +3,11 @@
 
   <div class="row gy-3">
     <layouts.group code="issue_template_id" label="选择问题模版">
-      <controls.bootstrap_select v-bind="{ collection: issue_templates, labelMethod: 'name', valueMethod: 'id', include_blank: '请选择' }" @change="templateChange" />
+      <controls.bootstrap_select include_blank="请选择">
+        <BSOption v-for="item in issue_templates" :value="item.id">
+          {{ item.name }}
+        </BSOption>
+      </controls.bootstrap_select>
     </layouts.group>
     <template v-if="former.form['issue_template_id']">
       <layouts.group code="issue_attributes.title" label="标题">
@@ -33,6 +37,7 @@ import { Attachment, IssueTemplate, Member } from '@/models'
 import AttachmentsUploader from '@/components/AttachmentsUploader.vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import Former from "@/components/simple_form/Former"
+import BSOption from "@/components/BSOption.vue"
 
 const router = useRouter()
 

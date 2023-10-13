@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { Validation } from '@/models'
-import { computed, provide, reactive } from 'vue'
+import { InputHTMLAttributes, computed, provide, reactive } from 'vue'
 import * as helper from "../helper"
 import { ControlProps } from '../helper'
 import DropdownMenuItem from './DropdownMenuItem.vue'
@@ -42,7 +42,7 @@ const validation = helper.validation(props)
 
 const options = helper.buildControlConfig(props)
 const control_attrs = computed(() => {
-  const attrs = { class: [] } as any
+  const attrs = <InputHTMLAttributes>{ class: [] }
 
   if (options.value.size == 'small') {
     attrs.class.push('btn-sm')
@@ -66,7 +66,11 @@ const control_attrs = computed(() => {
     attrs.id = options.value.control_id
   }
 
-  return attrs
+  if (options.value.input_class) {
+    attrs.class = attrs.class.concat(options.value.input_class)
+  }
+
+  return attrs as any
 })
 
 const mapping = reactive(new Map<any, any[]>())

@@ -10,7 +10,11 @@
 
         <div class="row gy-3">
           <layouts.group code="issue_template_id" label="选择问题模版">
-            <controls.bootstrap_select :collection="issue_templates" v-bind="{ labelMethod: 'name', valueMethod: 'id' }" include_blank />
+            <controls.bootstrap_select include_blank>
+              <BSOption v-for="item in issue_templates" :value="item.id">
+                {{ item.name }}
+              </BSOption>
+            </controls.bootstrap_select>
           </layouts.group>
 
           <template v-if="issue_template">
@@ -54,6 +58,7 @@
 
 <script setup lang="ts">
 import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
+import BSOption from "@/components/BSOption.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import { controls, layouts } from "@/components/simple_form"

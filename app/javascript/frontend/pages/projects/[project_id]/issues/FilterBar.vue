@@ -9,16 +9,33 @@
       </controls.select>
     </layouts.group>
     <layouts.group label="里程碑" code="milestone_id_eq">
-      <controls.bootstrap_select :collection="milestone_collection" include_blank="任意" v-bind="{ labelMethod: 'title', valueMethod: 'id' }" />
+      <controls.bootstrap_select>
+        <option :value="undefined">全部</option>
+        <BSOption v-for="milestone in milestone_collection" :value="milestone.id">
+          {{ milestone.title }}
+        </BSOption>
+      </controls.bootstrap_select>
     </layouts.group>
     <layouts.group label="受理人" code="assignee_id_eq">
-      <controls.bootstrap_select :collection="assignee_collection" include_blank="任意" v-bind="{ labelMethod: 'name', valueMethod: 'id' }" />
+      <controls.bootstrap_select include_blank="任意">
+        <BSOption v-for="assignee in assignee_collection" :value="assignee.id">
+          {{ assignee.name }}
+        </BSOption>
+      </controls.bootstrap_select>
     </layouts.group>
     <layouts.group label="创建人" code="creator_id_eq">
-      <controls.bootstrap_select :collection="creator_collection" include_blank="任意" v-bind="{ labelMethod: 'name', valueMethod: 'id' }" />
+      <controls.bootstrap_select include_blank="任意">
+        <BSOption v-for="creator in creator_collection" :value="creator.id">
+          {{ creator.name }}
+        </BSOption>
+      </controls.bootstrap_select>
     </layouts.group>
     <layouts.group label="问题类型" code="task_id_is">
-      <controls.bootstrap_select :collection="issue_type_collection" include_blank="所有" v-bind="{ labelMethod: 'label', valueMethod: 'value' }" />
+      <controls.bootstrap_select include_blank="所有">
+        <BSOption v-for="item in issue_type_collection" :value="item.value">
+          {{ item.label }}
+        </BSOption>
+      </controls.bootstrap_select>
     </layouts.group>
   </layouts.form_inline>
 </template>
@@ -32,6 +49,7 @@ import _ from "lodash"
 import { computed, reactive, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Search2, Filter2 } from "./types"
+import BSOption from "@/components/BSOption.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -47,7 +65,6 @@ const filter2 = reactive(utils.instance(Filter2, query))
 const former = Former.build(filter2)
 former.perform = async function() {
   const data = utils.compactObject({ ...search2, ...this.form })
-  console.log(utils.plainToQuery(data))
   router.push({ query: utils.plainToQuery(data) })
 }
 

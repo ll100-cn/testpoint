@@ -11,7 +11,7 @@ import * as helper from "../helper"
 import { ControlProps } from "../helper"
 import { computed, provide } from "vue"
 
-interface Props extends ControlProps {
+export interface Props extends ControlProps {
   validation?: Validation
 
   name?: string

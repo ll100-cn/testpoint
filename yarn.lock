@@ -1251,7 +1251,7 @@ boolbase@^1.0.0:
 
 "bootstrap-select@https://github.com/sunteya/bootstrap-select.git#deploy":
   version "1.14.0-beta3"
-  resolved "https://github.com/sunteya/bootstrap-select.git#9c0c519cc8b04fb5a847356ff1f8148c370d1804"
+  resolved "https://github.com/sunteya/bootstrap-select.git#168eda323cf1c2065a49e54cb6dc6069e3218e7d"
 
 bootstrap@5.3.1:
   version "5.3.1"

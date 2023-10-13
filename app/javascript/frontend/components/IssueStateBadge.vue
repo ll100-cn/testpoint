@@ -1,5 +1,5 @@
 <template>
-  <span v-if="state" v-tooltip:top="helper_tooltip_text" class="badge" :class="[css_class, color]">
+  <span v-if="state" v-tooltip:top="helper_tooltip_text" class="badge" :class="css_class" :style="{backgroundColor: utils.calcColorHex(state)}">
     {{ text }}
   </span>
   <span v-else>
@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue"
-
+import * as utils from "@/lib/utils"
 import { ISSUE_STATE_MAPPING } from "@/constants"
 
 const props = withDefaults(defineProps<{
@@ -17,21 +17,6 @@ const props = withDefaults(defineProps<{
   options?: any
 }>(), {
   options: () => ({}),
-})
-
-const color = computed(() => {
-  const colors = {
-    pending: "bg-danger",
-    waiting: "bg-warning",
-    confirmed: "bg-warning",
-    processing: "bg-info",
-    processed: "bg-success",
-    deploying: "bg-success",
-    resolved: "bg-secondary",
-    archived: "bg-light text-body",
-    closed: "bg-light text-body"
-  }
-  return colors[props.state]
 })
 
 const text = computed(() => {
