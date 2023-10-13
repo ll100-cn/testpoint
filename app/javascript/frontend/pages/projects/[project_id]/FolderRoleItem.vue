@@ -5,7 +5,7 @@
     </a>
     <span class="line" />
     <div class="item">
-      <a href="#" class="treeview-link flex-1 rounded" :class="{ 'active': highlight }" @click="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })">
+      <a href="#" class="treeview-link flex-1 rounded" :class="{ 'btn btn-primary active': highlight }" @click="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })">
         <i class="fal fa-folder me-2" />{{ role_item.role_name ?? '未设置' }}
         <span class="small">({{ role_item.totalCount() }})</span>
       </a>

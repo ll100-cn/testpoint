@@ -1,6 +1,6 @@
 <template>
-  <div class="form-control p-0">
-    <select ref="el" v-model="model_value" v-bind="control_attrs" @change="emit('change', $event)">
+  <div class="form-control p-0" :class="{ 'disabled': options.disabled }">
+    <select ref="el" v-model="model_value">
       <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
       <slot />
     </select>
@@ -9,10 +9,10 @@
 
 <script setup lang="ts">
 import { Validation } from "@/models"
+import $ from 'jquery'
+import { nextTick, onMounted, provide, ref } from "vue"
 import * as helper from "../helper"
 import { ControlProps } from "../helper"
-import { computed, onMounted, provide, ref } from "vue"
-import $ from 'jquery'
 
 export interface Props extends ControlProps {
   validation?: Validation
@@ -24,12 +24,7 @@ export interface Props extends ControlProps {
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   include_blank: false,
-  required: false,
 })
-
-const emit = defineEmits<{
-  change: [evenvt: Event]
-}>()
 
 const define_model_value = defineModel<any>()
 const model_value = helper.modelValue(define_model_value)
@@ -37,21 +32,31 @@ const el = ref(null as HTMLSelectElement)
 
 provide('model_value', model_value)
 
-const control_attrs = computed(() => {
-  const attrs = { class: [] } as any
-  return attrs
-})
+const options = helper.buildControlConfig(props)
 
 onMounted(() => {
-  setTimeout(() => {
-    ($(el.value) as any).selectpicker({
+  nextTick(() => {
+    const config = {
       liveSearch: true,
       styleBase: "btn border-0 bg-transparent",
       width: "100%",
       style: "",
       noneSelectedText: "请选择"
-    })
-  }, 0);
+    }
+
+    if (options.value.size == 'small') {
+      config.styleBase += " btn-sm"
+    } else if (options.value.size == 'large') {
+      config.styleBase += " btn-lg"
+    }
+
+    if (options.value.disabled) {
+      config.styleBase += " disabled"
+    }
+
+    const $el = $(el.value) as any
+    $el.selectpicker(config)
+  })
 })
 
 </script>

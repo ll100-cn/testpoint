@@ -6,7 +6,7 @@
     <span class="" />
     <span class="line" />
     <div class="item">
-      <a class="treeview-link flex-1 rounded" href="#" :class="{ 'active': highlight }" @click="changeFilter({ ...params, scene_path: scene_item.path })">
+      <a class="treeview-link flex-1 rounded" href="#" :class="{ 'btn btn-primary active': highlight }" @click="changeFilter({ ...params, scene_path: scene_item.path })">
         <i class="fal fa-folder me-2" /> {{ scene_item.name }}
         <span v-if="scene_item.count == 0 || scene_item.count == scene_item.totalCount()" class="small">({{ scene_item.totalCount() }})</span>
         <span v-else class="small">({{ scene_item.count }}/{{ scene_item.totalCount() }})</span>

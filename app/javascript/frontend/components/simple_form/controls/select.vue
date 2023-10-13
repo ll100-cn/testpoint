@@ -21,7 +21,6 @@ export interface Props extends ControlProps {
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   include_blank: false,
-  required: false,
 })
 
 const emit = defineEmits<{
