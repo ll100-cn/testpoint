@@ -21,7 +21,7 @@
     "@vendor/fontawesome-pro-web": "https://token:9d4aa7a88bcb1e65@dev.ll100.com/repo/fontawesome-pro-6.1.0-web.tar.gz",
     "axios": "^1.4.0",
     "big.js": "^6.2.1",
-    "bootstrap": "5.3.1",
+    "bootstrap": "5.3.2",
     "bootstrap-select": "https://github.com/sunteya/bootstrap-select.git#deploy",
     "buffer": "^6.0.3",
     "chart.js": "^2.9.4",

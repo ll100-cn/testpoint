@@ -1,61 +1,61 @@
 <template>
-  <select ref="el" v-model="model_value" class="form-control" v-bind="control_attrs">
-    <option v-if="include_blank_text != null" :value="undefined">{{ include_blank_text }}</option>
-    <option v-for="item in collection" :key="item[valueMethod]" :value="item[valueMethod]">
-      {{ item[labelMethod] }}
-    </option>
-  </select>
+  <div class="form-control p-0" :class="{ 'disabled': options.disabled }">
+    <select ref="el" v-model="model_value">
+      <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
+      <slot />
+    </select>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Validation } from '@/models'
-import 'bootstrap-select'
+import { Validation } from "@/models"
 import $ from 'jquery'
-import { computed, nextTick, onMounted, ref } from "vue"
+import { nextTick, onMounted, provide, ref } from "vue"
 import * as helper from "../helper"
-import { ControlProps } from '../helper'
+import { ControlProps } from "../helper"
 
-interface Props extends ControlProps {
+export interface Props extends ControlProps {
   validation?: Validation
 
   name?: string
-  collection: Object
-  labelMethod: string
-  valueMethod: string
   include_blank?: string | boolean
-  live_search?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  include_blank: true,
-  live_search: false,
+  disabled: false,
+  include_blank: false,
 })
 
-const el = ref(null! as HTMLElement)
 const define_model_value = defineModel<any>()
 const model_value = helper.modelValue(define_model_value)
-const validation = helper.validation(props)
+const el = ref(null as HTMLSelectElement)
+
+provide('model_value', model_value)
 
 const options = helper.buildControlConfig(props)
-const control_attrs = helper.buildControlAttrs(options, validation)
-
-const include_blank_text = computed(() => {
-  if (props.include_blank === false) {
-    return null
-  } else if (props.include_blank === true) {
-    return ""
-  } else {
-    return props.include_blank
-  }
-})
 
 onMounted(() => {
   nextTick(() => {
-    ($(el.value) as any).selectpicker({
+    const config = {
       liveSearch: true,
-      styleBase: "form-control",
+      styleBase: "btn border-0 bg-transparent",
+      width: "100%",
+      style: "",
       noneSelectedText: "请选择"
-    })
+    }
+
+    if (options.value.size == 'small') {
+      config.styleBase += " btn-sm"
+    } else if (options.value.size == 'large') {
+      config.styleBase += " btn-lg"
+    }
+
+    if (options.value.disabled) {
+      config.styleBase += " disabled"
+    }
+
+    const $el = $(el.value) as any
+    $el.selectpicker(config)
   })
 })
 

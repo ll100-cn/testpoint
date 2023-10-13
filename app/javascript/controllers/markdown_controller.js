@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import { Controller } from "stimulus"
 import _ from 'lodash'
-import { replaceMarkdownTaskList, renderMarkdown } from "../components/showdown"
+import { replaceMarkdownTaskList, renderMarkdown } from "../widgets/showdown"
 
 export default class extends Controller {
   static targets = [ "input", "view" ]

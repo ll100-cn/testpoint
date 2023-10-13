@@ -14,7 +14,7 @@
 
           <MoreDropdown class="ms-auto">
             <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
-            <template v-if="!readonly && comment.member.user_id == user.id && allow('update', comment)">
+            <template v-if="!readonly && allow('update', comment)">
               <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
               <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
               <a v-if="comment.collapsed" class="small dropdown-item" @click.prevent="foldComment" href="#">显示</a>

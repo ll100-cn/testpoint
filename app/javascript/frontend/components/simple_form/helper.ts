@@ -14,6 +14,7 @@ export interface ControlConfig {
   size?: 'default' | 'small' | 'large'
   disabled?: boolean
   control_id?: string
+  input_class?: string[]
 }
 
 export interface GroupProps extends WrapperConfig {
@@ -81,6 +82,10 @@ export function buildControlAttrs(options: Ref<ControlConfig>, validation: Ref<V
 
     if (options.value.control_id) {
       attrs.id = options.value.control_id
+    }
+
+    if (options.value.input_class) {
+      attrs.class = attrs.class.concat(options.value.input_class)
     }
 
     return attrs

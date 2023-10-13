@@ -6,11 +6,12 @@ declare module globalThis {
 globalThis.Buffer = buffer.Buffer
 
 import '../bootstrap-ext'
-import '../components/fontawesome'
-import '../components/bootstrap-select'
-import '../components/treeview'
-import '../components/fancybox'
-import '../components/stimulus'
-import '../frontend/vendor/old'
+import '../widgets/fontawesome'
+import '../widgets/treeview'
+import '../widgets/fancybox'
+import '../widgets/stimulus'
+import '../widgets/old'
+import '../widgets/styles'
+import '../widgets/bootstrap-select'
 
-import '../frontend'
+import '../frontend/main'

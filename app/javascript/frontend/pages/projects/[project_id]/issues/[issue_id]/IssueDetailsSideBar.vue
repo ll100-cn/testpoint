@@ -15,9 +15,12 @@
         <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="state" title="状态">
           <template #editable>
             <layouts.group code="state">
-              <controls.select>
-                <OptionsForSelect :collection="OPTIONS_FOR_ISSUE_STATE" />
-              </controls.select>
+              <controls.bootstrap_select>
+                <BSOption v-for="item in OPTIONS_FOR_ISSUE_STATE" :value="item.value">
+                  <i class="fas fa-circle" :style="{ color: utils.calcColorHex(item.value) }"></i>
+                  {{ item.label }}
+                </BSOption>
+              </controls.bootstrap_select>
             </layouts.group>
           </template>
 
@@ -63,7 +66,12 @@
         <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="category_id" title="分类">
           <template #editable>
             <layouts.group code="category_id">
-              <controls.bootstrap_select v-bind="{ live_search: true, collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.bootstrap_select>
+                <BSOption v-for="category in categories" :value="category.id">
+                  <i class="fas fa-circle" :style="{ color: category.color }"></i>
+                  {{ category.name }}
+                </BSOption>
+              </controls.bootstrap_select>
             </layouts.group>
           </template>
 
@@ -117,6 +125,8 @@ import { computed, getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
+import * as utils from "@/lib/utils"
+import BSOption from "@/components/BSOption.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

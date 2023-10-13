@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 import 'codemirror/lib/codemirror.css'
-import EasyMDE from '@/vendor/easymde'
+import EasyMDE from '../../../../widgets/easymde'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import * as helper from "../helper"
 import { ControlProps } from '../helper'

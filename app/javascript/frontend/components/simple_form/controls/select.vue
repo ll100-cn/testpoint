@@ -11,7 +11,7 @@ import * as helper from "../helper"
 import { ControlProps } from "../helper"
 import { computed, provide } from "vue"
 
-interface Props extends ControlProps {
+export interface Props extends ControlProps {
   validation?: Validation
 
   name?: string
@@ -21,7 +21,6 @@ interface Props extends ControlProps {
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   include_blank: false,
-  required: false,
 })
 
 const emit = defineEmits<{
