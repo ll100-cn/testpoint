@@ -13,6 +13,14 @@ export const Boolean = Transform(({ value }) => {
   return [1, "1", "true", "TRUE", "True", true].includes(value)
 })
 
+export const Number = Transform(({ value }) => {
+  if (value == null || value == "") {
+    return null
+  }
+
+  return _.toNumber(value)
+})
+
 export const Decimal = Transform(({ value }) => {
   if (value == null || value == "") {
     return null
@@ -31,6 +39,5 @@ export function Enum<T>(e: T) {
   })
 }
 
-export const Number = Klass(globalThis.Number)
 export const Date = Klass(globalThis.Date)
 export const String = Klass(globalThis.String)
