@@ -15,6 +15,7 @@ export const ISSUE_STATE_MAPPING = {
   pending: "待确认",
   waiting: "等待反馈",
   confirmed: "已确认",
+  suspending: "已搁置",
   processing: "处理中",
   processed: "已处理",
   deploying: "待部署",

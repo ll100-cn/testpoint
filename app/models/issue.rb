@@ -23,7 +23,7 @@
 #
 
 class Issue < ApplicationRecord
-  enumerize :state, in: [ :pending, :waiting, :confirmed, :processing, :processed, :deploying, :resolved, :closed ],
+  enumerize :state, in: [ :pending, :waiting, :confirmed, :suspending, :processing, :processed, :deploying, :resolved, :closed ],
                     default: :pending, scope: true
   enumerize :stage, in: [ :pending, :developing, :testing, :deploying, :resolved, :closed, :archived ], scope: true
   enumerize :priority, in: { low: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
@@ -77,7 +77,7 @@ class Issue < ApplicationRecord
   def generate_stage
     if archived_at?
       self.stage = :archived
-    elsif state.pending? || state.waiting?
+    elsif state.pending? || state.waiting? || state.suspending?
       self.stage = :pending
     elsif state.confirmed?
       self.stage = assignee_id? ? :developing : :pending

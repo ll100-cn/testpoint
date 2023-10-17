@@ -35,7 +35,7 @@
             <th><SortLink :sorts="search2.sorts" code="id" @click.prevent="sork_link('id')">ID</SortLink></th>
             <th>标题</th>
             <th>分类</th>
-            <th>状态</th>
+            <th><SortLink :sorts="search2.sorts" code="state" @click.prevent="sork_link('state')">状态</SortLink></th>
             <th>里程碑</th>
             <th>创建人</th>
             <th>受理人</th>

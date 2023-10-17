@@ -34,6 +34,7 @@ const helper_tooltip_text = computed(() => {
     pending: "该问题尚未确认，等待测试人员确认后开始处理",
     waiting: "暂时无法确认问题，需要报告人提供更多信息",
     confirmed: "已确认存在该问题，准备分配给开发人员处理",
+    suspending: "已确认存在该问题，暂时搁置等待后期分配",
     processing: "开发人员已知晓，正在处理",
     processed: "开发人员已初步解决该问题，等待测试并发布程序",
     deploying: "测试显示该问题已修复，即将发布到正式服务器",
