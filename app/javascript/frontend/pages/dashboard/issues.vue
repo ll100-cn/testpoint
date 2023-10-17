@@ -83,6 +83,7 @@ const filter = query.filter || 'unhandled'
 const unhandled_issues_count = ref(0)
 
 const pagination = ref(await new q.profile.IssueReq.Page().setup(proxy, req => {
+  req.query = utils.plainToQuery(query)
   req.query.filter = filter
 }).perform())
 

@@ -83,8 +83,6 @@ const page = usePageStore()
 const allow = page.inProject().allow
 const plan_modal = ref(null as InstanceType<typeof BlankModal>)
 
-const PlanCreateModalRef = ref<InstanceType<typeof PlanCreateModal>>()
-
 class Search {
   @t.Number creator_id_eq?: number = undefined
 }
@@ -99,6 +97,7 @@ former.perform = async function(data) {
 const project_id = _.toNumber(params.project_id)
 const plans = ref(await new q.test.PlanReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
+  req.query = utils.plainToQuery(query)
   req.query.q = search
 }).perform())
 

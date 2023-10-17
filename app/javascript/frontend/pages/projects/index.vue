@@ -46,15 +46,21 @@
 <script setup lang="ts">
 import Validations from '@/components/simple_form/Validations'
 import * as q from '@/lib/requests'
+import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PaginationBar from '@/components/PaginationBar.vue'
+import { useRoute } from 'vue-router'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
 const validations = reactive<Validations>(new Validations())
+const route = useRoute()
+const query = utils.queryToPlain(route.query)
 
-const projects = ref(await new q.admin.ProjectReq.Page().setup(proxy).perform())
+const projects = ref(await new q.admin.ProjectReq.Page().setup(proxy, req => {
+  req.query = utils.plainToQuery(query)
+}).perform())
 
 async function onRemove(project_id) {
   if (!confirm("是否归档项目？")) {
