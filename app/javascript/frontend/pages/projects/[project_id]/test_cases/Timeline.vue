@@ -23,19 +23,15 @@
 </template>
 
 <script setup lang="ts">
+import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
-import * as utils from '@/lib/utils'
-import { DATETIME_LONG_FORMAT, DATE_FORMAT } from '@/constants'
 import _ from 'lodash'
 import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
-import * as h from '@/lib/humanize'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const params = route.params as any
-
-const RAILS_RELATIVE_URL_ROOT = import.meta.env.VITE_RUBY_BASE ?? '/'
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null

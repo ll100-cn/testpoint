@@ -33,7 +33,9 @@
             <tr v-for="milestone in group" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
               <td>{{ milestone.title }}</td>
               <td>{{ h.datetime(milestone.published_at) }}</td>
-              <td>{{ milestone.description }}</td>
+              <td>
+                <textarea :value="milestone.description" data-controller="markdown" readonly class="d-none" />
+              </td>
               <td>
                 <div class="x-actions justify-content-end x-spacer-3">
                   <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
