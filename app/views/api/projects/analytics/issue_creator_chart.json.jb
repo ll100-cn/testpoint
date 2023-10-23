@@ -1,0 +1,4 @@
+json = {}
+json[:issue_counts] = @issue_creator_chart.issues_count_by_creator_and_category
+
+json

@@ -21,16 +21,18 @@ class IssueActivityChart
     @members = self.role.present? ? @project.members.where(role: self.role) : @project.members
   end
 
-  def wday_issues_confirm_time(wday)
+  def issues_confirm_time()
     confirmed_issues = @issues.where_exists(IssueActivity.where(property: "state", after_value: "confirmed").where_table(:issue))
-    issues = confirmed_issues.select { |issue| issue.created_at.wday == wday }
+    (0..7).map do |wday|
+      issues = confirmed_issues.select { |issue| issue.created_at.wday == wday }
 
-    (1..24).map do |hour|
-      issues_this_hour = issues.select { |issue| issue.created_at.hour == hour }
-      if issues_this_hour.empty?
-        0
-      else
-        ((issues_this_hour.sum { |issue| issue_confirm_time(issue) } / issues_this_hour.count) / 1.hour).round(1)
+      (1..24).map do |hour|
+        issues_this_hour = issues.select { |issue| issue.created_at.hour == hour }
+        if issues_this_hour.empty?
+          0
+        else
+          ((issues_this_hour.sum { |issue| issue_confirm_time(issue) } / issues_this_hour.count) / 1.hour).round(1)
+        end
       end
     end
   end

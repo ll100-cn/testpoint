@@ -3,6 +3,8 @@
 export { default as AttachmentReq } from "./AttachmentReq"
 export { default as CategoryInfoReq } from "./CategoryInfoReq"
 export { default as CategoryReq } from "./CategoryReq"
+export { default as IssueActivityChartReq } from "./IssueActivityChartReq"
+export { default as IssueCreatorChartReq } from "./IssueCreatorChartReq"
 export { default as IssueTemplateReq } from "./IssueTemplateReq"
 export { default as MemberInfoReq } from "./MemberInfoReq"
 export { default as MemberReq } from "./MemberReq"

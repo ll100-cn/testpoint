@@ -1,5 +1,4 @@
 import { Category } from "@/models"
-import BaseObjectRequest from "../BaseObjectRequest"
 import BaseArrayRequest from "../BaseArrayRequest"
 
 export default {

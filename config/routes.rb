@@ -115,6 +115,10 @@ Rails.application.routes.draw do
       scope module: 'projects' do
         resource :profile
 
+        resources :analytics do
+          get 'issue_creator_chart', on: :collection
+          get 'issue_activity_chart', on: :collection
+        end
         resources :member_infos
         resources :members do
           get "list", on: :collection

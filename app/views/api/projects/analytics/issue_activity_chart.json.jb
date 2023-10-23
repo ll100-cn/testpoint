@@ -1,0 +1,4 @@
+json = {}
+json[:issues_confirm_time] = @issue_activity_chart.issues_confirm_time
+
+json
