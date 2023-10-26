@@ -8,8 +8,6 @@ export const useSessionStore = defineStore('session', () => {
   const account = ref(undefined! as Account | null)
   const profiles = reactive(new Map<number, Profile>)
 
-  // /projects/project_id/profile
-
   async function prepare(ctx: any) {
     if (account.value !== undefined) {
       return

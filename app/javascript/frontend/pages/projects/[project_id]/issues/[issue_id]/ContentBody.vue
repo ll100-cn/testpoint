@@ -6,7 +6,7 @@
     </span>
 
     <div class="row mt-2 gy-2" v-if="body.attachments.length > 0">
-      <div v-for="attachment in body.attachments" :key="attachment.id" class="col-lg-6">
+      <div v-for="attachment in body.attachments" :key="attachment.id" class="col-lg-4 col-6">
         <AttachmentInfo :editable="editable" :attachment="attachment" @deleted="emit('attachment_destroyed', $event)" @edited="emit('attachment_updated', $event)" />
       </div>
     </div>
