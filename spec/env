@@ -1,1 +1,2 @@
 DEVISE_MAILER_SENDER=support@example.com
+BASE_MAIL_URL=http://localhost:3000

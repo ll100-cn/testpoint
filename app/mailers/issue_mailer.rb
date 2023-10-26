@@ -1,4 +1,6 @@
 class IssueMailer < ApplicationMailer
+  helper MailerHelper
+
   def created_notification(issue_id, changer_id, to_address)
     @issue = Issue.find(issue_id)
     @changer = Member.find(changer_id)

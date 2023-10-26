@@ -2,4 +2,4 @@
   <strong><%= @changer.name %></strong> 将状态修改为
   <strong><%= @state %>
 </p>
-<p><%= link_to "点击查看详情", [@issue.project, @issue] %></p>
+<p><%= link_to "点击查看详情", public_mail_url("/projects/#{@issue.project_id}/issues/#{@issue.id}") %></p>
