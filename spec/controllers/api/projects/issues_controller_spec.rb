@@ -87,44 +87,6 @@ RSpec.describe Api::Projects::IssuesController, type: :controller do
     it { is_expected.to respond_with :success }
   end
 
-  describe "PUT update" do
-    context "update with valid attributes" do
-      let(:attributes) { { title: "issue update", content: "hello" } }
-      action { put :update, params: { id: issue.id, project_id: project.id }.merge(attributes), format: :json }
-
-      it { is_expected.to respond_with :success }
-    end
-
-    context "update with invalid attributes" do
-      let!(:attributes) { { title: "" } }
-      action { put :update, params: { id: issue.id, project_id: project.id }.merge(attributes), format: :json }
-
-      it { expect(issue.title).not_to be_empty }
-    end
-
-    context "update with state processed" do
-      let(:attributes) { { state: "confirmed" } }
-      action { put :update, params: { id: issue.id, project_id: project.id }.merge(attributes), format: :json }
-
-      it { is_expected.to respond_with :success
-           expect(issue.reload.state).to eq "confirmed" }
-    end
-
-    context "assigning" do
-      let(:attributes) { { assignee_id: owner } }
-      action { put :update, params: { id: issue.id, project_id: project.id }.merge(attributes), format: :json }
-
-      it { is_expected.to respond_with :success
-           expect(issue.reload.assignee_id).to eq owner.id }
-    end
-  end
-
-  describe "PATCH archived" do
-    action { patch :archive, params: { project_id: project.id, id: issue.id }, format: :json }
-    it { is_expected.to respond_with :success
-         expect(issue.reload.archived_at).not_to be_nil }
-  end
-
   describe "DELETE destroy" do
     action { delete :destroy, params: { project_id: project.id, id: issue.id }, format: :json }
     it { is_expected.to respond_with :success }

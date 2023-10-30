@@ -4,7 +4,7 @@ RSpec.describe Api::Projects::TestCasesController, type: :controller do
   let!(:user) { create :user }
   let!(:project) { create :project }
   let!(:platform) { create :platform }
-  let!(:member) { create :member, user: user, project: project }
+  let!(:member) { create :member, user: user, role: :manager, project: project }
   before { sign_in user }
 
   describe "GET index" do
