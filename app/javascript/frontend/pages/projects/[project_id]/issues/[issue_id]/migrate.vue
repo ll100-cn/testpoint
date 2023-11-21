@@ -63,8 +63,8 @@ const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
 }).perform())
 
 const former = Former.build({
-  target_project_id: undefined,
-  target_category_id: undefined
+  target_project_id: null,
+  target_category_id: null
 })
 
 former.perform = async function() {
@@ -90,7 +90,7 @@ actioner.loadCategories = function(project_id: number) {
     categories.value = await new q.project.CategoryReq.List().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
     }).perform()
-    former.form.target_category_id = undefined
+    former.form.target_category_id = null
   }, { confirm_text: false })
 }
 

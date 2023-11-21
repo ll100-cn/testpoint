@@ -37,10 +37,12 @@ class IssueMigrationForm
     new_attrs = {
       project: target_project,
       creator: target_project.members.where(user_id: self.issue.creator.user_id).take || target_member,
-      assignee: target_project.members.where(user_id: self.issue.assignee.user_id).take,
       category: target_project.categories.where(id: target_category_id).take,
       milestone: nil
     }
+    if self.issue.assignee && (assignee = target_project.members.where(user_id: self.issue.assignee.user_id).take)
+      new_attrs[:assignee] = assignee
+    end
 
     Issue.transaction do
       if !self.issue.update(new_attrs)
