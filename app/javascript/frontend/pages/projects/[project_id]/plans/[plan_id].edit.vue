@@ -39,7 +39,7 @@ const params = route.params as any
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan = ref(await new q.test.PlanReq.Get().setup(proxy, (req) => {
+const plan = ref(await new q.test.PlanInfoReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
