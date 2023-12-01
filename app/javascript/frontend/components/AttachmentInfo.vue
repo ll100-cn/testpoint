@@ -39,7 +39,7 @@
         </div>
         <div class="d-flex align-items-center x-actions">
           <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
-          <a v-if="attachment.file_url" class="clipboard ms-1" :href="attachment.file_url" @click.prevent>
+          <a v-if="attachment.file_url" class="clipboard ms-1" :href="attachment.file_url" :download="attachment.title">
             <span class="far fa-fw fa-link text-muted" />
           </a>
           <a v-if="editable" class="ms-auto" href="#" @click.prevent="deleteAttachment">
