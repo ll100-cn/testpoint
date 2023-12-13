@@ -2,11 +2,14 @@
 #
 # Table name: projects
 #
-#  id         :bigint           not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  archived   :boolean          default(FALSE)
+#  id               :bigint           not null, primary key
+#  name             :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  archived         :boolean          default(FALSE)
+#  trello_list_id   :string
+#  trello_api_key   :string
+#  trello_api_token :string
 #
 
 class Project < ApplicationRecord
@@ -25,6 +28,8 @@ class Project < ApplicationRecord
 
   accepts_nested_attributes_for :members
   has_many :users, through: :members
+
+  cleanup_column :trello_list_id, :trello_api_key, :trello_api_token
 
   scope :available, -> { where(archived: false) }
   scope :ranked, -> { order("name") }

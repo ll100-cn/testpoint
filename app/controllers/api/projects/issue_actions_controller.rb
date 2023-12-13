@@ -7,6 +7,9 @@ class Api::Projects::IssueActionsController < Api::Projects::BaseController
 
     with_email_notification do
       @activities = @issue.update_with_author(issue_params, current_member)
+      if @issue.saved_change_to_state? && @issue.state.confirmed?
+        SyncTrelloJob.perform_async(@issue.id)
+      end
     end
 
     respond_with @issue

@@ -31,6 +31,6 @@ class Api::Admin::ProjectsController < Api::BaseController
 protected
 
   def project_params
-    params.permit(:name)
+    params.permit(:name, :trello_list_id, :trello_api_key, :trello_api_token)
   end
 end

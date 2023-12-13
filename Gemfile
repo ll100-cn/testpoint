@@ -52,15 +52,18 @@ gem 'kramdown', '2.3.0'
 gem 'rgb', '0.1.0'
 gem "jb", "0.8.0"
 gem 'has_array_of', github: "marshall-lee/has_array_of"
+gem "fume", "0.10.0", require: false
+gem "uri_template", "0.7.0"
 
 # Assets
+gem 'vite_ruby', '3.3.1'
 gem 'vite_rails', '3.0.15'
 
 # Use Active Storage variant
 gem 'image_processing', '1.12.1'
 
 # backgound
-gem 'sidekiq', '6.0.2'
+gem 'sidekiq', '7.2.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

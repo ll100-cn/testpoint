@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: issue_infos
+# Table name: issue_surveys
 #
 #  id          :bigint           not null, primary key
 #  issue_id    :bigint           not null

@@ -31,7 +31,10 @@ const router = useRouter()
 const proxy = getCurrentInstance()!.proxy!
 
 const former = Former.build({
-  name: ""
+  name: "",
+  trello_list_id: "",
+  trello_api_key: "",
+  trello_api_token: "",
 })
 
 former.perform = async function() {

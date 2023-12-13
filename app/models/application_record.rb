@@ -1,7 +1,10 @@
+require 'fume/require_accessor'
+
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
   extend Enumerize
   include SqlScopes
+  include Fume::RequireAccessor
   include AnyOfConds
   include Ransackable
 

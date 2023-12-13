@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_28_082919) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_12_084531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -202,6 +202,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_28_082919) do
     t.datetime "archived_at", precision: nil
     t.string "stage"
     t.integer "legacy_project_ids", default: [], array: true
+    t.string "trello_card_id"
     t.index ["assignee_id"], name: "index_issues_on_assignee_id"
     t.index ["bak_assignee_id"], name: "index_issues_on_bak_assignee_id"
     t.index ["bak_creator_id"], name: "index_issues_on_bak_creator_id"
@@ -300,6 +301,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_28_082919) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "archived", default: false
+    t.string "trello_list_id"
+    t.string "trello_api_key"
+    t.string "trello_api_token"
   end
 
   create_table "projects_users", force: :cascade do |t|

@@ -10,6 +10,7 @@
 #  updated_at   :datetime         not null
 #  nickname     :string
 #  receive_mail :boolean          default(FALSE)
+#  archived_at  :datetime
 #
 
 FactoryBot.define do

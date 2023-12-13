@@ -5,6 +5,18 @@
     <layouts.group code="name" label="名称">
       <controls.string />
     </layouts.group>
+
+    <layouts.group code="trello_list_id" label="trello list id">
+      <controls.string />
+    </layouts.group>
+
+    <layouts.group code="trello_api_key" label="trello api key">
+      <controls.string />
+    </layouts.group>
+
+    <layouts.group code="trello_api_token" label="trello api token">
+      <controls.string />
+    </layouts.group>
   </div>
 </template>
 

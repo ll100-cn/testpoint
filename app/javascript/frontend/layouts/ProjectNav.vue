@@ -32,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import { Category, Issue, IssueTemplate, Member, Milestone, Plan, Platform, Project, TestCase, TestCaseLabel } from '@/models'
-import NavItemDropdown from './NavItemDropdown.vue'
+import { Category, Issue, IssueTemplate, Member, Milestone, Plan, Platform, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from '@/store'
+import NavItemDropdown from './NavItemDropdown.vue'
 
 const page = usePageStore()
 const allow = page.inProject().allow
@@ -42,6 +42,5 @@ const allow = page.inProject().allow
 defineProps<{
   project_id: number
 }>()
-
 
 </script>

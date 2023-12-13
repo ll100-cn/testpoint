@@ -45,7 +45,10 @@ const project = await new q.admin.ProjectReq.Get().setup(proxy, (req) => {
 }).perform()
 
 const former = Former.build({
-  name: project.name
+  name: project.name,
+  trello_list_id: project.trello_list_id,
+  trello_api_key: project.trello_api_key,
+  trello_api_token: project.trello_api_token,
 })
 
 former.perform = async function() {

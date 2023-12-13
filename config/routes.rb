@@ -1,5 +1,5 @@
 require 'sidekiq/web'
-Sidekiq::Web.set :sessions, false
+# Sidekiq::Web.set :sessions, false
 
 Rails.application.routes.draw do
   devise_for :users, path: "", controllers: {
