@@ -137,7 +137,7 @@ const issue_info = ref(await new q.bug.IssueInfoReq.Get().setup(proxy, (req) => 
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).perform())
-document.title = `#${issue_info.value.id} ${issue_info.value.title}`
+page.meta.title = `#${issue_info.value.id} ${issue_info.value.title}`
 
 const readonly = computed(() => issue_info.value.project_id.toString() !== params.project_id)
 const comments = ref(await new q.bug.IssueCommentReq.List().setup(proxy, (req) => {

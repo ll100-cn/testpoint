@@ -39,6 +39,7 @@ export const usePageStore = defineStore('page', () => {
   const route = useRoute()
   const errors = ref([] as any[])
   const caches = new Map<any, any>()
+  const meta = ref({ title: null as string | null })
 
   function cache<T>(key: any, callback: () => T): T {
     if (caches.has(key)) {
@@ -78,5 +79,5 @@ export const usePageStore = defineStore('page', () => {
     caches.clear()
   }
 
-  return { errors, inProject, singleton, clear }
+  return { errors, inProject, singleton, clear, meta }
 })
