@@ -16,7 +16,7 @@ class SyncTrelloJob
     content_url = URITemplate.new(template_url).expand(project: project.id, issue: issue.id)
     data = {
       name: "##{issue.id} #{issue.title}",
-      desc: "[#{content_url}](content_url)",
+      desc: "<#{content_url}>",
       idList: project.trello_list_id,
     }
     response = client.create_card(data)
