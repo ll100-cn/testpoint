@@ -1,5 +1,5 @@
 <template>
-  <div class="form-control p-0" :class="{ 'disabled': options.disabled }">
+  <div class="form-control p-0" :class="{ 'disabled': options.disabled, 'is-invalid': validation.isInvaild() }">
     <select ref="el" v-model="model_value">
       <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
       <slot />
@@ -33,6 +33,7 @@ const el = ref(null as HTMLSelectElement)
 provide('model_value', model_value)
 
 const options = helper.buildControlConfig(props)
+const validation = helper.validation(props)
 
 onMounted(() => {
   nextTick(() => {

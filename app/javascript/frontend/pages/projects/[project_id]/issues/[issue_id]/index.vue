@@ -74,6 +74,12 @@
               </template>
             </template>
 
+            <template v-if="allow('manage', issue_info) && issue_info.state == 'pending'">
+              <a class="btn ms-auto btn-sm btn-outline-default" href="#" @click.prevent="issue_info_modal.show(IssueConfirmFrame)" :style="{ color: utils.calcColorHex('confirmed'), borderColor: utils.calcColorHex('confirmed') }">
+                设置为已确认
+              </a>
+            </template>
+
             <template v-if="allow('manage', issue_info) || issue_info.creator_id == profile.member_id">
               <template v-if="issue_info.state == 'resolved' && !issue_info.archived_at">
                 <div class="btn-group ms-auto" role="group">
@@ -100,10 +106,14 @@
 </template>
 
 <script setup lang="ts">
+import { Actioner } from "@/components/Actioner"
+import ActionerAlert from "@/components/ActionerAlert.vue"
 import BlankModal from "@/components/BlankModal.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/lib/requests'
+import * as utils from "@/lib/utils"
 import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"
+import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
 import { useRoute } from "vue-router"
@@ -119,9 +129,7 @@ import IssueResolveFrame from "./IssueResolveFrame.vue"
 import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateFrame from "./IssueSurveyCreateFrame.vue"
 import IssueUnresolveFrame from "./IssueUnresolveFrame.vue"
-import { usePageStore } from "@/store"
-import { Actioner } from "@/components/Actioner"
-import ActionerAlert from "@/components/ActionerAlert.vue"
+import IssueConfirmFrame from "./IssueConfirmFrame.vue"
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_info_modal = ref(null as InstanceType<typeof BlankModal>)
