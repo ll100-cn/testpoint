@@ -51,22 +51,22 @@
               <template v-if="issue_info.assignee && ['confirmed', 'processing', 'processed'].includes(issue_info.state)">
                 <div class="btn-group ms-auto" role="group">
                   <template v-if="issue_info.state == 'confirmed'">
-                    <a class="btn btn-sm btn-outline-info" href="#" @click.prevent="changeIssueState('processing')">
+                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processing')" :style="{ color: utils.calcColorHex('processing'), borderColor: utils.calcColorHex('processing') }">
                       设置为处理中
                     </a>
-                    <a class="btn btn-sm btn-outline-success" href="#" @click.prevent="changeIssueState('processed')">
+                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processed')" :style="{ color: utils.calcColorHex('processed'), borderColor: utils.calcColorHex('processed') }">
                       设置为已处理
                     </a>
                   </template>
 
                   <template v-if="issue_info.state == 'processing'">
-                    <a class="btn btn-sm btn-outline-success" href="#" @click.prevent="changeIssueState('processed')">
+                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processed')" :style="{ color: utils.calcColorHex('processed'), borderColor: utils.calcColorHex('processed') }">
                       设置为已处理
                     </a>
                   </template>
 
                   <template v-if="issue_info.state == 'processed'">
-                    <a class="btn btn-sm btn-outline-info" href="#" @click.prevent="changeIssueState('processing')">
+                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processing')" :style="{ color: utils.calcColorHex('processing'), borderColor: utils.calcColorHex('processing') }">
                       设置为处理中
                     </a>
                   </template>

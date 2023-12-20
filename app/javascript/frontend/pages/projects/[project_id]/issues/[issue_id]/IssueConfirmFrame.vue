@@ -17,6 +17,7 @@
             <layouts.group code="category_id" label="分类">
               <controls.bootstrap_select>
                 <BSOption v-for="category in categories" :value="category.id">
+                  <i class="fas fa-circle" :style="{ color: category.color }"></i>
                   {{ category.name }}
                 </BSOption>
               </controls.bootstrap_select>

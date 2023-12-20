@@ -12,7 +12,7 @@
       <div>
         <FormErrorAlert :validations="former.validations" />
 
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="state" title="状态">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="state" title="状态">
           <template #editable>
             <layouts.group code="state">
               <controls.bootstrap_select>
@@ -27,7 +27,7 @@
           <IssueStateBadge :state="issue_info.state" />
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="priority" title="优先级">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="priority" title="优先级">
           <template #editable>
             <layouts.group code="priority">
               <controls.select>
@@ -39,7 +39,7 @@
           <span :class="{'text-danger': issue_info.priority == 'important'}">{{ issue_info.priority_text }}</span>
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former }" code="creator_id" title="创建人">
+        <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former, issue_info }" code="creator_id" title="创建人">
           <template #editable>
             <layouts.group code="creator_id">
               <controls.select include_blank>
@@ -51,7 +51,7 @@
           {{ issue_info.creator.name }}
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="assignee_id" title="受理人">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="assignee_id" title="受理人">
           <template #editable>
             <layouts.group code="assignee_id">
               <controls.select include_blank>
@@ -63,7 +63,7 @@
           {{ issue_info.assignee?.name ?? '无' }}
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="category_id" title="分类">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="category_id" title="分类">
           <template #editable>
             <layouts.group code="category_id">
               <controls.bootstrap_select>
@@ -78,7 +78,7 @@
           <CategoryBadgeVue :category="_.find(categories, { id: issue_info.category_id })" />
         </IssueDetailEdit>
 
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former }" code="milestone_id" title="里程碑">
+        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="milestone_id" title="里程碑">
           <template #editable>
             <layouts.group code="milestone_id">
               <controls.select>
@@ -109,24 +109,24 @@
 </template>
 
 <script setup lang="ts">
+import BSOption from "@/components/BSOption.vue"
 import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
+import OptionsForMember from "@/components/OptionsForMember.vue"
+import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
-import { ISSUE_PRIORITY_OPTIONS, ISSUE_STATE_MAPPING, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
+import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
-import { IssueInfo, Member, Role } from "@/models"
+import * as utils from "@/lib/utils"
+import { IssueInfo } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
-import { computed, getCurrentInstance, ref } from "vue"
+import { getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
-import OptionsForMember from "@/components/OptionsForMember.vue"
-import OptionsForSelect from "@/components/OptionsForSelect.vue"
-import * as utils from "@/lib/utils"
-import BSOption from "@/components/BSOption.vue"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
