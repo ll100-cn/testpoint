@@ -1,7 +1,6 @@
 <template>
   <div class="page-header">
-    <h2 class="me-1">{{ issue_info.titleWithPriority() }}</h2>
-    <div class="me-1">#{{ issue_info.id }}</div>
+    <h2 class="me-1">#{{ issue_info.id }} {{ issue_info.titleWithPriority() }}</h2>
     <span class="me-1">
       <IssueStateBadge :state="issue_info.state" />
     </span>
@@ -11,7 +10,7 @@
   </div>
 
   <div v-if="issue_info.archived_at" class="alert alert-danger">
-    该问题已归档
+    该问题已完结
   </div>
 
   <div class="row">
@@ -60,6 +59,9 @@
                   </template>
 
                   <template v-if="issue_info.state == 'processing'">
+                    <a class="btn btn-sm btn-outline-secondary disabled" href="#" @click.prevent="changeIssueState('processing')">
+                      已设置 <IssueStateBadge state="processing" />
+                    </a>
                     <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processed')">
                       设置为 <IssueStateBadge state="processed" />
                     </a>
@@ -68,6 +70,9 @@
                   <template v-if="issue_info.state == 'processed'">
                     <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processing')">
                       设置为 <IssueStateBadge state="processing" />
+                    </a>
+                    <a class="btn btn-sm btn-outline-secondary disabled" href="#" @click.prevent="changeIssueState('processed')">
+                      已设置 <IssueStateBadge state="processed" />
                     </a>
                   </template>
                 </div>

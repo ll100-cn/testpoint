@@ -29,30 +29,7 @@
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
       <FilterBar :summary="issue_summary" />
-      <table class="table">
-        <thead>
-          <tr>
-            <th><SortLink :sorts="search2.sorts" code="id" @click.prevent="sork_link('id')">ID</SortLink></th>
-            <th>标题</th>
-            <th>分类</th>
-            <th><SortLink :sorts="search2.sorts" code="state" @click.prevent="sork_link('state')">状态</SortLink></th>
-            <th>里程碑</th>
-            <th>创建人</th>
-            <th>受理人</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="issue in issues.list" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
-            <td>{{ issue.id }}</td>
-            <td><router-link :to="`/projects/${project_id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
-            <td><CategoryBadge :category="issue.category" /></td>
-            <td><IssueStateBadge :state="issue.state" /></td>
-            <td>{{ issue.milestone?.title }}</td>
-            <td>{{ issue.creator?.name }}</td>
-            <td>{{ issue.assignee?.name }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <IssueList :issues="issues" />
     </div>
     <div class="card-footer">
       <PaginationBar :pagination="issues" />
@@ -61,23 +38,21 @@
 </template>
 
 <script setup lang="ts">
-import CategoryBadge from "@/components/CategoryBadge.vue"
-import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"
+import { ENUM_ISSUE_STAGES } from "@/constants"
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
+import { Issue } from "@/models"
 import Page from "@/pages/Page"
+import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
+import IssueList from "./IssueList.vue"
 import { Filter2, Search2 } from "./types"
-import { ENUM_ISSUE_STAGES } from "@/constants"
-import { usePageStore } from "@/store"
-import { Issue } from "@/models"
-import SortLink from "./SortLink.vue"
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

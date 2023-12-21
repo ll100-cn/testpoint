@@ -28,36 +28,7 @@
 
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
-      <table class="table">
-        <colgroup>
-          <col width="5%">
-          <col width="30%">
-          <col width="10%">
-          <col width="15%">
-          <col width="10%">
-          <col width="10%">
-        </colgroup>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>标题</th>
-            <th>分类</th>
-            <th>状态</th>
-            <th>创建人</th>
-            <th>受理人</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="issue in pagination.list" :class="{ 'block-discard': issue.state == 'closed' }">
-            <td>{{ issue.id }}</td>
-            <td><IssueLink v-bind="{ issue }" /></td>
-            <td><span class="badge" :style="`background-color: ${issue.category?.color}`">{{ issue.category?.name }}</span></td>
-            <td><IssueStateBadge :state="issue.state" /></td>
-            <td>{{ issue.creator.name }}</td>
-            <td>{{ issue.assignee?.name }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <IssueList :issues="pagination" />
     </div>
     <div class="card-footer">
       <PaginationBar :pagination="pagination" />
@@ -66,13 +37,12 @@
 </template>
 
 <script setup lang="ts">
-import IssueLink from "@/components/IssueLink.vue"
-import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
-import * as utils from "@/lib/utils"
 import * as q from '@/lib/requests'
+import * as utils from "@/lib/utils"
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute } from "vue-router"
+import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
 
 const proxy = getCurrentInstance()!.proxy!

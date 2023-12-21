@@ -25,7 +25,7 @@ interface Info {
 const info_mapping = <Record<string, Info>>{
   pending: {
     tips: "该问题尚未确认，等待测试人员确认后开始处理",
-    icon: "far fa-plus-circle",
+    icon: "far fa-circle",
     color: "rgb(178,42,55)"
   },
   waiting: {
@@ -35,7 +35,7 @@ const info_mapping = <Record<string, Info>>{
   },
   confirmed: {
     tips: "已确认存在该问题，准备分配给开发人员处理",
-    icon: "far fa-record-vinyl",
+    icon: "far fa-plus-circle",
     color: ISSUE_STATE_COLORS.confirmed
   },
   suspending: {
