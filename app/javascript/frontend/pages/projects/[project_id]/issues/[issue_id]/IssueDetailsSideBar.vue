@@ -17,8 +17,7 @@
             <layouts.group code="state">
               <controls.bootstrap_select>
                 <BSOption v-for="item in OPTIONS_FOR_ISSUE_STATE" :value="item.value">
-                  <i class="fas fa-circle" :style="{ color: utils.calcColorHex(item.value) }"></i>
-                  {{ item.label }}
+                  <IssueStateBadge :state="item.value" />
                 </BSOption>
               </controls.bootstrap_select>
             </layouts.group>

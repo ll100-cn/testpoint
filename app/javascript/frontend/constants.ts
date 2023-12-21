@@ -23,6 +23,12 @@ export const ISSUE_STATE_MAPPING = {
   closed: "已关闭",
 }
 
+export const ISSUE_STATE_COLORS = {
+  confirmed: "rgb(214,106,16)",
+  processed: "rgb(8,78,181)",
+  resolved: "rgb(20,112,70)",
+}
+
 export const OPTIONS_FOR_ISSUE_STATE = _.map(ISSUE_STATE_MAPPING, (value, key) => {
   return { label: value, value: key }
 })

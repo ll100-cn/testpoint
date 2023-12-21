@@ -42,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="issue in issues.list" :key="issue.id" :class="{ 'block-discard': issue.state == 'closed' }">
+          <tr v-for="issue in issues.list" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
             <td>{{ issue.id }}</td>
             <td><router-link :to="`/projects/${project_id}/issues/${issue.id}`">{{ issue.title }}</router-link></td>
             <td><CategoryBadge :category="issue.category" /></td>

@@ -51,23 +51,23 @@
               <template v-if="issue_info.assignee && ['confirmed', 'processing', 'processed'].includes(issue_info.state)">
                 <div class="btn-group ms-auto" role="group">
                   <template v-if="issue_info.state == 'confirmed'">
-                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processing')" :style="{ color: utils.calcColorHex('processing'), borderColor: utils.calcColorHex('processing') }">
-                      设置为处理中
+                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processing')">
+                      设置为 <IssueStateBadge state="processing" />
                     </a>
-                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processed')" :style="{ color: utils.calcColorHex('processed'), borderColor: utils.calcColorHex('processed') }">
-                      设置为已处理
+                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processed')">
+                      设置为 <IssueStateBadge state="processed" />
                     </a>
                   </template>
 
                   <template v-if="issue_info.state == 'processing'">
-                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processed')" :style="{ color: utils.calcColorHex('processed'), borderColor: utils.calcColorHex('processed') }">
-                      设置为已处理
+                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processed')">
+                      设置为 <IssueStateBadge state="processed" />
                     </a>
                   </template>
 
                   <template v-if="issue_info.state == 'processed'">
-                    <a class="btn btn-sm btn-outline-default" href="#" @click.prevent="changeIssueState('processing')" :style="{ color: utils.calcColorHex('processing'), borderColor: utils.calcColorHex('processing') }">
-                      设置为处理中
+                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processing')">
+                      设置为 <IssueStateBadge state="processing" />
                     </a>
                   </template>
                 </div>
@@ -75,21 +75,28 @@
             </template>
 
             <template v-if="allow('manage', issue_info) && issue_info.state == 'pending'">
-              <a class="btn ms-auto btn-sm btn-outline-default" href="#" @click.prevent="issue_info_modal.show(IssueConfirmFrame)" :style="{ color: utils.calcColorHex('confirmed'), borderColor: utils.calcColorHex('confirmed') }">
-                设置为已确认
+              <a class="btn ms-auto btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_modal.show(IssueConfirmFrame)">
+                设置为 <IssueStateBadge state="confirmed" />
               </a>
             </template>
 
             <template v-if="allow('manage', issue_info) || issue_info.creator_id == profile.member_id">
               <template v-if="issue_info.state == 'resolved' && !issue_info.archived_at">
                 <div class="btn-group ms-auto" role="group">
-                  <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />已解决</button>
-                  <button class="btn btn-sm btn-outline-danger" @click="issue_info_modal.show(IssueUnresolveFrame)"><i class="far fa-times me-1" />未解决</button>
+                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_modal.show(IssueResolveFrame)">
+                    设置为 <IssueStateBadge state="archived" text="已完结" />
+                  </a>
+
+                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_modal.show(IssueUnresolveFrame)">
+                    设置为 <IssueStateBadge state="pending" text="未解决" />
+                  </a>
                 </div>
               </template>
               <template v-if="issue_info.state == 'closed' && !issue_info.archived_at">
                 <div class="btn-group ms-auto" role="group">
-                  <button class="btn btn-sm btn-outline-success" @click="issue_info_modal.show(IssueResolveFrame)"><i class="far fa-check me-1" />确认关闭</button>
+                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_modal.show(IssueResolveFrame)">
+                    设置为 <IssueStateBadge state="archived" text="确认完结" />
+                  </a>
                 </div>
               </template>
             </template>
@@ -99,6 +106,7 @@
     </div>
     <IssueDetailsSideBar :readonly="readonly" class="col-12 col-md-3 order-0 order-md-1" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
   </div>
+
   <teleport to="body">
     <BlankModal ref="comment_modal" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
     <BlankModal ref="issue_info_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
@@ -120,6 +128,7 @@ import { useRoute } from "vue-router"
 import IssueActivityInfo from "./IssueActivityInfo.vue"
 import IssueComment from "./IssueComment.vue"
 import IssueCommentCreateFrame from "./IssueCommentCreateFrame.vue"
+import IssueConfirmFrame from "./IssueConfirmFrame.vue"
 import IssueContent from "./IssueContent.vue"
 import IssueDetailsSideBar from "./IssueDetailsSideBar.vue"
 import IssueInfoRelationshipNewFrame from "./IssueInfoRelationshipNewFrame.vue"
@@ -129,7 +138,7 @@ import IssueResolveFrame from "./IssueResolveFrame.vue"
 import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateFrame from "./IssueSurveyCreateFrame.vue"
 import IssueUnresolveFrame from "./IssueUnresolveFrame.vue"
-import IssueConfirmFrame from "./IssueConfirmFrame.vue"
+import { ISSUE_STATE_COLORS } from "@/constants"
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_info_modal = ref(null as InstanceType<typeof BlankModal>)
