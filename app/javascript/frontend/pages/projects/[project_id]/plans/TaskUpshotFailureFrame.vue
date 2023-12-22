@@ -163,7 +163,7 @@ async function reset(a_task_upshot_info: TaskUpshotInfo, a_task_info: TaskInfo) 
   members.value = await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform()
   categories.value = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
 
-  issue_former.form.issue_attributes.title = `【${props.plan_info.platform.name} 测试失败】${task_upshot_info.value.test_case.title}`
+  issue_former.form.issue_attributes.title = `「${props.plan_info.platform.name}」 ${task_upshot_info.value.test_case.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_info.value.content ?? task_upshot_info.value.test_case.content}\n\n实际效果:\n`
   issue_former.form.from_task_id = task_upshot_info.value.task.id
 
