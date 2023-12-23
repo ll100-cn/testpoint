@@ -80,9 +80,14 @@
             </template>
 
             <template v-if="allow('manage', issue_info) && issue_info.state == 'pending'">
-              <a class="btn ms-auto btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_modal.show(IssueConfirmFrame)">
-                设置为 <IssueStateBadge state="confirmed" />
-              </a>
+              <div class="btn-group ms-auto" role="group">
+                <a class="btn ms-auto btn-sm btn-outline-secondary" href="#" @click.prevent="issue_comment_create_modal.show(IssueWaitingFrame, issue_info)">
+                  设置为 <IssueStateBadge state="waiting" />
+                </a>
+                <a class="btn ms-auto btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_modal.show(IssueConfirmFrame)">
+                  设置为 <IssueStateBadge state="confirmed" />
+                </a>
+              </div>
             </template>
 
             <template v-if="allow('manage', issue_info) || issue_info.creator_id == profile.member_id">
@@ -115,6 +120,7 @@
   <teleport to="body">
     <BlankModal ref="comment_modal" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
     <BlankModal ref="issue_info_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
+    <BlankModal ref="issue_comment_create_modal" @created="onIssueCommentCreated" v-bind="{ issue_info }" />
   </teleport>
 </template>
 
@@ -144,9 +150,11 @@ import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateFrame from "./IssueSurveyCreateFrame.vue"
 import IssueUnresolveFrame from "./IssueUnresolveFrame.vue"
 import { ISSUE_STATE_COLORS } from "@/constants"
+import IssueWaitingFrame from "./IssueWaitingFrame.vue"
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_info_modal = ref(null as InstanceType<typeof BlankModal>)
+const issue_comment_create_modal = ref(null as InstanceType<typeof BlankModal>)
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const params = route.params as any
@@ -191,6 +199,11 @@ function onCommentDestroyed(comment: Comment) {
 async function onCommentUpdated(comment: Comment) {
   const index = comments.value.findIndex(it => it.id === comment.id)
   comments.value[index] = comment
+}
+
+function onIssueCommentCreated(a_issue_info: IssueInfo, a_comment: Comment) {
+  issue_info.value = a_issue_info
+  comments.value.push(a_comment)
 }
 
 const actioner = Actioner.build()
