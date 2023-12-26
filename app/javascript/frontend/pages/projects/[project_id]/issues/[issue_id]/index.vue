@@ -14,7 +14,7 @@
   </div>
 
   <div class="row">
-    <div class="col order-1 order-md-0 mb-5">
+    <div class="col col-md-9 order-1 order-md-0 mb-5">
       <IssueRelatedTask v-if="issue_info.task" :task="issue_info.task" :project_id="project_id" />
       <IssueContent :readonly="readonly" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
       <IssueSurveyCard :readonly="readonly" :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_modal.show(...args)" />
