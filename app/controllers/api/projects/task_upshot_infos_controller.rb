@@ -9,7 +9,7 @@ class Api::Projects::TaskUpshotInfosController < Api::Projects::BaseController
     @task_upshots = @all_task_upshots_scope.includes(task: :test_case).references(task: :test_case).order(:task_id)
 
     test_case_scope = TestCase.where_exists(@plan.tasks.where_table(:test_case))
-    @test_cases = TestCase.filter_by_version_at(test_case_scope, @plan.created_at)
+    @test_cases = TestCase.filter_by_version_at(test_case_scope, @current_phase.created_at)
     @test_case_mapping = @test_cases.index_by(&:id)
   end
 end
