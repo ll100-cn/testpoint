@@ -11,6 +11,9 @@ export class Attachment {
 
   file_url: string
   file_size: number
+  file_previewable!: boolean
+  file_preview_url?: string
+
 
   isImage() {
     return _.startsWith(this.content_type, "image/")

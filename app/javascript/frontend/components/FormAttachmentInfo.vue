@@ -11,13 +11,18 @@
       <template v-else-if="attachment.isVideo() && attachment.file_url">
         <a :href="attachment.file_url" data-fancybox-trigger="gallery" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
           <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center">
-            <img src="@/assets/images/file.png" class="h-100" alt="">
+            <template v-if="attachment.file_previewable">
+              <img :src="attachment.file_preview_url" class="h-100" alt="">
+            </template>
+            <template v-else>
+              <i class="fal fa-play-circle text-muted" :style="{fontSize: '2.8rem'}"></i>
+            </template>
           </div>
         </a>
       </template>
       <template v-else>
         <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center">
-          <img src="@/assets/images/file.png" class="h-100" alt="">
+          <i class="fal fa-file-alt text-muted" :style="{fontSize: '2.8rem'}"></i>
         </div>
       </template>
     </div>

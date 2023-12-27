@@ -1,4 +1,10 @@
 json = attachment.slice(:id, :title, :updated_at, :content_type)
 json[:file_url] = url_for(attachment.file)
 json[:file_size] = attachment.file.blob.byte_size
+
+json[:file_previewable] = attachment.file.previewable?
+if attachment.file.previewable?
+  json[:file_preview_url] = url_for(attachment.file.preview(resize: "100x100"))
+end
+
 json
