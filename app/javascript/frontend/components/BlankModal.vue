@@ -1,5 +1,5 @@
 <template>
-  <div ref="el" class="modal fade" tabindex="-1" role="dialog" @keypress.enter="onEnterPress">
+  <div ref="el" class="modal fade" tabindex="-1" role="dialog" @keypress.enter="onEnterPress" data-bs-keyboard="false">
     <frame_component ref="frame" v-if="frame_component" v-bind="attrs" @switch="onSwitch" />
   </div>
 </template>
@@ -7,6 +7,7 @@
 <script setup lang="ts">
 import BootstrapHelper from '@/lib/BootstrapHelper'
 import { type Component, markRaw, nextTick, ref, useAttrs, onMounted, onUnmounted, onBeforeUnmount } from "vue"
+import * as utils from '@/lib/utils'
 
 const attrs = useAttrs()
 const el = ref(null! as HTMLElement)
@@ -57,7 +58,9 @@ onBeforeUnmount(() => {
 })
 
 function onEnterPress(event: Event) {
-  if (frame.value.confirm) {
+  const enable_keyboard = utils.stringToBoolean(el.value.dataset.bsKeyboard)
+
+  if (enable_keyboard && frame.value.confirm) {
     event.preventDefault()
     frame.value.confirm()
   }

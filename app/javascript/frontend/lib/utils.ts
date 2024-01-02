@@ -81,3 +81,7 @@ export function createOrEditTimeInWords(created_at: Date, last_edited_at: Date) 
     return dayjs(created_at).fromNow() + "添加"
   }
 }
+
+export function stringToBoolean(stringValue: string | null | undefined) {
+  return ![ "false", "no", "0", null, undefined ].includes(stringValue.toLowerCase()?.trim())
+}

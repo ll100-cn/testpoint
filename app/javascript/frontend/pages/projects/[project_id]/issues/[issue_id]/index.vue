@@ -93,7 +93,7 @@
             <template v-if="allow('manage', issue_info) || issue_info.creator_id == profile.member_id">
               <template v-if="issue_info.state == 'resolved' && !issue_info.archived_at">
                 <div class="btn-group ms-auto" role="group">
-                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_modal.show(IssueResolveFrame)">
+                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_resolve_modal.show(IssueResolveFrame)">
                     设置为 <IssueStateBadge state="archived" text="已完结" />
                   </a>
 
@@ -120,6 +120,7 @@
   <teleport to="body">
     <BlankModal ref="comment_modal" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
     <BlankModal ref="issue_info_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
+    <BlankModal ref="issue_info_resolve_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" data-bs-keyboard="true" />
     <BlankModal ref="issue_comment_create_modal" @created="onIssueCommentCreated" v-bind="{ issue_info }" />
   </teleport>
 </template>
@@ -154,6 +155,7 @@ import IssueWaitingFrame from "./IssueWaitingFrame.vue"
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_info_modal = ref(null as InstanceType<typeof BlankModal>)
+const issue_info_resolve_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_comment_create_modal = ref(null as InstanceType<typeof BlankModal>)
 const { proxy } = getCurrentInstance()
 const route = useRoute()
