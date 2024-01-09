@@ -7,7 +7,7 @@ export function Klass<T>(klass: new () => T) {
 }
 
 export const Boolean = Transform(({ value }) => {
-  if (value === null || value === "") {
+  if (value === null || value === undefined || value === "") {
     return null
   }
 
@@ -15,7 +15,7 @@ export const Boolean = Transform(({ value }) => {
 })
 
 export const Number = Transform(({ value }) => {
-  if (value === null || value === "") {
+  if (value === null || value === undefined || value === "") {
     return null
   }
 
@@ -23,7 +23,7 @@ export const Number = Transform(({ value }) => {
 })
 
 export const Decimal = Transform(({ value }) => {
-  if (value === null || value === "") {
+  if (value === null || value === undefined || value === "") {
     return null
   }
 
@@ -32,7 +32,7 @@ export const Decimal = Transform(({ value }) => {
 
 export function Enum<T>(e: T) {
   return Transform(({ value }) => {
-    if (value === null || value === "") {
+    if (value === null || value === undefined || value === "") {
       return null
     }
 
