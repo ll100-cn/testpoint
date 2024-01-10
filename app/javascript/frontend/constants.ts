@@ -48,3 +48,9 @@ export const ENUM_ISSUE_STAGES = {
   closed: '已关闭',
   archived: '已归档',
 }
+
+export const COMMENT_DISPLAY_OPTIONS = [
+  { label: "重要", value: "important" },
+  { label: "正常", value: "normal" },
+  { label: "折叠", value: "collapsed" },
+]

@@ -11,6 +11,7 @@
 #  collapsed      :boolean          default(FALSE)
 #  member_id      :bigint
 #  comment_id     :bigint
+#  display        :string           default("normal")
 #
 
 FactoryBot.define do

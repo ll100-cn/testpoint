@@ -1,36 +1,36 @@
 <template>
-  <div>
-    <div class="d-flex align-items-baseline text-muted" v-if="comment.collapsed">
+  <div class="card">
+    <div class="card-header d-flex align-items-center" :style="comment.display == 'important' ? { backgroundColor: 'var(--bs-danger-bg-subtle)' } : {}">
       <MemberLabel :member="comment.member" class="me-1" />
-      <span>在 {{ h.datetime(comment.created_at) }} 发表了评论</span>
-      <a :href="`#${content_id}`" data-bs-toggle="collapse" class="small text-muted ms-auto">展开</a>
+
+      <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
+
+      <div class="d-flex ms-auto">
+        <a v-if="comment.display == 'collapsed'" :href="`#${content_id}`" data-bs-toggle="collapse" class="btn btn-sm">展开</a>
+        <MoreDropdown>
+          <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
+          <template v-if="!readonly && allow('update', comment)">
+            <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
+            <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
+
+            <hr class="dropdown-divider">
+
+            <template v-for="option in COMMENT_DISPLAY_OPTIONS">
+              <a v-if="option.value != comment.display" class="small dropdown-item" href="#" @click.prevent="updateComment({ display: option.value })">
+                设为: {{ option.label }}
+              </a>
+            </template>
+          </template>
+        </MoreDropdown>
+      </div>
     </div>
-    <div :id="content_id" class="collapse" :class="{ show: !comment.collapsed }">
-      <div class="card">
-        <div class="card-header d-flex align-items-center">
-          <MemberLabel :member="comment.member" class="me-1" />
-
-          <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
-
-          <MoreDropdown class="ms-auto">
-            <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
-            <template v-if="!readonly && allow('update', comment)">
-              <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-              <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
-              <a v-if="comment.collapsed" class="small dropdown-item" @click.prevent="foldComment" href="#">显示</a>
-              <a v-else class="small dropdown-item" href="#" @click.prevent="unfoldComment">隐藏</a>
-            </template>
-          </MoreDropdown>
-        </div>
-        <div class="card-body">
-          <ContentBody :body="comment" :editable="!readonly && allow('update', comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
-          <div class="x-callout mt-3 py-1" v-if="children.length > 0">
-            <template v-for="(child, index) in children">
-              <div class="mt-4" v-if="index != 0"></div>
-              <IssueCommentReply :readonly="readonly" :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
-            </template>
-          </div>
-        </div>
+    <div :id="content_id" class="collapse card-body" :class="{ show: comment.display !== 'collapsed' }">
+      <ContentBody :body="comment" :editable="!readonly && allow('update', comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+      <div class="x-callout mt-3 py-1" v-if="children.length > 0">
+        <template v-for="(child, index) in children">
+          <div class="mt-4" v-if="index != 0"></div>
+          <IssueCommentReply :readonly="readonly" :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
+        </template>
       </div>
     </div>
   </div>
@@ -50,6 +50,7 @@ import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyFrame from "./IssueCommentReplyFrame.vue"
+import { COMMENT_DISPLAY_OPTIONS } from "@/constants"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()
@@ -90,26 +91,12 @@ async function deleteComment() {
   emit("destroyed", props.comment)
 }
 
-async function foldComment() {
+async function updateComment(data: Record<string, any>) {
   const comment = await new q.bug.IssueCommentReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id
-  }).perform({
-    collapsed: false
-  })
-
-  emit('updated', comment)
-}
-
-async function unfoldComment() {
-  const comment = await new q.bug.IssueCommentReq.Update().setup(proxy, (req) => {
-    req.interpolations.project_id = props.issue.project_id
-    req.interpolations.issue_id = props.issue.id
-    req.interpolations.comment_id = props.comment.id
-  }).perform({
-    collapsed: true
-  })
+  }).perform(data)
 
   emit('updated', comment)
 }

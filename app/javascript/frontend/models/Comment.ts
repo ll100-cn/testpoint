@@ -13,6 +13,7 @@ export class Comment {
 
   @t.Number issue_id : number
   @t.Boolean collapsed : boolean
+  @t.String display: string
   @t.Number member_id : number
   @t.Klass(Member) member: Member
 

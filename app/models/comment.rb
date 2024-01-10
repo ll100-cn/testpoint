@@ -11,9 +11,12 @@
 #  collapsed      :boolean          default(FALSE)
 #  member_id      :bigint
 #  comment_id     :bigint
+#  display        :string           default("normal")
 #
 
 class Comment < ApplicationRecord
+  enumerize :display, in: [ :important, :normal, :collapsed ]
+
   belongs_to :member
   belongs_to :issue, touch: true
   belongs_to :comment, optional: true
@@ -32,14 +35,6 @@ class Comment < ApplicationRecord
     assign_attributes(params)
     self.last_edited_at = Time.current if will_save_change_to_content?
     self.save
-  end
-
-  def unfold
-    update(collapsed: true)
-  end
-
-  def fold
-    update(collapsed: false)
   end
 
   def change_issue_state_to_pending

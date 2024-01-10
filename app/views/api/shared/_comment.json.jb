@@ -1,4 +1,7 @@
-json = comment.slice(:id, :content, :created_at, :updated_at, :issue_id, :last_edited_at, :member_id, :comment_id, :collapsed)
+json = comment.slice(
+  :id, :content, :created_at, :updated_at, :issue_id,
+  :last_edited_at, :member_id, :comment_id, :collapsed, :display
+)
 
 if comment.member
   json[:member] = render partial: "api/shared/member", locals: { member: comment.member }

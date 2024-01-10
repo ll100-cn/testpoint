@@ -29,6 +29,6 @@ class Api::Projects::CommentsController < Api::Projects::BaseController
 
 protected
   def comment_params
-    params.permit(:content, :comment_id, :collapsed, attachments_params: [ :id, :title ])
+    params.permit(:content, :comment_id, :display, attachments_params: [ :id, :title ])
   end
 end

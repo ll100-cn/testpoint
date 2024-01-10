@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_12_084531) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_10_065105) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -98,6 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_084531) do
     t.boolean "collapsed", default: false
     t.bigint "member_id"
     t.bigint "comment_id"
+    t.string "display", default: "normal"
     t.index ["comment_id"], name: "index_comments_on_comment_id"
     t.index ["issue_id"], name: "index_comments_on_issue_id"
     t.index ["member_id"], name: "index_comments_on_member_id"
