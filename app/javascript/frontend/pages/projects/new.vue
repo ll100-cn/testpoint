@@ -32,9 +32,7 @@ const proxy = getCurrentInstance()!.proxy!
 
 const former = Former.build({
   name: "",
-  trello_list_id: "",
-  trello_api_key: "",
-  trello_api_token: "",
+  webhook_url: "",
 })
 
 former.perform = async function() {

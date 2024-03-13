@@ -16,8 +16,7 @@
             <th>ID</th>
             <th>名称</th>
             <th>是否归档</th>
-            <th>trello list ID</th>
-            <th>trello api 账号</th>
+            <th>webhook_url</th>
             <th></th>
           </tr>
         </thead>
@@ -27,11 +26,7 @@
               <td>{{ project.id }}</td>
               <td>{{ project.name }}</td>
               <td>{{ project.archived ? "是" : "否" }}</td>
-              <td>{{ project.trello_list_id }}</td>
-              <td>
-                <div v-if="project.trello_api_key">key: {{ project.trello_api_key }}</div>
-                <div v-if="project.trello_api_token">token: {{ project.trello_api_token }}</div>
-              </td>
+              <td>{{ project.webhook_url }}</td>
               <td>
                 <div class="x-actions justify-content-end x-spacer-3">
                   <router-link :to="`/projects/${project.id}`"><i class="far fa-search"></i> 详情</router-link>

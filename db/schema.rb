@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_10_065105) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_13_074458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -305,6 +305,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_065105) do
     t.string "trello_list_id"
     t.string "trello_api_key"
     t.string "trello_api_token"
+    t.string "webhook_url"
   end
 
   create_table "projects_users", force: :cascade do |t|

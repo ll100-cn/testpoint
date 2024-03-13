@@ -1,2 +1,2 @@
-json = project.slice(:id, :name, :archived, :trello_list_id, :trello_api_key, :trello_api_token)
+json = project.slice(:id, :name, :archived, :trello_list_id, :trello_api_key, :trello_api_token, :webhook_url)
 json

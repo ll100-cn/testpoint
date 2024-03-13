@@ -11,12 +11,16 @@ class Api::Projects::IssueInfosController < Api::Projects::BaseController
   end
 
   def resolve
-    @issue.resolve(resolve_params, current_member)
+    if @issue.resolve(resolve_params, current_member)
+      IssueNotifyJob.perform_later(@issue.id)
+    end
     respond_with @issue
   end
 
   def process2
-    @issue.process(process_params, current_member)
+    if @issue.process(process_params, current_member)
+      IssueNotifyJob.perform_later(@issue.id)
+    end
     respond_with @issue
   end
 

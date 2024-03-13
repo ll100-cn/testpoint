@@ -10,6 +10,7 @@
 #  trello_list_id   :string
 #  trello_api_key   :string
 #  trello_api_token :string
+#  webhook_url      :string
 #
 
 FactoryBot.define do
