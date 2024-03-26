@@ -11,7 +11,7 @@ class IssueNotifyJob < ApplicationJob
       only: %i[id title state project_id created_at updated_at trello_card_id],
     )
     json["assignee_email"] = issue.assignee&.user&.email
-    conn.post(project.webhook_url, json)
+    # conn.post(project.webhook_url, json)
   end
 
   def conn
