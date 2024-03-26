@@ -7,6 +7,9 @@ class IssueNotifyJob < ApplicationJob
 
     return if project.webhook_url.blank?
 
+    title = issue.title.presence
+    return unless title =~ /^\[\d+(\.\d+)?\].*/
+
     json = issue.as_json(
       only: %i[id title state project_id created_at updated_at trello_card_id],
     )
