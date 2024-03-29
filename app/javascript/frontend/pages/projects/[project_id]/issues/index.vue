@@ -29,10 +29,10 @@
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
       <FilterBar :summary="issue_summary" />
-      <IssueList :issues="issues" />
+      <IssueList :issues="pagination.list" />
     </div>
     <div class="card-footer">
-      <PaginationBar :pagination="issues" />
+      <PaginationBar :pagination="pagination" />
     </div>
   </div>
 </template>
@@ -90,7 +90,7 @@ function sork_link(code: string) {
   router.push({ query: utils.plainToQuery(data) })
 }
 
-const issues = ref(await new q.bug.IssueReq.Page().setup(proxy, (req) => {
+const pagination = ref(await new q.bug.IssueReq.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
 }).perform())

@@ -21,6 +21,7 @@ export class Issue {
   updated_at: Date
 
   project_id: number
+  project_name: string
 
   @Type(() => Date)
   last_edited_at: Date

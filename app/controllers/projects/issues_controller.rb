@@ -7,24 +7,26 @@ class Projects::IssuesController < BaseProjectController
   def index
     @filter = params[:filter] || "assign"
     @keyword = params[:keyword].presence
-    issues_scope = @issues
+    @issues_scope = @issues
 
-    @issue_filter_state_counts = issues_scope.group(:state, "assignee_id IS NOT NULL", "archived_at IS NOT NULL").count.transform_keys do |it|
+    @issue_filter_state_counts = @issues_scope.group(:state, "assignee_id IS NOT NULL", "archived_at IS NOT NULL").count.transform_keys do |it|
       [ :state, :assignee_id_is, :archived_at_is ].zip(it).to_h
     end
 
-    issues_scope = issues_scope.filter_state_is(@filter) if @filter != "all"
+    @issues_scope = @issues_scope.filter_state_is(@filter) if @filter != "all"
     if @keyword
-      issues_scope = issues_scope.where_exists(Comment.where("content LIKE ?", "%#{@keyword}%").where_table(:issue))
-        .or(issues_scope.where("title LIKE ? or content LIKE ?", "%#{@keyword}%", "%#{@keyword}%"))
+      @issues_scope = @issues_scope.where_exists(Comment.where("content LIKE ?", "%#{@keyword}%").where_table(:issue))
+        .or(@issues_scope.where("title LIKE ? or content LIKE ?", "%#{@keyword}%", "%#{@keyword}%"))
     end
-    @issue_searcher = IssueSearcher.from(issues_scope, params.fetch(:search, {}))
+    @issue_searcher = IssueSearcher.from(@issues_scope, params.fetch(:search, {}))
     @issues_scope = @issue_searcher.result
 
     @filter_issues_scope = @issues_scope.unscope(:order)
     @q = @issues_scope.ransack(params[:q])
     @q.sorts = "updated_at desc" if @q.sorts.empty?
-    @issues = @q.result.page(params[:page])
+    @issues_scope = @q.result.page(params[:page])
+    @issues_scope = @issues_scope.includes(:project).references(:project)
+    @issues = @issues_scope
   end
 
   def new

@@ -28,7 +28,7 @@
 
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
-      <IssueList :issues="pagination" />
+      <IssueList :issues="pagination.list" :columns="['project']" />
     </div>
     <div class="card-footer">
       <PaginationBar :pagination="pagination" />

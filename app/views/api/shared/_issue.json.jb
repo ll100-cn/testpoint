@@ -27,4 +27,6 @@ if issue.category
   json[:category] = render partial: "api/shared/category", locals: { category: issue.category }
 end
 
+json[:project_name] = issue.project.name
+
 json

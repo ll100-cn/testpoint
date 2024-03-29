@@ -8,6 +8,7 @@ class Api::Profile::IssuesController < Api::BaseController
     @issues_scope = @issues_scope.includes(:assignee).references(:assignee)
     @issues_scope = @issues_scope.includes(:creator).references(:creator)
     @issues_scope = @issues_scope.includes(:category).references(:category)
+    @issues_scope = @issues_scope.includes(:project).references(:project)
 
     case params[:filter]
     when 'created'

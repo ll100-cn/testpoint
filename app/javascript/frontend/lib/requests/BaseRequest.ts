@@ -22,6 +22,7 @@ export abstract class BaseRequest<T> {
   $keyv: Keyv = null
   data: any = {}
   method!: Method
+  graph: string | null = null
   headers = {}
   conifg: AxiosRequestConfig = {}
   ctx: PerformContext = { $axios: null, $keyv: null }
@@ -117,13 +118,17 @@ export abstract class BaseRequest<T> {
       ...this.conifg
     }
 
+    if (this.graph) {
+      config.headers!["X-Resource-Graph"] = this.graph
+    }
+
     if (data) {
       const formData = data instanceof FormData ? data : this.buildFormData(data)
       config.data = formData
     }
 
     if (config.method === "GET") {
-      const key = config.url
+      const key = `${config.url}+${this.graph}`
       const cached = await $keyv.get(key)
 
       if (cached) {
