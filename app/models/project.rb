@@ -39,6 +39,10 @@ class Project < ApplicationRecord
     members.where(receive_mail: true).map(&:user)
   end
 
+  def available_subscribed_users
+    members.where(receive_mail: true, archived_at: nil).map(&:user)
+  end
+
   def available_issue_assignees_with_group
     members.where.not(role: :reporter)
       .sort_by { |x| x.role.developer? ? 0 : 1 }

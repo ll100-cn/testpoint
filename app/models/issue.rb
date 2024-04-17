@@ -299,8 +299,12 @@ class Issue < ApplicationRecord
     end
   end
 
+  def available_subscribed_users
+    subscribed_users.where_exists(project.members.where(receive_mail: true, archived_at: nil).where_table(:user))
+  end
+
 protected
   def email_list
-    (subscribed_users + project.subscribed_users).uniq.map(&:email)
+    (available_subscribed_users + project.available_subscribed_users).uniq.map(&:email)
   end
 end
