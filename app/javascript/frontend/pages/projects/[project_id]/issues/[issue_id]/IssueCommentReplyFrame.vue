@@ -12,7 +12,7 @@
             <PageContent :content="comment.content" />
           </blockquote>
 
-          <IssueCommentForm :former="former" :attachments="comment.attachments" />
+          <IssueCommentForm :former="former" :attachments="[]" />
         </div>
         <div class="modal-footer x-spacer-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
