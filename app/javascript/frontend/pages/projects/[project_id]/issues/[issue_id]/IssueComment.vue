@@ -13,7 +13,7 @@
           <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
           <template v-if="!readonly && allow('update', comment)">
             <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
-            <a v-if="children.length == 0" class="small dropdown-item" href="#" @click="emit('modal', IssueCommentConvertFrame, issue, comment)">转换</a>
+            <a v-if="children.length == 0" class="small dropdown-item" href="#" @click="emit('modal', IssueCommentConvertFrame, issue, comment)">关联</a>
             <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
 
             <hr class="dropdown-divider">
@@ -77,7 +77,7 @@ const emit = defineEmits<{
 }>()
 
 const children = computed(() => {
-  return props.comment_repo.parent_id.findAll(props.comment.id)
+  return props.comment_repo.parent_id.findAll(props.comment.id).sort((a, b) => a.created_at > b.created_at ? 1 : -1)
 })
 
 const content_id = _.uniqueId("content_")

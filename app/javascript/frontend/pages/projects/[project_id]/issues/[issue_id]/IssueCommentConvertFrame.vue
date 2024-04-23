@@ -2,7 +2,7 @@
   <div ref="el" class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="mb-0">转换</h5>
+        <h5 class="mb-0">关联</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
       </div>
 

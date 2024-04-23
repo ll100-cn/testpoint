@@ -8,7 +8,7 @@
       <MoreDropdown class="ms-auto">
         <a v-if="!readonly && comment.member.user_id == user.id && allow('update', comment)" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
         <a v-if="!readonly && allow('destroy', comment)" class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
-        <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentConvertFrame, issue, comment)">转换</a>
+        <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentConvertFrame, issue, comment)">关联</a>
       </MoreDropdown>
     </div>
 
