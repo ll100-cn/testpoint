@@ -22,6 +22,11 @@ class Api::Projects::CommentsController < Api::Projects::BaseController
     respond_with @comment
   end
 
+  def convert
+    @comment.convert(convert_params)
+    respond_with @comment
+  end
+
   def destroy
     @comment.destroy
     respond_with @comment
@@ -30,5 +35,9 @@ class Api::Projects::CommentsController < Api::Projects::BaseController
 protected
   def comment_params
     params.permit(:content, :comment_id, :display, attachments_params: [ :id, :title ])
+  end
+
+  def convert_params
+    params.permit(:comment_id)
   end
 end

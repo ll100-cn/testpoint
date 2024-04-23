@@ -8,6 +8,7 @@
 
           <MoreDropdown class="ms-auto" v-if="!readonly">
             <a v-if="allow('update', 'IssueBody')" href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
+            <a v-if="allow('update', 'IssueBody')" href="#" class="dropdown-item small" @click.prevent="converComment">转换为评论</a>
           </MoreDropdown>
         </div>
 
@@ -42,7 +43,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  updated: [IssueInfo]
+  updated: [IssueInfo],
+  convert: [IssueInfo]
 }>()
 
 function onIssueUpdated(issue: Issue) {
@@ -60,5 +62,9 @@ function onAttachmentDestroyed(attachment: Attachment) {
   const index = props.issue_info.attachments.findIndex(a => a.id == attachment.id)
   props.issue_info.attachments.splice(index, 1)
   emit('updated', props.issue_info)
+}
+
+function converComment() {
+  emit('convert', props.issue_info)
 }
 </script>

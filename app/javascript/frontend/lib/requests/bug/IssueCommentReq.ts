@@ -30,6 +30,15 @@ export default {
     }
   },
 
+  Convert: class extends BaseObjectRequest<Comment> {
+    constructor() {
+      super()
+      this.method = "PATCH"
+      this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/comments/{comment_id}/convert"
+      this.klass = Comment
+    }
+  },
+
   Destroy: class extends BaseObjectRequest<Comment> {
     constructor() {
       super()

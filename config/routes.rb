@@ -163,7 +163,11 @@ Rails.application.routes.draw do
 
         resources :issue_templates
         resources :issues do
-          resource :body, controller: "issue_bodies"
+          resource :body, controller: "issue_bodies" do
+            member do
+              patch :convert_comment
+            end
+          end
 
           resource :subscription
           resources :issue_relationships
@@ -173,6 +177,7 @@ Rails.application.routes.draw do
           resources :comments do
             member do
               get :comment
+              patch :convert
             end
           end
         end

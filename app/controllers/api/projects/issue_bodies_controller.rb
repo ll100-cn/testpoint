@@ -12,6 +12,12 @@ class Api::Projects::IssueBodiesController < Api::Projects::BaseController
     respond_with @issue
   end
 
+  def convert_comment
+    authorize! :update, 'IssueBody'
+
+    @issue.convert_comment
+  end
+
 protected
 
   def body_params

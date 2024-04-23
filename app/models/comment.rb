@@ -58,4 +58,28 @@ class Comment < ApplicationRecord
 
     self.attachments = new_attachments
   end
+
+  def convert(params)
+    new_comment_id = params[:comment_id].presence
+    if new_comment_id
+      if !issue.comments.exists?(new_comment_id)
+        errors.add(:comment_id, " 评论 ID 不存在于当前问题中")
+        return false
+      end
+
+      if comments.exists?(new_comment_id)
+        errors.add(:comment_id, "已有回复, 不能转换为回复")
+        return false
+      end
+
+      new_comment = issue.comments.find(new_comment_id)
+      if new_comment.comment_id
+        errors.add(:comment_id, "当前 ID 是回复, 只能是评论的 ID")
+        return false
+      end
+    end
+
+    self.comment_id = new_comment_id
+    save
+  end
 end

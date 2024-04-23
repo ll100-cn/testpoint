@@ -303,6 +303,21 @@ class Issue < ApplicationRecord
     subscribed_users.where_exists(project.members.where(receive_mail: true, archived_at: nil).where_table(:user))
   end
 
+  def convert_comment
+    transaction do
+      comment = self.comments.create!(
+        content: self.content,
+        member_id: self.creator_id,
+        display: "normal",
+        created_at: self.created_at,
+      )
+
+      self.attachments.update_all(attachmentable_type: Comment.to_s, attachmentable_id: comment.id)
+      self.update!(content: "N/A")
+    end
+
+  end
+
 protected
   def email_list
     (available_subscribed_users + project.available_subscribed_users).uniq.map(&:email)

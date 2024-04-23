@@ -5,12 +5,15 @@
 
       <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
 
+      <span class="ms-1 small text-body-tertiary">[{{ comment.id }}]</span>
+
       <div class="d-flex ms-auto">
         <a v-if="comment.display == 'collapsed'" :href="`#${content_id}`" data-bs-toggle="collapse" class="btn btn-sm">展开</a>
         <MoreDropdown>
           <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
           <template v-if="!readonly && allow('update', comment)">
             <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditFrame, issue, comment)">修改</a>
+            <a v-if="children.length == 0" class="small dropdown-item" href="#" @click="emit('modal', IssueCommentConvertFrame, issue, comment)">转换</a>
             <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
 
             <hr class="dropdown-divider">
@@ -50,6 +53,7 @@ import ContentBody from "./ContentBody.vue"
 import IssueCommentEditFrame from "./IssueCommentEditFrame.vue"
 import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyFrame from "./IssueCommentReplyFrame.vue"
+import IssueCommentConvertFrame from "./IssueCommentConvertFrame.vue"
 import { COMMENT_DISPLAY_OPTIONS } from "@/constants"
 
 const { proxy } = getCurrentInstance()

@@ -16,7 +16,7 @@
   <div class="row">
     <div class="col col-md-9 order-1 order-md-0 mb-5">
       <IssueRelatedTask v-if="issue_info.task" :task="issue_info.task" :project_id="project_id" />
-      <IssueContent :readonly="readonly" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
+      <IssueContent :readonly="readonly" :issue_info="issue_info" @updated="onIssueInfoUpdated" @convert="onIssueConvert" />
       <IssueSurveyCard :readonly="readonly" :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_modal.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
@@ -131,12 +131,11 @@ import ActionerAlert from "@/components/ActionerAlert.vue"
 import BlankModal from "@/components/BlankModal.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/lib/requests'
-import * as utils from "@/lib/utils"
 import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import IssueActivityInfo from "./IssueActivityInfo.vue"
 import IssueComment from "./IssueComment.vue"
 import IssueCommentCreateFrame from "./IssueCommentCreateFrame.vue"
@@ -150,7 +149,6 @@ import IssueResolveFrame from "./IssueResolveFrame.vue"
 import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateFrame from "./IssueSurveyCreateFrame.vue"
 import IssueUnresolveFrame from "./IssueUnresolveFrame.vue"
-import { ISSUE_STATE_COLORS } from "@/constants"
 import IssueWaitingFrame from "./IssueWaitingFrame.vue"
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
@@ -159,6 +157,7 @@ const issue_info_resolve_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_comment_create_modal = ref(null as InstanceType<typeof BlankModal>)
 const { proxy } = getCurrentInstance()
 const route = useRoute()
+const router = useRouter()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const page = usePageStore()
@@ -206,6 +205,15 @@ async function onCommentUpdated(comment: Comment) {
 function onIssueCommentCreated(a_issue_info: IssueInfo, a_comment: Comment) {
   issue_info.value = a_issue_info
   comments.value.push(a_comment)
+}
+
+async function onIssueConvert(a_issue_info: IssueInfo) {
+  await new q.bug.IssueBodyReq.Convert().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+    req.interpolations.issue_id = a_issue_info.id
+  }).perform()
+
+  router.go(0)
 }
 
 const actioner = Actioner.build()
