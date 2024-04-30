@@ -47,6 +47,7 @@ class Issue < ApplicationRecord
   has_many :issue_surveys
 
   validates :title, presence: true
+  validates :assignee_id, presence: true, if: -> { state.resolved? }
   validate :require_category_when_archive
 
   before_save :generate_stage
