@@ -22,4 +22,8 @@ export class Attachment {
   isVideo() {
     return _.startsWith(this.content_type, "video/") && _.includes(this.content_type, "mp4")
   }
+
+  isAudio() {
+    return _.startsWith(this.content_type, "audio/")
+  }
 }
