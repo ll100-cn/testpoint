@@ -42,7 +42,6 @@ export const ISSUE_PRIORITY_OPTIONS = [
 export const ENUM_ISSUE_STAGES = {
   pending: '分配',
   developing: '开发',
-  testing: '测试',
   deploying: '部署',
   resolved: '解决',
   closed: '已关闭',

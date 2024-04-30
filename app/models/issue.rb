@@ -28,7 +28,7 @@
 class Issue < ApplicationRecord
   enumerize :state, in: [ :pending, :waiting, :confirmed, :suspending, :processing, :processed, :deploying, :resolved, :closed ],
                     default: :pending, scope: true
-  enumerize :stage, in: [ :pending, :developing, :testing, :deploying, :resolved, :closed, :archived ], scope: true
+  enumerize :stage, in: [ :pending, :developing, :deploying, :resolved, :closed, :archived ], scope: true
   enumerize :priority, in: { low: :p2_low, normal: :p1_normal, important: :p0_important }, default: :normal, scope: true
 
   has_many :comments, dependent: :destroy
@@ -86,9 +86,7 @@ class Issue < ApplicationRecord
       self.stage = assignee_id? ? :developing : :pending
     elsif state.processing?
       self.stage = :developing
-    elsif state.processed?
-      self.stage = :testing
-    elsif state.deploying?
+    elsif state.processed? || state.deploying?
       self.stage = :deploying
     elsif state.resolved?
       self.stage = :resolved

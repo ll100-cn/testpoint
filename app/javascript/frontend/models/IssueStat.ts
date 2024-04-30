@@ -4,7 +4,7 @@ import { Category, Project } from "."
 export class IssueStat {
   project_id: number
   category_id: number
-  stage: "pending" | "developing" | "testing" | "deploying" | "resolved" | "closed"
+  stage: "pending" | "developing" | "deploying" | "resolved" | "closed"
   count: number
 
   @Type(() => Category)
