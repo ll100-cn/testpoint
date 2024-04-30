@@ -119,7 +119,7 @@
 
   <teleport to="body">
     <BlankModal ref="comment_modal" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
-    <BlankModal ref="issue_info_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
+    <BlankModal ref="issue_info_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" data-bs-keyboard="true" />
     <BlankModal ref="issue_info_resolve_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" data-bs-keyboard="true" />
     <BlankModal ref="issue_comment_create_modal" @created="onIssueCommentCreated" v-bind="{ issue_info }" />
   </teleport>
