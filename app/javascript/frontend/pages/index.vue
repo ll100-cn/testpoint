@@ -2,5 +2,5 @@
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-router.push("/dashboard")
+router.push("/dashboard/issues")
 </script>
