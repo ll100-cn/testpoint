@@ -1,16 +1,8 @@
 import { AppContext } from "@/types"
-import { Modal, Tooltip } from 'bootstrap'
+import { Modal } from 'bootstrap'
 import _ from "lodash"
 
 export default function({ app }: AppContext) {
-  app.directive('bs-tooltip', function(el, binding) {
-    new Tooltip(el, {
-      title: binding.value,
-      placement: binding.arg as any,
-      trigger: 'hover'
-    })
-  })
-
   const router = app.config.globalProperties.$router
   router.beforeEach((to, from, next) => {
     const elements = document.querySelectorAll('.modal.show')

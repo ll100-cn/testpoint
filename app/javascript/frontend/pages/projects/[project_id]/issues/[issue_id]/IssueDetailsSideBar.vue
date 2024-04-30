@@ -126,6 +126,7 @@ import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
+import vTooltip from "@/components/vTooltip"
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { ISSUE_STATE_MAPPING, ISSUE_STATE_COLORS } from "@/constants"
+import vTooltip from "./vTooltip"
 
 const props = defineProps<{
   state: string
