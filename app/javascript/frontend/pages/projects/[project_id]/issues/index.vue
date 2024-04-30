@@ -29,7 +29,7 @@
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
       <FilterBar :summary="issue_summary" />
-      <IssueList :issues="pagination.list" />
+      <IssueList :issues="pagination.list" :sorts="search2.sorts" />
     </div>
     <div class="card-footer">
       <PaginationBar :pagination="pagination" />
@@ -69,6 +69,7 @@ const filter2 = reactive(utils.instance(Filter2, query))
 const project_id = params.project_id
 
 const former = Former.build(search2)
+search2.sorts ??= "id desc"
 former.perform = async function(search: Search2 | null) {
   if (search) {
     const data = utils.compactObject(search)
@@ -76,18 +77,6 @@ former.perform = async function(search: Search2 | null) {
   } else {
     router.push({ query: null })
   }
-}
-
-function sork_link(code: string) {
-  const sort_data = search2.sorts?.split(" ") ?? []
-  if (sort_data[0] == code) {
-    search2.sorts = `${code} ${sort_data[1] == "asc" ? "desc" : "asc"}`
-  } else {
-    search2.sorts = `${code} asc`
-  }
-
-  const data = utils.compactObject({ ...search2, ...filter2 })
-  router.push({ query: utils.plainToQuery(data) })
 }
 
 const pagination = ref(await new q.bug.IssueReq.Page().setup(proxy, (req) => {

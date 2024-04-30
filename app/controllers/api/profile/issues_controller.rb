@@ -37,6 +37,11 @@ class Api::Profile::IssuesController < Api::BaseController
       @issues_scope = @issues_scope.none
     end
 
+    if params[:sorts]
+      @q = @issues_scope.ransack
+      @q.sorts = params[:sorts] if params[:sorts]
+      @issues_scope = @q.result
+    end
     @issues = @issues_scope.sorted.page(params[:page]).per(params[:per_page] || 20)
     kaminari_headers(@issues)
   end

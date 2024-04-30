@@ -28,7 +28,7 @@
 
   <div class="card rounded-top-left-0 card-x-table">
     <div class="card-body">
-      <IssueList :issues="pagination.list" :columns="['project']" />
+      <IssueList :issues="pagination.list" :columns="['project']" :sorts="sorts" />
     </div>
     <div class="card-footer">
       <PaginationBar :pagination="pagination" />
@@ -52,9 +52,12 @@ const query = utils.queryToPlain(route.query)
 const filter = query.filter || 'unhandled'
 const unhandled_issues_count = ref(0)
 
+const sorts = ref(query.sorts ?? 'id desc')
+
 const pagination = ref(await new q.profile.IssueReq.Page().setup(proxy, req => {
   req.query = utils.plainToQuery(query)
   req.query.filter = filter
+  req.query.sorts = sorts.value
 }).perform())
 
 if (filter == 'unhandled') {
