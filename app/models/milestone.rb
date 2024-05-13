@@ -22,7 +22,7 @@ class Milestone < ApplicationRecord
 
   validates :title, presence: true
 
-  scope :ranked, -> { order(published_at: :desc) }
+  scope :ranked, -> { order("published_at DESC, title ASC") }
   scope :available, -> { where(archived_at: nil) }
 
   def published?
