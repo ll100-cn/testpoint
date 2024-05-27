@@ -7,7 +7,7 @@
           <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
           {{ test_case.title }}
         </h5>
-        <a v-if="allow('update', test_case)" href="#" @click="emit('switch', CaseEditFrame, test_case)">编辑</a>
+        <a v-if="allow('update', test_case)" href="#" @click.prevent="emit('switch', CaseEditFrame, test_case)">编辑</a>
       </div>
       <div class="modal-body">
         <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="d-none">{{ test_case.content }}</textarea>
