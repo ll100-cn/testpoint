@@ -4,7 +4,7 @@
       <Transition>
         <div>
           <Suspense timeout="0">
-            <Navbar />
+            <AppNavbar />
           </Suspense>
           <Error :errors="errors" />
           <Suspense timeout="0">
@@ -23,7 +23,7 @@
 import { onErrorCaptured, ref } from "vue"
 import { onBeforeRouteLeave } from "vue-router"
 import Error from './Error.vue'
-import Navbar from './Navbar.vue'
+import AppNavbar from '../components/AppNavbar.vue'
 
 const errors = ref([])
 

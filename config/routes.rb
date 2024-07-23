@@ -6,106 +6,9 @@ Rails.application.routes.draw do
     sessions: "sessions",
     login_codes: "login_codes"
   }
-
-
-  # devise_scope :user do
-  #   resource :reset_password
-  # end
-
   authenticate :user, ->(u) { u.superadmin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
-
-  # root 'main#root'
-  # get '/dashboard', to: 'main#dashboard'
-
-  # resources :issues do
-  #   collection do
-  #     get :dashboard
-  #     get :created
-  #     get :focused
-  #     get :assigned
-  #     get :archived
-  #   end
-  # end
-
-  # resources :projects do
-  #   patch :subscribe,   on: :member
-  #   patch :unsubscribe, on: :member
-  #   patch :archive, on: :member
-  #   scope module: 'projects' do
-  #     resources :test_cases
-  #     resources :test_case_snapshots
-  #     resources :plans do
-  #       resources :phases
-  #       resources :tasks do
-  #         member do
-  #           get :row
-  #           get :change_state
-  #           get :upload_attachment
-  #           get :related_issues
-  #           patch :update_upshot
-  #         end
-
-  #         resources :upshots do
-  #           member do
-  #             get :row
-  #             patch :state
-  #             patch :content
-  #             patch :archive_issue
-  #           end
-  #         end
-  #       end
-  #       resources :upshots
-  #     end
-  #     resources :issues do
-  #       member do
-  #         get :edit_project
-  #         patch :update_project
-  #         post :archive
-  #         match :unresolve, via: [ :get, :patch ]
-  #       end
-  #       resources :comments do
-  #         member do
-  #           get :comment
-  #           get :unfold
-  #           get :fold
-  #         end
-  #       end
-  #       resource :subscription
-  #       resources :issue_relationships
-  #       resources :issue_infos
-  #     end
-  #     resources :tasks do
-  #       resources :issues
-  #     end
-  #     resources :folders do
-  #       patch :archive, on: :member
-  #     end
-  #     resources :platforms
-  #     resources :categories
-  #     resources :test_case_labels
-  #     resources :test_case_snapshots
-  #     resources :analytics do
-  #       get :issue_creator_chart, on: :collection
-  #       get :issue_activity_chart, on: :collection
-  #     end
-  #     resources :issue_templates
-  #     resources :members
-  #   end
-
-  #   get "milestones(/*path)", as: :milestones, action: "vue", on: :member
-  #   get "plans(/*path)", as: :plans, action: "vue", on: :member
-  #   get "error(/*path)", action: "vue", on: :member
-  # end
-
-  # resources :users
-  # resources :attachments
-
-  # namespace :profiles do
-  #   resource :basic
-  #   resources :projects
-  # end
 
   namespace :api, defaults: { format: :json } do
     resources :users
@@ -211,6 +114,6 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: "main#vue"
-  get "*path" => "main#vue"
+  root to: "main#root"
+  get "*path" => "main#root"
 end

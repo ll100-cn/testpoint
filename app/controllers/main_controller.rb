@@ -1,5 +1,5 @@
 class MainController < ApplicationController
-  def vue
+  def root
     render layout: false
   end
 end

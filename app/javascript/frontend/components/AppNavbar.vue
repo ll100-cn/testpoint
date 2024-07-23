@@ -5,7 +5,7 @@
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse">
+      <div class="navbar-collapse">
         <div class="navbar-nav">
           <div class="nav-item">
             <router-link class="nav-link" to="/">Testpoint</router-link>
@@ -42,12 +42,12 @@
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuUser" role="button" href="#">
               <template v-if="profile">
-                <img height="25" class="rounded-circle" :src="account.avatarUrl()">
+                <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
                 {{ profile?.nickname ?? account.name }} ({{ profile.role_text }})
               </template>
 
               <template v-else>
-                <img height="25" class="rounded-circle" :src="account.avatarUrl()">
+                <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
                 {{ account.name }}
               </template>
             </a>

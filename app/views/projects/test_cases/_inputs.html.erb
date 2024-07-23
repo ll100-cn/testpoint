@@ -1,7 +1,0 @@
-<%= f.input :title %>
-<%= f.input :content, input_html: { class: 'markdown-field' } %>
-<%= f.input :folder_id, collection: sort_folders(@project.folders.available.ranked) %>
-<%= f.input :platform_ids, collection: @project.platforms, as: :check_boxes %>
-<%= f.input :label_ids, collection: @project.test_case_labels, as: :check_boxes %>
-
-<%= ok_url_tag %>

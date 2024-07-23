@@ -1,7 +1,0 @@
-<script>
-  <% if params[:ok_url] %>
-    location.href = <%= raw params[:ok_url].to_json %>
-  <% else %>
-    location.reload(false)
-  <% end %>
-</script>

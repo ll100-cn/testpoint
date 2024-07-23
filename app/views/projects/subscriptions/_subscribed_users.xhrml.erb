@@ -1,8 +1,0 @@
-<div class="mt-2 small text-muted"><%= @issue.subscriptions.count %>人订阅:</div>
-<% if @issue.subscriptions.count.nonzero? %>
-  <div class="mt-2">
-    <% issue.subscribed_users.each do |user| %>
-      <%= image_tag user.avatar_url, width: 30, class: "rounded-circle me-1", title: user.name, data: { bs_toggle: "tooltip", placement: "bottom" }  %>
-    <% end %>
-  </div>
-<% end %>
