@@ -1,8 +1,11 @@
 import { usePageStore } from '@/store'
 import { AppContext } from '@/types'
+import { App } from 'vue'
 
-export default function(ctx: AppContext) {
-  ctx.router.onError((err) => {
+export default function(app: App) {
+  const router = app.config.globalProperties.$router
+
+  router.onError((err) => {
     const store = usePageStore()
     store.errors.push(err)
 

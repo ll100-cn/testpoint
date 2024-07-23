@@ -1,8 +1,9 @@
-import { AppContext } from "@/types";
-import { Subscription } from "rxjs";
+import { Subscription } from "rxjs"
+import { App } from "vue"
 
-export default function({ app, router}: AppContext) {
+export default function(app: App) {
   app.config.globalProperties.$subscriptions = []
+  const router = app.config.globalProperties.$router
 
   router.beforeResolve((to, from) => {
     app.config.globalProperties.$subscriptions.reverse().forEach(subscription => {

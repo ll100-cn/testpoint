@@ -1,6 +1,15 @@
-import { AppContext } from "@/types"
 import { createPinia } from "pinia"
+import { App } from "vue"
 
-export default function({ app }: AppContext) {
-  app.use(createPinia())
+const pinia = createPinia()
+
+export default function(app: App) {
+  app.use(pinia)
+  app.config.globalProperties.$pinia = pinia
+}
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $pinia: typeof pinia
+  }
 }

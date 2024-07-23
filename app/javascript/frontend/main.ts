@@ -11,17 +11,15 @@ import '../widgets/bootstrap-select'
 
 
 import { createApp } from 'vue'
-import { AppContext } from "@/types"
 import App from "./App.vue"
 
-const ctx = {} as AppContext
-const app = ctx.app = createApp(App)
+const app = createApp(App)
 
 import * as initializers from "./initializers"
 
 for (const key in initializers) {
   const initializer = initializers[key as keyof typeof initializers]
-  initializer(ctx)
+  initializer(app)
 }
 
 app.mount('#app')
