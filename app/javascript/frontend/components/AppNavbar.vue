@@ -1,65 +1,74 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top tp-navbar">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapseContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse">
-        <div class="navbar-nav">
-          <div class="nav-item">
-            <router-link class="nav-link" to="/">Testpoint</router-link>
-          </div>
+  <div class="bg-dark !py-2 sticky top-0">
+    <Container class="flex w-full">
+      <Nav>
+        <NavList :preset="navbarPt">
+          <NavItem value="" as-child>
+            <RLink to="/">Testpoint</RLink>
+          </NavItem>
 
           <template v-if="account">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" aria-expanded="false">
-                {{ profile?.project_name ?? "选择项目" }}
-              </a>
+            <NavItem value="">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <span>{{ profile?.project_name ?? "选择项目" }}</span>
+                  <i class="fa-solid fa-caret-down !ms-1"></i>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem v-for="project in projects" :key="project.id" class="justify-between" as-child>
+                    <RLink :to="`/projects/${project.id}`">
+                      <span>{{ project.name }}</span>
+                      <i class="fal fa-sign-in-alt fa-fw"></i>
+                    </RLink>
+                  </DropdownMenuItem>
 
-              <div class="dropdown-menu">
-                <router-link v-for="project in projects" class="small dropdown-item d-flex align-items-center" :to="`/projects/${project.id}`">
-                  <span class="me-auto">{{ project.name }}</span>
-                  <i class="fal fa-sign-in-alt"></i>
-                </router-link>
-
-                <template v-if="account?.admin">
-                  <div class="dropdown-divider"></div>
-
-                  <router-link class="small dropdown-item d-flex align-items-center" to="/projects">
-                    <span class="me-auto">项目设置</span>
-                    <i class="fal fa-cogs"></i>
-                  </router-link>
-                </template>
-              </div>
-            </div>
+                  <template v-if="account?.admin">
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem class="justify-between" as-child>
+                      <RLink to="/projects">
+                        <span>项目设置</span>
+                        <i class="fal fa-cogs fa-fw"></i>
+                      </RLink>
+                    </DropdownMenuItem>
+                  </template>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </NavItem>
 
             <ProjectNav v-if="profile" :project_id="profile.project_id" />
           </template>
-        </div>
+        </NavList>
+      </Nav>
 
-        <div v-if="account" class="navbar-nav ms-md-auto">
-          <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuUser" role="button" href="#">
-              <template v-if="profile">
-                <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
-                {{ profile?.nickname ?? account.name }} ({{ profile.role_text }})
-              </template>
+      <Nav v-if="account">
+        <NavList :preset="navbarPt" class="ms-auto">
+          <NavItem value="">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <span v-if="profile">
+                  <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
+                  {{ profile?.nickname ?? account.name }} ({{ profile.role_text }})
+                </span>
 
-              <template v-else>
-                <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
-                {{ account.name }}
-              </template>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end">
-              <router-link class="dropdown-item" to="/profile/basic">个人中心</router-link>
-              <a class="dropdown-item" rel="nofollow" href="#" @click="signOut">退出</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+                <span v-else>
+                  <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
+                  {{ account.name }}
+                </span>
+
+                <i class="fa-solid fa-caret-down !ms-1"></i>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent :align="'end'">
+                <DropdownMenuItem as-child>
+                  <RLink to="/profile/basic">个人中心</RLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem @click.prevent="signOut">退出</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </NavItem>
+        </NavList>
+      </Nav>
+    </Container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -70,6 +79,12 @@ import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
+import { Nav, NavList, NavItem } from '$vendor/ui'
+import { bva } from '$vendor/ui/utils'
+import { NavPresenter } from '$vendor/ui/nav/types'
+import RLink from './RLink.vue'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { Container } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
@@ -91,5 +106,20 @@ async function signOut() {
   session.clear()
   router.push('/')
 }
+
+const navbarPt = {
+  list: bva('flex', { }),
+  item: bva(`
+    !p-2 text-white/55
+    hover:text-white/75
+    data-[state=active]:text-white
+  `, {
+    size: {
+      xs: '',
+      sm: '',
+      default: '',
+    }
+  })
+} satisfies NavPresenter
 
 </script>

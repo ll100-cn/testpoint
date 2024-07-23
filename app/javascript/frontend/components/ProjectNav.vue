@@ -1,23 +1,23 @@
 <template>
-  <div class="nav-item">
-    <router-link v-if="allow('read', TestCase)" class="nav-link" :to="`/projects/${project_id}/test_cases`" active-class="active">案例</router-link>
-  </div>
+  <NavItem value="" as-child>
+    <RLink v-if="allow('read', TestCase)" :to="`/projects/${project_id}/test_cases`" active-class="active">案例</RLink>
+  </NavItem>
 
-  <div class="nav-item">
-    <router-link v-if="allow('read', Plan)" class="nav-link" :to="`/projects/${project_id}/plans`" active-class="active">计划</router-link>
-  </div>
+  <NavItem value="" as-child>
+    <RLink v-if="allow('read', Plan)" :to="`/projects/${project_id}/plans`" active-class="active">计划</RLink>
+  </NavItem>
 
-  <div class="nav-item">
-    <router-link v-if="allow('read', Issue)" class="nav-link" :to="`/projects/${project_id}/issues`" active-class="active">问题</router-link>
-  </div>
+  <NavItem value="" as-child>
+    <RLink v-if="allow('read', Issue)" :to="`/projects/${project_id}/issues`" active-class="active">问题</RLink>
+  </NavItem>
 
-  <div class="nav-item">
-    <router-link v-if="allow('read', Milestone)" class="nav-link" :to="`/projects/${project_id}/milestones`" active-class="active">里程碑</router-link>
-  </div>
+  <NavItem value="" as-child>
+    <RLink v-if="allow('read', Milestone)" :to="`/projects/${project_id}/milestones`" active-class="active">里程碑</RLink>
+  </NavItem>
 
-  <div class="nav-item">
-    <router-link class="nav-link" :to="`/projects/${project_id}/analytics`" active-class="active">统计报表</router-link>
-  </div>
+  <NavItem value="" as-child>
+    <RLink :to="`/projects/${project_id}/analytics`" active-class="active">统计报表</RLink>
+  </NavItem>
 
   <NavItemDropdown>
     <template #toggle>设置</template>
@@ -35,6 +35,8 @@
 import { Category, Issue, IssueTemplate, Member, Milestone, Plan, Platform, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from '@/store'
 import NavItemDropdown from './NavItemDropdown.vue'
+import { Nav, NavList, NavItem } from '$vendor/ui'
+import RLink from './RLink.vue'
 
 const page = usePageStore()
 const allow = page.inProject().allow

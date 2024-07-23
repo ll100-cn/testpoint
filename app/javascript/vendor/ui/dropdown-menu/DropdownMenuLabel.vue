@@ -3,7 +3,7 @@ import { type HTMLAttributes, computed } from 'vue'
 import { DropdownMenuLabel, type DropdownMenuLabelProps, useForwardProps } from 'radix-vue'
 import { cn } from '$vendor/ui/utils'
 
-interface Props extends DropdownMenuLabelProps {
+interface Props extends /* @vue-ignore */ DropdownMenuLabelProps {
   class?: HTMLAttributes['class']
   inset?: boolean
   preset?: 'default' | 'plain'

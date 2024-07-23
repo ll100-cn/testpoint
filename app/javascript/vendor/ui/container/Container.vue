@@ -6,7 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 type PresetId = 'fluid' | 'fixed'
 
-const variance = cva('px-4', {
+const variance = cva('!px-3', {
   variants: {
     preset: {
       fluid: '',
