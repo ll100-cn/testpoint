@@ -27,6 +27,7 @@ export default defineConfig({
       'vue': 'vue/dist/vue.esm-bundler.js',
       '@': fileURLToPath(new URL('./app/javascript/frontend', import.meta.url)),
       '@vendor': fileURLToPath(new URL('./node_modules/@vendor', import.meta.url)),
+      '$vendor': fileURLToPath(new URL('./app/javascript/vendor', import.meta.url)),
     }
   }
 })
