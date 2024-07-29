@@ -1,63 +1,54 @@
 <template>
-  <div ref="el" class="modal-dialog modal-lg" v-if="!loading" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">测试不通过</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+  <DialogContent v-if="!loading" class="max-w-4xl">
+    <DialogHeader>
+      <DialogTitle>测试不通过</DialogTitle>
+    </DialogHeader>
 
-      <template v-if="addon == null">
-        <div class="modal-body">
-          <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
+    <template v-if="addon == null">
+      <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
+      <ActionerAlert :actioner="actioner" />
 
-          <ActionerAlert :actioner="actioner" />
-        </div>
+      <DialogFooter>
+        <Button variant="secondary" type="button" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_info)">取消</Button>
+        <a class="btn btn-danger" href="#" @click.prevent="actioner.failTaskUpshot">设置为不通过</a>
+      </DialogFooter>
+    </template>
 
-        <div class="modal-footer x-spacer-2">
-          <button type="button" class="btn btn-secondary" @click.prevent="emit('switch', TaskUpshotInfoFrame, task_upshot_info)">取消</button>
-          <a class="btn btn-danger" href="#" @click.prevent="actioner.failTaskUpshot">设置为不通过</a>
-        </div>
-      </template>
+    <IssueForm preset="vertical" v-else-if="addon == 'new_issue'" v-bind="{ former: issue_former }" @submit.prevent="issue_former.perform()">
+      <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
 
-      <layouts.form_vertical v-else-if="addon == 'new_issue'" v-bind="{ former: issue_former }" @submit.prevent="issue_former.submit">
-        <div class="modal-body">
-          <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
+      <hr>
 
-          <hr>
+      <FormErrorAlert />
+      <ActionerAlert :actioner="actioner" />
 
-          <FormErrorAlert />
-          <ActionerAlert :actioner="actioner" />
+      <IssueFormGroup path="issue_attributes.title" label="工单标题"><newControls.string /></IssueFormGroup>
+      <IssueFormGroup path="issue_attributes.content" label="工单内容"><newControls.markdown /></IssueFormGroup>
 
-          <layouts.group code="issue_attributes.title" label="工单标题"><controls.string /></layouts.group>
-          <layouts.group code="issue_attributes.content" label="工单内容"><controls.markdown /></layouts.group>
-        </div>
+      <DialogFooter>
+        <Button type="button" variant="secondary" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_info)">取消</Button>
+        <Button>提交</Button>
+      </DialogFooter>
+    </IssueForm>
 
-        <div class="modal-footer x-spacer-2">
-          <button type="button" class="btn btn-secondary" @click.prevent="emit('switch', TaskUpshotInfoFrame, task_upshot_info)">取消</button>
-          <layouts.submit>提交</layouts.submit>
-        </div>
-      </layouts.form_vertical>
+    <template v-else>
+      <CommentForm preset="vertical" v-bind="{ former: comment_former }" @submit.prevent="comment_former.perform()">
+        <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
 
-      <template v-else>
-        <layouts.form_vertical v-bind="{ former: comment_former }" @submit.prevent="comment_former.submit">
-          <div class="modal-body">
-            <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
+        <hr>
 
-            <hr>
+        <FormErrorAlert />
+        <ActionerAlert :actioner="actioner" />
 
-            <FormErrorAlert />
-            <ActionerAlert :actioner="actioner" />
+        <IssueCommentForm :former="comment_former" :attachments="[]" />
 
-            <IssueCommentForm :former="comment_former" :attachments="[]" />
-          </div>
-          <div class="modal-footer x-spacer2">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-            <layouts.submit>提交</layouts.submit>
-          </div>
-        </layouts.form_vertical>
-      </template>
-    </div>
-  </div>
+        <DialogFooter>
+          <DialogClose><Button variant="secondary" type="button">取消</Button></DialogClose>
+          <Button>提交</Button>
+        </DialogFooter>
+      </CommentForm>
+    </template>
+  </DialogContent>
 </template>
 
 <script setup lang="ts">
@@ -67,11 +58,15 @@ import * as q from '@/lib/requests'
 import { Category, IssueTemplate, Member, PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import { usePageStore } from '@/store'
 import { Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
-import TaskUpshotInfoFrame from "./TaskUpshotInfoFrame.vue"
+import TaskUpshotInfoDialogContent from "./TaskUpshotInfoDialogContent.vue"
 import TaskUpshotFailureType, { ModalValue as AddonType } from "./TaskUpshotFailureType.vue"
 import { Actioner } from "@/components/Actioner"
 import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
+import { Former as NewFormer, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as newControls from '@/components/controls'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()
@@ -92,7 +87,7 @@ const members = ref([] as Member[])
 const categories = ref([] as Category[])
 const issue_templates = ref([] as IssueTemplate[])
 
-const issue_former = Former.build({
+const issue_former = NewFormer.build({
   from_task_id: null,
   issue_attributes: {
     title: null,
@@ -100,7 +95,9 @@ const issue_former = Former.build({
   },
 })
 
-issue_former.perform = async function() {
+const { Form: IssueForm, FormGroup: IssueFormGroup } = FormFactory<typeof issue_former.form>()
+
+issue_former.doPerform = async function() {
   await new q.bug.IssueReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.plan_info.project_id
   }).perform(this.form)
@@ -112,12 +109,14 @@ const comment_issue = computed(() => {
   return task_info.value.issues.find(it => it.id === addon.value)
 })
 
-const comment_former = Former.build({
+const comment_former = NewFormer.build({
   content: "",
   attachments_params: []
 })
 
-comment_former.perform = async function() {
+const { Form: CommentForm, FormGroup: CommentFormGroup } = FormFactory<typeof comment_former.form>()
+
+comment_former.doPerform = async function() {
   await new q.bug.IssueCommentReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = comment_issue.value.project_id
     req.interpolations.issue_id = comment_issue.value.id
@@ -144,7 +143,7 @@ actioner.failTaskUpshot = async function() {
     })
 
     Object.assign(task_upshot_info.value, a_task_upshot)
-    emit('switch', TaskUpshotInfoFrame, task_upshot_info.value)
+    emit('switch', TaskUpshotInfoDialogContent, task_upshot_info.value)
   })
 }
 

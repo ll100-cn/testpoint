@@ -1,6 +1,6 @@
 <template>
   <div id="tp-main">
-    <a v-if="allow('update', TestCase)" href="#" @click="onBatch?.(CaseBatchEditFrame, select_test_cases)">编辑 ({{ select_test_case_ids.length }})</a>
+    <a v-if="allow('update', TestCase)" href="#" @click="onBatch?.(CaseBatchEditDialogContent, select_test_cases)">编辑 ({{ select_test_case_ids.length }})</a>
     <Table data-controller="select-all">
       <TableHeader>
         <TableRow>
@@ -16,7 +16,7 @@
             <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
           </TableCell>
           <TableCell>
-            <a href="#" @click="onModal?.(CaseShowFrame, test_case)">
+            <a href="#" @click="onModal?.(CaseShowDialogContent, test_case)">
               <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
               {{ test_case.title }}
             </a>
@@ -34,14 +34,14 @@
 </template>
 
 <script setup lang="ts">
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$vendor/ui'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from "@/models"
 import { usePageStore } from "@/store"
-import { Component, PropType, computed, ref } from "vue"
-import CaseBatchEditFrame from "./CaseBatchEditFrame.vue"
+import { Component, computed, ref } from "vue"
+import CaseBatchEditDialogContent from "./CaseBatchEditDialogContent.vue"
 import CaseLabelCell from "./CaseLabelCell.vue"
 import CasePlatformCell from "./CasePlatformCell.vue"
-import CaseShowFrame from "./CaseShowFrame.vue"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import CaseShowDialogContent from "./CaseShowDialogContent.vue"
 
 const page = usePageStore()
 const allow = page.inProject().allow

@@ -1,34 +1,30 @@
 <template>
-  <div ref="el" class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="mb-0">等待反馈</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-      </div>
-      <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit" v-if="!loading">
-        <div class="modal-body">
-          <IssueCommentForm :former="former" :attachments="[]" />
-        </div>
-        <div class="modal-footer x-spacer-2">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-          <layouts.submit>确认</layouts.submit>
-        </div>
-      </layouts.form_vertical>
-    </div>
-  </div>
+  <DialogContent class="max-w-4xl">
+    <DialogHeader>
+      <DialogTitle>等待反馈</DialogTitle>
+    </DialogHeader>
+    <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
+      <IssueCommentForm :former="former" :attachments="[]" />
+
+      <DialogFooter>
+        <DialogClose><Button variant="secondary" type="button">取消</Button></DialogClose>
+        <Button>确认</Button>
+      </DialogFooter>
+    </Form>
+  </DialogContent>
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
-import BootstrapHelper from "@/lib/BootstrapHelper"
 import * as q from '@/lib/requests'
 import { Comment, IssueInfo } from "@/models"
 import { getCurrentInstance, nextTick, ref } from "vue"
 import IssueCommentForm from "./IssueCommentForm.vue"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import Button from "$vendor/ui/button/Button.vue"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
-const el = ref(null! as HTMLElement)
 const { proxy } = getCurrentInstance()
+const open = defineModel('open')
 
 const emit = defineEmits<{
   created: [ IssueInfo, Comment ]
@@ -44,7 +40,9 @@ const former = Former.build({
   attachments_params: []
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const a_comment = await new q.bug.IssueCommentReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
@@ -59,7 +57,7 @@ former.perform = async function() {
   props.issue_info.activities.push(...a_issue_action.activities)
 
   emit("created", props.issue_info, a_comment)
-  BootstrapHelper.modal(el).hide()
+  open.value = false
 }
 
 const loading = ref(true)

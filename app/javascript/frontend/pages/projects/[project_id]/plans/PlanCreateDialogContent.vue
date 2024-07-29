@@ -1,26 +1,21 @@
 <template>
-  <div ref="el" class="modal-dialog modal-lg" role="document">
-    <div v-if="!loading" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">新增计划</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-      </div>
-      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-        <div class="modal-body">
-          <Fields :platforms="platforms" :test_case_stats="test_case_stats" />
-        </div>
-        <div class="modal-footer x-spacer-2">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
-          <layouts.submit>新增计划</layouts.submit>
-        </div>
-      </layouts.form_horizontal>
-    </div>
-  </div>
+  <DialogContent v-if="!loading" class="max-w-lg">
+    <DialogHeader>
+      <DialogTitle>新增计划</DialogTitle>
+    </DialogHeader>
+
+    <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
+      <Fields :former="former" :platforms="platforms" :test_case_stats="test_case_stats" />
+
+      <DialogFooter>
+        <DialogClose><Button variant="secondary" type="button">关闭</Button></DialogClose>
+        <Button>新增计划</Button>
+      </DialogFooter>
+    </Form>
+  </DialogContent>
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
 import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
 import { Plan, Platform, TestCaseStat } from '@/models'
@@ -29,15 +24,15 @@ import { getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
 import BootstrapHelper from "@/lib/BootstrapHelper"
 import { usePageStore } from "@/store"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const el = ref(null as InstanceType<typeof HTMLElement>)
 const page = usePageStore()
 const profile = page.inProject().profile
-
-const props = defineProps<{
-  test_case_stats: TestCaseStat[]
-}>()
+const open = defineModel('open')
 
 const emit = defineEmits<{
   created: [plan: Plan]
@@ -52,18 +47,24 @@ const former = Former.build({
   role_names: [],
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const plan = await new q.test.PlanReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = profile.project_id
   }).perform(this.form)
 
   emit('created', plan)
-  BootstrapHelper.modal(el).hide()
+  open.value = false
 }
 
 const loading = ref(true)
-async function reset() {
+const test_case_stats = ref([] as TestCaseStat[])
+
+async function reset(new_test_case_stats: TestCaseStat[]) {
   loading.value = true
+
+  test_case_stats.value = new_test_case_stats
 
   platforms.value = await page.inProject().request(q.project.PlatformReq.List).setup(proxy).perform()
   former.form.title = `Test Plan: ${h.datetime(new Date(), "YYYY-MM-DD")}`

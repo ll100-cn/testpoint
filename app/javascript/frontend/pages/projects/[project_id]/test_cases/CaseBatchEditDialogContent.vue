@@ -1,82 +1,80 @@
 <template>
-  <div class="modal-dialog modal-lg">
-    <div v-if="!loading" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">批量编辑</h5>
+  <DialogContent class="max-w-4xl" v-if="!loading">
+    <DialogHeader>
+      <DialogTitle>批量编辑</DialogTitle>
+    </DialogHeader>
+
+    <template v-if="state === 'pending'">
+      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
+        <div>
+          <FormErrorAlert />
+
+          <div class="row gy-3">
+            <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping">
+              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping">
+              <controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+            </SwitchFormGroup>
+          </div>
+
+        </div>
+
+        <DialogFooter>
+          <DialogClose><Button type="button" class="btn btn-secondary">Close</Button></DialogClose>
+          <Button>保存</Button>
+        </DialogFooter>
+      </layouts.form_horizontal>
+    </template>
+
+    <template v-if="state === 'submitting'">
+      <div>
+        <h3>表单提交中</h3>
       </div>
+    </template>
 
-      <template v-if="state === 'pending'">
-        <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-          <div class="modal-body">
-            <FormErrorAlert />
-
-            <div class="row gy-3">
-              <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping">
-                <controls.string />
-              </SwitchFormGroup>
-
-              <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
-                <controls.string />
-              </SwitchFormGroup>
-
-              <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping">
-                <controls.string />
-              </SwitchFormGroup>
-
-              <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping">
-                <controls.string />
-              </SwitchFormGroup>
-
-              <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping">
-                <controls.string />
-              </SwitchFormGroup>
-
-              <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping">
-                <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
-              </SwitchFormGroup>
-
-              <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping">
-                <controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
-              </SwitchFormGroup>
-            </div>
-
+    <template v-if="state === 'submitted'">
+      <div>
+        <h5>提交结束, 错误数 {{ result.filter((it) => { return it.error != null }).length }} 个</h5>
+        <template v-for="info in result" :key="info">
+          <div>
+            <span>名称: {{ info.test_case.title }}</span>
+            <span v-if="info.error" class="text-danger">
+              错误: {{ info.error }}
+            </span>
+            <span v-else class="text-success">
+              成功
+            </span>
           </div>
-
-          <div class="modal-footer x-spacer-2">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <layouts.submit>保存</layouts.submit>
-          </div>
-        </layouts.form_horizontal>
-      </template>
-
-      <template v-if="state === 'submitting'">
-        <div class="modal-body">
-          <h3>表单提交中</h3>
-        </div>
-      </template>
-
-      <template v-if="state === 'submitted'">
-        <div class="modal-body">
-          <h5>提交结束, 错误数 {{ result.filter((it) => { return it.error != null }).length }} 个</h5>
-          <template v-for="info in result" :key="info">
-            <div>
-              <span>名称: {{ info.test_case.title }}</span>
-              <span v-if="info.error" class="text-danger">
-                错误: {{ info.error }}
-              </span>
-              <span v-else class="text-success">
-                成功
-              </span>
-            </div>
-          </template>
-        </div>
-        <div class="modal-footer x-spacer-2">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="state = 'pending'">重新编辑</button>
-        </div>
-      </template>
-    </div>
-  </div>
+        </template>
+      </div>
+      <DialogFooter>
+        <DialogClose><Button variant="secondary" type="button">Close</Button></DialogClose>
+        <Button type="button" @click.prevent="state = 'pending'">重新编辑</Button>
+      </DialogFooter>
+    </template>
+  </DialogContent>
 </template>
 
 <script setup lang="ts">
@@ -88,8 +86,10 @@ import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import _ from 'lodash'
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
-const validations = reactive<Validations>(new Validations())
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import Button from '$vendor/ui/button/Button.vue'
 
+const validations = reactive<Validations>(new Validations())
 const { proxy } = getCurrentInstance()
 const state = ref('pending') // [ pending, submitting, submited ]
 

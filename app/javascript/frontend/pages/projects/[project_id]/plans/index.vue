@@ -3,18 +3,18 @@
     <h2>计划列表</h2>
 
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <button v-if="allow('create', Plan)" class="btn btn-primary" @click="plan_modal.show(PlanCreateFrame)">新增计划</button>
+      <button v-if="allow('create', Plan)" class="btn btn-primary" @click="plan_dialog.show(PlanCreateDialogContent, test_case_stats)">新增计划</button>
     </div>
   </div>
 
-  <div class="page-filter">
-    <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)" @input="onSearchInput">
-      <layouts.group code="creator_id_eq" label="成员">
+  <div class="">
+    <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()" @input="onSearchInput">
+      <FormGroup path="creator_id_eq" label="成员">
         <controls.select include_blank>
           <OptionsForMember :collection="members" except_level="reporter" />
         </controls.select>
-      </layouts.group>
-    </layouts.form_inline>
+      </FormGroup>
+    </Form>
   </div>
 
   <div class="row mb-3">
@@ -52,14 +52,13 @@
 
   <PaginationBar :pagination="plans" />
   <teleport to="body">
-    <BlankModal ref="plan_modal" :test_case_stats="test_case_stats" @created="onCreated" />
+    <BlankDialog ref="plan_dialog" @created="onCreated" />
   </teleport>
 </template>
 
 <script setup lang="ts">
 import PaginationBar from '@/components/PaginationBar.vue'
-import { controls, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
+import { layouts } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
 import * as q from '@/lib/requests'
 import * as utils from '@/lib/utils'
@@ -71,9 +70,12 @@ import * as t from '@/lib/transforms'
 import { usePageStore } from '@/store'
 import { Plan } from '@/models'
 import BlankModal from '@/components/BlankModal.vue'
-import PlanCreateFrame from './PlanCreateFrame.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import * as controls from '@/components/controls'
+import BlankDialog from '$vendor/ui/BlankDialog.vue'
+import PlanCreateDialogContent from './PlanCreateDialogContent.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -82,7 +84,7 @@ const params = route.params as any
 const query = route.query
 const page = usePageStore()
 const allow = page.inProject().allow
-const plan_modal = ref(null as InstanceType<typeof BlankModal>)
+const plan_dialog = ref(null as InstanceType<typeof BlankDialog>)
 
 class Search {
   @t.Number creator_id_eq?: number = undefined
@@ -90,7 +92,10 @@ class Search {
 
 const search = utils.instance(Search, query)
 const former = Former.build(search)
-former.perform = async function(data) {
+
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function(data) {
   data = utils.compactObject(data)
   router.push({ query: utils.plainToQuery(data) })
 }
@@ -112,7 +117,7 @@ const progress_bg_mapping = ref({ pass: "bg-success", failure: "bg-danger" })
 
 function onSearchInput(event) {
   setTimeout(() => {
-    former.submit(former.form)
+    former.perform()
   }, 0);
 }
 

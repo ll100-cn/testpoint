@@ -1,15 +1,16 @@
 <template>
   <FormErrorAlert />
 
-  <div class="row gy-3">
+  <div class="space-y-3">
     <FormGroup path="name" label="模版名称">
-      <newControls.string />
+      <controls.string />
     </FormGroup>
-    <FormGroup path="lookup_by_build_form" label="新增问题时可选" hint="不勾选则新增工单时隐藏, 只能人工指给定已创建的工单">
+    <FormGroup path="lookup_by_build_form" label="新增问题时可选">
       <controls.checkboxes v-bind="{ collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
+      <div class="text-muted text-sm">不勾选则新增工单时隐藏, 只能人工指给定已创建的工单</div>
     </FormGroup>
     <FormGroup path="title_suggestion" label="预设标题">
-      <newControls.string />
+      <controls.string />
     </FormGroup>
     <FormGroup path="default_category_id" label="预设分类">
       <controls.select include_blank>
@@ -36,7 +37,7 @@
           </TableHeader>
           <TableBody>
             <TableRow v-for="(input, index) in former.form.inputs_attributes" :key="input.id">
-              <TableCell><newControls.string v-model="input['label']" /></TableCell>
+              <TableCell><controls.string v-model="input['label']" /></TableCell>
               <TableCell><controls.number v-model="input['order_index']" /></TableCell>
               <TableCell>
                 <a class="btn btn-danger" @click="onRemoveInput(index)">删除</a>
@@ -53,7 +54,6 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { controls, layouts } from "@/components/simple_form"
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 import * as q from '@/lib/requests'
 import { usePageStore } from '@/store'
@@ -62,7 +62,7 @@ import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import * as newControls from '@/components/controls'
+import * as controls from '@/components/controls'
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()

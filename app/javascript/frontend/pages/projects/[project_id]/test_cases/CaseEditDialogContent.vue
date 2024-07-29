@@ -1,28 +1,26 @@
 <template>
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content" v-if="!loading">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ test_case.title }}</h5>
+  <DialogContent class="max-w-4xl" v-if="!loading" :closeable="false">
+    <DialogHeader>
+      <DialogTitle>{{ test_case.title }}</DialogTitle>
+
+      <template #actions>
         <a v-if="allow('destroy', test_case)" href="#" class="text-danger small" @click="archiveTestCase">归档</a>
-      </div>
+      </template>
+    </DialogHeader>
 
-      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-        <div class="modal-body">
-          <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
-        </div>
+    <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
+      <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
 
-        <div class="modal-footer x-spacer-2">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <layouts.submit>保存</layouts.submit>
-        </div>z
-      </layouts.form_horizontal>
-    </div>
-  </div>
+      <DialogFooter>
+        <DialogClose><Button variant="secondary" type="button">Close</Button></DialogClose>
+        <Button>保存</Button>
+      </DialogFooter>
+    </Form>
+  </DialogContent>
 </template>
 
 <script setup lang="ts">
 import { Validations, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from "@/store"
@@ -30,12 +28,16 @@ import { Modal } from 'bootstrap'
 import $ from 'jquery'
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()
 const allow = page.inProject().allow
 
 const validations = reactive<Validations>(new Validations())
+const open = defineModel('open')
 
 const props = defineProps<{
   platform_repo: EntityRepo<Platform>,
@@ -59,17 +61,16 @@ const former = Former.build({
   label_ids: null
 })
 
-former.perform = async function(event) {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const new_test_case = await new q.case.TestCaseReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = 1
     req.interpolations.id = test_case.value.id
   }).perform(this.form)
 
-  const targe = event.target as HTMLElement
-  const modal = Modal.getOrCreateInstance(targe.closest('.modal'))
-  modal.hide()
-
   emit('updated', new_test_case)
+  open.value = false
 }
 
 async function archiveTestCase(event: Event) {
@@ -86,8 +87,8 @@ async function archiveTestCase(event: Event) {
       req.interpolations.id = test_case.value.id
     }).perform()
 
-    $(event.target).closest('.modal').modal('hide')
     emit('destroyed', new_test_case)
+    open.value = false
   } catch (err) {
     if (validations.handleError(err)) {
       alert(JSON.stringify(validations.fullMessages, null, 2))

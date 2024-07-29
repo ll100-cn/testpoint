@@ -1,6 +1,6 @@
 <template>
   <Card class="mb-2 c-pointer" @click="emit('click', task_upshot_info)">
-    <CardContent class="py-2 px-2">
+    <CardContent class="py-2 px-2 flex">
       <span class="me-3">
         <i v-if="task_upshot_info.state_override" class="far fa-clipboard-check text-muted" />
         <i v-else class="far fa-clipboard" style="opacity: 0.25" />

@@ -7,7 +7,7 @@
     </template>
   </PageHeader>
 
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert :validator="validator" />
 
   <Card>
     <CardContent>
@@ -43,7 +43,6 @@
 <script setup lang="ts">
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Validations } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import _ from 'lodash'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -53,6 +52,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import Validator from '$vendor/ui/simple_form/Validator';
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -61,7 +61,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow
 
-const validations = reactive<Validations>(new Validations())
+const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
 const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
@@ -83,7 +83,7 @@ async function onRemove(id: number) {
 
     router.go(0)
   } catch (error) {
-    if (validations.handleError(error)) {
+    if (validator.processError(error)) {
       return
     }
 

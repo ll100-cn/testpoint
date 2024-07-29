@@ -3,57 +3,55 @@
     <PageTitle>新增问题</PageTitle>
   </PageHeader>
 
-  <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <FormErrorAlert />
+  <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
+    <div class="mx-auto w-full max-w-4xl">
+      <FormErrorAlert />
 
-        <div class="row gy-3">
-          <layouts.group code="issue_template_id" label="选择问题模版">
-            <controls.bootstrap_select include_blank>
-              <BSOption v-for="item in issue_templates" :value="item.id">
-                {{ item.name }}
-              </BSOption>
-            </controls.bootstrap_select>
-          </layouts.group>
-
-          <template v-if="issue_template">
-            <layouts.group v-if="allow('manage', Issue)" code="issue_attributes.creator_id" label="创建人">
-              <controls.select include_blank>
-                <OptionsForMember :collection="members" />
-              </controls.select>
-            </layouts.group>
-            <layouts.group code="issue_attributes.title" label="标题">
-              <controls.string />
-            </layouts.group>
-            <layouts.group code="issue_attributes.content" label="内容">
-              <controls.markdown />
-            </layouts.group>
-            <layouts.group>
-              <AttachmentsUploader @changed="onAttachmentsChanged" :attachments="[]" />
-            </layouts.group>
-          </template>
-        </div>
+      <div class="space-y-3">
+        <FormGroup path="issue_template_id" label="选择问题模版">
+          <controls.bootstrap_select include_blank>
+            <BSOption v-for="item in issue_templates" :value="item.id">
+              {{ item.name }}
+            </BSOption>
+          </controls.bootstrap_select>
+        </FormGroup>
 
         <template v-if="issue_template">
-          <hr class="x-form-divider-through">
-
-          <div class="row gy-3">
-            <layouts.group v-for="(input, index) in issue_template.inputs" :code="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
-              <controls.string />
-            </layouts.group>
-          </div>
-
-          <hr class="x-form-divider-through">
-
-          <layouts.group control_wrap_class="x-actions x-spacer-2">
-            <layouts.submit>新增问题</layouts.submit>
-            <router-link class="btn btn-secondary" :to="`/projects/${params.project_id}/issues`">取消</router-link>
-          </layouts.group>
+          <FormGroup v-if="allow('manage', Issue)" path="issue_attributes.creator_id" label="创建人">
+            <controls.select include_blank>
+              <OptionsForMember :collection="members" />
+            </controls.select>
+          </FormGroup>
+          <FormGroup path="issue_attributes.title" label="标题">
+            <controls.string />
+          </FormGroup>
+          <FormGroup path="issue_attributes.content" label="内容">
+            <controls.markdown />
+          </FormGroup>
+          <FormGroup>
+            <AttachmentsUploader @changed="onAttachmentsChanged" :attachments="[]" />
+          </FormGroup>
         </template>
       </div>
+
+      <template v-if="issue_template">
+        <hr class="x-form-divider-through">
+
+        <div class="space-y-3">
+          <FormGroup v-for="(input, index) in issue_template.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
+            <controls.string />
+          </FormGroup>
+        </div>
+
+        <hr class="x-form-divider-through">
+
+        <div class="space-x-3">
+          <Button>新增问题</Button>
+          <Button variant="secondary" :to="`/projects/${params.project_id}/issues`">取消</Button>
+        </div>
+      </template>
     </div>
-  </layouts.form_vertical>
+  </Form>
 </template>
 
 <script setup lang="ts">
@@ -63,13 +61,15 @@ import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { controls, layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
+import { layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { Attachment, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -100,7 +100,9 @@ const former = Former.build({
   survey_attributes: { inputs_attributes: [] },
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const issue = await new q.bug.IssueReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)

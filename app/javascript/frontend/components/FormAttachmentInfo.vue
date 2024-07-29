@@ -29,13 +29,13 @@
 
     <div class="flex-column flex-grow-1">
       <div v-if="editing" class="d-flex x-actions">
-        <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
-          <layouts.group class="mb-0" code="title"><controls.string /></layouts.group>
-          <div class="x-actions x-spacer-2 text-nowrap">
-            <layouts.submit>确定</layouts.submit>
-            <button class="btn btn-secondary" @click.prevent="exitEditing">取消</button>
+        <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
+          <FormGroup path="title"><controls.string /></FormGroup>
+          <div class="space-x-3">
+            <Button>确定</Button>
+            <Button variant="secondary" @click.prevent="exitEditing">取消</Button>
           </div>
-        </layouts.form_inline>
+        </Form>
       </div>
       <template v-else>
         <div class="d-flex align-items-center">
@@ -57,13 +57,15 @@
 </template>
 
 <script setup lang="ts">
-import { controls, layouts } from "@/components/simple_form"
+import { layouts } from "@/components/simple_form"
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { nextTick, onMounted, ref } from "vue"
-import Former from "./simple_form/Former"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const props = defineProps<{
   attachment: Attachment
@@ -79,7 +81,9 @@ const former = Former.build({
   title: props.attachment.title
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const changes = <Partial<Attachment>>{ id: props.attachment.id }
   if (props.attachment.title != this.form.title) {
     changes.title = this.form.title

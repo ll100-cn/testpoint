@@ -27,7 +27,6 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 
-
 const route = useRoute()
 const router = useRouter()
 const { proxy } = getCurrentInstance()
@@ -41,7 +40,7 @@ const former = Former.build({
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
-former.perform = async function() {
+former.doPerform = async function() {
   await new q.project.CategoryInfoReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)

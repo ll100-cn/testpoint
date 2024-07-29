@@ -25,7 +25,7 @@
       </router-link>
     </li>
     <li class="nav-item mb-3 mx-3">
-      <a v-if="allow('create', Phase)" class="nav-link" href="#" @click.prevent="phase_modal.show(PlanPhaseCreateFrame)">
+      <a v-if="allow('create', Phase)" class="nav-link" href="#" @click.prevent="phase_dialog.show(PlanPhaseCreateDialogContent)">
         <i class="far fa-plus-circle me-1" /><span>开始新一轮测试</span>
       </a>
     </li>
@@ -53,7 +53,7 @@
       </layouts.form_inline>
     </CardHeader>
 
-    <CardContent>
+    <CardContent class="row">
       <div class="col-12 col-md-3 col-xl-2 border-end p-3">
         <FolderSide :filter="filter" :test_case_stats="test_case_stats" />
       </div>
@@ -61,7 +61,7 @@
       <div class="col-12 col-md-9 col-xl-10">
         <div id="tp-main">
           <div class="test_cases-cards">
-            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_modal.show(TaskUpshotInfoFrame, task_upshot_info)" />
+            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_info)" />
           </div>
         </div>
       </div>
@@ -70,7 +70,8 @@
 
   <teleport to="body">
     <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
-    <BlankModal ref="phase_modal" :plan_info="plan_info" @created="onPhaseCreated" />
+    <BlankDialog ref="phase_dialog" :plan_info="plan_info" @created="onPhaseCreated" />
+    <BlankDialog ref="task_upshot_info_dialog" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
   </teleport>
 </template>
 
@@ -87,13 +88,14 @@ import { computed, getCurrentInstance, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FolderSide from '../FolderSide.vue'
 import { ChangeFilterFunction, ColumnFilter, Filter } from '../types'
-import PlanPhaseCreateFrame from './PlanPhaseCreateFrame.vue'
+import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
 import TaskRow from './TaskRow.vue'
-import TaskUpshotInfoFrame from './TaskUpshotInfoFrame.vue'
+import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import BlankDialog from '$vendor/ui/BlankDialog.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -103,7 +105,8 @@ const page = usePageStore()
 const allow = page.inProject().allow
 const query = route.query
 const task_upshot_info_modal = ref(null as InstanceType<typeof BlankModal>)
-const phase_modal = ref(null as InstanceType<typeof BlankModal>)
+const phase_dialog = ref(null as InstanceType<typeof BlankDialog>)
+const task_upshot_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
 
 const searcher = Former.build({
   state_eq: null as string | null,

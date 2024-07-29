@@ -7,7 +7,7 @@
     </template>
   </PageHeader>
 
-  <FormErrorAlert :validations="validations" />
+  <FormErrorAlert :validator="validator" />
 
   <div class="nav nav-tabs mb-n1px position-relative zindex-999">
     <a href="#" class="nav-link active" data-bs-toggle="tab" data-bs-target="#normal_card">正常</a>
@@ -53,7 +53,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { Validations } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { Member } from '@/models'
 import { usePageStore } from '@/store'
@@ -66,6 +65,7 @@ import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import Validator from '$vendor/ui/simple_form/Validator';
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -74,7 +74,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow
 
-const validations = reactive<Validations>(new Validations())
+const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
 const currentQuery = ref<PageQuery>({
@@ -104,7 +104,7 @@ async function onArchive(id: number) {
 
     router.go(0)
   } catch (error) {
-    if (validations.handleError(error)) {
+    if (validator.processError(error)) {
       return
     }
 

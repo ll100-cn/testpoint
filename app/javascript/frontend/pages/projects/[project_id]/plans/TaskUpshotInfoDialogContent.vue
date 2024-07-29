@@ -1,40 +1,33 @@
 <template>
-  <div ref="el" class="modal-dialog modal-lg" role="document">
-    <div v-if="!loading" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ task_upshot_info.test_case.title }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-      </div>
+  <DialogContent class="max-w-4xl" v-if="!loading">
+    <DialogHeader>
+      <DialogTitle>{{ task_upshot_info.test_case.title }}</DialogTitle>
+    </DialogHeader>
 
-      <div class="modal-body">
-        <div>
-          <textarea v-if="content.length > 0" v-model="content" data-controller="markdown" data-action="render->markdown#render" class="d-none" :readonly="!is_last_phase || !allow('update', task_upshot_info)" />
-          <small v-else class="text-muted">无详细信息</small>
+    <textarea v-if="content.length > 0" v-model="content" data-controller="markdown" data-action="render->markdown#render" class="d-none" :readonly="!is_last_phase || !allow('update', task_upshot_info)" />
+    <small v-else class="text-muted">无详细信息</small>
 
-          <hr>
-          <TaskDetailsState :task_info="task_info" :phase_infos="plan_info.phase_infos" :current_phase_id="current_phase_id" />
-        </div>
-      </div>
+    <hr>
+    <TaskDetailsState :task_info="task_info" :phase_infos="plan_info.phase_infos" :current_phase_id="current_phase_id" />
 
-      <div v-if="is_last_phase" class="modal-footer x-spacer-2">
-        <template v-if="task_info.ignore_at != null">
-          <a v-if="allow('update', task_info)" class="btn btn-primary" href="#" @click.prevent="actioner.unignoreTask">取消忽略</a>
+    <DialogFooter v-if="is_last_phase">
+      <template v-if="task_info.ignore_at != null">
+        <a v-if="allow('update', task_info)" class="btn btn-primary" href="#" @click.prevent="actioner.unignoreTask">取消忽略</a>
+      </template>
+      <template v-else-if="task_upshot_info.state == 'pending'">
+        <a v-if="allow('update', task_info)" class="btn btn-secondary me-auto" href="#" :disabled="actioner.processing" @click.prevent="actioner.ignoreTask">忽略</a>
+
+        <template v-if="allow('update', task_upshot_info)">
+          <a  class="btn btn-success" href="#" @click.prevent="actioner.updateTaskUpshotState('pass')">设置为通过</a>
+          <a class="btn btn-danger" href="#" @click.prevent="emit('switch', TaskUpshotFailureDialogContent, task_upshot_info, task_info)">不通过</a>
+          <a v-if="task_upshot_info.state_override && prev_task_upshot" class="btn btn-secondary" href="#" @click.prevent="actioner.updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</a>
         </template>
-        <template v-else-if="task_upshot_info.state == 'pending'">
-          <a v-if="allow('update', task_info)" class="btn btn-secondary me-auto" href="#" :disabled="actioner.processing" @click.prevent="actioner.ignoreTask">忽略</a>
-
-          <template v-if="allow('update', task_upshot_info)">
-            <a  class="btn btn-success" href="#" @click.prevent="actioner.updateTaskUpshotState('pass')">设置为通过</a>
-            <a class="btn btn-danger" href="#" @click.prevent="emit('switch', TaskUpshotFailureFrame, task_upshot_info, task_info)">不通过</a>
-            <a v-if="task_upshot_info.state_override && prev_task_upshot" class="btn btn-secondary" href="#" @click.prevent="actioner.updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</a>
-          </template>
-        </template>
-        <template v-else>
-          <a v-if="allow('update', task_upshot_info)" href="#" class="btn btn-primary" @click.prevent="actioner.updateTaskUpshotState('pending')">撤销测试结果</a>
-        </template>
-      </div>
-    </div>
-  </div>
+      </template>
+      <template v-else>
+        <a v-if="allow('update', task_upshot_info)" href="#" class="btn btn-primary" @click.prevent="actioner.updateTaskUpshotState('pending')">撤销测试结果</a>
+      </template>
+    </DialogFooter>
+  </DialogContent>
 </template>
 
 <script setup lang="ts">
@@ -46,10 +39,10 @@ import { usePageStore } from "@/store"
 import _ from 'lodash'
 import { Component, computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
 import TaskDetailsState from './TaskDetailsState.vue'
-import TaskUpshotFailureFrame from "./TaskUpshotFailureFrame.vue"
+import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
-const el = ref(null! as HTMLElement)
 const page = usePageStore()
 const allow = page.inProject().allow
 

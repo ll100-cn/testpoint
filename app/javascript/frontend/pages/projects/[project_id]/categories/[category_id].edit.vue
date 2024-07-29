@@ -4,16 +4,14 @@
   </PageHeader>
 
   <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields :former="former" />
+    <div class="w-full max-w-4xl mx-auto">
+      <Fields :former="former" />
 
-        <hr class="x-form-divider-through">
+      <hr class="x-form-divider-through">
 
-        <div class="space-x-3">
-          <Button>修改分类</Button>
-          <Button variant="secondary" :to="`/projects/${params.project_id}/categories`">取消</Button>
-        </div>
+      <div class="space-x-3">
+        <Button>修改分类</Button>
+        <Button variant="secondary" :to="`/projects/${params.project_id}/categories`">取消</Button>
       </div>
     </div>
   </Form>
@@ -49,7 +47,7 @@ const former = Former.build({
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
-former.perform = async function() {
+former.doPerform = async function() {
   await new q.project.CategoryInfoReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.category_id = category_id

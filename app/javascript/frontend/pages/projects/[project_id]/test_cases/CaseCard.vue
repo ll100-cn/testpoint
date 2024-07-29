@@ -36,15 +36,15 @@
       :platform_repo="platform_repo"
       :label_repo="label_repo"
       :filter="filter"
-      @modal="(...args) => case_modal.show(...args)"
-      @batch="(...args) => case_batch_modal.show(...args)" />
+      @modal="(...args) => case_dialog.show(...args)"
+      @batch="(...args) => case_batch_dialog.show(...args)" />
 
-    <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
+    <CardNewDialog ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
   </Card>
 
   <teleport to="body">
-    <BlankModal ref="case_modal" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankModal>
-    <BlankModal ref="case_batch_modal" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></BlankModal>
+    <BlankDialog ref="case_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankDialog>
+    <BlankDialog ref="case_batch_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></BlankDialog>
   </teleport>
 </template>
 
@@ -61,10 +61,11 @@ import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
-import CardNew from './CardNew.vue'
 import { usePageStore } from '@/store'
 import BlankModal from '@/components/BlankModal.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import BlankDialog from '$vendor/ui/BlankDialog.vue'
+import CardNewDialog from './CardNewDialog.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -75,6 +76,8 @@ const page = usePageStore()
 const allow = page.inProject().allow
 const case_modal = ref<InstanceType<typeof BlankModal>>()
 const case_batch_modal = ref<InstanceType<typeof BlankModal>>()
+const case_dialog = ref<InstanceType<typeof BlankDialog>>()
+const case_batch_dialog = ref<InstanceType<typeof BlankDialog>>()
 
 class Search {
   @t.String group_name_search?: string = undefined
@@ -146,7 +149,7 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 
 provide("changeFilter", changeFilter)
 
-const modal = ref<InstanceType<typeof CardNew>>()
+const modal = ref<InstanceType<typeof CardNewDialog>>()
 function showModal(project_id: number) {
   modal.value.show(project_id.toString())
 }

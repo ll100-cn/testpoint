@@ -1,33 +1,37 @@
 <template>
   <FormErrorAlert />
 
-  <div class="row gy-3">
-    <layouts.group code="title" label="标题"><controls.string /></layouts.group>
-    <layouts.group code="platform_id" label="平台">
+  <div class="space-x-3">
+    <FormGroup path="title" label="标题"><controls.string /></FormGroup>
+    <FormGroup path="platform_id" label="平台">
       <controls.select>
         <OptionsForSelect :collection="platforms.map(it => ({ label: it.name, value: it.id }))" />
       </controls.select>
-    </layouts.group>
+    </FormGroup>
 
-    <layouts.group v-if="test_case_stats && test_case_stats.length > 0" code="role_names" label="角色">
+    <FormGroup v-if="test_case_stats && test_case_stats.length > 0" path="role_names" label="角色">
       <controls.checkboxes v-bind="{ collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
-    </layouts.group>
+    </FormGroup>
   </div>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
-import { controls, layouts } from "@/components/simple_form"
 import { Platform, TestCaseStat } from "@/models"
 import _ from "lodash"
 import { computed } from 'vue'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const props = withDefaults(defineProps<{
+  former: Former<any>
   platforms: Platform[]
   test_case_stats?: TestCaseStat[]
 }>(), {
 })
+
+const { FormGroup } = FormFactory<typeof props.former.form>()
 
 const test_case_stats_collection = computed(() => {
   const role_name_list = _(props.test_case_stats).filter([ "archived", false ]).groupBy("role_name").keys().value()

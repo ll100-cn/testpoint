@@ -4,16 +4,14 @@
   </PageHeader>
 
   <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields :project_id="project_id" v-bind="{ former }" />
+    <div class="w-full max-w-4xl mx-auto">
+      <Fields :project_id="project_id" v-bind="{ former }" />
 
-        <hr class="x-form-divider-through">
+      <hr class="x-form-divider-through">
 
-        <div class="space-x-3">
-          <Button>修改问题模版</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/issue_templates`">取消</Button>
-        </div>
+      <div class="space-x-3">
+        <Button>修改问题模版</Button>
+        <Button variant="secondary" :to="`/projects/${project_id}/issue_templates`">取消</Button>
       </div>
     </div>
   </Form>
