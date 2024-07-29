@@ -13,30 +13,30 @@
   </div>
 
   <div class="tab-content">
-    <div v-for="(group, key) in grouped_milestones" :id="`${key}_card`" class="card page-card card-x-table rounded-top-left-0 tab-pane fade" :class="{ show: key == 'normal', active: key == 'normal' }">
-      <div class="card-body py-0">
-        <table class="table mb-0">
+    <Card v-for="(group, key) in grouped_milestones" :id="`${key}_card`" class="rounded-top-left-0 tab-pane fade" :class="{ show: key == 'normal', active: key == 'normal' }">
+      <CardContent>
+        <Table>
           <colgroup>
             <col>
             <col>
             <col width="30%">
           </colgroup>
-          <thead>
-            <tr>
-              <th>标题</th>
-              <th>发布时间</th>
-              <th>描述</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="milestone in group" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
-              <td>{{ milestone.title }}</td>
-              <td>{{ h.datetime(milestone.published_at) }}</td>
-              <td>
+          <TableHeader>
+            <TableRow>
+              <TableHead>标题</TableHead>
+              <TableHead>发布时间</TableHead>
+              <TableHead>描述</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="milestone in group" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
+              <TableCell>{{ milestone.title }}</TableCell>
+              <TableCell>{{ h.datetime(milestone.published_at) }}</TableCell>
+              <TableCell>
                 <textarea :value="milestone.description" data-controller="markdown" readonly class="d-none" />
-              </td>
-              <td>
+              </TableCell>
+              <TableCell>
                 <div class="x-actions justify-content-end x-spacer-3">
                   <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
                     <i class="far fa-pencil-alt" /> 修改
@@ -46,12 +46,12 @@
                   <a v-if="milestone.archived_at && allow('active', milestone)" href="#" @click.prevent="milestoneActive(milestone)"><i class="far fa-box-up"></i> 取消归档</a>
                   <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-trash-alt"></i> 删除</a>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   </div>
 </template>
 
@@ -63,6 +63,8 @@ import { usePageStore } from '@/store'
 import _ from 'lodash'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

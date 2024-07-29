@@ -10,6 +10,7 @@ export type CardPresenter = {
   root: (config: Partial<CardPresenterConfig>) => string
   header: (config: Partial<CardPresenterConfig>) => string
   content: (config: Partial<CardPresenterConfig>) => string
+  table: (config: Partial<CardPresenterConfig>) => string
   footer: (config: Partial<CardPresenterConfig>) => string
 }
 

@@ -1,54 +1,59 @@
 <template>
-  <div class="page-header">
-    <h2>问题模版列表</h2>
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
+  <PageHeader>
+    <PageTitle>问题模版列表</Pagetitle>
+
+    <template #actions>
       <button v-if="allow('create', IssueTemplate)" class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
-    </div>
-  </div>
-  <FormErrorAlert :validations="validations" />
-  <div class="card page-card card-x-table">
-    <div class="card-body">
-      <table class="table mb-0">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>模版名称</th>
-            <th>新增问题时可选</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+    </template>
+  </PageHeader>
+
+  <FormErrorAlert :validator="validator" />
+
+  <Card>
+    <CardContent>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>ID</TableHead>
+            <TableHead>模版名称</TableHead>
+            <TableHead>新增问题时可选</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           <template v-for="item in issue_templates" :key="item.id">
-            <tr>
-              <td>{{ item.id }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</td>
-              <td>
-                <div class="x-actions justify-content-end x-spacer-3">
+            <TableRow>
+              <TableCell>{{ item.id }}</TableCell>
+              <TableCell>{{ item.name }}</TableCell>
+              <TableCell>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</TableCell>
+              <TableCell>
+                <div class="flex justify-content-end space-x-3">
                   <router-link v-if="allow('update', item)" :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
                     <i class="far fa-pencil-alt" /> 修改
                   </router-link>
                   <a v-if="allow('destroy', item)" href="#" @click.prevent="onRemove(item.id)"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           </template>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        </TableBody>
+      </Table>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
 import * as q from '@/lib/requests'
-import { Validations } from "@/components/simple_form"
-
+import Validator from '$vendor/ui/simple_form/Validator';
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { IssueTemplate } from '@/models'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const route = useRoute()
 const router = useRouter()
@@ -57,7 +62,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow
 
-const validations = reactive<Validations>(new Validations())
+const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
 const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
@@ -75,7 +80,7 @@ async function onRemove(id: number) {
       req.interpolations.issue_template_id = id
     }).perform()
   } catch (error) {
-    if (validations.handleError(error)) {
+    if (validator.processError(error)) {
       return
     }
 

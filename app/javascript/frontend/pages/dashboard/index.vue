@@ -1,32 +1,32 @@
 <template>
   <PageHeader :issues_count="unhandled_issues_count" current="projects" />
 
-  <div class="card page-card card-x-table">
-    <div class="card-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="text-nowrap">项目名称</th>
+  <Card>
+    <CardContent>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead class="text-nowrap">项目名称</TableHead>
 
-            <th class="text-nowrap" v-for="[code, text] of enum_issue_stages">
+            <TableHead class="text-nowrap" v-for="[code, text] of enum_issue_stages">
               {{ text }} ({{ issue_stages_counts.get(code) ?? 0 }})
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="[project, issue_stats_mapping] of grouped_issue_stats">
-            <td class="text-nowrap"><router-link :to="`/projects/${project.id}`">{{ project.name }}</router-link></td>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="[project, issue_stats_mapping] of grouped_issue_stats">
+            <TableCell class="text-nowrap"><router-link :to="`/projects/${project.id}`">{{ project.name }}</router-link></TableCell>
 
-            <td v-for="[code, text] of enum_issue_stages">
+            <TableCell v-for="[code, text] of enum_issue_stages">
               <router-link v-for="issue_stat in issue_stats_mapping.get(code) ?? []" :to="{ path: `/projects/${project.id}/issues`, query: { stage: code, category_id_eq: issue_stat.category?.id } }">
                 <CategoryBadge class="text-nowrap mb-1 me-2" :category="issue_stat.category" :count="issue_stat.count" />
               </router-link>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +38,8 @@ import CategoryBadge from '@/components/CategoryBadge.vue'
 import { ENUM_ISSUE_STAGES } from "@/constants"
 import { usePageStore } from '@/store'
 import _ from 'lodash'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const page = usePageStore()

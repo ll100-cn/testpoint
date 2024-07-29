@@ -1,7 +1,7 @@
 <template>
-  <div class="page-header">
-    <h2>新增里程碑</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>新增里程碑</PageTitle>
+  </PageHeader>
 
   <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
@@ -26,6 +26,8 @@ import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import { layouts } from '@/components/simple_form'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

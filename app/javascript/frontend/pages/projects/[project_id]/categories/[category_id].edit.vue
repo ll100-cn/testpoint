@@ -1,31 +1,33 @@
 <template>
-  <div class="page-header">
-    <h2>修改分类</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>修改分类</PageTitle>
+  </PageHeader>
 
-  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
+  <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
     <div class="row">
       <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields />
+        <Fields :former="former" />
 
         <hr class="x-form-divider-through">
 
-        <layouts.group control_wrap_class="x-actions x-spacer-2">
-          <layouts.submit>修改分类</layouts.submit>
-          <router-link class="btn btn-secondary" :to="`/projects/${project_id}/categories`">取消</router-link>
-        </layouts.group>
+        <div class="space-x-3">
+          <Button>修改分类</Button>
+          <Button variant="secondary" :to="`/projects/${params.project_id}/categories`">取消</Button>
+        </div>
       </div>
     </div>
-  </layouts.form_horizontal>
+  </Form>
 </template>
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
-import Former from '@/components/simple_form/Former'
 import Fields from './Fields.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
 
 const route = useRoute()
 const router = useRouter()
@@ -44,6 +46,8 @@ const former = Former.build({
   description: category.value.description,
   color: category.value.color
 })
+
+const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.perform = async function() {
   await new q.project.CategoryInfoReq.Update().setup(proxy, (req) => {

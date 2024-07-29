@@ -1,7 +1,7 @@
 <template>
   <div class="bg-dark !py-2 sticky top-0">
     <Container class="flex w-full">
-      <Nav>
+      <Nav :model-value="null">
         <NavList :preset="navbarPt">
           <NavItem value="" as-child>
             <RLink to="/">Testpoint</RLink>

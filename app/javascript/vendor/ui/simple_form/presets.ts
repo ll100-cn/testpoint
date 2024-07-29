@@ -10,7 +10,7 @@ export const vertical = {
     }
   }),
 
-  group: bva('flex-auto mb-4 last:mb-0', { }),
+  group: bva('flex-auto', { }),
   label: bva('block mb-1 group-data-[disabled]:text-muted', { }),
   error: bva('text-muted group-data-[state=invalid]:text-destructive', {})
 } satisfies FormPresenter

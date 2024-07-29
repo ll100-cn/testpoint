@@ -1,39 +1,49 @@
 <template>
   <PageHeader :issues_count="unhandled_issues_count" current="issues" />
 
-  <div class="nav-scroll mb-n1px position-relative zindex-999">
-    <div class="nav nav-tabs">
-      <router-link class="nav-item nav-link me-auto" :class="{ 'active': filter == 'unhandled' }" :to="{ query: { } }">
-        待处理的
-        <span class="badge bg-danger ms-1 rounded-pill">{{ unhandled_issues_count }}</span>
-      </router-link>
+  <Nav :model-value="filter">
+    <NavList preset="tabs">
+      <NavItem value="unhandled" class="me-auto" as-child>
+        <router-link :to="{ query: {} }">
+          待处理的
+          <span class="badge bg-danger ms-1 rounded-pill">{{ unhandled_issues_count }}</span>
+        </router-link>
+      </NavItem>
 
-      <router-link class="nav-item nav-link" :class="{ 'active': filter == 'created' }" :to="{ query: { filter: 'created' } }">
-        创建的
-      </router-link>
+      <NavItem value="created" as-child>
+        <router-link :to="{ query: { filter: 'created' } }">
+          创建的
+        </router-link>
+      </NavItem>
 
-      <router-link class="nav-item nav-link" :class="{ 'active': filter == 'subscribed' }" :to="{ query: { filter: 'subscribed' } }">
-        关注的
-      </router-link>
+      <NavItem value="subscribed" as-child>
+        <router-link :to="{ query: { filter: 'subscribed' } }">
+          关注的
+        </router-link>
+      </NavItem>
 
-      <router-link class="nav-item nav-link" :class="{ 'active': filter == 'assigned' }" :to="{ query: { filter: 'assigned' } }">
-        受理的
-      </router-link>
+      <NavItem value="assigned" as-child>
+        <router-link :to="{ query: { filter: 'assigned' } }">
+          受理的
+        </router-link>
+      </NavItem>
 
-      <router-link class="nav-item nav-link" :class="{ 'active': filter == 'archived' }" :to="{ query: { filter: 'archived' } }">
-        归档的
-      </router-link>
-    </div>
-  </div>
+      <NavItem value="archived" as-child>
+        <router-link :to="{ query: { filter: 'archived' } }">
+          归档的
+        </router-link>
+      </NavItem>
+    </NavList>
+  </Nav>
 
-  <div class="card rounded-top-left-0 card-x-table">
-    <div class="card-body">
+  <Card class="rounded-t-none">
+    <CardContent>
       <IssueList :issues="pagination.list" :columns="['project']" :sorts="sorts" />
-    </div>
-    <div class="card-footer">
+    </CardContent>
+    <CardFooter>
       <PaginationBar :pagination="pagination" />
-    </div>
-  </div>
+    </CardFooter>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -44,6 +54,8 @@ import { getCurrentInstance, ref } from 'vue'
 import { useRoute } from "vue-router"
 import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Nav, NavList, NavItem } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()

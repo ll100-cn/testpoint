@@ -1,7 +1,7 @@
 <template>
-  <div class="page-header">
-    <h2>编辑里程碑</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>编辑里程碑</PageTitle>
+  </PageHeader>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
@@ -28,6 +28,8 @@ import _ from 'lodash'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

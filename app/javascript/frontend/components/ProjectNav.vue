@@ -1,34 +1,39 @@
 <template>
   <NavItem value="" as-child>
-    <RLink v-if="allow('read', TestCase)" :to="`/projects/${project_id}/test_cases`" active-class="active">案例</RLink>
+    <RLink v-if="allow('read', TestCase)" :to="`/projects/${project_id}/test_cases`">案例</RLink>
   </NavItem>
 
   <NavItem value="" as-child>
-    <RLink v-if="allow('read', Plan)" :to="`/projects/${project_id}/plans`" active-class="active">计划</RLink>
+    <RLink v-if="allow('read', Plan)" :to="`/projects/${project_id}/plans`">计划</RLink>
   </NavItem>
 
   <NavItem value="" as-child>
-    <RLink v-if="allow('read', Issue)" :to="`/projects/${project_id}/issues`" active-class="active">问题</RLink>
+    <RLink v-if="allow('read', Issue)" :to="`/projects/${project_id}/issues`">问题</RLink>
   </NavItem>
 
   <NavItem value="" as-child>
-    <RLink v-if="allow('read', Milestone)" :to="`/projects/${project_id}/milestones`" active-class="active">里程碑</RLink>
+    <RLink v-if="allow('read', Milestone)" :to="`/projects/${project_id}/milestones`">里程碑</RLink>
   </NavItem>
 
   <NavItem value="" as-child>
-    <RLink :to="`/projects/${project_id}/analytics`" active-class="active">统计报表</RLink>
+    <RLink :to="`/projects/${project_id}/analytics`">统计报表</RLink>
   </NavItem>
 
-  <NavItemDropdown>
-    <template #toggle>设置</template>
-    <template #menu>
-      <router-link v-if="allow('read', Category)" class="dropdown-item" :to="`/projects/${project_id}/categories`" active-class="active">分类</router-link>
-      <router-link v-if="allow('read', IssueTemplate)" class="dropdown-item" :to="`/projects/${project_id}/issue_templates`" active-class="active">问题模版</router-link>
-      <router-link v-if="allow('read', Member)" class="dropdown-item" :to="`/projects/${project_id}/members`" active-class="active">成员</router-link>
-      <router-link v-if="allow('read', TestCaseLabel)" class="dropdown-item" :to="`/projects/${project_id}/test_case_labels`" active-class="active">标签</router-link>
-      <router-link v-if="allow('read', Platform)" class="dropdown-item" :to="`/projects/${project_id}/platforms`" active-class="active">平台</router-link>
-    </template>
-  </NavItemDropdown>
+  <NavItem value="">
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <span>设置</span>
+        <i class="fa-solid fa-caret-down !ms-1"></i>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem as-child v-if="allow('read', Category)"><router-link :to="`/projects/${project_id}/categories`">分类</router-link></DropdownMenuItem>
+        <DropdownMenuItem as-child v-if="allow('read', IssueTemplate)"><router-link :to="`/projects/${project_id}/issue_templates`">问题模版</router-link></DropdownMenuItem>
+        <DropdownMenuItem as-child v-if="allow('read', Member)"><router-link :to="`/projects/${project_id}/members`">成员</router-link></DropdownMenuItem>
+        <DropdownMenuItem as-child v-if="allow('read', TestCaseLabel)"><router-link :to="`/projects/${project_id}/test_case_labels`">标签</router-link></DropdownMenuItem>
+        <DropdownMenuItem as-child v-if="allow('read', Platform)"><router-link :to="`/projects/${project_id}/platforms`">平台</router-link></DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </NavItem>
 </template>
 
 <script setup lang="ts">
@@ -37,6 +42,7 @@ import { usePageStore } from '@/store'
 import NavItemDropdown from './NavItemDropdown.vue'
 import { Nav, NavList, NavItem } from '$vendor/ui'
 import RLink from './RLink.vue'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
 const page = usePageStore()
 const allow = page.inProject().allow

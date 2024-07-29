@@ -2,7 +2,7 @@ import { bva } from '../utils'
 import { type TablePresenter } from './types'
 
 export const standard = {
-  root: bva('w-full caption-bottom text-sm', { }),
+  root: bva('w-full caption-bottom', { }),
   header: bva('[&_tr]:border-b', { }),
   body: bva('[&_tr:last-child]:border-0', { }),
   row: bva('border-b transition-colors hover:bg-muted/10 data-[state=selected]:bg-muted', { }),
@@ -12,7 +12,7 @@ export const standard = {
 
 
 export const bordered = {
-  root: bva('w-full caption-bottom text-sm', { }),
+  root: bva('w-full caption-bottom', { }),
   header: bva('[&_tr]:border-b', { }),
   body: bva('[&_tr:last-child]:border-0', { }),
   row: bva('border-b transition-colors hover:bg-muted/10 data-[state=selected]:bg-muted', { }),

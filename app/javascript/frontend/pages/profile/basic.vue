@@ -1,49 +1,50 @@
 <template>
   <PageHeader current="basic" />
 
-  <div class="card">
-    <div class="card-body">
+  <Card class="rounded-ss-none">
+    <CardContent>
       <div class="container page-md-box">
-        <div class="card col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 mx-auto">
-          <layouts.form_vertical v-bind="{ former }" @submit.prevent="former.submit">
-            <div class="card-body">
-              <div class="row gy-3">
+        <Card class="mx-auto w-full max-w-lg">
+          <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
+            <CardContent>
+              <div class="space-y-4">
                 <FormErrorAlert />
 
-                <layouts.group code="email" label="邮箱">
+                <FormGroup path="email" label="邮箱">
                   <controls.string v-model="account.user.email" readonly disabled />
-                </layouts.group>
+                </FormGroup>
 
-                <layouts.group code="name" label="姓名">
+                <FormGroup path="name" label="姓名">
                   <controls.string />
-                </layouts.group>
+                </FormGroup>
 
-                <layouts.group code="avatar" label="头像">
+                <FormGroup path="avatar" label="头像">
                   <img :src="account.avatarUrl()" class="me-1" width="64" />
                   <a href="https://gravatar.com" target="_blank">修改</a>
-                </layouts.group>
+                </FormGroup>
               </div>
-            </div>
+            </CardContent>
 
-            <div class="card-footer x-spacer-2 d-flex align-items-center">
-              <layouts.submit>确定修改</layouts.submit>
+            <CardFooter>
+              <Button>确定修改</Button>
               <span v-if="success" class="text-success">已修改 <i class="far fa-check"></i></span>
-            </div>
-          </layouts.form_vertical>
-        </div>
+            </CardFooter>
+          </Form>
+        </Card>
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
-import { controls, layouts } from '@/components/simple_form'
-import Former from '@/components/simple_form/Former'
 import * as q from "@/lib/requests"
 import { useSessionStore } from '@/store'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import PageHeader from './PageHeader.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Button, Former, FormFactory } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
@@ -51,15 +52,19 @@ const session = useSessionStore()
 
 const account = session.account
 const former = Former.build({
-  name: account.user.name
+  name: account.user.name,
+  email: account.email,
+  avatar: "",
 })
+
+const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 const success = ref(false)
 watch(former.form, () => {
   success.value = false
 })
 
-former.perform = async function() {
+former.doPerform = async function() {
   const account = await new q.profile.AccountReq.Update().setup(proxy).perform(this.form)
   session.account = account
 

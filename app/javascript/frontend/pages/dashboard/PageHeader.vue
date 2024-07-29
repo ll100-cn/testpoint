@@ -1,6 +1,6 @@
 <template>
-  <div class="page-header">
-    <h2 class="me-3">仪表盘</h2>
+  <PageHeader>
+    <PageTitle class="!me-4">仪表盘</PageTitle>
 
     <router-link v-if="current == 'projects'" class="text-primary me-3" to="/dashboard">
       <i class="far fa-check-square"></i> 按项目
@@ -17,10 +17,13 @@
       <i class="far fa-square"></i> 按个人
       <span class="text-danger">({{ issues_count }})</span>
     </router-link>
-  </div>
+  </PageHeader>
 </template>
 
 <script setup lang="ts">
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue';
+
 defineProps<{
   issues_count: number
   current: 'projects' | 'issues'

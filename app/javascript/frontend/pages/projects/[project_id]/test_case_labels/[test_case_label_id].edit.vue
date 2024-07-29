@@ -1,7 +1,7 @@
 <template>
-  <div class="page-header">
-    <h2>修改标签</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>修改标签</PageTitle>
+  </PageHeader>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
@@ -26,6 +26,8 @@ import * as q from '@/lib/requests'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
 
 const route = useRoute()
 const router = useRouter()

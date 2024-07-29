@@ -1,7 +1,7 @@
 <template>
-  <div class="page-header">
-    <h2>修改问题</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>修改问题</PageTitle>
+  </PageHeader>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
@@ -46,6 +46,8 @@
 import BSOption from '@/components/BSOption.vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'

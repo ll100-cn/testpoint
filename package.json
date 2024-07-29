@@ -58,6 +58,7 @@
     "turbolinks": "5.2.0",
     "urijs": "^1.19.11",
     "vue": "3.3.4",
+    "vue-component-type-helpers": "^2.0.29",
     "vue-flatpickr-component": "^11.0.3",
     "vue-router": "4.2.4",
     "vuejs-paginate": "^2.1.0"

@@ -1,55 +1,58 @@
 <template>
-  <div class="page-header">
-    <h2>平台列表</h2>
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
+  <PageHeader>
+    <PageTitle>平台列表</PageTitle>
+
+    <template #actions>
       <router-link v-if="allow('create', Platform)" class="btn btn-primary" :to="`/projects/${project_id}/platforms/new`">新增平台</router-link>
-    </div>
-  </div>
+    </template>
+  </PageHeader>
 
   <FormErrorAlert :validations="validations" />
 
-  <div class="card page-card card-x-table">
-    <div class="card-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>名称</th>
-            <th>建议工单受理人</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
+  <Card>
+    <CardContent>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>名称</TableHead>
+            <TableHead>建议工单受理人</TableHead>
+            <TableHead />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           <template v-for="platform in platforms" :key="platform.id">
-            <tr>
-              <td>{{ platform.name }}</td>
-              <td>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</td>
-              <td>
+            <TableRow>
+              <TableCell>{{ platform.name }}</TableCell>
+              <TableCell>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</TableCell>
+              <TableCell>
                 <div class="x-actions justify-content-end x-spacer-3">
                   <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`">
                     <i class="far fa-pencil-alt" /> 修改
                   </router-link>
                   <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           </template>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        </TableBody>
+      </Table>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
 import { Validations } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import _ from 'lodash'
-
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { Platform } from '@/models'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

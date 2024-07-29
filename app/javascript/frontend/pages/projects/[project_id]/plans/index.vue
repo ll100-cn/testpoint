@@ -20,8 +20,8 @@
   <div class="row mb-3">
     <div v-for="plan in plans?.list" :key="plan.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
       <router-link :to="{ path: `plans/${plan.id}` }">
-        <div class="card">
-          <div class="card-body">
+        <Card>
+          <CardContent>
             <div class="card-title d-flex align-items-center">
               <h4>{{ plan.title }}</h4>
               <span v-if="plan.milestone" class="badge bg-light text-dark ms-auto">{{ plan.milestone.title }}</span>
@@ -39,13 +39,13 @@
                 <div :class="`progress-bar ${progress_bg_mapping[state]}`" :style="`width: ${100.0 * plan.tasks_state_counts[state] / _(plan.tasks_state_counts).values().sum()}%`" />
               </template>
             </div>
-          </div>
+          </CardContent>
 
-          <div class="card-footer x-actions x-spacer-2">
+          <CardFooter>
             <small>{{ dayjs(plan.created_at).fromNow() }} {{ plan.creator_name }} 创建</small>
             <button class="btn btn-outline-primary btn-sm py-1 ms-auto text-nowrap">进入测试</button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </router-link>
     </div>
   </div>
@@ -73,6 +73,7 @@ import { Plan } from '@/models'
 import BlankModal from '@/components/BlankModal.vue'
 import PlanCreateFrame from './PlanCreateFrame.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

@@ -1,13 +1,13 @@
 <template>
-  <div class="card">
-    <div class="card-header d-flex align-items-center" :style="comment.display == 'important' ? { backgroundColor: 'var(--bs-danger-bg-subtle)' } : {}">
+  <Card>
+    <CardHeader :style="comment.display == 'important' ? { backgroundColor: 'var(--bs-danger-bg-subtle)' } : {}">
       <MemberLabel :member="comment.member" class="me-1" />
 
       <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
 
       <span class="ms-1 small text-body-tertiary">[{{ comment.id }}]</span>
 
-      <div class="d-flex ms-auto">
+      <template #actions>
         <a v-if="comment.display == 'collapsed'" :href="`#${content_id}`" data-bs-toggle="collapse" class="btn btn-sm">展开</a>
         <MoreDropdown>
           <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyFrame, issue, comment)">回复</a>
@@ -25,9 +25,9 @@
             </template>
           </template>
         </MoreDropdown>
-      </div>
-    </div>
-    <div :id="content_id" class="collapse card-body" :class="{ show: comment.display !== 'collapsed' }">
+      </template>
+    </CardHeader>
+    <CardContent :id="content_id" class="collapse" :class="{ show: comment.display !== 'collapsed' }">
       <ContentBody :body="comment" :editable="!readonly && allow('update', comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
       <div class="x-callout mt-3 py-1" v-if="children.length > 0">
         <template v-for="(child, index) in children">
@@ -35,8 +35,8 @@
           <IssueCommentReply :readonly="readonly" :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
         </template>
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -55,6 +55,7 @@ import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyFrame from "./IssueCommentReplyFrame.vue"
 import IssueCommentConvertFrame from "./IssueCommentConvertFrame.vue"
 import { COMMENT_DISPLAY_OPTIONS } from "@/constants"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const store = useSessionStore()

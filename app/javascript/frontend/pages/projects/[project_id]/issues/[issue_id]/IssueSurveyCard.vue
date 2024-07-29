@@ -1,6 +1,6 @@
 <template>
-  <div class="card page-card">
-    <div class="card-body">
+  <Card>
+    <CardContent>
       <template v-for="(issue_survey, index) in issue_info.surveys">
         <hr v-if="index > 0">
 
@@ -31,8 +31,8 @@
           </div>
         </div>
       </template>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -43,6 +43,7 @@ import { IssueInfo, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import { Component, getCurrentInstance } from "vue"
 import IssueSurveyEditFrame from "./IssueSurveyEditFrame.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()

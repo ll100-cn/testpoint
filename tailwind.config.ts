@@ -65,6 +65,9 @@ module.exports = {
           foreground: "hsl(var(--board-foreground))",
         },
       },
+      opacity: {
+        '3': '0.03',
+      },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",

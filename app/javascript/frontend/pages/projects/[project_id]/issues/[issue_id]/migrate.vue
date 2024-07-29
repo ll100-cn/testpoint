@@ -1,7 +1,7 @@
 <template>
-  <div class="page-header">
-    <h2>项目迁移</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>项目迁移</PageTitle>
+  </PageHeader>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
@@ -39,6 +39,8 @@ import { Actioner } from "@/components/Actioner"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForCategory from "@/components/OptionsForCategory.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'

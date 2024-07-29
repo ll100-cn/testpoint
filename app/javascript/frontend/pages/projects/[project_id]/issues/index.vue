@@ -1,9 +1,9 @@
 <template>
-  <div class="page-header">
-    <h2>问题列表</h2>
+  <PageHeader>
+    <PageTitle>问题列表</PageTitle>
 
-    <div class="d-flex ms-auto x-spacer-4 align-items-center">
-      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)">
+    <template #actions>
+      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)" class="mx-0">
         <layouts.group code="keyword">
           <controls.string placeholder="搜索问题或评论" />
         </layouts.group>
@@ -12,32 +12,43 @@
       </layouts.form_inline>
 
       <router-link v-if="allow('create', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
-    </div>
-  </div>
-
-  <div class="nav nav-tabs mb-n1px position-relative zindex-999">
-    <router-link class="nav-link" :class="{ 'active': search2.stage === 'all' }" :to="{ query: utils.plainToQuery({ ...search2, stage: 'all' }, true) }">
-      全部 ({{ _(issue_stage_count).values().sum() }})
-    </router-link>
-    <template v-for="(name, code) in ENUM_ISSUE_STAGES">
-      <router-link class="nav-link" :class="{ 'active': search2.stage === code }" :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }">
-        {{ name }} ({{ issue_stage_count[code] ?? 0 }})
-      </router-link>
     </template>
-  </div>
+  </PageHeader>
 
-  <div class="card rounded-top-left-0 card-x-table">
-    <div class="card-body">
+  <Nav :model-value="search2.stage">
+    <NavList preset="tabs" class="inline-flex">
+      <NavItem value="all" as-child>
+        <router-link :to="{ query: utils.plainToQuery({ ...search2, stage: 'all' }, true) }">
+          全部 ({{ _(issue_stage_count).values().sum() }})
+        </router-link>
+      </NavItem>
+      <NavItem v-for="(name, code) in ENUM_ISSUE_STAGES" :value="code" as-child>
+        <router-link :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }">
+          {{ name }} ({{ issue_stage_count[code] ?? 0 }})
+        </router-link>
+      </NavItem>
+    </NavList>
+  </Nav>
+
+  <Card class="rounded-ss-none">
+    <CardHeader class="bg-transparent">
       <FilterBar :summary="issue_summary" />
+    </CardHeader>
+
+    <CardContent class="!py-0">
       <IssueList :issues="pagination.list" :sorts="search2.sorts" />
-    </div>
-    <div class="card-footer">
+    </CardContent>
+
+    <CardFooter>
       <PaginationBar :pagination="pagination" />
-    </div>
-  </div>
+    </CardFooter>
+  </Card>
 </template>
 
 <script setup lang="ts">
+import { Card, CardContent, CardFooter, CardHeader, Nav, NavItem, NavList } from '$vendor/ui'
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import { controls, layouts } from "@/components/simple_form"
 import Former from "@/components/simple_form/Former"

@@ -15,7 +15,7 @@ const presenter = useCardPresenter()
 
 <template>
   <div :class="cn(presenter.rounded(presenterConfig), 'rounded-b-none', presenter.header(presenterConfig), props.class)">
-    <div>
+    <div class="flex items-center">
       <slot></slot>
     </div>
 

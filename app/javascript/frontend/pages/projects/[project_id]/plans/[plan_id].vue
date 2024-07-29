@@ -1,6 +1,6 @@
 <template>
-  <div class="page-header">
-    <h2 class="me-3">{{ plan_info.title }}</h2>
+  <PageHeader>
+    <PageTitle class="me-3">{{ plan_info.title }}</PageTitle>
 
     <div class="border-start px-2">
       <span class="text-dark fw-bold">
@@ -16,7 +16,7 @@
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link v-if="allow('update', plan_info)" class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
     </div>
-  </div>
+  </PageHeader>
 
   <ul class="nav nav-pills">
     <li v-for="(phase, index) in plan_info.phase_infos" class="nav-item mb-3 mx-3">
@@ -31,8 +31,8 @@
     </li>
   </ul>
 
-  <div class="card page-card">
-    <div class="card-header bg-white d-flex">
+  <Card>
+    <CardHeader>
       <h4 class="me-auto my-auto">任务列表</h4>
 
       <layouts.form_inline :former="searcher" :default_wrapper_config="{ size: 'small' }">
@@ -51,9 +51,9 @@
           </controls.dropdown>
         </layouts.group>
       </layouts.form_inline>
-    </div>
+    </CardHeader>
 
-    <div class="card-body p-0 d-flex align-items-stretch">
+    <CardContent>
       <div class="col-12 col-md-3 col-xl-2 border-end p-3">
         <FolderSide :filter="filter" :test_case_stats="test_case_stats" />
       </div>
@@ -65,8 +65,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 
   <teleport to="body">
     <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
@@ -91,6 +91,9 @@ import PlanPhaseCreateFrame from './PlanPhaseCreateFrame.vue'
 import TaskRow from './TaskRow.vue'
 import TaskUpshotInfoFrame from './TaskUpshotInfoFrame.vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

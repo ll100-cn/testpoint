@@ -15,6 +15,6 @@ class Api::Profile::AccountsController < Api::BaseController
 
 protected
   def user_params
-    params.permit(:name, :avatar)
+    params.permit(:name, :email)
   end
 end

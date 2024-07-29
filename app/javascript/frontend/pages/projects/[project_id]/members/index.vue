@@ -1,10 +1,11 @@
 <template>
-  <div class="page-header">
-    <h2>项目成员列表</h2>
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
+  <PageHeader>
+    <PageTitle>项目成员列表</PageTitle>
+
+    <template #actions>
       <router-link v-if="allow('create', Member)" class="btn btn-primary" :to="`/projects/${project_id}/members/new`">新增成员</router-link>
-    </div>
-  </div>
+    </template>
+  </PageHeader>
 
   <FormErrorAlert :validations="validations" />
 
@@ -14,39 +15,39 @@
   </div>
 
   <div class="tab-content">
-    <div v-for="(group, key) in grouped_members" :id="`${key}_card`" class="card page-card card-x-table rounded-top-left-0 tab-pane fade" :class="{ show: key == 'normal', active: key == 'normal' }">
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>名称</th>
-              <th>邮箱</th>
-              <th>角色</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
+    <Card v-for="(group, key) in grouped_members" :id="`${key}_card`" class="rounded-top-left-0 tab-pane fade" :class="{ show: key == 'normal', active: key == 'normal' }">
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID</TableHead>
+              <TableHead>名称</TableHead>
+              <TableHead>邮箱</TableHead>
+              <TableHead>角色</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             <template v-for="member in group" :key="member.id">
-              <tr :class="{ 'block-discard': member.archived_at }">
-                <td>{{ member.id }}</td>
-                <td>{{ member.name }}</td>
-                <td>{{ member.user.email }}</td>
-                <td>{{ member.role_text }}</td>
-                <td>
+              <TableRow :class="{ 'block-discard': member.archived_at }">
+                <TableCell>{{ member.id }}</TableCell>
+                <TableCell>{{ member.name }}</TableCell>
+                <TableCell>{{ member.user.email }}</TableCell>
+                <TableCell>{{ member.role_text }}</TableCell>
+                <TableCell>
                   <div class="x-actions justify-content-end x-spacer-3">
                     <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`">
                       <i class="far fa-pencil-alt" /> 修改
                     </router-link>
                     <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)"><i class="far fa-archive" /> 归档</a>
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             </template>
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   </div>
 </template>
 
@@ -61,6 +62,10 @@ import _ from 'lodash'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import * as h from '@/lib/humanize'
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

@@ -1,13 +1,13 @@
 <template>
-  <div class="page-header">
-    <h2 class="me-1">#{{ issue_info.id }} {{ issue_info.titleWithPriority() }}</h2>
+  <PageHeader>
+    <PageTitle class="me-1">#{{ issue_info.id }} {{ issue_info.titleWithPriority() }}</PageTitle>
     <span class="me-1">
       <IssueStateBadge :state="issue_info.state" />
     </span>
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link v-if="!readonly && allow('update', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
     </div>
-  </div>
+  </PageHeader>
 
   <div v-if="issue_info.archived_at" class="alert alert-danger">
     该问题已完结
@@ -31,8 +31,8 @@
         </template>
       </div>
 
-      <div class="card" v-if="!readonly">
-        <div class="card-body">
+      <Card v-if="!readonly">
+        <CardContent>
           <h6 class="card-title">提供更多信息</h6>
           <ActionerAlert :actioner="actioner" />
           <div class="d-flex x-actions x-spacer-2">
@@ -111,8 +111,8 @@
               </template>
             </template>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
     <IssueDetailsSideBar :readonly="readonly" class="col-12 col-md-3 order-0 order-md-1" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
   </div>
@@ -150,6 +150,9 @@ import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateFrame from "./IssueSurveyCreateFrame.vue"
 import IssueUnresolveFrame from "./IssueUnresolveFrame.vue"
 import IssueWaitingFrame from "./IssueWaitingFrame.vue"
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const comment_modal = ref(null as InstanceType<typeof BlankModal>)
 const issue_info_modal = ref(null as InstanceType<typeof BlankModal>)

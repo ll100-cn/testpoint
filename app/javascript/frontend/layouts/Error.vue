@@ -24,13 +24,15 @@
           详细信息
         </a>
         <div id="errorMessage" class="collapse show">
-          <div class="card card-body">
-            <ul class="list-group list-group-flush">
-              <li v-for="error in errors" :key="error" class="list-group-item text-danger">
-                {{ buildErrorMessage(error) }}
-              </li>
-            </ul>
-          </div>
+          <Card>
+            <CardContent>
+              <ul class="list-group list-group-flush">
+                <li v-for="error in errors" :key="error" class="list-group-item text-danger">
+                  {{ buildErrorMessage(error) }}
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </template>
@@ -40,6 +42,7 @@
 <script setup lang="ts">
 import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
 import _ from "lodash"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const props = defineProps<{
   errors: any[]

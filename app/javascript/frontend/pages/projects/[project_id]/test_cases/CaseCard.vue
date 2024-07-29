@@ -1,6 +1,6 @@
 <template>
-  <div class="card page-card">
-    <div class="card-header bg-white d-flex">
+  <Card>
+    <CardHeader>
       <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit" :default_wrapper_config="{ size: 'small' }">
         <layouts.group code="platform_id" label="平台">
           <controls.dropdown #default="{ Component }">
@@ -26,10 +26,10 @@
         </layouts.group>
       </layouts.form_inline>
 
-      <div class="d-flex ms-auto x-spacer-3 align-items-center">
+      <template #actions>
         <a v-if="allow('create', TestCase)" class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
-      </div>
-    </div>
+      </template>
+    </CardHeader>
 
     <CardBody
       :test_cases="search_test_cases"
@@ -40,7 +40,7 @@
       @batch="(...args) => case_batch_modal.show(...args)" />
 
     <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
-  </div>
+  </Card>
 
   <teleport to="body">
     <BlankModal ref="case_modal" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankModal>
@@ -64,6 +64,7 @@ import CardBody from './CardBody.vue'
 import CardNew from './CardNew.vue'
 import { usePageStore } from '@/store'
 import BlankModal from '@/components/BlankModal.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

@@ -2,7 +2,7 @@ import { bva } from "../utils"
 import type { ButtonPresenter } from "./types"
 
 const base = `
-  inline-flex items-center justify-center whitespace-nowrap rounded font-medium transition-colors
+  inline-flex items-center justify-center whitespace-nowrap border rounded font-medium transition-colors
   relative z-10 align-bottom
   focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
   disabled:pointer-events-none disabled:opacity-50
@@ -10,7 +10,7 @@ const base = `
 const size = {
   xs: 'h-6 rounded-sm px-2 text-xs',
   sm: 'h-7 rounded px-3 text-xs',
-  default: 'h-9 px-4 py-2 text-sm',
+  default: '!px-3 !py-1.5',
   lg: 'h-10 rounded-md px-8',
 }
 
@@ -19,8 +19,8 @@ export const standard = {
   root: bva(base, {
     size,
     variant: {
-      primary: 'bg-primary text-primary-foreground hover:bg-primary/80',
-      secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+      primary: 'bg-primary text-primary-foreground border-primary hover:bg-primary/80',
+      secondary: 'bg-secondary text-secondary-foreground border-secondary hover:bg-secondary/80',
       muted: 'bg-muted text-muted-foreground hover:bg-muted/80',
       silence: 'bg-silence/15 text-silence-foreground hover:bg-silence/80',
       destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/80',

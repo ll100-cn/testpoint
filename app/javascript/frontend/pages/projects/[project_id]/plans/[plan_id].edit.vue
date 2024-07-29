@@ -1,10 +1,11 @@
 <template>
-  <div class="page-header">
-    <h2>修改计划</h2>
-    <div class="x-actions x-spacer-2 ms-auto">
+  <PageHeader>
+    <PageTitle>修改计划</PageTitle>
+
+    <template #actions>
       <a class="btn btn-link text-danger" type="button" @click="onDestroy">删除</a>
-    </div>
-  </div>
+    </template>
+  </PageHeader>
 
   <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
     <div class="row">
@@ -30,6 +31,8 @@ import _ from 'lodash'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
