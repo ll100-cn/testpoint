@@ -118,11 +118,6 @@
   </div>
 
   <teleport to="body">
-    <BlankModal ref="comment_modal" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
-    <BlankModal ref="issue_info_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" data-bs-keyboard="true" />
-    <BlankModal ref="issue_info_resolve_modal" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" data-bs-keyboard="true" />
-    <BlankModal ref="issue_comment_create_modal" @created="onIssueCommentCreated" v-bind="{ issue_info }" />
-
     <BlankDialog ref="comment_dialog" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
     <BlankDialog ref="issue_info_dialog" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
     <BlankDialog ref="issue_comment_create_dialog" @created="onIssueCommentCreated" v-bind="{ issue_info }" />
@@ -133,7 +128,6 @@
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
 import ActionerAlert from "@/components/ActionerAlert.vue"
-import BlankModal from "@/components/BlankModal.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/lib/requests'
 import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"

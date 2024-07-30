@@ -18,13 +18,11 @@
   </div>
 
   <teleport to="body">
-    <BlankModal ref="blank_modal" @updated="onIssueUpdated" />
     <BlankDialog ref="blank_dialog" @updated="onIssueUpdated" />
   </teleport>
 </template>
 
 <script setup lang="ts">
-import BlankModal from "@/components/BlankModal.vue"
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'

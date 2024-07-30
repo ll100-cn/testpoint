@@ -69,14 +69,12 @@
   </Card>
 
   <teleport to="body">
-    <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
     <BlankDialog ref="phase_dialog" :plan_info="plan_info" @created="onPhaseCreated" />
     <BlankDialog ref="task_upshot_info_dialog" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
   </teleport>
 </template>
 
 <script setup lang="ts">
-import BlankModal from '@/components/BlankModal.vue'
 import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
@@ -104,7 +102,6 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow
 const query = route.query
-const task_upshot_info_modal = ref(null as InstanceType<typeof BlankModal>)
 const phase_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const task_upshot_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
 
