@@ -1,27 +1,26 @@
 <template>
-  <div class="page-header">
-    <h2>新增成员</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>新增成员</PageTitle>
+  </PageHeader>
 
-  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields v-bind="{ former }" />
+  <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
+    <div class="mx-auto w-full max-w-4xl">
+      <Fields v-bind="{ former }" />
 
-        <hr class="x-form-divider-through">
+      <hr class="x-form-divider-through">
 
-        <layouts.group control_wrap_class="x-actions x-spacer-2">
-          <layouts.submit>新增成员</layouts.submit>
-          <router-link class="btn btn-secondary" to="/users">取消</router-link>
-        </layouts.group>
+      <div class="space-x-3">
+        <Button>新增成员</Button>
+        <Button variant="secondary" to="/users">取消</Button>
       </div>
     </div>
-  </layouts.form_horizontal>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
+import { Button, Former, FormFactory } from '$vendor/ui'
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
@@ -35,7 +34,9 @@ const former = Former.build({
   name: ""
 })
 
-former.perform = async function() {
+const { Form } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const user = await new q.admin.UserReq.Create().setup(proxy).perform(this.form)
   router.push("/users")
 }

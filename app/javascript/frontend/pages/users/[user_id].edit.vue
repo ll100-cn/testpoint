@@ -1,31 +1,30 @@
 <template>
-  <div class="page-header">
-    <h2>编辑用户</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>编辑用户</PageTitle>
+  </PageHeader>
 
-  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields v-bind="{ former }" mode="edit" />
+  <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
+    <div class="mx-auto w-full max-w-4xl">
+      <Fields v-bind="{ former }" mode="edit" />
 
-        <hr class="x-form-divider-through">
+      <hr class="x-form-divider-through">
 
-        <layouts.group control_wrap_class="x-actions x-spacer-2">
-          <layouts.submit>编辑用户</layouts.submit>
-          <router-link :to="`/users`" class="btn btn-secondary">返回</router-link>
-        </layouts.group>
+      <div class="space-x-3">
+        <Button>编辑用户</Button>
+        <Button variant="secondary" to="/users">返回</Button>
       </div>
     </div>
-  </layouts.form_horizontal>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { layouts } from '@/components/simple_form'
-import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Button, Former, FormFactory } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
@@ -41,7 +40,9 @@ const former = Former.build({
   name: user.name
 })
 
-former.perform = async function() {
+const { Form } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   await new q.admin.UserReq.Update().setup(proxy, (req) => {
     req.interpolations.id = user.id
   }).perform(this.form)

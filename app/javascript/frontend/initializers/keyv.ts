@@ -1,9 +1,9 @@
-import { AppContext } from '@/types'
 import Keyv from '@keyvhq/core'
+import { App } from 'vue'
 
 const keyv = new Keyv()
 
-export default function({ app }: AppContext) {
+export default function(app: App) {
   app.config.globalProperties.$keyv = keyv
 }
 

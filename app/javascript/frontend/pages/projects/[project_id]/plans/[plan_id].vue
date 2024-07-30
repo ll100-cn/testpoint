@@ -1,6 +1,6 @@
 <template>
-  <div class="page-header">
-    <h2 class="me-3">{{ plan_info.title }}</h2>
+  <PageHeader>
+    <PageTitle class="me-3">{{ plan_info.title }}</PageTitle>
 
     <div class="border-start px-2">
       <span class="text-dark fw-bold">
@@ -16,7 +16,7 @@
     <div class="d-flex ms-auto x-spacer-3 align-items-center">
       <router-link v-if="allow('update', plan_info)" class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
     </div>
-  </div>
+  </PageHeader>
 
   <ul class="nav nav-pills">
     <li v-for="(phase, index) in plan_info.phase_infos" class="nav-item mb-3 mx-3">
@@ -25,14 +25,14 @@
       </router-link>
     </li>
     <li class="nav-item mb-3 mx-3">
-      <a v-if="allow('create', Phase)" class="nav-link" href="#" @click.prevent="phase_modal.show(PlanPhaseCreateFrame)">
+      <a v-if="allow('create', Phase)" class="nav-link" href="#" @click.prevent="phase_dialog.show(PlanPhaseCreateDialogContent)">
         <i class="far fa-plus-circle me-1" /><span>开始新一轮测试</span>
       </a>
     </li>
   </ul>
 
-  <div class="card page-card">
-    <div class="card-header bg-white d-flex">
+  <Card>
+    <CardHeader>
       <h4 class="me-auto my-auto">任务列表</h4>
 
       <layouts.form_inline :former="searcher" :default_wrapper_config="{ size: 'small' }">
@@ -51,9 +51,9 @@
           </controls.dropdown>
         </layouts.group>
       </layouts.form_inline>
-    </div>
+    </CardHeader>
 
-    <div class="card-body p-0 d-flex align-items-stretch">
+    <CardContent class="row">
       <div class="col-12 col-md-3 col-xl-2 border-end p-3">
         <FolderSide :filter="filter" :test_case_stats="test_case_stats" />
       </div>
@@ -61,21 +61,20 @@
       <div class="col-12 col-md-9 col-xl-10">
         <div id="tp-main">
           <div class="test_cases-cards">
-            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_modal.show(TaskUpshotInfoFrame, task_upshot_info)" />
+            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_info)" />
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 
   <teleport to="body">
-    <BlankModal ref="task_upshot_info_modal" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
-    <BlankModal ref="phase_modal" :plan_info="plan_info" @created="onPhaseCreated" />
+    <BlankDialog ref="phase_dialog" :plan_info="plan_info" @created="onPhaseCreated" />
+    <BlankDialog ref="task_upshot_info_dialog" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
   </teleport>
 </template>
 
 <script setup lang="ts">
-import BlankModal from '@/components/BlankModal.vue'
 import { controls, layouts } from '@/components/simple_form'
 import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
@@ -87,10 +86,14 @@ import { computed, getCurrentInstance, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FolderSide from '../FolderSide.vue'
 import { ChangeFilterFunction, ColumnFilter, Filter } from '../types'
-import PlanPhaseCreateFrame from './PlanPhaseCreateFrame.vue'
+import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
 import TaskRow from './TaskRow.vue'
-import TaskUpshotInfoFrame from './TaskUpshotInfoFrame.vue'
+import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import BlankDialog from '$vendor/ui/BlankDialog.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -99,8 +102,8 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow
 const query = route.query
-const task_upshot_info_modal = ref(null as InstanceType<typeof BlankModal>)
-const phase_modal = ref(null as InstanceType<typeof BlankModal>)
+const phase_dialog = ref(null as InstanceType<typeof BlankDialog>)
+const task_upshot_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
 
 const searcher = Former.build({
   state_eq: null as string | null,

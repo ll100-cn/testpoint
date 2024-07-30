@@ -1,8 +1,8 @@
-import { AppContext } from "@/types"
 import { Modal } from 'bootstrap'
 import _ from "lodash"
+import { App } from "vue"
 
-export default function({ app }: AppContext) {
+export default function(app: App) {
   const router = app.config.globalProperties.$router
   router.beforeEach((to, from, next) => {
     const elements = document.querySelectorAll('.modal.show')

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="validations.isAvaliableInvalid()" class="alert alert-danger" role="alert">
-    <div v-for="message in validations.avaliableFullMessages()" :key="message">
+  <div v-if="validator.errorMessages([]).length > 0" class="alert alert-danger" role="alert">
+    <div v-for="message in validator.errorMessages([])" :key="message">
       {{ message }}
     </div>
   </div>
@@ -8,13 +8,14 @@
 
 <script setup lang="ts">
 import { PropType, inject, reactive } from 'vue'
-import { Validations } from './simple_form';
+import Validator from '$vendor/ui/simple_form/Validator';
 import Former from './simple_form/Former'
+import { useInjectFormer } from '$vendor/ui/simple_form/types';
 
 const props = defineProps<{
-  validations?: Validations
+  validator?: Validator
 }>()
 
-const former = inject('former') as Former<Record<string, any>>
-const validations = reactive(props.validations || former.validations)
+const former = useInjectFormer()
+const validator = reactive(props.validator || former.validator)
 </script>

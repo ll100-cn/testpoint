@@ -1,9 +1,8 @@
 
 import { usePageStore } from "@/store"
-import { AppContext } from "@/types"
-import { watch } from "vue"
+import { App, watch } from "vue"
 
-export default function({ app }: AppContext) {
+export default function(app: App) {
   const router = app.config.globalProperties.$router
   const page = usePageStore(app.config.globalProperties.$pinia)
 

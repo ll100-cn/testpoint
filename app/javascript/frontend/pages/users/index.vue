@@ -1,45 +1,46 @@
 <template>
-  <div class="page-header">
-    <h2>用户列表</h2>
+  <PageHeader>
+    <PageTitle>用户列表</PageTitle>
     <router-link to="/projects" class="ms-3">项目</router-link>
 
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
+    <template #actions>
       <router-link to="/users/new" class="btn btn-primary">新增用户</router-link>
-    </div>
-  </div>
+    </template>
+  </PageHeader>
 
-  <div class="card page-card card-x-table">
-    <div class="card-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>邮箱</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+  <Card>
+    <CardContent>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>ID</TableHead>
+            <TableHead>名称</TableHead>
+            <TableHead>邮箱</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           <template v-for="user in users.list">
-            <tr>
-              <td>{{ user.id }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.email }}</td>
-              <td>
+            <TableRow>
+              <TableCell>{{ user.id }}</TableCell>
+              <TableCell>{{ user.name }}</TableCell>
+              <TableCell>{{ user.email }}</TableCell>
+              <TableCell>
                 <div class="x-actions justify-content-end x-spacer-3">
                   <router-link :to="`/users/${user.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
                   <a href="#" @click.prevent="onRemove(user.id)"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           </template>
-        </tbody>
-      </table>
-    </div>
-    <div class="card-footer">
+        </TableBody>
+      </Table>
+    </CardContent>
+
+    <CardFooter>
       <PaginationBar :pagination="users" />
-    </div>
-  </div>
+    </CardFooter>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -50,6 +51,10 @@ import Validations from '@/components/simple_form/Validations';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router'
 import * as utils from "@/lib/utils"
+import PageHeader from '@/components/PageHeader.vue';
+import PageTitle from '@/components/PageTitle.vue';
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()

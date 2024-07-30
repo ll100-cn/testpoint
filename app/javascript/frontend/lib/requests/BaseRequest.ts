@@ -7,6 +7,9 @@ import * as rxjs from "rxjs"
 import { Subscription } from "rxjs/internal/Subscription"
 import URI from 'urijs'
 import URITemplate from "urijs/src/URITemplate"
+import { ClassConstructor, plainToInstance } from "class-transformer"
+import { ErrorsObject } from "@/models/ErrorsObject"
+import { UnprocessableEntityError } from "$vendor/ui"
 
 export interface PerformContext {
   $axios: AxiosInstance,
@@ -76,6 +79,9 @@ export abstract class BaseRequest<T> {
       throw new ErrorAccessDenied()
     } else if (e instanceof AxiosError && e.response?.status === 401) {
       throw new ErrorUnauthorized()
+    } else if (e instanceof AxiosError && e.response?.status === 422) {
+      const errors = plainToInstance(ErrorsObject, e.response.data)
+      throw new UnprocessableEntityError(errors)
     } else {
       throw e
     }

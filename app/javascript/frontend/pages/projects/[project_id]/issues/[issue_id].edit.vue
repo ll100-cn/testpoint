@@ -1,59 +1,60 @@
 <template>
-  <div class="page-header">
-    <h2>修改问题</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>修改问题</PageTitle>
+  </PageHeader>
 
-  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <FormErrorAlert />
+  <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
+    <div class="mx-auto w-full max-w-4xl">
+      <FormErrorAlert />
 
-        <div class="row gy-3">
-          <layouts.group code="title" label="标题"><controls.string /></layouts.group>
-          <layouts.group code="category_id" label="分类">
-            <controls.bootstrap_select>
-              <BSOption v-for="category in categories" :value="category.id">
-                {{ category.name }}
-              </BSOption>
-            </controls.bootstrap_select>
-          </layouts.group>
-          <layouts.group code="creator_id" label="创建人">
-            <controls.select include_blank>
-              <OptionsForMember :collection="members" />
-            </controls.select>
-          </layouts.group>
-          <layouts.group code="assignee_id" label="受理人">
-            <controls.select include_blank>
-              <OptionsForMember :collection="members" except_level="reporter" />
-            </controls.select>
-          </layouts.group>
-        </div>
+      <div class="space-y-3">
+        <FormGroup path="title" label="标题"><controls.string /></FormGroup>
+        <FormGroup path="category_id" label="分类">
+          <controls.bootstrap_select>
+            <BSOption v-for="category in categories" :value="category.id">
+              {{ category.name }}
+            </BSOption>
+          </controls.bootstrap_select>
+        </FormGroup>
+        <FormGroup path="creator_id" label="创建人">
+          <controls.select include_blank>
+            <OptionsForMember :collection="members" />
+          </controls.select>
+        </FormGroup>
+        <FormGroup path="assignee_id" label="受理人">
+          <controls.select include_blank>
+            <OptionsForMember :collection="members" except_level="reporter" />
+          </controls.select>
+        </FormGroup>
+      </div>
 
-        <hr class="x-form-divider-through">
+      <hr class="x-form-divider-through">
 
-        <layouts.group control_wrap_class="x-actions x-spacer-2">
-          <layouts.submit>更新问题</layouts.submit>
-          <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</router-link>
-          <router-link v-if="allow('manage', issue)" class="btn btn-warning ms-auto" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
-        </layouts.group>
+      <div class="space-x-3">
+        <Button>更新问题</Button>
+        <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</Button>
+        <router-link v-if="allow('manage', issue)" class="btn btn-warning me-auto" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
       </div>
     </div>
-
-  </layouts.form_horizontal>
+  </Form>
 </template>
 
 <script setup lang="ts">
 import BSOption from '@/components/BSOption.vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
-import { controls, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { Issue } from '@/models'
 import { usePageStore } from '@/store'
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -76,7 +77,9 @@ const former = Former.build({
   creator_id: issue.value.creator_id,
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue_id

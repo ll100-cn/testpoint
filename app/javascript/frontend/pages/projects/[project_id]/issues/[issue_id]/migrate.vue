@@ -1,37 +1,35 @@
 <template>
-  <div class="page-header">
-    <h2>项目迁移</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>项目迁移</PageTitle>
+  </PageHeader>
 
-  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <FormErrorAlert />
+  <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
+    <div class="mx-auto w-full max-w-4xl">
+      <FormErrorAlert />
 
-        <div class="row gy-3">
-          <layouts.group code="target_project_id" label="项目">
-            <controls.select include_blank>
-              <OptionsForSelect :collection="projects.map(it => ({ label: it.name, value: it.id }))" />
-            </controls.select>
-          </layouts.group>
+      <div class="space-y-3">
+        <FormGroup path="target_project_id" label="项目">
+          <controls.select include_blank>
+            <OptionsForSelect :collection="projects.map(it => ({ label: it.name, value: it.id }))" />
+          </controls.select>
+        </FormGroup>
 
-          <layouts.group code="target_category_id" label="分类">
-            <span class="form-control-plaintext text-muted" v-if="actioner.processing">载入中...</span>
-            <controls.select v-else include_blank>
-              <OptionsForCategory :collection="categories" />
-            </controls.select>
-          </layouts.group>
-        </div>
+        <FormGroup path="target_category_id" label="分类">
+          <span class="form-control-plaintext text-muted" v-if="actioner.processing">载入中...</span>
+          <controls.select v-else include_blank>
+            <OptionsForCategory :collection="categories" />
+          </controls.select>
+        </FormGroup>
+      </div>
 
-        <hr class="x-form-divider-through">
+      <hr class="x-form-divider-through">
 
-        <layouts.group control_wrap_class="x-actions x-spacer-2">
-          <layouts.submit :disabled="actioner.processing">迁移</layouts.submit>
-          <router-link class="btn btn-secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</router-link>
-        </layouts.group>
+      <div class="space-x-3">
+        <Button :disabled="actioner.processing">迁移</Button>
+        <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</Button>
       </div>
     </div>
-  </layouts.form_horizontal>
+  </Form>
 </template>
 
 <script setup lang="ts">
@@ -39,14 +37,18 @@ import { Actioner } from "@/components/Actioner"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForCategory from "@/components/OptionsForCategory.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
-import { controls, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
+import { layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { Category } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -67,7 +69,9 @@ const former = Former.build({
   target_category_id: null
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   await new q.bug.IssueMigrationReq().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform({ ...this.form, source_issue_id: issue_id })

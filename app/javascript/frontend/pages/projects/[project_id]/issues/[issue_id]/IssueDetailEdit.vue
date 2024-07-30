@@ -8,16 +8,16 @@
   </div>
 
   <div v-if="mode == 'edit'">
-    <layouts.form_vertical v-bind="{ former }" @submit.prevent="onSubmit" :default_wrapper_config="{ size: 'small' }">
+    <Form preset="vertical" v-bind="{ former }" @submit.prevent="onSubmit" :default_wrapper_config="{ size: 'small' }">
       <div class="mb-2">
         <slot name="editable" />
       </div>
 
-      <div class="x-actions x-spacer-2">
-        <layouts.submit class="btn-sm">更新</layouts.submit>
-        <button class="btn btn-sm btn-secondary" @click="mode = 'show'">取消</button>
+      <div class="space-x-3">
+        <Button size="sm">更新</Button>
+        <Button variant="secondary" size="sm" type="button" @click="mode = 'show'">取消</Button>
       </div>
-    </layouts.form_vertical>
+    </Form>
   </div>
   <template v-else>
     <slot />
@@ -27,7 +27,9 @@
 
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 import { IssueInfo } from "@/models"
 import { ref } from "vue"
 
@@ -35,16 +37,17 @@ const props = withDefaults(defineProps<{
   code: string
   title: string
   issue_info: IssueInfo
-  former: Former<Record<string, any>>
+  former: Former<any>
   editable?: boolean
 }>(), {
   editable: true
 })
 
 const mode = ref('show' as 'show' | 'edit')
+const { Form, FormGroup } = FormFactory<typeof props.former.form>()
 
 async function onSubmit() {
-  await props.former.submit(props.code)
+  await props.former.perform(props.code)
   mode.value = 'show'
 }
 

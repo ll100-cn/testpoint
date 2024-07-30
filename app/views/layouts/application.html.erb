@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%= render 'layouts/head' %>
+    <title>Testpoint</title>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <%= vite_client_tag %>
+    <%= vite_typescript_tag 'application' %>
   </head>
 
-  <body class="singleton">
-    <%= render "layouts/nav" %>
-    <%= render "layouts/flash" %>
-
-    <div class="app-container">
-      <%= yield %>
-    </div>
-
-    <div id="applicationModal" class="modal">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border p-5 m-5" role="status"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+  <body>
+    <%= yield %>
   </body>
 </html>

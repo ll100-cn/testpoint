@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body d-flex">
+  <CardContent class="flex">
     <div class="col-12 col-md-4 col-xl-3 border-end py-3">
       <FolderSide :filter="filter" :test_case_stats="test_case_stats" />
     </div>
@@ -10,7 +10,7 @@
         :test_cases="avaiable_test_cases"
       />
     </div>
-  </div>
+  </CardContent>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +21,7 @@ import { computed } from 'vue'
 import FolderSide from '../FolderSide.vue'
 import { ColumnFilter, Filter } from '../types'
 import CaseTable, { Props, Listeners } from './CaseTable.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const props = defineProps<Props & Listeners & {
   filter: Filter

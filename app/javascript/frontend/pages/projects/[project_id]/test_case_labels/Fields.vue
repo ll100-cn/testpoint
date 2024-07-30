@@ -2,12 +2,20 @@
   <FormErrorAlert />
 
   <div class="row gy-3">
-    <layouts.group code="name" label="名称"><controls.string /></layouts.group>
-    <layouts.group code="description" label="描述"><controls.text /></layouts.group>
+    <FormGroup path="name" label="名称"><controls.string /></FormGroup>
+    <FormGroup path="description" label="描述"><controls.text /></FormGroup>
   </div>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { controls, layouts } from "@/components/simple_form"
+import * as controls from '@/components/controls'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+
+const props = defineProps<{
+  former: Former<any>
+}>()
+
+const { FormGroup } = FormFactory<typeof props.former.form>()
+
 </script>

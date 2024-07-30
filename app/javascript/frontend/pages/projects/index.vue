@@ -1,48 +1,49 @@
 <template>
-  <div class="page-header">
-    <h2>项目列表</h2>
+  <PageHeader>
+    <PageTitle>项目列表</PageTitle>
     <router-link to="/users" class="ms-3">成员</router-link>
 
-    <div class="page-actions ms-auto">
+    <template #actions>
       <router-link to="/projects/new" class="btn btn-primary">新增项目</router-link>
-    </div>
-  </div>
+    </template>
+  </PageHeader>
 
-  <div class="card page-card card-x-table">
-    <div class="card-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>是否归档</th>
-            <th>webhook_url</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+  <Card>
+    <CardContent>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>ID</TableHead>
+            <TableHead>名称</TableHead>
+            <TableHead>是否归档</TableHead>
+            <TableHead>webhook_url</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           <template v-for="project in projects.list">
-            <tr :class="{ 'block-discard': project.archived }">
-              <td>{{ project.id }}</td>
-              <td>{{ project.name }}</td>
-              <td>{{ project.archived ? "是" : "否" }}</td>
-              <td>{{ project.webhook_url }}</td>
-              <td>
+            <TableRow :class="{ 'block-discard': project.archived }">
+              <TableCell>{{ project.id }}</TableCell>
+              <TableCell>{{ project.name }}</TableCell>
+              <TableCell>{{ project.archived ? "是" : "否" }}</TableCell>
+              <TableCell>{{ project.webhook_url }}</TableCell>
+              <TableCell>
                 <div class="x-actions justify-content-end x-spacer-3">
                   <router-link :to="`/projects/${project.id}`"><i class="far fa-search"></i> 详情</router-link>
                   <router-link :to="`/projects/${project.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
                   <a href="#" @click.prevent="onRemove(project.id)"><i class="far fa-trash-alt" /> 归档</a>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           </template>
-        </tbody>
-      </table>
-    </div>
-    <div class="card-footer">
+        </TableBody>
+      </Table>
+    </CardContent>
+
+    <CardFooter>
       <PaginationBar :pagination="projects" />
-    </div>
-  </div>
+    </CardFooter>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -53,6 +54,10 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PaginationBar from '@/components/PaginationBar.vue'
 import { useRoute } from 'vue-router'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()

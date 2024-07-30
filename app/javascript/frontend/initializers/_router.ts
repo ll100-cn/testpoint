@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
 import { setupLayouts } from 'virtual:meta-layouts'
+import { App } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto/routes'
-import { AppContext } from "@/types"
 
 const routes_with_layout = setupLayouts(routes)
 
@@ -11,7 +11,6 @@ const router = createRouter({
   routes: routes_with_layout
 })
 
-export default function(ctx: AppContext) {
-  ctx.app.use(router)
-  ctx.router = router
+export default function(app: App) {
+  app.use(router)
 }

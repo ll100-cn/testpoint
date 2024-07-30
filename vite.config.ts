@@ -11,7 +11,7 @@ export default defineConfig({
     VueRouter({
       routesFolder: fileURLToPath(new URL('./app/javascript/frontend/pages', import.meta.url)),
       exclude: [ "**/[A-Z]*.vue" ],
-      dts: fileURLToPath(new URL('./app/javascript/frontend/typings/typed-router.d.ts', import.meta.url))
+      dts: fileURLToPath(new URL('./app/javascript/typings/typed-router.d.ts', import.meta.url))
     }),
     Vue({
       script: {
@@ -24,9 +24,9 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      'vue': 'vue/dist/vue.esm-bundler.js',
       '@': fileURLToPath(new URL('./app/javascript/frontend', import.meta.url)),
       '@vendor': fileURLToPath(new URL('./node_modules/@vendor', import.meta.url)),
+      '$vendor': fileURLToPath(new URL('./app/javascript/vendor', import.meta.url)),
     }
   }
 })

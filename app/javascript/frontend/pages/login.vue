@@ -1,46 +1,43 @@
 <template>
-  <div class="row mt-5">
-    <div class="col-12 col-xxl-4 col-xl-5 col-lg-7 col-md-9 mx-auto">
-      <div class="card">
-        <div class="card-header">用户登陆</div>
+  <Card class="!mt-10 max-w-lg mx-auto">
+    <CardHeader>用户登陆</CardHeader>
 
-        <layouts.form_vertical v-bind="{ former: code_former }" v-if="!login_code" @submit.prevent="code_former.submit">
-          <div class="card-body">
-            <FormErrorAlert />
-            <div class="row gy-3">
-              <layouts.group code="email" label="邮箱">
-                <controls.string />
-              </layouts.group>
-            </div>
-          </div>
+    <CodeForm preset="vertical" v-bind="{ former: code_former }" v-if="!login_code" @submit.prevent="code_former.perform()">
+      <CardContent>
+        <FormErrorAlert />
+        <div class="space-y-4">
+          <CodeFormGroup path="email" label="邮箱">
+            <controls.string />
+          </CodeFormGroup>
+        </div>
+      </CardContent>
 
-          <div class="card-footer x-spacer-2">
-            <layouts.submit>确定</layouts.submit>
-          </div>
-        </layouts.form_vertical>
+      <CardFooter>
+        <Button>确定</Button>
+      </CardFooter>
+    </CodeForm>
 
-        <layouts.form_vertical v-bind="{ former }" v-else @submit.prevent="former.submit">
-          <div class="card-body">
-            <FormErrorAlert />
-            <div class="row gy-3">
-              <layouts.group code="email" label="邮箱">
-                <div class="form-control-plaintext">{{ former.form.email }}</div>
-              </layouts.group>
+    <Form preset="vertical" v-bind="{ former }" v-else @submit.prevent="former.perform()">
+      <CardContent>
+        <FormErrorAlert />
 
-              <layouts.group code="login_code" label="验证码">
-                <controls.string />
-              </layouts.group>
-            </div>
-          </div>
+        <div class="space-y-4">
+          <FormGroup path="email" label="邮箱">
+            <div class="form-control-plaintext">{{ former.form.email }}</div>
+          </FormGroup>
 
-          <div class="card-footer x-spacer-2">
-            <layouts.submit>登陆</layouts.submit>
-            <input type="button" value="取消" class="btn btn-secondary" @click="login_code = null">
-          </div>
-        </layouts.form_vertical>
-      </div>
-    </div>
-  </div>
+          <FormGroup path="login_code" label="验证码">
+            <controls.string />
+          </FormGroup>
+        </div>
+      </CardContent>
+
+      <CardFooter>
+        <Button>登陆</Button>
+        <Button variant="secondary" @click="login_code = null">取消</Button>
+      </CardFooter>
+    </Form>
+  </Card>
 </template>
 
 <route>
@@ -53,13 +50,15 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { controls, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { LoginCode } from "@/models"
 import { useSessionStore } from "@/store/session"
 import { getCurrentInstance, ref } from "vue"
 import { useRouter } from "vue-router"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()
@@ -70,7 +69,9 @@ const code_former = Former.build({
 })
 const login_code = ref(null as LoginCode | null)
 
-code_former.perform = async function() {
+const { Form: CodeForm, FormGroup: CodeFormGroup } = FormFactory<typeof code_former.form>()
+
+code_former.doPerform = async function() {
   login_code.value = await new q.profile.LoginCodeDeliver().setup(proxy).perform(this.form)
   former.form.email = this.form.email
 }
@@ -80,7 +81,9 @@ const former = Former.build({
   login_code: null as string | null
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   try {
     await new q.profile.LoginCodeVerify().setup(proxy).perform({ user: this.form })
     session.account = undefined
@@ -88,7 +91,7 @@ former.perform = async function() {
     router.push("/")
   } catch(err) {
     if (err instanceof q.ErrorUnauthorized) {
-      this.validations.invalid("login_code", "验证码错误")
+      this.validator.get("base").invalid(["验证码错误"])
       return
     }
 

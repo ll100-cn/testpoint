@@ -7,7 +7,7 @@
           <span class="ms-1 small text-muted">创建于 {{ h.datetime(issue_info.created_at) }}</span>
 
           <MoreDropdown class="ms-auto" v-if="!readonly">
-            <a v-if="allow('update', 'IssueBody')" href="#" class="dropdown-item small" @click.prevent="blank_modal.show(IssueContentEditFrame, issue_info)">修改</a>
+            <a v-if="allow('update', 'IssueBody')" href="#" class="dropdown-item small" @click.prevent="blank_dialog.show(IssueContentEditDialogContent, issue_info)">修改</a>
             <a v-if="allow('update', 'IssueBody')" href="#" class="dropdown-item small" @click.prevent="converComment">转换为评论</a>
           </MoreDropdown>
         </div>
@@ -18,22 +18,22 @@
   </div>
 
   <teleport to="body">
-    <BlankModal ref="blank_modal" @updated="onIssueUpdated" />
+    <BlankDialog ref="blank_dialog" @updated="onIssueUpdated" />
   </teleport>
 </template>
 
 <script setup lang="ts">
-import BlankModal from "@/components/BlankModal.vue"
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import { Attachment, Issue, IssueInfo } from "@/models"
 import { ref } from "vue"
 import ContentBody from "./ContentBody.vue"
-import IssueContentEditFrame from "./IssueContentEditFrame.vue"
+import IssueContentEditDialogContent from "./IssueContentEditDialogContent.vue"
 import { usePageStore } from "@/store"
+import BlankDialog from "$vendor/ui/BlankDialog.vue"
 
-const blank_modal = ref(null as InstanceType<typeof BlankModal>)
+const blank_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const page = usePageStore()
 const allow = page.inProject().allow
 

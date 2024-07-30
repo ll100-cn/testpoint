@@ -1,8 +1,8 @@
 <template>
-  <div class="card page-card">
-    <div class="card-header bg-white d-flex">
-      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit" :default_wrapper_config="{ size: 'small' }">
-        <layouts.group code="platform_id" label="平台">
+  <Card>
+    <CardHeader>
+      <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()" size="sm">
+        <FormGroup path="platform_id" label="平台">
           <controls.dropdown #default="{ Component }">
             <component v-for="platform in _platforms" :is="Component" :value="platform.id">
               <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
@@ -11,46 +11,44 @@
             <div class="dropdown-divider" />
             <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
           </controls.dropdown>
-        </layouts.group>
+        </FormGroup>
 
-        <layouts.group code="label_id" label="标签">
+        <FormGroup path="label_id" label="标签">
           <controls.dropdown #default="{ Component }">
             <component v-for="label in _labels" :is="Component" :value="label.id">{{ label.name }}</component>
             <div class="dropdown-divider" />
             <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
           </controls.dropdown>
-        </layouts.group>
+        </FormGroup>
 
-        <layouts.group code="group_name_search" label="分组">
+        <FormGroup path="group_name_search" label="分组">
           <controls.string />
-        </layouts.group>
-      </layouts.form_inline>
+        </FormGroup>
+      </Form>
 
-      <div class="d-flex ms-auto x-spacer-3 align-items-center">
+      <template #actions>
         <a v-if="allow('create', TestCase)" class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
-      </div>
-    </div>
+      </template>
+    </CardHeader>
 
     <CardBody
       :test_cases="search_test_cases"
       :platform_repo="platform_repo"
       :label_repo="label_repo"
       :filter="filter"
-      @modal="(...args) => case_modal.show(...args)"
-      @batch="(...args) => case_batch_modal.show(...args)" />
+      @modal="(...args) => case_dialog.show(...args)"
+      @batch="(...args) => case_batch_dialog.show(...args)" />
 
-    <CardNew ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
-  </div>
+    <CardNewDialog ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
+  </Card>
 
   <teleport to="body">
-    <BlankModal ref="case_modal" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankModal>
-    <BlankModal ref="case_batch_modal" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></BlankModal>
+    <BlankDialog ref="case_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankDialog>
+    <BlankDialog ref="case_batch_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></BlankDialog>
   </teleport>
 </template>
 
 <script setup lang="ts">
-import { controls, layouts } from '@/components/simple_form'
-import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
@@ -61,9 +59,13 @@ import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
-import CardNew from './CardNew.vue'
 import { usePageStore } from '@/store'
-import BlankModal from '@/components/BlankModal.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import BlankDialog from '$vendor/ui/BlankDialog.vue'
+import CardNewDialog from './CardNewDialog.vue'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -72,8 +74,9 @@ const params = route.params as any
 const query = utils.queryToPlain(route.query)
 const page = usePageStore()
 const allow = page.inProject().allow
-const case_modal = ref<InstanceType<typeof BlankModal>>()
-const case_batch_modal = ref<InstanceType<typeof BlankModal>>()
+
+const case_dialog = ref<InstanceType<typeof BlankDialog>>()
+const case_batch_dialog = ref<InstanceType<typeof BlankDialog>>()
 
 class Search {
   @t.String group_name_search?: string = undefined
@@ -85,12 +88,17 @@ const search = ref(plainToClass(Search, query))
 const filter = plainToClass(Filter, query.f ?? {})
 
 const former = Former.build(search.value)
-former.perform = async function() {
+
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const data = utils.compactObject(this.form)
   router.push({ query: utils.plainToQuery(data) })
 }
 
-watch(computed(() => [ former.form.platform_id, former.form.label_id ]), former.submit)
+watch(computed(() => [ former.form.platform_id, former.form.label_id ]), () => {
+  former.perform()
+})
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void
@@ -145,7 +153,7 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 
 provide("changeFilter", changeFilter)
 
-const modal = ref<InstanceType<typeof CardNew>>()
+const modal = ref<InstanceType<typeof CardNewDialog>>()
 function showModal(project_id: number) {
   modal.value.show(project_id.toString())
 }

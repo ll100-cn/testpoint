@@ -1,59 +1,65 @@
 <template>
-  <div class="page-header">
-    <h2>分类列表</h2>
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
+  <PageHeader>
+    <PageTitle>分类列表</PageTitle>
+
+    <template #actions>
       <router-link v-if="allow('create', Category)" class="btn btn-primary" :to="`/projects/${project_id}/categories/new`">新增分类</router-link>
-    </div>
-  </div>
+    </template>
+  </PageHeader>
 
   <ActionerAlert :actioner="actioner" />
 
-  <div class="card page-card card-x-table">
-    <div class="card-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>描述</th>
-            <th>关联问题数</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+  <Card>
+    <CardContent>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>ID</TableHead>
+            <TableHead>名称</TableHead>
+            <TableHead>描述</TableHead>
+            <TableHead>关联问题数</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           <template v-for="category in categories" :key="category.id">
-            <tr>
-              <td>{{ category.id }}</td>
-              <td>
+            <TableRow>
+              <TableCell>{{ category.id }}</TableCell>
+              <TableCell>
                 <CategoryBadge :category="category" />
-              </td>
-              <td>{{ category.description }}</td>
-              <td>{{ category.issue_count }}</td>
-              <td>
+              </TableCell>
+              <TableCell>{{ category.description }}</TableCell>
+              <TableCell>{{ category.issue_count }}</TableCell>
+              <TableCell>
                 <div class="x-actions justify-content-end x-spacer-3">
                   <router-link v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
                     <i class="far fa-pencil-alt" /> 修改
                   </router-link>
                   <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           </template>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        </TableBody>
+      </Table>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import { Actioner } from '@/components/Actioner'
 import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
 import * as q from '@/lib/requests'
 import { Category } from '@/models'
 import { usePageStore } from '@/store'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import CardBody from '../test_cases/CardBody.vue'
 
 const { proxy } = getCurrentInstance()
 const route = useRoute()

@@ -34,13 +34,13 @@
 
     <div class="flex-column flex-grow-1">
       <div v-if="editing" class="d-flex x-actions">
-        <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
-          <layouts.group class="mb-0" code="title"><controls.string /></layouts.group>
-          <div class="x-actions x-spacer-2 text-nowrap">
-            <layouts.submit>更新</layouts.submit>
-            <button class="btn btn-secondary" @click.prevent="cancelEdit">取消</button>
+        <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
+          <FormGroup class="mb-0" path="title"><controls.string /></FormGroup>
+          <div class="space-x-3">
+            <Button>更新</Button>
+            <Button variant="secondary" @click.prevent="cancelEdit">取消</Button>
           </div>
-        </layouts.form_inline>
+        </Form>
       </div>
       <template v-else>
         <div class="d-flex align-items-center">
@@ -69,8 +69,9 @@ import ClipboardJS from "clipboard"
 import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
-import Former from "./simple_form/Former"
 import { usePageStore } from "@/store"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
 
 const { proxy } = getCurrentInstance()
 const page = usePageStore()
@@ -95,7 +96,9 @@ const former = Former.build({
   title: ""
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const attachment = await new q.project.AttachmentReq.Update().setup(proxy, (req) => {
     req.interpolations.attachment_id = props.attachment.id
   }).perform(this.form)

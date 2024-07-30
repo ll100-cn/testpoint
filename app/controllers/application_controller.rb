@@ -8,22 +8,17 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
 
-  before_action :adjust_format_for_xhr_html
   before_action :set_raven_context
 
   rescue_from CanCan::AccessDenied do |exception|
     if current_user
       render plain: "AccessDenied", status: :forbidden
     else
-      redirect_to new_user_session_path
+      render plain: "Unauthorized", status: :unauthorized
     end
   end
 
 protected
-  def adjust_format_for_xhr_html
-    request.format = :xhrml if request.format.to_sym == :html && (request.xhr? || params[:xhr])
-  end
-
   def ok_url_or_default(default)
     params[:ok_url] || default
   end

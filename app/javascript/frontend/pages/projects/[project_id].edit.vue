@@ -1,22 +1,20 @@
 <template>
-  <div class="page-header">
-    <h2>编辑项目</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>编辑项目</PageTitle>
+  </PageHeader>
 
-  <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields />
+  <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
+      <div class="mx-auto w-full max-w-4xl">
+        <Fields :former="former" />
 
         <hr class="x-form-divider-through">
 
-        <layouts.group control_wrap_class="x-actions x-spacer-2">
-          <layouts.submit>编辑项目</layouts.submit>
-          <router-link :to="`/projects`" class="btn btn-secondary">返回</router-link>
-        </layouts.group>
+        <div class="space-x-3">
+          <Button>编辑项目</Button>
+          <Button variant="secondary" to="/projects">取消</Button>
+        </div>
       </div>
-    </div>
-  </layouts.form_horizontal>
+  </Form>
 </template>
 
 <route>
@@ -29,11 +27,13 @@
 
 <script setup lang="ts">
 import { layouts } from '@/components/simple_form'
-import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { Button, Former, FormFactory } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
@@ -49,7 +49,9 @@ const former = Former.build({
   webhook_url: project.webhook_url,
 })
 
-former.perform = async function() {
+const { Form } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   await new q.admin.ProjectReq.Update().setup(proxy, (req) => {
     req.interpolations.id = project.id
   }).perform(this.form)

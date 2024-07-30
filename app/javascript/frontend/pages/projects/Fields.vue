@@ -1,18 +1,25 @@
 <template>
-  <div class="row gy-3">
+  <div class="space-y-4">
     <FormErrorAlert />
 
-    <layouts.group code="name" label="名称">
+    <FormGroup path="name" label="名称">
       <controls.string />
-    </layouts.group>
+    </FormGroup>
 
-    <layouts.group code="webhook_url" label="webhook_url">
+    <FormGroup path="webhook_url" label="webhook_url">
       <controls.string />
-    </layouts.group>
+    </FormGroup>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Former, FormFactory } from "$vendor/ui";
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { controls, layouts } from "@/components/simple_form"
+import * as controls from '@/components/controls'
+
+const props = defineProps<{
+  former: Former<any>
+}>()
+
+const { FormGroup } = FormFactory<typeof props.former.form>()
 </script>

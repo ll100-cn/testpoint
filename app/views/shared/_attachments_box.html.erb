@@ -1,9 +1,0 @@
-<% if attachmentable.attachments.any? %>
-  <div class="attachments-box">
-    <% attachmentable.attachments.each do |attachment| %>
-      <div class="attachment-item">
-        <%= render "attachments/info", formats: [ :html ], attachment: attachment %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
