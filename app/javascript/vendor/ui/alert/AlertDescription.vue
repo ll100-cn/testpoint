@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
+import { computed, type HTMLAttributes } from 'vue'
 import { cn } from '$vendor/ui/utils'
+import { provideAlertPresenter, relayAlertPreseterConfig, useAlertPresenter, type AlertPresenterConfig } from './types';
 
-const props = defineProps<{
+interface Props {
   class?: HTMLAttributes['class']
-}>()
+}
+
+const props = withDefaults(defineProps<Props & Partial<AlertPresenterConfig>>(), {
+})
+
+const presenterConfig = relayAlertPreseterConfig(props)
+const presenter = useAlertPresenter()
 </script>
 
 <template>
-  <div :class="cn('text-sm [&_p]:leading-relaxed', props.class)">
+  <div :class="cn(presenter.description(presenterConfig), props.class)">
     <slot />
   </div>
 </template>

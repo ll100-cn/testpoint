@@ -37,3 +37,14 @@ export const outline = {
   })
 } satisfies BadgePresenter
 
+export const pill = {
+  root: bva(`${base} rounded-full`, {
+    variant: {
+      primary: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/80',
+      secondary: 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+      destructive: 'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
+      successful: 'border-transparent bg-green-600 text-destructive-foreground hover:bg-green-600/80',
+    },
+  })
+} satisfies BadgePresenter
+

@@ -12,7 +12,7 @@ import { Validation } from "@/models"
 import $ from 'jquery'
 import { nextTick, onMounted, provide, ref } from "vue"
 import * as helper from "../helper"
-import { ControlProps } from "../helper"
+import { type ControlProps } from "../helper"
 
 export interface Props extends ControlProps {
   validation?: Validation

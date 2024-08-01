@@ -1,14 +1,12 @@
 <template>
   <div>
     <PageContent :content="body.content" />
-    <span v-if="is_edited" class="text-muted small mt-1">
+    <span v-if="is_edited" class="text-muted text-sm mt-1">
       最后修改于: {{ h.datetime(body.last_edited_at) }}
     </span>
 
-    <div class="row mt-2 gy-2" v-if="body.attachments.length > 0">
-      <div v-for="attachment in body.attachments" :key="attachment.id" class="col-lg-4 col-6">
-        <AttachmentInfo :editable="editable" :attachment="attachment" @deleted="emit('attachment_destroyed', $event)" @edited="emit('attachment_updated', $event)" />
-      </div>
+    <div class="grid grid-cols-3 gap-4 mt-2 gy-2" v-if="body.attachments.length > 0">
+      <AttachmentInfo v-for="attachment in body.attachments" :editable="editable" :attachment="attachment" @deleted="emit('attachment_destroyed', $event)" @edited="emit('attachment_updated', $event)" />
     </div>
   </div>
 </template>

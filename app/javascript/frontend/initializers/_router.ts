@@ -1,5 +1,5 @@
 import { setupLayouts } from 'virtual:meta-layouts'
-import { App } from 'vue'
+import { type App } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto/routes'
 

@@ -3,15 +3,15 @@
     <PageTitle>问题列表</PageTitle>
 
     <template #actions>
-      <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit(former.form)" class="mx-0">
-        <layouts.group code="keyword">
+      <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform(former.form)" class="mx-0">
+        <FormGroup path="keyword" label="">
           <controls.string placeholder="搜索问题或评论" />
-        </layouts.group>
+        </FormGroup>
 
-        <layouts.submit class="w-auto">搜索</layouts.submit>
-      </layouts.form_inline>
+        <Button class="w-auto">搜索</Button>
+      </Form>
 
-      <router-link v-if="allow('create', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/new`">新增问题</router-link>
+      <Button v-if="allow('create', Issue)" :to="`/projects/${project_id}/issues/new`">新增问题</Button>
     </template>
   </PageHeader>
 
@@ -43,6 +43,7 @@
       <PaginationBar :pagination="pagination" />
     </CardFooter>
   </Card>
+
 </template>
 
 <script setup lang="ts">
@@ -50,8 +51,7 @@ import { Card, CardContent, CardFooter, CardHeader, Nav, NavItem, NavList } from
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
-import { controls, layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
+import { layouts } from "@/components/simple_form"
 import { ENUM_ISSUE_STAGES } from "@/constants"
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
@@ -64,14 +64,17 @@ import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
 import IssueList from "./IssueList.vue"
 import { Filter2, Search2 } from "./types"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const query = utils.queryToPlain(route.query)
 const params = route.params as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const page2 = utils.instance(Page, query)
 const search2 = reactive(utils.instance(Search2, query))
@@ -80,8 +83,11 @@ const filter2 = reactive(utils.instance(Filter2, query))
 const project_id = params.project_id
 
 const former = Former.build(search2)
+
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
 search2.sorts ??= "id desc"
-former.perform = async function(search: Search2 | null) {
+former.doPerform = async function(search: Search2 | null) {
   if (search) {
     const data = utils.compactObject(search)
     router.push({ query: utils.plainToQuery(data) })

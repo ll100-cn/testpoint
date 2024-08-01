@@ -1,14 +1,14 @@
 <template>
-  <div class="small">
-    <div class="d-flex align-items-center x-actions x-spacer-2">
+  <div class="text-sm">
+    <div class="flex items-center gap-x-2 mb-2">
       <MemberLabel :member="comment.member" />
 
       <span class="text-muted">回复于 {{ h.datetime(comment.created_at) }}</span>
 
       <MoreDropdown class="ms-auto">
-        <a v-if="!readonly && comment.member.user_id == user.id && allow('update', comment)" class="dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentEditDialogContent, issue, comment)">修改</a>
-        <a v-if="!readonly && allow('destroy', comment)" class="dropdown-item" @click.prevent="deleteComment" href="#">删除</a>
-        <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentConvertDialogContent, issue, comment)">关联</a>
+        <DropdownMenuItem v-if="!readonly && comment.member.user_id == user.id && allow('update', comment)" @click.prevent="emit('modal', IssueCommentEditDialogContent, issue, comment)">修改</DropdownMenuItem>
+        <DropdownMenuItem v-if="!readonly && allow('destroy', comment)" @click.prevent="deleteComment">删除</DropdownMenuItem>
+        <DropdownMenuItem @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue, comment)">关联</DropdownMenuItem>
       </MoreDropdown>
     </div>
 
@@ -28,8 +28,9 @@ import { Component, getCurrentInstance } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueCommentEditDialogContent from "./IssueCommentEditDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const store = useSessionStore()
 const user = store.account.user
 const page = usePageStore()

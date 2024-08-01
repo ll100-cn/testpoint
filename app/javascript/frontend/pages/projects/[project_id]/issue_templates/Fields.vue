@@ -45,7 +45,7 @@
             </TableRow>
           </TableBody>
         </Table>
-        <button class="btn btn-outline-primary btn-sm m-2" type="button" @click="onAddInput">+ 新增</button>
+        <Button size="sm" preset="outline" class="m-2" type="button" @click="onAddInput">+ 新增</Button>
       </Card>
     </FormGroup>
   </div>
@@ -63,8 +63,9 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import * as controls from '@/components/controls'
+import Button from '$vendor/ui/button/Button.vue'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()
 
 const props = defineProps<{

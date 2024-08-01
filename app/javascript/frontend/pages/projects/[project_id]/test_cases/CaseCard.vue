@@ -3,22 +3,34 @@
     <CardHeader>
       <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()" size="sm">
         <FormGroup path="platform_id" label="平台">
-          <controls.dropdown #default="{ Component }">
-            <component v-for="platform in _platforms" :is="Component" :value="platform.id">
+          <controls.Selectpicker include-blank="任意">
+            <SelectdropItem v-for="platform in _platforms" :value="platform.id">
               <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
               {{ platform.name }}
-            </component>
-            <div class="dropdown-divider" />
-            <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
-          </controls.dropdown>
+            </SelectdropItem>
+
+            <template #menuAfter>
+              <DropdownMenuSeparator></DropdownMenuSeparator>
+              <DropdownMenuItem as-child>
+                <router-link target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
+              </DropdownMenuItem>
+            </template>
+          </controls.Selectpicker>
         </FormGroup>
 
         <FormGroup path="label_id" label="标签">
-          <controls.dropdown #default="{ Component }">
-            <component v-for="label in _labels" :is="Component" :value="label.id">{{ label.name }}</component>
-            <div class="dropdown-divider" />
-            <router-link class="dropdown-item" target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
-          </controls.dropdown>
+          <controls.Selectpicker include-blank="任意">
+            <SelectdropItem v-for="label in _labels" :value="label.id">
+              {{ label.name }}
+            </SelectdropItem>
+
+            <template #menuAfter>
+              <DropdownMenuSeparator></DropdownMenuSeparator>
+              <DropdownMenuItem as-child>
+                <router-link target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
+              </DropdownMenuItem>
+            </template>
+          </controls.Selectpicker>
         </FormGroup>
 
         <FormGroup path="group_name_search" label="分组">
@@ -27,7 +39,7 @@
       </Form>
 
       <template #actions>
-        <a v-if="allow('create', TestCase)" class="btn btn-primary btn-sm" href="#" @click="showModal(project_id)">新增用例</a>
+        <Button size="sm" v-if="allow('create', TestCase)" @click.prevent="showModal(project_id)">新增用例</Button>
       </template>
     </CardHeader>
 
@@ -36,8 +48,8 @@
       :platform_repo="platform_repo"
       :label_repo="label_repo"
       :filter="filter"
-      @modal="(...args) => case_dialog.show(...args)"
-      @batch="(...args) => case_batch_dialog.show(...args)" />
+      @modal="(...args) => case_dialog!.show(...args)"
+      @batch="(...args) => case_batch_dialog!.show(...args)" />
 
     <CardNewDialog ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
   </Card>
@@ -57,7 +69,7 @@ import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ChangeFilterFunction, Filter } from '../types'
+import { type ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import { usePageStore } from '@/store'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
@@ -66,22 +78,24 @@ import CardNewDialog from './CardNewDialog.vue'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const query = utils.queryToPlain(route.query)
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const case_dialog = ref<InstanceType<typeof BlankDialog>>()
 const case_batch_dialog = ref<InstanceType<typeof BlankDialog>>()
 
 class Search {
   @t.String group_name_search?: string = undefined
-  @t.Number platform_id?: number = undefined
-  @t.Number label_id?: number = undefined
+  @t.Number platform_id?: number | null = null
+  @t.Number label_id?: number | null = null
 }
 
 const search = ref(plainToClass(Search, query))

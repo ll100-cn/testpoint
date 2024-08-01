@@ -1,7 +1,7 @@
 <template>
   <FormErrorAlert />
 
-  <div class="space-x-3">
+  <div class="space-y-3">
     <FormGroup path="title" label="标题"><controls.string /></FormGroup>
     <FormGroup path="platform_id" label="平台">
       <controls.select>

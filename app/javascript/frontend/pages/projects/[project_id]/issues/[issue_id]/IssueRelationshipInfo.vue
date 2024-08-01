@@ -1,17 +1,17 @@
 <template>
-  <div class="issue-relationship d-flex align-items-center x-spacer-2">
+  <div class="flex items-center gap-x-2">
     <MemberLabel :member="issue_relationship.member" />
 
     <span>将问题</span>
     <span v-if="direction === 'source'">关联到</span>
     <span v-else>关联自</span>
 
-    <router-link :to="`/projects/${other.project_id}/issues/${other.id}`">#{{ other.id }} {{ other.titleWithPriority() }}</router-link>
+    <router-link :to="`/projects/${other.project_id}/issues/${other.id}`" class="link">#{{ other.id }} {{ other.titleWithPriority() }}</router-link>
 
-    <span class="small text-muted">{{ h.datetime(issue_relationship.created_at) }}</span>
+    <span class="text-sm text-muted">{{ h.datetime(issue_relationship.created_at) }}</span>
 
-    <MoreDropdown class="ms-auto" v-if="!readonly && allow('destroy', IssueRelationship)">
-      <a class="small dropdown-item" href="#" @click.prevent="deleteIssueRelationShip">取消关联</a>
+    <MoreDropdown v-if="!readonly && allow('destroy', IssueRelationship)">
+      <DropdownMenuItem @click.prevent="deleteIssueRelationShip">取消关联</DropdownMenuItem>
     </MoreDropdown>
   </div>
 </template>
@@ -24,10 +24,11 @@ import * as q from '@/lib/requests'
 import { IssueInfo, IssueRelationship } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance } from "vue"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const props = defineProps<{
   issue_info: IssueInfo

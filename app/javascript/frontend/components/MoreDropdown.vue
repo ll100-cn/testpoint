@@ -1,21 +1,22 @@
 <template>
-  <div class="dropdown dropdown-no-arrow" v-show="shown">
-    <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+  <DropdownMenu>
+    <DropdownMenuTrigger :class="props.class">
       <i class="far fa-ellipsis-h"></i>
-    </button>
-    <div ref="content_node" class="dropdown-menu dropdown-menu-end">
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
       <slot />
-    </div>
-  </div>
+    </DropdownMenuContent>
+  </DropdownMenu>
 </template>
 <script setup lang="ts">
 import _ from 'lodash'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, type HTMLAttributes } from 'vue'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
-const content_node = ref(null! as HTMLDivElement)
-const shown = ref(false)
+const props = defineProps<{
+  class?: HTMLAttributes['class']
+}>()
 
 onMounted(() => {
-  shown.value = !_.isEmpty(content_node.value.innerHTML)
 })
 </script>

@@ -15,11 +15,11 @@ const presenter = useCardPresenter()
 
 <template>
   <div :class="cn(presenter.rounded(presenterConfig), 'rounded-b-none', presenter.header(presenterConfig), props.class)">
-    <div class="flex items-center">
+    <div class="flex items-center w-auto">
       <slot></slot>
     </div>
 
-    <div class="ms-auto space-x-1" v-if="slots.actions">
+    <div class="ms-auto flex gap-x-1" v-if="slots.actions">
       <slot name="actions"></slot>
     </div>
   </div>

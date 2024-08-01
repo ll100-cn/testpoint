@@ -1,18 +1,18 @@
 <template>
-  <div class="pt-2">
+  <div class="space-x-2">
     <input type="hidden" value="" :disabled="presenterConfig.disabled">
-    <div v-for="item in collection" class="form-check form-check-inline">
-      <input v-model="modelValue" class="form-check-input" type="checkbox" :value="item[valueMethod]">
-      <label class="form-check-label">{{ item[labelMethod] }}</label>
-    </div>
+    <span v-for="item in collection">
+      <input v-model="modelValue" type="checkbox" :value="item[valueMethod]">
+      <label>{{ item[labelMethod] }}</label>
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Validation } from '@/models'
-import { computed, HTMLAttributes, InputHTMLAttributes } from 'vue'
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
-import { ControlProps } from '../simple_form/helper'
+import { computed, type HTMLAttributes, type InputHTMLAttributes } from 'vue'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { type ControlProps } from '../simple_form/helper'
 
 interface Props extends ControlProps {
   collection: Object

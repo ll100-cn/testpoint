@@ -24,7 +24,7 @@ import { Button } from '$vendor/ui'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
 const router = useRouter()
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')
 
 const emit = defineEmits<{

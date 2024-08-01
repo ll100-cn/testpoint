@@ -1,5 +1,5 @@
 import { type AxiosResponse } from "axios"
-import { ClassConstructor, plainToInstance } from "class-transformer"
+import { type ClassConstructor, plainToInstance } from "class-transformer"
 import { BaseRequest } from "./BaseRequest"
 
 export default abstract class BaseArrayRequest<T> extends BaseRequest<T[]> {

@@ -45,7 +45,7 @@ import RLink from './RLink.vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()?.allow
 
 defineProps<{
   project_id: number

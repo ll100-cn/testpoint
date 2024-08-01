@@ -23,7 +23,7 @@ import { getCurrentInstance, ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')
 
 const emit = defineEmits<{

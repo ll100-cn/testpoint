@@ -1,6 +1,6 @@
 import '$vendor/ui/main.css'
 
-import '../bootstrap-ext'
+// import '../bootstrap-ext'
 import '../widgets/fontawesome'
 import '../widgets/treeview'
 import '../widgets/fancybox'

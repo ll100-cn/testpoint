@@ -1,5 +1,5 @@
 <template>
-  <select v-model="modelValue" class="form-select" v-bind="control_attrs" @change="emit('change', $event)">
+  <select v-model="modelValue" :class="cn(standard.input(presenterConfig), props.class)" v-bind="control_attrs" @change="emit('change', $event)">
     <option v-if="include_blank !== false" value>{{ include_blank || "" }}</option>
     <slot />
   </select>
@@ -8,12 +8,15 @@
 <script setup lang="ts">
 import { Validation } from "@/models"
 import * as helper from "../simple_form/helper"
-import { ControlProps } from "../simple_form/helper"
-import { computed, provide } from "vue"
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { type ControlProps } from "../simple_form/helper"
+import { computed, provide, type HTMLAttributes } from "vue"
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { standard } from './presets'
+import { cn } from '$vendor/ui/utils'
 
 export interface Props extends ControlProps {
   include_blank?: string | boolean
+  class?: HTMLAttributes['class']
 }
 
 const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {

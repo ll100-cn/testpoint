@@ -18,7 +18,7 @@
 import { Validation } from '@/models'
 import { provide, ref, useSlots } from 'vue'
 import Former from '../Former'
-import { ControlConfig, WrapperConfig } from '../helper'
+import { type ControlConfig, type WrapperConfig } from '../helper'
 import VerticalGroup from './VerticalGroup.vue'
 import group from './group.vue'
 

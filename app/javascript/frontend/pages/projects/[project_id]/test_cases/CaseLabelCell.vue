@@ -1,13 +1,14 @@
 <template>
-  <span v-for="label in labels" :key="label.id" class="badge text-bg-secondary me-2">
+  <Badge v-for="label in labels" preset="standard" variant="secondary" class="me-2">
     {{ label.name }}
-  </span>
+  </Badge>
 </template>
 
 <script setup lang="ts">
 import { EntityRepo, TestCaseLabel } from '@/models';
 import _ from 'lodash';
-import { PropType, computed } from 'vue';
+import { type PropType, computed } from 'vue';
+import { Badge } from '$vendor/ui';
 
 const props = defineProps({
   label_repo: {

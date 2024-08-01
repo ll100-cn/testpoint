@@ -37,14 +37,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$vendor/ui'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from "@/models"
 import { usePageStore } from "@/store"
-import { Component, computed, ref } from "vue"
+import { type Component, computed, ref } from "vue"
 import CaseBatchEditDialogContent from "./CaseBatchEditDialogContent.vue"
 import CaseLabelCell from "./CaseLabelCell.vue"
 import CasePlatformCell from "./CasePlatformCell.vue"
 import CaseShowDialogContent from "./CaseShowDialogContent.vue"
 
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 export interface Listeners {
   onModal?: (component: Component, test_case: TestCase) => void

@@ -1,6 +1,6 @@
 <template>
   <div :class="cn('group', presenter.group(presenterConfig))" v-bind="{ ...groupAttrs }">
-    <label v-if="label" :class="cn(presenter.label(presenterConfig))" :for="controlId">{{ label }}</label>
+    <label v-if="label != null" :class="cn(presenter.label(presenterConfig))" :for="controlId">{{ label }}</label>
 
     <div class="flex-1">
       <slot></slot>

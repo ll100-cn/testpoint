@@ -4,7 +4,7 @@
       <DialogTitle>{{ task_upshot_info.test_case.title }}</DialogTitle>
     </DialogHeader>
 
-    <textarea v-if="content.length > 0" v-model="content" data-controller="markdown" data-action="render->markdown#render" class="d-none" :readonly="!is_last_phase || !allow('update', task_upshot_info)" />
+    <textarea v-if="content.length > 0" v-model="content" data-controller="markdown" data-action="render->markdown#render" class="hidden" :readonly="!is_last_phase || !allow('update', task_upshot_info)" />
     <small v-else class="text-muted">无详细信息</small>
 
     <hr>
@@ -12,19 +12,19 @@
 
     <DialogFooter v-if="is_last_phase">
       <template v-if="task_info.ignore_at != null">
-        <a v-if="allow('update', task_info)" class="btn btn-primary" href="#" @click.prevent="actioner.unignoreTask">取消忽略</a>
+        <Button v-if="allow('update', task_info)" @click.prevent="actioner.unignoreTask()">取消忽略</Button>
       </template>
       <template v-else-if="task_upshot_info.state == 'pending'">
-        <a v-if="allow('update', task_info)" class="btn btn-secondary me-auto" href="#" :disabled="actioner.processing" @click.prevent="actioner.ignoreTask">忽略</a>
+        <Button variant="secondary" v-if="allow('update', task_info)" class="me-auto" :disabled="actioner.processing" @click.prevent="actioner.ignoreTask()">忽略</Button>
 
         <template v-if="allow('update', task_upshot_info)">
-          <a  class="btn btn-success" href="#" @click.prevent="actioner.updateTaskUpshotState('pass')">设置为通过</a>
-          <a class="btn btn-danger" href="#" @click.prevent="emit('switch', TaskUpshotFailureDialogContent, task_upshot_info, task_info)">不通过</a>
-          <a v-if="task_upshot_info.state_override && prev_task_upshot" class="btn btn-secondary" href="#" @click.prevent="actioner.updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</a>
+          <Button variant="primary" @click.prevent="actioner.updateTaskUpshotState('pass')">设置为通过</Button>
+          <Button variant="destructive" @click.prevent="emit('switch', TaskUpshotFailureDialogContent, task_upshot_info, task_info)">不通过</Button>
+          <Button variant="secondary" v-if="task_upshot_info.state_override && prev_task_upshot" @click.prevent="actioner.updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</Button>
         </template>
       </template>
       <template v-else>
-        <a v-if="allow('update', task_upshot_info)" href="#" class="btn btn-primary" @click.prevent="actioner.updateTaskUpshotState('pending')">撤销测试结果</a>
+        <Button v-if="allow('update', task_upshot_info)" @click.prevent="actioner.updateTaskUpshotState('pending')">撤销测试结果</Button>
       </template>
     </DialogFooter>
   </DialogContent>
@@ -37,14 +37,14 @@ import * as q from '@/lib/requests'
 import { PlanInfo, TaskInfo, TaskUpshotInfo } from '@/models'
 import { usePageStore } from "@/store"
 import _ from 'lodash'
-import { Component, computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
+import { type Component, computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
 import TaskDetailsState from './TaskDetailsState.vue'
 import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Button } from '$vendor/ui'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const props = defineProps<{
   plan_info: PlanInfo
@@ -56,8 +56,8 @@ const emit = defineEmits<{
   switch: [ compoenent: Component, ...args: any[] ]
 }>()
 
-const task_upshot_info = ref(null as TaskUpshotInfo)
-const task_info = ref(null as TaskInfo)
+const task_upshot_info = ref(null! as TaskUpshotInfo)
+const task_info = ref(null! as TaskInfo)
 
 const is_last_phase = computed(() => {
   return _.last(props.plan_info.phase_infos)?.id == task_upshot_info.value.phase_id

@@ -1,48 +1,50 @@
 <template>
-  <layouts.form_inline v-bind="{ former }" @submit.prevent="former.submit">
-    <layouts.group label="分类" code="category_id_eq">
-      <controls.select>
-        <option :value="undefined">全部</option>
+  <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
+    <FormGroup label="分类" path="category_id_eq">
+      <controls.Selectpicker include-blank="全部">
         <template v-for="category_stat in summary.by_category">
-          <option v-if="category_stat.count > 0" :value="category_stat.category?.id ?? -1">{{ category_stat.category?.name ?? '未分配' }} ({{ category_stat.count }})</option>
+          <SelectdropItem v-if="category_stat.count > 0" :value="category_stat.category?.id ?? -1">
+            {{ category_stat.category?.name ?? '未分配' }} ({{ category_stat.count }})
+          </SelectdropItem>
         </template>
-      </controls.select>
-    </layouts.group>
-    <layouts.group label="里程碑" code="milestone_id_eq">
-      <controls.bootstrap_select>
-        <option :value="undefined">全部</option>
-        <BSOption v-for="milestone in milestone_collection" :value="milestone.id">
+      </controls.Selectpicker>
+    </FormGroup>
+
+    <FormGroup label="里程碑" path="milestone_id_eq">
+      <controls.Selectpicker include-blank="全部">
+        <SelectdropItem v-for="milestone in milestone_collection" :value="milestone.id">
           {{ milestone.title }}
-        </BSOption>
-      </controls.bootstrap_select>
-    </layouts.group>
-    <layouts.group label="受理人" code="assignee_id_eq">
-      <controls.bootstrap_select include_blank="任意">
-        <BSOption v-for="assignee in assignee_collection" :value="assignee.id">
+        </SelectdropItem>
+      </controls.Selectpicker>
+    </FormGroup>
+
+    <FormGroup label="受理人" path="assignee_id_eq">
+      <controls.Selectpicker include-blank="全部">
+        <SelectdropItem v-for="assignee in assignee_collection" :value="assignee.id">
           {{ assignee.name }}
-        </BSOption>
-      </controls.bootstrap_select>
-    </layouts.group>
-    <layouts.group label="创建人" code="creator_id_eq">
-      <controls.bootstrap_select include_blank="任意">
-        <BSOption v-for="creator in creator_collection" :value="creator.id">
+        </SelectdropItem>
+      </controls.Selectpicker>
+    </FormGroup>
+
+    <FormGroup label="创建人" path="creator_id_eq">
+      <controls.Selectpicker include_blank="任意">
+        <SelectdropItem v-for="creator in creator_collection" :value="creator.id">
           {{ creator.name }}
-        </BSOption>
-      </controls.bootstrap_select>
-    </layouts.group>
-    <layouts.group label="问题类型" code="task_id_is">
-      <controls.bootstrap_select include_blank="所有">
-        <BSOption v-for="item in issue_type_collection" :value="item.value">
+        </SelectdropItem>
+      </controls.Selectpicker>
+    </FormGroup>
+
+    <FormGroup label="问题类型" path="task_id_is">
+      <controls.Selectpicker include_blank="所有">
+        <SelectdropItem v-for="item in issue_type_collection" :value="item.value">
           {{ item.label }}
-        </BSOption>
-      </controls.bootstrap_select>
-    </layouts.group>
-  </layouts.form_inline>
+        </SelectdropItem>
+      </controls.Selectpicker>
+    </FormGroup>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import { controls, layouts } from "@/components/simple_form"
-import Former from "@/components/simple_form/Former"
 import * as utils from "@/lib/utils"
 import { IssueSummary } from "@/models"
 import _ from "lodash"
@@ -50,6 +52,9 @@ import { computed, reactive, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Search2, Filter2 } from "./types"
 import BSOption from "@/components/BSOption.vue"
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
 
 const route = useRoute()
 const router = useRouter()
@@ -63,12 +68,15 @@ const search2 = reactive(utils.instance(Search2, query))
 const filter2 = reactive(utils.instance(Filter2, query))
 
 const former = Former.build(filter2)
-former.perform = async function() {
+
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   const data = utils.compactObject({ ...search2, ...this.form })
   router.push({ query: utils.plainToQuery(data) })
 }
 
-watch(former.form, former.submit)
+watch(former.form, () => { former.perform() })
 
 const issue_type_collection = [{ label: "案例问题", value: "not_null" }, { label: "非案例问题", value: "null" }]
 

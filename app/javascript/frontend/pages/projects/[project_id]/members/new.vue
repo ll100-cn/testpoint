@@ -13,12 +13,14 @@
         </template>
       </Fields>
 
-      <hr class="x-form-divider-through">
+      <Separator class="my-4" preset="through" />
 
-      <div class="space-x-3">
-        <Button>新增成员</Button>
-        <Button variant="secondary" :to="`/projects/${project_id}/members`">取消</Button>
-      </div>
+      <FormGroup label="">
+        <div class="space-x-3">
+          <Button>新增成员</Button>
+          <Button variant="secondary" :to="`/projects/${project_id}/members`">取消</Button>
+        </div>
+      </FormGroup>
     </div>
   </Form>
 </template>
@@ -33,10 +35,11 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
+import Separator from '$vendor/ui/separator/Separator.vue'
 
 const route = useRoute()
 const router = useRouter()
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const params = route.params as any
 
 const project_id = params.project_id

@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { provide, ref, useSlots } from 'vue'
 import Former from '../Former'
-import { ControlConfig, WrapperConfig } from '../helper'
+import { type ControlConfig, type WrapperConfig } from '../helper'
 import InlineGroup from './InlineGroup.vue'
 
 const slots = useSlots()

@@ -65,3 +65,16 @@
     align-items: center;
   }
 }
+
+.x-upload-area {
+  padding: 0.5rem;
+  border: 6px dashed #ccc;
+
+  &.highlight {
+    background-color: rgba(232, 240, 254, 0.8);
+  }
+}
+
+.x-upload-container {
+  min-height: 150px;
+}

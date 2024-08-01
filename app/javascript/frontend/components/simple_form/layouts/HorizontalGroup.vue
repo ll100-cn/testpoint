@@ -24,7 +24,7 @@ import { Validation } from "@/models"
 import _ from "lodash"
 import { computed } from "vue"
 import * as helper from '../helper'
-import { GroupProps } from "../helper"
+import { type GroupProps } from "../helper"
 
 interface Props extends GroupProps {
   label?: string

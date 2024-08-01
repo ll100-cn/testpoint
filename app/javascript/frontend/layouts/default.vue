@@ -8,9 +8,9 @@
           </Suspense>
           <Error :errors="errors" />
           <Suspense timeout="0">
-            <div class="app-container">
+            <Container>
               <component :is="Component" v-if="Component" />
-            </div>
+            </Container>
           </Suspense>
         </div>
       </Transition>
@@ -24,6 +24,7 @@ import { onErrorCaptured, ref } from "vue"
 import { onBeforeRouteLeave } from "vue-router"
 import Error from './Error.vue'
 import AppNavbar from '../components/AppNavbar.vue'
+import { Container } from "$vendor/ui"
 
 const errors = ref([])
 

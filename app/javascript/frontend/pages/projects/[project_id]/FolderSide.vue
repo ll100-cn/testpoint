@@ -1,6 +1,6 @@
 <template>
   <div id="folder-tree" class="treeview mb-3" data-controller="activable">
-    <h5>有效</h5>
+    <h5 class="text-lg">有效</h5>
     <ul>
       <template v-for="role_item in tree.avaiable" :key="role_item">
         <FolderRoleItem :role_item="role_item" :filter="filter" :params="{ archived: '0', ignored: null }" :actived="filter.archived == '0'" />

@@ -1,13 +1,13 @@
 import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
 import Keyv from "@keyvhq/core"
-import { AxiosError, AxiosHeaders, AxiosInstance, AxiosProgressEvent, AxiosRequestConfig, AxiosResponse, Method } from "axios"
+import { AxiosError, AxiosHeaders, type AxiosInstance, type AxiosProgressEvent, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
 import _ from "lodash"
 import * as qs from "qs"
 import * as rxjs from "rxjs"
 import { Subscription } from "rxjs/internal/Subscription"
 import URI from 'urijs'
 import URITemplate from "urijs/src/URITemplate"
-import { ClassConstructor, plainToInstance } from "class-transformer"
+import { type ClassConstructor, plainToInstance } from "class-transformer"
 import { ErrorsObject } from "@/models/ErrorsObject"
 import { UnprocessableEntityError } from "$vendor/ui"
 
@@ -20,16 +20,16 @@ export abstract class BaseRequest<T> {
   endpoint!: string
   interpolations = {} as { [ x: string]: any }
   query = {} as { [ x: string]: any }
-  cancellation: Subscription | null
-  $axios: AxiosInstance = null
-  $keyv: Keyv = null
+  cancellation!: Subscription
+  $axios!: AxiosInstance
+  $keyv!: Keyv
   data: any = {}
   method!: Method
   graph: string | null = null
   headers = {}
   conifg: AxiosRequestConfig = {}
-  ctx: PerformContext = { $axios: null, $keyv: null }
-  subject: rxjs.Subject<T>
+  ctx: PerformContext = { $axios: null!, $keyv: null! }
+  subject!: rxjs.Subject<T>
 
   setup(ctx: { $axios: any, $keyv: any }, callback: (instance: this) => void | null = null): this {
     this.ctx = ctx

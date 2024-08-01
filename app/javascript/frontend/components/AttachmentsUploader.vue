@@ -13,10 +13,10 @@
         拖拽上传 或者
         <label class="text-primary c-pointer mb-0">
           本地上传
-          <input type="file" class="d-none" multiple @change="onInputFileSelected">
+          <input type="file" class="hidden" multiple @change="onInputFileSelected">
         </label>
         或者
-        <a href="#" @click.prevent="onClipboardInput">剪贴板</a>
+        <a href="#" @click.prevent="onClipboardInput" class="link">剪贴板</a>
       </div>
     </div>
   </div>
@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import * as q from '@/lib/requests'
 import { Attachment } from "@/models"
-import { AxiosProgressEvent } from "axios"
+import { type AxiosProgressEvent } from "axios"
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue"
 import FormAttachmentInfo from "./FormAttachmentInfo.vue"
 import FormAttachmentUpload from "./FormAttachmentUpload.vue"
@@ -34,7 +34,7 @@ import { UploadFile } from './types'
 const props = defineProps<{
   attachments?: Attachment[]
 }>()
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!
 
 class Item {
   upload_file?: UploadFile

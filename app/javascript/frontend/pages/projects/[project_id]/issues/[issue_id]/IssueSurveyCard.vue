@@ -2,26 +2,26 @@
   <Card>
     <CardContent>
       <template v-for="(issue_survey, index) in issue_info.surveys">
-        <hr v-if="index > 0">
+        <hr class="my-4" v-if="index > 0">
 
         <div>
-          <div class="d-flex align-items-center mb-1">
+          <div class="flex items-center mb-1">
             <span>备注：{{ issue_survey.remark }}</span>
             工单模版：{{ issue_survey.template.name }}
-            <span class="ms-3 small text-muted">修改于 {{ h.datetime(issue_survey.updated_at) }}</span>
+            <span class="ms-3 text-sm text-muted">修改于 {{ h.datetime(issue_survey.updated_at) }}</span>
 
             <MoreDropdown class="ms-auto">
-              <a v-if="!readonly && allow('update', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueSurveyEditDialogContent, issue_info, issue_survey)">修改</a>
-              <a v-if="!readonly && allow('destroy', IssueSurvey)" class="small dropdown-item" href="#" @click.prevent="deleteIssueSurvey(issue_survey)">删除</a>
+              <DropdownMenuItem v-if="!readonly && allow('update', IssueSurvey)" @click.prevent="emit('modal', IssueSurveyEditDialogContent, issue_info, issue_survey)">修改</DropdownMenuItem>
+              <DropdownMenuItem v-if="!readonly && allow('destroy', IssueSurvey)" @click.prevent="deleteIssueSurvey(issue_survey)">删除</DropdownMenuItem>
             </MoreDropdown>
           </div>
 
-          <div v-if="issue_survey.state == 'pending'" class="alert alert-danger mb-0">
+          <Alert variant="destructive" v-if="issue_survey.state == 'pending'">
             <p class="mb-2">该工单需要提供更多信息，请按照模版</p>
             <div>
-              <a v-if="!readonly && allow('update', IssueSurvey)" class="btn btn-danger btn-sm" href="#" @click.prevent="emit('modal', IssueSurveyEditDialogContent, issue_info, issue_survey)">补充工单</a>
+              <Button size="sm" variant="destructive" v-if="!readonly && allow('update', IssueSurvey)" @click.prevent="emit('modal', IssueSurveyEditDialogContent, issue_info, issue_survey)">补充工单</Button>
             </div>
-          </div>
+          </Alert>
           <div v-else>
             <div>
               <template v-for="input in issue_survey.template.inputs">
@@ -41,11 +41,13 @@ import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
 import { IssueInfo, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
-import { Component, getCurrentInstance } from "vue"
+import { type Component, getCurrentInstance } from "vue"
 import IssueSurveyEditDialogContent from "./IssueSurveyEditDialogContent.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Alert, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import Button from "$vendor/ui/button/Button.vue"
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()
 const allow = page.inProject().allow
 

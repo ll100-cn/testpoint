@@ -3,18 +3,18 @@
     <PageTitle>修改标签</PageTitle>
   </PageHeader>
 
-  <Form preset="horizontal" layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.perform()">
-    <div class="row">
-      <div class="col-xxl-8 col-xl-10 col-12 mx-auto">
-        <Fields :former="former" />
+  <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
+    <div class="mx-auto w-full max-w-4xl">
+      <Fields :former="former" />
 
-        <hr class="x-form-divider-through">
+      <Separator class="my-4" preset="through" />
 
+      <FormGroup label="">
         <div class="space-x-3">
           <Button>修改标签</Button>
           <Button variant="secondary" :to="`/projects/${project_id}/test_case_labels`">取消</Button>
         </div>
-      </div>
+      </FormGroup>
     </div>
   </Form>
 </template>
@@ -26,12 +26,12 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 
 const route = useRoute()
 const router = useRouter()
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const params = route.params as any
 
 const project_id = params.project_id as string

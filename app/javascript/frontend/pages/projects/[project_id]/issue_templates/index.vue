@@ -3,7 +3,7 @@
     <PageTitle>问题模版列表</Pagetitle>
 
     <template #actions>
-      <button v-if="allow('create', IssueTemplate)" class="btn btn-primary" @click="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</button>
+      <Button v-if="allow('create', IssueTemplate)" @click.prevent="router.push(`/projects/${project_id}/issue_templates/new`)">新增问题模版</Button>
     </template>
   </PageHeader>
 
@@ -27,11 +27,11 @@
               <TableCell>{{ item.name }}</TableCell>
               <TableCell>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</TableCell>
               <TableCell>
-                <div class="flex justify-content-end space-x-3">
-                  <router-link v-if="allow('update', item)" :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
+                <div class="flex justify-end space-x-3">
+                  <router-link class="link" v-if="allow('update', item)" :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
                     <i class="far fa-pencil-alt" /> 修改
                   </router-link>
-                  <a v-if="allow('destroy', item)" href="#" @click.prevent="onRemove(item.id)"><i class="far fa-trash-alt" /> 删除</a>
+                  <a v-if="allow('destroy', item)" href="#" @click.prevent="onRemove(item.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
               </TableCell>
             </TableRow>
@@ -54,10 +54,11 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import Button from '$vendor/ui/button/Button.vue';
 
 const route = useRoute()
 const router = useRouter()
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject().allow

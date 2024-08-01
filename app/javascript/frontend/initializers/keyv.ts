@@ -1,5 +1,5 @@
 import Keyv from '@keyvhq/core'
-import { App } from 'vue'
+import { type App } from 'vue'
 
 const keyv = new Keyv()
 

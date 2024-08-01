@@ -10,8 +10,8 @@ import 'codemirror/lib/codemirror.css'
 import EasyMDE from '../../../widgets/easymde'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import * as helper from "../simple_form/helper"
-import { ControlProps } from '../simple_form/helper'
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
+import { type ControlProps } from '../simple_form/helper'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
 
 interface Props extends ControlProps {
 }

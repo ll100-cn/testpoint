@@ -48,7 +48,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const page = usePageStore()
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')
 
 const emit = defineEmits<{

@@ -1,5 +1,3 @@
-@import '../../bootstrap-ext/variables';
-
 .timeline {
   border-left: 1px solid hsl(0, 0%, 90%);
   position: relative;
@@ -27,6 +25,6 @@
   }
 
   .active:after {
-    background-color: $success;
+    background-color: hsl(152, 69%, 31%);
   }
 }
