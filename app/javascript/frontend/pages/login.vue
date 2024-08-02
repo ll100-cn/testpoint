@@ -1,8 +1,8 @@
 <template>
-  <Card class="!mt-10 max-w-lg mx-auto">
+  <Card class="mt-10 max-w-lg mx-auto">
     <CardHeader>用户登陆</CardHeader>
 
-    <CodeForm preset="vertical" v-bind="{ former: code_former }" v-if="!login_code" @submit.prevent="code_former.perform()">
+    <CodeForm preset="vertical" v-bind="{ former: code_former }" v-if="login_code" @submit.prevent="code_former.perform()">
       <CardContent>
         <FormErrorAlert />
         <div class="space-y-4">

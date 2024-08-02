@@ -1,5 +1,5 @@
 <template>
-  <CardContent class="flex">
+  <div class="flex">
     <div class="w-full md:w-1/3 xl:w-1/4 py-3 border-e">
       <FolderSide :filter="filter" :test_case_stats="test_case_stats" />
     </div>
@@ -7,7 +7,7 @@
     <div class="flex-1">
       <CaseTable v-bind="props" :test_cases="avaiable_test_cases" />
     </div>
-  </CardContent>
+  </div>
 </template>
 
 <script setup lang="ts">

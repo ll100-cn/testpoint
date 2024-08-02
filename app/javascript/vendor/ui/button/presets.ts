@@ -10,7 +10,7 @@ const base = `
 const size = {
   xs: 'h-6 rounded-sm px-2 text-xs',
   sm: 'h-7 rounded px-3 text-xs',
-  default: '!px-3 !py-1.5',
+  default: 'px-3 py-1.5',
   lg: 'h-10 rounded-md px-8',
 }
 

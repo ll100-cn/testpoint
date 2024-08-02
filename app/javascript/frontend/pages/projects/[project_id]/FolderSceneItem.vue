@@ -1,19 +1,18 @@
 <template>
-  <li :class="{ 'has-children': scene_item.children.length > 0 }">
-    <a v-if="scene_item.children.length > 0" data-bs-toggle="collapse" :href="`#treeview-${scene_item.uuid}`" class="toggler text-muted" :class="{ 'collapsed': collapsed }">
-      <i class="fal fa-plus-square" />
-    </a>
-    <span class="" />
-    <span class="line" />
-    <div class="item">
-      <a class="treeview-link flex-1 rounded" href="#" :class="{ 'btn btn-primary active': highlight }" @click="changeFilter({ ...params, scene_path: scene_item.path })">
-        <i class="fal fa-folder me-2" /> {{ scene_item.name }}
-        <span v-if="scene_item.count == 0 || scene_item.count == scene_item.totalCount()" class="small">({{ scene_item.totalCount() }})</span>
-        <span v-else class="small">({{ scene_item.count }}/{{ scene_item.totalCount() }})</span>
-      </a>
+  <li :class="{ 'has-children': scene_item.children.length > 0 }" class="relative group">
+    <div class="flex items-center group-last:relative">
+      <div class="absolute top-0 bottom-0 border-l -translate-x-1/2 group-last:bottom-1/2"></div>
+
+      <div class="border-b w-3 box-content" />
+
+      <TreeItemView
+        :highlight="highlight"
+        :item-title="scene_item.name"
+        :item-count="(scene_item.count == 0 || scene_item.count == scene_item.totalCount()) ? scene_item.totalCount() : `${scene_item.count} / ${scene_item.totalCount()}`"
+        @click="changeFilter({ ...params, scene_path: scene_item.path })" />
     </div>
 
-    <ul :id="`treeview-${scene_item.uuid}`" class="collapse" :class="{ 'show': !collapsed }">
+    <ul :id="`treeview-${scene_item.uuid}`" :class="{ 'hidden': collapsed }" class="ms-8">
       <template v-for="child in scene_item.children" :key="child">
         <Self v-bind="props" :scene_item="child" :actived="!collapsed" />
       </template>
@@ -23,8 +22,9 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { computed, inject, PropType } from "vue";
-import { ChangeFilterFunction, Filter, SceneItem } from "./types";
+import { computed, inject, type PropType } from "vue";
+import { type ChangeFilterFunction, Filter, SceneItem } from "./types";
+import TreeItemView from './TreeItemView.vue';
 
 const props = defineProps({
   actived: {

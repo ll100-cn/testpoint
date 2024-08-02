@@ -35,7 +35,7 @@
       <FilterBar :summary="issue_summary" />
     </CardHeader>
 
-    <CardContent class="!py-0">
+    <CardContent class="py-0">
       <IssueList :issues="pagination.list" :sorts="search2.sorts" />
     </CardContent>
 

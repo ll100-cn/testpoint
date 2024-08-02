@@ -23,7 +23,7 @@
     <DropdownMenu>
       <DropdownMenuTrigger>
         <span>设置</span>
-        <i class="fa-solid fa-caret-down !ms-1"></i>
+        <i class="fa-solid fa-caret-down ms-1"></i>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem as-child v-if="allow('read', Category)"><router-link :to="`/projects/${project_id}/categories`">分类</router-link></DropdownMenuItem>

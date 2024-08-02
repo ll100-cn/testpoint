@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-gray-800 !py-2 sticky top-0 mb-4 z-10">
+  <div class="bg-gray-800 py-2 sticky top-0 mb-4 z-10">
     <Container>
       <div class="flex">
         <Nav :model-value="null">
           <NavList :preset="navbarPt">
-            <NavItem class="!ps-0" value="" as-child>
+            <NavItem class="ps-0" value="" as-child>
               <RLink to="/">Testpoint</RLink>
             </NavItem>
 
@@ -13,7 +13,7 @@
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <span>{{ profile?.project_name ?? "选择项目" }}</span>
-                    <i class="fa-solid fa-caret-down !ms-1"></i>
+                    <i class="fa-solid fa-caret-down ms-1"></i>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem v-for="project in projects" :key="project.id" class="justify-between" as-child>
@@ -56,7 +56,7 @@
                     {{ account.name }}
                   </span>
 
-                  <i class="fa-solid fa-caret-down !ms-1"></i>
+                  <i class="fa-solid fa-caret-down ms-1"></i>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent :align="'end'">
                   <DropdownMenuItem as-child>
@@ -112,7 +112,7 @@ async function signOut() {
 const navbarPt = {
   list: bva('flex', { }),
   item: bva(`
-    !p-2 text-white/55
+    p-2 text-white/55
     hover:text-white/75
     data-[state=active]:text-white
   `, {

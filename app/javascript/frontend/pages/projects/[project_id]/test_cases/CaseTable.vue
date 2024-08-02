@@ -16,7 +16,7 @@
             <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
           </TableCell>
           <TableCell>
-            <a href="#" @click="onModal?.(CaseShowDialogContent, test_case)">
+            <a href="#" @click="onModal?.(CaseShowDialogContent, test_case)" class="link">
               <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
               {{ test_case.title }}
             </a>

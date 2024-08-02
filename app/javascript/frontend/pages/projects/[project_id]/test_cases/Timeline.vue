@@ -1,5 +1,5 @@
 <template>
-  <div class="!px-3">
+  <div class="px-3">
     <div class="mt-1">
       <h5 class="my-auto d-inline-block">里程碑</h5>
     </div>

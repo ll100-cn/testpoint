@@ -7,18 +7,20 @@
     <div class="mx-auto w-full max-w-4xl">
       <Fields :former="former" />
 
-      <hr class="x-form-divider-through">
+      <Separator class="my-4" preset="through" />
 
-      <div class="space-x-3">
-        <Button>新增项目</Button>
-        <Button variant="secondary" to="/projects">取消</Button>
-      </div>
+      <FormGroup label="">
+        <div class="space-x-3">
+          <Button>新增项目</Button>
+          <Button variant="secondary" to="/projects">取消</Button>
+        </div>
+      </FormGroup>
     </div>
   </Form>
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory } from '$vendor/ui'
+import { Button, Former, FormFactory, Separator } from '$vendor/ui'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/lib/requests'
@@ -34,7 +36,7 @@ const former = Former.build({
   webhook_url: "",
 })
 
-const { Form } = FormFactory<typeof former.form>()
+const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
   await new q.admin.ProjectReq.Create().setup(proxy).perform(this.form)

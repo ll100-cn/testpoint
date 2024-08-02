@@ -2,7 +2,7 @@ import '$vendor/ui/main.css'
 
 // import '../bootstrap-ext'
 import '../widgets/fontawesome'
-import '../widgets/treeview'
+// import '../widgets/treeview'
 import '../widgets/fancybox'
 import '../widgets/stimulus'
 import '../widgets/old'

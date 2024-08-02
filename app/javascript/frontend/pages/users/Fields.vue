@@ -1,7 +1,7 @@
 <template>
   <FormErrorAlert />
 
-  <div class="row gy-3">
+  <div class="gap-x-3">
     <FormGroup path="email" label="用户邮箱">
       <div v-if="props.mode == 'edit'" class="form-control-plaintext">{{ former.form.email }}</div>
       <controls.string v-else />

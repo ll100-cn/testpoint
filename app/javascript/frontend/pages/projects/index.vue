@@ -1,10 +1,10 @@
 <template>
   <PageHeader>
     <PageTitle>项目列表</PageTitle>
-    <router-link to="/users" class="ms-3">成员</router-link>
+    <router-link to="/users" class="ms-3 link">成员</router-link>
 
     <template #actions>
-      <router-link to="/projects/new" class="btn btn-primary">新增项目</router-link>
+      <Button to="/projects/new">新增项目</Button>
     </template>
   </PageHeader>
 
@@ -28,10 +28,10 @@
               <TableCell>{{ project.archived ? "是" : "否" }}</TableCell>
               <TableCell>{{ project.webhook_url }}</TableCell>
               <TableCell>
-                <div class="x-actions justify-content-end x-spacer-3">
-                  <router-link :to="`/projects/${project.id}`"><i class="far fa-search"></i> 详情</router-link>
-                  <router-link :to="`/projects/${project.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
-                  <a href="#" @click.prevent="onRemove(project.id)"><i class="far fa-trash-alt" /> 归档</a>
+                <div class="flex justify-end space-x-3">
+                  <router-link :to="`/projects/${project.id}`" class="link"><i class="far fa-search"></i> 详情</router-link>
+                  <router-link :to="`/projects/${project.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                  <a href="#" @click.prevent="onRemove(project.id)" class="link"><i class="far fa-trash-alt" /> 归档</a>
                 </div>
               </TableCell>
             </TableRow>
@@ -56,7 +56,7 @@ import PaginationBar from '@/components/PaginationBar.vue'
 import { useRoute } from 'vue-router'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
