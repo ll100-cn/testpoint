@@ -3,7 +3,7 @@
     <PageTitle>分类列表</PageTitle>
 
     <template #actions>
-      <router-link v-if="allow('create', Category)" class="btn btn-primary" :to="`/projects/${project_id}/categories/new`">新增分类</router-link>
+      <Button v-if="allow('create', Category)" :to="`/projects/${project_id}/categories/new`">新增分类</Button>
     </template>
   </PageHeader>
 
@@ -31,11 +31,11 @@
               <TableCell>{{ category.description }}</TableCell>
               <TableCell>{{ category.issue_count }}</TableCell>
               <TableCell>
-                <div class="x-actions justify-content-end x-spacer-3">
-                  <router-link v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
+                <div class="flex justify-end space-x-3">
+                  <router-link class="link" v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
                     <i class="far fa-pencil-alt" /> 修改
                   </router-link>
-                  <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
+                  <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
               </TableCell>
             </TableRow>
@@ -60,13 +60,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 import CardBody from '../test_cases/CardBody.vue'
+import Button from '$vendor/ui/button/Button.vue'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const project_id = params.project_id
 

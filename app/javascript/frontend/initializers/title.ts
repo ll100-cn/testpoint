@@ -1,6 +1,6 @@
 
 import { usePageStore } from "@/store"
-import { App, watch } from "vue"
+import { type App, watch } from "vue"
 
 export default function(app: App) {
   const router = app.config.globalProperties.$router

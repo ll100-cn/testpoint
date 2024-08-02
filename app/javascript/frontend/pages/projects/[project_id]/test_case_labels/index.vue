@@ -3,7 +3,7 @@
     <PageTitle>标签列表</PageTitle>
 
     <template #actions>
-      <router-link v-if="allow('create', TestCaseLabel)" class="btn btn-primary" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</router-link>
+      <Button v-if="allow('create', TestCaseLabel)" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</Button>
     </template>
   </PageHeader>
 
@@ -27,11 +27,11 @@
               <TableCell>{{ test_case_label.description }}</TableCell>
               <TableCell>{{ test_case_label.test_case_count }}</TableCell>
               <TableCell>
-                <div class="x-actions justify-content-end x-spacer-3">
-                  <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`">
+                <div class="flex justify-end space-x-3">
+                  <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`" class="link">
                     <i class="far fa-pencil-alt" /> 修改
                   </router-link>
-                  <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)"><i class="far fa-trash-alt" /> 删除</a>
+                  <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
               </TableCell>
             </TableRow>
@@ -51,16 +51,16 @@ import { usePageStore } from '@/store'
 import { TestCaseLabel } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 import Validator from '$vendor/ui/simple_form/Validator';
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id

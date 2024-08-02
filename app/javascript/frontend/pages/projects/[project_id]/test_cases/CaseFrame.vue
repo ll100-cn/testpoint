@@ -29,7 +29,7 @@ const props = defineProps({
   }
 })
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void,

@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 import * as helper from "../helper"
-import { ControlProps } from '../helper'
+import { type ControlProps } from '../helper'
 
 interface Props extends ControlProps {
   validation?: Validation

@@ -1,7 +1,17 @@
 <template>
-  <span v-if="state" v-tooltip:top="info.tips" class="badge rounded-pill" :style="{backgroundColor: info.color}">
-    <i class="me-1" :class="info.icon"></i>{{ text ?? ISSUE_STATE_MAPPING[props.state] }}
-  </span>
+  <TooltipProvider v-if="state">
+    <Tooltip>
+      <TooltipTrigger as-child>
+        <Badge preset="pill" class="" :style="{ backgroundColor: info.color }">
+          <i class="me-1" :class="info.icon"></i>{{ text ?? ISSUE_STATE_MAPPING[props.state] }}
+        </Badge>
+      </TooltipTrigger>
+      <TooltipContent>
+        {{ info.tips }}
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+
   <span v-else>
     无
   </span>
@@ -10,7 +20,7 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { ISSUE_STATE_MAPPING, ISSUE_STATE_COLORS } from "@/constants"
-import vTooltip from "./vTooltip"
+import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$vendor/ui";
 
 const props = defineProps<{
   state: string

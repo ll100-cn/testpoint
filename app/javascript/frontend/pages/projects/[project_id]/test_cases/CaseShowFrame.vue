@@ -10,7 +10,7 @@
         <a v-if="allow('update', test_case)" href="#" @click.prevent="emit('switch', CaseEditFrame, test_case)">编辑</a>
       </div>
       <div class="modal-body">
-        <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="d-none">{{ test_case.content }}</textarea>
+        <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="hidden">{{ test_case.content }}</textarea>
 
         <div class="collapse show btn-toggle text-center p-1">
           <a class="btn btn-link mx-auto" data-bs-toggle="collapse" data-bs-target=".btn-toggle" role="button">
@@ -29,7 +29,7 @@
 
               <div :id="`test_case_version_${index}_body`" class="accordion-collapse collapse" :aria-labelledby="`test_case_version_${index}_header`">
                 <div class="accordion-body">
-                  <textarea v-model="version_case.content" data-controller="markdown" readonly class="d-none" />
+                  <textarea v-model="version_case.content" data-controller="markdown" readonly class="hidden" />
                 </div>
               </div>
             </div>

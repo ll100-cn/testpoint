@@ -1,18 +1,25 @@
 <template>
-  <input v-model="modelValue" class="form-control" >
+  <input v-model="modelValue" :type="type" :class="cn(standard.input(presenterConfig), props.class)" >
 </template>
 
-<script setup lang="ts">
-import { Validation } from '@/models'
-import { computed, HTMLAttributes, InputHTMLAttributes } from 'vue'
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
-
-interface Props {
+<script lang="ts">
+export interface Props {
   type?: InputHTMLAttributes['type']
   class?: HTMLAttributes['class']
 }
+</script>
 
-const props = defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>()
+<script setup lang="ts">
+import { Validation } from '@/models'
+import { computed, type HTMLAttributes, type InputHTMLAttributes } from 'vue'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { standard } from './presets'
+import { cn } from '$vendor/ui/utils'
+
+
+const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {
+  type: 'text'
+})
 
 const presenterConfig = relayInjectPreseterConfig(props)
 const controlConfig = useInjectControlConfig(props)

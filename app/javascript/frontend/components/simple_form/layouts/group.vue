@@ -8,9 +8,9 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 import _ from 'lodash'
-import { DefineComponent, Ref, computed, inject, provide, useSlots } from 'vue'
+import { type DefineComponent, type Ref, computed, inject, provide, useSlots } from 'vue'
 import Former from '../Former'
-import { ControlConfig, WrapperConfig } from '../helper'
+import { type ControlConfig, type WrapperConfig } from '../helper'
 
 
 interface Props extends WrapperConfig {

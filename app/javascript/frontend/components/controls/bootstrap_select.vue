@@ -12,8 +12,8 @@ import { Validation } from "@/models";
 import $ from 'jquery'
 import { computed, nextTick, onMounted, provide, ref } from "vue"
 import * as helper from "../simple_form/helper"
-import { ControlProps } from "../simple_form/helper"
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
+import { type ControlProps } from "../simple_form/helper"
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
 
 export interface Props extends ControlProps {
   include_blank?: string | boolean

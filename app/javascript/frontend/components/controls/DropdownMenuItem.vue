@@ -1,11 +1,14 @@
 <template>
-  <a href="#" @click.prevent="onClick" class="dropdown-item" :class="{ 'active': value == modelValue }">
-    <component v-for="child in children" :is="child" />
-  </a>
+  <DropdownMenuItem>
+    <a href="#" @click.prevent="onClick" class="dropdown-item" :class="{ 'active': value == modelValue }">
+      <component v-for="child in children" :is="child" />
+    </a>
+  </DropdownMenuItem>
 </template>
 
 <script setup lang="ts">
-import { Ref, inject, useSlots } from 'vue'
+import { type Ref, inject, onMounted, useSlots } from 'vue'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
 const props = defineProps<{
   value: any
@@ -22,5 +25,10 @@ register(props.value, children)
 function onClick() {
   modelValue.value = props.value
 }
+
+onMounted(() => {
+  console.log("---------1111111111-----------")
+  console.log("props.value", props.value)
+})
 
 </script>

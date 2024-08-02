@@ -1,6 +1,6 @@
 <template>
   <PageHeader>
-    <PageTitle class="!me-4">仪表盘</PageTitle>
+    <PageTitle class="me-4">仪表盘</PageTitle>
 
     <router-link v-if="current == 'projects'" class="text-primary me-3" to="/dashboard">
       <i class="far fa-check-square"></i> 按项目

@@ -3,7 +3,7 @@
     <PageTitle>平台列表</PageTitle>
 
     <template #actions>
-      <router-link v-if="allow('create', Platform)" class="btn btn-primary" :to="`/projects/${project_id}/platforms/new`">新增平台</router-link>
+      <Button v-if="allow('create', Platform)" :to="`/projects/${project_id}/platforms/new`">新增平台</Button>
     </template>
   </PageHeader>
 
@@ -25,11 +25,11 @@
               <TableCell>{{ platform.name }}</TableCell>
               <TableCell>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</TableCell>
               <TableCell>
-                <div class="x-actions justify-content-end x-spacer-3">
-                  <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`">
+                <div class="flex justify-end space-x-3">
+                  <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`" class="link">
                     <i class="far fa-pencil-alt" /> 修改
                   </router-link>
-                  <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)"><i class="far fa-trash-alt" /> 删除</a>
+                  <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
               </TableCell>
             </TableRow>
@@ -53,8 +53,9 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 import Validator from '$vendor/ui/simple_form/Validator';
+import Button from '$vendor/ui/button/Button.vue'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any

@@ -1,49 +1,44 @@
 <template>
-  <div class="page-header justify-content-between">
-    <h2>计划列表</h2>
+  <PageHeader>
+    <PageTitle>计划列表</PageTitle>
 
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <button v-if="allow('create', Plan)" class="btn btn-primary" @click="plan_dialog.show(PlanCreateDialogContent, test_case_stats)">新增计划</button>
-    </div>
-  </div>
+    <template #actions>
+      <Button v-if="allow('create', Plan)" @click.prevent="plan_dialog.show(PlanCreateDialogContent, test_case_stats)">新增计划</Button>
+    </template>
+  </PageHeader>
 
-  <div class="">
-    <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()" @input="onSearchInput">
-      <FormGroup path="creator_id_eq" label="成员">
-        <controls.select include_blank>
-          <OptionsForMember :collection="members" except_level="reporter" />
-        </controls.select>
-      </FormGroup>
-    </Form>
-  </div>
+  <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
+    <FormGroup path="creator_id_eq" label="成员">
+      <controls.select include_blank @change="onSearchInput">
+        <OptionsForMember :collection="members" except_level="reporter" />
+      </controls.select>
+    </FormGroup>
+  </Form>
 
-  <div class="row mb-3">
-    <div v-for="plan in plans?.list" :key="plan.id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+  <div class="grid grid-cols-3 gap-4 mt-4">
+    <div v-for="plan in plans?.list">
       <router-link :to="{ path: `plans/${plan.id}` }">
         <Card>
-          <CardContent>
-            <div class="card-title d-flex align-items-center">
-              <h4>{{ plan.title }}</h4>
-              <span v-if="plan.milestone" class="badge bg-light text-dark ms-auto">{{ plan.milestone.title }}</span>
+          <CardContent class="flex flex-col gap-y-3">
+            <div class="flex items-center">
+              <h4 class="text-lg font-medium">{{ plan.title }}</h4>
+              <Badge v-if="plan.milestone" preset="standard">{{ plan.milestone.title }}</Badge>
             </div>
 
-            <div class="d-flex">
+            <div class="flex">
               <p><span>{{ _(plan.tasks_state_counts).values().sum() }} 个任务</span></p>
               <p class="ms-auto">
-                <span class="badge" :style="{ backgroundColor: utils.calcColorHex(plan.platform.name) }">{{ plan.platform.name }}</span>
+                <Badge preset="standard" :style="{ backgroundColor: utils.calcColorHex(plan.platform.name) }">{{ plan.platform.name }}</Badge>
               </p>
             </div>
 
-            <div class="progress" style="height: 0.5rem;">
-              <template v-for="state in ['pass', 'failure']" :key="state">
-                <div :class="`progress-bar ${progress_bg_mapping[state]}`" :style="`width: ${100.0 * plan.tasks_state_counts[state] / _(plan.tasks_state_counts).values().sum()}%`" />
-              </template>
-            </div>
+            <Progress v-bind:model-value="100.0 * plan.tasks_state_counts['pass'] / _(plan.tasks_state_counts).values().sum()" class="bg-destructive">
+            </Progress>
           </CardContent>
 
           <CardFooter>
             <small>{{ dayjs(plan.created_at).fromNow() }} {{ plan.creator_name }} 创建</small>
-            <button class="btn btn-outline-primary btn-sm py-1 ms-auto text-nowrap">进入测试</button>
+            <Button preset="outline" size="sm" class="py-1 ms-auto text-nowrap">进入测试</Button>
           </CardFooter>
         </Card>
       </router-link>
@@ -51,6 +46,7 @@
   </div>
 
   <PaginationBar :pagination="plans" />
+
   <teleport to="body">
     <BlankDialog ref="plan_dialog" @created="onCreated" />
   </teleport>
@@ -65,25 +61,27 @@ import * as utils from '@/lib/utils'
 import _ from 'lodash'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import PlanCreateModal from './PlanCreateModal.vue'
 import * as t from '@/lib/transforms'
 import { usePageStore } from '@/store'
 import { Plan } from '@/models'
 import OptionsForMember from '@/components/OptionsForMember.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Badge, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, Progress } from '$vendor/ui'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import * as controls from '@/components/controls'
 import BlankDialog from '$vendor/ui/BlankDialog.vue'
 import PlanCreateDialogContent from './PlanCreateDialogContent.vue'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import Button from '$vendor/ui/button/Button.vue'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const query = route.query
 const page = usePageStore()
-const allow = page.inProject().allow
-const plan_dialog = ref(null as InstanceType<typeof BlankDialog>)
+const allow = page.inProject()!.allow
+const plan_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 
 class Search {
   @t.Number creator_id_eq?: number = undefined
@@ -94,8 +92,8 @@ const former = Former.build(search)
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
-former.doPerform = async function(data) {
-  data = utils.compactObject(data)
+former.doPerform = async function() {
+  const data = utils.compactObject(this.form)
   router.push({ query: utils.plainToQuery(data) })
 }
 
@@ -106,7 +104,7 @@ const plans = ref(await new q.test.PlanReq.Page().setup(proxy, (req) => {
   req.query.q = search
 }).perform())
 
-const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
+const members = ref(await page.inProject()!.request(q.project.MemberInfoReq.List).setup(proxy).perform())
 
 const test_case_stats = ref(await new q.case.TestCaseStatReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id

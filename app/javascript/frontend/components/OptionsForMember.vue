@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { Member, Role } from '@/models'
 import _ from 'lodash'
-import { Ref, computed, inject } from 'vue'
+import { type Ref, computed, inject } from 'vue'
 
 const props = defineProps<{
   collection: Member[]

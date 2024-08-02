@@ -1,8 +1,8 @@
 <template>
-  <p class="d-flex align-items-center">
+  <p class="flex items-center">
     <span class="text-muted">该问题来自测试</span>
     <span><router-link :to="`/projects/${project_id}/plans/${task.plan_id}`">{{ test_case.title }}</router-link></span>
-    <span class="badge bg-secondary ms-1">{{ plan_info.platform.name }}</span>
+    <Badge preset="standard" variant="secondary" class="ms-1">{{ plan_info.platform.name }}</Badge>
   </p>
 </template>
 
@@ -11,8 +11,9 @@ import { getCurrentInstance, ref } from "vue"
 
 import { Task } from "@/models"
 import * as q from '@/lib/requests'
+import Badge from "$vendor/ui/badge/Badge.vue";
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const props = defineProps<{
   task: Task
   project_id: number

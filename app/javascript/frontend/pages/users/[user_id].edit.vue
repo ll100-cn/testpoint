@@ -7,12 +7,14 @@
     <div class="mx-auto w-full max-w-4xl">
       <Fields v-bind="{ former }" mode="edit" />
 
-      <hr class="x-form-divider-through">
+      <Separator class="my-4" preset="through" />
 
-      <div class="space-x-3">
-        <Button>编辑用户</Button>
-        <Button variant="secondary" to="/users">返回</Button>
-      </div>
+      <FormGroup label="">
+        <div class="space-x-3">
+          <Button>编辑用户</Button>
+          <Button variant="secondary" to="/users">返回</Button>
+        </div>
+      </FormGroup>
     </div>
   </Form>
 </template>
@@ -24,7 +26,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Button, Former, FormFactory } from '$vendor/ui'
+import { Button, Former, FormFactory, Separator } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()
@@ -40,7 +42,7 @@ const former = Former.build({
   name: user.name
 })
 
-const { Form } = FormFactory<typeof former.form>()
+const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
   await new q.admin.UserReq.Update().setup(proxy, (req) => {

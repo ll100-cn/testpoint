@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { DropdownMenuTrigger, type DropdownMenuTriggerProps, useForwardProps } from 'radix-vue'
+import type { HTMLAttributes } from 'vue';
 
-const props = defineProps<DropdownMenuTriggerProps>()
+interface Props {
+  class?: HTMLAttributes['class']
+}
+
+const props = defineProps<DropdownMenuTriggerProps & Props>()
 
 const forwardedProps = useForwardProps(props)
 </script>

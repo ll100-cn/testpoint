@@ -10,7 +10,7 @@
 
       <DialogFooter>
         <Button variant="secondary" type="button" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_info)">取消</Button>
-        <a class="btn btn-danger" href="#" @click.prevent="actioner.failTaskUpshot">设置为不通过</a>
+        <Button variant="destructive" type="button" @click.prevent="actioner.failTaskUpshot()">设置为不通过</Button>
       </DialogFooter>
     </template>
 
@@ -57,9 +57,9 @@ import Former from '@/components/simple_form/Former'
 import * as q from '@/lib/requests'
 import { Category, IssueTemplate, Member, PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import { usePageStore } from '@/store'
-import { Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
+import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
 import TaskUpshotInfoDialogContent from "./TaskUpshotInfoDialogContent.vue"
-import TaskUpshotFailureType, { ModalValue as AddonType } from "./TaskUpshotFailureType.vue"
+import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpshotFailureType.vue"
 import { Actioner } from "@/components/Actioner"
 import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
@@ -68,7 +68,7 @@ import { Button } from '$vendor/ui'
 import * as newControls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()
 
 const props = defineProps<{
@@ -81,8 +81,8 @@ const emit = defineEmits<{
 }>()
 
 const addon = ref(null as AddonType)
-const task_upshot_info = ref(null as TaskUpshotInfo)
-const task_info = ref(null as TaskInfo)
+const task_upshot_info = ref(null! as TaskUpshotInfo)
+const task_info = ref(null! as TaskInfo)
 const members = ref([] as Member[])
 const categories = ref([] as Category[])
 const issue_templates = ref([] as IssueTemplate[])
@@ -118,8 +118,8 @@ const { Form: CommentForm, FormGroup: CommentFormGroup } = FormFactory<typeof co
 
 comment_former.doPerform = async function() {
   await new q.bug.IssueCommentReq.Create().setup(proxy, (req) => {
-    req.interpolations.project_id = comment_issue.value.project_id
-    req.interpolations.issue_id = comment_issue.value.id
+    req.interpolations.project_id = comment_issue.value!.project_id
+    req.interpolations.issue_id = comment_issue.value!.id
   }).perform(this.form)
 
   await actioner.failTaskUpshot()
@@ -131,6 +131,7 @@ const actioner = Actioner.build<{
 
 actioner.failTaskUpshot = async function() {
   this.perform(async function() {
+    console.log("-------znmsb--------")
     const a_task_upshot = await new q.test.TaskUpshotStateReq.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
@@ -159,8 +160,8 @@ async function reset(a_task_upshot_info: TaskUpshotInfo, a_task_info: TaskInfo) 
     req.interpolations.project_id = props.plan_info.project_id
   }).perform()
 
-  members.value = await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform()
-  categories.value = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
+  members.value = await page.inProject()!.request(q.project.MemberInfoReq.List).setup(proxy).perform()
+  categories.value = await page.inProject()!.request(q.project.CategoryReq.List).setup(proxy).perform()
 
   issue_former.form.issue_attributes.title = `「${props.plan_info.platform.name}」 ${task_upshot_info.value.test_case.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_info.value.content ?? task_upshot_info.value.test_case.content}\n\n实际效果:\n`

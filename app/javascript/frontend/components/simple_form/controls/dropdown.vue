@@ -20,9 +20,9 @@
 
 <script setup lang="ts">
 import { Validation } from '@/models'
-import { InputHTMLAttributes, computed, provide, reactive } from 'vue'
+import { type InputHTMLAttributes, computed, provide, reactive } from 'vue'
 import * as helper from "../helper"
-import { ControlProps } from '../helper'
+import { type ControlProps } from '../helper'
 import DropdownMenuItem from './DropdownMenuItem.vue'
 
 interface Props extends ControlProps {

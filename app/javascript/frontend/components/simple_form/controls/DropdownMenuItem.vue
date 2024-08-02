@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, inject, useSlots } from 'vue'
+import { type Ref, inject, useSlots } from 'vue'
 
 const props = defineProps<{
   value: any

@@ -2,7 +2,7 @@ import { bva } from "../utils"
 import type { ButtonPresenter } from "./types"
 
 const base = `
-  inline-flex items-center justify-center whitespace-nowrap border rounded font-medium transition-colors
+  inline-flex items-center justify-center whitespace-nowrap border border-transparent rounded font-medium transition-colors
   relative z-10 align-bottom
   focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
   disabled:pointer-events-none disabled:opacity-50
@@ -10,7 +10,7 @@ const base = `
 const size = {
   xs: 'h-6 rounded-sm px-2 text-xs',
   sm: 'h-7 rounded px-3 text-xs',
-  default: '!px-3 !py-1.5',
+  default: 'px-3 py-1.5',
   lg: 'h-10 rounded-md px-8',
 }
 

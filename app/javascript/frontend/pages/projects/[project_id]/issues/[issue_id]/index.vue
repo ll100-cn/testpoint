@@ -4,8 +4,8 @@
     <span class="me-1">
       <IssueStateBadge :state="issue_info.state" />
     </span>
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link v-if="!readonly && allow('update', Issue)" class="btn btn-primary" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</router-link>
+    <div class="flex ms-auto space-x-3 items-center">
+      <Button v-if="!readonly && allow('update', Issue)" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</Button>
     </div>
   </PageHeader>
 
@@ -13,8 +13,8 @@
     该问题已完结
   </div>
 
-  <div class="row">
-    <div class="col col-md-9 order-1 order-md-0 mb-5">
+  <div class="flex gap-x-6">
+    <div class="flex-1 space-y-4">
       <IssueRelatedTask v-if="issue_info.task" :task="issue_info.task" :project_id="project_id" />
       <IssueContent :readonly="readonly" :issue_info="issue_info" @updated="onIssueInfoUpdated" @convert="onIssueConvert" />
       <IssueSurveyCard :readonly="readonly" :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_dialog.show(...args)" />
@@ -32,89 +32,89 @@
       </div>
 
       <Card v-if="!readonly">
+        <CardHeader>
+          <CardTitle>提供更多信息</CardTitle>
+        </CardHeader>
         <CardContent>
-          <h6 class="card-title">提供更多信息</h6>
           <ActionerAlert :actioner="actioner" />
-          <div class="d-flex x-actions x-spacer-2">
-            <button v-if="allow('create', Comment)" class="btn btn-sm btn-primary" @click="comment_dialog.show(IssueCommentCreateDialogContent, issue_info)">
+          <div class="flex items-center gap-x-2">
+            <Button v-if="allow('create', Comment)" @click="comment_dialog.show(IssueCommentCreateDialogContent, issue_info)">
               <i class="far fa-comment fa-fw" /> 新增评论
-            </button>
-            <button class="btn btn-sm btn-primary" @click="issue_info_dialog.show(IssueInfoRelationshipNewDialogContent)">
+            </Button>
+            <Button @click="issue_info_dialog.show(IssueInfoRelationshipNewDialogContent)">
               <i class="far fa-link fa-fw" /> 关联其它问题
-            </button>
-            <button v-if="allow('create', IssueSurvey)" class="btn btn-sm btn-primary" @click="issue_info_dialog.show(IssueSurveyCreateDialogContent)">
+            </Button>
+            <Button v-if="allow('create', IssueSurvey)" @click="issue_info_dialog.show(IssueSurveyCreateDialogContent)">
               <i class="far fa-file-lines fa-fw" /> 新增问题模版
-            </button>
+            </Button>
 
             <template v-if="allow('manage', issue_info) || issue_info.assignee_id == profile.member_id">
               <template v-if="issue_info.assignee && ['confirmed', 'processing', 'processed'].includes(issue_info.state)">
-                <div class="btn-group ms-auto" role="group">
+                <ButtonGroup class="ms-auto">
                   <template v-if="issue_info.state == 'confirmed'">
-                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processing')">
-                      设置为 <IssueStateBadge state="processing" />
-                    </a>
-                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processed')">
-                      设置为 <IssueStateBadge state="processed" />
-                    </a>
+                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processing')">
+                      <span class="me-1">设置为</span><IssueStateBadge state="processing" />
+                    </Button>
+                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processed')">
+                      <span class="me-1">设置为</span><IssueStateBadge state="processed" />
+                    </Button>
                   </template>
 
                   <template v-if="issue_info.state == 'processing'">
-                    <a class="btn btn-sm btn-outline-secondary disabled" href="#" @click.prevent="changeIssueState('processing')">
+                    <Button preset="outline" variant="secondary" disabled @click.prevent="changeIssueState('processing')">
                       已设置 <IssueStateBadge state="processing" />
-                    </a>
-                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processed')">
-                      设置为 <IssueStateBadge state="processed" />
-                    </a>
+                    </Button>
+                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processed')">
+                      <span class="me-1">设置为</span><IssueStateBadge state="processed" />
+                    </Button>
                   </template>
 
                   <template v-if="issue_info.state == 'processed'">
-                    <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="changeIssueState('processing')">
-                      设置为 <IssueStateBadge state="processing" />
-                    </a>
-                    <a class="btn btn-sm btn-outline-secondary disabled" href="#" @click.prevent="changeIssueState('processed')">
+                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processing')">
+                      <span class="me-1">设置为</span><IssueStateBadge state="processing" />
+                    </Button>
+                    <Button preset="outline" variant="secondary" disabled @click.prevent="changeIssueState('processed')">
                       已设置 <IssueStateBadge state="processed" />
-                    </a>
+                    </Button>
                   </template>
-                </div>
+                </ButtonGroup>
               </template>
             </template>
 
             <template v-if="allow('manage', issue_info) && issue_info.state == 'pending'">
-              <div class="btn-group ms-auto" role="group">
-                <a class="btn ms-auto btn-sm btn-outline-secondary" href="#" @click.prevent="issue_comment_create_dialog.show(IssueWaitingDialogContent, issue_info)">
-                  设置为 <IssueStateBadge state="waiting" />
-                </a>
-                <a class="btn ms-auto btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_dialog.show(IssueConfirmDialogContent)">
-                  设置为 <IssueStateBadge state="confirmed" />
-                </a>
-              </div>
+              <ButtonGroup class="ms-auto">
+                <Button preset="outline" variant="secondary" @click.prevent="issue_comment_create_dialog.show(IssueWaitingDialogContent, issue_info)">
+                  <span class="me-1">设置为</span><IssueStateBadge state="waiting" />
+                </Button>
+                <Button preset="outline" variant="secondary" @click.prevent="issue_info_dialog.show(IssueConfirmDialogContent)">
+                  <span class="me-1">设置为</span><IssueStateBadge state="confirmed" />
+                </Button>
+              </ButtonGroup>
             </template>
 
             <template v-if="allow('manage', issue_info) || issue_info.creator_id == profile.member_id">
               <template v-if="issue_info.state == 'resolved' && !issue_info.archived_at">
-                <div class="btn-group ms-auto" role="group">
-                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_resolve_dialog.show(IssueResolveDialogContent)">
-                    设置为 <IssueStateBadge state="archived" text="已完结" />
-                  </a>
+                <ButtonGroup class="ms-auto">
+                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_info_resolve_dialog.show(IssueResolveDialogContent)">
+                    <span class="me-1">设置为</span><IssueStateBadge state="archived" text="已完结" />
+                  </Button>
 
-                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_dialog.show(IssueUnresolveDialogContent)">
-                    设置为 <IssueStateBadge state="pending" text="未解决" />
-                  </a>
-                </div>
+                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_info_dialog.show(IssueUnresolveDialogContent)">
+                    <span class="me-1">设置为</span><IssueStateBadge state="pending" text="未解决" />
+                  </Button>
+                </ButtonGroup>
               </template>
               <template v-if="issue_info.state == 'closed' && !issue_info.archived_at">
-                <div class="btn-group ms-auto" role="group">
-                  <a class="btn btn-sm btn-outline-secondary" href="#" @click.prevent="issue_info_dialog.show(IssueResolveDialogContent)">
-                    设置为 <IssueStateBadge state="archived" text="确认完结" />
-                  </a>
-                </div>
+                <Button preset="outline" variant="silence" size="sm" @click.prevent="issue_info_dialog.show(IssueResolveDialogContent)">
+                  <span class="me-1">设置为</span><IssueStateBadge state="archived" text="确认完结" />
+                </Button>
               </template>
             </template>
           </div>
         </CardContent>
       </Card>
     </div>
-    <IssueDetailsSideBar :readonly="readonly" class="col-12 col-md-3 order-0 order-md-1" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
+    <IssueDetailsSideBar :readonly="readonly" class="w-full md:w-1/4" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
   </div>
 
   <teleport to="body">
@@ -153,13 +153,15 @@ import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 import BlankDialog from "$vendor/ui/BlankDialog.vue"
+import Button from "$vendor/ui/button/Button.vue"
+import ButtonGroup from "$vendor/ui/button/ButtonGroup.vue"
 
 const comment_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const issue_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const issue_comment_create_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const issue_info_resolve_dialog = ref(null as InstanceType<typeof BlankDialog>)
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any

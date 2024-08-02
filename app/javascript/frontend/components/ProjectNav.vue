@@ -23,7 +23,7 @@
     <DropdownMenu>
       <DropdownMenuTrigger>
         <span>设置</span>
-        <i class="fa-solid fa-caret-down !ms-1"></i>
+        <i class="fa-solid fa-caret-down ms-1"></i>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem as-child v-if="allow('read', Category)"><router-link :to="`/projects/${project_id}/categories`">分类</router-link></DropdownMenuItem>
@@ -45,7 +45,7 @@ import RLink from './RLink.vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()?.allow
 
 defineProps<{
   project_id: number

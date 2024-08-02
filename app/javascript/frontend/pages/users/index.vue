@@ -1,10 +1,10 @@
 <template>
   <PageHeader>
     <PageTitle>用户列表</PageTitle>
-    <router-link to="/projects" class="ms-3">项目</router-link>
+    <router-link to="/projects" class="ms-3 link">项目</router-link>
 
     <template #actions>
-      <router-link to="/users/new" class="btn btn-primary">新增用户</router-link>
+      <Button to="/users/new">新增用户</Button>
     </template>
   </PageHeader>
 
@@ -26,9 +26,9 @@
               <TableCell>{{ user.name }}</TableCell>
               <TableCell>{{ user.email }}</TableCell>
               <TableCell>
-                <div class="x-actions justify-content-end x-spacer-3">
-                  <router-link :to="`/users/${user.id}/edit`"><i class="far fa-pencil-alt" /> 修改</router-link>
-                  <a href="#" @click.prevent="onRemove(user.id)"><i class="far fa-trash-alt" /> 删除</a>
+                <div class="flex justify-end space-x-3">
+                  <router-link :to="`/users/${user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                  <a href="#" @click.prevent="onRemove(user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
                 </div>
               </TableCell>
             </TableRow>
@@ -53,7 +53,7 @@ import { useRoute } from 'vue-router'
 import * as utils from "@/lib/utils"
 import PageHeader from '@/components/PageHeader.vue';
 import PageTitle from '@/components/PageTitle.vue';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy!

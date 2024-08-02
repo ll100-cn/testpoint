@@ -1,19 +1,16 @@
 <template>
-  <div class="page-header justify-content-between">
-    <h2>统计报表</h2>
-  </div>
+  <PageHeader>
+    <PageTitle>统计报表</PageTitle>
+  </PageHeader>
 
   <h3>工单时间统计</h3>
+
   <div class="filter-bar mb-3">
     <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
-      <layouts.group code="starts_on">
-        <controls.datetime />
-      </layouts.group>
-      <layouts.group code="ends_on">
-        <controls.datetime />
-      </layouts.group>
+      <FormGroup path="starts_on" label=""><controls.datetime /></FormGroup>
+      <FormGroup path="ends_on" label=""><controls.datetime /></FormGroup>
 
-      <layouts.submit class="w-auto">过滤</layouts.submit>
+      <Button class="w-auto">过滤</Button>
     </Form>
   </div>
 
@@ -37,9 +34,11 @@ import WdayIssuesConfirmTimeChart from './WdayIssuesConfirmTimeChart.vue'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
 
 const wday_mapping = [ "星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ]
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any

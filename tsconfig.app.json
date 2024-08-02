@@ -2,11 +2,11 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": ["env.d.ts", "app/javascript/**/*", "app/javascript/**/*.vue"],
   "compilerOptions": {
-    "verbatimModuleSyntax": false,
-    "strictPropertyInitialization": false,
+    // "verbatimModuleSyntax": false,
+    // "strictPropertyInitialization": false,
     "noImplicitAny": false,
 
-    "strict": false,
+    // "strict": false,
     "experimentalDecorators": true,
     "composite": true,
     "baseUrl": ".",

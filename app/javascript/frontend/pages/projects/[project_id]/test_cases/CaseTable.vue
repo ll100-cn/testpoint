@@ -16,7 +16,7 @@
             <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
           </TableCell>
           <TableCell>
-            <a href="#" @click="onModal?.(CaseShowDialogContent, test_case)">
+            <a href="#" @click="onModal?.(CaseShowDialogContent, test_case)" class="link">
               <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
               {{ test_case.title }}
             </a>
@@ -37,14 +37,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$vendor/ui'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from "@/models"
 import { usePageStore } from "@/store"
-import { Component, computed, ref } from "vue"
+import { type Component, computed, ref } from "vue"
 import CaseBatchEditDialogContent from "./CaseBatchEditDialogContent.vue"
 import CaseLabelCell from "./CaseLabelCell.vue"
 import CasePlatformCell from "./CasePlatformCell.vue"
 import CaseShowDialogContent from "./CaseShowDialogContent.vue"
 
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 export interface Listeners {
   onModal?: (component: Component, test_case: TestCase) => void

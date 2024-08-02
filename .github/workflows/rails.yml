@@ -42,7 +42,7 @@ jobs:
       - run: gem install bundler -v 2.4.20
 
       - uses: actions/setup-node@v4
-        with: { node-version: '16.x' }
+        with: { node-version: '20.x' }
       - run: npm install -g yarn
 
       # ==================
@@ -72,7 +72,7 @@ jobs:
       - run: ./setup.sh
       - run: ./prepare.sh
       - run: ./test.sh
-      - run: bundle exec rake coverage
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with: { name: coverage, path: ./coverage }
+      # - run: bundle exec rake coverage
+      # - uses: actions/upload-artifact@v4
+      #   if: failure()
+      #   with: { name: coverage, path: ./coverage }

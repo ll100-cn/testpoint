@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="no-margin-bottom">
-      <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="d-none" :value="content" />
+      <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="hidden" :value="content" />
     </div>
   </div>
 </template>

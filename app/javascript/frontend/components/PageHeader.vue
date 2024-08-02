@@ -1,9 +1,9 @@
 <template>
-  <div class="flex items-baseline border-b !pb-2 !mb-4">
+  <div class="flex items-baseline border-b pb-2 mb-4 mt-6">
     <slot />
 
     <template v-if="slots.actions">
-      <div class="ms-auto flex !gap-2">
+      <div class="ms-auto flex gap-2">
         <slot name="actions" />
       </div>
     </template>

@@ -1,10 +1,10 @@
 import { type AxiosResponse } from "axios"
-import { ClassConstructor, plainToInstance } from "class-transformer"
+import { type ClassConstructor, plainToInstance } from "class-transformer"
 import { BaseRequest } from "./BaseRequest"
 import { Pagination } from "@/models"
 
 export default class BasePaginationRequest<T> extends BaseRequest<Pagination<T>> {
-  klass: ClassConstructor<T>
+  klass!: ClassConstructor<T>
 
   processResponse(response: AxiosResponse): Pagination<T> {
     const pagination = new Pagination<T>()

@@ -11,12 +11,14 @@
     <div class="w-full max-w-4xl mx-auto">
       <Fields :former="former" :platforms="platforms" />
 
-      <hr class="x-form-divider-through">
+      <Separator class="my-4" preset="through" />
 
-      <div class="space-x-3">
-        <Button>更新计划</Button>
-        <Button variant="secondary" type="button" @click="onCancel">取消</Button>
-      </div>
+      <FormGroup label="">
+        <div class="space-x-3">
+          <Button>更新计划</Button>
+          <Button variant="secondary" type="button" @click="onCancel">取消</Button>
+        </div>
+      </FormGroup>
     </div>
   </Form>
 </template>
@@ -29,11 +31,11 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import Validator from '$vendor/ui/simple_form/Validator';
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any

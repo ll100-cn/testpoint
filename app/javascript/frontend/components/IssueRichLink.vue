@@ -1,6 +1,6 @@
 <template>
   <span>
-    <router-link class="me-3" :to="`/projects/${issue.project_id}/issues/${issue.id}`">
+    <router-link class="me-3 link" :to="`/projects/${issue.project_id}/issues/${issue.id}`">
       #{{ issue.id }} {{ issue.title }}
     </router-link>
     <IssueStateBadge :state="issue.state" />

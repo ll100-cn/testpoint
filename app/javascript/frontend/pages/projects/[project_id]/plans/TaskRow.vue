@@ -6,7 +6,7 @@
         <i v-else class="far fa-clipboard" style="opacity: 0.25" />
       </span>
 
-      <div class="small me-3" style="width: 4rem;">
+      <div class="small me-3" style="width: 5rem;">
         <span v-if="task_upshot_info.task.ignore_at" class="text-secondary">
           已忽略 <i class="far fa-eye-slash"></i>
         </span>

@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, inject, reactive } from 'vue'
+import { type PropType, inject, reactive } from 'vue'
 import Validator from '$vendor/ui/simple_form/Validator';
 import Former from './simple_form/Former'
 import { useInjectFormer } from '$vendor/ui/simple_form/types';

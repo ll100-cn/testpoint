@@ -15,7 +15,7 @@ import 'flatpickr/dist/flatpickr.css'
 import { computed, ref } from 'vue'
 import FlatPickr from 'vue-flatpickr-component'
 import * as helper from "../helper"
-import { ControlProps } from '../helper'
+import { type ControlProps } from '../helper'
 
 export interface Props extends ControlProps {
   validation?: Validation

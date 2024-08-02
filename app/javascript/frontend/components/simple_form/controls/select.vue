@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { Validation } from "@/models"
 import * as helper from "../helper"
-import { ControlProps } from "../helper"
+import { type ControlProps } from "../helper"
 import { computed, provide } from "vue"
 
 export interface Props extends ControlProps {

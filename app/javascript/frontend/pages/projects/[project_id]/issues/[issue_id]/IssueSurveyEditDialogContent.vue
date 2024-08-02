@@ -33,7 +33,7 @@ import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')
 
 const emits = defineEmits<{

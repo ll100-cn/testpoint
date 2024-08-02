@@ -10,7 +10,7 @@ import 'codemirror/lib/codemirror.css'
 import EasyMDE from '../../../../widgets/easymde'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import * as helper from "../helper"
-import { ControlProps } from '../helper'
+import { type ControlProps } from '../helper'
 
 interface Props extends ControlProps {
   validation?: Validation

@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts">
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
 import { Validation } from "@/models";
 import { computed } from "vue";
-import { ControlProps } from '../simple_form/helper';
+import { type ControlProps } from '../simple_form/helper';
 import Component from './string.vue';
 
 interface Props extends ControlProps {

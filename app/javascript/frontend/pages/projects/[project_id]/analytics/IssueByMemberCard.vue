@@ -1,29 +1,32 @@
 <template>
-  <div class="col-12 col-sm-12 col-md-4 mb-3">
-    <div class="card mb-2" style="min-height: 10rem;">
-      <div class="card-header">
-        <div class="d-flex align-items-center">
-          <h5 class="mb-0 me-3">{{ member.name }}</h5>
-          <div class="progress flex-grow-1" style="height: 0.75rem; opacity: 0.7;">
-            <template v-for="category in categories" :key="category.id">
-              <div v-if="getCount(category, member) != 0" class="progress-bar" :style="`background-color: ${category.color}; width: ${ buildPercentStr(getCount(category, member), total_count) };`" role="progressbar" />
-            </template>
-          </div>
+  <div class="mb-3">
+    <Card class="mb-2" style="min-height: 10rem;">
+      <CardHeader>
+        <CardTitle class="me-3">{{ member.name }}</CardTitle>
+
+        <div class="flex-1">
+          <Progress :model-value="50">
+
+          </Progress>
         </div>
-      </div>
-      <div class="card-body">
-        <div class="row">
+
+        <!-- <div class="progress flex-grow-1" style="height: 0.75rem; opacity: 0.7;">
           <template v-for="category in categories" :key="category.id">
-            <div class="col-4">
-              <span class="text-nowrap">
-                <CategoryBadge :category="category" />
-                <span class="ms-2">{{ buildPercentStr(getCount(category, member), total_count) }}</span>
-              </span>
-            </div>
+            <div v-if="getCount(category, member) != 0" class="progress-bar" :style="`background-color: ${category.color}; width: ${ buildPercentStr(getCount(category, member), total_count) };`" role="progressbar" />
+          </template>
+        </div> -->
+      </CardHeader>
+      <CardContent>
+        <div class="grid grid-cols-3">
+          <template v-for="category in categories">
+            <span class="text-nowrap">
+              <CategoryBadge :category="category" />
+              <span class="ms-2">{{ buildPercentStr(getCount(category, member), total_count) }}</span>
+            </span>
           </template>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   </div>
 </template>
 
@@ -32,6 +35,10 @@ import CategoryBadge from '@/components/CategoryBadge.vue'
 import { IssueCreatorChart, Category, Member } from '@/models'
 import _ from 'lodash'
 import { computed } from 'vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
+import { CaretDownIcon } from '@radix-icons/vue'
+import CardBody from '../test_cases/CardBody.vue'
+import { Progress } from '$vendor/ui'
 
 const props = defineProps<{
   member: Member

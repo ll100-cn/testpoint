@@ -1,24 +1,27 @@
 <template>
-  <div class="input-group" v-bind="input_group_attrs">
-    <FlatPickr :model-value="local_value" v-bind="input_attrs" @update:model-value="onUpdateModelValue" class="form-control" :config="config" />
-    <button class="btn btn-outline-secondary" type="button" data-toggle>
+  <ButtonGroup>
+    <FlatPickr :model-value="local_value" v-bind="input_attrs" :class="cn(standard.input(presenterConfig), props.class)" @update:model-value="onUpdateModelValue" :config="config" />
+    <Button preset="outline" variant="secondary" type="button" data-toggle>
       <i class="far fa-calendar"></i>
-      <span aria-hidden="true" class="sr-only">Toggle</span>
-    </button>
-  </div>
+    </Button>
+  </ButtonGroup>
 </template>
 
 <script setup lang="ts">
 import { Validation } from '@/models'
 import dayjs from 'dayjs'
 import 'flatpickr/dist/flatpickr.css'
-import { computed, ref } from 'vue'
+import { computed, ref, type HTMLAttributes } from 'vue'
 import FlatPickr from 'vue-flatpickr-component'
 import * as helper from "../simple_form/helper"
-import { ControlProps } from '../simple_form/helper'
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
+import { type ControlProps } from '../simple_form/helper'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
+import { standard } from './presets'
+import { cn } from '$vendor/ui/utils'
+import { Button, ButtonGroup } from '$vendor/ui'
 
 export interface Props extends ControlProps {
+  class?: HTMLAttributes['class']
 }
 
 const props = defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>()

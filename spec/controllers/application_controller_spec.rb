@@ -13,7 +13,7 @@ RSpec.describe ApplicationController, type: :controller do
     action { get :index }
 
     context "current_user not exists" do
-      it { is_expected.to respond_with :redirect }
+      it { is_expected.to respond_with :unauthorized }
     end
 
     context "current_user exists" do

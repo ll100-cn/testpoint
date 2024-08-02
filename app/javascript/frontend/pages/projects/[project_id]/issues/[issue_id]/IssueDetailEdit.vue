@@ -1,28 +1,29 @@
 <template>
-  <div class="d-flex mb-2">
-    <span class="small text-muted">{{ title }}</span>
-    <span class="ms-auto" v-if="editable">
-      <a href="#" @click.prevent="switchMode('edit')" v-if="mode != 'edit'"><i class="far fa-edit"></i></a>
-      <a href="#" @click.prevent="switchMode('show')" v-else><i class="far fa-times text-muted"></i></a>
-    </span>
-  </div>
+  <div>
+    <div class="flex mb-2">
+      <span class="text-sm text-muted">{{ title }}</span>
+      <span class="ms-auto" v-if="editable">
+        <a href="#" @click.prevent="switchMode('edit')" v-if="mode != 'edit'"><i class="far fa-edit"></i></a>
+        <a href="#" @click.prevent="switchMode('show')" v-else><i class="far fa-times text-muted"></i></a>
+      </span>
+    </div>
 
-  <div v-if="mode == 'edit'">
-    <Form preset="vertical" v-bind="{ former }" @submit.prevent="onSubmit" :default_wrapper_config="{ size: 'small' }">
-      <div class="mb-2">
-        <slot name="editable" />
-      </div>
+    <div v-if="mode == 'edit'">
+      <Form preset="vertical" v-bind="{ former }" @submit.prevent="onSubmit" size="sm">
+        <div class="mb-2">
+          <slot name="editable" />
+        </div>
 
-      <div class="space-x-3">
-        <Button size="sm">更新</Button>
-        <Button variant="secondary" size="sm" type="button" @click="mode = 'show'">取消</Button>
-      </div>
-    </Form>
+        <div class="space-x-3">
+          <Button size="sm">更新</Button>
+          <Button variant="secondary" size="sm" type="button" @click="mode = 'show'">取消</Button>
+        </div>
+      </Form>
+    </div>
+    <template v-else>
+      <slot />
+    </template>
   </div>
-  <template v-else>
-    <slot />
-  </template>
-  <hr>
 </template>
 
 <script setup lang="ts">

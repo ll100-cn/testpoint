@@ -90,7 +90,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import Button from '$vendor/ui/button/Button.vue'
 
 const validations = reactive<Validations>(new Validations())
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const state = ref('pending') // [ pending, submitting, submited ]
 
 const props = defineProps<{

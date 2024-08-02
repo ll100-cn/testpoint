@@ -7,7 +7,7 @@
     <div class="w-full max-w-4xl mx-auto">
       <Fields :project_id="project_id" v-bind="{ former }" />
 
-      <hr class="x-form-divider-through">
+      <Separator class="my-4" preset="through" />
 
       <div class="space-x-3">
         <Button>新增问题模版</Button>
@@ -24,11 +24,11 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Button, Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button, Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
 
 const route = useRoute()
 const router = useRouter()
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const params = route.params as any
 
 const project_id = params.project_id

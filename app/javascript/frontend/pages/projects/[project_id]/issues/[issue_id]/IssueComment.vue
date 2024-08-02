@@ -1,40 +1,43 @@
 <template>
   <Card>
-    <CardHeader :style="comment.display == 'important' ? { backgroundColor: 'var(--bs-danger-bg-subtle)' } : {}">
+    <CardHeader :class="{ 'bg-destructive/10': comment.display == 'important' }">
       <MemberLabel :member="comment.member" class="me-1" />
 
-      <span class="ms-1 small text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
+      <span class="ms-1 text-sm text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
 
-      <span class="ms-1 small text-body-tertiary">[{{ comment.id }}]</span>
+      <span class="ms-1 text-sm text-body-tertiary">[{{ comment.id }}]</span>
 
       <template #actions>
-        <a v-if="comment.display == 'collapsed'" :href="`#${content_id}`" data-bs-toggle="collapse" class="btn btn-sm">展开</a>
-        <MoreDropdown>
-          <a v-if="!readonly && allow('create', Comment)" class="small dropdown-item" href="#" @click.prevent="emit('modal', IssueCommentReplyDialogContent, issue, comment)">回复</a>
-          <template v-if="!readonly && allow('update', comment)">
-            <a class="small dropdown-item" href="#" @click="emit('modal', IssueCommentEditDialogContent, issue, comment)">修改</a>
-            <a v-if="children.length == 0" class="small dropdown-item" href="#" @click="emit('modal', IssueCommentConvertDialogContent, issue, comment)">关联</a>
-            <!-- <a v-if="allow('destroy', comment)" class="small dropdown-item" @click.prevent="deleteComment" href="#">删除</a> -->
+        <Button preset="ghost" variant="secondary" size="sm" v-if="display == 'collapsed'" @click.prevent="changeDisplay()">展开</Button>
 
-            <hr class="dropdown-divider">
+        <MoreDropdown>
+          <DropdownMenuItem v-if="!readonly && allow('create', Comment)" @click.prevent="emit('modal', IssueCommentReplyDialogContent, issue, comment)">回复</DropdownMenuItem>
+
+          <template v-if="!readonly && allow('update', comment)">
+            <DropdownMenuItem @click.prevent="emit('modal', IssueCommentEditDialogContent, issue, comment)">修改</DropdownMenuItem>
+            <DropdownMenuItem v-if="children.length == 0" @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue, comment)">关联</DropdownMenuItem>
+            <!-- <DropdownMenuItem v-if="allow('destroy', comment)" @click.prevent="deleteComment">删除</DropdownMenuItem> -->
+
+            <DropdownMenuSeparator />
 
             <template v-for="option in COMMENT_DISPLAY_OPTIONS">
-              <a v-if="option.value != comment.display" class="small dropdown-item" href="#" @click.prevent="updateComment({ display: option.value })">
+              <DropdownMenuItem v-if="option.value != comment.display" @click.prevent="updateComment({ display: option.value })">
                 设为: {{ option.label }}
-              </a>
+              </DropdownMenuItem>
             </template>
           </template>
         </MoreDropdown>
       </template>
     </CardHeader>
-    <CardContent :id="content_id" class="collapse" :class="{ show: comment.display !== 'collapsed' }">
+
+    <CardContent :id="content_id" :class="{ hidden: display == 'collapsed' }">
       <ContentBody :body="comment" :editable="!readonly && allow('update', comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
-      <div class="x-callout mt-3 py-1" v-if="children.length > 0">
+      <Callout class="mt-3 py-1" v-if="children.length > 0">
         <template v-for="(child, index) in children">
           <div class="mt-4" v-if="index != 0"></div>
           <IssueCommentReply :readonly="readonly" :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
         </template>
-      </div>
+      </Callout>
     </CardContent>
   </Card>
 </template>
@@ -48,20 +51,22 @@ import { Attachment, Comment, CommentRepo, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
-import { Component, computed, getCurrentInstance } from "vue"
+import { type Component, computed, getCurrentInstance, ref } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueCommentEditDialogContent from "./IssueCommentEditDialogContent.vue"
 import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyDialogContent from "./IssueCommentReplyDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
 import { COMMENT_DISPLAY_OPTIONS } from "@/constants"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Callout, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import Button from "$vendor/ui/button/Button.vue"
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const store = useSessionStore()
-const user = store.account.user
+const user = store.account!.user
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const props = defineProps<{
   issue: Issue
@@ -76,6 +81,11 @@ const emit = defineEmits<{
 
   modal: [ component: Component, ...args: any[] ]
 }>()
+
+const display = ref(props.comment.display)
+function changeDisplay() {
+  display.value = display.value == 'collapsed' ? 'normal' : 'collapsed'
+}
 
 const children = computed(() => {
   return props.comment_repo.parent_id.findAll(props.comment.id).sort((a, b) => a.created_at > b.created_at ? 1 : -1)
@@ -103,6 +113,7 @@ async function updateComment(data: Record<string, any>) {
     req.interpolations.comment_id = props.comment.id
   }).perform(data)
 
+  display.value = comment.display
   emit('updated', comment)
 }
 

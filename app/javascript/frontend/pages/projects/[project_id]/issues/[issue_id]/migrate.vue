@@ -50,7 +50,7 @@ import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any

@@ -1,7 +1,7 @@
 <template>
   <FormErrorAlert />
 
-  <div class="row gy-3">
+  <div class="space-y-3">
     <FormGroup path="name" label="名称"><controls.string /></FormGroup>
     <FormGroup path="description" label="描述"><controls.text /></FormGroup>
   </div>

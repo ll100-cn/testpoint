@@ -1,7 +1,5 @@
-import { AppContext } from "@/types";
-
 import Axios from 'axios'
-import { App } from "vue"
+import { type App } from "vue"
 
 const axios = Axios.create({
   baseURL: import.meta.env.VITE_RUBY_BASE ?? "/"

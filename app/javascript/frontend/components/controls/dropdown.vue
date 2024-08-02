@@ -1,30 +1,33 @@
 <template>
-  <div class="dropdown">
-    <input type="hidden" :value="modelValue" />
-    <button type="button" class="btn dropdown-toggle" v-bind="control_attrs" data-bs-toggle="dropdown">
-      <template v-if="selected_item">
-        <component v-for="child in selected_item.children" :is="child" />
-      </template>
-      <template v-else>
-        <span v-if="include_blank !== false">{{ include_blank === true ? "任意" : include_blank }}</span>
-      </template>
-    </button>
-    <div class="dropdown-menu">
+  <DropdownMenu>
+    <DropdownMenuTrigger>
+      <button type="button" class="btn" v-bind="control_attrs">
+        <template v-if="selected_item">
+          <component v-for="child in selected_item.children" :is="child" />
+        </template>
+        <template v-else>
+          <span v-if="include_blank !== false">{{ include_blank === true ? "任意" : include_blank }}</span>
+        </template>
+      </button>
+    </DropdownMenuTrigger>
+
+    <DropdownMenuContent>
       <a href="#" class="dropdown-item" :class="{ 'active': modelValue == null }" v-if="include_blank !== false" @click.prevent="onBlankClick">
         {{ include_blank === true ? "任意" : include_blank }}
       </a>
-      <slot v-bind="{ Component: DropdownMenuItem }"></slot>
-    </div>
-  </div>
+      <slot v-bind="{ Component: DropdownMenuItemVue }"></slot>
+    </DropdownMenuContent>
+  </DropdownMenu>
 </template>
 
 <script setup lang="ts">
 import { Validation } from '@/models'
-import { InputHTMLAttributes, computed, provide, reactive } from 'vue'
+import { type InputHTMLAttributes, computed, provide, reactive } from 'vue'
 import * as helper from "../simple_form/helper"
-import { ControlProps } from '../simple_form/helper'
-import DropdownMenuItem from './DropdownMenuItem.vue'
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { type ControlProps } from '../simple_form/helper'
+import { default as DropdownMenuItemVue } from './DropdownMenuItem.vue'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
 
 interface Props extends ControlProps {
   include_blank?: boolean | string

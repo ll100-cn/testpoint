@@ -2,68 +2,75 @@
   <PageHeader>
     <PageTitle class="me-3">{{ plan_info.title }}</PageTitle>
 
-    <div class="border-start px-2">
-      <span class="text-dark fw-bold">
-        平台: {{ plan_info.platform.name }}
-      </span>
-    </div>
-    <div class="border-start px-2">
-      <span class="text-dark fw-bold">
-        创建人: {{ plan_info.creator_name }}
-      </span>
+    <div class="flex">
+      <div class="px-2">
+        <span class="text-secondary font-bold">
+          平台: {{ plan_info.platform.name }}
+        </span>
+      </div>
+
+      <Separator orientation="vertical" class="h-auto" />
+
+      <div class="px-2">
+        <span class="text-secondary font-bold">
+          创建人: {{ plan_info.creator_name }}
+        </span>
+      </div>
     </div>
 
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link v-if="allow('update', plan_info)" class="ms-auto btn btn-link" :to="`${plan_id}/edit`">设置</router-link>
-    </div>
+    <template #actions>
+      <Button preset="ghost" v-if="allow('update', plan_info)" :to="`${plan_id}/edit`">设置</Button>
+    </template>
   </PageHeader>
 
-  <ul class="nav nav-pills">
-    <li v-for="(phase, index) in plan_info.phase_infos" class="nav-item mb-3 mx-3">
-      <router-link :to="{ query: { phase_index: index } }" class="nav-link" :class="{ active: phase.id == current_phase_info.id }">
-        <span>{{ phase.title }}</span>
-      </router-link>
-    </li>
-    <li class="nav-item mb-3 mx-3">
-      <a v-if="allow('create', Phase)" class="nav-link" href="#" @click.prevent="phase_dialog.show(PlanPhaseCreateDialogContent)">
-        <i class="far fa-plus-circle me-1" /><span>开始新一轮测试</span>
-      </a>
-    </li>
-  </ul>
+
+  <Nav v-bind:model-value="current_phase_info.id.toString()">
+    <NavList preset="pill" class="mb-4">
+      <NavItem v-for="(phase, index) in plan_info.phase_infos" :value="phase.id.toString()" as-child>
+        <router-link :to="{ query: { phase_index: index } }">
+          <span>{{ phase.title }}</span>
+        </router-link>
+      </NavItem>
+      <NavItem value="" v-if="allow('create', Phase)" @click.prevent="phase_dialog.show(PlanPhaseCreateDialogContent)">
+        <i class="far fa-plus-circle me-1" />
+        <span>开始新一轮测试</span>
+      </NavItem>
+    </NavList>
+  </Nav>
 
   <Card>
     <CardHeader>
-      <h4 class="me-auto my-auto">任务列表</h4>
+      <CardTitle>任务列表</CardTitle>
 
-      <layouts.form_inline :former="searcher" :default_wrapper_config="{ size: 'small' }">
-        <layouts.group code="state_eq" label="状态">
-          <controls.dropdown #default="{ Component }">
-            <component :is="Component" value="pending"><TaskStateLabel state="pending" /></component>
-            <component :is="Component" value="pass"><TaskStateLabel state="pass" /></component>
-            <component :is="Component" value="failure"><TaskStateLabel state="failure" /></component>
-          </controls.dropdown>
-        </layouts.group>
+      <template #actions>
+        <Form preset="inline" size="sm" :former="searcher">
+          <FormGroup path="state_eq" label="状态">
+            <controls.Selectpicker>
+              <SelectdropItem value="pending"><TaskStateLabel state="pending" /></SelectdropItem>
+              <SelectdropItem value="pass"><TaskStateLabel state="pass" /></SelectdropItem>
+              <SelectdropItem value="failure"><TaskStateLabel state="failure" /></SelectdropItem>
+            </controls.Selectpicker>
+          </FormGroup>
 
-        <layouts.group code="state_modify_is" label="本轮操作">
-          <controls.dropdown #default="{ Component }">
-            <component :is="Component" value="not_overrided">未操作</component>
-            <component :is="Component" value="overrided">已操作</component>
-          </controls.dropdown>
-        </layouts.group>
-      </layouts.form_inline>
+          <FormGroup path="state_modify_is" label="本轮操作">
+            <controls.Selectpicker>
+              <SelectdropItem value="not_overrided">未操作</SelectdropItem>
+              <SelectdropItem value="overrided">已操作</SelectdropItem>
+            </controls.Selectpicker>
+          </FormGroup>
+        </Form>
+      </template>
     </CardHeader>
 
-    <CardContent class="row">
-      <div class="col-12 col-md-3 col-xl-2 border-end p-3">
+    <CardContent class="flex">
+      <div class="flex-1">
         <FolderSide :filter="filter" :test_case_stats="test_case_stats" />
       </div>
 
-      <div class="col-12 col-md-9 col-xl-10">
-        <div id="tp-main">
-          <div class="test_cases-cards">
-            <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_info)" />
-          </div>
-        </div>
+      <Separator orientation="vertical" class="h-auto" />
+
+      <div class="w-full md:w-3/4 xl:w-5/6 px-4">
+        <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_info)" />
       </div>
     </CardContent>
   </Card>
@@ -75,8 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { controls, layouts } from '@/components/simple_form'
-import Former from '@/components/simple_form/Former'
+import { layouts } from '@/components/simple_form'
 import * as q from '@/lib/requests'
 import { Phase, TaskUpshotInfo, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
@@ -85,30 +91,36 @@ import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FolderSide from '../FolderSide.vue'
-import { ChangeFilterFunction, ColumnFilter, Filter } from '../types'
+import { type ChangeFilterFunction, ColumnFilter, Filter } from '../types'
 import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
 import TaskRow from './TaskRow.vue'
 import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, Separator } from '$vendor/ui'
 import BlankDialog from '$vendor/ui/BlankDialog.vue'
+import { Nav, NavList, NavItem } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 const query = route.query
-const phase_dialog = ref(null as InstanceType<typeof BlankDialog>)
-const task_upshot_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
+const phase_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const task_upshot_info_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 
 const searcher = Former.build({
   state_eq: null as string | null,
   state_modify_is: null as string | null,
 })
+
+const { Form, FormGroup } = FormFactory<typeof searcher.form>()
 
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)

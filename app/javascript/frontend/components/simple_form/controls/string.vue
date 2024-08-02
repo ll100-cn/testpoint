@@ -5,8 +5,8 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 import * as helper from "../helper"
-import { ControlProps } from '../helper'
-import { InputHTMLAttributes } from 'vue'
+import { type ControlProps } from '../helper'
+import { type InputHTMLAttributes } from 'vue'
 
 export interface Props extends ControlProps, /* @vue-ignore */ Partial<InputHTMLAttributes> {
   validation?: Validation

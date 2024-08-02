@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4">
+  <div class="gap-y-3">
     <FormErrorAlert />
 
     <FormGroup path="name" label="名称">

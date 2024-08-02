@@ -1,9 +1,9 @@
 <template>
-  <div class="row">
-    <div class="col col-md-8 col-xl-9">
+  <div class="flex gap-x-3">
+    <div class="flex-1">
       <CaseCard />
     </div>
-    <div class="col">
+    <div class="w-full md:w-1/3 xl:w-1/4">
       <Timeline />
     </div>
   </div>

@@ -1,108 +1,124 @@
 <template>
   <div>
-    <button class="btn btn-secondary btn-block d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#issueDetailCollapse">
-      修改问题
-    </button>
+    <FormErrorAlert :validator="former.validator" />
 
-    <div id="issueDetailCollapse" class="d-md-block">
-      <span class="small text-muted mt-2 d-flex">创建时间</span>
-      <span>{{ h.datetime(issue_info.created_at) }}</span>
-      <hr>
-
+    <div class="flex flex-col gap-y-4">
       <div>
-        <!-- <FormErrorAlert :validator="former.validator" /> -->
-
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="state" title="状态">
-          <template #editable>
-            <FormGroup path="state">
-              <controls.bootstrap_select>
-                <BSOption v-for="item in OPTIONS_FOR_ISSUE_STATE" :value="item.value">
-                  <IssueStateBadge :state="item.value" />
-                </BSOption>
-              </controls.bootstrap_select>
-            </FormGroup>
-          </template>
-
-          <IssueStateBadge :state="issue_info.state" />
-        </IssueDetailEdit>
-
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="priority" title="优先级">
-          <template #editable>
-            <FormGroup path="priority">
-              <controls.select>
-                <OptionsForSelect :collection="ISSUE_PRIORITY_OPTIONS" />
-              </controls.select>
-            </FormGroup>
-          </template>
-
-          <span :class="{'text-danger': issue_info.priority == 'important'}">{{ issue_info.priority_text }}</span>
-        </IssueDetailEdit>
-
-        <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former, issue_info }" code="creator_id" title="创建人">
-          <template #editable>
-            <FormGroup path="creator_id">
-              <controls.select include_blank>
-                <OptionsForMember :collection="members" />
-              </controls.select>
-            </FormGroup>
-          </template>
-
-          {{ issue_info.creator.name }}
-        </IssueDetailEdit>
-
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="assignee_id" title="受理人">
-          <template #editable>
-            <FormGroup path="assignee_id">
-              <controls.select include_blank>
-                <OptionsForMember :collection="members" except_level="reporter" />
-              </controls.select>
-            </FormGroup>
-          </template>
-
-          {{ issue_info.assignee?.name ?? '无' }}
-        </IssueDetailEdit>
-
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="category_id" title="分类">
-          <template #editable>
-            <FormGroup path="category_id">
-              <controls.bootstrap_select>
-                <BSOption v-for="category in categories" :value="category.id">
-                  <i class="fas fa-circle" :style="{ color: category.color }"></i>
-                  {{ category.name }}
-                </BSOption>
-              </controls.bootstrap_select>
-            </FormGroup>
-          </template>
-
-          <CategoryBadgeVue :category="_.find(categories, { id: issue_info.category_id })" />
-        </IssueDetailEdit>
-
-        <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="milestone_id" title="里程碑">
-          <template #editable>
-            <FormGroup path="milestone_id">
-              <controls.select>
-                <OptionsForSelect :collection="milestones.map(it => ({ label: it.title, value: it.id }))" />
-              </controls.select>
-            </FormGroup>
-          </template>
-
-          {{ _.find(milestones, { id: issue_info.milestone_id })?.title ?? '无' }}
-        </IssueDetailEdit>
-
-        <div class="d-flex flex-column" v-if="!readonly">
-          <div class="h5">订阅</div>
-          <div class="mt-1">
-            <button v-if="_.find(issue_info.subscriptions, it => it.user_id == current_user.id)" class="btn border border-secondary bg-light w-100 text-dark" @click="unsubscribe">取消订阅</button>
-            <button v-else class="btn border border-secondary bg-light w-100 text-dark" @click="subscribe">订阅问题</button>
-            <div class="mt-2 small text-muted">{{ issue_info.subscriptions.length }} 人订阅:</div>
-            <div class="x-actions">
-              <img v-for="subscription in issue_info.subscriptions" v-tooltip:top="subscription.member.name" class="rounded-circle avatar" :src="subscription.member.avatar_url" width="30">
-            </div>
-          </div>
-        </div>
+        <div class="text-sm text-muted mb-2">创建时间</div>
+        <span>{{ h.datetime(issue_info.created_at) }}</span>
       </div>
 
       <hr>
+
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="state" title="状态">
+        <template #editable>
+          <FormGroup path="state" label="">
+            <controls.Selectpicker>
+              <SelectdropItem v-for="item in OPTIONS_FOR_ISSUE_STATE" :value="item.value">
+                <IssueStateBadge :state="item.value" />
+              </SelectdropItem>
+            </controls.Selectpicker>
+          </FormGroup>
+        </template>
+
+        <IssueStateBadge :state="issue_info.state" />
+      </IssueDetailEdit>
+
+      <hr>
+
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="priority" title="优先级">
+        <template #editable>
+          <FormGroup path="priority" label="">
+            <controls.select>
+              <OptionsForSelect :collection="ISSUE_PRIORITY_OPTIONS" />
+            </controls.select>
+          </FormGroup>
+        </template>
+
+        <span :class="{'text-danger': issue_info.priority == 'important'}">{{ issue_info.priority_text }}</span>
+      </IssueDetailEdit>
+
+      <hr>
+
+      <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former, issue_info }" code="creator_id" title="创建人">
+        <template #editable>
+          <FormGroup path="creator_id" label="">
+            <controls.select include_blank>
+              <OptionsForMember :collection="members" />
+            </controls.select>
+          </FormGroup>
+        </template>
+
+        {{ issue_info.creator.name }}
+      </IssueDetailEdit>
+
+      <hr>
+
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="assignee_id" title="受理人">
+        <template #editable>
+          <FormGroup path="assignee_id" label="">
+            <controls.select include_blank>
+              <OptionsForMember :collection="members" except_level="reporter" />
+            </controls.select>
+          </FormGroup>
+        </template>
+
+        {{ issue_info.assignee?.name ?? '无' }}
+      </IssueDetailEdit>
+
+      <hr>
+
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="category_id" title="分类">
+        <template #editable>
+          <FormGroup path="category_id" label="">
+            <controls.Selectpicker>
+              <SelectdropItem v-for="category in categories" :value="category.id">
+                <i class="fas fa-circle" :style="{ color: category.color }"></i>
+                {{ category.name }}
+              </SelectdropItem>
+            </controls.Selectpicker>
+          </FormGroup>
+        </template>
+
+        <CategoryBadgeVue :category="_.find(categories, { id: issue_info.category_id })" />
+      </IssueDetailEdit>
+
+      <hr>
+
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="milestone_id" title="里程碑">
+        <template #editable>
+          <FormGroup path="milestone_id" label="">
+            <controls.select>
+              <OptionsForSelect :collection="milestones.map(it => ({ label: it.title, value: it.id }))" />
+            </controls.select>
+          </FormGroup>
+        </template>
+
+        {{ _.find(milestones, { id: issue_info.milestone_id })?.title ?? '无' }}
+      </IssueDetailEdit>
+
+      <hr>
+
+      <div class="flex flex-col" v-if="!readonly">
+        <div class="h5">订阅</div>
+        <div class="mt-1">
+          <Button v-if="_.find(issue_info.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click="unsubscribe">取消订阅</Button>
+          <Button v-else preset="outline" variant="secondary" class="w-full" @click="subscribe">订阅问题</Button>
+          <div class="mt-2 text-sm text-muted">{{ issue_info.subscriptions.length }} 人订阅:</div>
+          <div class="flex items-center gap-1">
+            <TooltipProvider v-for="subscription in issue_info.subscriptions">
+              <Tooltip>
+                <TooltipTrigger>
+                  <img class="rounded-full" :src="subscription.member.avatar_url" width="30">
+                </TooltipTrigger>
+                <TooltipContent>
+                  {{ subscription.member.name }}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -125,16 +141,17 @@ import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
-import vTooltip from "@/components/vTooltip"
+import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$vendor/ui";
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const store = useSessionStore()
-const current_user = store.account.user
+const current_user = store.account!.user
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const props = defineProps<{
   issue_info: IssueInfo

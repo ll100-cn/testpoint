@@ -1,5 +1,5 @@
 import { Validation } from "@/models"
-import { LabelHTMLAttributes, Ref, computed, inject, ref } from "vue"
+import { type LabelHTMLAttributes, type Ref, computed, inject, ref } from "vue"
 
 export interface WrapperConfig {
   size?: 'default' | 'small' | 'large'

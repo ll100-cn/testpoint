@@ -1,14 +1,15 @@
 <template>
-  <textarea v-model="modelValue" class="form-control" />
+  <textarea v-model="modelValue" :class="cn(standard.input(presenterConfig), props.class)" />
 </template>
 
 <script setup lang="ts">
 import { Validation } from '@/models'
-import { computed, HTMLAttributes, InputHTMLAttributes } from 'vue'
-import { ControlConfig, FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { computed, type HTMLAttributes, type InputHTMLAttributes } from 'vue'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
+import { standard } from './presets'
+import { cn } from '$vendor/ui/utils'
 
 interface Props {
-  type?: InputHTMLAttributes['type']
   class?: HTMLAttributes['class']
 }
 

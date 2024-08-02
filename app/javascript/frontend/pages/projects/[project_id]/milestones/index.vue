@@ -1,58 +1,59 @@
 <template>
-  <div class="page-header justify-content-between">
-    <h2>里程碑列表</h2>
+  <PageHeader>
+    <PageTitle>里程碑列表</PageTitle>
 
-    <div class="d-flex ms-auto x-spacer-3 align-items-center">
-      <router-link v-if="allow('create', Milestone)" class="btn btn-primary" :to="`/projects/${project_id}/milestones/new`">新增里程碑</router-link>
-    </div>
-  </div>
+    <template #actions>
+      <Button v-if="allow('create', Milestone)" :to="`/projects/${project_id}/milestones/new`">新增里程碑</Button>
+    </template>
+  </PageHeader>
 
-  <div class="nav nav-tabs mb-n1px position-relative zindex-999">
-    <a href="#" class="nav-link active" data-bs-toggle="tab" data-bs-target="#normal_card">正常</a>
-    <a href="#" class="nav-link" data-bs-toggle="tab" data-bs-target="#archived_card">归档</a>
-  </div>
+  <Nav v-model:model-value="active">
+    <NavList preset="tabs">
+      <NavItem v-for="key in [ 'normal', 'archived' ]" :key="key" :value="key">
+        {{ key === 'normal' ? '正常' : '归档' }}
+      </NavItem>
+    </NavList>
+  </Nav>
 
-  <div class="tab-content">
-    <Card v-for="(group, key) in grouped_milestones" :id="`${key}_card`" class="rounded-top-left-0 tab-pane fade" :class="{ show: key == 'normal', active: key == 'normal' }">
-      <CardContent>
-        <Table>
-          <colgroup>
-            <col>
-            <col>
-            <col width="30%">
-          </colgroup>
-          <TableHeader>
-            <TableRow>
-              <TableHead>标题</TableHead>
-              <TableHead>发布时间</TableHead>
-              <TableHead>描述</TableHead>
-              <TableHead></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow v-for="milestone in group" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
-              <TableCell>{{ milestone.title }}</TableCell>
-              <TableCell>{{ h.datetime(milestone.published_at) }}</TableCell>
-              <TableCell>
-                <textarea :value="milestone.description" data-controller="markdown" readonly class="d-none" />
-              </TableCell>
-              <TableCell>
-                <div class="x-actions justify-content-end x-spacer-3">
-                  <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`">
-                    <i class="far fa-pencil-alt" /> 修改
-                  </router-link>
+  <Card v-for="(group, key) in grouped_milestones" class="rounded-ss-none" :class="{ hidden: key != active }">
+    <CardContent>
+      <Table>
+        <colgroup>
+          <col>
+          <col>
+          <col width="30%">
+        </colgroup>
+        <TableHeader>
+          <TableRow>
+            <TableHead>标题</TableHead>
+            <TableHead>发布时间</TableHead>
+            <TableHead>描述</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="milestone in group" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
+            <TableCell>{{ milestone.title }}</TableCell>
+            <TableCell>{{ h.datetime(milestone.published_at) }}</TableCell>
+            <TableCell>
+              <textarea :value="milestone.description" data-controller="markdown" readonly class="hidden" />
+            </TableCell>
+            <TableCell>
+              <div class="flex justify-end space-x-3">
+                <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`" class="link">
+                  <i class="far fa-pencil-alt" /> 修改
+                </router-link>
 
-                  <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" @click.prevent="milestoneArchive(milestone)"><i class="far fa-archive"></i> 归档</a>
-                  <a v-if="milestone.archived_at && allow('active', milestone)" href="#" @click.prevent="milestoneActive(milestone)"><i class="far fa-box-up"></i> 取消归档</a>
-                  <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)"><i class="far fa-trash-alt"></i> 删除</a>
-                </div>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  </div>
+                <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" @click.prevent="milestoneArchive(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
+                <a v-if="milestone.archived_at && allow('active', milestone)" href="#" @click.prevent="milestoneActive(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
+                <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -65,16 +66,22 @@ import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Nav, NavList, NavItem } from '$vendor/ui'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import Button from '$vendor/ui/button/Button.vue'
 
-const { proxy } = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
+
+const active = ref('normal')
 
 const project_id = _.toNumber(params.project_id)
-const milestones = ref(await page.inProject().request(q.project.MilestoneReq.List).setup(proxy).perform())
+const milestones = ref(await page.inProject()!.request(q.project.MilestoneReq.List).setup(proxy).perform())
 const grouped_milestones = ref(_.groupBy(milestones.value, (m) => m.archived_at ? 'archived' : 'normal'))
 
 function milestoneDestroy(milestone: Milestone) {
