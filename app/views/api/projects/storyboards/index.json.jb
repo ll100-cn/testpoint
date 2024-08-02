@@ -1,0 +1,1 @@
+render partial: "api/shared/storyboard", collection: @storyboards, as: :storyboard

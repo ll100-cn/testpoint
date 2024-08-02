@@ -33,8 +33,6 @@ const delegatedProps = computed(() => {
 
 <template>
   <div v-bind="delegatedProps" :class="cn(variance({ preset }), props.class)">
-    <div class="relative">
-      <slot></slot>
-    </div>
+    <slot></slot>
   </div>
 </template>

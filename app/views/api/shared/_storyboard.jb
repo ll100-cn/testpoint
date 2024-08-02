@@ -1,0 +1,2 @@
+json = storyboard.slice(:id, :title, :description)
+json

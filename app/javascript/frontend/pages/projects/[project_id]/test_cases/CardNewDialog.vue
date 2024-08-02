@@ -19,8 +19,7 @@
 <script setup lang="ts">
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
-import { Modal } from 'bootstrap'
-import { PropType, getCurrentInstance, nextTick, ref } from 'vue'
+import { type PropType, getCurrentInstance, nextTick, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'

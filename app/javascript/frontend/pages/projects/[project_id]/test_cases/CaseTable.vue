@@ -21,8 +21,8 @@
               {{ test_case.title }}
             </a>
           </TableCell>
-          <TableCell>
-            <CasePlatformCell :platform_ids="test_case.platform_ids" :platform_repo="platform_repo" />
+          <TableCell class="space-x-2">
+            <PlatformBadge v-for="platform_id in test_case.platform_ids" :platform="platform_repo.id.find(platform_id)" />
           </TableCell>
           <TableCell>
             <CaseLabelCell :label_ids="test_case.label_ids" :label_repo="label_repo" />
@@ -40,8 +40,8 @@ import { usePageStore } from "@/store"
 import { type Component, computed, ref } from "vue"
 import CaseBatchEditDialogContent from "./CaseBatchEditDialogContent.vue"
 import CaseLabelCell from "./CaseLabelCell.vue"
-import CasePlatformCell from "./CasePlatformCell.vue"
 import CaseShowDialogContent from "./CaseShowDialogContent.vue"
+import PlatformBadge from '@/components/PlatformBadge.vue'
 
 const page = usePageStore()
 const allow = page.inProject()!.allow

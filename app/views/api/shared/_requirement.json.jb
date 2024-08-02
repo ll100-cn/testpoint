@@ -1,0 +1,2 @@
+json = requirement.slice(:id, :title, :description, :roles, :upstream_ids, :platform_ids)
+json

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-baseline border-b pb-2 mb-4 mt-6">
+  <div class="flex items-baseline border-b pb-2 mb-4">
     <slot />
 
     <template v-if="slots.actions">

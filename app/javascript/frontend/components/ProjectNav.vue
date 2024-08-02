@@ -1,5 +1,9 @@
 <template>
   <NavItem value="" as-child>
+    <RLink v-if="allow('read', Storyboard)" :to="`/projects/${project_id}/storyboards`">需求</RLink>
+  </NavItem>
+
+  <NavItem value="" as-child>
     <RLink v-if="allow('read', TestCase)" :to="`/projects/${project_id}/test_cases`">案例</RLink>
   </NavItem>
 
@@ -37,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { Category, Issue, IssueTemplate, Member, Milestone, Plan, Platform, TestCase, TestCaseLabel } from '@/models'
+import { Category, Issue, IssueTemplate, Member, Milestone, Plan, Platform, TestCase, TestCaseLabel, Requirement, Storyboard } from '@/models'
 import { usePageStore } from '@/store'
 import NavItemDropdown from './NavItemDropdown.vue'
 import { Nav, NavList, NavItem } from '$vendor/ui'
@@ -45,7 +49,7 @@ import RLink from './RLink.vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
 const page = usePageStore()
-const allow = page.inProject()?.allow
+const allow = page.inProject()!.allow
 
 defineProps<{
   project_id: number

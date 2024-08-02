@@ -28,6 +28,9 @@ json[:permissions] = {
   Comment => [ :read, :create, :update, :manage ],
   Attachment => [ :read, :create, :update, :manage ],
   "IssueBody" => [ :read, :create, :update, :manage ],
+
+  Requirement => [ :read, :create, :update, :manage ],
+  Storyboard => [ :read, :create, :update, :manage ],
 }.map do |klass, actions|
   allow_actions = actions.filter { |action| can? action, klass }
   [ klass, allow_actions ]

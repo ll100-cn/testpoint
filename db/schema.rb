@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_30_061129) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_05_012256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -317,6 +317,29 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_30_061129) do
     t.index ["user_id"], name: "index_projects_users_on_user_id"
   end
 
+  create_table "requirements", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "platform_ids", default: [], array: true
+    t.bigint "upstream_ids", default: [], array: true
+    t.string "title"
+    t.text "description"
+    t.string "roles", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "storyboard_id"
+    t.index ["project_id"], name: "index_requirements_on_project_id"
+    t.index ["storyboard_id"], name: "index_requirements_on_storyboard_id"
+  end
+
+  create_table "storyboards", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_storyboards_on_project_id"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.integer "user_id"
     t.integer "issue_id"
@@ -481,6 +504,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_30_061129) do
   add_foreign_key "platforms", "projects"
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
+  add_foreign_key "requirements", "projects"
+  add_foreign_key "requirements", "storyboards"
+  add_foreign_key "storyboards", "projects"
   add_foreign_key "task_upshots", "phases"
   add_foreign_key "task_upshots", "tasks"
   add_foreign_key "tasks", "phases"

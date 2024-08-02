@@ -129,7 +129,7 @@ export abstract class BaseRequest<T> {
     }
 
     if (data) {
-      const formData = data instanceof FormData ? data : this.buildFormData(data)
+      const formData = data instanceof FormData ? data : this.buildFormData(data, config.headers!["Content-Type"])
       config.data = formData
     }
 
@@ -151,12 +151,17 @@ export abstract class BaseRequest<T> {
     }
   }
 
-  buildFormData(params) {
+  buildFormData(params, contentType: string) {
+    if (contentType === "application/json") {
+      return params
+    }
+
     const formData = new FormData()
     for (const name in params) {
       const value = params[name]
       this.fillFormData(formData, name, value)
     }
+
     return formData
   }
 

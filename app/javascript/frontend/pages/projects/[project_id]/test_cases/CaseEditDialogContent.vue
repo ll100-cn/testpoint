@@ -4,7 +4,7 @@
       <DialogTitle>{{ test_case.title }}</DialogTitle>
 
       <template #actions>
-        <a v-if="allow('destroy', test_case)" href="#" class="text-danger small" @click="archiveTestCase">归档</a>
+        <a v-if="allow('destroy', test_case)" href="#" class="text-destructive text-sm link" @click.prevent="archiveTestCase">归档</a>
       </template>
     </DialogHeader>
 
@@ -34,7 +34,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 
 const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const validations = reactive<Validations>(new Validations())
 const open = defineModel('open')
@@ -49,7 +49,7 @@ const emit = defineEmits<{
   (e: 'destroyed', test_case: TestCase): void,
 }>()
 
-const test_case = ref(null as TestCase)
+const test_case = ref(null! as TestCase)
 
 const former = Former.build({
   title: null,

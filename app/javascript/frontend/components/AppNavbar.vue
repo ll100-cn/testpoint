@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-800 py-2 sticky top-0 mb-4 z-10">
+  <div class="bg-gray-800 py-2 sticky top-0 mb-6 z-10">
     <Container>
       <div class="flex">
         <Nav :model-value="null">

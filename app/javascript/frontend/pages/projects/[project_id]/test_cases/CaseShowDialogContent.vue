@@ -8,33 +8,27 @@
       </DialogTitle>
 
       <template #actions>
-        <a v-if="allow('update', test_case)" href="#" @click.prevent="emit('switch', CaseEditDialogContent, test_case)">编辑</a>
+        <a v-if="allow('update', test_case)" href="#" class="link" @click.prevent="emit('switch', CaseEditDialogContent, test_case)">编辑</a>
       </template>
     </DialogHeader>
 
     <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="hidden">{{ test_case.content }}</textarea>
 
-    <div class="collapse show btn-toggle text-center p-1">
-      <a class="btn btn-link mx-auto" data-bs-toggle="collapse" data-bs-target=".btn-toggle" role="button">
+    <div class="text-center p-1" :class="{ 'hidden': !collapsed }">
+      <Button preset="ghost" @click="collapsed=false">
         <i class="far fa-history me-1" />显示历史版本
-      </a>
+      </Button>
     </div>
 
-    <div class="collapse multi-collapse btn-toggle mt-4">
-      <div class="accordion">
-        <div v-for="(version_case, index) in history" :key="version_case.id" class="accordion-item">
-          <h2 :id="`test_case_version_${index}_header`" class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#test_case_version_${index}_body`" aria-expanded="false" :aria-controls="`test_case_version_${index}_body`">
-              {{ h.datetime(version_case.updated_at) }}
-            </button>
-          </h2>
+    <div class="mt-4" :class="{ 'hidden': collapsed }">
+      <div v-for="(version_case, index) in history" class="border p-4">
+        <h2 :id="`test_case_version_${index}_header`" class="text-lg mb-2">
+          <a href="#" @click.prevent="">
+            {{ h.datetime(version_case.updated_at) }}
+          </a>
+        </h2>
 
-          <div :id="`test_case_version_${index}_body`" class="accordion-collapse collapse" :aria-labelledby="`test_case_version_${index}_header`">
-            <div class="accordion-body">
-              <textarea v-model="version_case.content" data-controller="markdown" readonly class="hidden" />
-            </div>
-          </div>
-        </div>
+        <textarea v-model="version_case.content" data-controller="markdown" readonly class="hidden" />
       </div>
     </div>
     <DialogFooter>
@@ -52,7 +46,7 @@ import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
 import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'
 import CaseEditDialogContent from './CaseEditDialogContent.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Well } from '$vendor/ui'
 import Button from '$vendor/ui/button/Button.vue'
 
 const proxy = getCurrentInstance()!.proxy!
@@ -65,6 +59,7 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 
 const textarea = ref()
+const collapsed = ref(true)
 
 const loading = ref(true)
 const test_case = ref(null! as TestCase)

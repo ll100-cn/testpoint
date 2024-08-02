@@ -48,6 +48,8 @@ class Ability
     can :read, TestCaseLabel
     can :read, Platform
     can :read, Milestone
+    can :read, Requirement
+    can :read, Storyboard
 
     can :manage, Attachment
   end
@@ -62,6 +64,8 @@ class Ability
     can :read, Phase
     can [ :read, :update ], Task
     can [ :read, :update ], TaskUpshot
+    can :read, Requirement
+    can :read, Storyboard
   end
 
   def apply_manager_permissions(member)
@@ -73,6 +77,8 @@ class Ability
     can :manage, Platform
     can :manage, TestCase
     can :manage, Milestone
+    can :manage, Storyboard
+    can :manage, Requirement
 
     can :manage, Plan
     can :manage, Phase

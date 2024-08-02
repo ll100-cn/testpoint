@@ -1,0 +1,1 @@
+render "api/shared/storyboard", storyboard: @storyboard

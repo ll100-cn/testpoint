@@ -7,7 +7,7 @@
     <FormGroup path="group_name" label="分组"><controls.string /></FormGroup>
     <FormGroup path="title" label="标题"><controls.string /></FormGroup>
     <FormGroup path="content" label="内容">
-      <textarea id="test_case_content" v-model="former.form.content" class="form-control text optional markdown-field" name="content" />
+      <controls.markdown />
     </FormGroup>
     <FormGroup path="platform_ids" label="平台">
       <controls.checkboxes v-bind="{ name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { layouts } from "@/components/simple_form"
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import * as controls from '@/components/controls'
