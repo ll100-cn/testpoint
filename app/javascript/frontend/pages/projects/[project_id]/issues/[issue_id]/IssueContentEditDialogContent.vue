@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import { Button, Former, FormFactory } from '$vendor/ui'
-import BootstrapHelper from '@/lib/BootstrapHelper'
 import * as q from '@/lib/requests'
 import { Attachment, IssueInfo } from '@/models'
 import { getCurrentInstance, ref } from 'vue'

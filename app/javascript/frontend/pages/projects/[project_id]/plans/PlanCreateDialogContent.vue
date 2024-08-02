@@ -22,16 +22,15 @@ import { Plan, Platform, TestCaseStat } from '@/models'
 import _ from 'lodash'
 import { getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
-import BootstrapHelper from "@/lib/BootstrapHelper"
 import { usePageStore } from "@/store"
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
-const el = ref(null as InstanceType<typeof HTMLElement>)
+const el = ref(null! as InstanceType<typeof HTMLElement>)
 const page = usePageStore()
-const profile = page.inProject().profile
+const profile = page.inProject()!.profile
 const open = defineModel('open')
 
 const emit = defineEmits<{

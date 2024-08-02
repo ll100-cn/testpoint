@@ -50,8 +50,7 @@ import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
 import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
-import { Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'
-import CaseEditFrame from './CaseEditFrame.vue'
+import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'
 import CaseEditDialogContent from './CaseEditDialogContent.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 import Button from '$vendor/ui/button/Button.vue'
@@ -63,12 +62,12 @@ const emit = defineEmits<{
 }>()
 
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const textarea = ref()
 
 const loading = ref(true)
-const test_case = ref(null as TestCase)
+const test_case = ref(null! as TestCase)
 const history = ref([] as TestCase[])
 
 async function reset(a_test_case: TestCase) {

@@ -104,8 +104,8 @@ group :test do
   gem 'rails-controller-testing', '1.0.5'
   gem 'rspec-do_action', '0.0.7'
   gem 'shoulda-matchers', '4.4.1'
-  gem 'simplecov', '0.16.1', require: false
-  gem 'coveralls', '0.8.23', require: false
+  # gem 'simplecov', '0.16.1', require: false
+  # gem 'coveralls', '0.8.23', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
