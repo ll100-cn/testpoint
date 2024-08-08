@@ -1,5 +1,5 @@
 <template>
-  <DialogContent class="max-w-4xl">
+  <DialogContent class="max-w-4xl" :closeable="false">
     <DialogHeader>
       <DialogTitle>新建需求板</DialogTitle>
     </DialogHeader>

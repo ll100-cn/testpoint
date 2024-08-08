@@ -1,13 +1,7 @@
 <template>
   <DialogContent class="max-w-4xl">
     <DialogHeader>
-      <DialogTitle>选择问题模版</DialogTitle>
-
-      <template #actions>
-        <Button preset="ghost" variant="destructive" @click.prevent="">
-          删除
-        </Button>
-      </template>
+      <DialogTitle>新建需求</DialogTitle>
     </DialogHeader>
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
       <FormErrorAlert />
@@ -38,7 +32,7 @@ import * as q from '@/lib/requests'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
-import { EntityRepo, Platform, Requirement } from '@/models'
+import { EntityRepo, Platform, Requirement, Storyboard } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -56,7 +50,7 @@ const emit = defineEmits<{
 
 const props = defineProps<{
   platforms: Platform[],
-  storyboard_id: string
+  storyboard: Storyboard
 }>()
 
 const former = Former.build({
@@ -70,7 +64,7 @@ const { Form, FormGroup } = FormFactory<typeof former.form>()
 former.doPerform = async function() {
   const a_issue_survey = await new q.project.RequirementReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard_id
+    req.interpolations.storyboard_id = props.storyboard.id
   }).perform(this.form)
   emit('created', a_issue_survey)
   open.value = false

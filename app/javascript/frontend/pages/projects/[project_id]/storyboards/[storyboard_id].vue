@@ -53,7 +53,7 @@
   </Card>
 
   <BlankDialog ref="storyboard_dialog" @created="onStoryboardCreated" @updated="onStoryboardUpdated" @destroyed="onStoryboardDestroyed" />
-  <BlankDialog ref="requirement_dialog" @created="onRequirementCreated" @updated="onRequirementUpdated" @destroyed="onRequirementDestroyed" :platforms="platforms" :storyboard_id="storyboard_id" />
+  <BlankDialog ref="requirement_dialog" @created="onRequirementCreated" @updated="onRequirementUpdated" @destroyed="onRequirementDestroyed" :platforms="platforms" :storyboard="storyboard" />
   </template>
 
   <script setup lang="ts">
@@ -199,7 +199,7 @@
 
   function onStoryboardUpdated(a_storyboard: Storyboard) {
     storyboards.value = storyboards.value.map((s) => s.id === a_storyboard.id ? a_storyboard : s)
-    if (storyboard_id.value === a_storyboard.id.toString()) {
+    if (storyboard.value.id === a_storyboard.id) {
       storyboard.value = a_storyboard
     }
 
