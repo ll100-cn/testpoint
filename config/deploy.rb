@@ -54,4 +54,40 @@ namespace :deploy do
   end
 end
 after "deploy:migrate", "deploy:seed"
-before "deploy:assets:precompile", "deploy:yarn_install"
+
+fetch(:rsync_options).concat %w[--exclude=/node_modules --exclude=/tmp/cache -v]
+namespace :local do
+  task :compile_assets do
+    base_dir = fetch(:rsync_stage)
+    folder = fetch(:rsync_folder, "/")
+    deploy_dir = File.join(base_dir, folder)
+
+    Dir.chdir deploy_dir do
+      on primary(:web) do
+        [
+          # "config/env",
+          "config/master.key"
+        ].each do |path|
+          download! File.join(shared_path, path), path
+        end
+      end
+
+      run_locally do
+        execute "cp -f config/database.yml.example config/database.yml"
+        execute "cp -f config/redis.yml.example config/redis.yml"
+        Bundler.with_original_env do
+          execute "bundle", "update"
+          execute "yarn", "install"
+
+          execute "rm", "-rf", "public/assets"
+          execute "bin/vite", "clobber", "-m", "production"
+          execute "bundle", "exec", "rake", "assets:precompile", "RAILS_ENV=production"
+        end
+      end
+    end
+  end
+end
+
+after "rsync:stage", "local:compile_assets"
+task("deploy:compile_assets").clear
+task("deploy:set_linked_dirs").clear

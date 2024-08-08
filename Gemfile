@@ -25,6 +25,7 @@ gem 'bootsnap', '1.16.0', require: false
 gem "dotenv-rails", "2.8.1"
 gem "sentry-raven", "3.1.2"
 gem "hashie", "5.0.0"
+gem "ffi", "1.15.5"
 
 # Controllers
 gem "responders", "3.1.0"
