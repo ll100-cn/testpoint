@@ -28,5 +28,11 @@ export default defineConfig({
       '@vendor': fileURLToPath(new URL('./node_modules/@vendor', import.meta.url)),
       '$vendor': fileURLToPath(new URL('./app/javascript/vendor', import.meta.url)),
     }
+  },
+  build: {
+    minify: 'terser',
+    terserOptions: {
+      keep_classnames: true,
+    }
   }
 })

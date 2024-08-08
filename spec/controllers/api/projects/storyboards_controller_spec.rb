@@ -13,6 +13,11 @@ RSpec.describe Api::Projects::StoryboardsController, type: :controller do
     it { is_expected.to respond_with :success }
   end
 
+  describe "GET show" do
+    action { get :show, params: { project_id: project.id, id: storyboard.id }, format: :json }
+    it { is_expected.to respond_with :success }
+  end
+
   describe "POST create" do
     action { post :create, params: { project_id: project.id, title: "title", description: "description" }, format: :json }
 

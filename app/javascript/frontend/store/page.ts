@@ -7,8 +7,8 @@ import { useSessionStore } from '.'
 import { Profile } from '@/models'
 
 class ProjectCache {
-  project_id: number
-  profile: Profile
+  project_id!: number
+  profile!: Profile
   caches = new Map<any, any>()
 
   constructor() {

@@ -31,6 +31,8 @@ export class Profile {
   allow(action: string, resource: any) {
     const klasses = this.findKlass(resource)
 
+    console.log(`------------allow methos action is ${action}, resource is ${resource}--, findKlass is ${klasses}--------------------`)
+
     for (const klass of klasses) {
       const permission = this.permissions.get(klass)
 

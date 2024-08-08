@@ -9,11 +9,11 @@
 
       <div class="space-y-3">
         <FormGroup path="issue_template_id" label="选择问题模版">
-          <controls.bootstrap_select include_blank>
-            <BSOption v-for="item in issue_templates" :value="item.id">
+          <controls.Selectpicker include_blank>
+            <SelectdropItem v-for="item in issue_templates" :value="item.id">
               {{ item.name }}
-            </BSOption>
-          </controls.bootstrap_select>
+            </SelectdropItem>
+          </controls.Selectpicker>
         </FormGroup>
 
         <template v-if="issue_template">
@@ -70,16 +70,17 @@ import { useRoute, useRouter } from "vue-router"
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
-const profile = page.inProject().profile
-const allow = page.inProject().allow
+const profile = page.inProject()!.profile
+const allow = page.inProject()!.allow
 
-const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
+const members = ref(await page.inProject()!.request(q.project.MemberInfoReq.List).setup(proxy).perform())
 
 const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id

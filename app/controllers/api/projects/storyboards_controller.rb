@@ -6,6 +6,9 @@ class Api::Projects::StoryboardsController < Api::Projects::BaseController
     @storyboards
   end
 
+  def show
+  end
+
   def create
     @storyboard.save
     respond_with @storyboard

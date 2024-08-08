@@ -61,6 +61,7 @@
     "select2": "4.0.11",
     "showdown": "^2.1.0",
     "stimulus": "1.1.1",
+    "terser": "^5.31.4",
     "turbolinks": "5.2.0",
     "urijs": "^1.19.11",
     "vue": "3.3.4",

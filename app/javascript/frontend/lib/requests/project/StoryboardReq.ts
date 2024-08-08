@@ -12,6 +12,14 @@ export default {
       this.klass = Storyboard
     }
   },
+  Get: class extends BaseObjectRequest<Storyboard> {
+    constructor() {
+      super()
+      this.method = "GET"
+      this.endpoint = "/api/projects/{project_id}/storyboards/{storyboard_id}"
+      this.klass = Storyboard
+    }
+  },
   Create: class extends BaseObjectRequest<Storyboard> {
     constructor() {
       super()
