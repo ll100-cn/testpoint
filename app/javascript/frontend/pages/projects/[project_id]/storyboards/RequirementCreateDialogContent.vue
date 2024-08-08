@@ -56,7 +56,9 @@ const props = defineProps<{
 const former = Former.build({
   title: "",
   description: "",
-  platform_ids: [] as number[]
+  platform_ids: [] as number[],
+  label_ids: [] as number[],
+  label_description: Map<number, string>
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()

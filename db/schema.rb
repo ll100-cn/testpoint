@@ -328,6 +328,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_08_072119) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "storyboard_id"
+    t.bigint "label_ids", default: [], array: true
+    t.json "label_descriptions", default: {}
     t.index ["project_id"], name: "index_requirements_on_project_id"
     t.index ["storyboard_id"], name: "index_requirements_on_storyboard_id"
   end

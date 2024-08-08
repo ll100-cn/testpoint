@@ -13,7 +13,7 @@
         <PlatformBadge v-for="platform_id in requirement.platform_ids" :platform="platform_repo.id.find(platform_id)" />
       </div>
 
-      <div>
+      <div class="text-sm text-muted">
          <VueMarkdown :source="requirement.description" />
       </div>
     </CardContent>
