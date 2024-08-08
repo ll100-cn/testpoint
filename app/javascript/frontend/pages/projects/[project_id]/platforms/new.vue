@@ -43,6 +43,7 @@ const members = ref(await page.inProject()?.request(q.project.MemberInfoReq.List
 const former = Former.build({
   name: "",
   default_assignee_id: "",
+  icon_svg: "",
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()

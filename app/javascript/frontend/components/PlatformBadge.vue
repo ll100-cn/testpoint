@@ -1,6 +1,9 @@
 <template>
-  <Badge preset="standard" :style="{ backgroundColor: utils.calcColorHex(platform.name), color: 'white' }">
-    {{ platform.name }}
+  <Badge preset="standard" :style="{ backgroundColor: utils.calcColorHex(platform.name), color: 'white' }" class="align-middle">
+    <svg viewBox="0 0 32 32" fill="none" class="stroke-[4px] stroke-white size-4 me-1" v-if="platform.icon_svg" v-html="platform.icon_svg" />
+    <div class="">
+      {{ platform.name }}
+    </div>
   </Badge>
 </template>
 

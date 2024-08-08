@@ -9,6 +9,7 @@
 #  archived            :boolean          default(FALSE)
 #  project_id          :bigint
 #  default_assignee_id :bigint
+#  icon_svg            :string
 #
 
 class Platform < ApplicationRecord

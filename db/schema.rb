@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_05_012256) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_08_072119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -293,6 +293,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_05_012256) do
     t.boolean "archived", default: false
     t.bigint "project_id"
     t.bigint "default_assignee_id"
+    t.string "icon_svg"
     t.index ["default_assignee_id"], name: "index_platforms_on_default_assignee_id"
     t.index ["project_id"], name: "index_platforms_on_project_id"
   end

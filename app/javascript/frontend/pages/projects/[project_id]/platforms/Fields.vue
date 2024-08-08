@@ -5,6 +5,9 @@
     <FormGroup path="name" label="名称">
       <controls.string />
     </FormGroup>
+    <FormGroup path="icon_svg" label="svg图标">
+      <controls.text />
+    </FormGroup>
     <FormGroup path="default_assignee_id" label="建议工单受理人">
       <controls.select include_blank>
         <OptionsForMember :collection="members" except_level="reporter" />

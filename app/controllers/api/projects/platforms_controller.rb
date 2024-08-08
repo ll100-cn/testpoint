@@ -27,6 +27,6 @@ class Api::Projects::PlatformsController < Api::Projects::BaseController
 
 protected
   def platform_params
-    params.permit(:name, :default_assignee_id)
+    params.permit(:name, :icon_svg, :default_assignee_id)
   end
 end

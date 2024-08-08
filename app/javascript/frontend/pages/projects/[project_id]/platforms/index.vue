@@ -15,6 +15,7 @@
         <TableHeader>
           <TableRow>
             <TableHead>名称</TableHead>
+            <TableHead>svg图标</TableHead>
             <TableHead>建议工单受理人</TableHead>
             <TableHead />
           </TableRow>
@@ -23,6 +24,9 @@
           <template v-for="platform in platforms" :key="platform.id">
             <TableRow>
               <TableCell>{{ platform.name }}</TableCell>
+              <TableCell>
+                <PlatformBadge :platform="platform" />
+              </TableCell>
               <TableCell>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</TableCell>
               <TableCell>
                 <div class="flex justify-end space-x-3">
@@ -54,6 +58,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 import Validator from '$vendor/ui/simple_form/Validator';
 import Button from '$vendor/ui/button/Button.vue'
+import PlatformBadge from '@/components/PlatformBadge.vue'
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
