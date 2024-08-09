@@ -26,10 +26,8 @@ export function calcColorHlsValue(text: string) {
 
   if (!color_cache.has(key)) {
     const hex = md5.array(text).slice(0, 3)
-    const color = colord({ r: hex[0], g: hex[1], b: hex[2] })
-
-    const hsl = color.toHsl()
-    const result = `${hsl.h} ${hsl.s}% ${hsl.l}%`
+    const hue = hex[0] % 360
+    const result = `${hue} 72% 45%`
 
     color_cache.set(key, result)
   }
