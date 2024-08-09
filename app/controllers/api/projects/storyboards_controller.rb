@@ -3,7 +3,7 @@ class Api::Projects::StoryboardsController < Api::Projects::BaseController
   load_and_authorize_resource through: :project
 
   def index
-    @storyboards
+    @storyboards = @storyboards.ranked
   end
 
   def show

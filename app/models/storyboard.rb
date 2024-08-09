@@ -18,6 +18,8 @@ class Storyboard < ApplicationRecord
 
   validates :title, :main_axle, presence: true
 
+  scope :ranked, -> { order(:title) }
+
   def archive
     if requirements.empty?
       destroy
