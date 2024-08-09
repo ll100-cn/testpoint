@@ -38,20 +38,12 @@
     </CardContent>
 
     <template v-if="main_axle == 'LR'">
-      <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-primary/80 rounded contrast-50" />
-      <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-destructive/80 rounded contrast-50" />
+      <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-card rounded" />
+      <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-card rounded" />
     </template>
     <template v-else-if="main_axle == 'TB'">
-      <Handle type="target" :position="Position.Top" class="border w-5 h-2 bg-primary/80 rounded contrast-50" />
-      <Handle type="source" :position="Position.Bottom" class="border w-5 h-2 bg-destructive/80 rounded contrast-50" />
-    </template>
-    <template v-else-if="main_axle == 'BT'">
-      <Handle type="target" :position="Position.Bottom" class="border w-5 h-2 bg-primary/80 rounded contrast-50" />
-      <Handle type="source" :position="Position.Top" class="border w-5 h-2 bg-destructive/80 rounded contrast-50" />
-    </template>
-    <template v-else>
-      <Handle type="target" :position="Position.Right" class="border w-2 h-5 bg-primary/80 rounded contrast-50" />
-      <Handle type="source" :position="Position.Left" class="border w-2 h-5 bg-destructive/80 rounded contrast-50" />
+      <Handle type="target" :position="Position.Top" class="border w-5 h-2 bg-card rounded" />
+      <Handle type="source" :position="Position.Bottom" class="border w-5 h-2 bg-card rounded" />
     </template>
   </Card>
 </template>

@@ -11,7 +11,7 @@
 #  main_axle   :string
 #
 class Storyboard < ApplicationRecord
-  enumerize :main_axle, in: [ :LR, :RL, :TB, :BT ]
+  enumerize :main_axle, in: [ :LR, :TB ]
 
   belongs_to :project
   has_many :requirements

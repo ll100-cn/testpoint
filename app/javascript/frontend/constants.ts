@@ -56,7 +56,5 @@ export const COMMENT_DISPLAY_OPTIONS = [
 
 export const STORYBOARD_MAIN_AXLE = [
   { label: "左 -> 右", value: "LR" },
-  { label: "右 -> 左", value: "RL" },
   { label: "上 -> 下", value: "TB" },
-  { label: "下 -> 上", value: "BT" },
 ]
