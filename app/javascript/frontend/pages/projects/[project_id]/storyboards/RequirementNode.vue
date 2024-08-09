@@ -91,7 +91,7 @@ const actived = computed(() => {
   let result = true
 
   if (props.filter.platform_id_eq != null) {
-    result = result && props.requirement.platform_ids.includes(props.filter.platform_id_eq)
+    result = result && (props.requirement.platform_ids.length == 0 || props.requirement.platform_ids.includes(props.filter.platform_id_eq))
   }
 
   if (props.filter.label_id_eq != null) {
