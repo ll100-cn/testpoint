@@ -72,7 +72,7 @@ import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import Well from "$vendor/ui/well/Well.vue"
 
-const proxy = getCurrentInstance()
+const proxy = getCurrentInstance()!.proxy!
 const page = usePageStore()
 const allow = page.inProject()?.allow
 
