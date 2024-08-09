@@ -22,10 +22,10 @@
           <template v-if="requirement.label_descriptions[label_id.toString()]">
             <Collapsible>
               <Callout class="py-1.5 px-2" variant="tint" :style="{ '--color-tint': utils.calcColorHlsValue(label_repo.find(label_id)!.name) }">
-                <CollapsibleTrigger as-child><CalloutTitle>{{ label_repo.find(label_id)!.name }}</CalloutTitle></CollapsibleTrigger>
+                <CollapsibleTrigger as-child><CalloutTitle class="mb-0">{{ label_repo.find(label_id)!.name }}</CalloutTitle></CollapsibleTrigger>
                 <CollapsibleContent>
                   <CalloutDescription>
-                    <div class="text-muted">
+                    <div class="text-muted mt-1">
                       <VueMarkdown :source="requirement.label_descriptions[label_id.toString()]"></VueMarkdown>
                     </div>
                   </CalloutDescription>

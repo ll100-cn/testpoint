@@ -1,8 +1,8 @@
 <template>
   <Nav v-model:model-value="storyboard.id">
     <NavList preset="tabs">
-      <NavItem v-for="storyboard in storyboards" :value="storyboard.id">
-        <RouterLink :to="`/projects/${params.project_id}/storyboards/${storyboard.id}`">{{ storyboard.title }}</RouterLink>
+      <NavItem v-for="storyboard in storyboards" :value="storyboard.id" as-child>
+        <RLink :to="`/projects/${params.project_id}/storyboards/${storyboard.id}`">{{ storyboard.title }}</RLink>
       </NavItem>
       <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
     </NavList>
@@ -104,6 +104,7 @@
   import { useElementSize } from '@vueuse/core'
   import { Background } from '@vue-flow/background'
   import { debounce, size } from 'lodash'
+  import RLink from '@/components/RLink.vue'
 
   const proxy = getCurrentInstance()!.proxy!
   const route = useRoute()

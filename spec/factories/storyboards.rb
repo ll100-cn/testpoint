@@ -13,6 +13,7 @@
 FactoryBot.define do
   factory :storyboard do
     title { "My Storyboard Title" }
+    main_axle { "LR" }
     description { "My Storyboard Description" }
   end
 end
