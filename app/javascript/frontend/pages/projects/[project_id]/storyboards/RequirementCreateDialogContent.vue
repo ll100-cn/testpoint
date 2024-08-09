@@ -6,18 +6,7 @@
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
       <FormErrorAlert />
 
-      <div class="space-y-3">
-        <FormGroup path="title" label="名称">
-          <controls.string />
-        </FormGroup>
-        <FormGroup path="description" label="描述">
-          <controls.markdown />
-        </FormGroup>
-
-        <FormGroup path="platform_ids" label="平台">
-          <controls.checkboxes v-bind="{ name: 'platform_ids[]', collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
-        </FormGroup>
-      </div>
+      <RequirementForm v-bind="{ former, platforms, test_case_labels }" />
 
       <DialogFooter>
         <DialogClose><Button variant="secondary" type="button">取消</Button></DialogClose>
@@ -32,12 +21,13 @@ import * as q from '@/lib/requests'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
-import { EntityRepo, Platform, Requirement, Storyboard } from '@/models'
+import { EntityRepo, Platform, Requirement, Storyboard, TestCaseLabel } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import RequirementForm from './RequirementForm.vue'
 
 const route = useRoute()
 const params = route.params as any
@@ -50,23 +40,27 @@ const emit = defineEmits<{
 
 const props = defineProps<{
   platforms: Platform[],
+  test_case_labels: TestCaseLabel[],
   storyboard: Storyboard
 }>()
 
 const former = Former.build({
   title: "",
   description: "",
-  platform_ids: [] as number[]
+  platform_ids: [] as number[],
+  label_ids: [] as number[],
+  label_descriptions: {} as Record<string, string>
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_survey = await new q.project.RequirementReq.Create().setup(proxy, (req) => {
+  const a_requirement = await new q.project.RequirementReq.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
   }).perform(this.form)
-  emit('created', a_issue_survey)
+
+  emit('created', a_requirement)
   open.value = false
 }
 

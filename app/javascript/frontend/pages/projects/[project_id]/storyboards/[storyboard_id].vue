@@ -5,7 +5,9 @@
 
   <Nav v-model:model-value="storyboard.id">
     <NavList preset="tabs">
-      <NavItem v-for="storyboard in storyboards" :value="storyboard.id" @click.prevent="changeStoryboard(storyboard)">{{ storyboard.title }}</NavItem>
+      <NavItem v-for="storyboard in storyboards" :value="storyboard.id">
+        <RouterLink :to="`/projects/${params.project_id}/storyboards/${storyboard.id}`">{{ storyboard.title }}</RouterLink>
+      </NavItem>
       <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
     </NavList>
   </Nav>
@@ -31,15 +33,17 @@
 
     <div ref="vueFlowContainer" class="flex-1">
       <div :style="{ height: `${height}px` }">
-        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect" class="basic-flow">
+        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect">
           <Background />
 
           <template #node-requirement="slotProps">
             <RequirementNode
               :platform_repo="platform_repo"
+              :label_repo="label_repo"
               :requirement="slotProps.data"
               :filter="former.form"
-              @edit="requirement_dialog.show(RequirementUpdateDialogContent, $event)" />
+              @edit="requirement_dialog.show(RequirementUpdateDialogContent, $event)"
+              @size="resizeRequirement" />
           </template>
           <template #node-storyboard="slotProps">
             <StoryboardNode
@@ -53,7 +57,14 @@
   </Card>
 
   <BlankDialog ref="storyboard_dialog" @created="onStoryboardCreated" @updated="onStoryboardUpdated" @destroyed="onStoryboardDestroyed" />
-  <BlankDialog ref="requirement_dialog" @created="onRequirementCreated" @updated="onRequirementUpdated" @destroyed="onRequirementDestroyed" :platforms="platforms" :storyboard="storyboard" />
+  <BlankDialog
+    ref="requirement_dialog"
+    @created="onRequirementCreated"
+    @updated="onRequirementUpdated"
+    @destroyed="onRequirementDestroyed"
+    :platforms="platforms"
+    :test_case_labels="test_case_labels"
+    :storyboard="storyboard" />
   </template>
 
   <script setup lang="ts">
@@ -67,7 +78,7 @@
   import * as q from '@/lib/requests'
   import { useRoute, useRouter } from 'vue-router'
   import { usePageStore } from '@/store'
-  import { PlatformRepo, Requirement, Storyboard } from '@/models'
+  import { LabelRepo, PlatformRepo, Requirement, Storyboard } from '@/models'
   import * as utils from "@/lib/utils"
   import type { Connection, Edge, EdgeChange, Node } from '@vue-flow/core'
   import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
@@ -87,6 +98,7 @@
   import ActionerAlert from '@/components/ActionerAlert.vue'
   import { useElementSize } from '@vueuse/core'
   import { Background } from '@vue-flow/background'
+  import { debounce, size } from 'lodash'
 
   const proxy = getCurrentInstance()!.proxy!
   const route = useRoute()
@@ -102,11 +114,16 @@
 
   const vueFlowContainer = ref(null! as HTMLDivElement)
   const { width, height } = useElementSize(vueFlowContainer)
+  const size_mapping = ref({} as Record<string, { width: number | null, height: number | null }>)
 
   const { updateNodeData, addNodes, addEdges, fitView } = useVueFlow()
 
   const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = params.project_id
+    req.interpolations.project_id = project_id
+  }).perform())
+
+  const test_case_labels = ref(await new q.project.TestCaseLabelInfoReq.List().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
   }).perform())
 
   const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
@@ -150,9 +167,9 @@
     }
 
     edges.value = preEdges
-    nodes.value = layoutNodes(preNodes, preEdges)
+    nodes.value = layoutNodes(preNodes, preEdges, size_mapping.value)
 
-    if (storyboard.value!.description) {
+    if (storyboard.value.description) {
       nodes.value.push({
         id: `storyboard_${storyboard.value!.id}`,
         position: { x: 10, y: 10 },
@@ -162,13 +179,13 @@
     }
   }
 
-  function layoutNodes(nodes: Node[], edges: Edge[]): Node[] {
+  function layoutNodes(nodes: Node[], edges: Edge[], size_mapping: Record<string, { width: number | null, height: number | null }>): Node[] {
     var g = new dagre.graphlib.Graph()
     g.setGraph({ rankdir: 'LR' })
     g.setDefaultEdgeLabel(function() { return {} })
 
     nodes.forEach((node) => {
-      g.setNode(node.id, { width: 260, height: 120 })
+      g.setNode(node.id, { width: size_mapping[node.id]?.width ?? 260, height: size_mapping[node.id]?.height ?? 120 })
     })
 
     edges.forEach((edge) => {
@@ -193,6 +210,10 @@
     return new PlatformRepo().setup(platforms.value)
   })
 
+  const label_repo = computed(() => {
+    return new LabelRepo().setup(test_case_labels.value)
+  })
+
   function onStoryboardCreated() {
     router.go(0)
   }
@@ -208,11 +229,6 @@
 
   function onStoryboardDestroyed(a_storyboard: Storyboard) {
     router.push(`/projects/${params.project_id}/storyboards`)
-  }
-
-  function changeStoryboard(a_storyboard: Storyboard) {
-    query.storyboard_id = a_storyboard.id
-    router.push({ query: utils.plainToQuery(query) })
   }
 
   function onConnect(connection: Connection) {
@@ -276,6 +292,27 @@
   function onRequirementDestroyed(a_requirement: Requirement) {
     requirements.value = requirements.value.filter((r) => r.id !== a_requirement.id)
     parseDataAndLayout(requirements.value)
+  }
+
+  function resizeRequirement(a_requirement : Requirement, size: { width: number, height: number }) {
+    size_mapping.value[a_requirement.id.toString()] ||= { width: null, height: null }
+    size_mapping.value[a_requirement.id.toString()].width = size.width
+    size_mapping.value[a_requirement.id.toString()].height = size.height
+
+    resizeNodes()
+  }
+
+  const timer = ref(null as number | null)
+  function resizeNodes() {
+    if (timer.value) {
+      clearTimeout(timer.value)
+      timer.value = null
+    }
+
+    timer.value = setTimeout(() => {
+      parseDataAndLayout(requirements.value)
+    }, 500)
+
   }
 
   const former = Former.build(new Filter())

@@ -24,6 +24,6 @@ class Api::Projects::RequirementsController < Api::Projects::BaseController
   end
 protected
   def requirement_params
-    params.permit(:title, :description, :roles, platform_ids: [], upstream_ids: [])
+    params.permit(:title, :description, :roles, platform_ids: [], upstream_ids: [], label_ids: [], label_descriptions: {})
   end
 end
