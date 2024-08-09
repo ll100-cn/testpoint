@@ -9,6 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  main_axle   :string
+#  positions   :json
 #
 FactoryBot.define do
   factory :storyboard do

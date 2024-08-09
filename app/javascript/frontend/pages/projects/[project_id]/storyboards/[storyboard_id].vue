@@ -55,7 +55,15 @@
               :storyboard="slotProps.data"
               @edit="storyboard_dialog.show(StoryboardUpdateDialogContent, $event)" />
           </template>
-          <Controls />
+
+          <Controls>
+            <button class="vue-flow__controls-button" @click.prevent="relayout">
+              <i class="fa-regular fa-chart-tree-map text-xs"></i>
+            </button>
+            <button class="vue-flow__controls-button" @click.prevent="save">
+              <i class="fa-regular fa-floppy-disk text-xs"></i>
+            </button>
+          </Controls>
         </VueFlow>
       </div>
     </div>
@@ -105,6 +113,7 @@
   import { Background } from '@vue-flow/background'
   import { debounce, size } from 'lodash'
   import RLink from '@/components/RLink.vue'
+import type { of } from 'rxjs'
 
   const proxy = getCurrentInstance()!.proxy!
   const route = useRoute()
@@ -122,7 +131,7 @@
   const { width, height } = useElementSize(vueFlowContainer)
   const size_mapping = ref({} as Record<string, { width: number | null, height: number | null }>)
 
-  const { updateNodeData, addNodes, addEdges, fitView } = useVueFlow()
+  const { updateNodeData, addNodes, addEdges, fitView, getNodes } = useVueFlow()
 
   const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
@@ -140,6 +149,7 @@
     req.interpolations.project_id = project_id
     req.interpolations.storyboard_id = params.storyboard_id
   }).perform())
+  const position_mapping = ref(storyboard.value.positions)
 
   const requirements = ref(await new q.project.RequirementReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
@@ -148,17 +158,21 @@
 
   const edges = ref([] as Edge[])
   const nodes = ref([] as Node[])
-  parseDataAndLayout(requirements.value, false)
+  parseDataAndLayout(requirements.value, position_mapping.value)
 
-  function parseDataAndLayout(requirements: Requirement[], layout: boolean = true) {
+  function parseDataAndLayout(requirements: Requirement[], positions: Record<string, { x: number, y: number }> = {}) {
     const preNodes = [] as Node[]
     const preEdges = [] as Edge[]
 
     for (let i = 0 ;i < requirements.length; i++) {
       const requirement = requirements[i]
+      const node_id = requirement.id.toString()
+      const position = positions[node_id] || { x: 100 * i, y: 50 }
+      console.log(position)
+
       preNodes.push({
-        id: requirement.id.toString(),
-        position: { x: 100 * i, y: 50  },
+        id: node_id,
+        position: position,
         data: requirement,
         type: 'requirement'
       })
@@ -173,12 +187,20 @@
     }
 
     edges.value = preEdges
-    nodes.value = layoutNodes(preNodes, preEdges, size_mapping.value)
+    if (Object.keys(positions).length > 0) {
+      console.log("layout with positions")
+      nodes.value = preNodes
+    } else {
+      nodes.value = layoutNodes(preNodes, preEdges, size_mapping.value)
+    }
 
     if (storyboard.value.description) {
+      const node_id = `storyboard_${storyboard.value!.id}`
+      const position = positions[node_id] || { x: 10, y: 10 }
+
       nodes.value.push({
-        id: `storyboard_${storyboard.value!.id}`,
-        position: { x: 10, y: 10 },
+        id: node_id,
+        position: position,
         data: storyboard.value,
         type: 'storyboard'
       })
@@ -302,14 +324,41 @@
 
   const resizeNodes = debounce(() => {
     parseDataAndLayout(requirements.value)
-  }, 500)
+  }, 350)
 
   function resizeRequirement(a_requirement : Requirement, size: { width: number, height: number }) {
     size_mapping.value[a_requirement.id.toString()] ||= { width: null, height: null }
     size_mapping.value[a_requirement.id.toString()].width = size.width
     size_mapping.value[a_requirement.id.toString()].height = size.height
 
+    if (Object.keys(position_mapping.value).length > 0) {
+      return
+    }
+
     resizeNodes()
+  }
+
+  function relayout() {
+    position_mapping.value = {}
+    resizeNodes()
+  }
+
+  async function save() {
+    console.log(getNodes.value)
+
+    const position_mapping_data = getNodes.value.reduce((acc, node) => {
+      acc[node.id] = { x: node.position.x, y: node.position.y }
+      return acc
+    }, {} as Record<string, { x: number, y: number }>)
+
+    const a_storyboard = await new q.project.StoryboardReq.Update().setup(proxy, (req) => {
+      req.interpolations.project_id = params.project_id
+      req.interpolations.storyboard_id = storyboard.value.id
+    }).perform({
+      positions: position_mapping_data
+    })
+
+    storyboard.value = a_storyboard
   }
 
   const former = Former.build(new Filter())

@@ -1,2 +1,2 @@
-json = storyboard.slice(:id, :title, :main_axle, :description)
+json = storyboard.slice(:id, :title, :main_axle, :description, :positions)
 json

@@ -9,6 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  main_axle   :string
+#  positions   :json
 #
 class Storyboard < ApplicationRecord
   enumerize :main_axle, in: [ :LR, :TB ]

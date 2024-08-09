@@ -6,4 +6,6 @@ export class Storyboard {
   title!: string
   main_axle!: string
   description?: string
+
+  positions: Record<string, { x: number, y: number }> = {}
 }
