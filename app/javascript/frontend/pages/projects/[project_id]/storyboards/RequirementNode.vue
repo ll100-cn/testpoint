@@ -1,5 +1,5 @@
 <template>
-  <Card ref="node" class="w-64" :class="{ 'grayscale hover:grayscale-0 opacity-40 hover:opacity-100': !actived }">
+  <Card ref="node" class="w-72" :class="{ 'grayscale hover:grayscale-0 opacity-40 hover:opacity-100': !actived }">
     <CardHeader>
       <div>{{ requirement.title }}</div>
       <template #actions>
@@ -13,15 +13,22 @@
         <PlatformBadge v-for="platform_id in requirement.platform_ids" :platform="platform_repo.id.find(platform_id)" />
       </div>
 
-      <div class="text-sm text-muted space-y-2">
-         <VueMarkdown :source="requirement.description" />
+      <div class="text-sm space-y-2">
+        <Callout variant="secondary" class="py-1.5 px-2">
+          <CalloutTitle>需求描述</CalloutTitle>
+          <div class="text-muted">
+            <VueMarkdown :source="requirement.description" />
+          </div>
+        </Callout>
 
          <template v-for="label_id in requirement.label_ids">
             <template v-if="requirement.label_descriptions[label_id.toString()]">
-              <Well class="block">
-                <div class="text-primary">{{ label_repo.find(label_id)?.name }}</div>
-                <VueMarkdown :source="requirement.label_descriptions[label_id.toString()]"></VueMarkdown>
-              </Well>
+              <Callout class="py-1.5 px-2" variant="tint" :style="{ '--color-tint': utils.calcColorHlsValue(label_repo.find(label_id)!.name) }">
+                <CalloutTitle>{{ label_repo.find(label_id)!.name }}</CalloutTitle>
+                <div class="text-muted">
+                  <VueMarkdown :source="requirement.label_descriptions[label_id.toString()]"></VueMarkdown>
+                </div>
+              </Callout>
             </template>
          </template>
       </div>
@@ -44,9 +51,10 @@ import { usePageStore } from '@/store'
 import { Filter } from './type'
 import { computed, getCurrentInstance, onMounted, ref } from 'vue'
 import * as q from '@/lib/requests'
-import { useRoute } from 'vue-router';
-import { useElementSize } from '@vueuse/core';
-import Well from '$vendor/ui/well/Well.vue';
+import { useRoute } from 'vue-router'
+import { useElementSize } from '@vueuse/core'
+import { Callout, CalloutTitle, CalloutDescription } from '$vendor/ui'
+import * as utils from "@/lib/utils"
 
 const page = usePageStore()
 const allow = page.inProject()!.allow

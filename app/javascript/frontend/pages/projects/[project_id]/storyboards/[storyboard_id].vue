@@ -142,9 +142,9 @@
 
   const edges = ref([] as Edge[])
   const nodes = ref([] as Node[])
-  parseDataAndLayout(requirements.value)
+  parseDataAndLayout(requirements.value, false)
 
-  function parseDataAndLayout(requirements: Requirement[]) {
+  function parseDataAndLayout(requirements: Requirement[], layout: boolean = true) {
     const preNodes = [] as Node[]
     const preEdges = [] as Edge[]
 
@@ -294,25 +294,16 @@
     parseDataAndLayout(requirements.value)
   }
 
+  const resizeNodes = debounce(() => {
+    parseDataAndLayout(requirements.value)
+  }, 500)
+
   function resizeRequirement(a_requirement : Requirement, size: { width: number, height: number }) {
     size_mapping.value[a_requirement.id.toString()] ||= { width: null, height: null }
     size_mapping.value[a_requirement.id.toString()].width = size.width
     size_mapping.value[a_requirement.id.toString()].height = size.height
 
     resizeNodes()
-  }
-
-  const timer = ref(null as number | null)
-  function resizeNodes() {
-    if (timer.value) {
-      clearTimeout(timer.value)
-      timer.value = null
-    }
-
-    timer.value = setTimeout(() => {
-      parseDataAndLayout(requirements.value)
-    }, 500)
-
   }
 
   const former = Former.build(new Filter())

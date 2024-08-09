@@ -21,6 +21,22 @@ export function calcColorHex(text: string) {
   return color_cache.get(text)
 }
 
+export function calcColorHlsValue(text: string) {
+  const key = `hsl-(${text})`
+
+  if (!color_cache.has(key)) {
+    const hex = md5.array(text).slice(0, 3)
+    const color = colord({ r: hex[0], g: hex[1], b: hex[2] })
+
+    const hsl = color.toHsl()
+    const result = `${hsl.h} ${hsl.s}% ${hsl.l}%`
+
+    color_cache.set(key, result)
+  }
+
+  return color_cache.get(key)
+}
+
 export function redirect(path: string) {
   const origin = location.origin
   location.href = origin + (import.meta.env.VITE_RUBY_BASE ?? '/') + _.trimStart(path, "/")
