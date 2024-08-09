@@ -1,8 +1,4 @@
 <template>
-  <PageHeader>
-    <PageTitle>{{ storyboard.title }}</PageTitle>
-  </PageHeader>
-
   <Nav v-model:model-value="storyboard.id">
     <NavList preset="tabs">
       <NavItem v-for="storyboard in storyboards" :value="storyboard.id">

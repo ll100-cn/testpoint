@@ -1,15 +1,11 @@
 <template>
-<PageHeader>
-  <PageTitle>需求列表</PageTitle>
-</PageHeader>
+  <Nav>
+    <NavList preset="tabs">
+      <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
+    </NavList>
+  </Nav>
 
-<Nav>
-  <NavList preset="tabs">
-    <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
-  </NavList>
-</Nav>
-
-<BlankDialog ref="storyboard_dialog" @created="onStoryboardCreated" />
+  <BlankDialog ref="storyboard_dialog" @created="onStoryboardCreated" />
 </template>
 
 <script setup lang="ts">
