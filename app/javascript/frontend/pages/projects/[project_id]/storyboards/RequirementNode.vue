@@ -9,7 +9,7 @@
       </template>
     </CardHeader>
     <CardContent class="py-2">
-      <div class="space-x-2 mb-2" v-if="requirement.platform_ids.length > 0">
+      <div class="flex gap-x-2 mb-2" v-if="requirement.platform_ids.length > 0">
         <PlatformBadge v-for="platform_id in requirement.platform_ids" :platform="platform_repo.id.find(platform_id)" />
       </div>
 
