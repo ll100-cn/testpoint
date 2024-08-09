@@ -25,6 +25,6 @@ class Api::Projects::StoryboardsController < Api::Projects::BaseController
   end
 protected
   def storyboard_params
-    params.permit(:title, :description)
+    params.permit(:title, :description, :main_axle)
   end
 end

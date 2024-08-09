@@ -23,6 +23,13 @@
             </SelectdropItem>
           </controls.Selectpicker>
         </FormGroup>
+        <FormGroup path="label_id_eq" label="标签">
+          <controls.Selectpicker include-blank="任意">
+            <SelectdropItem v-for="label in test_case_labels" :value="label.id">
+              {{ label.name }}
+            </SelectdropItem>
+          </controls.Selectpicker>
+        </FormGroup>
       </Form>
 
       <template #actions>
@@ -33,7 +40,7 @@
 
     <div ref="vueFlowContainer" class="flex-1">
       <div :style="{ height: `${height}px` }">
-        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect">
+        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect" fit-view-on-init>
           <Background />
 
           <template #node-requirement="slotProps">
@@ -42,8 +49,10 @@
               :label_repo="label_repo"
               :requirement="slotProps.data"
               :filter="former.form"
+              :main_axle="storyboard.main_axle"
               @edit="requirement_dialog.show(RequirementUpdateDialogContent, $event)"
               @size="resizeRequirement" />
+
           </template>
           <template #node-storyboard="slotProps">
             <StoryboardNode
@@ -181,7 +190,7 @@
 
   function layoutNodes(nodes: Node[], edges: Edge[], size_mapping: Record<string, { width: number | null, height: number | null }>): Node[] {
     var g = new dagre.graphlib.Graph()
-    g.setGraph({ rankdir: 'LR' })
+    g.setGraph({ rankdir: storyboard.value.main_axle })
     g.setDefaultEdgeLabel(function() { return {} })
 
     nodes.forEach((node) => {

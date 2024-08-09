@@ -8,6 +8,7 @@
 #  description :text
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  main_axle   :string
 #
 FactoryBot.define do
   factory :storyboard do

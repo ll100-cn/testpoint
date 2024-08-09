@@ -14,28 +14,45 @@
       </div>
 
       <div class="text-sm space-y-2">
-        <Callout variant="secondary" class="py-1.5 px-2">
-          <CalloutTitle>需求描述</CalloutTitle>
-          <div class="text-muted">
-            <VueMarkdown :source="requirement.description" />
-          </div>
-        </Callout>
+        <div class="text-muted">
+          <VueMarkdown :source="requirement.description" />
+        </div>
 
-         <template v-for="label_id in requirement.label_ids">
-            <template v-if="requirement.label_descriptions[label_id.toString()]">
+        <template v-for="label_id in requirement.label_ids">
+          <template v-if="requirement.label_descriptions[label_id.toString()]">
+            <Collapsible>
               <Callout class="py-1.5 px-2" variant="tint" :style="{ '--color-tint': utils.calcColorHlsValue(label_repo.find(label_id)!.name) }">
-                <CalloutTitle>{{ label_repo.find(label_id)!.name }}</CalloutTitle>
-                <div class="text-muted">
-                  <VueMarkdown :source="requirement.label_descriptions[label_id.toString()]"></VueMarkdown>
-                </div>
+                <CollapsibleTrigger as-child><CalloutTitle>{{ label_repo.find(label_id)!.name }}</CalloutTitle></CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CalloutDescription>
+                    <div class="text-muted">
+                      <VueMarkdown :source="requirement.label_descriptions[label_id.toString()]"></VueMarkdown>
+                    </div>
+                  </CalloutDescription>
+                </CollapsibleContent>
               </Callout>
-            </template>
-         </template>
+            </Collapsible>
+          </template>
+        </template>
       </div>
     </CardContent>
 
-    <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-primary/80 rounded contrast-50" />
-    <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-destructive/80 rounded contrast-50" />
+    <template v-if="main_axle == 'LR'">
+      <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-primary/80 rounded contrast-50" />
+      <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-destructive/80 rounded contrast-50" />
+    </template>
+    <template v-else-if="main_axle == 'TB'">
+      <Handle type="target" :position="Position.Top" class="border w-5 h-2 bg-primary/80 rounded contrast-50" />
+      <Handle type="source" :position="Position.Bottom" class="border w-5 h-2 bg-destructive/80 rounded contrast-50" />
+    </template>
+    <template v-else-if="main_axle == 'BT'">
+      <Handle type="target" :position="Position.Bottom" class="border w-5 h-2 bg-primary/80 rounded contrast-50" />
+      <Handle type="source" :position="Position.Top" class="border w-5 h-2 bg-destructive/80 rounded contrast-50" />
+    </template>
+    <template v-else>
+      <Handle type="target" :position="Position.Right" class="border w-2 h-5 bg-primary/80 rounded contrast-50" />
+      <Handle type="source" :position="Position.Left" class="border w-2 h-5 bg-destructive/80 rounded contrast-50" />
+    </template>
   </Card>
 </template>
 
@@ -44,7 +61,7 @@ import { LabelRepo, Platform, PlatformRepo, Requirement } from '@/models'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import { Handle, Position } from '@vue-flow/core'
-import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$vendor/ui";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "$vendor/ui";
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import VueMarkdown from 'vue-markdown-render'
 import { usePageStore } from '@/store'
@@ -67,6 +84,7 @@ const props = defineProps<{
   platform_repo: PlatformRepo
   label_repo: LabelRepo
   filter: Filter
+  main_axle: string
 }>()
 
 const emits = defineEmits<{
@@ -78,7 +96,17 @@ const node = ref(null! as HTMLDivElement)
 const { width, height } = useElementSize(node)
 
 const actived = computed(() => {
-  return props.filter.platform_id_eq == null || props.requirement.platform_ids.includes(props.filter.platform_id_eq)
+  let result = true
+
+  if (props.filter.platform_id_eq != null) {
+    result = result && props.requirement.platform_ids.includes(props.filter.platform_id_eq)
+  }
+
+  if (props.filter.label_id_eq != null) {
+    result = result && props.requirement.label_ids.includes(props.filter.label_id_eq)
+  }
+
+  return result
 })
 
 onMounted(() => {

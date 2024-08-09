@@ -10,6 +10,11 @@
         <FormGroup path="title" label="名称">
           <controls.string />
         </FormGroup>
+        <FormGroup path="main_axle" label="主轴">
+          <controls.select :options="STORYBOARD_MAIN_AXLE">
+            <option v-for="option in STORYBOARD_MAIN_AXLE" :value="option.value">{{ option.label }}</option>
+          </controls.select>
+        </FormGroup>
         <FormGroup path="description" label="描述">
           <controls.markdown />
         </FormGroup>
@@ -34,6 +39,7 @@ import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import { STORYBOARD_MAIN_AXLE } from '@/constants'
 
 const route = useRoute()
 const params = route.params as any
@@ -46,12 +52,13 @@ const emit = defineEmits<{
 
 const props = defineProps<{
   platforms: Platform[],
-  storyboard_id: number
+  storyboard_id: number,
 }>()
 
 const former = Former.build({
   title: "",
   description: "",
+  main_axle: STORYBOARD_MAIN_AXLE[0].value,
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()

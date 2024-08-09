@@ -8,12 +8,15 @@
 #  description :text
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  main_axle   :string
 #
 class Storyboard < ApplicationRecord
+  enumerize :main_axle, in: [ :LR, :RL, :TB, :BT ]
+
   belongs_to :project
   has_many :requirements
 
-  validates :title, presence: true
+  validates :title, :main_axle, presence: true
 
   def archive
     if requirements.empty?
