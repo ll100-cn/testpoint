@@ -311,7 +311,7 @@ import type { of } from 'rxjs'
 
   function onRequirementCreated(new_requirement: Requirement) {
     requirements.value.push(new_requirement)
-    parseDataAndLayout(requirements.value)
+    parseDataAndLayout(requirements.value, position_mapping.value)
   }
 
   function onRequirementUpdated(a_requirement: Requirement) {
