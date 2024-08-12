@@ -1,12 +1,14 @@
 <template>
-  <Nav v-model:model-value="storyboard.id">
-    <NavList preset="tabs">
-      <NavItem v-for="storyboard in storyboards" :value="storyboard.id" as-child>
-        <RLink :to="`/projects/${params.project_id}/storyboards/${storyboard.id}`">{{ storyboard.title }}</RLink>
-      </NavItem>
-      <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
-    </NavList>
-  </Nav>
+  <div class="flex items-center">
+    <Nav v-model:model-value="storyboard.id">
+      <NavList preset="tabs" class="overflow-y-auto">
+        <NavItem v-for="storyboard in storyboards" :value="storyboard.id" class="shrink-0" as-child>
+          <RLink :to="`/projects/${params.project_id}/storyboards/${storyboard.id}`">{{ storyboard.title }}</RLink>
+        </NavItem>
+      </NavList>
+    </Nav>
+    <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
+  </div>
 
   <Card class="min-h-96 flex-1 rounded-ss-none">
     <CardHeader class="bg-transparent">
