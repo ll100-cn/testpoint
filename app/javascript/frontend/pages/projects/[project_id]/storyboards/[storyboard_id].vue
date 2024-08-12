@@ -40,7 +40,7 @@
 
     <div ref="vueFlowContainer" class="flex-1">
       <div :style="{ height: `${height}px` }">
-        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect" :snap-grid="[10, 10]" snap-to-grid fit-view-on-init>
+        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect" :snap-grid="[10, 10]" snap-to-grid fit-view-on-init :max-zoom="1">
           <Background />
 
           <template #node-requirement="slotProps">
