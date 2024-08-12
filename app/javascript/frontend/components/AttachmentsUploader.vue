@@ -34,7 +34,7 @@ import { UploadFile } from './types'
 const props = defineProps<{
   attachments?: Attachment[]
 }>()
-const proxy = getCurrentInstance()!
+const proxy = getCurrentInstance()!.proxy!
 
 class Item {
   upload_file?: UploadFile
@@ -51,7 +51,7 @@ const items = ref([] as Item[])
 const upload_area = ref(null! as HTMLElement)
 
 onMounted(() => {
-  items.value = props.attachments.map(it => {
+  items.value = (props.attachments ?? []).map(it => {
     const item = new Item()
     item.attachment = it
     item.changes.id = it.id
@@ -117,7 +117,7 @@ function onAreaDragLeave() {
 
 function onAreaDrop(event: DragEvent) {
   onAreaDragLeave()
-  const files = event.dataTransfer.files
+  const files = event.dataTransfer?.files ?? []
 
   for (const file of files) {
     upload(file)
@@ -126,7 +126,7 @@ function onAreaDrop(event: DragEvent) {
 
 function onInputFileSelected(event: Event) {
   const input = event.target as HTMLInputElement
-  const files = input.files
+  const files = input.files ?? []
 
   for (const file of files) {
     upload(file)
