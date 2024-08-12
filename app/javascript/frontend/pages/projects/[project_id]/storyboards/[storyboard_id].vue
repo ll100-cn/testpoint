@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center">
     <Nav v-model:model-value="storyboard.id">
-      <NavList preset="tabs" class="overflow-y-auto">
+      <NavList preset="tabs" class="overflow-y-auto scrollbar-none">
         <NavItem v-for="storyboard in storyboards" :value="storyboard.id" class="shrink-0" as-child>
           <RLink :to="`/projects/${params.project_id}/storyboards/${storyboard.id}`">{{ storyboard.title }}</RLink>
         </NavItem>
@@ -170,7 +170,6 @@ import type { of } from 'rxjs'
       const requirement = requirements[i]
       const node_id = requirement.id.toString()
       const position = positions[node_id] || { x: 100 * i, y: 50 }
-      console.log(position)
 
       preNodes.push({
         id: node_id,
@@ -190,7 +189,6 @@ import type { of } from 'rxjs'
 
     edges.value = preEdges
     if (Object.keys(positions).length > 0) {
-      console.log("layout with positions")
       nodes.value = preNodes
     } else {
       nodes.value = layoutNodes(preNodes, preEdges, size_mapping.value)
@@ -346,7 +344,6 @@ import type { of } from 'rxjs'
   }
 
   async function save() {
-    console.log(getNodes.value)
 
     const position_mapping_data = getNodes.value.reduce((acc, node) => {
       acc[node.id] = { x: node.position.x, y: node.position.y }

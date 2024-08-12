@@ -3,6 +3,7 @@ import { Config } from 'tailwindcss'
 import tailwindcssForms from '@tailwindcss/forms'
 import tailwindcssAnimated from "tailwindcss-animated"
 import tailwindcssTypography from '@tailwindcss/typography'
+import tailwindScrollbar from 'tailwind-scrollbar'
 
 module.exports = {
   darkMode: ["class"],
@@ -101,5 +102,5 @@ module.exports = {
       },
     },
   },
-  plugins: [ tailwindcssAnimate, tailwindcssAnimated, tailwindcssForms, tailwindcssTypography ],
+  plugins: [ tailwindcssAnimate, tailwindcssAnimated, tailwindcssForms, tailwindcssTypography, tailwindScrollbar ],
 } satisfies Config
