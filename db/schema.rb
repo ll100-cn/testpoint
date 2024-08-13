@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_13_045836) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_13_053541) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -318,18 +318,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_13_045836) do
     t.index ["user_id"], name: "index_projects_users_on_user_id"
   end
 
-  create_table "requirements", force: :cascade do |t|
-    t.bigint "project_id", null: false
+  create_table "requirement_records", force: :cascade do |t|
+    t.bigint "requirement_id", null: false
+    t.bigint "roadmap_ids", default: [], array: true
+    t.datetime "deleted_at"
     t.bigint "platform_ids", default: [], array: true
     t.bigint "upstream_ids", default: [], array: true
     t.string "title"
     t.text "description"
-    t.string "roles", default: [], array: true
+    t.bigint "label_ids", default: [], array: true
+    t.json "label_descriptions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_requirement_records_on_deleted_at"
+    t.index ["requirement_id"], name: "index_requirement_records_on_requirement_id"
+  end
+
+  create_table "requirements", force: :cascade do |t|
+    t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "storyboard_id"
-    t.bigint "label_ids", default: [], array: true
-    t.json "label_descriptions", default: {}
     t.index ["project_id"], name: "index_requirements_on_project_id"
     t.index ["storyboard_id"], name: "index_requirements_on_storyboard_id"
   end
@@ -517,6 +526,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_13_045836) do
   add_foreign_key "platforms", "projects"
   add_foreign_key "projects_users", "projects"
   add_foreign_key "projects_users", "users"
+  add_foreign_key "requirement_records", "requirements"
   add_foreign_key "requirements", "projects"
   add_foreign_key "requirements", "storyboards"
   add_foreign_key "roadmaps", "projects"

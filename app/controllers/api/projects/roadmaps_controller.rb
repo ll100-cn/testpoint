@@ -7,7 +7,7 @@ class Api::Projects::RoadmapsController < Api::Projects::BaseController
   end
 
   def create
-    @roadmap.save
+    @roadmap.submit
     respond_with @roadmap
   end
 
