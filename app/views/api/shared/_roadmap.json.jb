@@ -1,0 +1,2 @@
+json = roadmap.slice(:id, :title)
+json

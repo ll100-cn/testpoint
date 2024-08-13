@@ -28,6 +28,7 @@ class Project < ApplicationRecord
   has_many :members,             dependent: :destroy
   has_many :requirements,        dependent: :destroy
   has_many :storyboards,         dependent: :destroy
+  has_many :roadmaps,            dependent: :destroy
 
   accepts_nested_attributes_for :members
   has_many :users, through: :members

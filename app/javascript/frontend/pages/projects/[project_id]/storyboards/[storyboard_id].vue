@@ -1,4 +1,11 @@
 <template>
+  <PageHeader>
+    <PageTitle>需求板</PageTitle>
+    <template #actions>
+      <Button v-if="allow('create', Roadmap)" preset="ghost" class="ms-auto" @click.prevent="roadmap_dialog.show(RoadmapCreateDialogContent)">+ 新建线路图</Button>
+    </template>
+  </PageHeader>
+
   <div class="flex items-center -mb-px">
     <div class="overflow-y-auto scrollbar-none">
       <Nav v-model:model-value="storyboard.id">
@@ -82,7 +89,8 @@
     :platforms="platforms"
     :test_case_labels="test_case_labels"
     :storyboard="storyboard" />
-  </template>
+  <BlankDialog ref="roadmap_dialog" />
+</template>
 
   <script setup lang="ts">
   import PageHeader from '@/components/PageHeader.vue'
@@ -95,7 +103,7 @@
   import * as q from '@/lib/requests'
   import { useRoute, useRouter } from 'vue-router'
   import { usePageStore } from '@/store'
-  import { LabelRepo, PlatformRepo, Requirement, Storyboard } from '@/models'
+  import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap } from '@/models'
   import * as utils from "@/lib/utils"
   import type { Connection, Edge, EdgeChange, Node } from '@vue-flow/core'
   import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
@@ -117,7 +125,7 @@
   import { Background } from '@vue-flow/background'
   import { debounce, size } from 'lodash'
   import RLink from '@/components/RLink.vue'
-import type { of } from 'rxjs'
+  import RoadmapCreateDialogContent from './RoadmapCreateDialogContent.vue'
 
   const proxy = getCurrentInstance()!.proxy!
   const route = useRoute()
@@ -129,6 +137,7 @@ import type { of } from 'rxjs'
 
   const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
   const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+  const roadmap_dialog = ref(null! as InstanceType<typeof BlankDialog>)
   const project_id = params.project_id
 
   const vueFlowContainer = ref(null! as HTMLDivElement)
@@ -142,6 +151,10 @@ import type { of } from 'rxjs'
   }).perform())
 
   const test_case_labels = ref(await new q.project.TestCaseLabelInfoReq.List().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+  }).perform())
+
+  const roadmaps = ref(await new q.project.RoadmapReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform())
 
