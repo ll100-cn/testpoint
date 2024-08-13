@@ -1,2 +1,2 @@
-json = requirement.slice(:id, :title, :description, :roles, :upstream_ids, :platform_ids, :label_ids, :label_descriptions)
+json = requirement.slice(:id, :title, :description, :roles, :upstream_ids, :platform_ids, :label_ids, :label_descriptions, :updated_at)
 json

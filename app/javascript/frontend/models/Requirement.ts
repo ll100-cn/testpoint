@@ -12,4 +12,6 @@ export class Requirement {
   title!: string
   description?: string
   roles: string[] = []
+
+  @t.Date updated_at!: Date
 }

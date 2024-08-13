@@ -47,7 +47,7 @@
             <RequirementNode
               :platform_repo="platform_repo"
               :label_repo="label_repo"
-              :requirement="slotProps.data"
+              :requirement="slotProps.data.requirement"
               :filter="former.form"
               :main_axle="storyboard.main_axle"
               @edit="requirement_dialog.show(RequirementUpdateDialogContent, $event)"
@@ -176,7 +176,7 @@ import type { of } from 'rxjs'
       preNodes.push({
         id: node_id,
         position: position,
-        data: requirement,
+        data: { requirement: requirement },
         type: 'requirement'
       })
 
@@ -306,7 +306,7 @@ import type { of } from 'rxjs'
     }).perform(data)
 
     requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
-    updateNodeData(a_requirement.id.toString(), a_requirement)
+    updateNodeData(a_requirement.id.toString(), { requirement: a_requirement })
   }
 
   function onRequirementCreated(new_requirement: Requirement) {
@@ -316,7 +316,7 @@ import type { of } from 'rxjs'
 
   function onRequirementUpdated(a_requirement: Requirement) {
     requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
-    updateNodeData(a_requirement.id.toString(), a_requirement)
+    updateNodeData(a_requirement.id.toString(), { requirement: a_requirement })
   }
 
   function onRequirementDestroyed(a_requirement: Requirement) {
