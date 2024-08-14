@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       scope module: 'projects' do
         resource :profile
 
+        resources :roadmaps
         resources :storyboards do
           resources :requirements
         end

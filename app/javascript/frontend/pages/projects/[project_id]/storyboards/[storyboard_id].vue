@@ -1,4 +1,27 @@
 <template>
+  <PageHeader>
+    <PageTitle>需求板</PageTitle>
+    <template #actions>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button preset="ghost">
+            <span>{{ roadmap?.title ?? '新路线图' }}</span>
+            <i class="fa-solid fa-caret-down ms-1"></i>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem @click.prevent="changeRoadmap()">新路线图</DropdownMenuItem>
+          <DropdownMenuItem v-for="roadmap in roadmaps" @click.prevent="changeRoadmap(roadmap)">
+            {{ roadmap.title }}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Button v-if="!roadmap && allow('create', Roadmap)" class="ms-auto" @click.prevent="roadmap_dialog.show(RoadmapCreateDialogContent)">保存线路图</Button>
+      <Button v-if="roadmap && allow('update', roadmap)" class="ms-auto" @click.prevent="roadmap_dialog.show(RoadmapUpdateDialogContent, roadmap)">编辑线路图</Button>
+    </template>
+  </PageHeader>
+
   <div class="flex items-center -mb-px">
     <div class="overflow-y-auto scrollbar-none">
       <Nav v-model:model-value="storyboard.id">
@@ -82,7 +105,8 @@
     :platforms="platforms"
     :test_case_labels="test_case_labels"
     :storyboard="storyboard" />
-  </template>
+  <BlankDialog ref="roadmap_dialog" @created="" @updated="onRoadmapUpdated" />
+</template>
 
   <script setup lang="ts">
   import PageHeader from '@/components/PageHeader.vue'
@@ -95,7 +119,7 @@
   import * as q from '@/lib/requests'
   import { useRoute, useRouter } from 'vue-router'
   import { usePageStore } from '@/store'
-  import { LabelRepo, PlatformRepo, Requirement, Storyboard } from '@/models'
+  import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap } from '@/models'
   import * as utils from "@/lib/utils"
   import type { Connection, Edge, EdgeChange, Node } from '@vue-flow/core'
   import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
@@ -117,7 +141,9 @@
   import { Background } from '@vue-flow/background'
   import { debounce, size } from 'lodash'
   import RLink from '@/components/RLink.vue'
-import type { of } from 'rxjs'
+  import RoadmapCreateDialogContent from './RoadmapCreateDialogContent.vue'
+  import RoadmapUpdateDialogContent from './RoadmapUpdateDialogContent.vue'
+  import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
 
   const proxy = getCurrentInstance()!.proxy!
   const route = useRoute()
@@ -129,6 +155,7 @@ import type { of } from 'rxjs'
 
   const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
   const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+  const roadmap_dialog = ref(null! as InstanceType<typeof BlankDialog>)
   const project_id = params.project_id
 
   const vueFlowContainer = ref(null! as HTMLDivElement)
@@ -145,6 +172,14 @@ import type { of } from 'rxjs'
     req.interpolations.project_id = project_id
   }).perform())
 
+  const roadmap = ref(null as Roadmap | null)
+  const roadmaps = ref(await new q.project.RoadmapReq.List().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+  }).perform())
+  if (query.roadmap_id) {
+    roadmap.value = roadmaps.value.find((r) => r.id === parseInt(query.roadmap_id)) ?? null
+  }
+
   const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform())
@@ -158,6 +193,9 @@ import type { of } from 'rxjs'
   const requirements = ref(await new q.project.RequirementReq.List().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.storyboard_id = storyboard.value.id
+    if (roadmap.value) {
+      req.query = { roadmap_id: roadmap.value?.id }
+    }
   }).perform())
 
   const edges = ref([] as Edge[])
@@ -324,6 +362,17 @@ import type { of } from 'rxjs'
     parseDataAndLayout(requirements.value)
   }
 
+  function onRoadmapUpdated(a_roadmap: Roadmap) {
+    roadmaps.value = roadmaps.value.map((r) => r.id === a_roadmap.id ? a_roadmap : r)
+    if (roadmap.value?.id === a_roadmap.id) {
+      roadmap.value = a_roadmap
+    }
+  }
+
+  function onRoadedCreated(a_roadmap: Roadmap) {
+    roadmaps.value.push(a_roadmap)
+  }
+
   const resizeNodes = debounce(() => {
     parseDataAndLayout(requirements.value)
   }, 350)
@@ -364,4 +413,12 @@ import type { of } from 'rxjs'
 
   const former = Former.build(new Filter())
   const { Form, FormGroup } = FormFactory<typeof former.form>()
-  </script>
+
+  function changeRoadmap(roadmap: Roadmap | null = null) {
+    if (roadmap) {
+      router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}?roadmap_id=${roadmap.id}`)
+    } else {
+      router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}`)
+    }
+  }
+  </script>π

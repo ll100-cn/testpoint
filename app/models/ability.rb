@@ -50,6 +50,7 @@ class Ability
     can :read, Milestone
     can :read, Requirement
     can :read, Storyboard
+    can :read, Roadmap
 
     can :manage, Attachment
   end
@@ -66,6 +67,7 @@ class Ability
     can [ :read, :update ], TaskUpshot
     can :read, Requirement
     can :read, Storyboard
+    can :read, Roadmap
   end
 
   def apply_manager_permissions(member)
@@ -79,6 +81,7 @@ class Ability
     can :manage, Milestone
     can :manage, Storyboard
     can :manage, Requirement
+    can :manage, Roadmap
 
     can :manage, Plan
     can :manage, Phase

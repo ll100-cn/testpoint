@@ -1,2 +1,14 @@
-json = requirement.slice(:id, :title, :description, :roles, :upstream_ids, :platform_ids, :label_ids, :label_descriptions, :updated_at)
+json = requirement.slice(:id)
+
+records = requirement.local_records
+record = records.first
+
+json[:title] = record.title
+json[:description] = record.description
+json[:upstream_ids] = record.upstream_ids
+json[:platform_ids] = record.platform_ids
+json[:label_ids] = record.label_ids
+json[:label_descriptions] = record.label_descriptions
+json[:updated_at] = record.updated_at
+
 json
