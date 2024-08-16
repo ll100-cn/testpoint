@@ -9,7 +9,7 @@
 
   <ActionerAlert :actioner="actioner" />
 
-  <!-- <Card>
+  <Card>
     <CardContent>
       <Table>
         <TableHeader>
@@ -43,7 +43,7 @@
         </TableBody>
       </Table>
     </CardContent>
-  </Card> -->
+  </Card>
 </template>
 
 <script setup lang="ts">

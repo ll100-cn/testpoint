@@ -32,7 +32,7 @@ class Api::Projects::IssuesController < Api::Projects::BaseController
     @q = @issues_scope.ransack(params[:q])
     @q.sorts = params[:sorts] if params[:sorts]
     @q.sorts = "updated_at desc" if @q.sorts.empty?
-    @issues = @q.result.page(params[:page])
+    @issues = @q.result.page(params[:page]).per(params[:limit] || 25)
     kaminari_headers(@issues)
   end
 

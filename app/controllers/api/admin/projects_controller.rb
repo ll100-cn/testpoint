@@ -5,7 +5,7 @@ class Api::Admin::ProjectsController < Api::BaseController
   def index
     @projects_scope = @projects
     @projects_scope = @projects_scope.ransack(params[:q]).result
-    @projects = @projects_scope.page(params[:page])
+    @projects = @projects_scope.page(params[:page]).per(params[:limit])
 
     kaminari_headers(@projects)
   end

@@ -6,7 +6,7 @@ class Api::Admin::UsersController < Api::BaseController
     @users_scope = @users
     @users_scope = @users_scope.ransack(params[:q]).result
 
-    @users = @users_scope.page(params[:page])
+    @users = @users_scope.page(params[:page]).per(params[:limit])
     kaminari_headers(@users)
   end
 

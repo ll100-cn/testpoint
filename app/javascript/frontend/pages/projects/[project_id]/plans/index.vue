@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <PaginationBar :pagination="plans" />
+  <PaginationBar class="mt-2" :per_size_enabled="false" :pagination="plans" />
 
   <teleport to="body">
     <BlankDialog ref="plan_dialog" @created="onCreated" />
