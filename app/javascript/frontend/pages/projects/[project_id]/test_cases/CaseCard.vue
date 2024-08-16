@@ -36,6 +36,14 @@
         <FormGroup path="group_name_search" label="分组">
           <controls.string />
         </FormGroup>
+
+        <FormGroup path="relate_state" label="关联需求">
+          <controls.Selectpicker include_blank>
+            <SelectdropItem v-for="state in Object.keys(TEST_CASE_RELATE_STATES)" :value="state">
+              {{ TEST_CASE_RELATE_STATES[state] }}
+            </SelectdropItem>
+          </controls.Selectpicker>
+        </FormGroup>
       </Form>
 
       <template #actions>
@@ -82,6 +90,7 @@ import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { TEST_CASE_RELATE_STATES } from '@/constants'
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
@@ -98,6 +107,7 @@ class Search {
   @t.String group_name_search?: string = undefined
   @t.Number platform_id?: number | null = null
   @t.Number label_id?: number | null = null
+  @t.String relate_state?: keyof typeof TEST_CASE_RELATE_STATES = undefined
 }
 
 const search = ref(plainToClass(Search, query))
@@ -112,7 +122,7 @@ former.doPerform = async function() {
   router.push({ query: utils.plainToQuery(data) })
 }
 
-watch(computed(() => [ former.form.platform_id, former.form.label_id ]), () => {
+watch(computed(() => [ former.form.platform_id, former.form.label_id, former.form.relate_state ]), () => {
   former.perform()
 })
 
@@ -162,7 +172,6 @@ const newest_roadmap = computed(() => {
     return newest
   }
 })
-console.log(newest_roadmap.value)
 
 const search_test_cases = computed(() => {
   let scope = _(test_cases)
@@ -179,6 +188,16 @@ const search_test_cases = computed(() => {
 
   if (query.group_name_search) {
     scope = scope.filter((it) => it.group_name?.includes(query.group_name_search))
+  }
+
+  if (query.relate_state) {
+    if (query.relate_state === 'related') {
+      scope = scope.filter((it) => it.requirement_id != null)
+    } else if (query.relate_state === 'unrelated') {
+      scope = scope.filter((it) => it.requirement_id == null)
+    } else if (query.relate_state === 'expired') {
+      scope = scope.filter((it) => (it.requirement_id != null && it.roadmap_id != newest_roadmap.value.id))
+    }
   }
 
   return scope.value()

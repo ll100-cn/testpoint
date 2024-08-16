@@ -5,6 +5,12 @@ export const DATE_FORMAT = 'YYYY-MM-DD'
 export const DATETIME_SHORT_FORMAT = 'MM[月]DD[日] HH:mm'
 export const DATETIME_LONG_FORMAT = 'YYYY[年]MM[月]DD[日] HH:mm'
 
+export const TEST_CASE_RELATE_STATES = {
+  unrelated: "未关联",
+  related: "已关联",
+  expired: "已过期",
+}
+
 export const TASK_UPSHOT_STATES = {
   pending: "待测试",
   pass: "通过",

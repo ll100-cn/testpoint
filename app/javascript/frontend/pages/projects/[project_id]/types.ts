@@ -1,3 +1,4 @@
+import type { TEST_CASE_RELATE_STATES } from "@/constants"
 import { TestCase, TestCaseStat } from "@/models"
 import _ from "lodash"
 
@@ -43,10 +44,11 @@ export class ColumnFilter {
 }
 
 export class Filter {
-  role_name: string | null
-  scene_path: string[]
+  role_name: string | null = null
+  scene_path: string[] = []
   archived: string = "0"
-  ignored: string | null
+  relate_state: keyof typeof TEST_CASE_RELATE_STATES | null = null
+  ignored: string | null = null
   // platform_id: string | null
   // label_id: string | null
 
@@ -55,6 +57,7 @@ export class Filter {
       role_name: this.role_name,
       scene_path: this.scene_path,
       archived: this.archived,
+      relate_state: this.relate_state
       // platform_id: this.platform_id,
       // label_id: this.label_id,
     }
