@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_13_053541) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_15_085227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -451,10 +451,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_13_053541) do
     t.datetime "archived_at"
     t.bigint "platform_ids", default: [], array: true
     t.bigint "label_ids", default: [], array: true
+    t.bigint "roadmap_id"
+    t.bigint "storyboard_id"
+    t.bigint "requirement_id"
     t.index ["archived_at"], name: "index_test_cases_on_archived_at"
     t.index ["bak_folder_id"], name: "index_test_cases_on_bak_folder_id"
     t.index ["group_name"], name: "index_test_cases_on_group_name"
     t.index ["project_id"], name: "index_test_cases_on_project_id"
+    t.index ["requirement_id"], name: "index_test_cases_on_requirement_id"
+    t.index ["roadmap_id"], name: "index_test_cases_on_roadmap_id"
+    t.index ["storyboard_id"], name: "index_test_cases_on_storyboard_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -538,4 +544,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_13_053541) do
   add_foreign_key "test_case_records", "test_cases"
   add_foreign_key "test_case_snapshots", "projects"
   add_foreign_key "test_cases", "projects"
+  add_foreign_key "test_cases", "requirements"
+  add_foreign_key "test_cases", "roadmaps"
+  add_foreign_key "test_cases", "storyboards"
 end

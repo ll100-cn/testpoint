@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { Category } from '@/models'
-import { Badge } from '$vendor/ui';
+import { Badge } from '$vendor/ui'
 
 const props = defineProps<{
   category?: Category

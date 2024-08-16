@@ -7,7 +7,7 @@
         {{ test_case.title }}
       </DialogTitle>
 
-      <template #actions>
+      <template v-if="!readonly" #actions>
         <a v-if="allow('update', test_case)" href="#" class="link" @click.prevent="emit('switch', CaseEditDialogContent, test_case)">编辑</a>
       </template>
     </DialogHeader>
@@ -21,14 +21,19 @@
     </div>
 
     <div class="mt-4" :class="{ 'hidden': collapsed }">
-      <div v-for="(version_case, index) in history" class="border p-4">
-        <h2 :id="`test_case_version_${index}_header`" class="text-lg mb-2">
-          <a href="#" @click.prevent="">
-            {{ h.datetime(version_case.updated_at) }}
-          </a>
-        </h2>
-
-        <textarea v-model="version_case.content" data-controller="markdown" readonly class="hidden" />
+      <div v-for="(version_case, index) in history" class="border p-4 -mb-px">
+        <Collapsible>
+          <CollapsibleTrigger as-child>
+            <div class="flex">
+              <div>{{ h.datetime(version_case.updated_at) }}</div>
+              <div class="ms-auto"><i class="fa-regular fa-chevron-down"></i></div>
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <hr class="my-3">
+            <textarea v-model="version_case.content" data-controller="markdown" readonly class="hidden mt-2" />
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     </div>
     <DialogFooter>
@@ -48,8 +53,13 @@ import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vu
 import CaseEditDialogContent from './CaseEditDialogContent.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Well } from '$vendor/ui'
 import Button from '$vendor/ui/button/Button.vue'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "$vendor/ui"
 
 const proxy = getCurrentInstance()!.proxy!
+
+const props = defineProps<{
+  readonly: boolean
+}>()
 
 const emit = defineEmits<{
   switch: [ compoenent: Component, ...args: any[] ]

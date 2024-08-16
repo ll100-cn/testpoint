@@ -1,5 +1,6 @@
 import { Type } from "class-transformer"
 import * as t from '@/lib/transforms'
+import { EntityRepo } from "./EntityRepo"
 
 export class Requirement {
   id!: number
@@ -14,4 +15,7 @@ export class Requirement {
   roles: string[] = []
 
   @t.Date updated_at!: Date
+}
+
+export class RequirementRepo extends EntityRepo<Requirement> {
 }

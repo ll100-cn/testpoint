@@ -19,12 +19,12 @@ class Api::Projects::TestCasesController < Api::Projects::BaseController
   end
 
   def create
-    @test_case.save
+    @test_case.create_with_requirement
     respond_with @test_case
   end
 
   def update
-    @test_case.update(test_case_params)
+    @test_case.update_with_requirement(test_case_params)
     respond_with @test_case
   end
 
@@ -44,6 +44,6 @@ class Api::Projects::TestCasesController < Api::Projects::BaseController
 
 protected
   def test_case_params
-    params.permit(:title, :role_name, :content, :scene_name, :group_name, label_ids: [], platform_ids: [])
+    params.permit(:title, :role_name, :content, :scene_name, :group_name, :storyboard_id, :requirement_id, label_ids: [], platform_ids: [])
   end
 end

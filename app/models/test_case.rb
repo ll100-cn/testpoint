@@ -2,26 +2,31 @@
 #
 # Table name: test_cases
 #
-#  id            :bigint           not null, primary key
-#  title         :string
-#  content       :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  bak_folder_id :bigint
-#  archived      :boolean          default(FALSE)
-#  project_id    :bigint
-#  role_name     :string
-#  scene_name    :string
-#  group_name    :string
-#  archived_at   :datetime
-#  platform_ids  :bigint           default([]), is an Array
-#  label_ids     :bigint           default([]), is an Array
+#  id             :bigint           not null, primary key
+#  title          :string
+#  content        :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  bak_folder_id  :bigint
+#  archived       :boolean          default(FALSE)
+#  project_id     :bigint
+#  role_name      :string
+#  scene_name     :string
+#  group_name     :string
+#  archived_at    :datetime
+#  platform_ids   :bigint           default([]), is an Array
+#  label_ids      :bigint           default([]), is an Array
+#  roadmap_id     :bigint
+#  storyboard_id  :bigint
+#  requirement_id :bigint
 #
 
 class TestCase < ApplicationRecord
   # belongs_to :folder, optional: true
   # has_and_belongs_to_many :platforms
   belongs_to :project
+  belongs_to :requirement, optional: true
+  belongs_to :roadmap, optional: true
   has_array_of :platforms, class_name: 'Platform'
   has_array_of :labels, class_name: 'TestCaseLabel'
   # has_many :test_case_versions, dependent: :destroy
@@ -100,5 +105,23 @@ class TestCase < ApplicationRecord
 
   def self.ransackable_scopes(auth_object = nil)
     [ :filter_by_label_id, :filter_by_platform_id ]
+  end
+
+  def create_with_requirement
+    if requirement_id.present?
+      self.roadmap = Roadmap.ranked.first
+    end
+
+    self.save
+  end
+
+  def update_with_requirement(params)
+    assign_attributes(params)
+
+    if requirement_id.present?
+      self.roadmap = Roadmap.ranked.first
+    end
+
+    self.save
   end
 end

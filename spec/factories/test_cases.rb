@@ -2,20 +2,23 @@
 #
 # Table name: test_cases
 #
-#  id            :bigint           not null, primary key
-#  title         :string
-#  content       :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  bak_folder_id :bigint
-#  archived      :boolean          default(FALSE)
-#  project_id    :bigint
-#  role_name     :string
-#  scene_name    :string
-#  group_name    :string
-#  archived_at   :datetime
-#  platform_ids  :bigint           default([]), is an Array
-#  label_ids     :bigint           default([]), is an Array
+#  id             :bigint           not null, primary key
+#  title          :string
+#  content        :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  bak_folder_id  :bigint
+#  archived       :boolean          default(FALSE)
+#  project_id     :bigint
+#  role_name      :string
+#  scene_name     :string
+#  group_name     :string
+#  archived_at    :datetime
+#  platform_ids   :bigint           default([]), is an Array
+#  label_ids      :bigint           default([]), is an Array
+#  roadmap_id     :bigint
+#  storyboard_id  :bigint
+#  requirement_id :bigint
 #
 
 FactoryBot.define do

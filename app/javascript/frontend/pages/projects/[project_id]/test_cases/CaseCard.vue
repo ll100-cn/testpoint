@@ -39,23 +39,25 @@
       </Form>
 
       <template #actions>
-        <Button size="sm" v-if="allow('create', TestCase)" @click.prevent="showModal(project_id)">新增用例</Button>
+        <Button size="sm" v-if="!readonly && allow('create', TestCase)" @click.prevent="showModal(project_id)">新增用例</Button>
       </template>
     </CardHeader>
 
     <CardBody
       :test_cases="search_test_cases"
+      :newest_roadmap="newest_roadmap"
       :platform_repo="platform_repo"
       :label_repo="label_repo"
       :filter="filter"
+      :readonly="readonly"
       @modal="(...args) => case_dialog!.show(...args)"
       @batch="(...args) => case_batch_dialog!.show(...args)" />
 
-    <CardNewDialog ref="modal" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
+    <CardNewDialog ref="modal" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
   </Card>
 
   <teleport to="body">
-    <BlankDialog ref="case_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankDialog>
+    <BlankDialog ref="case_dialog" :readonly="readonly" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankDialog>
     <BlankDialog ref="case_batch_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></BlankDialog>
   </teleport>
 </template>
@@ -64,7 +66,7 @@
 import * as q from '@/lib/requests'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Milestone, Platform, TestCase, TestCaseLabel } from '@/models'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
@@ -118,6 +120,13 @@ const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void
 }>()
 
+const milestone = ref(null as Milestone | null)
+if (route.query.milestone_id) {
+  const _milestones = await page.inProject()!.request(q.project.MilestoneReq.List).setup(proxy).perform()
+  milestone.value = _.find(_milestones, { id: _.toNumber(route.query.milestone_id) }) ?? null
+}
+const readonly = computed(() => milestone.value != null)
+
 const project_id = _.toNumber(params.project_id)
 const test_cases = await new q.case.TestCaseReq.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
@@ -139,6 +148,21 @@ const _platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req)
 const platform_repo = computed(() => {
   return new EntityRepo<Platform>().setup(_platforms.value)
 })
+
+const _roadmaps = ref(await new q.project.RoadmapReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+}).perform())
+
+const newest_roadmap = computed(() => {
+  const newest = _roadmaps.value.sort((a, b) => b.id - a.id)[0]
+
+  if (milestone.value) {
+    return _roadmaps.value.filter((it) => it.created_at < milestone.value!.published_at).sort((a, b) => b.id - a.id)[0] ?? newest
+  } else {
+    return newest
+  }
+})
+console.log(newest_roadmap.value)
 
 const search_test_cases = computed(() => {
   let scope = _(test_cases)

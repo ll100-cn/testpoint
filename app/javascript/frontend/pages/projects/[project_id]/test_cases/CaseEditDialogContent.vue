@@ -9,7 +9,7 @@
     </DialogHeader>
 
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
-      <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
+      <CaseForm :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
 
       <DialogFooter>
         <DialogClose><Button variant="secondary" type="button">Close</Button></DialogClose>
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { Validations, layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from "@/store"
 import { Modal } from 'bootstrap'
 import $ from 'jquery'
@@ -42,6 +42,7 @@ const open = defineModel('open')
 const props = defineProps<{
   platform_repo: EntityRepo<Platform>,
   label_repo: EntityRepo<TestCaseLabel>,
+  newest_roadmap: Roadmap
 }>()
 
 const emit = defineEmits<{
@@ -58,7 +59,9 @@ const former = Former.build({
   scene_name: null,
   group_name: null,
   platform_ids: null,
-  label_ids: null
+  label_ids: null,
+  storyboard_id : null,
+  requirement_id: null
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
@@ -112,6 +115,8 @@ function reset(a_test_case: TestCase) {
   former.form.group_name = test_case.value.group_name
   former.form.platform_ids = test_case.value.platform_ids
   former.form.label_ids = test_case.value.label_ids
+  former.form.storyboard_id = test_case.value.storyboard_id
+  former.form.requirement_id = test_case.value.requirement_id
 
   nextTick(() => {
     loading.value = false

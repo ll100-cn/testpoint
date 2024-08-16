@@ -5,7 +5,7 @@
         <DialogTitle>新增案例</DialogTitle>
       </DialogHeader>
       <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
-        <CaseForm :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
+        <CaseForm :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
 
         <DialogFooter>
           <DialogClose><Button variant="secondary" type="button">Close</Button></DialogClose>
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
-import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { type PropType, getCurrentInstance, nextTick, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
@@ -28,16 +28,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 const proxy = getCurrentInstance()!.proxy as any
 const open = ref(false)
 
-const props = defineProps({
-  platform_repo: {
-    type: Object as PropType<EntityRepo<Platform>>,
-    required: true,
-  },
-  label_repo: {
-    type: Object as PropType<EntityRepo<TestCaseLabel>>,
-    required: true,
-  }
-});
+const props = defineProps<{
+  platform_repo: EntityRepo<Platform>,
+  label_repo: EntityRepo<TestCaseLabel>,
+  newest_roadmap: Roadmap
+}>();
 
 const former = Former.build({
   title: null as string | null | undefined,
@@ -46,7 +41,9 @@ const former = Former.build({
   scene_name: null as string | null | undefined,
   group_name: null as string | null | undefined,
   platform_ids: [] as number[],
-  label_ids: [] as number[]
+  label_ids: [] as number[],
+  storyboard_id : null as number | null,
+  requirement_id: null as number | null,
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
