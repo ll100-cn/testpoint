@@ -1,13 +1,10 @@
 import '$vendor/ui/main.css'
 
-// import '../bootstrap-ext'
 import '../widgets/fontawesome'
-// import '../widgets/treeview'
 import '../widgets/fancybox'
 import '../widgets/stimulus'
 import '../widgets/old'
 import '../widgets/styles'
-import '../widgets/bootstrap-select'
 
 import '@vue-flow/core/dist/style.css';
 // import '@vue-flow/core/dist/theme-default.css';

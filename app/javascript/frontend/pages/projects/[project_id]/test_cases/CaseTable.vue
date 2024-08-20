@@ -1,5 +1,5 @@
 <template>
-  <div id="tp-main">
+  <div class="p-4">
     <a v-if="!readonly && allow('update', TestCase)" href="#" @click="onBatch?.(CaseBatchEditDialogContent, select_test_cases)">编辑 ({{ select_test_case_ids.length }})</a>
     <Table data-controller="select-all">
       <TableHeader>

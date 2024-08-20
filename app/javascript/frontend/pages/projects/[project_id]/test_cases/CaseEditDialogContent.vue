@@ -24,7 +24,6 @@ import { Validations, layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from "@/store"
-import { Modal } from 'bootstrap'
 import $ from 'jquery'
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import CaseForm from './CaseForm.vue'

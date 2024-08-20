@@ -10,11 +10,11 @@
       <div class="space-y-3">
         <FormGroup path="title" label="标题"><controls.string /></FormGroup>
         <FormGroup path="category_id" label="分类">
-          <controls.bootstrap_select>
-            <BSOption v-for="category in categories" :value="category.id">
+          <controls.Selectpicker>
+            <SelectdropItem v-for="category in categories" :value="category.id">
               {{ category.name }}
-            </BSOption>
-          </controls.bootstrap_select>
+            </SelectdropItem>
+          </controls.Selectpicker>
         </FormGroup>
         <FormGroup path="creator_id" label="创建人">
           <controls.select include_blank>
@@ -28,13 +28,15 @@
         </FormGroup>
       </div>
 
-      <hr class="x-form-divider-through">
+      <Separator class="my-4" preset="through" />
 
-      <div class="space-x-3">
-        <Button>更新问题</Button>
-        <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</Button>
-        <router-link v-if="allow('manage', issue)" class="btn btn-warning me-auto" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</router-link>
-      </div>
+      <FormGroup label="">
+        <div class="space-x-3">
+          <Button>更新问题</Button>
+          <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</Button>
+          <Button variant="destructive" v-if="allow('manage', issue)" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
+        </div>
+      </FormGroup>
     </div>
   </Form>
 </template>
@@ -52,9 +54,10 @@ import { usePageStore } from '@/store'
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
@@ -63,7 +66,7 @@ const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
