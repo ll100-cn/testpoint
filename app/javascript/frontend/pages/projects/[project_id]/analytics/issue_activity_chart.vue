@@ -5,7 +5,7 @@
 
   <h3>工单时间统计</h3>
 
-  <div class="filter-bar mb-3">
+  <div class="mb-3">
     <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
       <FormGroup path="starts_on" label=""><controls.datetime /></FormGroup>
       <FormGroup path="ends_on" label=""><controls.datetime /></FormGroup>

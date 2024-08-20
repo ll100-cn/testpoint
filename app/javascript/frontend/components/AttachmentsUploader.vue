@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div ref="upload_area" class="x-upload-area" @dragover.prevent="onAreaDragOver" @dragleave.prevent="onAreaDragLeave" @drop.prevent="onAreaDrop">
-      <div class="row g-2 x-upload-container">
+    <div ref="upload_area" class="p-2 border-8 border-dashed border-silence/50" @dragover.prevent="onAreaDragOver" @dragleave.prevent="onAreaDragLeave" @drop.prevent="onAreaDrop">
+      <div class="grid grid-cols-2 gap-4 min-h-36">
         <template v-for="item in items">
-          <div class="col-lg-4 col-6">
+          <div>
             <FormAttachmentInfo v-if="item.attachment" :attachment="item.attachment" @changed="onAttachmenChanged" />
             <FormAttachmentUpload v-else :upload_file="item.upload_file" />
           </div>

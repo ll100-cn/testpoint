@@ -1,10 +1,9 @@
 import '$vendor/ui/main.css'
 
-import '../widgets/fontawesome'
-import '../widgets/fancybox'
-import '../widgets/stimulus'
-import '../widgets/old'
-import '../widgets/styles'
+import '../vendor/fontawesome'
+import '../vendor/fancybox'
+import '../vendor/stimulus'
+import '../vendor/old'
 
 import '@vue-flow/core/dist/style.css';
 // import '@vue-flow/core/dist/theme-default.css';
