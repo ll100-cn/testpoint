@@ -26,8 +26,6 @@
     "@vueuse/core": "^10.11.0",
     "axios": "^1.4.0",
     "big.js": "^6.2.1",
-    "bootstrap": "5.3.2",
-    "bootstrap-select": "https://github.com/sunteya/bootstrap-select.git#deploy",
     "buffer": "^6.0.3",
     "chart.js": "^2.9.4",
     "class-transformer": "^0.5.1",
@@ -73,7 +71,6 @@
   },
   "optionalDependencies": {
     "@types/big.js": "^6.2.0",
-    "@types/bootstrap": "^5.2.6",
     "@types/jquery": "^3.5.16",
     "@types/js-md5": "^0.7.0",
     "@types/lodash": "^4.14.196",

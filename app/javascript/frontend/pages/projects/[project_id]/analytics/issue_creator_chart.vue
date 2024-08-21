@@ -5,7 +5,7 @@
 
   <h3>已创建的工单</h3>
 
-  <div class="filter-bar mb-3">
+  <div class="mb-3">
     <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform(former.form)">
       <FormGroup path="starts_on" label="">
         <controls.datetime />
@@ -36,7 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { usePageStore } from '@/store'

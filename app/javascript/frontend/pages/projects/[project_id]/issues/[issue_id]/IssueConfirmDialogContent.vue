@@ -12,12 +12,12 @@
         </FormGroup>
 
         <FormGroup path="category_id" label="分类">
-          <controls.bootstrap_select>
-            <BSOption v-for="category in categories" :value="category.id">
+          <controls.Selectpicker>
+            <SelectdropItem v-for="category in categories" :value="category.id">
               <i class="fas fa-circle" :style="{ color: category.color }"></i>
               {{ category.name }}
-            </BSOption>
-          </controls.bootstrap_select>
+            </SelectdropItem>
+          </controls.Selectpicker>
         </FormGroup>
 
         <FormGroup path="assignee_id" label="受理人">
@@ -46,6 +46,7 @@ import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { SelectdropItem } from '@/components/controls/selectdrop'
 
 const page = usePageStore()
 const proxy = getCurrentInstance()!.proxy as any
