@@ -1,23 +1,24 @@
 <template>
-  <layouts.group :code="code" :label="label" :disabled="!enableds[code]">
-    <template #label-prepend>
-      <div class="col-auto pe-0 me-auto">
-        <div class="form-check form-switch">
-          <input v-model="enableds[code]" class="form-check-input" type="checkbox" role="switch">
-        </div>
-      </div>
-    </template>
-    <template #default><slot></slot></template>
-  </layouts.group>
+  <div class="flex items-center">
+    <input v-model="enableds[code]" class="form-check-input" type="checkbox" role="switch">
+
+    <FormGroup :path="code" :label="label" class="flex-1" :disabled="!enableds[code]">
+      <slot />
+    </FormGroup>
+  </div>
 </template>
 
 <script setup lang="ts">
+import { FormFactory, type Former } from '$vendor/ui';
 import { layouts } from '@/components/simple_form'
 
 const props = defineProps<{
   label: string
   code: string
   enableds: Record<string, boolean>
+  former: Former<any>
 }>()
+
+const { Form, FormGroup } = FormFactory<typeof props.former.form>()
 
 </script>

@@ -5,16 +5,40 @@
     </DialogHeader>
 
     <template v-if="state === 'pending'">
-      <layouts.form_horizontal v-bind="{ former }" @submit.prevent="former.submit">
+      <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
         <div>
           <FormErrorAlert />
 
-          <div class="row gy-3">
-            <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping">
+          <div class="space-y-3">
+            <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping" :former="former">
               <controls.string />
             </SwitchFormGroup>
 
-            <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
+            <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping" :former="former">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping" :former="former">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping" :former="former">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping" :former="former">
+              <controls.string />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping" :former="former">
+              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+            </SwitchFormGroup>
+
+            <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping" :former="former">
+              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+            </SwitchFormGroup>
+
+            <!-- <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
               <controls.string />
             </SwitchFormGroup>
 
@@ -36,7 +60,7 @@
 
             <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping">
               <controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
-            </SwitchFormGroup>
+            </SwitchFormGroup> -->
           </div>
 
         </div>
@@ -45,7 +69,7 @@
           <DialogClose><Button type="button" class="btn btn-secondary">Close</Button></DialogClose>
           <Button>保存</Button>
         </DialogFooter>
-      </layouts.form_horizontal>
+      </Form>
     </template>
 
     <template v-if="state === 'submitting'">
@@ -79,8 +103,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { Validations, controls, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
+import { Validations, layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import _ from 'lodash'
@@ -88,6 +111,8 @@ import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 import Button from '$vendor/ui/button/Button.vue'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import * as controls from '@/components/controls'
 
 const validations = reactive<Validations>(new Validations())
 const proxy = getCurrentInstance()!.proxy as any
@@ -117,7 +142,9 @@ const former = Former.build({
   label_ids: null as number[] | null | undefined
 })
 
-former.perform = async function() {
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+former.doPerform = async function() {
   result.value = []
   state.value = 'submitting'
   validations.clear()

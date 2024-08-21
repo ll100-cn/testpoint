@@ -1,5 +1,5 @@
 <template>
-  <input v-model="modelValue" :type="type" :class="cn(standard.input(presenterConfig), props.class)" >
+  <input v-model="modelValue" :type="type" :class="cn(standard.input(presenterConfig), props.class)" :disabled="presenterConfig.disabled" >
 </template>
 
 <script lang="ts">
@@ -15,7 +15,6 @@ import { computed, type HTMLAttributes, type InputHTMLAttributes } from 'vue'
 import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types';
 import { standard } from './presets'
 import { cn } from '$vendor/ui/utils'
-
 
 const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {
   type: 'text'
