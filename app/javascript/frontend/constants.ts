@@ -64,3 +64,8 @@ export const STORYBOARD_MAIN_AXLE = [
   { label: "左 -> 右", value: "LR" },
   { label: "上 -> 下", value: "TB" },
 ]
+
+export const REQUIREMENT_RELATE_STATS = [
+  { label: "已关联", value: "related" },
+  { label: "未关联", value: "unrelated" },
+]

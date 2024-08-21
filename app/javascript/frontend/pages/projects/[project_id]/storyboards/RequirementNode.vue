@@ -1,7 +1,10 @@
 <template>
   <Card ref="node" class="w-72" :class="{ 'grayscale hover:grayscale-0 opacity-40 hover:opacity-100': !actived }">
     <CardHeader>
-      <div>{{ requirement.title }}</div>
+      <div>
+        <span>{{ requirement.title }}</span>
+        <span v-if="requirement_stat_repo.find(requirement.id)"> [{{ requirement_stat_repo.find(requirement.id)!.test_cases_count }}]</span>
+      </div>
       <template #actions>
         <Button preset="ghost" variant="secondary" size="xs" class="-me-3" v-if="allow('update', requirement)" @click.prevent="emits('edit', requirement)">
           <i class="far fa-pencil-alt" />
@@ -49,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { LabelRepo, Platform, PlatformRepo, Requirement } from '@/models'
+import { LabelRepo, Platform, PlatformRepo, Requirement, RequirementStatRepo } from '@/models'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import { Handle, Position } from '@vue-flow/core'
@@ -74,6 +77,7 @@ const proxy = getCurrentInstance()!.proxy as any
 const props = defineProps<{
   requirement: Requirement
   platform_repo: PlatformRepo
+  requirement_stat_repo: RequirementStatRepo
   label_repo: LabelRepo
   filter: Filter
   main_axle: string
@@ -96,6 +100,15 @@ const actived = computed(() => {
 
   if (props.filter.label_id_eq != null) {
     result = result && props.requirement.label_ids.includes(props.filter.label_id_eq)
+  }
+
+  if (props.filter.relate_stat_eq != null) {
+    const relate_stat = props.requirement_stat_repo.find(props.requirement.id)
+    if (props.filter.relate_stat_eq == 'related') {
+      result = result && relate_stat != null && relate_stat.test_cases_count > 0
+    } else {
+      result = result && (relate_stat == null || relate_stat?.test_cases_count == 0)
+    }
   }
 
   return result

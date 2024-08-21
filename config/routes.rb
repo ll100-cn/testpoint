@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         resources :roadmaps
         resources :storyboards do
           resources :requirements
+          resources :requirement_stats
         end
 
         resources :analytics do

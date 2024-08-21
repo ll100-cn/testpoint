@@ -1,0 +1,10 @@
+json = []
+
+@test_case_stats.each do |requirement_id, test_cases_count|
+  json.push({
+    id: requirement_id,
+    test_cases_count: test_cases_count,
+  })
+end
+
+json

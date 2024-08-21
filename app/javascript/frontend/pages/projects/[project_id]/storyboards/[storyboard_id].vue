@@ -53,6 +53,13 @@
             </SelectdropItem>
           </controls.Selectpicker>
         </FormGroup>
+        <FormGroup path="relate_stat_eq" label="关联状态">
+          <controls.Selectpicker include-blank="任意">
+            <SelectdropItem v-for="relate_stat in REQUIREMENT_RELATE_STATS" :value="relate_stat.value">
+              {{ relate_stat.label }}
+            </SelectdropItem>
+          </controls.Selectpicker>
+        </FormGroup>
       </Form>
 
       <template #actions>
@@ -70,6 +77,7 @@
             <RequirementNode
               :platform_repo="platform_repo"
               :label_repo="label_repo"
+              :requirement_stat_repo="requirement_stat_repo"
               :requirement="slotProps.data.requirement"
               :filter="former.form"
               :main_axle="storyboard.main_axle"
@@ -119,7 +127,7 @@
   import * as q from '@/lib/requests'
   import { useRoute, useRouter } from 'vue-router'
   import { usePageStore } from '@/store'
-  import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap } from '@/models'
+  import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap, RequirementStatRepo } from '@/models'
   import * as utils from "@/lib/utils"
   import type { Connection, Edge, EdgeChange, Node } from '@vue-flow/core'
   import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
@@ -139,11 +147,12 @@
   import ActionerAlert from '@/components/ActionerAlert.vue'
   import { useElementSize } from '@vueuse/core'
   import { Background } from '@vue-flow/background'
-  import { debounce, size } from 'lodash'
+  import { debounce } from 'lodash'
   import RLink from '@/components/RLink.vue'
   import RoadmapCreateDialogContent from './RoadmapCreateDialogContent.vue'
   import RoadmapUpdateDialogContent from './RoadmapUpdateDialogContent.vue'
   import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+  import { REQUIREMENT_RELATE_STATS } from '@/constants'
 
   const proxy = getCurrentInstance()!.proxy!
   const route = useRoute()
@@ -197,6 +206,18 @@
       req.query = { roadmap_id: roadmap.value?.id }
     }
   }).perform())
+
+  const requirement_stats = ref(await new q.project.RequirementStatReq.List().setup(proxy, (req) => {
+    req.interpolations.project_id = project_id
+    req.interpolations.storyboard_id = storyboard.value.id
+    if (roadmap.value) {
+      req.query = { roadmap_id: roadmap.value!.id }
+    }
+  }).perform())
+  const requirement_stat_repo = computed(() => {
+    return new RequirementStatRepo().setup(requirement_stats.value)
+  })
+
 
   const edges = ref([] as Edge[])
   const nodes = ref([] as Node[])
@@ -395,7 +416,6 @@
   }
 
   async function save() {
-
     const position_mapping_data = getNodes.value.reduce((acc, node) => {
       acc[node.id] = { x: node.position.x, y: node.position.y }
       return acc
