@@ -28,22 +28,22 @@
           <FormGroup path="issue_attributes.content" label="内容">
             <controls.markdown />
           </FormGroup>
-          <FormGroup>
+          <FormGroup label="">
             <AttachmentsUploader @changed="onAttachmentsChanged" :attachments="[]" />
           </FormGroup>
         </template>
       </div>
 
       <template v-if="issue_template">
-        <hr class="x-form-divider-through">
-
+        <Separator class="my-4" preset="through" />
+        
         <div class="space-y-3">
           <FormGroup v-for="(input, index) in issue_template.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
             <controls.string />
           </FormGroup>
         </div>
 
-        <hr class="x-form-divider-through">
+        <Separator class="my-4" preset="through" />
 
         <div class="space-x-3">
           <Button>新增问题</Button>
@@ -67,7 +67,7 @@ import { Attachment, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
