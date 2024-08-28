@@ -1,9 +1,10 @@
 import { Type } from "class-transformer"
 import * as t from '@/lib/transforms'
-import { EntityRepo } from "./EntityRepo"
+import { EntityIndex, EntityRepo } from "./EntityRepo"
 
 export class Requirement {
   id!: number
+  scene_id: number | null = null
 
   platform_ids: number[] = []
   upstream_ids: number[] = []
@@ -18,4 +19,9 @@ export class Requirement {
 }
 
 export class RequirementRepo extends EntityRepo<Requirement> {
+  scene_id = new EntityIndex<number | null, Requirement>(it => it.scene_id)
+
+  buildIndex(entity: Requirement): void {
+    this.scene_id.add(entity);
+  }
 }

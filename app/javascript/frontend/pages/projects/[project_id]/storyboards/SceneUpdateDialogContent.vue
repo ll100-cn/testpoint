@@ -1,16 +1,18 @@
 <template>
   <DialogContent class="max-w-4xl">
     <DialogHeader>
-      <DialogTitle>新建需求</DialogTitle>
+      <DialogTitle>编辑场景</DialogTitle>
     </DialogHeader>
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
       <FormErrorAlert />
 
-      <RequirementForm v-bind="{ former, scenes, platforms, test_case_labels }" />
+      <FormGroup path="name" label="">
+        <controls.string />
+      </FormGroup>
 
       <DialogFooter>
         <DialogClose><Button variant="secondary" type="button">取消</Button></DialogClose>
-        <Button>新增模版化表单</Button>
+        <Button>编辑场景</Button>
       </DialogFooter>
     </Form>
   </DialogContent>
@@ -35,39 +37,32 @@ const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')
 
 const emit = defineEmits<{
-  created: [ Requirement ]
-}>()
-
-const props = defineProps<{
-  scenes: Scene[],
-  platforms: Platform[],
-  test_case_labels: TestCaseLabel[],
-  storyboard: Storyboard
+  updated: [ Scene ]
 }>()
 
 const former = Former.build({
-  title: "",
-  description: "",
-  scene_id: null as number | null,
-  platform_ids: [] as number[],
-  label_ids: [] as number[],
-  label_descriptions: {} as Record<string, string>
+  name: "",
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_requirement = await new q.project.RequirementReq.Create().setup(proxy, (req) => {
+  const a_scene = await new q.project.SceneReq.Update().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard.id
+    req.interpolations.storyboard_id = params.storyboard_id
+    req.interpolations.scene_id = scene.value.id
   }).perform(this.form)
 
-  emit('created', a_requirement)
+  emit('updated', a_scene)
   open.value = false
 }
 
 const loading = ref(true)
-async function reset() {
+const scene = ref(null! as Scene)
+async function reset(a_scene: Scene) {
+  former.form.name = a_scene.name
+  scene.value = a_scene
+
   loading.value = false
 }
 

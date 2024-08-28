@@ -63,6 +63,7 @@
       </Form>
 
       <template #actions>
+        <Button preset="ghost" v-if="allow('read', Scene)" @click.prevent="scene_dialog.show(SceneListDialogContent, scenes)">场景列表 [{{ scenes.length }}]</Button>
         <Button preset="ghost" v-if="allow('update', storyboard)" @click.prevent="storyboard_dialog.show(StoryboardUpdateDialogContent, storyboard)">编辑</Button>
         <Button v-if="allow('create', Requirement)" @click.prevent="requirement_dialog.show(RequirementCreateDialogContent, platforms)">新建需求</Button>
       </template>
@@ -70,7 +71,7 @@
 
     <div ref="vueFlowContainer" class="flex-1">
       <div :style="{ height: `${height}px` }">
-        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect" :snap-grid="[10, 10]" snap-to-grid fit-view-on-init :max-zoom="1">
+        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect" @node-drag-stop="onNodeDragStop" @nodes-initialized="onNodesInitialized" :snap-grid="[10, 10]" snap-to-grid fit-view-on-init :max-zoom="1">
           <Background />
 
           <template #node-requirement="slotProps">
@@ -81,14 +82,17 @@
               :requirement="slotProps.data.requirement"
               :filter="former.form"
               :main_axle="storyboard.main_axle"
-              @edit="requirement_dialog.show(RequirementUpdateDialogContent, $event)"
-              @size="resizeRequirement" />
-
+              @edit="requirement_dialog.show(RequirementUpdateDialogContent, $event)" />
           </template>
+
           <template #node-storyboard="slotProps">
             <StoryboardNode
               :storyboard="slotProps.data"
               @edit="storyboard_dialog.show(StoryboardUpdateDialogContent, $event)" />
+          </template>
+
+          <template #node-scene="slotProps">
+            <SceneNode :scene="slotProps.data.scene" />
           </template>
 
           <Controls>
@@ -112,333 +116,454 @@
     @destroyed="onRequirementDestroyed"
     :platforms="platforms"
     :test_case_labels="test_case_labels"
+    :scenes="scenes"
     :storyboard="storyboard" />
   <BlankDialog ref="roadmap_dialog" @created="" @updated="onRoadmapUpdated" />
+  <BlankDialog ref="scene_dialog" :scenes="scenes" @created="onSceneCreated" @destroyed="onSceneDestroyed" @updated="onSceneUpdated" />
 </template>
 
-  <script setup lang="ts">
-  import PageHeader from '@/components/PageHeader.vue'
-  import PageTitle from '@/components/PageTitle.vue'
-  import BlankDialog from '$vendor/ui/BlankDialog.vue'
-  import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref } from 'vue'
-  import { Button } from '$vendor/ui'
-  import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
-  import { Nav, NavList, NavItem } from '$vendor/ui'
-  import * as q from '@/lib/requests'
-  import { useRoute, useRouter } from 'vue-router'
-  import { usePageStore } from '@/store'
-  import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap, RequirementStatRepo } from '@/models'
-  import * as utils from "@/lib/utils"
-  import type { Connection, Edge, EdgeChange, Node } from '@vue-flow/core'
-  import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
-  import { Controls } from '@vue-flow/controls'
-  import RequirementNode from './RequirementNode.vue'
-  import StoryboardNode from './StoryboardNode.vue'
-  import StoryboardCreateDialogContent from './StoryboardCreateDialogContent.vue'
-  import StoryboardUpdateDialogContent from './StoryboardUpdateDialogContent.vue'
-  import RequirementCreateDialogContent from './RequirementCreateDialogContent.vue'
-  import RequirementUpdateDialogContent from './RequirementUpdateDialogContent.vue'
-  import dagre from '@dagrejs/dagre'
-  import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-  import * as controls from '@/components/controls'
-  import { Filter } from './type'
-  import SelectdropItem from '@/components/controls/selectdrop/SelectdropItem.vue'
-  import { Actioner } from '@/components/Actioner'
-  import ActionerAlert from '@/components/ActionerAlert.vue'
-  import { useElementSize } from '@vueuse/core'
-  import { Background } from '@vue-flow/background'
-  import { debounce } from 'lodash'
-  import RLink from '@/components/RLink.vue'
-  import RoadmapCreateDialogContent from './RoadmapCreateDialogContent.vue'
-  import RoadmapUpdateDialogContent from './RoadmapUpdateDialogContent.vue'
-  import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
-  import { REQUIREMENT_RELATE_STATS } from '@/constants'
+<script setup lang="ts">
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import BlankDialog from '$vendor/ui/BlankDialog.vue'
+import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from 'vue'
+import { Button } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
+import { Nav, NavList, NavItem } from '$vendor/ui'
+import * as q from '@/lib/requests'
+import { useRoute, useRouter } from 'vue-router'
+import { usePageStore } from '@/store'
+import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap, RequirementStatRepo, Scene, SceneRepo, RequirementRepo } from '@/models'
+import * as utils from "@/lib/utils"
+import type { Connection, Edge, EdgeChange, GraphNode, Node, NodeChange, NodeDragEvent } from '@vue-flow/core'
+import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
+import { Controls } from '@vue-flow/controls'
+import RequirementNode from './RequirementNode.vue'
+import StoryboardNode from './StoryboardNode.vue'
+import StoryboardCreateDialogContent from './StoryboardCreateDialogContent.vue'
+import StoryboardUpdateDialogContent from './StoryboardUpdateDialogContent.vue'
+import RequirementCreateDialogContent from './RequirementCreateDialogContent.vue'
+import RequirementUpdateDialogContent from './RequirementUpdateDialogContent.vue'
+import dagre from '@dagrejs/dagre'
+import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import * as controls from '@/components/controls'
+import { Filter } from './type'
+import SelectdropItem from '@/components/controls/selectdrop/SelectdropItem.vue'
+import { Actioner } from '@/components/Actioner'
+import ActionerAlert from '@/components/ActionerAlert.vue'
+import { useElementSize } from '@vueuse/core'
+import { Background } from '@vue-flow/background'
+import _, { debounce } from 'lodash'
+import RLink from '@/components/RLink.vue'
+import RoadmapCreateDialogContent from './RoadmapCreateDialogContent.vue'
+import RoadmapUpdateDialogContent from './RoadmapUpdateDialogContent.vue'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { REQUIREMENT_RELATE_STATS } from '@/constants'
+import SceneListDialogContent from './SceneListDialogContent.vue'
+import SceneNode from './SceneNode.vue'
 
-  const proxy = getCurrentInstance()!.proxy!
-  const route = useRoute()
-  const router = useRouter()
-  const params = route.params as any
-  const query = utils.queryToPlain(route.query)
-  const page = usePageStore()
-  const allow = page.inProject()!.allow
+const proxy = getCurrentInstance()!.proxy!
+const route = useRoute()
+const router = useRouter()
+const params = route.params as any
+const query = utils.queryToPlain(route.query)
+const page = usePageStore()
+const allow = page.inProject()!.allow
 
-  const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-  const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-  const roadmap_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-  const project_id = params.project_id
+const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const roadmap_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const scene_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const project_id = params.project_id
 
-  const vueFlowContainer = ref(null! as HTMLDivElement)
-  const { width, height } = useElementSize(vueFlowContainer)
-  const size_mapping = ref({} as Record<string, { width: number | null, height: number | null }>)
+const vueFlowContainer = ref(null! as HTMLDivElement)
+const { width, height } = useElementSize(vueFlowContainer)
+const node_size_mapping = reactive(new Map<string, { dimensions: { width: number, height: number }, position: { x: number, y: number } }>())
 
-  const { updateNodeData, addNodes, addEdges, fitView, getNodes } = useVueFlow()
+const { updateNodeData, updateNode, addNodes, addEdges, getNodes } = useVueFlow()
 
-  const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-  }).perform())
+const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+}).perform())
 
-  const test_case_labels = ref(await new q.project.TestCaseLabelInfoReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-  }).perform())
+const test_case_labels = ref(await new q.project.TestCaseLabelInfoReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+}).perform())
 
-  const roadmap = ref(null as Roadmap | null)
-  const roadmaps = ref(await new q.project.RoadmapReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-  }).perform())
-  if (query.roadmap_id) {
-    roadmap.value = roadmaps.value.find((r) => r.id === parseInt(query.roadmap_id)) ?? null
+const roadmap = ref(null as Roadmap | null)
+const roadmaps = ref(await new q.project.RoadmapReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+}).perform())
+if (query.roadmap_id) {
+  roadmap.value = roadmaps.value.find((r) => r.id === parseInt(query.roadmap_id)) ?? null
+}
+
+const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+}).perform())
+
+const storyboard = ref(await new q.project.StoryboardReq.Get().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+  req.interpolations.storyboard_id = params.storyboard_id
+}).perform())
+
+const position_mapping = computed(() => {
+  const result = new Map()
+  for (const [key, value] of Object.entries(storyboard.value.positions)) {
+    const requirement_id = parseRequirementId(key)
+    result.set(requirement_id, value)
   }
+  return result
+})
 
-  const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-  }).perform())
+const scenes = ref(await new q.project.SceneReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = params.project_id
+  req.interpolations.storyboard_id = params.storyboard_id
+}).perform())
 
-  const storyboard = ref(await new q.project.StoryboardReq.Get().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-    req.interpolations.storyboard_id = params.storyboard_id
-  }).perform())
-  const position_mapping = ref(storyboard.value.positions)
+const requirements = ref(await new q.project.RequirementReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+  req.interpolations.storyboard_id = storyboard.value.id
+  if (roadmap.value) {
+    req.query = { roadmap_id: roadmap.value?.id }
+  }
+}).perform())
 
-  const requirements = ref(await new q.project.RequirementReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-    req.interpolations.storyboard_id = storyboard.value.id
-    if (roadmap.value) {
-      req.query = { roadmap_id: roadmap.value?.id }
-    }
-  }).perform())
+const requirement_repo = ref(new RequirementRepo().setup(requirements.value))
 
-  const requirement_stats = ref(await new q.project.RequirementStatReq.List().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-    req.interpolations.storyboard_id = storyboard.value.id
-    if (roadmap.value) {
-      req.query = { roadmap_id: roadmap.value!.id }
-    }
-  }).perform())
-  const requirement_stat_repo = computed(() => {
-    return new RequirementStatRepo().setup(requirement_stats.value)
-  })
+function rebuildRequirementRepo() {
+  requirement_repo.value = new RequirementRepo().setup(requirements.value)
+}
 
+const requirement_stats = ref(await new q.project.RequirementStatReq.List().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+  req.interpolations.storyboard_id = storyboard.value.id
+  if (roadmap.value) {
+    req.query = { roadmap_id: roadmap.value!.id }
+  }
+}).perform())
+const requirement_stat_repo = computed(() => {
+  return new RequirementStatRepo().setup(requirement_stats.value)
+})
 
-  const edges = ref([] as Edge[])
-  const nodes = ref([] as Node[])
-  parseDataAndLayout(requirements.value, position_mapping.value)
+function requimentNodeId(requirement: Requirement | number) {
+  if (typeof requirement === 'number') {
+    return `requirement_${requirement}`
+  } else {
+    return `requirement_${requirement.id}`
+  }
+}
 
-  function parseDataAndLayout(requirements: Requirement[], positions: Record<string, { x: number, y: number }> = {}) {
-    const preNodes = [] as Node[]
-    const preEdges = [] as Edge[]
+function sceneNodeId(scene: Scene | number) {
+  if (typeof scene === 'number') {
+    return `scene_${scene}`
+  } else {
+    return `scene_${scene.id}`
+  }
+}
 
-    for (let i = 0 ;i < requirements.length; i++) {
-      const requirement = requirements[i]
-      const node_id = requirement.id.toString()
-      const position = positions[node_id] || { x: 100 * i, y: 50 }
+function parseRequirementId(node_id: string) {
+  const match = node_id.match(/^requirement_(\d+)$/)
+  if (match) {
+    return parseInt(match[1])
+  } 
 
-      preNodes.push({
-        id: node_id,
-        position: position,
-        data: { requirement: requirement },
-        type: 'requirement'
+  return parseInt(node_id)
+}
+
+const edges = ref([] as Edge[])
+const nodes = ref([] as Node[])
+rebuildNodes()
+
+function rebuildNodes() {
+  nodes.value = []
+  edges.value = []
+
+  for (let i = 0 ;i < requirements.value.length; i++) {
+    const requirement = requirements.value[i]
+    const node_id = requimentNodeId(requirement)
+    const size = node_size_mapping.get(node_id)
+    const position = position_mapping.value.get(requirement.id) ?? { x: 100 * i, y: 50 }
+
+    nodes.value.push({
+      id: node_id,
+      position: size?.position ?? position,
+      width: size?.dimensions.width,
+      height: size?.dimensions.height,
+      zIndex: 20,
+      data: { requirement: requirement },
+      type: 'requirement'
+    })
+
+    for (const upstream_id of requirement.upstream_ids) {
+      edges.value.push({
+        id: `${requimentNodeId(requirement)}-${requimentNodeId(upstream_id)}`,
+        source: requimentNodeId(upstream_id),
+        target: requimentNodeId(requirement)
       })
-
-      for (const upstream_id of requirement.upstream_ids) {
-        preEdges.push({
-          id: `${requirement.id}-${upstream_id}`,
-          source: upstream_id.toString(),
-          target: requirement.id.toString()
-        })
-      }
-    }
-
-    edges.value = preEdges
-    if (Object.keys(positions).length > 0) {
-      nodes.value = preNodes
-    } else {
-      nodes.value = layoutNodes(preNodes, preEdges, size_mapping.value)
-    }
-
-    if (storyboard.value.description) {
-      const node_id = `storyboard_${storyboard.value!.id}`
-      const position = positions[node_id] || { x: 10, y: 10 }
-
-      nodes.value.push({
-        id: node_id,
-        position: position,
-        data: storyboard.value,
-        type: 'storyboard'
-      })
     }
   }
 
-  function layoutNodes(nodes: Node[], edges: Edge[], size_mapping: Record<string, { width: number | null, height: number | null }>): Node[] {
-    var g = new dagre.graphlib.Graph()
-    g.setGraph({ rankdir: storyboard.value.main_axle })
-    g.setDefaultEdgeLabel(function() { return {} })
+  if (node_size_mapping.size > 0) {
+    updateScenePositions()
+  }
 
-    nodes.forEach((node) => {
-      g.setNode(node.id, { width: size_mapping[node.id]?.width ?? 260, height: size_mapping[node.id]?.height ?? 120 })
+  for (const scene of scenes.value) {
+    const node_id = sceneNodeId(scene)
+    const size = node_size_mapping.get(node_id)
+    nodes.value.push({
+      id: node_id,
+      position: size?.position ?? { x: 100, y: 200 },
+      width: size?.dimensions.width ?? 300,
+      height: size?.dimensions.height ?? 200,
+      zIndex: 10,
+      draggable: false,
+      data: { scene: scene },
+      type: 'scene'
     })
-
-    edges.forEach((edge) => {
-      g.setEdge(edge.source, edge.target)
-    })
-
-    dagre.layout(g)
-
-    g.nodes().forEach(function(node_id) {
-      let node = g.node(node_id)
-      let original_node = nodes.find(node => node.id == node_id)
-      if (original_node) {
-        original_node.position.x = node.x
-        original_node.position.y = node.y
-      }
-    })
-
-    return nodes
   }
+}
 
-  const platform_repo = computed(() => {
-    return new PlatformRepo().setup(platforms.value)
-  })
+const platform_repo = computed(() => {
+  return new PlatformRepo().setup(platforms.value)
+})
 
-  const label_repo = computed(() => {
-    return new LabelRepo().setup(test_case_labels.value)
-  })
+const label_repo = computed(() => {
+  return new LabelRepo().setup(test_case_labels.value)
+})
 
-  function onStoryboardCreated() {
-    router.go(0)
-  }
+function onStoryboardCreated() {
+  router.go(0)
+}
 
-  function onStoryboardUpdated(a_storyboard: Storyboard) {
-    storyboards.value = storyboards.value.map((s) => s.id === a_storyboard.id ? a_storyboard : s)
-    if (storyboard.value.id === a_storyboard.id) {
-      storyboard.value = a_storyboard
-    }
-
-    updateNodeData(`storyboard_${a_storyboard.id}`, a_storyboard)
-  }
-
-  function onStoryboardDestroyed(a_storyboard: Storyboard) {
-    router.push(`/projects/${params.project_id}/storyboards`)
-  }
-
-  function onConnect(connection: Connection) {
-    const requirement = requirements.value.find((r) => r.id.toString() === connection.target)
-    if (!requirement) {
-      return
-    }
-
-    const new_upstream_id = parseInt(connection.source)
-    if (requirement.upstream_ids.includes(new_upstream_id)) {
-      return
-    }
-
-    updateRequirement(requirement, { upstream_ids: [...requirement.upstream_ids, new_upstream_id] })
-    addEdges([{
-      id: `${requirement.id}-${new_upstream_id}`,
-      source: new_upstream_id.toString(),
-      target: requirement.id.toString()
-    }])
-  }
-
-  function onEdgesChanged(changes: EdgeChange[]) {
-    for (const change of changes) {
-      if (change.type != 'remove') {
-        continue
-      }
-
-      const requirement = requirements.value.find((r) => r.id.toString() === change.target)
-      if (!requirement) {
-        continue
-      }
-
-      const old_upstream_id = parseInt(change.source)
-      if (requirement.upstream_ids.includes(old_upstream_id)) {
-        updateRequirement(requirement, { upstream_ids: requirement.upstream_ids.filter((id) => id !== old_upstream_id), ts: 1 })
-      }
-    }
-  }
-
-  async function updateRequirement(requirement: Requirement, data: any) {
-    const a_requirement = await new q.project.RequirementReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = params.project_id
-      req.interpolations.storyboard_id = storyboard.value.id
-      req.interpolations.requirement_id = requirement.id
-    }).perform(data)
-
-    requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
-    updateNodeData(a_requirement.id.toString(), { requirement: a_requirement })
-  }
-
-  function onRequirementCreated(new_requirement: Requirement) {
-    requirements.value.push(new_requirement)
-    parseDataAndLayout(requirements.value, position_mapping.value)
-  }
-
-  function onRequirementUpdated(a_requirement: Requirement) {
-    requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
-    updateNodeData(a_requirement.id.toString(), { requirement: a_requirement })
-  }
-
-  function onRequirementDestroyed(a_requirement: Requirement) {
-    requirements.value = requirements.value.filter((r) => r.id !== a_requirement.id)
-    parseDataAndLayout(requirements.value)
-  }
-
-  function onRoadmapUpdated(a_roadmap: Roadmap) {
-    roadmaps.value = roadmaps.value.map((r) => r.id === a_roadmap.id ? a_roadmap : r)
-    if (roadmap.value?.id === a_roadmap.id) {
-      roadmap.value = a_roadmap
-    }
-  }
-
-  function onRoadedCreated(a_roadmap: Roadmap) {
-    roadmaps.value.push(a_roadmap)
-  }
-
-  const resizeNodes = debounce(() => {
-    parseDataAndLayout(requirements.value)
-  }, 350)
-
-  function resizeRequirement(a_requirement : Requirement, size: { width: number, height: number }) {
-    size_mapping.value[a_requirement.id.toString()] ||= { width: null, height: null }
-    size_mapping.value[a_requirement.id.toString()].width = size.width
-    size_mapping.value[a_requirement.id.toString()].height = size.height
-
-    if (Object.keys(position_mapping.value).length > 0) {
-      return
-    }
-
-    resizeNodes()
-  }
-
-  function relayout() {
-    position_mapping.value = {}
-    resizeNodes()
-  }
-
-  async function save() {
-    const position_mapping_data = getNodes.value.reduce((acc, node) => {
-      acc[node.id] = { x: node.position.x, y: node.position.y }
-      return acc
-    }, {} as Record<string, { x: number, y: number }>)
-
-    const a_storyboard = await new q.project.StoryboardReq.Update().setup(proxy, (req) => {
-      req.interpolations.project_id = params.project_id
-      req.interpolations.storyboard_id = storyboard.value.id
-    }).perform({
-      positions: position_mapping_data
-    })
-
+function onStoryboardUpdated(a_storyboard: Storyboard) {
+  storyboards.value = storyboards.value.map((s) => s.id === a_storyboard.id ? a_storyboard : s)
+  if (storyboard.value.id === a_storyboard.id) {
     storyboard.value = a_storyboard
   }
 
-  const former = Former.build(new Filter())
-  const { Form, FormGroup } = FormFactory<typeof former.form>()
+  updateNodeData(`storyboard_${a_storyboard.id}`, a_storyboard)
+}
 
-  function changeRoadmap(roadmap: Roadmap | null = null) {
-    if (roadmap) {
-      router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}?roadmap_id=${roadmap.id}`)
-    } else {
-      router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}`)
+function onStoryboardDestroyed(a_storyboard: Storyboard) {
+  router.push(`/projects/${params.project_id}/storyboards`)
+}
+
+function onConnect(connection: Connection) {
+  const requirement_id = parseRequirementId(connection.target)!
+  const requirement = requirement_repo.value.id.find(requirement_id)
+  if (!requirement) {
+    return
+  }
+
+  const new_upstream_id = parseRequirementId(connection.source)!
+  if (requirement.upstream_ids.includes(new_upstream_id)) {
+    return
+  }
+
+  updateRequirement(requirement, { upstream_ids: [...requirement.upstream_ids, new_upstream_id] })
+  addEdges([{
+    id: `${requirement.id}-${new_upstream_id}`,
+    source: requimentNodeId(new_upstream_id),
+    target: requimentNodeId(requirement)
+  }])
+}
+
+function onEdgesChanged(changes: EdgeChange[]) {
+  for (const change of changes) {
+    if (change.type != 'remove') {
+      continue
+    }
+
+    const requirement_id = parseRequirementId(change.target)!
+    const requirement = requirement_repo.value.id.find(requirement_id)
+    if (!requirement) {
+      continue
+    }
+
+    const old_upstream_id = parseRequirementId(change.source)!
+    if (requirement.upstream_ids.includes(old_upstream_id)) {
+      updateRequirement(requirement, { upstream_ids: requirement.upstream_ids.filter((id) => id !== old_upstream_id) })
     }
   }
-  </script>π
+}
+
+function onNodeDragStop(event: NodeDragEvent) {
+  const node = event.node
+  const requirement_id = parseRequirementId(node.id)!
+  const node_id = requimentNodeId(requirement_id)
+  node_size_mapping.set(node_id, { dimensions: { ...node.dimensions }, position: { ...node.position } })
+}
+
+function onNodesInitialized(graphNodes: GraphNode[]) {
+  node_size_mapping.clear()
+
+  const requirement_nodes = graphNodes.filter(it => it.type == "requirement")
+  for (const node of requirement_nodes) {
+    const requirement_id = parseRequirementId(node.id)!
+    const node_id = requimentNodeId(requirement_id)
+    node_size_mapping.set(node_id, { dimensions: { ...node.dimensions }, position: { ...node.position } })
+  }
+
+  if (position_mapping.value.size == 0) {
+    relayout()
+  }
+}
+
+watch(node_size_mapping, (event) => {
+  updateScenePositions()
+})
+
+function updateScenePositions() {
+  for (const scene of scenes.value) {
+    const requirements = requirement_repo.value.scene_id.findAll(scene.id)
+    if (requirements.length > 0) {
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+      
+      for (const req of requirements) {
+        const nodeId = requimentNodeId(req.id)
+        const size = node_size_mapping.get(nodeId)
+        
+        if (size) {
+          minX = Math.min(minX, size.position.x)
+          minY = Math.min(minY, size.position.y)
+          maxX = Math.max(maxX, size.position.x + size.dimensions.width)
+          maxY = Math.max(maxY, size.position.y + size.dimensions.height)
+        }
+      }
+      
+      const scene_node_id = sceneNodeId(scene)
+
+      const inset = 50
+      const position = { x: minX - inset, y: minY - inset }
+      const dimensions = { width: maxX - minX + 2 * inset, height: maxY - minY + 2 * inset }
+      updateNode(scene_node_id, {
+        position: { ...position },
+        width: dimensions.width,
+        height: dimensions.height
+      })
+      node_size_mapping.set(scene_node_id, { dimensions, position })
+    }
+  }
+}
+
+async function updateRequirement(requirement: Requirement, data: any) {
+  const a_requirement = await new q.project.RequirementReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = params.project_id
+    req.interpolations.storyboard_id = storyboard.value.id
+    req.interpolations.requirement_id = requirement.id
+  }).perform(data)
+
+  requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
+  rebuildRequirementRepo()
+  updateNodeData(requimentNodeId(a_requirement), { requirement: a_requirement })
+  updateScenePositions()
+}
+
+function onRequirementCreated(new_requirement: Requirement) {
+  requirements.value.push(new_requirement)
+  requirement_repo.value.setup([ new_requirement ])
+  rebuildNodes()
+}
+
+function onRequirementUpdated(a_requirement: Requirement) {
+  requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
+  rebuildRequirementRepo()
+  updateNodeData(requimentNodeId(a_requirement), { requirement: a_requirement })
+  updateScenePositions()
+}
+
+function onRequirementDestroyed(a_requirement: Requirement) {
+  requirements.value = requirements.value.filter((r) => r.id !== a_requirement.id)
+  rebuildRequirementRepo()
+  rebuildNodes()
+}
+
+function onRoadmapUpdated(a_roadmap: Roadmap) {
+  roadmaps.value = roadmaps.value.map((r) => r.id === a_roadmap.id ? a_roadmap : r)
+  if (roadmap.value?.id === a_roadmap.id) {
+    roadmap.value = a_roadmap
+  }
+}
+
+function onSceneCreated(a_scene: Scene) {
+  scenes.value.push(a_scene)
+}
+
+function onSceneDestroyed(a_scene: Scene) {
+  scenes.value = scenes.value.filter(scene => scene.id !== a_scene.id)
+}
+
+function onSceneUpdated(a_scene: Scene) {
+  scenes.value = scenes.value.map(scene => scene.id === a_scene.id ? a_scene : scene)
+}
+
+function relayout() {
+  const g = new dagre.graphlib.Graph({ compound: true })
+  g.setGraph({ rankdir: storyboard.value.main_axle })
+  g.setDefaultEdgeLabel(function() { return {} })
+
+  const grouped_requirements = _.groupBy(requirements.value, requirement => {
+    return requirement.scene_id
+  }) 
+  
+  for (const scene_id of Object.keys(grouped_requirements)) {
+    const vitual = `vitual_${scene_id}`
+    g.setNode(vitual, { width: 0, height: 0 })
+
+    for (const requirement of grouped_requirements[scene_id]) {
+      const node_id = requimentNodeId(requirement)
+      const size = node_size_mapping.get(node_id)!
+      g.setNode(node_id, { width: size.dimensions.width, height: size.dimensions.height })
+      g.setParent(node_id, vitual)
+    }
+
+    for (const requirement of grouped_requirements[scene_id]) {
+      const upstream_ids = requirement.upstream_ids.filter(id => !!requirement_repo.value.id.find(id))
+      for (const upstream_id of upstream_ids) {
+        g.setEdge(requimentNodeId(upstream_id), requimentNodeId(requirement))
+      }
+    }
+  }
+
+  dagre.layout(g)
+
+  for (const requirement of requirements.value) {
+    const node_id = requimentNodeId(requirement)
+    const item = g.node(node_id)
+    const size = node_size_mapping.get(node_id)!
+
+    updateNode(node_id, { position: { x: item.x, y: item.y } })
+    node_size_mapping.set(node_id, { ...size, position: { x: item.x, y: item.y } })
+  }
+
+  updateScenePositions()
+}
+
+async function save() {
+  const position_mapping_data = getNodes.value.reduce((acc, node) => {
+    acc[node.id] = { x: node.position.x, y: node.position.y }
+    return acc
+  }, {} as Record<string, { x: number, y: number }>)
+
+  const a_storyboard = await new q.project.StoryboardReq.Update().setup(proxy, (req) => {
+    req.interpolations.project_id = params.project_id
+    req.interpolations.storyboard_id = storyboard.value.id
+  }).perform({
+    positions: position_mapping_data
+  })
+
+  storyboard.value = a_storyboard
+}
+
+const former = Former.build(new Filter())
+const { Form, FormGroup } = FormFactory<typeof former.form>()
+
+function changeRoadmap(roadmap: Roadmap | null = null) {
+  if (roadmap) {
+    router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}?roadmap_id=${roadmap.id}`)
+  } else {
+    router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}`)
+  }
+}
+</script>π

@@ -12,7 +12,7 @@
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
       <FormErrorAlert />
 
-      <RequirementForm v-bind="{ former, platforms, test_case_labels }" />
+      <RequirementForm v-bind="{ former, scenes, platforms, test_case_labels }" />
 
       <DialogFooter>
         <DialogClose><Button variant="secondary" type="button">取消</Button></DialogClose>
@@ -27,7 +27,7 @@ import * as q from '@/lib/requests'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
-import { EntityRepo, Platform, Requirement, Storyboard, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
 import { computed, getCurrentInstance, nextTick, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -46,6 +46,7 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps<{
+  scenes: Scene[],
   platforms: Platform[],
   test_case_labels: TestCaseLabel[],
   storyboard: Storyboard
@@ -57,6 +58,7 @@ async function reset(a_requirement: Requirement) {
   requirement.value = a_requirement
   former.form.title = a_requirement.title
   former.form.description = a_requirement.description
+  former.form.scene_id = a_requirement.scene_id
   former.form.platform_ids = a_requirement.platform_ids
   former.form.label_ids = a_requirement.label_ids
   former.form.label_descriptions = a_requirement.label_descriptions
@@ -84,6 +86,7 @@ async function destroyRequirement() {
 const former = Former.build({
   title: "",
   description: "",
+  scene_id: null as number | null,
   platform_ids: [] as number[],
   label_ids: [] as number[],
   label_descriptions: {} as Record<string, string>

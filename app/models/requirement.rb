@@ -7,19 +7,22 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  storyboard_id :bigint
+#  scene_id      :bigint
 #
 class Requirement < ApplicationRecord
   belongs_to :project
   belongs_to :storyboard
+  belongs_to :scene, optional: true
   has_many :records, class_name: RequirementRecord.to_s, dependent: :destroy
 
   has_array_of :upstreams, class_name: 'Requirement'
   has_array_of :platforms, class_name: 'Platform'
   has_array_of :labels, class_name: 'TestCaseLabel'
 
-  def create_with_record(record_params)
+  def create_with_record(params, record_params)
     record = RequirementRecord.new(requirement: self)
     local_records = [ record ]
+    assign_attributes(params)
     save_with_record(record, record_params)
   end
 

@@ -16,6 +16,7 @@ class Storyboard < ApplicationRecord
 
   belongs_to :project
   has_many :requirements
+  has_many :scenes
 
   validates :title, :main_axle, presence: true
 

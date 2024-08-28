@@ -1,15 +1,16 @@
 # == Schema Information
 #
-# Table name: requirements
+# Table name: scenes
 #
 #  id            :bigint           not null, primary key
-#  project_id    :bigint           not null
+#  storyboard_id :bigint           not null
+#  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  storyboard_id :bigint
-#  scene_id      :bigint
 #
 FactoryBot.define do
-  factory :requirement do
+  factory :scene do
+    storyboard { nil }
+    name { "MyString" }
   end
 end

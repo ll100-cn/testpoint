@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { LabelRepo, Platform, PlatformRepo, Requirement, RequirementStatRepo } from '@/models'
+import { LabelRepo, Platform, PlatformRepo, Requirement, RequirementStatRepo, SceneRepo } from '@/models'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import { Handle, Position } from '@vue-flow/core'
@@ -85,11 +85,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   edit: [requirement: Requirement]
-  size: [requirement: Requirement, size: { width: number, height: number }]
 }>()
-
-const node = ref(null! as HTMLDivElement)
-const { width, height } = useElementSize(node)
 
 const actived = computed(() => {
   let result = true
@@ -112,10 +108,6 @@ const actived = computed(() => {
   }
 
   return result
-})
-
-onMounted(() => {
-  emits('size', props.requirement, { width: width.value, height: height.value })
 })
 
 </script>

@@ -7,6 +7,12 @@
     <controls.markdown />
   </FormGroup>
 
+  <FormGroup path="scene_id" label="场景">
+    <controls.select include_blank>
+      <option v-for="scene of scenes" :value="scene.id">{{ scene.name }}</option>
+    </controls.select>
+  </FormGroup>
+
   <FormGroup path="platform_ids" label="平台">
     <controls.checkboxes v-bind="{ name: 'platform_ids[]', collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
   </FormGroup>
@@ -27,10 +33,11 @@
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'
-import type { Platform, TestCaseLabel } from '@/models';
+import type { Platform, Scene, TestCaseLabel } from '@/models';
 
 const props = defineProps<{
   former: Former<any>,
+  scenes: Scene[],
   platforms: Platform[],
   test_case_labels: TestCaseLabel[],
 }>()

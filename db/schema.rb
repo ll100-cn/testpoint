@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_15_085227) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_28_024117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -339,7 +339,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_15_085227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "storyboard_id"
+    t.bigint "scene_id"
     t.index ["project_id"], name: "index_requirements_on_project_id"
+    t.index ["scene_id"], name: "index_requirements_on_scene_id"
     t.index ["storyboard_id"], name: "index_requirements_on_storyboard_id"
   end
 
@@ -349,6 +351,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_15_085227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_roadmaps_on_project_id"
+  end
+
+  create_table "scenes", force: :cascade do |t|
+    t.bigint "storyboard_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["storyboard_id"], name: "index_scenes_on_storyboard_id"
   end
 
   create_table "storyboards", force: :cascade do |t|
@@ -536,6 +546,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_15_085227) do
   add_foreign_key "requirements", "projects"
   add_foreign_key "requirements", "storyboards"
   add_foreign_key "roadmaps", "projects"
+  add_foreign_key "scenes", "storyboards"
   add_foreign_key "storyboards", "projects"
   add_foreign_key "task_upshots", "phases"
   add_foreign_key "task_upshots", "tasks"

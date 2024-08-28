@@ -37,7 +37,7 @@ class Api::Projects::RequirementsController < Api::Projects::BaseController
 
   def create
     @requirement.project = @project
-    @requirement.create_with_record(requirement_record_params)
+    @requirement.create_with_record(requirement_params, requirement_record_params)
     respond_with @requirement
   end
 
@@ -52,7 +52,7 @@ class Api::Projects::RequirementsController < Api::Projects::BaseController
   end
 protected
   def requirement_params
-    params.permit()
+    params.permit(:scene_id)
   end
 
   def requirement_record_params

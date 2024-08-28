@@ -32,6 +32,7 @@ json[:permissions] = {
   Requirement => [ :read, :create, :update, :manage ],
   Storyboard => [ :read, :create, :update, :manage ],
   Roadmap => [ :read, :create, :update, :manage ],
+  Scene => [ :read, :create, :update, :manage ],
 }.map do |klass, actions|
   allow_actions = actions.filter { |action| can? action, klass }
   [ klass, allow_actions ]

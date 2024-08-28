@@ -1,4 +1,4 @@
-json = requirement.slice(:id)
+json = requirement.slice(:id, :scene_id)
 
 records = requirement.local_records
 record = records.first

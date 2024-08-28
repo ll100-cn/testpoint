@@ -51,6 +51,7 @@ class Ability
     can :read, Requirement
     can :read, Storyboard
     can :read, Roadmap
+    can :read, Scene
 
     can :manage, Attachment
   end
@@ -68,6 +69,7 @@ class Ability
     can :read, Requirement
     can :read, Storyboard
     can :read, Roadmap
+    can :read, Scene
   end
 
   def apply_manager_permissions(member)
@@ -82,6 +84,7 @@ class Ability
     can :manage, Storyboard
     can :manage, Requirement
     can :manage, Roadmap
+    can :manage, Scene
 
     can :manage, Plan
     can :manage, Phase
