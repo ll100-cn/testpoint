@@ -393,6 +393,7 @@ function onNodeDragStop(event: NodeDragEvent) {
   const requirement_id = parseRequirementId(node.id)!
   const node_id = requimentNodeId(requirement_id)
   node_size_mapping.set(node_id, { dimensions: { ...node.dimensions }, position: { ...node.position } })
+  updateScenePositions()
 }
 
 function onNodesInitialized(graphNodes: GraphNode[]) {
@@ -407,12 +408,10 @@ function onNodesInitialized(graphNodes: GraphNode[]) {
 
   if (position_mapping.value.size == 0) {
     relayout()
+  } else {
+    updateScenePositions()
   }
 }
-
-watch(node_size_mapping, (event) => {
-  updateScenePositions()
-})
 
 function updateScenePositions() {
   for (const scene of scenes.value) {
