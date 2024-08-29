@@ -29,7 +29,7 @@ class Roadmap < ApplicationRecord
       requirement_records_scope = RequirementRecord.joins(:requirement).merge(project.requirements)
       requirement_records_scope.where(roadmap_ids: []).update_all(roadmap_ids: [self.id])
 
-      prev_roadmap = project.roadmaps.ranked.first
+      prev_roadmap = project.roadmaps.where("id < ?", self.id).ranked.first
       if prev_roadmap
         requirement_records_scope.where(deleted_at: nil).where("? = ANY(roadmap_ids)", prev_roadmap.id).update_all(["roadmap_ids = ARRAY_APPEND(roadmap_ids, ?::bigint)", self.id])
       end

@@ -1,6 +1,6 @@
 class Api::Projects::RoadmapsController < Api::Projects::BaseController
   before_action -> { @project = current_project }
-  load_and_authorize_resource through: :project
+  load_and_authorize_resource through: :project, with_scope: ->(base) { base.ranked }
 
   def index
     @roadmaps

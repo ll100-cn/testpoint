@@ -5,7 +5,7 @@
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Button preset="ghost">
-            <span>{{ roadmap?.title ?? '新路线图' }}</span>
+            <span>{{ roadmap?.title ?? '尚未发布' }}</span>
             <i class="fa-solid fa-caret-down ms-1"></i>
           </Button>
         </DropdownMenuTrigger>
