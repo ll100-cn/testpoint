@@ -44,6 +44,6 @@ class Api::Projects::TestCasesController < Api::Projects::BaseController
 
 protected
   def test_case_params
-    params.permit(:title, :role_name, :content, :scene_name, :group_name, :storyboard_id, :requirement_id, label_ids: [], platform_ids: [])
+    params.permit(:title, :role_name, :content, :scene_name, :group_name, :requirement_id, label_ids: [], platform_ids: [])
   end
 end

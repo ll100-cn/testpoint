@@ -17,7 +17,6 @@
 #  platform_ids   :bigint           default([]), is an Array
 #  label_ids      :bigint           default([]), is an Array
 #  roadmap_id     :bigint
-#  storyboard_id  :bigint
 #  requirement_id :bigint
 #
 
@@ -33,6 +32,9 @@ class TestCase < ApplicationRecord
   # has_many :test_case_label_links, dependent: :destroy
   # has_many :test_case_records, dependent: :destroy
   # has_many :labels, through: :test_case_label_links, source: :test_case_label
+
+  # TODO fix history storyboard_id column
+  attr_accessor :storyboard_id
 
   has_paper_trail versions: {
     inverse_of: :item,

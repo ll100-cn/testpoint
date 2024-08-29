@@ -14,6 +14,7 @@ class Requirement < ApplicationRecord
   belongs_to :storyboard
   belongs_to :scene, optional: true
   has_many :records, class_name: RequirementRecord.to_s, dependent: :destroy
+  has_many :test_cases
 
   has_array_of :upstreams, class_name: 'Requirement'
   has_array_of :platforms, class_name: 'Platform'

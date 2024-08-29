@@ -17,7 +17,6 @@
 #  platform_ids   :bigint           default([]), is an Array
 #  label_ids      :bigint           default([]), is an Array
 #  roadmap_id     :bigint
-#  storyboard_id  :bigint
 #  requirement_id :bigint
 #
 
