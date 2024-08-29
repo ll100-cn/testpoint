@@ -1,7 +1,7 @@
 <template>
   <DialogContent class="max-w-4xl" :closeable="false">
     <DialogHeader>
-      <DialogTitle>编辑需求</DialogTitle>
+      <DialogTitle>编辑需求 #{{ requirement.id }}</DialogTitle>
 
       <template #actions>
         <Button preset="ghost" variant="destructive" @click.prevent="destroyRequirement">
