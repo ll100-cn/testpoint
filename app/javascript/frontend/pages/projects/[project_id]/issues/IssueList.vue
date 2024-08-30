@@ -16,7 +16,12 @@
       <TableRow v-for="issue in issues" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
         <TableCell v-if="columns.includes('project')"><router-link :to="`/projects/${issue.project_id}`">{{ issue.project_name }}</router-link></TableCell>
         <TableCell>{{ issue.id }}</TableCell>
-        <TableCell><router-link class="link" :to="`/projects/${issue.project_id}/issues/${issue.id}`">{{ issue.title }}</router-link></TableCell>
+        <TableCell>
+          <router-link class="link" :to="`/projects/${issue.project_id}/issues/${issue.id}`">
+            <span v-if="issue.priority === 'important'">!!</span>
+            {{ issue.title }}
+          </router-link>
+        </TableCell>
         <TableCell><CategoryBadge :category="issue.category" /></TableCell>
         <TableCell><IssueStateBadge :state="issue.state" /></TableCell>
         <TableCell>{{ issue.milestone?.title }}</TableCell>
