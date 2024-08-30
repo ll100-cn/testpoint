@@ -27,7 +27,7 @@
       <Nav v-model:model-value="storyboard.id">
         <NavList preset="tabs">
           <NavItem v-for="storyboard in storyboards" :value="storyboard.id" class="shrink-0" as-child>
-            <RLink :to="`/projects/${params.project_id}/storyboards/${storyboard.id}`">{{ storyboard.title }}</RLink>
+            <RLink :to="{ path: `/projects/${params.project_id}/storyboards/${storyboard.id}`, query: utils.plainToQuery(query) }">{{ storyboard.title }}</RLink>
           </NavItem>
         </NavList>
       </Nav>
@@ -559,10 +559,7 @@ const former = Former.build(new Filter())
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 function changeRoadmap(roadmap: Roadmap | null = null) {
-  if (roadmap) {
-    router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}?roadmap_id=${roadmap.id}`)
-  } else {
-    router.push(`/projects/${params.project_id}/storyboards/${params.storyboard_id}`)
-  }
+  const data = utils.compactObject({ ...query, roadmap_id: roadmap?.id })
+  router.push({ query: utils.plainToQuery(data) })
 }
 </script>π
