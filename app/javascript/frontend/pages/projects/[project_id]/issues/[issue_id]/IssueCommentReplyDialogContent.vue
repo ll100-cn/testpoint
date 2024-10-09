@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Attachment, Comment, Issue } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"

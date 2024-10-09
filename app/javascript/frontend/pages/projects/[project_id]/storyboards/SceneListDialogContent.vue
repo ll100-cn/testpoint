@@ -3,7 +3,7 @@
     <DialogHeader>
       <DialogTitle>场景列表</DialogTitle>
     </DialogHeader>
-    
+
     <FormErrorAlert :validator="validator" />
 
     <Table>
@@ -35,9 +35,9 @@
     </DialogFooter>
   </DialogContent>
 </template>
-  
+
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import { Button } from '$vendor/ui'
 import * as controls from '@/components/controls'

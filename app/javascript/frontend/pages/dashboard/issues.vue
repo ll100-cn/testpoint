@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import PaginationBar from "@/components/PaginationBar.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute } from "vue-router"

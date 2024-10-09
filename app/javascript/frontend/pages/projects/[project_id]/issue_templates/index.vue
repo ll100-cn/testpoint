@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import Validator from '$vendor/ui/simple_form/Validator';
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'

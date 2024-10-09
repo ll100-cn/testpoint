@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'

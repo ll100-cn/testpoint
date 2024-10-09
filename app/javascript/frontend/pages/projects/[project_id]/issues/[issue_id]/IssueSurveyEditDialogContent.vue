@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { layouts } from "@/components/simple_form"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Issue, IssueInfo, IssueSurvey, IssueTemplate } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"

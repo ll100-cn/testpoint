@@ -23,7 +23,7 @@
 import { Button, Former, FormFactory, Separator } from '$vendor/ui'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import _ from 'lodash'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

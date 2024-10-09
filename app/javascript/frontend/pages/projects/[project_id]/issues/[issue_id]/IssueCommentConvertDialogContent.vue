@@ -25,7 +25,7 @@
 import { Button, Former, FormFactory } from '$vendor/ui'
 import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Comment, Issue } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'

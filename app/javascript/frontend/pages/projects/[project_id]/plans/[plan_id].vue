@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { layouts } from '@/components/simple_form'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Phase, TaskUpshotInfo, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'

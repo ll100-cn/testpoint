@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { Button, Former, FormFactory } from '$vendor/ui'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Attachment, IssueInfo } from '@/models'
 import { getCurrentInstance, ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'

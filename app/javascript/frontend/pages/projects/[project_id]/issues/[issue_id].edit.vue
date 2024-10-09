@@ -48,7 +48,7 @@ import OptionsForMember from '@/components/OptionsForMember.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { layouts } from "@/components/simple_form"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Issue } from '@/models'
 import { usePageStore } from '@/store'
 import _ from "lodash"

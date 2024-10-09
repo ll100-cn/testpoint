@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Plan, Platform, TestCaseStat } from '@/models'
 import _ from 'lodash'
 import { getCurrentInstance, nextTick, ref } from 'vue'

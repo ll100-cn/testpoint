@@ -10,7 +10,7 @@
 import { getCurrentInstance, ref } from "vue"
 
 import { Task } from "@/models"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import Badge from "$vendor/ui/badge/Badge.vue";
 
 const proxy = getCurrentInstance()!.proxy as any

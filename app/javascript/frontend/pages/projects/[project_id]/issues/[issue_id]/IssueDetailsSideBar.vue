@@ -133,7 +133,7 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { layouts } from "@/components/simple_form"
 import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { IssueInfo } from "@/models"
 import { usePageStore } from "@/store"

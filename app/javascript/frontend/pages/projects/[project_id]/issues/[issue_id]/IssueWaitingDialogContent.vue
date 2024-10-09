@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Comment, IssueInfo } from "@/models"
 import { getCurrentInstance, nextTick, ref } from "vue"
 import IssueCommentForm from "./IssueCommentForm.vue"

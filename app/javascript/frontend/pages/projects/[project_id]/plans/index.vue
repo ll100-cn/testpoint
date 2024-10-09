@@ -59,7 +59,7 @@
 import PaginationBar from '@/components/PaginationBar.vue'
 import { layouts } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from '@/lib/utils'
 import _ from 'lodash'
 import { computed, getCurrentInstance, ref } from 'vue'

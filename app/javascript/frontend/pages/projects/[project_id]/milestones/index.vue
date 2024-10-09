@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Milestone } from '@/models'
 import { usePageStore } from '@/store'
 import _ from 'lodash'

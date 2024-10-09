@@ -1,4 +1,4 @@
-import { BaseRequest } from '@/lib/requests'
+import { BaseRequest } from '@/requests'
 import _ from 'lodash'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'

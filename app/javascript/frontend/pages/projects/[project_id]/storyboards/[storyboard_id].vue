@@ -130,7 +130,7 @@ import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, watch
 import { Button } from '$vendor/ui'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
 import { Nav, NavList, NavItem } from '$vendor/ui'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import { usePageStore } from '@/store'
 import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap, RequirementStatRepo, Scene, SceneRepo, RequirementRepo } from '@/models'
@@ -266,7 +266,7 @@ function parseRequirementId(node_id: string) {
   const match = node_id.match(/^requirement_(\d+)$/)
   if (match) {
     return parseInt(match[1])
-  } 
+  }
 
   return parseInt(node_id)
 }
@@ -418,11 +418,11 @@ function updateScenePositions() {
     const requirements = requirement_repo.value.scene_id.findAll(scene.id)
     if (requirements.length > 0) {
       let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
-      
+
       for (const req of requirements) {
         const nodeId = requimentNodeId(req.id)
         const size = node_size_mapping.get(nodeId)
-        
+
         if (size) {
           minX = Math.min(minX, size.position.x)
           minY = Math.min(minY, size.position.y)
@@ -430,7 +430,7 @@ function updateScenePositions() {
           maxY = Math.max(maxY, size.position.y + size.dimensions.height)
         }
       }
-      
+
       const scene_node_id = sceneNodeId(scene)
 
       const inset = 50
@@ -504,8 +504,8 @@ function relayout() {
 
   const grouped_requirements = _.groupBy(requirements.value, requirement => {
     return requirement.scene_id
-  }) 
-  
+  })
+
   for (const scene_id of Object.keys(grouped_requirements)) {
     const vitual = `vitual_${scene_id}`
     g.setNode(vitual, { width: 0, height: 0 })

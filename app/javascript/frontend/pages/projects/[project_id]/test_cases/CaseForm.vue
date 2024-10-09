@@ -37,7 +37,7 @@ import { EntityRepo, Platform, Requirement, Roadmap, TestCase, TestCaseLabel } f
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
 import * as controls from '@/components/controls'
 import FormGroup from '$vendor/ui/simple_form/FormGroup.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { usePageStore } from '@/store'
 
