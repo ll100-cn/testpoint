@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Member } from '@/models'
 import { usePageStore } from '@/store'
 import { type PageQuery } from '@/types'

@@ -1,7 +1,7 @@
 class Api::Projects::IssuesController < Api::Projects::BaseController
   before_action -> { @project = current_project }
   load_and_authorize_resource through: :project, authorization_action: ->(action) {
-    { archive: :create, unresolve: :create, body: :update }[action]
+    { archive: :create, unresolve: :create, body: :update, merge: :manage }[action]
   }
 
   def index
@@ -55,6 +55,14 @@ class Api::Projects::IssuesController < Api::Projects::BaseController
   def destroy
     @issue.destroy
     respond_with @issue
+  end
+
+  def merge
+    form_params = params.permit(source_ids: [])
+    @form = IssueMergeForm.new(form_params)
+    @form.project = @project
+    @form.submit(current_member)
+    respond_with @form
   end
 
 protected

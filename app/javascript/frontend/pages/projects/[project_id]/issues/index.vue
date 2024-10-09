@@ -53,7 +53,7 @@ import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import { layouts } from "@/components/simple_form"
 import { ENUM_ISSUE_STAGES } from "@/constants"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { Issue } from "@/models"
 import Page from "@/pages/Page"

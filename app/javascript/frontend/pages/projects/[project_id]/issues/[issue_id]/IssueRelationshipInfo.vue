@@ -20,7 +20,7 @@
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { IssueInfo, IssueRelationship } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance } from "vue"

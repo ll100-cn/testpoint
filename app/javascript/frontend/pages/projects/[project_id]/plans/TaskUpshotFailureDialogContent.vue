@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Category, IssueTemplate, Member, PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import { usePageStore } from '@/store'
 import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'

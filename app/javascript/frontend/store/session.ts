@@ -1,5 +1,5 @@
 import { Account, Profile } from '@/models'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import _ from 'lodash'

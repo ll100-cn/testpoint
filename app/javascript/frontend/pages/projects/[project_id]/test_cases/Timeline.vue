@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import _ from 'lodash'
 import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'

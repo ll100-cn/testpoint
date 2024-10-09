@@ -1,4 +1,4 @@
-import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
+import { ErrorAccessDenied, ErrorUnauthorized } from "@/requests"
 import Keyv from "@keyvhq/core"
 import { AxiosError, AxiosHeaders, type AxiosInstance, type AxiosProgressEvent, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
 import _ from "lodash"

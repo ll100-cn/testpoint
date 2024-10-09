@@ -74,6 +74,8 @@ Rails.application.routes.draw do
 
         resources :issue_templates
         resources :issues do
+          post :merge, on: :collection
+
           resource :body, controller: "issue_bodies" do
             member do
               patch :convert_comment

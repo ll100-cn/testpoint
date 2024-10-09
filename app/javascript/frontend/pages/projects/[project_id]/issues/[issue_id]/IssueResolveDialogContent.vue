@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'

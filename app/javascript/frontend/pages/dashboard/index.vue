@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { EntityRepo, IssueStat, Project } from '@/models'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
 import CategoryBadge from '@/components/CategoryBadge.vue'

@@ -36,7 +36,7 @@
 
       <template v-if="issue_template">
         <Separator class="my-4" preset="through" />
-        
+
         <div class="space-y-3">
           <FormGroup v-for="(input, index) in issue_template.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
             <controls.string />
@@ -62,7 +62,7 @@ import OptionsForMember from "@/components/OptionsForMember.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { layouts } from "@/components/simple_form"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Attachment, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance, ref, watch } from "vue"

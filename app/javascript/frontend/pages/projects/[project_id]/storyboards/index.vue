@@ -13,7 +13,7 @@ import { Button, Nav, NavList } from '$vendor/ui'
 import BlankDialog from '$vendor/ui/BlankDialog.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { Storyboard } from '@/models'
 import { usePageStore } from '@/store'

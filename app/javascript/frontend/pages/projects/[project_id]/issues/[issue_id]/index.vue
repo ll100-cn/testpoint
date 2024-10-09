@@ -6,6 +6,7 @@
     </span>
     <div class="flex ms-auto space-x-3 items-center">
       <Button v-if="!readonly && allow('update', Issue)" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</Button>
+      <Button variant="destructive" v-if="!readonly && allow('manage', Issue)" :to="`/projects/${project_id}/issues/merge?source_id=${params.issue_id}`">合并</Button>
     </div>
   </PageHeader>
 
@@ -129,7 +130,7 @@
 import { Actioner } from "@/components/Actioner"
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"

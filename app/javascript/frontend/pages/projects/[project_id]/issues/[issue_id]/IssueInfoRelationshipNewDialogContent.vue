@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'

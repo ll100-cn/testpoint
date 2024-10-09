@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
+import { ErrorAccessDenied, ErrorUnauthorized } from "@/requests"
 import _ from "lodash"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 

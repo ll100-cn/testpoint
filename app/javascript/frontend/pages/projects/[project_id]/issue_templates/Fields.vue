@@ -55,7 +55,7 @@
 import { getCurrentInstance, ref } from 'vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { usePageStore } from '@/store'
 import OptionsForCategory from '@/components/OptionsForCategory.vue'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'

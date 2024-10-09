@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import Validations from '@/components/simple_form/Validations'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'

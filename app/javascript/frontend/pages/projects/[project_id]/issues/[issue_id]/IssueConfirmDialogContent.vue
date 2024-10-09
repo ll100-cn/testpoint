@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import BSOption from "@/components/BSOption.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Category, IssueInfo, MemberInfo } from "@/models"
 import { usePageStore } from "@/store"
 import { getCurrentInstance, nextTick, ref } from "vue"

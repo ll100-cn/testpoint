@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Milestone, Platform, TestCase, TestCaseLabel } from '@/models'
