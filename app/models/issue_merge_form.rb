@@ -9,7 +9,7 @@ class IssueMergeForm
   def submit(author)
     return false unless valid?
 
-    issues = project.issues.without_state(:closed).where(id: source_ids).order(created_at: :asc, id: :asc)
+    issues = project.issues.without_state(:closed).where(id: source_ids).order(created_at: :asc, id: :asc).to_a
     if issues.empty?
       errors.add(:source_ids, :invalid)
       return false
@@ -28,7 +28,7 @@ class IssueMergeForm
 
           #{issue.content}
         EOF
-
+        comment.member_id = issue.creator_id
         comment.created_at = issue.created_at
         comment.updated_at = issue.updated_at
 

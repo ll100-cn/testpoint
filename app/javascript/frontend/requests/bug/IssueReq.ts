@@ -37,5 +37,14 @@ export default {
       this.endpoint = "/api/projects/{project_id}/issues"
       this.klass = Issue
     }
+  },
+
+  Merge: class extends BaseObjectRequest<Issue> {
+    constructor() {
+      super()
+      this.method = "POST"
+      this.endpoint = "/api/projects/{project_id}/issues/merge"
+      this.klass = Issue
+    }
   }
 }
