@@ -22,7 +22,7 @@ class IssueMergeForm
       issues.each do |issue|
         comment = head.comments.new
         comment.content = <<~EOF
-          ##{issue.title}
+          # #{issue.title}
 
           #{issue.content}
         EOF
