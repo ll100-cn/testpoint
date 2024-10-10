@@ -27,7 +27,8 @@
           <TableCell>{{ issue.creator?.name }}</TableCell>
           <TableCell><IssueStateBadge :state="issue.state" /></TableCell>
           <TableCell class="text-right">
-            <button @click="removeSource(issue)"><i class="far fa-trash-alt"></i></button>
+            <button v-if="issue.id !== head.id" @click="removeSource(issue)"><i class="far fa-trash-alt"></i></button>
+            <span v-else><i class="far fa-check-circle"></i> 主工单</span>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -92,7 +93,6 @@ const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
-const query = route.query as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -101,14 +101,11 @@ const add_dialog_open = ref(false)
 
 const issues = ref([] as Issue[])
 
-if (!_.isEmpty(query.source_id)) {
-  const issue = await new q.bug.IssueReq.Get().setup(proxy, (req) => {
-    req.interpolations.project_id = project_id
-    req.interpolations.issue_id = query.source_id
-  }).perform()
-
-  issues.value.push(issue)
-}
+const head = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
+  req.interpolations.project_id = project_id
+  req.interpolations.issue_id = params.issue_id
+}).perform())
+issues.value.push(head.value)
 
 function newSource() {
   add_dialog_open.value = true
@@ -145,6 +142,11 @@ former.doPerform = async function() {
       req.interpolations.issue_id = former.form.source_id
     }).perform()
 
+    if (issue.state == 'closed') {
+      former.validator.get('source_id').invalid(['已关闭的工单不能添加'])
+      return
+    }
+
     issues.value.push(issue)
 
     add_dialog_open.value = false
@@ -166,8 +168,10 @@ async function merge() {
   try {
     const issue = await new q.bug.IssueReq.Merge().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
-      req.query = { source_ids: _.union(issues.value.map(issue => issue.id)) }
-    }).perform()
+      req.interpolations.issue_id = head.value.id
+    }).perform({
+      source_ids: issues.value.filter(issue => issue.id !== head.value.id).map(issue => issue.id)
+    })
 
     router.push(`/projects/${project_id}/issues/${issue.id}`)
   } catch(e) {

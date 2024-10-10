@@ -6,7 +6,7 @@
     </span>
     <div class="flex ms-auto space-x-3 items-center">
       <Button v-if="!readonly && allow('update', Issue)" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</Button>
-      <Button variant="destructive" v-if="!readonly && allow('manage', Issue)" :to="`/projects/${project_id}/issues/merge?source_id=${params.issue_id}`">合并</Button>
+      <Button variant="destructive" v-if="!readonly && allow('manage', Issue)" :to="`/projects/${project_id}/issues/${issue_info.id}/merge`">合并</Button>
     </div>
   </PageHeader>
 

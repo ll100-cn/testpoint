@@ -43,7 +43,7 @@ export default {
     constructor() {
       super()
       this.method = "POST"
-      this.endpoint = "/api/projects/{project_id}/issues/merge"
+      this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/merge"
       this.klass = Issue
     }
   }

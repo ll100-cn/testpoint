@@ -61,6 +61,7 @@ class Api::Projects::IssuesController < Api::Projects::BaseController
     form_params = params.permit(source_ids: [])
     @form = IssueMergeForm.new(form_params)
     @form.project = @project
+    @form.head = @issue
     @form.submit(current_member)
     respond_with @form
   end

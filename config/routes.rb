@@ -74,7 +74,7 @@ Rails.application.routes.draw do
 
         resources :issue_templates
         resources :issues do
-          post :merge, on: :collection
+          post :merge, on: :member
 
           resource :body, controller: "issue_bodies" do
             member do
