@@ -41,7 +41,7 @@ class IssueMergeForm
 
         IssueRelationship.where(source_id: issue.id, target_id: head.id).destroy_all
 
-        unless issue.update_with_author({ title: "#{issue.title} (TO: #{head.title})", state: :closed, archived_at: Time.current }, author)
+        unless issue.update_with_author({ title: "#{issue.title} (TO: #{head.id})", state: :closed, archived_at: Time.current }, author)
           errors.add(:base, issue.errors.full_messages.join(", "))
           raise ActiveRecord::Rollback
         end
