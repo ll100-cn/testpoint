@@ -1,0 +1,9 @@
+.markdown-body {
+  p {
+    margin-bottom: 1em;
+
+    a {
+      @apply text-primary hover:underline;
+    }
+  }
+}
