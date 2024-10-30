@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import Validations from '@/components/simple_form/Validations';
@@ -53,8 +53,8 @@ import { useRoute } from 'vue-router'
 import * as utils from "@/lib/utils"
 import PageHeader from '@/components/PageHeader.vue';
 import PageTitle from '@/components/PageTitle.vue';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()

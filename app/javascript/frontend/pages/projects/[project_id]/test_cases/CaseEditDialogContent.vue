@@ -21,15 +21,15 @@
 
 <script setup lang="ts">
 import { Validations, layouts } from "@/components/simple_form"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from "@/store"
 import $ from 'jquery'
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()

@@ -47,13 +47,13 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardFooter, CardHeader, Nav, NavItem, NavList } from '$vendor/ui'
+import { Card, CardContent, CardFooter, CardHeader, Nav, NavItem, NavList } from '@/ui'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import { layouts } from "@/components/simple_form"
 import { ENUM_ISSUE_STAGES } from "@/constants"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Issue } from "@/models"
 import Page from "@/pages/Page"
@@ -64,8 +64,8 @@ import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
 import IssueList from "./IssueList.vue"
 import { Filter2, Search2 } from "./types"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy as any

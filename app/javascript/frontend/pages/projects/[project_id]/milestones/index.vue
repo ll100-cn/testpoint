@@ -58,18 +58,18 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Milestone } from '@/models'
 import { usePageStore } from '@/store'
 import _ from 'lodash'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import { Nav, NavList, NavItem } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Nav, NavList, NavItem } from '@/ui'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import Button from '$vendor/ui/button/Button.vue'
+import Button from '@/ui/button/Button.vue'
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()

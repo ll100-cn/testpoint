@@ -50,14 +50,14 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { LoginCode } from "@/models"
 import { useSessionStore } from "@/store/session"
 import { getCurrentInstance, ref } from "vue"
 import { useRouter } from "vue-router"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!

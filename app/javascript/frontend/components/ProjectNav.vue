@@ -44,9 +44,9 @@
 import { Category, Issue, IssueTemplate, Member, Milestone, Plan, Platform, TestCase, TestCaseLabel, Requirement, Storyboard } from '@/models'
 import { usePageStore } from '@/store'
 import NavItemDropdown from './NavItemDropdown.vue'
-import { Nav, NavList, NavItem } from '$vendor/ui'
+import { Nav, NavList, NavItem } from '@/ui'
 import RLink from './RLink.vue'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
 
 const page = usePageStore()
 const allow = page.inProject()!.allow

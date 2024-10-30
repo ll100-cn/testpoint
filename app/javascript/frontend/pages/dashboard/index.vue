@@ -31,15 +31,15 @@
 
 <script setup lang="ts">
 import { EntityRepo, IssueStat, Project } from '@/models'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import { ENUM_ISSUE_STAGES } from "@/constants"
 import { usePageStore } from '@/store'
 import _ from 'lodash'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const page = usePageStore()

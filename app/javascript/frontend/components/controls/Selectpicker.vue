@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ControlValueKey, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$vendor/ui/simple_form/types'
+import { ControlValueKey, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '@/ui/simple_form/types'
 import { computed, provide } from "vue"
 import { SelectdropRoot } from './selectdrop'
 import SelectdropItem from './selectdrop/SelectdropItem.vue'

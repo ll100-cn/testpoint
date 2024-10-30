@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import * as controls from '@/components/controls'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 
 const props = defineProps<{
   former: Former<any>

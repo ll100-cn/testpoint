@@ -34,12 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import * as q from '@/lib/requests'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { EntityRepo, Platform, Requirement, Storyboard } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'

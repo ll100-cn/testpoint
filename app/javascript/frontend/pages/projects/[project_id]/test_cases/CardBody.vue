@@ -18,7 +18,7 @@ import { computed } from 'vue'
 import FolderSide from '../FolderSide.vue'
 import { ColumnFilter, Filter } from '../types'
 import CaseTable, { type Props, type Listeners } from './CaseTable.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 
 const props = defineProps<Props & Listeners & {
   filter: Filter

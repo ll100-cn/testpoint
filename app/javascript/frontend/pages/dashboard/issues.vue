@@ -48,14 +48,14 @@
 
 <script setup lang="ts">
 import PaginationBar from "@/components/PaginationBar.vue"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute } from "vue-router"
 import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import { Nav, NavList, NavItem } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Nav, NavList, NavItem } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const route = useRoute()

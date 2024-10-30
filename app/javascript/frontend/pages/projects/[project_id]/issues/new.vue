@@ -62,13 +62,13 @@ import OptionsForMember from "@/components/OptionsForMember.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { layouts } from "@/components/simple_form"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Attachment, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 

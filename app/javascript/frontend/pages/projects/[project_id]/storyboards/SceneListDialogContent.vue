@@ -37,21 +37,21 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import * as q from '@/lib/requests'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap, Scene } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import { computed, getCurrentInstance, reactive, ref, type Component } from 'vue'
 import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { STORYBOARD_MAIN_AXLE } from '@/constants'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
 import { usePageStore } from '@/store'
 import SceneCreateDialogContent from './SceneCreateDialogContent.vue'
-import Validator from '$vendor/ui/simple_form/Validator';
+import Validator from '@/ui/simple_form/Validator';
 import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
 
 const route = useRoute()

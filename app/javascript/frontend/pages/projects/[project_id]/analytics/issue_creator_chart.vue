@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { usePageStore } from '@/store'
 import _ from 'lodash'
@@ -45,8 +45,8 @@ import { useRoute, useRouter } from "vue-router"
 import IssueByMemberCard from "./IssueByMemberCard.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy as any

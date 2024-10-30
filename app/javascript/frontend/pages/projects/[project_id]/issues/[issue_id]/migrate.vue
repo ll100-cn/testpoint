@@ -40,14 +40,14 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { layouts } from "@/components/simple_form"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Category } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy as any

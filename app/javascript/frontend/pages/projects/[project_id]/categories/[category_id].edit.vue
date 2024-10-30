@@ -22,12 +22,12 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
+import { Button } from '@/ui'
 
 const route = useRoute()
 const router = useRouter()

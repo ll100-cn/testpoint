@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Member } from '@/models'
 import { usePageStore } from '@/store'
 import { type PageQuery } from '@/types'
@@ -63,11 +63,11 @@ import { useRoute, useRouter } from 'vue-router'
 import * as h from '@/lib/humanize'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import Validator from '$vendor/ui/simple_form/Validator';
-import Button from "$vendor/ui/button/Button.vue"
-import { Nav, NavList, NavItem } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import Validator from '@/ui/simple_form/Validator';
+import Button from "@/ui/button/Button.vue"
+import { Nav, NavList, NavItem } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()

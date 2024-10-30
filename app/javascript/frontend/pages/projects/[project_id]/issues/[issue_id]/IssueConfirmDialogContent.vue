@@ -37,14 +37,14 @@
 <script setup lang="ts">
 import BSOption from "@/components/BSOption.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Category, IssueInfo, MemberInfo } from "@/models"
 import { usePageStore } from "@/store"
 import { getCurrentInstance, nextTick, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { SelectdropItem } from '@/components/controls/selectdrop'
 

@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { controls, layouts } from "@/components/simple_form"
 import Former from '@/components/simple_form/Former'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Category, IssueTemplate, Member, PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import { usePageStore } from '@/store'
 import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
@@ -63,10 +63,10 @@ import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpsho
 import { Actioner } from "@/components/Actioner"
 import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
-import { Former as NewFormer, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former as NewFormer, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as newControls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()

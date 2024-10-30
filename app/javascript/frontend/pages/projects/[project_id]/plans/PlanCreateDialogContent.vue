@@ -17,15 +17,15 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Plan, Platform, TestCaseStat } from '@/models'
 import _ from 'lodash'
 import { getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
 import { usePageStore } from "@/store"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const el = ref(null! as InstanceType<typeof HTMLElement>)

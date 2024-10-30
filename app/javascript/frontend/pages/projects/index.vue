@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import Validations from '@/components/simple_form/Validations'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -56,8 +56,8 @@ import PaginationBar from '@/components/PaginationBar.vue'
 import { useRoute } from 'vue-router'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy!
 const router = useRouter()

@@ -26,14 +26,14 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Phase, PhaseInfo, Plan, PlanInfo } from '@/models'
 import _ from 'lodash'
 import { computed, getCurrentInstance, nextTick, ref } from 'vue'
 import { useRoute } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
-import { Button } from '$vendor/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
+import { Button } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy as any

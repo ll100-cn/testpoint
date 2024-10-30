@@ -40,9 +40,9 @@
 </template>
 
 <script setup lang="ts">
-import { ErrorAccessDenied, ErrorUnauthorized } from "@/requests"
+import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
+import { Card, CardContent } from '@/ui'
 import _ from "lodash"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
 
 const props = defineProps<{
   errors: any[]

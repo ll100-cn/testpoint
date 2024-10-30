@@ -45,16 +45,16 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/requests'
-import Validator from '$vendor/ui/simple_form/Validator';
+import * as q from '@/lib/requests'
+import Validator from '@/ui/simple_form/Validator';
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { IssueTemplate } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import Button from '$vendor/ui/button/Button.vue';
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import Button from '@/ui/button/Button.vue';
 
 const route = useRoute()
 const router = useRouter()

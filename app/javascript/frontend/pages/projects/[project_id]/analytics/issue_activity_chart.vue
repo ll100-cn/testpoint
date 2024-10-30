@@ -26,13 +26,13 @@
 
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 import WdayIssuesConfirmTimeChart from './WdayIssuesConfirmTimeChart.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"

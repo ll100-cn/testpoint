@@ -20,7 +20,7 @@
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Attachment, Comment, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
@@ -28,7 +28,7 @@ import { Component, getCurrentInstance } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueCommentEditDialogContent from "./IssueCommentEditDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const store = useSessionStore()

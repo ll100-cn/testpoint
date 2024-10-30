@@ -37,13 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import * as q from "@/requests"
+import * as q from "@/lib/requests"
 import { useSessionStore } from '@/store'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import PageHeader from './PageHeader.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import { Button, Former, FormFactory } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Button, Former, FormFactory } from '@/ui'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!

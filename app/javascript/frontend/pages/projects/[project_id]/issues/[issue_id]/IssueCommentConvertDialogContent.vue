@@ -22,13 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory } from '$vendor/ui'
+import { Button, Former, FormFactory } from '@/ui'
 import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Comment, Issue } from "@/models"
 import { getCurrentInstance, ref } from "vue"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')

@@ -25,7 +25,7 @@
 import { TaskUpshotInfo } from '@/models'
 import { computed } from 'vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 
 const props = defineProps<{
   task_upshot_info: TaskUpshotInfo

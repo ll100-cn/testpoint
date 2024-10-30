@@ -26,16 +26,16 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
-import Separator from '$vendor/ui/separator/Separator.vue'
+import Separator from '@/ui/separator/Separator.vue'
 
 const route = useRoute()
 const router = useRouter()

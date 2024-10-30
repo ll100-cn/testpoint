@@ -26,7 +26,7 @@ import { onErrorCaptured, ref } from "vue"
 import { onBeforeRouteLeave } from "vue-router"
 import Error from './Error.vue'
 import AppNavbar from '../components/AppNavbar.vue'
-import { Container } from "$vendor/ui"
+import { Container } from "@/ui"
 
 const errors = ref([])
 

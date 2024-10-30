@@ -25,12 +25,12 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { usePageStore } from "@/store"
 import { getCurrentInstance, ref } from "vue"
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Nav, NavList, NavItem } from '$vendor/ui'
+import { Nav, NavList, NavItem } from '@/ui'
 
 const page = usePageStore()
 const proxy = getCurrentInstance()!.proxy!

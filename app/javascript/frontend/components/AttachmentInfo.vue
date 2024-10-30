@@ -61,16 +61,16 @@
 
 <script setup lang="ts">
 import { Validations, controls, layouts } from "@/components/simple_form"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import { usePageStore } from "@/store"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
-import Well from "$vendor/ui/well/Well.vue"
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
+import Well from "@/ui/well/Well.vue"
 
 const proxy = getCurrentInstance()!.proxy!
 const page = usePageStore()

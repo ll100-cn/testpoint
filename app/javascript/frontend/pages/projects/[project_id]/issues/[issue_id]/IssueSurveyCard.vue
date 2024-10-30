@@ -38,14 +38,14 @@
 <script setup lang="ts">
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { IssueInfo, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import { type Component, getCurrentInstance } from "vue"
 import IssueSurveyEditDialogContent from "./IssueSurveyEditDialogContent.vue"
-import { Alert, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
-import Button from "$vendor/ui/button/Button.vue"
+import { Alert, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
+import Button from "@/ui/button/Button.vue"
 
 const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()

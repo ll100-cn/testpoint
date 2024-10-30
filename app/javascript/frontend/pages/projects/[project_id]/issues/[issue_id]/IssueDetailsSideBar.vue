@@ -133,7 +133,7 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { layouts } from "@/components/simple_form"
 import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { IssueInfo } from "@/models"
 import { usePageStore } from "@/store"
@@ -141,9 +141,9 @@ import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
-import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$vendor/ui";
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui";
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 

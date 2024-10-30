@@ -22,8 +22,8 @@ import { type Props } from "./SelectdropMenuItem.vue"
 import SelectdropMenuText from './SelectdropMenuText.vue'
 import SelectdropMenuItem from './SelectdropMenuItem.vue'
 import { selectdropContextKey } from "./types"
-import { Checkbox } from '$vendor/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { Checkbox } from '@/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
 
 const props = defineProps<Props>()
 const context = inject(selectdropContextKey)!

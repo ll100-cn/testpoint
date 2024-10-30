@@ -33,14 +33,14 @@
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
 import { TASK_UPSHOT_STATES } from "@/constants"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { PlanInfo, TaskInfo, TaskUpshotInfo } from '@/models'
 import { usePageStore } from "@/store"
 import _ from 'lodash'
 import { type Component, computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
 import TaskDetailsState from './TaskDetailsState.vue'
 import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Button } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Button } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()

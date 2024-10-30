@@ -130,7 +130,7 @@
 import { Actioner } from "@/components/Actioner"
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
@@ -152,10 +152,10 @@ import IssueUnresolveDialogContent from "./IssueUnresolveDialogContent.vue"
 import IssueWaitingDialogContent from "./IssueWaitingDialogContent.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import BlankDialog from "$vendor/ui/BlankDialog.vue"
-import Button from "$vendor/ui/button/Button.vue"
-import ButtonGroup from "$vendor/ui/button/ButtonGroup.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import BlankDialog from "@/ui/BlankDialog.vue"
+import Button from "@/ui/button/Button.vue"
+import ButtonGroup from "@/ui/button/ButtonGroup.vue"
 
 const comment_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const issue_info_dialog = ref(null as InstanceType<typeof BlankDialog>)

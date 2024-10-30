@@ -104,14 +104,14 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { Validations, layouts } from "@/components/simple_form"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import _ from 'lodash'
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
-import Button from '$vendor/ui/button/Button.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import Button from '@/ui/button/Button.vue'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import * as controls from '@/components/controls'
 
 const validations = reactive<Validations>(new Validations())

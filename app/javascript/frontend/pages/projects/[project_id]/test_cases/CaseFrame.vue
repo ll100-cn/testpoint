@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as q from '@/requests';
+import * as q from '@/lib/requests';
 import { type PropType, getCurrentInstance, nextTick, ref } from 'vue';
 import CardShow from './CardShow.vue';
 import CaseEditFrame from './CaseEditFrame.vue';

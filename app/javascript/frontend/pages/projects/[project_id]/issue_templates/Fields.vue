@@ -55,15 +55,15 @@
 import { getCurrentInstance, ref } from 'vue'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { usePageStore } from '@/store'
 import OptionsForCategory from '@/components/OptionsForCategory.vue'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import * as controls from '@/components/controls'
-import Button from '$vendor/ui/button/Button.vue'
+import Button from '@/ui/button/Button.vue'
 
 const proxy = getCurrentInstance()!.proxy as any
 const page = usePageStore()

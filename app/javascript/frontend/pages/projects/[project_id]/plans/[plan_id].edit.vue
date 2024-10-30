@@ -24,16 +24,16 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import _ from 'lodash'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '$vendor/ui'
-import { Button } from '$vendor/ui'
-import Validator from '$vendor/ui/simple_form/Validator';
+import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
+import { Button } from '@/ui'
+import Validator from '@/ui/simple_form/Validator';
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()

@@ -45,15 +45,15 @@
 <script setup lang="ts">
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { TestCaseLabel } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import Validator from '$vendor/ui/simple_form/Validator';
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import Validator from '@/ui/simple_form/Validator';
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()

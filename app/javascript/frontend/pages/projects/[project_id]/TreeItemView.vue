@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '$vendor/ui';
+import { Button } from '@/ui';
 
 const props = defineProps<{
   highlight: boolean

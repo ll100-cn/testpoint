@@ -47,17 +47,17 @@
 <script setup lang="ts">
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import _ from 'lodash'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { Platform } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$vendor/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import Validator from '$vendor/ui/simple_form/Validator';
-import Button from '$vendor/ui/button/Button.vue'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import Validator from '@/ui/simple_form/Validator';
+import Button from '@/ui/button/Button.vue'
 import PlatformBadge from '@/components/PlatformBadge.vue'
 
 const proxy = getCurrentInstance()!.proxy as any

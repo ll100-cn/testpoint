@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import _ from 'lodash'
 import { onMounted, ref, type HTMLAttributes } from 'vue'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
 
 const props = defineProps<{
   class?: HTMLAttributes['class']

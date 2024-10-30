@@ -46,14 +46,14 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
 import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'
 import CaseEditDialogContent from './CaseEditDialogContent.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Well } from '$vendor/ui'
-import Button from '$vendor/ui/button/Button.vue'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "$vendor/ui"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Well } from '@/ui'
+import Button from '@/ui/button/Button.vue'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui"
 
 const proxy = getCurrentInstance()!.proxy!
 

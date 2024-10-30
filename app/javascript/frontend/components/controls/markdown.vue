@@ -11,7 +11,7 @@ import EasyMDE from '../../../vendor/easymde'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import * as helper from "../simple_form/helper"
 import { type ControlProps } from '../simple_form/helper'
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '@/ui/simple_form/types'
 
 interface Props extends ControlProps {
 }

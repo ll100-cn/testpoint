@@ -15,10 +15,10 @@ import { computed, ref, type HTMLAttributes } from 'vue'
 import FlatPickr from 'vue-flatpickr-component'
 import * as helper from "../simple_form/helper"
 import { type ControlProps } from '../simple_form/helper'
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$vendor/ui/simple_form/types'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '@/ui/simple_form/types'
 import { standard } from './presets'
-import { cn } from '$vendor/ui/utils'
-import { Button, ButtonGroup } from '$vendor/ui'
+import { cn } from '@/ui/utils'
+import { Button, ButtonGroup } from '@/ui'
 
 export interface Props extends ControlProps {
   class?: HTMLAttributes['class']

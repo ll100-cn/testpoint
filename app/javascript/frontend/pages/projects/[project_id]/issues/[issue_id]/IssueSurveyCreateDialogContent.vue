@@ -28,13 +28,13 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')

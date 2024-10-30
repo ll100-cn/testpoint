@@ -14,7 +14,7 @@
 import { Attachment } from "@/models"
 import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import * as controls from '@/components/controls'
 
 const props = defineProps<{

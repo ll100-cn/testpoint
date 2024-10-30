@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { layouts } from '@/components/simple_form'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import { Phase, TaskUpshotInfo, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'
@@ -98,10 +98,10 @@ import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, Separator } from '$vendor/ui'
-import BlankDialog from '$vendor/ui/BlankDialog.vue'
-import { Nav, NavList, NavItem } from '$vendor/ui'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, Separator } from '@/ui'
+import BlankDialog from '@/ui/BlankDialog.vue'
+import { Nav, NavList, NavItem } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 

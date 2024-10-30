@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Milestone, Platform, TestCase, TestCaseLabel } from '@/models'
@@ -82,14 +82,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { type ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import { usePageStore } from '@/store'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$vendor/ui'
-import BlankDialog from '$vendor/ui/BlankDialog.vue'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import BlankDialog from '@/ui/BlankDialog.vue'
 import CardNewDialog from './CardNewDialog.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
-import { Button } from '$vendor/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$vendor/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
 import { TEST_CASE_RELATE_STATES } from '@/constants'
 
 const proxy = getCurrentInstance()!.proxy as any

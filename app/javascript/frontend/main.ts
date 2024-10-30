@@ -1,4 +1,4 @@
-import '$vendor/ui/main.css'
+import '@/ui/main.css'
 
 import '../vendor/fontawesome'
 import '../vendor/fancybox'

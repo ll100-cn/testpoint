@@ -59,7 +59,7 @@
 import PaginationBar from '@/components/PaginationBar.vue'
 import { layouts } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
-import * as q from '@/requests'
+import * as q from '@/lib/requests'
 import * as utils from '@/lib/utils'
 import _ from 'lodash'
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -68,14 +68,14 @@ import * as t from '@/lib/transforms'
 import { usePageStore } from '@/store'
 import { Plan } from '@/models'
 import OptionsForMember from '@/components/OptionsForMember.vue'
-import { Badge, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, Progress } from '$vendor/ui'
-import { Former, FormFactory, PresenterConfigProvider } from '$vendor/ui'
+import { Badge, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, Progress } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import * as controls from '@/components/controls'
-import BlankDialog from '$vendor/ui/BlankDialog.vue'
+import BlankDialog from '@/ui/BlankDialog.vue'
 import PlanCreateDialogContent from './PlanCreateDialogContent.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import Button from '$vendor/ui/button/Button.vue'
+import Button from '@/ui/button/Button.vue'
 
 const proxy = getCurrentInstance()!.proxy as any
 const route = useRoute()

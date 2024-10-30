@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory } from '$vendor/ui'
-import * as q from '@/requests'
+import { Button, Former, FormFactory } from '@/ui'
+import * as q from '@/lib/requests'
 import { Attachment, IssueInfo } from '@/models'
 import { getCurrentInstance, ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$vendor/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
 const proxy = getCurrentInstance()!.proxy as any
 const open = defineModel('open')

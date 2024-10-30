@@ -35,10 +35,10 @@ import CategoryBadge from '@/components/CategoryBadge.vue'
 import { IssueCreatorChart, Category, Member } from '@/models'
 import _ from 'lodash'
 import { computed } from 'vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$vendor/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
 import { CaretDownIcon } from '@radix-icons/vue'
 import CardBody from '../test_cases/CardBody.vue'
-import { Progress } from '$vendor/ui'
+import { Progress } from '@/ui'
 
 const props = defineProps<{
   member: Member
