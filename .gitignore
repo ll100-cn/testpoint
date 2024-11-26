@@ -30,14 +30,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-# Webpacker
-/public/packs
-/public/packs-test
-yarn-debug.log*
-.yarn-integrity
-
 # Custom
-/Gemfile.lock
 /.byebug_history
 /spec/examples.txt
 /docker-compose.yml
@@ -49,14 +42,6 @@ yarn-debug.log*
 /config/database.yml
 /*.sql
 .python-version
-
-/public/packs
-/public/packs-test
-/node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
-
 
 # Vite Ruby
 /public/vite*
