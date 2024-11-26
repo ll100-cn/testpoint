@@ -76,8 +76,8 @@ namespace :local do
         execute "cp -f config/database.yml.example config/database.yml"
         execute "cp -f config/redis.yml.example config/redis.yml"
         Bundler.with_original_env do
-          execute "bundle", "update"
-          execute "yarn", "install"
+          execute "bundle", "install"
+          execute "pnpm", "install"
 
           execute "rm", "-rf", "public/assets"
           execute "bin/vite", "clobber", "-m", "production"

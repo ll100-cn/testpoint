@@ -49,7 +49,6 @@ yarn-debug.log*
 /config/database.yml
 /*.sql
 .python-version
-.ruby-version
 
 /public/packs
 /public/packs-test
