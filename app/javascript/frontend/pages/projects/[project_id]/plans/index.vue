@@ -33,9 +33,9 @@
             </div>
 
             <div class="flex gap-0.5">
-              <Progress :model-value="100" v-if="plan.tasks_state_counts['failure'] ?? 0 > 0" class="text-destructive" :style="{ width: 100.0 * plan.tasks_state_counts['failure'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
-              <Progress :model-value="100" v-if="plan.tasks_state_counts['pending'] ?? 0 > 0" class="text-muted" :style="{ width: 100.0 * plan.tasks_state_counts['pending'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
-              <Progress :model-value="100" v-if="plan.tasks_state_counts['pass'] ?? 0 > 0" class="text-green-700" :style="{ width: 100.0 * plan.tasks_state_counts['pass'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
+              <Progress preset="standard" :model-value="100" v-if="plan.tasks_state_counts['failure'] ?? 0 > 0" class="text-destructive" :style="{ width: 100.0 * plan.tasks_state_counts['failure'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
+              <Progress preset="standard" :model-value="100" v-if="plan.tasks_state_counts['pending'] ?? 0 > 0" class="text-muted" :style="{ width: 100.0 * plan.tasks_state_counts['pending'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
+              <Progress preset="standard" :model-value="100" v-if="plan.tasks_state_counts['pass'] ?? 0 > 0" class="text-green-700" :style="{ width: 100.0 * plan.tasks_state_counts['pass'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
             </div>
           </CardContent>
 

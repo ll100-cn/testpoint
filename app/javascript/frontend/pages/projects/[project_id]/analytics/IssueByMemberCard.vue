@@ -5,7 +5,7 @@
         <CardTitle class="me-3">{{ member.name }}</CardTitle>
 
         <div class="flex-1">
-          <Progress :model-value="50">
+          <Progress preset="standard" :model-value="50">
 
           </Progress>
         </div>
