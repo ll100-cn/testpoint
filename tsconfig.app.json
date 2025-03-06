@@ -13,6 +13,7 @@
     "paths": {
       "@/*": ["app/javascript/frontend/*"],
       "$vendor/*": ["app/javascript/vendor/*"],
+      "@bbb/*": ["app/javascript/bbb/*"],
     }
   }
 }

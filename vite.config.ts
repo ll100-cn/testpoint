@@ -27,6 +27,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./app/javascript/frontend', import.meta.url)),
       '@vendor': fileURLToPath(new URL('./node_modules/@vendor', import.meta.url)),
       '$vendor': fileURLToPath(new URL('./app/javascript/vendor', import.meta.url)),
+      '@bbb': fileURLToPath(new URL('./app/javascript/bbb', import.meta.url)),
     }
   },
   build: {
