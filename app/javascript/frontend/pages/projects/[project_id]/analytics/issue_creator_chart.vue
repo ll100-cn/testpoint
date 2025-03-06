@@ -62,10 +62,10 @@ const filter = reactive({
   ...query
 })
 const project_id = params.project_id
-const members = ref(await page.inProject()!.request(q.project.MemberInfoReq.List).setup(proxy).perform())
-const categories = ref(await page.inProject()!.request(q.project.CategoryReq.List).setup(proxy).perform())
+const members = ref(await page.inProject()!.request(q.project.members.InfoList).setup(proxy).perform())
+const categories = ref(await page.inProject()!.request(q.project.categories.List).setup(proxy).perform())
 const former = Former.build(filter)
-const analytics = ref(await new q.project.IssueCreatorChartReq.Get().setup(proxy, (req) => {
+const analytics = ref(await new q.project.issue_creator_charts.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.plainToQuery(former.form, true)
 }).perform())

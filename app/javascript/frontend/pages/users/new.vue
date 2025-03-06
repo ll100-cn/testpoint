@@ -39,7 +39,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const user = await new q.admin.UserReq.Create().setup(proxy).perform(this.form)
+  const user = await new q.admin.users.Create().setup(proxy).perform(this.form)
   router.push("/users")
 }
 

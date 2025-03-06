@@ -52,7 +52,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_relationship = await new q.bug.IssueRelationshipReq.Create().setup(proxy, (req) => {
+  const a_issue_relationship = await new q.bug.issue_relationships.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(former.form)

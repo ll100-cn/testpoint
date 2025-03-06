@@ -125,7 +125,7 @@ const { Form, FormGroup } = FormFactory<typeof searcher.form>()
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan_info = ref(await new q.test.PlanInfoReq.Get().setup(proxy, (req) => {
+const plan_info = ref(await new q.test.plans.InfoGet().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
@@ -135,7 +135,7 @@ const current_phase_info = computed(() => {
   return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
-const task_upshot_infos = ref(await new q.test.TaskUpshotInfoReq.List().setup(proxy, (req) => {
+const task_upshot_infos = ref(await new q.test.task_upshots.InfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_id = current_phase_info.value.id

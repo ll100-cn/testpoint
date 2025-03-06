@@ -101,7 +101,7 @@ const add_dialog_open = ref(false)
 
 const issues = ref([] as Issue[])
 
-const head = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
+const head = ref(await new q.bug.issues.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).perform())
@@ -137,7 +137,7 @@ former.doPerform = async function() {
   }
 
   try {
-    const issue = await new q.bug.IssueReq.Get().setup(proxy, (req) => {
+    const issue = await new q.bug.issues.Get().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = former.form.source_id
     }).perform()
@@ -166,7 +166,7 @@ async function merge() {
   }
 
   try {
-    const issue = await new q.bug.IssueReq.Merge().setup(proxy, (req) => {
+    const issue = await new q.bug.issues.Merge().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = head.value.id
     }).perform({

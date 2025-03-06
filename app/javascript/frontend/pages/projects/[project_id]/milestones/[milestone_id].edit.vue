@@ -45,7 +45,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.MilestoneReq.Update().setup(proxy, (req) => {
+  await new q.project.milestones.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform(this.form)
@@ -53,7 +53,7 @@ former.doPerform = async function() {
   router.push(`/projects/${project_id}/milestones`)
 }
 
-const milestone = await new q.project.MilestoneReq.Get().setup(proxy, (req) => {
+const milestone = await new q.project.milestones.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.id = _.toNumber(params.milestone_id)
 }).perform()

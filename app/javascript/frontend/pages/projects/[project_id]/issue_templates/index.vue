@@ -66,7 +66,7 @@ const allow = page.inProject().allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
+const issue_templates = ref(await new q.project.issue_templates.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -76,7 +76,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new q.project.IssueTemplateReq.Destroy().setup(proxy, (req) => {
+    await new q.project.issue_templates.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_template_id = id
     }).perform()

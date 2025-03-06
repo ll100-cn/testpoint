@@ -65,7 +65,7 @@ watch(former.form, () => {
 })
 
 former.doPerform = async function() {
-  const account = await new q.profile.AccountReq.Update().setup(proxy).perform(this.form)
+  const account = await new q.profile.accounts.Update().setup(proxy).perform(this.form)
   session.account = account
 
   success.value = true

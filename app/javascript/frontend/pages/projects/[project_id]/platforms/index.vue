@@ -70,11 +70,11 @@ const allow = page.inProject().allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
+const platforms = ref(await new q.project.platforms.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.members.InfoList).setup(proxy).perform())
 
 async function onRemove(id: number) {
   if (!confirm("是否删除平台？")) {
@@ -82,7 +82,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new q.project.PlatformReq.Destroy().setup(proxy, (req) => {
+    await new q.project.platforms.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.platform_id = id
     }).perform()

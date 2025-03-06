@@ -50,7 +50,7 @@ const { Form, FormGroup } = FormFactory<typeof former.form>()
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
 former.doPerform = async function() {
-  const new_test_case = await new q.case.TestCaseReq.Create().setup(proxy, (req) => {
+  const new_test_case = await new q.case.test_cases.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id.value
   }).perform(this.form)
 

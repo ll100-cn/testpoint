@@ -70,7 +70,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
+  const a_issue_action = await new q.bug.issue_actions.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
@@ -87,8 +87,8 @@ const categories = ref([] as Category[])
 async function reset() {
   loading.value = true
 
-  members.value = await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform()
-  categories.value = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
+  members.value = await page.inProject().request(q.project.members.InfoList).setup(proxy).perform()
+  categories.value = await page.inProject().request(q.project.categories.List).setup(proxy).perform()
 
   nextTick(() => {
     loading.value = false

@@ -132,18 +132,18 @@ const emit = defineEmits<{
 
 const milestone = ref(null as Milestone | null)
 if (route.query.milestone_id) {
-  const _milestones = await page.inProject()!.request(q.project.MilestoneReq.List).setup(proxy).perform()
+  const _milestones = await page.inProject()!.request(q.project.milestones.List).setup(proxy).perform()
   milestone.value = _.find(_milestones, { id: _.toNumber(route.query.milestone_id) }) ?? null
 }
 const readonly = computed(() => milestone.value != null)
 
 const project_id = _.toNumber(params.project_id)
-const test_cases = await new q.case.TestCaseReq.List().setup(proxy, (req) => {
+const test_cases = await new q.case.test_cases.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.milestone_id = route.query.milestone_id
 }).perform()
 
-const _labels = ref(await new q.project.TestCaseLabelReq.List().setup(proxy, (req) => {
+const _labels = ref(await new q.project.test_case_labels.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -151,7 +151,7 @@ const label_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>().setup(_labels.value)
 })
 
-const _platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
+const _platforms = ref(await new q.project.platforms.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -159,7 +159,7 @@ const platform_repo = computed(() => {
   return new EntityRepo<Platform>().setup(_platforms.value)
 })
 
-const _roadmaps = ref(await new q.project.RoadmapReq.List().setup(proxy, (req) => {
+const _roadmaps = ref(await new q.project.roadmaps.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

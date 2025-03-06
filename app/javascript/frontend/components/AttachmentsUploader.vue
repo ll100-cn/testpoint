@@ -69,7 +69,7 @@ async function upload(file: File) {
   items.value.push(item)
 
   try {
-    const attachment = await new q.project.AttachmentReq.Create().setup(proxy, (req) => {
+    const attachment = await new q.project.attachments.Create().setup(proxy, (req) => {
       req.conifg = {
         onUploadProgress: (progressEvent: AxiosProgressEvent) => {
           upload_file.state = "uploading"

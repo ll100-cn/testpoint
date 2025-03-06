@@ -43,7 +43,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.CategoryInfoReq.Create().setup(proxy, (req) => {
+  await new q.project.categories.InfoCreate().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)
   router.push('/projects/' + params.project_id + '/categories')

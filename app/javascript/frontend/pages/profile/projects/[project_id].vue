@@ -51,7 +51,7 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const account = ref(session.account)
-const profile = ref(session.profiles.get(project_id) ?? await new q.project.ProfileReq.Get().setup(proxy, req => {
+const profile = ref(session.profiles.get(project_id) ?? await new q.project.profiles.Get().setup(proxy, req => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -67,7 +67,7 @@ watch(former.form, () => {
 })
 
 former.doPerform = async function() {
-  const a_profile = await new q.project.ProfileReq.Update().setup(proxy, req => {
+  const a_profile = await new q.project.profiles.Update().setup(proxy, req => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
 

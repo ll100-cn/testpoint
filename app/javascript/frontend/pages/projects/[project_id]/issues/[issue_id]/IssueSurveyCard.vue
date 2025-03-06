@@ -62,7 +62,7 @@ const emit = defineEmits<{
 }>()
 
 async function deleteIssueSurvey(issue_survey: IssueSurvey) {
-  await new q.bug.IssueSurveyReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.issue_surveies.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
     req.interpolations.issue_survey_id = issue_survey.id

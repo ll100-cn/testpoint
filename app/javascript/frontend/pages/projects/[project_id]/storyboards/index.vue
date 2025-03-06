@@ -33,7 +33,7 @@ const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const project_id = params.project_id
 
-const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
+const storyboards = ref(await new q.project.storyboards.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 

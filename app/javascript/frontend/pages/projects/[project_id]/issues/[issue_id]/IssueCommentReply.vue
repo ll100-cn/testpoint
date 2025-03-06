@@ -65,7 +65,7 @@ async function deleteComment() {
   if (!confirm("确认删除该评论？")) {
     return
   }
-  await new q.bug.IssueCommentReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.issue_comments.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id

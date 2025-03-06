@@ -57,7 +57,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_requirement = await new q.project.RequirementReq.Create().setup(proxy, (req) => {
+  const a_requirement = await new q.project.requirements.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
   }).perform(this.form)

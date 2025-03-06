@@ -65,7 +65,7 @@ const validations = reactive<Validations>(new Validations())
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
 
-const projects = ref(await new q.admin.ProjectReq.Page().setup(proxy, req => {
+const projects = ref(await new q.admin.projects.Page().setup(proxy, req => {
   req.query = utils.plainToQuery(query)
 }).perform())
 
@@ -75,7 +75,7 @@ async function onRemove(project_id) {
   }
 
   try {
-    await new q.admin.ProjectReq.Destroy().setup(proxy, (req) => {
+    await new q.admin.projects.Destroy().setup(proxy, (req) => {
       req.interpolations.id = project_id
     }).perform()
 

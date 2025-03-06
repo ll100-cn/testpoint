@@ -98,7 +98,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const attachment = await new q.project.AttachmentReq.Update().setup(proxy, (req) => {
+  const attachment = await new q.project.attachments.Update().setup(proxy, (req) => {
     req.interpolations.attachment_id = props.attachment.id
   }).perform(this.form)
 
@@ -137,7 +137,7 @@ async function deleteAttachment() {
   validations.value.clear()
 
   try {
-    const attachment = await new q.project.AttachmentReq.Destroy().setup(proxy, (req) => {
+    const attachment = await new q.project.attachments.Destroy().setup(proxy, (req) => {
       req.interpolations.attachment_id = props.attachment.id
     }).perform()
     if (attachment) {

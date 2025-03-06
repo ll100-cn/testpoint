@@ -53,7 +53,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.MemberReq.Create().setup(proxy, (req) => {
+  await new q.project.members.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
   router.push('/projects/' + project_id + '/members')

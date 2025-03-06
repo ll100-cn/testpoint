@@ -52,7 +52,7 @@ async function deleteIssueRelationShip() {
     return
   }
 
-  await new q.bug.IssueRelationshipReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.issue_relationships.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
     req.interpolations.issue_relationship_id = props.issue_relationship.id

@@ -57,7 +57,7 @@ const emit = defineEmits<{
   (e: 'create', event: Event): void,
 }>()
 
-const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
+const storyboards = ref(await new q.project.storyboards.List().setup(proxy, (req) => {
   req.interpolations.project_id = page.inProject()!.project_id
 }).perform())
 
@@ -74,7 +74,7 @@ watch(() => props.former.form.storyboard_id, async (storyboard_id) => {
 })
 
 async function requestRequirement(storyboard_id: number) {
-  const new_requirements = await new q.project.RequirementReq.List().setup(proxy, (req) => {
+  const new_requirements = await new q.project.requirements.List().setup(proxy, (req) => {
     req.interpolations.project_id = page.inProject()!.project_id
     req.interpolations.storyboard_id = storyboard_id
     req.query.roadmap_id = props.newest_roadmap.id

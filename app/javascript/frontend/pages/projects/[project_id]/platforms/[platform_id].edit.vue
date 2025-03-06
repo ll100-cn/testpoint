@@ -38,12 +38,12 @@ const page = usePageStore()
 
 const project_id = params.project_id
 const platform_id = params.platform_id
-const platform = ref(await new q.project.PlatformReq.Get().setup(proxy, (req) => {
+const platform = ref(await new q.project.platforms.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.platform_id = platform_id
 }).perform())
 
-const members = ref(await page.inProject()!.request(q.project.MemberInfoReq.List).setup(proxy).perform())
+const members = ref(await page.inProject()!.request(q.project.members.InfoList).setup(proxy).perform())
 
 const former = Former.build({
   name: platform.value.name,
@@ -54,7 +54,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.PlatformReq.Update().setup(proxy, (req) => {
+  await new q.project.platforms.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.platform_id = platform_id
   }).perform(this.form)

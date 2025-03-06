@@ -100,11 +100,11 @@ const member_infos = ref([] as MemberInfo[])
 const projects = computed(() => member_infos.value.map(it => it.project))
 
 if (account.value) {
-  member_infos.value = (await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
+  member_infos.value = (await page.singleton(q.profile.members.InfoList).setup(proxy).perform())
 }
 
 async function signOut() {
-  await new q.profile.Logout().setup(proxy).perform()
+  await new q.profile.login.Destroy().setup(proxy).perform()
   session.clear()
   router.push('/')
 }

@@ -33,7 +33,7 @@ const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const user = await new q.admin.UserReq.Get().setup(proxy, (req) => {
+const user = await new q.admin.users.Get().setup(proxy, (req) => {
   req.interpolations.id = params.user_id
 }).perform()
 
@@ -45,7 +45,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.admin.UserReq.Update().setup(proxy, (req) => {
+  await new q.admin.users.Update().setup(proxy, (req) => {
     req.interpolations.id = user.id
   }).perform(this.form)
 

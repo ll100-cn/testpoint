@@ -85,7 +85,7 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const members = ref(await new q.project.MemberInfoReq.List().setup(proxy, (req) => {
+const members = ref(await new q.project.members.InfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = currentQuery.value
 }).perform())
@@ -101,7 +101,7 @@ async function onArchive(id: number) {
   }
 
   try {
-    await new q.project.MemberReq.Archive().setup(proxy, (req) => {
+    await new q.project.members.Archive().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.member_id = id
     }).perform()

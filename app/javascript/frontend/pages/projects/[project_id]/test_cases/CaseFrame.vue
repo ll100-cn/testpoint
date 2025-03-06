@@ -45,7 +45,7 @@ async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
 
-  history.value = await new q.case.TestCaseHistory().setup(proxy, (req) => {
+  history.value = await new q.case.test_cases.History().setup(proxy, (req) => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform()

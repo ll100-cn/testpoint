@@ -172,7 +172,7 @@ const former = Former.build({
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 former.doPerform = async function(code: string) {
-  const a_issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
+  const a_issue_action = await new q.bug.issue_actions.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform({ [code]: this.form[code] })
@@ -182,12 +182,12 @@ former.doPerform = async function(code: string) {
   emit('updated', props.issue_info)
 }
 
-const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
-const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
-const milestones = ref(await page.inProject().request(q.project.MilestoneReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.members.InfoList).setup(proxy).perform())
+const categories = ref(await page.inProject().request(q.project.categories.List).setup(proxy).perform())
+const milestones = ref(await page.inProject().request(q.project.milestones.List).setup(proxy).perform())
 
 async function subscribe() {
-  const a_subscription = await new q.bug.SubscriptionReq.Create().setup(proxy, (req) => {
+  const a_subscription = await new q.bug.subscriptions.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform()
@@ -197,7 +197,7 @@ async function subscribe() {
 }
 
 async function unsubscribe() {
-  await new q.bug.SubscriptionReq.Destroy().setup(proxy, (req) => {
+  await new q.bug.subscriptions.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform()

@@ -62,7 +62,7 @@ const route = useRoute()
 const validations = reactive<Validations>(new Validations())
 const query = utils.queryToPlain(route.query)
 
-const users = ref(await new q.admin.UserReq.Page().setup(proxy, req => {
+const users = ref(await new q.admin.users.Page().setup(proxy, req => {
   req.query = utils.plainToQuery(query)
 }).perform())
 
@@ -72,7 +72,7 @@ async function onRemove(user_id) {
   }
 
   try {
-    await new q.admin.UserReq.Destroy().setup(proxy, (req) => {
+    await new q.admin.users.Destroy().setup(proxy, (req) => {
       req.interpolations.id = user_id
     }).perform()
 

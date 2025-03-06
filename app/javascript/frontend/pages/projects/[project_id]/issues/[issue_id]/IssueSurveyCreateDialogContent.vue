@@ -55,7 +55,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_survey = await new q.bug.IssueSurveyReq.Create().setup(proxy, (req) => {
+  const a_issue_survey = await new q.bug.issue_surveies.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
@@ -73,7 +73,7 @@ async function reset() {
   loading.value = true
 
   try {
-    issue_templates.value = await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
+    issue_templates.value = await new q.project.issue_templates.List().setup(proxy, (req) => {
       req.interpolations.project_id = props.issue_info.project_id
     }).perform()
   } finally {

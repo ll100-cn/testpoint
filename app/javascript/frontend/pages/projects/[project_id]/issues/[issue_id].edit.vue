@@ -68,7 +68,7 @@ const issue_id = _.toInteger(params.issue_id)
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
-const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
+const issue = ref(await new q.bug.issues.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).perform())
@@ -83,7 +83,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
+  const issue_action = await new q.bug.issue_actions.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue_id
   }).perform(this.form)
@@ -91,6 +91,6 @@ former.doPerform = async function() {
   router.push({ path: `/projects/${project_id}/issues/${issue_id}` })
 }
 
-const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
-const categories = ref(await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform())
+const members = ref(await page.inProject().request(q.project.members.InfoList).setup(proxy).perform())
+const categories = ref(await page.inProject().request(q.project.categories.List).setup(proxy).perform())
 </script>

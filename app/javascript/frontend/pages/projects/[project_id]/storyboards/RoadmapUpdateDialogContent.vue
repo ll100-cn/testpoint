@@ -49,7 +49,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_roadmap = await new q.project.RoadmapReq.Update().setup(proxy, (req) => {
+  const a_roadmap = await new q.project.roadmaps.Update().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.roadmap_id = roadmap.value.id
   }).perform(this.form)

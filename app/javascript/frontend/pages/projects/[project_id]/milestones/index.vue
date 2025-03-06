@@ -81,7 +81,7 @@ const allow = page.inProject()!.allow
 const active = ref('normal')
 
 const project_id = _.toNumber(params.project_id)
-const milestones = ref(await page.inProject()!.request(q.project.MilestoneReq.List).setup(proxy).perform())
+const milestones = ref(await page.inProject()!.request(q.project.milestones.List).setup(proxy).perform())
 const grouped_milestones = ref(_.groupBy(milestones.value, (m) => m.archived_at ? 'archived' : 'normal'))
 
 function milestoneDestroy(milestone: Milestone) {
@@ -89,7 +89,7 @@ function milestoneDestroy(milestone: Milestone) {
     return
   }
 
-  new q.project.MilestoneReq.Destroy().setup(proxy, (req) => {
+  new q.project.milestones.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()
@@ -102,7 +102,7 @@ function milestoneArchive(milestone: Milestone) {
     return
   }
 
-  new q.project.MilestoneReq.Archive().setup(proxy, (req) => {
+  new q.project.milestones.Archive().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()
@@ -115,7 +115,7 @@ function milestoneActive(milestone: Milestone) {
     return
   }
 
-  new q.project.MilestoneReq.Active().setup(proxy, (req) => {
+  new q.project.milestones.Active().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()

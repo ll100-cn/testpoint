@@ -35,7 +35,7 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null
-const milestones = await new q.project.MilestoneReq.List().setup(proxy, (req) => {
+const milestones = await new q.project.milestones.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query.filter = "available"
 }).perform()

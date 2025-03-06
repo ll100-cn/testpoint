@@ -171,14 +171,14 @@ const page = usePageStore()
 const profile = page.inProject().profile
 const allow = profile.allow
 
-const issue_info = ref(await new q.bug.IssueInfoReq.Get().setup(proxy, (req) => {
+const issue_info = ref(await new q.bug.issues.InfoGet().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).perform())
 page.meta.title = `#${issue_info.value.id} ${issue_info.value.title}`
 
 const readonly = computed(() => issue_info.value.project_id.toString() !== params.project_id)
-const comments = ref(await new q.bug.IssueCommentReq.List().setup(proxy, (req) => {
+const comments = ref(await new q.bug.issue_comments.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_info.value.id
 }).perform())
@@ -215,7 +215,7 @@ function onIssueCommentCreated(a_issue_info: IssueInfo, a_comment: Comment) {
 }
 
 async function onIssueConvert(a_issue_info: IssueInfo) {
-  await new q.bug.IssueBodyReq.Convert().setup(proxy, (req) => {
+  await new q.bug.issue_bodies.Convert().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = a_issue_info.id
   }).perform()
@@ -227,7 +227,7 @@ const actioner = Actioner.build()
 
 async function changeIssueState(state: string) {
   actioner.perform(async function() {
-    const a_issue_info = await new q.bug.IssueInfoReq.Process().setup(proxy, (req) => {
+    const a_issue_info = await new q.bug.issues.InfoProcess().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = params.issue_id
     }).perform({ state })

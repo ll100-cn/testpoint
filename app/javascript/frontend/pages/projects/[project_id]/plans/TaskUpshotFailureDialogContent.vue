@@ -98,7 +98,7 @@ const issue_former = NewFormer.build({
 const { Form: IssueForm, FormGroup: IssueFormGroup } = FormFactory<typeof issue_former.form>()
 
 issue_former.doPerform = async function() {
-  await new q.bug.IssueReq.Create().setup(proxy, (req) => {
+  await new q.bug.issues.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.plan_info.project_id
   }).perform(this.form)
 
@@ -117,7 +117,7 @@ const comment_former = NewFormer.build({
 const { Form: CommentForm, FormGroup: CommentFormGroup } = FormFactory<typeof comment_former.form>()
 
 comment_former.doPerform = async function() {
-  await new q.bug.IssueCommentReq.Create().setup(proxy, (req) => {
+  await new q.bug.issue_comments.Create().setup(proxy, (req) => {
     req.interpolations.project_id = comment_issue.value!.project_id
     req.interpolations.issue_id = comment_issue.value!.id
   }).perform(this.form)
@@ -132,7 +132,7 @@ const actioner = Actioner.build<{
 actioner.failTaskUpshot = async function() {
   this.perform(async function() {
     console.log("-------znmsb--------")
-    const a_task_upshot = await new q.test.TaskUpshotStateReq.Update().setup(proxy, (req) => {
+    const a_task_upshot = await new q.test.task_upshot_states.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.task_id = task_info.value.id
@@ -156,12 +156,12 @@ async function reset(a_task_upshot_info: TaskUpshotInfo, a_task_info: TaskInfo) 
   task_info.value = a_task_info
   addon.value = null
 
-  issue_templates.value = await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
+  issue_templates.value = await new q.project.issue_templates.List().setup(proxy, (req) => {
     req.interpolations.project_id = props.plan_info.project_id
   }).perform()
 
-  members.value = await page.inProject()!.request(q.project.MemberInfoReq.List).setup(proxy).perform()
-  categories.value = await page.inProject()!.request(q.project.CategoryReq.List).setup(proxy).perform()
+  members.value = await page.inProject()!.request(q.project.members.InfoList).setup(proxy).perform()
+  categories.value = await page.inProject()!.request(q.project.categories.List).setup(proxy).perform()
 
   issue_former.form.issue_attributes.title = `「${props.plan_info.platform.name}」 ${task_upshot_info.value.test_case.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_info.value.content ?? task_upshot_info.value.test_case.content}\n\n实际效果:\n`

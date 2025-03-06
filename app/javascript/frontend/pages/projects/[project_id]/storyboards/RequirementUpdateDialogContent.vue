@@ -73,7 +73,7 @@ async function destroyRequirement() {
     return
   }
 
-  await new q.project.RequirementReq.Destroy().setup(proxy, (req) => {
+  await new q.project.requirements.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
     req.interpolations.requirement_id = requirement.value.id
@@ -95,7 +95,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function(a_platforms: Platform[]) {
-  const a_requirement = await new q.project.RequirementReq.Update().setup(proxy, (req) => {
+  const a_requirement = await new q.project.requirements.Update().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
     req.interpolations.requirement_id = requirement.value.id

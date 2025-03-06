@@ -72,7 +72,7 @@ const login_code = ref(null as LoginCode | null)
 const { Form: CodeForm, FormGroup: CodeFormGroup } = FormFactory<typeof code_former.form>()
 
 code_former.doPerform = async function() {
-  login_code.value = await new q.profile.LoginCodeDeliver().setup(proxy).perform(this.form)
+  login_code.value = await new q.profile.login.Deliver().setup(proxy).perform(this.form)
   former.form.email = this.form.email
 }
 
@@ -85,7 +85,7 @@ const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
   try {
-    await new q.profile.LoginCodeVerify().setup(proxy).perform({ user: this.form })
+    await new q.profile.login.Verify().setup(proxy).perform({ user: this.form })
     session.account = undefined
     await session.prepare(proxy)
     router.push("/")

@@ -66,7 +66,7 @@ const unhandled_issues_count = ref(0)
 
 const sorts = ref(query.sorts ?? 'id desc')
 
-const pagination = ref(await new q.profile.IssueReq.Page().setup(proxy, req => {
+const pagination = ref(await new q.profile.issues.Page().setup(proxy, req => {
   req.query = utils.plainToQuery(query)
   req.query.filter = filter
   req.query.sorts = sorts.value
@@ -75,7 +75,7 @@ const pagination = ref(await new q.profile.IssueReq.Page().setup(proxy, req => {
 if (filter == 'unhandled') {
   unhandled_issues_count.value = pagination.value.total_count
 } else {
-  const unhandled = await new q.profile.IssueReq.Page().setup(proxy, req => {
+  const unhandled = await new q.profile.issues.Page().setup(proxy, req => {
     req.query.per_page = 1
     req.query.filter = 'unhandled'
   }).perform()

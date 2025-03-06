@@ -86,7 +86,7 @@ const actioner = Actioner.build<{
 
 actioner.submitContent = function(content: string) {
   this.perform(async () => {
-    const a_task_upshot = await new q.test.TaskUpshotContentReq.Update().setup(proxy, (req) => {
+    const a_task_upshot = await new q.test.task_upshot_contents.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.task_id = task_upshot_info.value.task.id
@@ -102,7 +102,7 @@ actioner.submitContent = function(content: string) {
 
 actioner.ignoreTask = function() {
   this.perform(async function() {
-    const task = await new q.test.TaskReq.Ignore().setup(proxy, (req) => {
+    const task = await new q.test.tasks.Ignore().setup(proxy, (req) => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.id = task_info.value.id
@@ -116,7 +116,7 @@ actioner.ignoreTask = function() {
 
 actioner.unignoreTask = function() {
   this.perform(async function() {
-    const task = await new q.test.TaskReq.Unignore().setup(proxy, (req) => {
+    const task = await new q.test.tasks.Unignore().setup(proxy, (req) => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.id = task_info.value.id
@@ -130,7 +130,7 @@ actioner.unignoreTask = function() {
 
 actioner.updateTaskUpshotState = function(state_override: "pass" | "pending" | null) {
   this.perform(async function() {
-    const a_task_upshot = await new q.test.TaskUpshotStateReq.Update().setup(proxy, (req) => {
+    const a_task_upshot = await new q.test.task_upshot_states.Update().setup(proxy, (req) => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.task_id = task_info.value.id
@@ -149,7 +149,7 @@ async function reset(a_task_upshot_info: TaskUpshotInfo) {
   loading.value = true
 
   task_upshot_info.value = a_task_upshot_info
-  task_info.value = await new q.test.TaskInfoReq.Get().setup(proxy, (req) => {
+  task_info.value = await new q.test.tasks.InfoGet().setup(proxy, (req) => {
     req.interpolations.project_id = props.plan_info.project_id
     req.interpolations.plan_id = props.plan_info.id
     req.interpolations.task_id = task_upshot_info.value.task.id

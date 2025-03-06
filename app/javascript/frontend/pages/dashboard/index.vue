@@ -46,9 +46,9 @@ const page = usePageStore()
 
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const issue_stats = ref(await new q.profile.IssueStatReq.List().setup(proxy).perform())
+const issue_stats = ref(await new q.profile.issue_stats.List().setup(proxy).perform())
 
-const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
+const member_infos = ref(await page.singleton(q.profile.members.InfoList).setup(proxy).perform())
 const project_repo = computed(() => new EntityRepo<Project>().setup(member_infos.value.map(it => it.project)))
 
 const grouped_issue_stats = computed(() => {
@@ -90,7 +90,7 @@ const issue_stages_counts = computed(() => {
   return result
 })
 
-const unhandled_issues_count = ref((await new q.profile.IssueReq.Page().setup(proxy, req => {
+const unhandled_issues_count = ref((await new q.profile.issues.Page().setup(proxy, req => {
   req.query.per_page = 1
   req.query.filter = 'unhandled'
 }).perform()).total_count)

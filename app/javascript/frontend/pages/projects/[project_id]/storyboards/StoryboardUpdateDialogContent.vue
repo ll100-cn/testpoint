@@ -65,7 +65,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_storyboard = await new q.project.StoryboardReq.Update().setup(proxy, (req) => {
+  const a_storyboard = await new q.project.storyboards.Update().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
   }).perform(this.form)
@@ -95,7 +95,7 @@ async function destroyStoryboard() {
     return
   }
 
-  await new q.project.StoryboardReq.Destroy().setup(proxy, (req) => {
+  await new q.project.storyboards.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
   }).perform()

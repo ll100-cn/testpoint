@@ -39,7 +39,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_body = await new q.bug.IssueBodyReq.Update().setup(proxy, (req) => {
+  const a_issue_body = await new q.bug.issue_bodies.Update().setup(proxy, (req) => {
     req.interpolations.project_id = issue_info.value.project_id
     req.interpolations.issue_id = issue_info.value.id
   }).perform(this.form)

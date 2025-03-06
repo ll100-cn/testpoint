@@ -61,7 +61,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const phase = await new q.test.PlanPhaseReq.Create().setup(proxy, (req) => {
+  const phase = await new q.test.plan_phases.Create().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.plan_id = params.plan_id
   }).perform(this.form)

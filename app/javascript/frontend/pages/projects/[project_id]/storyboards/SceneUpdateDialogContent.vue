@@ -47,7 +47,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_scene = await new q.project.SceneReq.Update().setup(proxy, (req) => {
+  const a_scene = await new q.project.scenes.Update().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = params.storyboard_id
     req.interpolations.scene_id = scene.value.id

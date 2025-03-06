@@ -39,5 +39,5 @@ defineProps<{
   current: string | number
 }>()
 
-const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
+const member_infos = ref(await page.singleton(q.profile.members.InfoList).setup(proxy).perform())
 </script>

@@ -10,6 +10,7 @@ import URITemplate from "urijs/src/URITemplate"
 import { type ClassConstructor, plainToInstance } from "class-transformer"
 import { ErrorsObject } from "@/models/ErrorsObject"
 import { UnprocessableEntityError } from "@/ui"
+import { Pagination } from "@/models"
 
 export interface PerformContext {
   $axios: AxiosInstance,
@@ -182,5 +183,21 @@ export abstract class BaseRequest<T> {
     } else {
       _.isNull(value) ? formData.append(name, "") : formData.append(name, value)
     }
+  }
+
+  responseToArray<K>(klass: ClassConstructor<K>, response: AxiosResponse): K[] {
+    return plainToInstance<K, K>(klass, response.data)
+  }
+
+  responseToObject<K>(klass: ClassConstructor<K>, response: AxiosResponse): K {
+    return plainToInstance(klass, response.data)
+  }
+
+  responseToPagination<K>(klass: ClassConstructor<K>, response: AxiosResponse): Pagination<K> {
+    const pagination = new Pagination<K>()
+    const result = this.responseToArray(klass, response)
+    pagination.list = result
+    pagination.build(response)
+    return pagination
   }
 }

@@ -43,12 +43,12 @@ const params = route.params as any
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan = ref(await new q.test.PlanInfoReq.Get().setup(proxy, (req) => {
+const plan = ref(await new q.test.plans.InfoGet().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).perform())
 
-const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
+const platforms = ref(await new q.project.platforms.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -62,7 +62,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.test.PlanReq.Update().setup(proxy, (req) => {
+  await new q.test.plans.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.plan_id = plan_id
   }).perform(this.form)
@@ -80,7 +80,7 @@ async function onDestroy() {
     return
   }
 
-  const plan = await new q.test.PlanReq.Destroy().setup(proxy, (req) => {
+  const plan = await new q.test.plans.Destroy().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.plan_id = plan_id
   }).perform()

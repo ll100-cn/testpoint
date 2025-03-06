@@ -96,17 +96,17 @@ former.doPerform = async function(search: Search2 | null) {
   }
 }
 
-const pagination = ref(await new q.bug.IssueReq.Page().setup(proxy, (req) => {
+const pagination = ref(await new q.bug.issues.Page().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
 }).perform())
 
-const issue_summary = ref(await new q.bug.IssueSummaryReq.Get().setup(proxy, (req) => {
+const issue_summary = ref(await new q.bug.issue_summaries.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2 })
 }).perform())
 
-const issue_stats = ref(await new q.bug.IssueStatReq.List().setup(proxy, (req) => {
+const issue_stats = ref(await new q.bug.issue_stats.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ keyword: search2.keyword })
 }).perform())

@@ -43,12 +43,12 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_comment = await new q.bug.IssueCommentReq.Create().setup(proxy, (req) => {
+  const a_comment = await new q.bug.issue_comments.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
 
-  const a_issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
+  const a_issue_action = await new q.bug.issue_actions.Create().setup(proxy, (req) => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform({ state: "waiting" })

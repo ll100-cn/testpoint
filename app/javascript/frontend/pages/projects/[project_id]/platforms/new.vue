@@ -38,7 +38,7 @@ const page = usePageStore()
 
 const project_id = params.project_id as string
 
-const members = ref(await page.inProject()?.request(q.project.MemberInfoReq.List).setup(proxy).perform())
+const members = ref(await page.inProject()?.request(q.project.members.InfoList).setup(proxy).perform())
 
 const former = Former.build({
   name: "",
@@ -49,7 +49,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.PlatformReq.Create().setup(proxy, (req) => {
+  await new q.project.platforms.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
 

@@ -36,7 +36,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 const member_id = params.member_id
-const member = ref(await new q.project.MemberReq.Get().setup(proxy, (req) => {
+const member = ref(await new q.project.members.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.member_id = member_id
 }).perform())
@@ -49,7 +49,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.MemberReq.Update().setup(proxy, (req) => {
+  await new q.project.members.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.member_id = member_id
   }).perform(this.form)

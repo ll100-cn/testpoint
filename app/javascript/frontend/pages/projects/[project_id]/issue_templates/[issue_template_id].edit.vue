@@ -37,7 +37,7 @@ const params = route.params as any
 const project_id = params.project_id
 const issue_template_id = params.issue_template_id
 
-const issue_template = ref(await new q.project.IssueTemplateReq.Get().setup(proxy, (req) => {
+const issue_template = ref(await new q.project.issue_templates.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_template_id = issue_template_id
 }).perform())
@@ -55,7 +55,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.IssueTemplateReq.Update().setup(proxy, (req) => {
+  await new q.project.issue_templates.Update().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_template_id = issue_template_id
   }).perform(this.form)

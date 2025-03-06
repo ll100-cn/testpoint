@@ -71,7 +71,7 @@ const allow = page.inProject()!.allow
 
 const project_id = params.project_id
 
-const categories = ref(await new q.project.CategoryInfoReq.List().setup(proxy, (req) => {
+const categories = ref(await new q.project.categories.InfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -79,7 +79,7 @@ const actioner = Actioner.build()
 
 function deleteCategory(id: number) {
   actioner.perform(async function() {
-    await new q.project.CategoryInfoReq.Destroy().setup(proxy, (req) => {
+    await new q.project.categories.InfoDestroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.category_id = id
     }).perform()

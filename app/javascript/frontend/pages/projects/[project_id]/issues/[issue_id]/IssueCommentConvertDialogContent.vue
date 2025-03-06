@@ -44,7 +44,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_comment = await new q.bug.IssueCommentReq.Convert().setup(proxy, (req) => {
+  const a_comment = await new q.bug.issue_comments.Convert().setup(proxy, (req) => {
     req.interpolations.project_id = issue.value.project_id
     req.interpolations.issue_id = issue.value.id
     req.interpolations.comment_id = comment.value.id

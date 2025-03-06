@@ -66,7 +66,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const new_test_case = await new q.case.TestCaseReq.Update().setup(proxy, (req) => {
+  const new_test_case = await new q.case.test_cases.Update().setup(proxy, (req) => {
     req.interpolations.project_id = 1
     req.interpolations.id = test_case.value.id
   }).perform(this.form)
@@ -84,7 +84,7 @@ async function archiveTestCase(event: Event) {
   }
 
   try {
-    const new_test_case = await new q.case.TestCaseReq.Destroy().setup(proxy, (req) => {
+    const new_test_case = await new q.case.test_cases.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = test_case.value.project_id
       req.interpolations.id = test_case.value.id
     }).perform()

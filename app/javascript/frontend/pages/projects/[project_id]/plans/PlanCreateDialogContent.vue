@@ -49,7 +49,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const plan = await new q.test.PlanReq.Create().setup(proxy, (req) => {
+  const plan = await new q.test.plans.Create().setup(proxy, (req) => {
     req.interpolations.project_id = profile.project_id
   }).perform(this.form)
 
@@ -65,7 +65,7 @@ async function reset(new_test_case_stats: TestCaseStat[]) {
 
   test_case_stats.value = new_test_case_stats
 
-  platforms.value = await page.inProject().request(q.project.PlatformReq.List).setup(proxy).perform()
+  platforms.value = await page.inProject().request(q.project.platforms.List).setup(proxy).perform()
   former.form.title = `Test Plan: ${h.datetime(new Date(), "YYYY-MM-DD")}`
   former.form.platform_id = platforms.value[0]?.id
   former.form.milestone_id = null

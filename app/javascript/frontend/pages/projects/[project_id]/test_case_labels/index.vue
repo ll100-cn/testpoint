@@ -65,7 +65,7 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const test_case_labels = ref(await new q.project.TestCaseLabelInfoReq.List().setup(proxy, (req) => {
+const test_case_labels = ref(await new q.project.test_case_labels.InfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
@@ -75,7 +75,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new q.project.TestCaseLabelInfoReq.Destroy().setup(proxy, (req) => {
+    await new q.project.test_case_labels.InfoDestroy().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
       req.interpolations.test_case_label_id = id
     }).perform()

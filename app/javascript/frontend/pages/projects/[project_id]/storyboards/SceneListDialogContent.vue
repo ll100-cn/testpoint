@@ -93,7 +93,7 @@ async function remove(a_scene: Scene) {
   }
 
   try {
-    await new q.project.SceneReq.Destroy().setup(proxy, (req) => {
+    await new q.project.scenes.Destroy().setup(proxy, (req) => {
       req.interpolations.project_id = params.project_id
       req.interpolations.storyboard_id = params.storyboard_id
       req.interpolations.scene_id = a_scene.id

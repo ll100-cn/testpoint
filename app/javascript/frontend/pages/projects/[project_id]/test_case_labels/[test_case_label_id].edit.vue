@@ -36,7 +36,7 @@ const params = route.params as any
 
 const project_id = params.project_id as string
 const test_case_label_id = params.test_case_label_id
-const test_case_label = ref(await new q.project.TestCaseLabelInfoReq.Get().setup(proxy, (req) => {
+const test_case_label = ref(await new q.project.test_case_labels.InfoGet().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.test_case_label_id = test_case_label_id
 }).perform())
@@ -49,7 +49,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.TestCaseLabelInfoReq.Update().setup(proxy, (req) => {
+  await new q.project.test_case_labels.InfoUpdate().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.test_case_label_id = test_case_label_id
   }).perform(this.form)

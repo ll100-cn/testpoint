@@ -44,7 +44,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.TestCaseLabelInfoReq.Create().setup(proxy, (req) => {
+  await new q.project.test_case_labels.InfoCreate().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
 

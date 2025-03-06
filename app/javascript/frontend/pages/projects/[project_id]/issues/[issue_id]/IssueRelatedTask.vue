@@ -19,12 +19,12 @@ const props = defineProps<{
   project_id: number
 }>()
 
-const test_case = ref(await new q.case.TestCaseReq.Get().setup(proxy, (req) => {
+const test_case = ref(await new q.case.test_cases.Get().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.test_case_id = props.task.test_case_id
 }).perform())
 
-const plan_info = ref(await new q.test.PlanInfoReq.Get().setup(proxy, (req) => {
+const plan_info = ref(await new q.test.plans.InfoGet().setup(proxy, (req) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.plan_id = props.task.plan_id
 }).perform())

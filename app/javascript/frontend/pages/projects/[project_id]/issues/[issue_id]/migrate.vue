@@ -59,7 +59,7 @@ const page = usePageStore()
 const project_id = _.toNumber(params.project_id)
 const issue_id = _.toNumber(params.issue_id)
 
-const issue = ref(await new q.bug.IssueReq.Get().setup(proxy, (req) => {
+const issue = ref(await new q.bug.issues.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).perform())
@@ -72,14 +72,14 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.bug.IssueMigrationReq().setup(proxy, (req) => {
+  await new q.bug.issue_migrations.Create().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
   }).perform({ ...this.form, source_issue_id: issue_id })
 
   router.push({ path: `/projects/${former.form.target_project_id}/issues/${issue_id}` })
 }
 
-const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
+const member_infos = ref(await page.singleton(q.profile.members.InfoList).setup(proxy).perform())
 const projects = computed(() => member_infos.value.filter(it => {
   return ['manager', 'owner'].includes(it.role) && it.project_id != project_id
 }).map(it => it.project))
@@ -91,7 +91,7 @@ const actioner = Actioner.build<{
 
 actioner.loadCategories = function(project_id: number) {
   this.perform(async function() {
-    categories.value = await new q.project.CategoryReq.List().setup(proxy, (req) => {
+    categories.value = await new q.project.categories.List().setup(proxy, (req) => {
       req.interpolations.project_id = project_id
     }).perform()
     former.form.target_category_id = null

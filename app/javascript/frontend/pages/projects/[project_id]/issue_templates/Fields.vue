@@ -79,7 +79,7 @@ const lookup_by_build_form_collection = ref([
 
 const { FormGroup } = FormFactory<typeof props.former.form>()
 
-const categories = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
+const categories = await page.inProject().request(q.project.categories.List).setup(proxy).perform()
 
 async function onRemoveInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)

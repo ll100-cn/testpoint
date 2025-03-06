@@ -182,27 +182,27 @@ const node_size_mapping = reactive(new Map<string, { dimensions: { width: number
 
 const { updateNodeData, updateNode, addNodes, addEdges, getNodes } = useVueFlow()
 
-const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
+const platforms = ref(await new q.project.platforms.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const test_case_labels = ref(await new q.project.TestCaseLabelInfoReq.List().setup(proxy, (req) => {
+const test_case_labels = ref(await new q.project.test_case_labels.InfoList().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
 const roadmap = ref(null as Roadmap | null)
-const roadmaps = ref(await new q.project.RoadmapReq.List().setup(proxy, (req) => {
+const roadmaps = ref(await new q.project.roadmaps.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 if (query.roadmap_id) {
   roadmap.value = roadmaps.value.find((r) => r.id === parseInt(query.roadmap_id)) ?? null
 }
 
-const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
+const storyboards = ref(await new q.project.storyboards.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
 }).perform())
 
-const storyboard = ref(await new q.project.StoryboardReq.Get().setup(proxy, (req) => {
+const storyboard = ref(await new q.project.storyboards.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = params.storyboard_id
 }).perform())
@@ -216,12 +216,12 @@ const position_mapping = computed(() => {
   return result
 })
 
-const scenes = ref(await new q.project.SceneReq.List().setup(proxy, (req) => {
+const scenes = ref(await new q.project.scenes.List().setup(proxy, (req) => {
   req.interpolations.project_id = params.project_id
   req.interpolations.storyboard_id = params.storyboard_id
 }).perform())
 
-const requirements = ref(await new q.project.RequirementReq.List().setup(proxy, (req) => {
+const requirements = ref(await new q.project.requirements.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = storyboard.value.id
   if (roadmap.value) {
@@ -235,7 +235,7 @@ function rebuildRequirementRepo() {
   requirement_repo.value = new RequirementRepo().setup(requirements.value)
 }
 
-const requirement_stats = ref(await new q.project.RequirementStatReq.List().setup(proxy, (req) => {
+const requirement_stats = ref(await new q.project.requirement_stats.List().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = storyboard.value.id
   if (roadmap.value) {
@@ -447,7 +447,7 @@ function updateScenePositions() {
 }
 
 async function updateRequirement(requirement: Requirement, data: any) {
-  const a_requirement = await new q.project.RequirementReq.Update().setup(proxy, (req) => {
+  const a_requirement = await new q.project.requirements.Update().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
     req.interpolations.requirement_id = requirement.id
@@ -545,7 +545,7 @@ async function save() {
     return acc
   }, {} as Record<string, { x: number, y: number }>)
 
-  const a_storyboard = await new q.project.StoryboardReq.Update().setup(proxy, (req) => {
+  const a_storyboard = await new q.project.storyboards.Update().setup(proxy, (req) => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
   }).perform({

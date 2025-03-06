@@ -36,7 +36,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 const category_id = params.category_id
-const category = ref(await new q.project.CategoryInfoReq.Get().setup(proxy, (req) => {
+const category = ref(await new q.project.categories.InfoGet().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.interpolations.category_id = category_id
 }).perform())
@@ -50,7 +50,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.CategoryInfoReq.Update().setup(proxy, (req) => {
+  await new q.project.categories.InfoUpdate().setup(proxy, (req) => {
     req.interpolations.project_id = project_id
     req.interpolations.category_id = category_id
   }).perform(this.form)

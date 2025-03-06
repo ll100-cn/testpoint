@@ -53,7 +53,7 @@ const former = Former.build(filter)
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
-const analytics = ref(await new q.project.IssueActivityChartReq.Get().setup(proxy, (req) => {
+const analytics = ref(await new q.project.issue_activity_charts.Get().setup(proxy, (req) => {
   req.interpolations.project_id = project_id
   req.query = utils.plainToQuery(former.form, true)
 }).perform())
