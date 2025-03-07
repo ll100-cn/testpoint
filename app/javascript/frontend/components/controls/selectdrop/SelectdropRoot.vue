@@ -6,7 +6,7 @@
       <SelectdropMenuText v-else v-bind="labelItem" />
     </DropdownMenuTrigger>
 
-    <DropdownMenuContent class="max-h-[30em] !overflow-auto min-w-[var(--radix-dropdown-menu-trigger-width)]">
+    <DropdownMenuContent class="max-h-[30em] overflow-auto! min-w-[var(--radix-dropdown-menu-trigger-width)]">
       <DropdownMenuLabel preset="plain" class="text-xs space-x-3" v-if="multiple">
         <a href="#" @click.prevent.stop="selectAll" class="link">全部 ({{ valueMapping.size }})</a>
         <a href="#" @click.prevent.stop="selectNone" class="link">无</a>
@@ -146,7 +146,7 @@ const variance = cva(`
     block w-full rounded-md text-foreground py-0
     border border-border shadow-sm bg-input-background
     disabled:text-muted
-    focus:outline-none focus:border-ring focus:ring-4 focus:ring-ring/30
+    focus:outline-hidden focus:border-ring focus:ring-4 focus:ring-ring/30
   `,
   {
     variants: {

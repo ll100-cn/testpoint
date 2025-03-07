@@ -8,9 +8,9 @@
           </suspense>
         </SuspenseWrapper>
 
-        <Error :errors="errors" />
+        <Error v-if="errors.length > 0" :errors="errors" />
 
-        <Container class="flex flex-col flex-1" :class="{ 'select-none grayscale opacity-40 pointer-events-none': view.state == 'pending' }">
+        <Container v-else class="flex flex-col flex-1" :class="{ 'select-none grayscale opacity-40 pointer-events-none': view.state == 'pending' }">
           <SuspenseWrapper :helper="view">
             <router-view v-slot="{ Component }">
               <keep-alive>

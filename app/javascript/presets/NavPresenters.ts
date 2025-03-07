@@ -7,7 +7,7 @@ export const tabs = {
     rounded-t-md px-4 py-2 box-border -mb-px border border-transparent text-primary block
     hover:border-border
     disabled:text-silence disabled:border-transparent
-    data-[state=active]:text-foreground data-[state=active]:bg-card data-[state=active]:border-border
+    data-[state=active]:text-foreground data-[state=active]:bg-card-background data-[state=active]:border-border
     data-[state=active]:border-b-transparent
   `, { }),
 } satisfies NavPresenter

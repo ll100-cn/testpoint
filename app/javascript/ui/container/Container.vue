@@ -10,7 +10,7 @@ const variance = cva('px-4', {
   variants: {
     preset: {
       fluid: '',
-      fixed: 'container mx-auto',
+      fixed: 'mx-auto',
     } satisfies Record<PresetId, string>,
   },
   defaultVariants: {

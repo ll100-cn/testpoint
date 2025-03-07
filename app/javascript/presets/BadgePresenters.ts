@@ -3,7 +3,7 @@ import type { BadgePresenter } from "$ui/badge"
 
 const base = `
   inline-flex items-center rounded border px-2.5 py-0.5 text-xs font-semibold transition-colors
-  focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
+  focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2
 `
 
 export const standard = {

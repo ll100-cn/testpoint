@@ -1,3 +1,5 @@
+@reference './theme/main.css';
+
 .no-margin-bottom {
   overflow: hidden;
   padding-bottom: 1px;

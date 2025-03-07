@@ -41,12 +41,12 @@
     </CardContent>
 
     <template v-if="main_axle == 'LR'">
-      <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-card rounded" />
-      <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-card rounded" />
+      <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-card-background rounded" />
+      <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-card-background rounded" />
     </template>
     <template v-else-if="main_axle == 'TB'">
-      <Handle type="target" :position="Position.Top" class="border w-5 h-2 bg-card rounded" />
-      <Handle type="source" :position="Position.Bottom" class="border w-5 h-2 bg-card rounded" />
+      <Handle type="target" :position="Position.Top" class="border w-5 h-2 bg-card-background rounded" />
+      <Handle type="source" :position="Position.Bottom" class="border w-5 h-2 bg-card-background rounded" />
     </template>
   </Card>
 </template>

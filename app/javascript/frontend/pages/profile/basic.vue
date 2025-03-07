@@ -3,7 +3,7 @@
 
   <Card class="rounded-ss-none">
     <CardContent>
-      <div class="container page-md-box">
+      <div class="px-8 mx-auto page-md-box">
         <Card class="mx-auto w-full max-w-lg">
           <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
             <CardContent>

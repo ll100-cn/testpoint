@@ -88,6 +88,6 @@ const info_mapping = <Record<string, Info>>{
 }
 
 const info = computed(() => {
-  return info_mapping[props.state]
+  return info_mapping[props.state] ?? info_mapping.pending
 })
 </script>
