@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Phase, PhaseInfo, Plan, PlanInfo } from '@/models'
 import _ from 'lodash'
 import { nextTick, ref, computed } from 'vue'

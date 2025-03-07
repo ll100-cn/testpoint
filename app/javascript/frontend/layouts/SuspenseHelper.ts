@@ -1,4 +1,4 @@
-import { RxInterruptedError } from "./RxSimple"
+import { RxInterruptedError } from "@/lib/RxSimple"
 import { reactive } from "vue"
 
 export default class SuspenseHelper {

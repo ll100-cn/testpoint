@@ -27,9 +27,9 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { IssueInfo, IssueTemplate } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'

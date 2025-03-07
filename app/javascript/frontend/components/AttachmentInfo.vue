@@ -61,8 +61,8 @@
 
 <script setup lang="ts">
 import { Validations, controls, layouts } from "@/components/simple_form"
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"

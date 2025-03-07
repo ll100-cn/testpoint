@@ -34,14 +34,14 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForCategory from "@/components/OptionsForCategory.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { layouts } from "@/components/simple_form"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Category } from "@/models"
 import { usePageStore, useSessionStore } from "@/store"
 import _ from "lodash"

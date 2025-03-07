@@ -124,14 +124,14 @@
 
 <script setup lang="ts">
 import PageHeader from '@/components/PageHeader.vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import PageTitle from '@/components/PageTitle.vue'
 import BlankDialog from '@/components/BlankDialog.vue'
 import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
 import { Nav, NavList, NavItem } from '$ui/nav'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import { usePageStore } from '@/store'
 import { LabelRepo, PlatformRepo, Requirement, Storyboard, Roadmap, RequirementStatRepo, Scene, SceneRepo, RequirementRepo } from '@/models'

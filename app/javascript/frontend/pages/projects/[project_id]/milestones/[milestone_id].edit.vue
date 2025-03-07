@@ -25,11 +25,11 @@ import { Former, FormFactory } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import _ from 'lodash'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 
 const reqs = useRequestList()
 const route = useRoute()

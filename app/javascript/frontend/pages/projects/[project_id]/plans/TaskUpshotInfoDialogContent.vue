@@ -32,9 +32,9 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import { TASK_UPSHOT_STATES } from "@/constants"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { PlanInfo, TaskInfo, TaskUpshotInfo } from '@/models'
 import { usePageStore } from "@/store"
 import _ from 'lodash'

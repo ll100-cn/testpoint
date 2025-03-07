@@ -25,8 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import useRequestList from '@bbb/useRequestList'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'

@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import useRequestList from '@bbb/useRequestList'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { Attachment } from "@/models"
 import { type AxiosProgressEvent } from "axios"
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue"

@@ -37,8 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import useRequestList from '@bbb/useRequestList'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { Button } from '$ui/button'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap, Scene } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'

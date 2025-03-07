@@ -35,9 +35,9 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import OptionsForMember from "@/components/OptionsForMember.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Category, IssueInfo, MemberInfo } from "@/models"
 import { useSessionStore } from "@/store"
 import { nextTick, ref } from "vue"

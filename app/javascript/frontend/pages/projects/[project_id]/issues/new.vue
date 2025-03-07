@@ -56,12 +56,12 @@
 
 <script setup lang="ts">
 import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Attachment, Issue } from "@/models"
 import { usePageStore, useSessionStore } from "@/store"
 import { computed, watch } from "vue"

@@ -32,8 +32,8 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@bbb/useRequestList'
-import * as q from "@/lib/requests"
+import useRequestList from '@/lib/useRequestList'
+import * as q from "@/requests"
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
 import { getCurrentInstance, ref, watch } from 'vue'

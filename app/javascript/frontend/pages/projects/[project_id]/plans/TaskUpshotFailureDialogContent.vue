@@ -52,8 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Category, IssueTemplate, Member, PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
 import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'

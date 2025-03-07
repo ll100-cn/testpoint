@@ -37,9 +37,9 @@
 
 <script setup lang="ts">
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { IssueInfo, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import { type Component } from "vue"

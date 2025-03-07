@@ -7,10 +7,10 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 
 import { Task } from "@/models"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import Badge from "$ui/badge/Badge.vue";
 
 const reqs = useRequestList()

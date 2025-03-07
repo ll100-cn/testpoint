@@ -46,8 +46,8 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
 import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'

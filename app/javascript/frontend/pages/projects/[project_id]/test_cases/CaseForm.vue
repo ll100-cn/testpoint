@@ -33,12 +33,12 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import { EntityRepo, Platform, Requirement, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import FormGroup from '$ui/simple_form/FormGroup.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { ref, watch } from 'vue'
 import { usePageStore } from '@/store'
 

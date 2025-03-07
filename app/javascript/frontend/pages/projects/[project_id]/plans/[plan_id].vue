@@ -82,8 +82,8 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Phase, TaskUpshotInfo, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'

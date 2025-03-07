@@ -49,12 +49,12 @@
 <script setup lang="ts">
 import { Card, CardContent, CardFooter, CardHeader } from '$ui/card'
 import { Nav, NavItem, NavList } from '$ui/nav'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
 import { ENUM_ISSUE_STAGES } from "@/constants"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { Issue } from "@/models"
 import Page from "@/pages/Page"

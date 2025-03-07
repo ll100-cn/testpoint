@@ -124,7 +124,7 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
@@ -132,7 +132,7 @@ import OptionsForMember from "@/components/OptionsForMember.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { IssueInfo } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"

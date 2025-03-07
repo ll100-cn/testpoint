@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import useRequestList from '@bbb/useRequestList'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { nextTick, ref } from 'vue'
 import CaseForm from './CaseForm.vue'

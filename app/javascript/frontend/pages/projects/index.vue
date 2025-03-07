@@ -48,8 +48,8 @@
 
 <script setup lang="ts">
 import Validations from '@/components/simple_form/Validations'
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'

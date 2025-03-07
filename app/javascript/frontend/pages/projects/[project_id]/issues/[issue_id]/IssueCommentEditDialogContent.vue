@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import useRequestList from '@bbb/useRequestList'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { Attachment, Comment, Issue } from "@/models"
 import _ from "lodash"
 import { ref } from "vue"

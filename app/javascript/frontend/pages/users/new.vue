@@ -23,10 +23,10 @@
 import { Button } from '$ui/button'
 import { Former, FormFactory } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 

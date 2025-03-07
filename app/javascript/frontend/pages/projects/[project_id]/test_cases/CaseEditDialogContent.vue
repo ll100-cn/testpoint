@@ -21,8 +21,8 @@
 
 <script setup lang="ts">
 import { Validations, layouts } from "@/components/simple_form"
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from "@/store"
 import $ from 'jquery'

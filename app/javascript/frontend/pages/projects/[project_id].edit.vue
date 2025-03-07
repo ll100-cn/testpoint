@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { layouts } from '@/components/simple_form'
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'

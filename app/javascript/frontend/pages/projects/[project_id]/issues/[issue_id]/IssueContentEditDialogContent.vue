@@ -17,8 +17,8 @@
 <script setup lang="ts">
 import { Button } from '$ui/button'
 import { Former, FormFactory } from '$ui/simple_form'
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Attachment, IssueInfo } from '@/models'
 import { ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'

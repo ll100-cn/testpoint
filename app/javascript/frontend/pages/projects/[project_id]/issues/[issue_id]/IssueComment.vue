@@ -44,10 +44,10 @@
 
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Attachment, Comment, CommentRepo, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"

@@ -36,8 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import useRequestList from '@bbb/useRequestList'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import * as utils from "@/lib/utils"
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'

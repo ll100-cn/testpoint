@@ -33,8 +33,8 @@ import { onBeforeRouteLeave, useRoute } from "vue-router"
 import Error from './Error.vue'
 import AppNavbar from '../components/AppNavbar.vue'
 import { Container } from "$ui/container"
-import SuspenseHelper from "@bbb/SuspenseHelper"
-import SuspenseWrapper from "@bbb/SuspenseWrapper.vue"
+import SuspenseHelper from "./SuspenseHelper"
+import SuspenseWrapper from "./SuspenseWrapper.vue"
 
 const errors = ref([])
 const route = useRoute()

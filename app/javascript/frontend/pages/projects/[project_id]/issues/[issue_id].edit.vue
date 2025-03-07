@@ -43,12 +43,12 @@
 
 <script setup lang="ts">
 import BSOption from '@/components/BSOption.vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { usePageStore, useSessionStore } from '@/store'
 import _ from "lodash"
 import { useRoute, useRouter } from "vue-router"

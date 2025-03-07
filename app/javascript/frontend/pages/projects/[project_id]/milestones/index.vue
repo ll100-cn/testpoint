@@ -58,8 +58,8 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Milestone } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'

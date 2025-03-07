@@ -44,8 +44,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import useRequestList from '@bbb/useRequestList'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import Validations from '@/components/simple_form/Validations';

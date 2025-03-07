@@ -52,14 +52,14 @@ import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Category } from '@/models'
 import { usePageStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent } from '$ui/card'
 import Button from '$ui/button/Button.vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 
 const reqs = useRequestList()
 const route = useRoute()

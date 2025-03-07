@@ -53,10 +53,10 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { usePageStore, useSessionStore } from '@/store'
 import OptionsForCategory from '@/components/OptionsForCategory.vue'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'

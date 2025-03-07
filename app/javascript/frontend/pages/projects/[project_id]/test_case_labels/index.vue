@@ -44,9 +44,9 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { TestCaseLabel } from '@/models'

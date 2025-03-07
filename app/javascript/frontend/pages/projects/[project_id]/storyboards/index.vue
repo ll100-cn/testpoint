@@ -11,9 +11,9 @@
 <script setup lang="ts">
 import { Button } from '$ui/button'
 import { Nav, NavList } from '$ui/nav'
-import useRequestList from '@bbb/useRequestList'
+import useRequestList from '@/lib/useRequestList'
 import BlankDialog from '@/components/BlankDialog.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { Storyboard } from '@/models'
 import { usePageStore } from '@/store'

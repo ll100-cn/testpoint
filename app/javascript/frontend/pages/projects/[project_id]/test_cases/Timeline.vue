@@ -24,8 +24,8 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import useRequestList from '@bbb/useRequestList'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import _ from 'lodash'
 import { useRoute } from 'vue-router'
 
