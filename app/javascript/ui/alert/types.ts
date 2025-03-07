@@ -23,3 +23,12 @@ export const {
   useInject: useAlertPresenter,
   useProvide: provideAlertPresenter
 } = createProvideInject<Ref<AlertPresenter>>('Alert-presenter')
+
+export interface AlertPresenters {
+  standard: AlertPresenter
+}
+
+export const {
+  useInject: useAlertPresenters,
+  useProvide: provideAlertPresenters
+} = createProvideInject<AlertPresenters>('Alert-presenters')

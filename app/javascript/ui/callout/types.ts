@@ -23,3 +23,12 @@ export const {
   useInject: useCalloutPresenter,
   useProvide: provideCalloutPresenter
 } = createProvideInject<Ref<CalloutPresenter>>('callout-presenter')
+
+export interface CalloutPresenters {
+  standard: CalloutPresenter
+}
+
+export const {
+  useInject: useCalloutPresenters,
+  useProvide: provideCalloutPresenters
+} = createProvideInject<CalloutPresenters>('callout-presenters')

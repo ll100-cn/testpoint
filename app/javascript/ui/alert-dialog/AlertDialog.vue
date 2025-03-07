@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { AlertDialogRoot, useForwardPropsEmits, type AlertDialogEmits, type AlertDialogProps } from 'radix-vue'
 import { computed, type HTMLAttributes } from 'vue'
-import * as AlertDialogPresenters from './presets'
-import { provideAlertDialogPresenter, relayAlertDialogPreseterConfig, type AlertDialogPresenterConfig, type AlertDialogPresenter } from './types'
+import { provideAlertDialogPresenter, relayAlertDialogPreseterConfig, type AlertDialogPresenterConfig, type AlertDialogPresenter, useAlertDialogPresenters } from './types'
+
+const presenters = useAlertDialogPresenters()
 
 interface Props {
   class?: HTMLAttributes['class']
-  preset?: keyof typeof AlertDialogPresenters | AlertDialogPresenter
+  preset?: keyof typeof presenters | AlertDialogPresenter
 }
 
 const props = withDefaults(defineProps<Props & Partial<AlertDialogPresenterConfig>>(), {
@@ -15,7 +16,7 @@ const props = withDefaults(defineProps<Props & Partial<AlertDialogPresenterConfi
 
 const presenterConfig = relayAlertDialogPreseterConfig(props)
 const presenter = provideAlertDialogPresenter(computed(() => {
-  return typeof props.preset == 'string' ? AlertDialogPresenters[props.preset] : props.preset
+  return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 
 const emits = defineEmits<AlertDialogEmits>()

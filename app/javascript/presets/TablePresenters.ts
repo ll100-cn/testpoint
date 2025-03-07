@@ -1,5 +1,5 @@
-import { bva } from '../utils'
-import { type TablePresenter } from './types'
+import { bva } from "$ui/utils"
+import type { TablePresenter } from "$ui/table"
 
 export const standard = {
   root: bva('w-full caption-bottom', { }),
@@ -25,3 +25,9 @@ export const bordered = {
   [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-0.5
 `, { }),
 } satisfies TablePresenter
+
+declare module '$ui/table' {
+  interface TablePresenters {
+    bordered: typeof bordered
+  }
+}

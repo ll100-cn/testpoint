@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { AlertDialogPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { AlertDialogPresenter } from "$ui/alert-dialog"
 
 export const standard = {
   root: bva('', {}),

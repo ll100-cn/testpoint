@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { AlertPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { AlertPresenter } from "$ui/alert"
 
 export const standard = {
   root: bva(`
@@ -17,4 +17,3 @@ export const standard = {
   description: bva(`text-sm [&_p]:leading-relaxed`, { }),
   title: bva(`mb-1 font-medium leading-none tracking-tight`, { }),
 } satisfies AlertPresenter
-

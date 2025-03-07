@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { TooltipPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { TooltipPresenter } from "$ui/tooltip"
 
 export const standard = {
   root: bva(``, {}),

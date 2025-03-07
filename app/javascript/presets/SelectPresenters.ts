@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { SelectPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { SelectPresenter } from "$ui/select"
 
 export const standard = {
   root: bva('', {}),

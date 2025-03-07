@@ -21,3 +21,12 @@ export const {
   useInject: useButtonPresenter,
   useProvide: provideButtonPresenter
 } = createProvideInject<Ref<ButtonPresenter>>('button-presenter')
+
+export interface ButtonPresenters {
+  standard: ButtonPresenter
+}
+
+export const {
+  useInject: useButtonPresenters,
+  useProvide: provideButtonPresenters
+} = createProvideInject<ButtonPresenters>('Button-presenters')

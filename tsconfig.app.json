@@ -15,6 +15,7 @@
       "$vendor/*": ["app/javascript/vendor/*"],
       "@bbb/*": ["app/javascript/bbb/*"],
       "$ui/*": ["app/javascript/ui/*"],
+      "$presets/*": ["app/javascript/presets/*"],
     }
   }
 }

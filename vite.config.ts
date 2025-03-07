@@ -29,6 +29,7 @@ export default defineConfig({
       '$vendor': fileURLToPath(new URL('./app/javascript/vendor', import.meta.url)),
       '@bbb': fileURLToPath(new URL('./app/javascript/bbb', import.meta.url)),
       '$ui': fileURLToPath(new URL('./app/javascript/ui', import.meta.url)),
+      '$presets': fileURLToPath(new URL('./app/javascript/presets', import.meta.url)),
     }
   },
   build: {

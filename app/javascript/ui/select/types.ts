@@ -27,3 +27,12 @@ export const {
   useInject: useSelectPresenter,
   useProvide: provideSelectPresenter
 } = createProvideInject<Ref<SelectPresenter>>('select-presenter')
+
+export interface SelectPresenters {
+  standard: SelectPresenter
+}
+
+export const {
+  useInject: useSelectPresenters,
+  useProvide: provideSelectPresenters
+} = createProvideInject<SelectPresenters>('Select-presenters')

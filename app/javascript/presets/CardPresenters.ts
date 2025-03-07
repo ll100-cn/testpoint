@@ -1,5 +1,5 @@
-import { bva } from '../utils'
-import { type CardPresenter } from './types'
+import { bva } from "$ui/utils"
+import type { CardPresenter } from "$ui/card"
 
 export const standard = {
   rounded: bva('rounded-md', { }),
@@ -9,4 +9,3 @@ export const standard = {
   table: bva('[&_tr>*:first-child]:ps-4', {}),
   footer: bva('flex bg-foreground/3 gap-2 border-t items-center px-4 py-2', {}),
 } satisfies CardPresenter
-

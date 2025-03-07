@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { DropdownMenuPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { DropdownMenuPresenter } from "$ui/dropdown-menu"
 
 export const standard = {
   root: bva('', {}),

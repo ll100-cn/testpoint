@@ -20,3 +20,11 @@ export const {
   useInject: useProgressPresenter,
   useProvide: provideProgressPresenter
 } = createProvideInject<Ref<ProgressPresenter>>('progress-presenter')
+
+export interface ProgressPresenters {
+}
+
+export const {
+  useInject: useProgressPresenters,
+  useProvide: provideProgressPresenters
+} = createProvideInject<ProgressPresenters>('Progress-presenters')

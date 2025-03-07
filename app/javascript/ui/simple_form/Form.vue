@@ -6,17 +6,17 @@
 
 <script setup lang="ts" generic="T extends object">
 import { computed, provide, ref, type FormHTMLAttributes } from 'vue'
-import { FormerKey, provideFormPresenter, relayInjectPreseterConfig, type FormPresenter } from './types'
+import { FormerKey, provideFormPresenter, relayInjectPreseterConfig, useFormPresenters, type FormPresenter } from './types'
 import { type FormPresenterConfig } from './types'
 import { cn } from '$ui/utils'
 import Former from './Former'
-import * as FormPresenters from './presets'
 
+const presenters = useFormPresenters()
 
-interface Props {
+type Props = {
   former?: Former<T>
   class?: FormHTMLAttributes['class']
-  preset: keyof typeof FormPresenters | FormPresenter
+  preset: keyof typeof presenters | FormPresenter
 }
 
 const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), {
@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), 
 
 const presenterConfig = relayInjectPreseterConfig(props)
 const presenter = provideFormPresenter(computed(() => {
-  return typeof props.preset == 'string' ? FormPresenters[props.preset] : props.preset
+  return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 
 if (props.former) {

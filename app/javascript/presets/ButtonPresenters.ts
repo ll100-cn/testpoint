@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { ButtonPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { ButtonPresenter } from "$ui/button"
 
 const base = `
   inline-flex items-center justify-center whitespace-nowrap border border-transparent rounded font-medium transition-colors
@@ -71,3 +71,11 @@ export const ghost = {
     },
   })
 } satisfies ButtonPresenter
+
+declare module '$ui/button' {
+  interface ButtonPresenters {
+    light: typeof light
+    outline: typeof outline
+    ghost: typeof ghost
+  }
+}

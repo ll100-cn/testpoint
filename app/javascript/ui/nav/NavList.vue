@@ -2,19 +2,20 @@
 import { cn } from '$ui/utils'
 import { TabsList, type TabsListProps } from 'radix-vue'
 import { computed, type HTMLAttributes } from 'vue'
-import * as NavPresenters from './presets'
-import { provideNavPresenter, relayNavPreseterConfig, type NavPresenter, type NavPresenterConfig } from './types'
+import { provideNavPresenter, relayNavPreseterConfig, type NavPresenter, type NavPresenterConfig, useNavPresenters } from './types'
+
+const presenters = useNavPresenters()
 
 interface Props extends TabsListProps {
   class?: HTMLAttributes['class']
-  preset: keyof typeof NavPresenters | NavPresenter
+  preset: keyof typeof presenters | NavPresenter
 }
 
 const props = defineProps<Props & Partial<NavPresenterConfig>>()
 
 const presenterConfig = relayNavPreseterConfig(props)
 const presenter = provideNavPresenter(computed(() => {
-  return typeof props.preset == 'string' ? NavPresenters[props.preset] : props.preset
+  return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 
 const delegatedProps = computed(() => {

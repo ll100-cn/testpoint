@@ -22,3 +22,12 @@ export const {
   useInject: useTabsPresenter,
   useProvide: provideTabsPresenter
 } = createProvideInject<Ref<TabsPresenter>>('tabs-presenter')
+
+export interface TabsPresenters {
+  standard: TabsPresenter
+}
+
+export const {
+  useInject: useTabsPresenters,
+  useProvide: provideTabsPresenters
+} = createProvideInject<TabsPresenters>('Tabs-presenters')

@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { BadgePresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { BadgePresenter } from "$ui/badge"
 
 const base = `
   inline-flex items-center rounded border px-2.5 py-0.5 text-xs font-semibold transition-colors
@@ -48,3 +48,10 @@ export const pill = {
   })
 } satisfies BadgePresenter
 
+declare module '$ui/badge' {
+  interface BadgePresenters {
+    light: typeof light
+    outline: typeof outline
+    pill: typeof pill
+  }
+}

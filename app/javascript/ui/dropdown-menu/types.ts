@@ -29,3 +29,12 @@ export const {
   useInject: useDropdownMenuPresenter,
   useProvide: provideDropdownMenuPresenter
 } = createProvideInject<Ref<DropdownMenuPresenter>>('dropdown-menu-presenter')
+
+export interface DropdownMenuPresenters {
+  standard: DropdownMenuPresenter
+}
+
+export const {
+  useInject: useDropdownMenuPresenters,
+  useProvide: provideDropdownMenuPresenters
+} = createProvideInject<DropdownMenuPresenters>('DropdownMenu-presenters')

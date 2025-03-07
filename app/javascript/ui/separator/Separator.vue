@@ -2,12 +2,13 @@
 import { type HTMLAttributes, computed } from 'vue'
 import { Separator, type SeparatorProps } from 'radix-vue'
 import { cn } from '../utils'
-import * as SeparatorPresenters from './presets'
-import { provideSeparatorPresenter, relaySeparatorPreseterConfig, type SeparatorPresenter, type SeparatorPresenterConfig } from './types';
+import { provideSeparatorPresenter, relaySeparatorPreseterConfig, type SeparatorPresenter, type SeparatorPresenterConfig, useSeparatorPresenters } from './types';
+
+const presenters = useSeparatorPresenters()
 
 interface Props {
   class?: HTMLAttributes['class']
-  preset?: keyof typeof SeparatorPresenters | SeparatorPresenter
+  preset?: keyof typeof presenters | SeparatorPresenter
   label?: string
 }
 
@@ -17,7 +18,7 @@ const props = withDefaults(defineProps< SeparatorProps & Props & Partial<Separat
 
 const presenterConfig = relaySeparatorPreseterConfig(props)
 const presenter = provideSeparatorPresenter(computed(() => {
-  return typeof props.preset == 'string' ? SeparatorPresenters[props.preset] : props.preset
+  return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 
 

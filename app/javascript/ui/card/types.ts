@@ -25,3 +25,11 @@ export const {
   useProvide: provideCardPresenter
 } = createProvideInject<Ref<CardPresenter>>('card-presenter')
 
+export interface CardPresenters {
+  standard: CardPresenter
+}
+
+export const {
+  useInject: useCardPresenters,
+  useProvide: provideCardPresenters
+} = createProvideInject<CardPresenters>('Card-presenters')

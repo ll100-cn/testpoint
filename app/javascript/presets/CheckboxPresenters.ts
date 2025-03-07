@@ -1,5 +1,5 @@
-import { bva } from '../utils'
-import { type CheckboxPresenter } from './types'
+import { bva } from "$ui/utils"
+import type { CheckboxPresenter } from "$ui/checkbox"
 
 export const standard = {
   root: bva(`

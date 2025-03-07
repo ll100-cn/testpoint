@@ -25,3 +25,12 @@ export const {
   useInject: useDialogPresenter,
   useProvide: provideDialogPresenter
 } = createProvideInject<Ref<DialogPresenter>>('dialog-presenter')
+
+export interface DialogPresenters {
+  standard: DialogPresenter
+}
+
+export const {
+  useInject: useDialogPresenters,
+  useProvide: provideDialogPresenters
+} = createProvideInject<DialogPresenters>('Dialog-presenters')

@@ -20,3 +20,11 @@ export const {
   useInject: useNavPresenter,
   useProvide: provideNavPresenter
 } = createProvideInject<Ref<NavPresenter>>('nav-presenter')
+
+export interface NavPresenters {
+}
+
+export const {
+  useInject: useNavPresenters,
+  useProvide: provideNavPresenters
+} = createProvideInject<NavPresenters>('Nav-presenters')

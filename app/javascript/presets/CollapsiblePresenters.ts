@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { CollapsiblePresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { CollapsiblePresenter } from "$ui/collapsible"
 
 export const standard = {
   root: bva('', {}),

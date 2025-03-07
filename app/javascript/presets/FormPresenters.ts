@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { FormPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { FormPresenter } from "$ui/simple_form"
 
 export const vertical = {
   root: bva('flex flex-col', {
@@ -52,4 +52,10 @@ export const inline = {
   error: bva('text-destructive', {})
 } satisfies FormPresenter
 
-
+declare module '$ui/simple_form' {
+  interface FormPresenters {
+    vertical: typeof vertical
+    horizontal: typeof horizontal
+    inline: typeof inline
+  }
+}

@@ -8,13 +8,14 @@
 
 <script setup lang="ts">
 import { computed, type HTMLAttributes } from 'vue'
-import { provideButtonPresenter, relayButtonPreseterConfig, type ButtonPresenter, type ButtonPresenterConfig } from './types'
-import * as ButtonPresenters from './presets'
+import { provideButtonPresenter, relayButtonPreseterConfig, useButtonPresenters, type ButtonPresenter, type ButtonPresenterConfig } from './types'
 import { cn } from '../utils'
+
+const presenters = useButtonPresenters()
 
 interface Props {
   class?: HTMLAttributes['class']
-  preset?: keyof typeof ButtonPresenters | ButtonPresenter
+  preset?: keyof typeof presenters | ButtonPresenter
 }
 
 const props = withDefaults(defineProps<Props & Partial<ButtonPresenterConfig>>(), {
@@ -23,7 +24,7 @@ const props = withDefaults(defineProps<Props & Partial<ButtonPresenterConfig>>()
 const presenterConfig = relayButtonPreseterConfig(props)
 if (props.preset) {
   provideButtonPresenter(computed(() => {
-    return typeof props.preset == 'string' ? ButtonPresenters[props.preset] : props.preset!
+    return typeof props.preset == 'string' ? presenters[props.preset] : props.preset!
   }))
 }
 </script>

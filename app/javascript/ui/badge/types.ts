@@ -21,3 +21,12 @@ export const {
   useInject: useBadgePresenter,
   useProvide: provideBadgePresenter
 } = createProvideInject<Ref<BadgePresenter>>('badge-presenter')
+
+export interface BadgePresenters {
+  standard: BadgePresenter
+}
+
+export const {
+  useInject: useBadgePresenters,
+  useProvide: provideBadgePresenters
+} = createProvideInject<BadgePresenters>('Badge-presenters')

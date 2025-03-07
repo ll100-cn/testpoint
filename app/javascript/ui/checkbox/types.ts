@@ -18,3 +18,11 @@ export const {
   useInject: useCheckboxPresenter,
   useProvide: provideCheckboxPresenter
 } = createProvideInject<Ref<CheckboxPresenter>>('checkbox-presenter')
+
+export interface CheckboxPresenters {
+}
+
+export const {
+  useInject: useCheckboxPresenters,
+  useProvide: provideCheckboxPresenters
+} = createProvideInject<CheckboxPresenters>('Checkbox-presenters')

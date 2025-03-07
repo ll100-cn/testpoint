@@ -20,3 +20,12 @@ export const {
   useInject: useTooltipPresenter,
   useProvide: provideTooltipPresenter
 } = createProvideInject<Ref<TooltipPresenter>>('tooltip-presenter')
+
+export interface TooltipPresenters {
+  standard: TooltipPresenter
+}
+
+export const {
+  useInject: useTooltipPresenters,
+  useProvide: provideTooltipPresenters
+} = createProvideInject<TooltipPresenters>('Tooltip-presenters')

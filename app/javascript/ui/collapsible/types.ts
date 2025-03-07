@@ -20,3 +20,12 @@ export const {
   useInject: useCollapsiblePresenter,
   useProvide: provideCollapsiblePresenter
 } = createProvideInject<Ref<CollapsiblePresenter>>('collapsible-presenter')
+
+export interface CollapsiblePresenters {
+  standard: CollapsiblePresenter
+}
+
+export const {
+  useInject: useCollapsiblePresenters,
+  useProvide: provideCollapsiblePresenters
+} = createProvideInject<CollapsiblePresenters>('Collapsible-presenters')

@@ -24,3 +24,12 @@ export const {
   useInject: useAlertDialogPresenter,
   useProvide: provideAlertDialogPresenter
 } = createProvideInject<Ref<AlertDialogPresenter>>('alert-dialog-presenter')
+
+export interface AlertDialogPresenters {
+  standard: AlertDialogPresenter
+}
+
+export const {
+  useInject: useAlertDialogPresenters,
+  useProvide: provideAlertDialogPresenters
+} = createProvideInject<AlertDialogPresenters>('alert-dialog-presenters')

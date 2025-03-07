@@ -73,3 +73,11 @@ export function useInjectControlValue<T>(modelValue?: Ref<T | undefined>) {
   const injectControlValue = inject(ControlValueKey, null)
   return injectControlValue ?? modelValue as Ref<T>
 }
+
+export interface FormPresenters {
+}
+
+export const {
+  useInject: useFormPresenters,
+  useProvide: provideFormPresenters
+} = createProvideInject<FormPresenters>('Form-presenters')

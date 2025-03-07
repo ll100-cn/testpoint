@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { DialogPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { DialogPresenter } from "$ui/dialog"
 
 export const standard = {
   root: bva('', {}),

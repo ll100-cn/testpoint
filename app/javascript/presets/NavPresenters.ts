@@ -1,5 +1,5 @@
-import { bva } from '../utils'
-import { type NavPresenter } from './types'
+import { bva } from "$ui/utils"
+import type { NavPresenter } from "$ui/nav"
 
 export const tabs = {
   list: bva('flex border-b -mb-px relative z-10', { }),
@@ -50,3 +50,12 @@ export const navbar = {
     [&>.icon]:me-3 [&>.icon]:-ms-0.5 [&>.icon]:text-silence
   `, { }),
 } satisfies NavPresenter
+
+declare module '$ui/nav' {
+  interface NavPresenters {
+    tabs: typeof tabs
+    pill: typeof pill
+    underline: typeof underline
+    navbar: typeof navbar
+  }
+}

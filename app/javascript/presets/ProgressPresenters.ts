@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { DropdownMenuPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { ProgressPresenter } from "$ui/progress"
 
 export const standard = {
   root: bva('relative h-2 w-full overflow-hidden rounded-full', {}),

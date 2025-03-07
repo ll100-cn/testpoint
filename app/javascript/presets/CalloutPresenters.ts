@@ -1,5 +1,5 @@
-import { bva } from "../utils"
-import type { CalloutPresenter } from "./types"
+import { bva } from "$ui/utils"
+import type { CalloutPresenter } from "$ui/callout"
 
 export const standard = {
   root: bva(`
@@ -15,4 +15,3 @@ export const standard = {
   description: bva(`text-sm [&_p]:leading-relaxed`, { }),
   title: bva(`mb-1 font-medium leading-none tracking-tight`, { }),
 } satisfies CalloutPresenter
-

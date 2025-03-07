@@ -21,3 +21,11 @@ export const {
   useProvide: provideSeparatorPresenter
 } = createProvideInject<Ref<SeparatorPresenter>>('Separator-presenter')
 
+export interface SeparatorPresenters {
+  standard: SeparatorPresenter
+}
+
+export const {
+  useInject: useSeparatorPresenters,
+  useProvide: provideSeparatorPresenters
+} = createProvideInject<SeparatorPresenters>('Separator-presenters')

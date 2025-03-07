@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed, inject, ref, useAttrs, type HTMLAttributes, type Ref } from 'vue'
 import { Primitive, type PrimitiveProps } from 'radix-vue'
-import { provideButtonPresenter, relayButtonPreseterConfig, useButtonPresenter, type ButtonPresenter, type ButtonPresenterConfig } from './types'
+import { provideButtonPresenter, relayButtonPreseterConfig, useButtonPresenter, useButtonPresenters, type ButtonPresenter, type ButtonPresenterConfig } from './types'
 import { cn } from '$ui/utils'
 import { RouterLink } from 'vue-router'
-import * as ButtonPresenters from './presets'
+
+const presenters = useButtonPresenters()
 
 interface Props extends PrimitiveProps {
   class?: HTMLAttributes['class']
-  preset?: keyof typeof ButtonPresenters | ButtonPresenter
+  preset?: keyof typeof presenters | ButtonPresenter
   inherit?: boolean
 }
 
@@ -24,7 +25,7 @@ if (props.inherit) {
   presenter = useButtonPresenter()
 } else {
   presenter = provideButtonPresenter(computed(() => {
-    return typeof props.preset == 'string' ? ButtonPresenters[props.preset] : props.preset
+    return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
   }))
 }
 
