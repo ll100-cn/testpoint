@@ -6,6 +6,10 @@
   @apply after:content-[''] after:absolute after:inset-0 after:z-0;
 }
 
+@utility block-discard {
+  @apply opacity-70 grayscale-50;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

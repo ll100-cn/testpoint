@@ -40,3 +40,36 @@ const milestones = reqs.add(q.project.milestones.List, project_id).setup(req => 
 }).wait()
 await reqs.performAll()
 </script>
+
+<style scoped>
+.timeline {
+  border-left: 1px solid hsl(0, 0%, 90%);
+  position: relative;
+  list-style: none;
+  padding-left: 20px;
+
+  .timeline-item {
+    position: relative;
+  }
+
+  .timeline-item:after {
+    position: absolute;
+    display: block;
+    top: 0;
+  }
+
+  .timeline-item:after {
+    background-color: hsl(0, 0%, 90%);
+    left: -26px;
+    top: 5px;
+    border-radius: 50%;
+    height: 11px;
+    width: 11px;
+    content: "";
+  }
+
+  .active:after {
+    background-color: hsl(152, 69%, 31%);
+  }
+}
+</style>

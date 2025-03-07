@@ -3,7 +3,6 @@ import './assets/theme/main.css'
 import '../vendor/fontawesome'
 import '../vendor/fancybox'
 import '../vendor/stimulus'
-import '../vendor/old'
 
 import '@vue-flow/core/dist/style.css';
 // import '@vue-flow/core/dist/theme-default.css';
