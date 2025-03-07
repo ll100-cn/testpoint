@@ -11,6 +11,7 @@ export class Performer<T, R, W extends Performable<T>> {
   request!: W
   result!: Ref<T>
   performed = false
+  performCallbacks = [] as (() => void)[]
 
   constructor(requestable: W) {
     this.request = requestable
@@ -26,6 +27,17 @@ export class Performer<T, R, W extends Performable<T>> {
     return this.result
   }
 
+  waitFor(ref: Ref<T | null> | Ref<T>) {
+    if (this.performed) {
+      ref.value = this.result.value
+    } else {
+      this.performCallbacks.push(() => {
+        ref.value = this.result.value
+      })
+    }
+    return this
+  }
+
   async perform(...args: Parameters<W['invoke']>) {
     if (this.performed) {
       return this.result.value
@@ -33,6 +45,10 @@ export class Performer<T, R, W extends Performable<T>> {
 
     this.performed = true
     this.result.value = await this.request.invoke(...args)
+    for (const callback of this.performCallbacks) {
+      callback()
+    }
+    this.performCallbacks = []
     return this.result.value
   }
 }

@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { layouts } from "@/components/simple_form"
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { Issue, IssueInfo, IssueSurvey, IssueTemplate } from "@/models"
 import _ from "lodash"
@@ -33,7 +33,7 @@ import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emits = defineEmits<{
@@ -47,7 +47,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_survey = await new q.bug.issue_surveies.Update().setup(proxy, (req) => {
+  const a_issue_survey = await reqs.add(q.bug.issue_surveies.Update).setup(req => {
     req.interpolations.project_id = issue_info.value.project_id
     req.interpolations.issue_id = issue_info.value.id
     req.interpolations.issue_survey_id = issue_survey.value.id
@@ -68,8 +68,8 @@ function build_inputs_attributes() {
   })
 }
 
-const issue_info = ref(null as IssueInfo)
-const issue_survey = ref(null as IssueSurvey)
+const issue_info = ref(null! as IssueInfo)
+const issue_survey = ref(null! as IssueSurvey)
 const loading = ref(true)
 
 async function reset(a_issue_info: IssueInfo, a_issue_survey: IssueSurvey) {
@@ -78,10 +78,11 @@ async function reset(a_issue_info: IssueInfo, a_issue_survey: IssueSurvey) {
   issue_survey.value = a_issue_survey
 
   try {
-    current_issue_template.value = await new q.project.issue_templates.Get().setup(proxy, (req) => {
+    current_issue_template.value = await reqs.add(q.project.issue_templates.Get).setup(req => {
       req.interpolations.project_id = issue_info.value.project_id
       req.interpolations.issue_template_id = issue_survey.value.template_id
     }).perform()
+
     former.form.inputs_attributes = build_inputs_attributes()
   } finally {
     loading.value = false

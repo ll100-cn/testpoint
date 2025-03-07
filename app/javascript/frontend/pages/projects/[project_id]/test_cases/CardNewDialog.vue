@@ -18,14 +18,15 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
-import { type PropType, getCurrentInstance, nextTick, ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Former, FormFactory } from '@/ui'
 import { Button } from '@/ui'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = ref(false)
 
 const props = defineProps<{
@@ -50,7 +51,7 @@ const { Form, FormGroup } = FormFactory<typeof former.form>()
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
 former.doPerform = async function() {
-  const new_test_case = await new q.case.test_cases.Create().setup(proxy, (req) => {
+  const new_test_case = await reqs.add(q.case.test_cases.Create).setup(req => {
     req.interpolations.project_id = project_id.value
   }).perform(this.form)
 

@@ -128,6 +128,7 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
+import useRequestList from '@bbb/useRequestList'
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/lib/requests'
@@ -162,26 +163,28 @@ const issue_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const issue_comment_create_dialog = ref(null as InstanceType<typeof BlankDialog>)
 const issue_info_resolve_dialog = ref(null as InstanceType<typeof BlankDialog>)
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const page = usePageStore()
-const profile = page.inProject().profile
+const profile = page.inProject()!.profile
 const allow = profile.allow
 
-const issue_info = ref(await new q.bug.issues.InfoGet().setup(proxy, (req) => {
+const issue_info = reqs.add(q.bug.issues.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
-}).perform())
+}).wait()
+await reqs.performAll()
 page.meta.title = `#${issue_info.value.id} ${issue_info.value.title}`
 
 const readonly = computed(() => issue_info.value.project_id.toString() !== params.project_id)
-const comments = ref(await new q.bug.issue_comments.List().setup(proxy, (req) => {
+const comments = reqs.add(q.bug.issue_comments.List).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_info.value.id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const comment_repo = computed(() => {
   return new CommentRepo().setup(comments.value)
@@ -215,7 +218,7 @@ function onIssueCommentCreated(a_issue_info: IssueInfo, a_comment: Comment) {
 }
 
 async function onIssueConvert(a_issue_info: IssueInfo) {
-  await new q.bug.issue_bodies.Convert().setup(proxy, (req) => {
+  await reqs.add(q.bug.issue_bodies.Convert).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = a_issue_info.id
   }).perform()
@@ -227,7 +230,7 @@ const actioner = Actioner.build()
 
 async function changeIssueState(state: string) {
   actioner.perform(async function() {
-    const a_issue_info = await new q.bug.issues.InfoProcess().setup(proxy, (req) => {
+    const a_issue_info = await reqs.add(q.bug.issues.InfoProcess).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = params.issue_id
     }).perform({ state })

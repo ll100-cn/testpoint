@@ -25,15 +25,16 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { IssueInfo } from "@/models"
-import { getCurrentInstance, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { ref } from "vue"
+import { Former, FormFactory } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -52,7 +53,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_relationship = await new q.bug.issue_relationships.Create().setup(proxy, (req) => {
+  const a_issue_relationship = await reqs.add(q.bug.issue_relationships.Create).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(former.form)

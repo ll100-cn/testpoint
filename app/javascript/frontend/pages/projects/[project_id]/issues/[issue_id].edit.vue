@@ -43,35 +43,37 @@
 
 <script setup lang="ts">
 import BSOption from '@/components/BSOption.vue'
+import useRequestList from '@bbb/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
-import { Issue } from '@/models'
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import _ from "lodash"
-import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
 const page = usePageStore()
+const session = useSessionStore()
 const allow = page.inProject()!.allow
 
-const issue = ref(await new q.bug.issues.Get().setup(proxy, (req) => {
+const issue = reqs.add(q.bug.issues.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
-}).perform())
+}).wait()
+const categories = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
+const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+await reqs.performAll()
 
 const former = Former.build({
   title: issue.value.title,
@@ -83,14 +85,11 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const issue_action = await new q.bug.issue_actions.Create().setup(proxy, (req) => {
+  const issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = issue_id
   }).perform(this.form)
 
   router.push({ path: `/projects/${project_id}/issues/${issue_id}` })
 }
-
-const members = ref(await page.inProject().request(q.project.members.InfoList).setup(proxy).perform())
-const categories = ref(await page.inProject().request(q.project.categories.List).setup(proxy).perform())
 </script>

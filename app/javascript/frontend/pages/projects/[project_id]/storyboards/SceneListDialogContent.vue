@@ -38,9 +38,8 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import useRequestList from '@bbb/useRequestList'
 import { Button } from '@/ui'
-import * as controls from '@/components/controls'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap, Scene } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import { computed, getCurrentInstance, reactive, ref, type Component } from 'vue'
@@ -56,7 +55,7 @@ import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
 
 const route = useRoute()
 const params = route.params as any
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 const page = usePageStore()
 const allow = page.inProject()!.allow
@@ -93,7 +92,7 @@ async function remove(a_scene: Scene) {
   }
 
   try {
-    await new q.project.scenes.Destroy().setup(proxy, (req) => {
+    await reqs.add(q.project.scenes.Destroy).setup(req => {
       req.interpolations.project_id = params.project_id
       req.interpolations.storyboard_id = params.storyboard_id
       req.interpolations.scene_id = a_scene.id

@@ -103,19 +103,20 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { Validations, layouts } from "@/components/simple_form"
+import useRequestList from '@bbb/useRequestList'
+import { Validations } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import _ from 'lodash'
-import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
+import { nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import Button from '@/ui/button/Button.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Former, FormFactory } from '@/ui'
 import * as controls from '@/components/controls'
 
 const validations = reactive<Validations>(new Validations())
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const state = ref('pending') // [ pending, submitting, submited ]
 
 const props = defineProps<{
@@ -160,7 +161,7 @@ former.doPerform = async function() {
     }
 
     try {
-      await new q.case.test_cases.Update().setup(proxy, (req) => {
+      await reqs.add(q.case.test_cases.Update).setup(req => {
         req.interpolations.project_id = test_case.project_id
         req.interpolations.id = test_case.id
       }).perform(form_data)

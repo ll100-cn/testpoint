@@ -1,38 +1,31 @@
 import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
-import Keyv from "@keyvhq/core"
-import { AxiosError, AxiosHeaders, type AxiosInstance, type AxiosProgressEvent, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
-import _ from "lodash"
-import * as qs from "qs"
-import * as rxjs from "rxjs"
-import { Subscription } from "rxjs/internal/Subscription"
-import URI from 'urijs'
-import URITemplate from "urijs/src/URITemplate"
-import { type ClassConstructor, plainToInstance } from "class-transformer"
+import { Pagination } from "@/models"
 import { ErrorsObject } from "@/models/ErrorsObject"
 import { UnprocessableEntityError } from "@/ui"
-import { Pagination } from "@/models"
+import { DisposableRequest } from "@bbb/DisposableRequest"
+import { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
+import { type ClassConstructor, plainToInstance } from "class-transformer"
+import _ from "lodash"
+import * as qs from "qs"
+import URI from 'urijs'
+import URITemplate from "urijs/src/URITemplate"
 
-export interface PerformContext {
+export interface RequestContext {
   $axios: AxiosInstance,
-  $keyv: Keyv
 }
 
-export abstract class BaseRequest<T> {
+export abstract class BaseRequest<T> extends DisposableRequest<T> {
   endpoint!: string
   interpolations = {} as { [ x: string]: any }
   query = {} as { [ x: string]: any }
-  cancellation!: Subscription
-  $axios!: AxiosInstance
-  $keyv!: Keyv
   data: any = {}
   method!: Method
   graph: string | null = null
   headers = {}
-  conifg: AxiosRequestConfig = {}
-  ctx: PerformContext = { $axios: null!, $keyv: null! }
-  subject!: rxjs.Subject<T>
+  config: AxiosRequestConfig = {}
+  ctx: RequestContext = { $axios: null! }
 
-  setup(ctx: { $axios: any, $keyv: any }, callback: (instance: this) => void | null = null): this {
+  setup(ctx: { $axios: any }, callback: (instance: this) => void | null = null): this {
     this.ctx = ctx
 
     if (callback) {
@@ -42,32 +35,19 @@ export abstract class BaseRequest<T> {
     return this
   }
 
-  async perform(data?): Promise<T> {
-    const subject = this.doPerformSubject(data)
-    return await rxjs.lastValueFrom(subject)
-  }
-
-  doPerformSubject(data?) {
-    if (this.subject) {
-      return this.subject
-    }
-
-    this.subject = new rxjs.ReplaySubject()
-    this.doPerform(data).then(it => {
-      this.subject.next(it)
-      this.subject.complete()
-    }).catch(e => {
-      this.subject.error(e)
-    })
-
-    return this.subject
-  }
-
-  async doPerform(data?): Promise<T> {
+  perform(data?: any) {
     this.data = data
+    return this
+  }
 
+  async perform1(data?): Promise<T> {
+    this.data = data
+    return await this.request()
+  }
+
+  async request(): Promise<T> {
     try {
-      const resp = await this.axiosRequest(data)
+      const resp = await this.axiosRequest(this.data)
       const result = this.processResponse(resp)
       return result
     } catch (e) {
@@ -75,7 +55,7 @@ export abstract class BaseRequest<T> {
     }
   }
 
-  async processError(e: Error): Promise<T> {
+  async processError(e: unknown): Promise<T> {
     if (e instanceof AxiosError && e.response?.status === 403) {
       throw new ErrorAccessDenied()
     } else if (e instanceof AxiosError && e.response?.status === 401) {
@@ -97,32 +77,14 @@ export abstract class BaseRequest<T> {
     return uri.query(queryString).toString()
   }
 
-  cancellable(subscriptions: Subscription[]): this {
-    this.cancellation = new rxjs.Subject().subscribe()
-    subscriptions.push(this.cancellation)
-    return this
-  }
-
-  axiosDefaultConfig(): AxiosRequestConfig {
-    const controller = new AbortController()
-    if (this.cancellation) {
-      this.cancellation.add(() => {
-        controller.abort()
-      })
-    }
-
-    return {
-      signal: controller.signal
-    }
-  }
-
   async axiosRequest(data: any): Promise<AxiosResponse> {
-    const { $axios, $keyv } = this.ctx
+    const { $axios } = this.ctx
     const config: AxiosRequestConfig = {
+      signal: this.aborter.signal,
       url: this.buildUrl(),
       method: this.method,
       headers: this.headers,
-      ...this.conifg
+      ...this.config,
     }
 
     if (this.graph) {
@@ -134,22 +96,8 @@ export abstract class BaseRequest<T> {
       config.data = formData
     }
 
-    if (config.method === "GET") {
-      const key = `${config.url}+${this.graph}`
-      const cached = await $keyv.get(key)
-
-      if (cached) {
-        return cached
-      } else {
-        const resp = await $axios.request(config)
-        await $keyv.set(key, resp)
-        return resp
-      }
-    } else {
-      const resp = await $axios.request(config)
-      await $keyv.clear()
-      return resp
-    }
+    const resp = await $axios.request(config)
+    return resp
   }
 
   buildFormData(params, contentType: string) {

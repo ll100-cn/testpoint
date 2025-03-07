@@ -27,16 +27,17 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import useRequestList from '@bbb/useRequestList'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import * as q from '@/lib/requests'
-import { IssueInfo } from "@/models"
+import { IssueInfo, IssueTemplate } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -55,7 +56,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_survey = await new q.bug.issue_surveies.Create().setup(proxy, (req) => {
+  const a_issue_survey = await reqs.add(q.bug.issue_surveies.Create).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
@@ -66,14 +67,14 @@ former.doPerform = async function() {
   open.value = false
 }
 
-const issue_templates = ref([])
+const issue_templates = ref([] as IssueTemplate[])
 
 const loading = ref(true)
 async function reset() {
   loading.value = true
 
   try {
-    issue_templates.value = await new q.project.issue_templates.List().setup(proxy, (req) => {
+    issue_templates.value = await reqs.add(q.project.issue_templates.List).setup(req => {
       req.interpolations.project_id = props.issue_info.project_id
     }).perform()
   } finally {

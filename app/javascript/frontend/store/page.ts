@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSessionStore } from '.'
 import { Profile } from '@/models'
+import createCacheRequest from '@bbb/createCacheRequest'
 
 class ProjectCache {
   project_id!: number

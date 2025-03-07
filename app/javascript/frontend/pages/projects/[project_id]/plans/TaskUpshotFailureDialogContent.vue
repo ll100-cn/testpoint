@@ -52,11 +52,10 @@
 </template>
 
 <script setup lang="ts">
-import { controls, layouts } from "@/components/simple_form"
-import Former from '@/components/simple_form/Former'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { Category, IssueTemplate, Member, PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
 import TaskUpshotInfoDialogContent from "./TaskUpshotInfoDialogContent.vue"
 import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpshotFailureType.vue"
@@ -68,8 +67,9 @@ import { Button } from '@/ui'
 import * as newControls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const page = usePageStore()
+const session = useSessionStore()
 
 const props = defineProps<{
   plan_info: PlanInfo
@@ -88,17 +88,17 @@ const categories = ref([] as Category[])
 const issue_templates = ref([] as IssueTemplate[])
 
 const issue_former = NewFormer.build({
-  from_task_id: null,
+  from_task_id: null as number | null,
   issue_attributes: {
-    title: null,
-    content: null,
+    title: null as string | null,
+    content: null as string | null,
   },
 })
 
 const { Form: IssueForm, FormGroup: IssueFormGroup } = FormFactory<typeof issue_former.form>()
 
 issue_former.doPerform = async function() {
-  await new q.bug.issues.Create().setup(proxy, (req) => {
+  await reqs.add(q.bug.issues.Create).setup(req => {
     req.interpolations.project_id = props.plan_info.project_id
   }).perform(this.form)
 
@@ -117,7 +117,7 @@ const comment_former = NewFormer.build({
 const { Form: CommentForm, FormGroup: CommentFormGroup } = FormFactory<typeof comment_former.form>()
 
 comment_former.doPerform = async function() {
-  await new q.bug.issue_comments.Create().setup(proxy, (req) => {
+  await reqs.add(q.bug.issue_comments.Create).setup(req => {
     req.interpolations.project_id = comment_issue.value!.project_id
     req.interpolations.issue_id = comment_issue.value!.id
   }).perform(this.form)
@@ -131,8 +131,7 @@ const actioner = Actioner.build<{
 
 actioner.failTaskUpshot = async function() {
   this.perform(async function() {
-    console.log("-------znmsb--------")
-    const a_task_upshot = await new q.test.task_upshot_states.Update().setup(proxy, (req) => {
+    const a_task_upshot = await reqs.add(q.test.task_upshot_states.Update).setup(req => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.task_id = task_info.value.id
@@ -156,12 +155,12 @@ async function reset(a_task_upshot_info: TaskUpshotInfo, a_task_info: TaskInfo) 
   task_info.value = a_task_info
   addon.value = null
 
-  issue_templates.value = await new q.project.issue_templates.List().setup(proxy, (req) => {
+  reqs.add(q.project.issue_templates.List).setup(req => {
     req.interpolations.project_id = props.plan_info.project_id
-  }).perform()
-
-  members.value = await page.inProject()!.request(q.project.members.InfoList).setup(proxy).perform()
-  categories.value = await page.inProject()!.request(q.project.categories.List).setup(proxy).perform()
+  }).waitFor(issue_templates)
+  reqs.raw(session.request(q.project.members.InfoList, props.plan_info.project_id)).setup().waitFor(members as any)
+  reqs.raw(session.request(q.project.categories.List, props.plan_info.project_id)).setup().waitFor(categories)
+  await reqs.performAll()
 
   issue_former.form.issue_attributes.title = `「${props.plan_info.platform.name}」 ${task_upshot_info.value.test_case.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_info.value.content ?? task_upshot_info.value.test_case.content}\n\n实际效果:\n`

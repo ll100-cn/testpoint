@@ -24,9 +24,9 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
-import * as controls from '@/components/controls'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import { computed, getCurrentInstance, nextTick, ref } from 'vue'
@@ -37,7 +37,7 @@ import RequirementForm from './RequirementForm.vue'
 
 const route = useRoute()
 const params = route.params as any
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -57,7 +57,7 @@ const requirement = ref(null! as Requirement)
 async function reset(a_requirement: Requirement) {
   requirement.value = a_requirement
   former.form.title = a_requirement.title
-  former.form.description = a_requirement.description
+  former.form.description = a_requirement.description ?? ''
   former.form.scene_id = a_requirement.scene_id
   former.form.platform_ids = a_requirement.platform_ids
   former.form.label_ids = a_requirement.label_ids
@@ -73,7 +73,7 @@ async function destroyRequirement() {
     return
   }
 
-  await new q.project.requirements.Destroy().setup(proxy, (req) => {
+  await reqs.add(q.project.requirements.Destroy).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
     req.interpolations.requirement_id = requirement.value.id
@@ -95,11 +95,12 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function(a_platforms: Platform[]) {
-  const a_requirement = await new q.project.requirements.Update().setup(proxy, (req) => {
+  const a_requirement = await reqs.add(q.project.requirements.Update).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
     req.interpolations.requirement_id = requirement.value.id
   }).perform(this.form)
+
   emit('updated', a_requirement)
   open.value = false
 }

@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { Plan, Platform, TestCaseStat } from '@/models'
 import _ from 'lodash'
@@ -27,7 +28,7 @@ import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const el = ref(null! as InstanceType<typeof HTMLElement>)
 const page = usePageStore()
 const profile = page.inProject()!.profile
@@ -49,7 +50,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const plan = await new q.test.plans.Create().setup(proxy, (req) => {
+  const plan = await reqs.add(q.test.plans.Create).setup(req => {
     req.interpolations.project_id = profile.project_id
   }).perform(this.form)
 
@@ -65,7 +66,11 @@ async function reset(new_test_case_stats: TestCaseStat[]) {
 
   test_case_stats.value = new_test_case_stats
 
-  platforms.value = await page.inProject().request(q.project.platforms.List).setup(proxy).perform()
+  reqs.add(q.project.platforms.List).setup(req => {
+    req.interpolations.project_id = profile.project_id
+  }).waitFor(platforms)
+  await reqs.performAll()
+
   former.form.title = `Test Plan: ${h.datetime(new Date(), "YYYY-MM-DD")}`
   former.form.platform_id = platforms.value[0]?.id
   former.form.milestone_id = null

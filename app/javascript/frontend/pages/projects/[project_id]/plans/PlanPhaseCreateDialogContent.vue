@@ -26,17 +26,18 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { Phase, PhaseInfo, Plan, PlanInfo } from '@/models'
 import _ from 'lodash'
-import { computed, getCurrentInstance, nextTick, ref } from 'vue'
+import { nextTick, ref, computed } from 'vue'
 import { useRoute } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
+import { Former, FormFactory, Separator } from '@/ui'
 import { Button } from '@/ui'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 import * as controls from '@/components/controls'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const params = route.params as any
 const el = ref(null! as HTMLElement)
@@ -50,18 +51,18 @@ const emit = defineEmits<{
 }>()
 
 const upshots_state_counts = computed(() => {
-  return _.last(props.plan_info.phase_infos).upshots_state_counts
+  return _.last(props.plan_info.phase_infos)?.upshots_state_counts ?? {}
 })
 
 const former = Former.build({
-  title: `第 ${props.plan_info.phase_infos.length + 1 ?? 1} 轮`,
+  title: `第 ${(props.plan_info.phase_infos ?? []).length + 1} 轮`,
   release_revision: ""
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const phase = await new q.test.plan_phases.Create().setup(proxy, (req) => {
+  const phase = await reqs.add(q.test.plan_phases.Create).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.plan_id = params.plan_id
   }).perform(this.form)

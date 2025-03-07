@@ -24,19 +24,19 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import _ from 'lodash'
-import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null
-const milestones = await new q.project.milestones.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
+const milestones = reqs.add(q.project.milestones.List, project_id).setup(req => {
   req.query.filter = "available"
-}).perform()
+}).wait()
+await reqs.performAll()
 </script>

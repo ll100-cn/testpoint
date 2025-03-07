@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import { layouts } from '@/components/simple_form'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -37,25 +38,26 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Button, Former, FormFactory, Separator } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const project = await new q.admin.projects.Get().setup(proxy, (req) => {
+const project = reqs.add(q.admin.projects.Get).setup(req => {
   req.interpolations.project_id = params.project_id
-}).perform()
+}).wait()
+await reqs.performAll()
 
 const former = Former.build({
-  name: project.name,
-  webhook_url: project.webhook_url,
+  name: project.value.name,
+  webhook_url: project.value.webhook_url,
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.admin.projects.Update().setup(proxy, (req) => {
-    req.interpolations.id = project.id
+  await reqs.add(q.admin.projects.Update).setup(req => {
+    req.interpolations.id = project.value.id
   }).perform(this.form)
 
   router.push(`/projects`)

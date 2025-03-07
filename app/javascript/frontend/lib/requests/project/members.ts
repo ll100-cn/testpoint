@@ -63,10 +63,11 @@ export const Archive = class extends BaseRequest<Member> {
 }
 
 export const InfoList = class extends BaseRequest<Array<MemberInfo>> {
-  constructor() {
+  constructor(project_id: number) {
     super()
     this.method = "GET"
     this.endpoint = "/api/projects/{project_id}/member_infos"
+    this.interpolations.project_id = project_id
   }
 
   processResponse(response: AxiosResponse) {

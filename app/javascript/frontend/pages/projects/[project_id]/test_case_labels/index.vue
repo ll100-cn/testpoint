@@ -43,7 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref } from 'vue'
+import { reactive } from 'vue'
+import useRequestList from '@bbb/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/lib/requests'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -55,7 +56,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button }
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 import Validator from '@/ui/simple_form/Validator';
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -65,9 +66,10 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const test_case_labels = ref(await new q.project.test_case_labels.InfoList().setup(proxy, (req) => {
+const test_case_labels = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 async function onRemove(id: number) {
   if (!confirm("是否删除标签？")) {
@@ -75,7 +77,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new q.project.test_case_labels.InfoDestroy().setup(proxy, (req) => {
+    await reqs.add(q.project.test_case_labels.InfoDestroy).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.test_case_label_id = id
     }).perform()

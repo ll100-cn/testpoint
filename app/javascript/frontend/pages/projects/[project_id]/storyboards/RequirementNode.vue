@@ -61,18 +61,12 @@ import PlatformBadge from '@/components/PlatformBadge.vue'
 import VueMarkdown from 'vue-markdown-render'
 import { usePageStore } from '@/store'
 import { Filter } from './type'
-import { computed, getCurrentInstance, onMounted, onUpdated, ref } from 'vue'
-import * as q from '@/lib/requests'
-import { useRoute } from 'vue-router'
-import { useElementSize } from '@vueuse/core'
+import { computed } from 'vue'
 import { Callout, CalloutTitle, CalloutDescription } from '@/ui'
 import * as utils from "@/lib/utils"
 
 const page = usePageStore()
 const allow = page.inProject()!.allow
-const route = useRoute()
-const params = route.params as any
-const proxy = getCurrentInstance()!.proxy as any
 
 const props = defineProps<{
   requirement: Requirement

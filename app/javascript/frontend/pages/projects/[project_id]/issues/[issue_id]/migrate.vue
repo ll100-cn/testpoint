@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
+import useRequestList from '@bbb/useRequestList'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForCategory from "@/components/OptionsForCategory.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
@@ -42,7 +43,7 @@ import PageTitle from "@/components/PageTitle.vue"
 import { layouts } from "@/components/simple_form"
 import * as q from '@/lib/requests'
 import { Category } from "@/models"
-import { usePageStore } from "@/store"
+import { usePageStore, useSessionStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router"
@@ -50,19 +51,22 @@ import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
+const session = useSessionStore()
 
 const project_id = _.toNumber(params.project_id)
 const issue_id = _.toNumber(params.issue_id)
 
-const issue = ref(await new q.bug.issues.Get().setup(proxy, (req) => {
+const issue = reqs.add(q.bug.issues.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
-}).perform())
+}).wait()
+const member_infos = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
+await reqs.performAll()
 
 const former = Former.build({
   target_project_id: null,
@@ -72,14 +76,13 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.bug.issue_migrations.Create().setup(proxy, (req) => {
+  await reqs.add(q.bug.issue_migrations.Create).setup(req => {
     req.interpolations.project_id = project_id
-  }).perform({ ...this.form, source_issue_id: issue_id })
+  }).perform({ ...former.form, source_issue_id: issue_id })
 
   router.push({ path: `/projects/${former.form.target_project_id}/issues/${issue_id}` })
 }
 
-const member_infos = ref(await page.singleton(q.profile.members.InfoList).setup(proxy).perform())
 const projects = computed(() => member_infos.value.filter(it => {
   return ['manager', 'owner'].includes(it.role) && it.project_id != project_id
 }).map(it => it.project))
@@ -91,9 +94,10 @@ const actioner = Actioner.build<{
 
 actioner.loadCategories = function(project_id: number) {
   this.perform(async function() {
-    categories.value = await new q.project.categories.List().setup(proxy, (req) => {
+    categories.value = await reqs.add(q.project.categories.List, project_id).setup(req => {
       req.interpolations.project_id = project_id
     }).perform()
+
     former.form.target_category_id = null
   }, { confirm_text: false })
 }

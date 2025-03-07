@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { Validations, layouts } from "@/components/simple_form"
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { usePageStore } from "@/store"
@@ -31,7 +32,7 @@ import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -52,22 +53,22 @@ const emit = defineEmits<{
 const test_case = ref(null! as TestCase)
 
 const former = Former.build({
-  title: null,
-  content: null,
-  role_name: null,
-  scene_name: null,
-  group_name: null,
-  platform_ids: null,
-  label_ids: null,
-  storyboard_id : null,
-  requirement_id: null
+  title: null as string | null,
+  content: null as string | null,
+  role_name: null as string | null,
+  scene_name: null as string | null,
+  group_name: null as string | null,
+  platform_ids: null as number[] | null,
+  label_ids: null as number[] | null,
+  storyboard_id: null as number | null,
+  requirement_id: null as number | null,
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const new_test_case = await new q.case.test_cases.Update().setup(proxy, (req) => {
-    req.interpolations.project_id = 1
+  const new_test_case = await reqs.add(q.case.test_cases.Update).setup(req => {
+    req.interpolations.project_id = test_case.value.project_id
     req.interpolations.id = test_case.value.id
   }).perform(this.form)
 
@@ -84,7 +85,7 @@ async function archiveTestCase(event: Event) {
   }
 
   try {
-    const new_test_case = await new q.case.test_cases.Destroy().setup(proxy, (req) => {
+    const new_test_case = await reqs.add(q.case.test_cases.Destroy).setup(req => {
       req.interpolations.project_id = test_case.value.project_id
       req.interpolations.id = test_case.value.id
     }).perform()

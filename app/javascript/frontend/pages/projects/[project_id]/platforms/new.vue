@@ -21,10 +21,10 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
-import { getCurrentInstance, ref } from 'vue'
+import useRequestList from '@bbb/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
-import { usePageStore } from "@/store"
+import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
@@ -32,13 +32,15 @@ import { Button } from '@/ui'
 
 const route = useRoute()
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const params = route.params as any
 const page = usePageStore()
+const session = useSessionStore()
 
-const project_id = params.project_id as string
+const project_id = params.project_id
 
-const members = ref(await page.inProject()?.request(q.project.members.InfoList).setup(proxy).perform())
+const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+await reqs.performAll()
 
 const former = Former.build({
   name: "",
@@ -49,7 +51,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.platforms.Create().setup(proxy, (req) => {
+  await reqs.add(q.project.platforms.Create).setup(req => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
 

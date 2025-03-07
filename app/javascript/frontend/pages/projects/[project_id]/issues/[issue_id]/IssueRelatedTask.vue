@@ -7,25 +7,25 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from "vue"
+import useRequestList from '@bbb/useRequestList'
 
 import { Task } from "@/models"
 import * as q from '@/lib/requests'
 import Badge from "@/ui/badge/Badge.vue";
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const props = defineProps<{
   task: Task
   project_id: number
 }>()
 
-const test_case = ref(await new q.case.test_cases.Get().setup(proxy, (req) => {
+const test_case = reqs.add(q.case.test_cases.Get).setup(req => {
   req.interpolations.project_id = props.project_id
   req.interpolations.test_case_id = props.task.test_case_id
-}).perform())
-
-const plan_info = ref(await new q.test.plans.InfoGet().setup(proxy, (req) => {
+}).wait()
+const plan_info = reqs.add(q.test.plans.InfoGet).setup(req => {
   req.interpolations.project_id = props.project_id
   req.interpolations.plan_id = props.task.plan_id
-}).perform())
+}).wait()
+await reqs.performAll()
 </script>

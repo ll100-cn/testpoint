@@ -58,30 +58,35 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { Milestone } from '@/models'
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
-import { getCurrentInstance, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Card, CardContent } from '@/ui'
 import { Nav, NavList, NavItem } from '@/ui'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import Button from '@/ui/button/Button.vue'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const session = useSessionStore()
 
 const active = ref('normal')
 
 const project_id = _.toNumber(params.project_id)
-const milestones = ref(await page.inProject()!.request(q.project.milestones.List).setup(proxy).perform())
+
+const milestones = reqs.raw(session.request(q.project.milestones.List, project_id)).setup().wait()
+await reqs.performAll()
+
 const grouped_milestones = ref(_.groupBy(milestones.value, (m) => m.archived_at ? 'archived' : 'normal'))
 
 function milestoneDestroy(milestone: Milestone) {
@@ -89,7 +94,7 @@ function milestoneDestroy(milestone: Milestone) {
     return
   }
 
-  new q.project.milestones.Destroy().setup(proxy, (req) => {
+  reqs.add(q.project.milestones.Destroy).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()
@@ -102,7 +107,7 @@ function milestoneArchive(milestone: Milestone) {
     return
   }
 
-  new q.project.milestones.Archive().setup(proxy, (req) => {
+  reqs.add(q.project.milestones.Archive).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()
@@ -115,7 +120,7 @@ function milestoneActive(milestone: Milestone) {
     return
   }
 
-  new q.project.milestones.Active().setup(proxy, (req) => {
+  reqs.add(q.project.milestones.Active).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.id = milestone.id
   }).perform()

@@ -35,20 +35,20 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { EntityRepo, Platform, Requirement, Storyboard } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
-import { computed, getCurrentInstance, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { STORYBOARD_MAIN_AXLE } from '@/constants'
 
 const route = useRoute()
 const params = route.params as any
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -65,7 +65,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_storyboard = await new q.project.storyboards.Update().setup(proxy, (req) => {
+  const a_storyboard = await reqs.add(q.project.storyboards.Update).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
   }).perform(this.form)
@@ -80,7 +80,7 @@ const loading = ref(true)
 async function reset(a_storyboard: Storyboard) {
   storyboard.value = a_storyboard
   former.form.title = a_storyboard.title
-  former.form.description = a_storyboard.description
+  former.form.description = a_storyboard.description ?? ''
   former.form.main_axle = a_storyboard.main_axle
 
   loading.value = false
@@ -95,7 +95,7 @@ async function destroyStoryboard() {
     return
   }
 
-  await new q.project.storyboards.Destroy().setup(proxy, (req) => {
+  await reqs.add(q.project.storyboards.Destroy).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
   }).perform()

@@ -57,15 +57,16 @@
 
 <script setup lang="ts">
 import PaginationBar from '@/components/PaginationBar.vue'
+import useRequestList from '@bbb/useRequestList'
 import { layouts } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
 import * as q from '@/lib/requests'
 import * as utils from '@/lib/utils'
 import _ from 'lodash'
-import { computed, getCurrentInstance, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import * as t from '@/lib/transforms'
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import { Plan } from '@/models'
 import OptionsForMember from '@/components/OptionsForMember.vue'
 import { Badge, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, Progress } from '@/ui'
@@ -77,7 +78,8 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import Button from '@/ui/button/Button.vue'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
+const session = useSessionStore()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -101,17 +103,17 @@ former.doPerform = async function() {
 }
 
 const project_id = _.toNumber(params.project_id)
-const plans = ref(await new q.test.plans.Page().setup(proxy, (req) => {
+
+const plans = reqs.add(q.test.plans.Page).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.plainToQuery(query)
   req.query.q = search
-}).perform())
-
-const members = ref(await page.inProject()!.request(q.project.members.InfoList).setup(proxy).perform())
-
-const test_case_stats = ref(await new q.case.test_case_stats.List().setup(proxy, (req) => {
+}).wait()
+const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const test_case_stats = reqs.add(q.case.test_case_stats.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const progress_bg_mapping = ref({ pass: "bg-success", failure: "bg-danger" })
 

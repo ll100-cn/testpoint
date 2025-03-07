@@ -44,6 +44,7 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref, reactive } from 'vue'
+import useRequestList from '@bbb/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/lib/requests'
 import Validator from '@/ui/simple_form/Validator';
@@ -58,17 +59,18 @@ import Button from '@/ui/button/Button.vue';
 
 const route = useRoute()
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const params = route.params as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const issue_templates = ref(await new q.project.issue_templates.List().setup(proxy, (req) => {
+const issue_templates = reqs.add(q.project.issue_templates.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 async function onRemove(id: number) {
   if (!confirm("是否删除问题模版？")) {
@@ -76,7 +78,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new q.project.issue_templates.Destroy().setup(proxy, (req) => {
+    await reqs.add(q.project.issue_templates.Destroy).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_template_id = id
     }).perform()

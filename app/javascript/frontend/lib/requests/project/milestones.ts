@@ -39,10 +39,11 @@ export const Update = class extends BaseRequest<Milestone> {
 }
 
 export const List = class extends BaseRequest<Array<Milestone>> {
-  constructor() {
+  constructor(project_id: number) {
     super()
     this.method = "GET"
     this.endpoint = "/api/projects/{project_id}/milestones"
+    this.interpolations.project_id = project_id
   }
 
   processResponse(response: AxiosResponse) {

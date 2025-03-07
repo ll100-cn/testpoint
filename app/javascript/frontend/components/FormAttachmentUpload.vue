@@ -22,15 +22,14 @@
 
 <script setup lang="ts">
 import prettyBytes from 'pretty-bytes'
-import { getCurrentInstance } from 'vue'
+import useRequestList from '@bbb/useRequestList'
 import { UploadFile } from './types'
-
-const proxy = getCurrentInstance()!.proxy!
 
 const props = defineProps<{
   upload_file: UploadFile
 }>()
 
+// TODO: 取消现在无效
 function uploadAbort(upload_file: UploadFile) {
   if (upload_file.controller) {
     upload_file.controller.abort()

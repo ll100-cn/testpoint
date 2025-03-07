@@ -48,10 +48,10 @@
 
 <script setup lang="ts">
 import { Card, CardContent, CardFooter, CardHeader, Nav, NavItem, NavList } from '@/ui'
+import useRequestList from '@bbb/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
-import { layouts } from "@/components/simple_form"
 import { ENUM_ISSUE_STAGES } from "@/constants"
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
@@ -68,7 +68,7 @@ import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const query = utils.queryToPlain(route.query)
@@ -92,24 +92,23 @@ former.doPerform = async function(search: Search2 | null) {
     const data = utils.compactObject(search)
     router.push({ query: utils.plainToQuery(data) })
   } else {
-    router.push({ query: null })
+    router.push({})
   }
 }
 
-const pagination = ref(await new q.bug.issues.Page().setup(proxy, (req) => {
+const pagination = reqs.add(q.bug.issues.Page).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
-}).perform())
-
-const issue_summary = ref(await new q.bug.issue_summaries.Get().setup(proxy, (req) => {
+}).wait()
+const issue_summary = reqs.add(q.bug.issue_summaries.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2 })
-}).perform())
-
-const issue_stats = ref(await new q.bug.issue_stats.List().setup(proxy, (req) => {
+}).wait()
+const issue_stats = reqs.add(q.bug.issue_stats.List).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ keyword: search2.keyword })
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const issue_stage_count = computed(() => {
   return _(issue_stats.value).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()

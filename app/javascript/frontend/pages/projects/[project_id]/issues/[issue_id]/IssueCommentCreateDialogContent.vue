@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import { Issue, IssueSurvey, Comment } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
@@ -23,7 +24,7 @@ import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -38,7 +39,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_comment = await new q.bug.issue_comments.Create().setup(proxy, (req) => {
+  const a_comment = await reqs.add(q.bug.issue_comments.Create).setup(req => {
     req.interpolations.project_id = issue.value.project_id
     req.interpolations.issue_id = issue.value.id
   }).perform(this.form)
@@ -47,7 +48,7 @@ former.doPerform = async function() {
   open.value = false
 }
 
-const issue = ref(null as Issue)
+const issue = ref(null! as Issue)
 const loading = ref(true)
 
 function reset(a_issue: Issue) {

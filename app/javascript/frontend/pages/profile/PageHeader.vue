@@ -26,18 +26,19 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
-import { usePageStore } from "@/store"
-import { getCurrentInstance, ref } from "vue"
+import useRequestList from '@bbb/useRequestList'
+import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Nav, NavList, NavItem } from '@/ui'
 
-const page = usePageStore()
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
+const session = useSessionStore()
 
 defineProps<{
   current: string | number
 }>()
 
-const member_infos = ref(await page.singleton(q.profile.members.InfoList).setup(proxy).perform())
+const member_infos = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
+await reqs.performAll()
 </script>

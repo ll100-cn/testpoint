@@ -46,6 +46,7 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
@@ -55,7 +56,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import Button from '@/ui/button/Button.vue'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui"
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 
 const props = defineProps<{
   readonly: boolean
@@ -79,7 +80,7 @@ async function reset(a_test_case: TestCase) {
   loading.value = true
   test_case.value = a_test_case
 
-  history.value = await new q.case.test_cases.History().setup(proxy, (req) => {
+  history.value = await reqs.add(q.case.test_cases.History).setup(req => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform()

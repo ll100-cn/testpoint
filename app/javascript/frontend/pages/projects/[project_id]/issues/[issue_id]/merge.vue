@@ -73,6 +73,7 @@
 
 <script setup lang="ts">
 import { Button, Former, FormFactory, UnprocessableEntityError } from '@/ui'
+import useRequestList from '@bbb/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
@@ -89,7 +90,7 @@ import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import { AxiosError } from 'axios'
 import { usePageStore } from '@/store'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -101,10 +102,12 @@ const add_dialog_open = ref(false)
 
 const issues = ref([] as Issue[])
 
-const head = ref(await new q.bug.issues.Get().setup(proxy, (req) => {
+const head = reqs.add(q.bug.issues.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
-}).perform())
+}).wait()
+await reqs.performAll()
+
 issues.value.push(head.value)
 
 function newSource() {
@@ -137,7 +140,7 @@ former.doPerform = async function() {
   }
 
   try {
-    const issue = await new q.bug.issues.Get().setup(proxy, (req) => {
+    const issue = await reqs.add(q.bug.issues.Get).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = former.form.source_id
     }).perform()
@@ -166,7 +169,7 @@ async function merge() {
   }
 
   try {
-    const issue = await new q.bug.issues.Merge().setup(proxy, (req) => {
+    const issue = await reqs.add(q.bug.issues.Merge).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = head.value.id
     }).perform({

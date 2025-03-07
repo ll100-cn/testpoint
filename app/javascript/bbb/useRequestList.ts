@@ -1,5 +1,5 @@
 // SNIP: 4d42436ba7cc1fb8a3500e3b65f791af
-import type { BaseRequest, RequestContext } from "./BaseRequest"
+import type { BaseRequest, RequestContext } from "@/lib/requests"
 import { PerformerList, Performer, type Performable } from "./PerformerList"
 import { getCurrentInstance, onBeforeUnmount } from "vue"
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from "vue-router"

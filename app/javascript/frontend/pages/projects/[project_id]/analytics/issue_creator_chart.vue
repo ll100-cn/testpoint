@@ -37,8 +37,9 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import * as utils from "@/lib/utils"
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
 import { computed, getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
@@ -49,12 +50,14 @@ import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const query = utils.queryToPlain(route.query)
 const page = usePageStore()
+const session = useSessionStore()
+
 const filter = reactive({
   starts_on: null,
   ends_on: null,
@@ -62,13 +65,15 @@ const filter = reactive({
   ...query
 })
 const project_id = params.project_id
-const members = ref(await page.inProject()!.request(q.project.members.InfoList).setup(proxy).perform())
-const categories = ref(await page.inProject()!.request(q.project.categories.List).setup(proxy).perform())
+
+const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const categories = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
+const analytics = reqs.add(q.project.issue_creator_charts.Get).setup(req => {
+  req.query = { ...filter }
+}).wait()
+await reqs.performAll()
+
 const former = Former.build(filter)
-const analytics = ref(await new q.project.issue_creator_charts.Get().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-  req.query = utils.plainToQuery(former.form, true)
-}).perform())
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
@@ -76,7 +81,7 @@ former.doPerform = async function(filter) {
   if (filter) {
     router.push({ query: utils.plainToQuery(filter, true) })
   } else {
-    router.push({ query: null })
+    router.push({})
   }
 }
 const current_members = computed(() => {

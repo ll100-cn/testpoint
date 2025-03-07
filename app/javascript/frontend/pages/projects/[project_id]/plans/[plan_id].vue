@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from '@/components/simple_form'
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { Phase, TaskUpshotInfo, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
@@ -105,7 +105,7 @@ import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -125,21 +125,23 @@ const { Form, FormGroup } = FormFactory<typeof searcher.form>()
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan_info = ref(await new q.test.plans.InfoGet().setup(proxy, (req) => {
+const plan_info = reqs.add(q.test.plans.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const current_phase_info = computed(() => {
   const phase_infos = plan_info.value.phase_infos
   return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
-const task_upshot_infos = ref(await new q.test.task_upshots.InfoList().setup(proxy, (req) => {
+const task_upshot_infos = reqs.add(q.test.task_upshots.InfoList).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_id = current_phase_info.value.id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const filter = ref(new Filter())
 filter.value.archived = null

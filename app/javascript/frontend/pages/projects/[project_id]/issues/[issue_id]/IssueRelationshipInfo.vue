@@ -18,6 +18,7 @@
 
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
+import useRequestList from '@bbb/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
@@ -26,7 +27,7 @@ import { usePageStore } from "@/store"
 import { computed, getCurrentInstance } from "vue"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -52,7 +53,7 @@ async function deleteIssueRelationShip() {
     return
   }
 
-  await new q.bug.issue_relationships.Destroy().setup(proxy, (req) => {
+  await reqs.add(q.bug.issue_relationships.Destroy).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
     req.interpolations.issue_relationship_id = props.issue_relationship.id

@@ -1,34 +1,43 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <router-view v-slot="{ Component, route }">
-      <div :key="route.fullPath" class="flex flex-col flex-1">
-        <Transition>
-          <div class="flex flex-col flex-1">
-            <Suspense timeout="0">
-              <AppNavbar />
-            </Suspense>
-            <Error :errors="errors" />
-            <Suspense timeout="0">
-              <Container class="flex flex-col flex-1">
-                <component :is="Component" v-if="Component" />
-              </Container>
-            </Suspense>
-          </div>
-        </Transition>
+    <div class="flex flex-col flex-1">
+      <div class="flex flex-col flex-1">
+        <SuspenseWrapper :helper="navbar">
+          <suspense v-bind="{ ...navbar.events() }">
+            <AppNavbar :key="JSON.stringify([navbar.key()])" />
+          </suspense>
+        </SuspenseWrapper>
+
+        <Error :errors="errors" />
+
+        <Container class="flex flex-col flex-1" :class="{ 'select-none grayscale opacity-40 pointer-events-none': view.state == 'pending' }">
+          <SuspenseWrapper :helper="view">
+            <router-view v-slot="{ Component }">
+              <keep-alive>
+                <suspense v-bind="{ ...view.events() }">
+                  <component :is="Component" :key="JSON.stringify([view.key()])" />
+                </suspense>
+              </keep-alive>
+            </router-view>
+          </SuspenseWrapper>
+        </Container>
       </div>
-    </router-view>
+    </div>
     <footer class="pt-5" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onErrorCaptured, ref } from "vue"
-import { onBeforeRouteLeave } from "vue-router"
+import { onBeforeRouteLeave, useRoute } from "vue-router"
 import Error from './Error.vue'
 import AppNavbar from '../components/AppNavbar.vue'
 import { Container } from "@/ui"
+import SuspenseHelper from "@bbb/SuspenseHelper"
+import SuspenseWrapper from "@bbb/SuspenseWrapper.vue"
 
 const errors = ref([])
+const route = useRoute()
 
 onBeforeRouteLeave(() => {
   errors.value = []
@@ -41,4 +50,7 @@ onErrorCaptured((err, vm, info) => {
   }
   return false
 })
+
+const navbar = SuspenseHelper.build(() => 'navbar')
+const view = SuspenseHelper.build(() => route.fullPath)
 </script>

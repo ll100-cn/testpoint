@@ -32,6 +32,7 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
+import useRequestList from '@bbb/useRequestList'
 import { TASK_UPSHOT_STATES } from "@/constants"
 import * as q from '@/lib/requests'
 import { PlanInfo, TaskInfo, TaskUpshotInfo } from '@/models'
@@ -42,7 +43,7 @@ import TaskDetailsState from './TaskDetailsState.vue'
 import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Button } from '@/ui'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -86,12 +87,12 @@ const actioner = Actioner.build<{
 
 actioner.submitContent = function(content: string) {
   this.perform(async () => {
-    const a_task_upshot = await new q.test.task_upshot_contents.Update().setup(proxy, (req) => {
+    const a_task_upshot = await reqs.add(q.test.task_upshot_contents.Update).setup(req => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.task_id = task_upshot_info.value.task.id
       req.interpolations.upshot_id = task_upshot_info.value.id
-    }).perform({ content: content })
+    }).perform({ content })
 
     Object.assign(task_upshot_info.value, a_task_upshot)
     const index = task_info.value.task_upshots.findIndex(it => it.id == task_upshot_info.value.id)
@@ -102,7 +103,7 @@ actioner.submitContent = function(content: string) {
 
 actioner.ignoreTask = function() {
   this.perform(async function() {
-    const task = await new q.test.tasks.Ignore().setup(proxy, (req) => {
+    const task = await reqs.add(q.test.tasks.Ignore).setup(req => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.id = task_info.value.id
@@ -116,7 +117,7 @@ actioner.ignoreTask = function() {
 
 actioner.unignoreTask = function() {
   this.perform(async function() {
-    const task = await new q.test.tasks.Unignore().setup(proxy, (req) => {
+    const task = await reqs.add(q.test.tasks.Unignore).setup(req => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.id = task_info.value.id
@@ -130,7 +131,7 @@ actioner.unignoreTask = function() {
 
 actioner.updateTaskUpshotState = function(state_override: "pass" | "pending" | null) {
   this.perform(async function() {
-    const a_task_upshot = await new q.test.task_upshot_states.Update().setup(proxy, (req) => {
+    const a_task_upshot = await reqs.add(q.test.task_upshot_states.Update).setup(req => {
       req.interpolations.project_id = props.plan_info.project_id
       req.interpolations.plan_id = props.plan_info.id
       req.interpolations.task_id = task_info.value.id
@@ -149,7 +150,7 @@ async function reset(a_task_upshot_info: TaskUpshotInfo) {
   loading.value = true
 
   task_upshot_info.value = a_task_upshot_info
-  task_info.value = await new q.test.tasks.InfoGet().setup(proxy, (req) => {
+  task_info.value = await reqs.add(q.test.tasks.InfoGet).setup(req => {
     req.interpolations.project_id = props.plan_info.project_id
     req.interpolations.plan_id = props.plan_info.id
     req.interpolations.task_id = task_upshot_info.value.task.id

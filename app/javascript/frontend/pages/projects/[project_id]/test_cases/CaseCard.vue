@@ -72,6 +72,7 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Milestone, Platform, TestCase, TestCaseLabel } from '@/models'
@@ -81,7 +82,7 @@ import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { type ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 import BlankDialog from '@/ui/BlankDialog.vue'
 import CardNewDialog from './CardNewDialog.vue'
@@ -92,13 +93,14 @@ import { SelectdropItem } from '@/components/controls/selectdrop'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
 import { TEST_CASE_RELATE_STATES } from '@/constants'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
-const query = utils.queryToPlain(route.query)
+const query = utils.queryToPlain(route.query) as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const session = useSessionStore()
 
 const case_dialog = ref<InstanceType<typeof BlankDialog>>()
 const case_batch_dialog = ref<InstanceType<typeof BlankDialog>>()
@@ -130,39 +132,36 @@ const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void
 }>()
 
-const milestone = ref(null as Milestone | null)
-if (route.query.milestone_id) {
-  const _milestones = await page.inProject()!.request(q.project.milestones.List).setup(proxy).perform()
-  milestone.value = _.find(_milestones, { id: _.toNumber(route.query.milestone_id) }) ?? null
-}
-const readonly = computed(() => milestone.value != null)
+const _milestones = ref([] as Milestone[])
 
 const project_id = _.toNumber(params.project_id)
-const test_cases = await new q.case.test_cases.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-  req.query.milestone_id = route.query.milestone_id
-}).perform()
 
-const _labels = ref(await new q.project.test_case_labels.List().setup(proxy, (req) => {
+if (query.milestone_id) {
+  reqs.raw(session.request(q.project.milestones.List, project_id)).setup().waitFor(_milestones)
+}
+const test_cases = reqs.add(q.case.test_cases.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
+  req.query.milestone_id = query.milestone_id
+}).wait()
+const _labels = reqs.add(q.project.test_case_labels.List).setup(req => {
+  req.interpolations.project_id = project_id
+}).wait()
+const _platforms = reqs.add(q.project.platforms.List).setup(req => {
+  req.interpolations.project_id = project_id
+}).wait()
+const _roadmaps = reqs.add(q.project.roadmaps.List).setup(req => {
+  req.interpolations.project_id = project_id
+}).wait()
+await reqs.performAll()
 
+const milestone = computed(() => _milestones.value.find(it => it.id === _.toNumber(query.milestone_id)) ?? null)
+const readonly = computed(() => milestone.value != null)
 const label_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>().setup(_labels.value)
 })
-
-const _platforms = ref(await new q.project.platforms.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
-
 const platform_repo = computed(() => {
   return new EntityRepo<Platform>().setup(_platforms.value)
 })
-
-const _roadmaps = ref(await new q.project.roadmaps.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-}).perform())
-
 const newest_roadmap = computed(() => {
   const newest = _roadmaps.value.sort((a, b) => b.id - a.id)[0]
 
@@ -174,7 +173,7 @@ const newest_roadmap = computed(() => {
 })
 
 const search_test_cases = computed(() => {
-  let scope = _(test_cases)
+  let scope = _(test_cases.value)
 
   const platform = platform_repo.value.find(_.toNumber(query.platform_id))
   if (platform) {
@@ -187,7 +186,7 @@ const search_test_cases = computed(() => {
   }
 
   if (query.group_name_search) {
-    scope = scope.filter((it) => it.group_name?.includes(query.group_name_search))
+    scope = scope.filter((it) => !!it.group_name?.includes(query.group_name_search))
   }
 
   if (query.relate_state) {
@@ -211,8 +210,8 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 provide("changeFilter", changeFilter)
 
 const modal = ref<InstanceType<typeof CardNewDialog>>()
-function showModal(project_id: number) {
-  modal.value.show(project_id.toString())
+function showModal() {
+  modal.value?.show(project_id.toString())
 }
 
 function onTestCaseSend(test_case: TestCase) {

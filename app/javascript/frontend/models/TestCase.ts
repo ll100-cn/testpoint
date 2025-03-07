@@ -6,15 +6,15 @@ export class TestCase {
   content!: string
   platform_ids: number[] = []
   label_ids: number[] = []
-  role_name?: string
-  scene_name?: string
-  group_name?: string
+  role_name: string | null = null
+  scene_name: string | null = null
+  group_name: string | null = null
   scene_path?: string[]
   archived!: boolean
 
-  storyboard_id?: number
-  requirement_id?: number
-  roadmap_id?: number
+  storyboard_id: number | null = null
+  requirement_id: number | null = null
+  roadmap_id: number | null = null
 
   @Type(() => Date) updated_at!: Date
 }

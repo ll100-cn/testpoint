@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -31,7 +32,7 @@ import { Button } from '@/ui'
 
 const route = useRoute()
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const params = route.params as any
 
 const project_id = params.project_id
@@ -44,7 +45,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.test_case_labels.InfoCreate().setup(proxy, (req) => {
+  await reqs.add(q.project.test_case_labels.InfoCreate).setup(req => {
     req.interpolations.project_id = project_id
   }).perform(this.form)
 

@@ -38,6 +38,7 @@
 
 <script setup lang="ts">
 import * as q from "@/lib/requests"
+import useRequestList from '@bbb/useRequestList'
 import { useSessionStore } from '@/store'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -46,7 +47,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, 
 import { Button, Former, FormFactory } from '@/ui'
 import * as controls from '@/components/controls'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 
@@ -65,7 +66,8 @@ watch(former.form, () => {
 })
 
 former.doPerform = async function() {
-  const account = await new q.profile.accounts.Update().setup(proxy).perform(this.form)
+  const account = await reqs.add(q.profile.accounts.Update).setup(req => {
+  }).perform(this.form)
   session.account = account
 
   success.value = true

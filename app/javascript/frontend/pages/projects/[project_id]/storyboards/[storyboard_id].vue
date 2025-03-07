@@ -124,6 +124,7 @@
 
 <script setup lang="ts">
 import PageHeader from '@/components/PageHeader.vue'
+import useRequestList from '@bbb/useRequestList'
 import PageTitle from '@/components/PageTitle.vue'
 import BlankDialog from '@/ui/BlankDialog.vue'
 import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from 'vue'
@@ -162,7 +163,7 @@ import { REQUIREMENT_RELATE_STATS } from '@/constants'
 import SceneListDialogContent from './SceneListDialogContent.vue'
 import SceneNode from './SceneNode.vue'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -180,32 +181,34 @@ const vueFlowContainer = ref(null! as HTMLDivElement)
 const { width, height } = useElementSize(vueFlowContainer)
 const node_size_mapping = reactive(new Map<string, { dimensions: { width: number, height: number }, position: { x: number, y: number } }>())
 
+const roadmap = ref(null as Roadmap | null)
 const { updateNodeData, updateNode, addNodes, addEdges, getNodes } = useVueFlow()
 
-const platforms = ref(await new q.project.platforms.List().setup(proxy, (req) => {
+const platforms = reqs.add(q.project.platforms.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
-
-const test_case_labels = ref(await new q.project.test_case_labels.InfoList().setup(proxy, (req) => {
+}).wait()
+const test_case_labels = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
-
-const roadmap = ref(null as Roadmap | null)
-const roadmaps = ref(await new q.project.roadmaps.List().setup(proxy, (req) => {
+}).wait()
+const roadmaps = reqs.add(q.project.roadmaps.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
-if (query.roadmap_id) {
-  roadmap.value = roadmaps.value.find((r) => r.id === parseInt(query.roadmap_id)) ?? null
-}
-
-const storyboards = ref(await new q.project.storyboards.List().setup(proxy, (req) => {
+}).wait()
+const storyboards = reqs.add(q.project.storyboards.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
-
-const storyboard = ref(await new q.project.storyboards.Get().setup(proxy, (req) => {
+}).wait()
+const storyboard = reqs.add(q.project.storyboards.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = params.storyboard_id
-}).perform())
+}).wait()
+const scenes = reqs.add(q.project.scenes.List).setup(req => {
+  req.interpolations.project_id = params.project_id
+  req.interpolations.storyboard_id = params.storyboard_id
+}).wait()
+await reqs.performAll()
+
+if (query.roadmap_id) {
+  roadmap.value = roadmaps.value.find((r) => r.id === _.toInteger(query.roadmap_id)) ?? null
+}
 
 const position_mapping = computed(() => {
   const result = new Map()
@@ -216,35 +219,30 @@ const position_mapping = computed(() => {
   return result
 })
 
-const scenes = ref(await new q.project.scenes.List().setup(proxy, (req) => {
-  req.interpolations.project_id = params.project_id
-  req.interpolations.storyboard_id = params.storyboard_id
-}).perform())
-
-const requirements = ref(await new q.project.requirements.List().setup(proxy, (req) => {
+const requirements = reqs.add(q.project.requirements.List).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = storyboard.value.id
   if (roadmap.value) {
-    req.query = { roadmap_id: roadmap.value?.id }
+    req.query = { roadmap_id: roadmap.value.id }
   }
-}).perform())
+}).wait()
+const requirement_stats = reqs.add(q.project.requirement_stats.List).setup(req => {
+  req.interpolations.project_id = project_id
+  req.interpolations.storyboard_id = storyboard.value.id
+  if (roadmap.value) {
+    req.query = { roadmap_id: roadmap.value.id }
+  }
+}).wait()
+await reqs.performAll()
 
 const requirement_repo = ref(new RequirementRepo().setup(requirements.value))
+const requirement_stat_repo = computed(() => {
+  return new RequirementStatRepo().setup(requirement_stats.value)
+})
 
 function rebuildRequirementRepo() {
   requirement_repo.value = new RequirementRepo().setup(requirements.value)
 }
-
-const requirement_stats = ref(await new q.project.requirement_stats.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-  req.interpolations.storyboard_id = storyboard.value.id
-  if (roadmap.value) {
-    req.query = { roadmap_id: roadmap.value!.id }
-  }
-}).perform())
-const requirement_stat_repo = computed(() => {
-  return new RequirementStatRepo().setup(requirement_stats.value)
-})
 
 function requimentNodeId(requirement: Requirement | number) {
   if (typeof requirement === 'number') {
@@ -447,7 +445,7 @@ function updateScenePositions() {
 }
 
 async function updateRequirement(requirement: Requirement, data: any) {
-  const a_requirement = await new q.project.requirements.Update().setup(proxy, (req) => {
+  const a_requirement = await reqs.add(q.project.requirements.Update).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
     req.interpolations.requirement_id = requirement.id
@@ -545,7 +543,7 @@ async function save() {
     return acc
   }, {} as Record<string, { x: number, y: number }>)
 
-  const a_storyboard = await new q.project.storyboards.Update().setup(proxy, (req) => {
+  const a_storyboard = await reqs.add(q.project.storyboards.Update).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
   }).perform({

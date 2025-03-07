@@ -124,32 +124,30 @@
 </template>
 
 <script setup lang="ts">
-import BSOption from "@/components/BSOption.vue"
+import useRequestList from '@bbb/useRequestList'
 import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
-import { layouts } from "@/components/simple_form"
 import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
 import * as q from '@/lib/requests'
-import * as utils from "@/lib/utils"
 import { IssueInfo } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
-import { getCurrentInstance, ref } from "vue"
+import { ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
 import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui";
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Former, FormFactory } from '@/ui'
 import { Button } from '@/ui'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 
-const proxy = getCurrentInstance()!.proxy as any
-const store = useSessionStore()
-const current_user = store.account!.user
+const reqs = useRequestList()
+const session = useSessionStore()
+const current_user = session.account!.user
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -172,7 +170,7 @@ const former = Former.build({
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 former.doPerform = async function(code: string) {
-  const a_issue_action = await new q.bug.issue_actions.Create().setup(proxy, (req) => {
+  const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform({ [code]: this.form[code] })
@@ -182,12 +180,13 @@ former.doPerform = async function(code: string) {
   emit('updated', props.issue_info)
 }
 
-const members = ref(await page.inProject().request(q.project.members.InfoList).setup(proxy).perform())
-const categories = ref(await page.inProject().request(q.project.categories.List).setup(proxy).perform())
-const milestones = ref(await page.inProject().request(q.project.milestones.List).setup(proxy).perform())
+const members = reqs.raw(session.request(q.project.members.InfoList, props.issue_info.project_id)).setup().wait()
+const categories = reqs.add(q.project.categories.List, props.issue_info.project_id).setup().wait()
+const milestones = reqs.add(q.project.milestones.List, props.issue_info.project_id).setup().wait()
+await reqs.performAll()
 
 async function subscribe() {
-  const a_subscription = await new q.bug.subscriptions.Create().setup(proxy, (req) => {
+  const a_subscription = await reqs.add(q.bug.subscriptions.Create).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform()
@@ -197,7 +196,7 @@ async function subscribe() {
 }
 
 async function unsubscribe() {
-  await new q.bug.subscriptions.Destroy().setup(proxy, (req) => {
+  await reqs.add(q.bug.subscriptions.Destroy).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform()

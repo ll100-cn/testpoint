@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from 'vue'
+import useRequestList from '@bbb/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/lib/requests'
 import Fields from './Fields.vue'
@@ -31,15 +31,17 @@ import { Button } from '@/ui'
 
 const route = useRoute()
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const params = route.params as any
 
 const project_id = params.project_id
 const category_id = params.category_id
-const category = ref(await new q.project.categories.InfoGet().setup(proxy, (req) => {
+
+const category = reqs.add(q.project.categories.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.category_id = category_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const former = Former.build({
   name: category.value.name,
@@ -50,10 +52,11 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.categories.InfoUpdate().setup(proxy, (req) => {
+  await reqs.add(q.project.categories.InfoUpdate).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.category_id = category_id
   }).perform(this.form)
+
   router.push('/projects/' + project_id + '/categories')
 }
 

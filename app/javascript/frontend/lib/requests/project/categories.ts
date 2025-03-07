@@ -3,10 +3,11 @@ import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
 export const List = class extends BaseRequest<Array<Category>> {
-  constructor() {
+  constructor(project_id: number) {
     super()
     this.method = "GET"
     this.endpoint = "/api/projects/{project_id}/categories"
+    this.interpolations.project_id = project_id
   }
 
   processResponse(response: AxiosResponse) {

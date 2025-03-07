@@ -48,37 +48,44 @@
 
 <script setup lang="ts">
 import PaginationBar from "@/components/PaginationBar.vue"
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
-import { getCurrentInstance, ref } from 'vue'
+import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute } from "vue-router"
 import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
 import { Nav, NavList, NavItem } from '@/ui'
+import type { Issue, Pagination } from "@/models"
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
 
 const filter = query.filter || 'unhandled'
-const unhandled_issues_count = ref(0)
-
 const sorts = ref(query.sorts ?? 'id desc')
 
-const pagination = ref(await new q.profile.issues.Page().setup(proxy, req => {
+const pagination = reqs.add(q.profile.issues.Page).setup(req => {
   req.query = utils.plainToQuery(query)
   req.query.filter = filter
   req.query.sorts = sorts.value
-}).perform())
+}).wait()
 
-if (filter == 'unhandled') {
-  unhandled_issues_count.value = pagination.value.total_count
-} else {
-  const unhandled = await new q.profile.issues.Page().setup(proxy, req => {
+let unhandled_issues = ref(null as Pagination<Issue> | null)
+if (filter != 'unhandled') {
+  reqs.add(q.profile.issues.Page).setup(req => {
     req.query.per_page = 1
     req.query.filter = 'unhandled'
-  }).perform()
-  unhandled_issues_count.value = unhandled.total_count
+  }).waitFor(unhandled_issues)
 }
+await reqs.performAll()
+
+const unhandled_issues_count = computed(() => {
+  if (filter == 'unhandled') {
+    return pagination.value.total_count
+  } else {
+    return unhandled_issues.value?.total_count ?? 0
+  }
+})
 </script>

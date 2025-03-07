@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
+import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
@@ -38,7 +39,7 @@ import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 
 const wday_mapping = [ "星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ]
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -53,10 +54,11 @@ const former = Former.build(filter)
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
-const analytics = ref(await new q.project.issue_activity_charts.Get().setup(proxy, (req) => {
+const analytics = reqs.add(q.project.issue_activity_charts.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.plainToQuery(former.form, true)
-}).perform())
+}).wait()
+await reqs.performAll()
 
 former.doPerform = async function() {
   if (filter) {

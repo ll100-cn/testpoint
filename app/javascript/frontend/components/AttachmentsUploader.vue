@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 import * as q from '@/lib/requests'
+import useRequestList from '@bbb/useRequestList'
 import { Attachment } from "@/models"
 import { type AxiosProgressEvent } from "axios"
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue"
@@ -34,7 +35,7 @@ import { UploadFile } from './types'
 const props = defineProps<{
   attachments?: Attachment[]
 }>()
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 
 class Item {
   upload_file?: UploadFile
@@ -69,15 +70,13 @@ async function upload(file: File) {
   items.value.push(item)
 
   try {
-    const attachment = await new q.project.attachments.Create().setup(proxy, (req) => {
-      req.conifg = {
-        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-          upload_file.state = "uploading"
-          upload_file.loaded = progressEvent.loaded
-          upload_file.total = progressEvent.total
-        },
-        signal: upload_file.controller.signal
+    const attachment = await reqs.add(q.project.attachments.Create).setup(req => {
+      req.config.onUploadProgress = (progressEvent: AxiosProgressEvent) => {
+        upload_file.state = "uploading"
+        upload_file.loaded = progressEvent.loaded
+        upload_file.total = progressEvent.total
       }
+
     }).perform({ file: file })
 
     item.attachment = attachment
@@ -151,13 +150,4 @@ async function onClipboardInput() {
     console.error(error.message);
   }
 }
-
-onUnmounted(() => {
-  for (const item of items.value) {
-    if (item.upload_file) {
-      item.upload_file.controller.abort()
-    }
-  }
-})
-
 </script>
