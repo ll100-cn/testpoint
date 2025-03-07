@@ -1,11 +1,7 @@
 <template>
   <PresetsConfigProvider>
-    <Error :errors="store.errors" />
-    <router-view v-slot="{ Component }">
-      <component :is="Component" v-if="store.errors.length <= 0">
-        <template v-for="(_, name) in $slots" #[name]="slotData"><slot :name="name" v-bind="slotData" /></template>
-      </component>
-    </router-view>
+    <Error v-if="store.errors.length > 0" :errors="store.errors" />
+    <router-view v-else />
   </PresetsConfigProvider>
 </template>
 
