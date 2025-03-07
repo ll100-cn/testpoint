@@ -1,7 +1,7 @@
 import { setupLayouts } from 'virtual:meta-layouts'
 import { type App } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { routes } from 'vue-router/auto/routes'
+import { routes } from 'vue-router/auto-routes'
 
 const routes_with_layout = setupLayouts(routes)
 
