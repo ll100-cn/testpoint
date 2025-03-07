@@ -25,7 +25,7 @@ import * as q from '@/lib/requests'
 import { IssueInfo, IssueRelationship } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance } from "vue"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 
 const reqs = useRequestList()
 const page = usePageStore()

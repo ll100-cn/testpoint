@@ -56,7 +56,9 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { Button, PaginationEllipsis, PaginationFirst, PaginationLast, PaginationList, PaginationListItem, PaginationNext, PaginationPrev, Pagination as PaginationVue, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/ui"
+import { Button } from "$ui/button"
+import { PaginationEllipsis, PaginationFirst, PaginationLast, PaginationList, PaginationListItem, PaginationNext, PaginationPrev, Pagination as PaginationVue } from "$ui/pagination"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "$ui/select"
 import * as utils from '@/lib/utils'
 import { Pagination } from '@/models'
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-icons/vue'

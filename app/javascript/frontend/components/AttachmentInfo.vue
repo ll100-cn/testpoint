@@ -69,9 +69,9 @@ import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import { usePageStore } from "@/store"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import Well from "@/ui/well/Well.vue"
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import Well from "$ui/well/Well.vue"
 
 const reqs = useRequestList()
 const page = usePageStore()

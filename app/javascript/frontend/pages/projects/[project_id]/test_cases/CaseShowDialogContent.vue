@@ -52,9 +52,10 @@ import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
 import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'
 import CaseEditDialogContent from './CaseEditDialogContent.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Well } from '@/ui'
-import Button from '@/ui/button/Button.vue'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { Well } from '$ui/well'
+import Button from '$ui/button/Button.vue'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '$ui/collapsible'
 
 const reqs = useRequestList()
 

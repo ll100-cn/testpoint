@@ -32,9 +32,10 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
-import { Button } from '@/ui'
-import Validator from '@/ui/simple_form/Validator';
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
+import Validator from '$ui/simple_form/Validator';
 
 const reqs = useRequestList()
 const route = useRoute()

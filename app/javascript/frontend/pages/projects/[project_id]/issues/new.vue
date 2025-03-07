@@ -66,8 +66,9 @@ import { Attachment, Issue } from "@/models"
 import { usePageStore, useSessionStore } from "@/store"
 import { computed, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, Separator } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 

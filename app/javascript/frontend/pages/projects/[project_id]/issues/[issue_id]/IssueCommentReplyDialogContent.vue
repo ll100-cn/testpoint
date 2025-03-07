@@ -27,9 +27,9 @@ import _ from "lodash"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import PageContent from "@/components/PageContent.vue"
-import { Former, FormFactory } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const open = defineModel('open')

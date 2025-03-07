@@ -46,8 +46,8 @@ import { useRoute, useRouter } from "vue-router"
 import IssueByMemberCard from "./IssueByMemberCard.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
 const reqs = useRequestList()

@@ -15,13 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory } from '@/ui'
+import { Button } from '$ui/button'
+import { Former, FormFactory } from '$ui/simple_form'
 import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { Attachment, IssueInfo } from '@/models'
 import { ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const open = defineModel('open')

@@ -1,0 +1,19 @@
+<script setup lang="ts">
+import type { HTMLAttributes } from 'vue'
+import { cn } from '$ui/utils'
+import { relayTablePreseterConfig, useTablePresenter, type TablePresenterConfig } from './types'
+
+interface Props {
+  class?: HTMLAttributes['class']
+}
+
+const props = defineProps<Props & Partial<TablePresenterConfig>>()
+const presenterConfig = relayTablePreseterConfig(props)
+const presenter = useTablePresenter()
+</script>
+
+<template>
+  <tr :class="cn(presenter.row(presenterConfig), props.class)">
+    <slot></slot>
+  </tr>
+</template>

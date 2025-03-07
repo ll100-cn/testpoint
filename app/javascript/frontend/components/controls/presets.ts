@@ -1,4 +1,4 @@
-import { bva } from "@/ui/utils"
+import { bva } from "$ui/utils"
 
 export const standard = {
   input: bva(`

@@ -54,8 +54,9 @@ import { useRoute } from 'vue-router'
 import * as utils from "@/lib/utils"
 import PageHeader from '@/components/PageHeader.vue';
 import PageTitle from '@/components/PageTitle.vue';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Button } from '$ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 
 const reqs = useRequestList()
 const router = useRouter()

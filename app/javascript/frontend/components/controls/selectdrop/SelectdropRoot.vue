@@ -35,10 +35,10 @@ import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 
 import type { SelectdropMenuOption } from "./types"
 import SelectdropMenuItem from "./SelectdropMenuItem.vue"
 import SelectdropMenuText from "./SelectdropMenuText.vue"
-import { relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig, type SizeType } from '@/ui/simple_form/types'
-import Validation from '@/ui/simple_form/Validation'
-import { cn } from '@/ui/utils'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
+import { relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig, type SizeType } from '$ui/simple_form/types'
+import Validation from '$ui/simple_form/Validation'
+import { cn } from '$ui/utils'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { type SelectdropContext, selectdropContextKey, type SelectdropOption } from './types'
 import SelectdropItemExtractor from './SelectdropItemExtractor'
 import SelectdropOptionHelper from './SelectdropOptionHelper'
@@ -280,4 +280,3 @@ function selectNone() {
   open.value = false
 }
 </script>
-

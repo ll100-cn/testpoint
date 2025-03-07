@@ -22,9 +22,9 @@ import useRequestList from '@bbb/useRequestList'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { nextTick, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
-import { Former, FormFactory } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const open = ref(false)

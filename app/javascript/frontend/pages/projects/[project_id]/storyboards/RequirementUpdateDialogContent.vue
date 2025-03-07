@@ -25,10 +25,10 @@
 <script setup lang="ts">
 import * as q from '@/lib/requests'
 import useRequestList from '@bbb/useRequestList'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { computed, getCurrentInstance, nextTick, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'

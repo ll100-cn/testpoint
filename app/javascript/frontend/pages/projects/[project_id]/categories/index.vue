@@ -56,9 +56,9 @@ import * as q from '@/lib/requests'
 import { Category } from '@/models'
 import { usePageStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent } from '@/ui'
-import Button from '@/ui/button/Button.vue'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent } from '$ui/card'
+import Button from '$ui/button/Button.vue'
 import useRequestList from '@bbb/useRequestList'
 
 const reqs = useRequestList()

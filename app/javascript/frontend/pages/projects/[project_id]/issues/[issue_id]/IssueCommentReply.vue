@@ -29,7 +29,7 @@ import { type Component } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueCommentEditDialogContent from "./IssueCommentEditDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 
 const reqs = useRequestList()
 const store = useSessionStore()

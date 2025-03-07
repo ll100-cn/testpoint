@@ -30,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import type { Platform, Scene, TestCaseLabel } from '@/models';
 

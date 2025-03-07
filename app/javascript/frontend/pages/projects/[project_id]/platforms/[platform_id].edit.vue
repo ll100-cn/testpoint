@@ -28,8 +28,9 @@ import Fields from './Fields.vue'
 import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
 
 const route = useRoute()
 const router = useRouter()

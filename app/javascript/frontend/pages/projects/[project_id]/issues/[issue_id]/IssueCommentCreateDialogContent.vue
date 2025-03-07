@@ -20,9 +20,9 @@ import useRequestList from '@bbb/useRequestList'
 import { Issue, IssueSurvey, Comment } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const open = defineModel('open')

@@ -62,10 +62,10 @@ import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpsho
 import { Actioner } from "@/components/Actioner"
 import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
-import { Former as NewFormer, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former as NewFormer, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as newControls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const page = usePageStore()

@@ -39,8 +39,8 @@ import CategoryBadge from '@/components/CategoryBadge.vue'
 import { ENUM_ISSUE_STAGES } from "@/constants"
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 
 const reqs = useRequestList()
 const page = usePageStore()

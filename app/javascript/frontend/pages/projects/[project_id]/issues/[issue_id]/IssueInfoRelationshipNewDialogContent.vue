@@ -29,10 +29,10 @@ import useRequestList from '@bbb/useRequestList'
 import * as q from '@/lib/requests'
 import { IssueInfo } from "@/models"
 import { ref } from "vue"
-import { Former, FormFactory } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const open = defineModel('open')

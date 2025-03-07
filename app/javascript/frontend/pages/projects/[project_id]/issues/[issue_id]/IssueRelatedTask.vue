@@ -11,7 +11,7 @@ import useRequestList from '@bbb/useRequestList'
 
 import { Task } from "@/models"
 import * as q from '@/lib/requests'
-import Badge from "@/ui/badge/Badge.vue";
+import Badge from "$ui/badge/Badge.vue";
 
 const reqs = useRequestList()
 const props = defineProps<{

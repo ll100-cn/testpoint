@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
-import { Card, CardContent } from '@/ui'
+import { Card, CardContent } from '$ui/card'
 import _ from "lodash"
 
 const props = defineProps<{

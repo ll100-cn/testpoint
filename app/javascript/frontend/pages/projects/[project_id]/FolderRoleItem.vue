@@ -23,7 +23,7 @@
 import { type ChangeFilterFunction, Filter, TreeItem } from "./types"
 import FolderSceneItem from "./FolderSceneItem.vue"
 import { computed, inject, ref, type PropType } from "vue"
-import { Button } from "@/ui";
+import { Button } from "$ui/button";
 import TreeItemView from "./TreeItemView.vue";
 
 const props = defineProps({

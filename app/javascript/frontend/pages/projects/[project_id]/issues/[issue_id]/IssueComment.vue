@@ -59,9 +59,10 @@ import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyDialogContent from "./IssueCommentReplyDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
 import { COMMENT_DISPLAY_OPTIONS } from "@/constants"
-import { Callout, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
-import Button from "@/ui/button/Button.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Callout } from '$ui/callout'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import Button from "$ui/button/Button.vue"
 
 const reqs = useRequestList()
 const store = useSessionStore()

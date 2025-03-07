@@ -139,9 +139,10 @@ import { useSessionStore } from "@/store/session"
 import _ from "lodash"
 import { ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
-import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui";
-import { Former, FormFactory } from '@/ui'
-import { Button } from '@/ui'
+import { Badge } from "$ui/badge"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$ui/tooltip"
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 

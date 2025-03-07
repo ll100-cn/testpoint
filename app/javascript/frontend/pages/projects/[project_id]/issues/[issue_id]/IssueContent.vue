@@ -32,9 +32,9 @@ import { ref } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueContentEditDialogContent from "./IssueContentEditDialogContent.vue"
 import { usePageStore } from "@/store"
-import BlankDialog from "@/ui/BlankDialog.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
+import BlankDialog from "@/components/BlankDialog.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 
 const blank_dialog = ref(null!as InstanceType<typeof BlankDialog>)
 const page = usePageStore()

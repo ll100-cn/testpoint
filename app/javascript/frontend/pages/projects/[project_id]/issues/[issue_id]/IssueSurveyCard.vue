@@ -44,9 +44,10 @@ import { IssueInfo, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import { type Component } from "vue"
 import IssueSurveyEditDialogContent from "./IssueSurveyEditDialogContent.vue"
-import { Alert, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
-import Button from "@/ui/button/Button.vue"
+import { Card, CardContent } from '$ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import Button from "$ui/button/Button.vue"
+import { Alert } from "$ui/alert"
 
 const reqs = useRequestList()
 const page = usePageStore()

@@ -8,9 +8,9 @@
 
 <script setup lang="ts">
 import { type PropType, inject, reactive } from 'vue'
-import Validator from '@/ui/simple_form/Validator';
+import Validator from '$ui/simple_form/Validator';
 import Former from './simple_form/Former'
-import { useInjectFormer } from '@/ui/simple_form/types';
+import { useInjectFormer } from '$ui/simple_form/types';
 
 const props = defineProps<{
   validator?: Validator

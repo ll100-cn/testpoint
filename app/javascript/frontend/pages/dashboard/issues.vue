@@ -55,8 +55,8 @@ import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute } from "vue-router"
 import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { Nav, NavList, NavItem } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Nav, NavList, NavItem } from '$ui/nav'
 import type { Issue, Pagination } from "@/models"
 
 const reqs = useRequestList()

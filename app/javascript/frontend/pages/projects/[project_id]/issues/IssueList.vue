@@ -38,7 +38,7 @@ import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import SortLink from '@/components/SortLink.vue'
 import { Issue } from '@/models'
 import { ref } from 'vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 
 interface Props {
   issues: Issue[],

@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { type Ref, inject, onMounted, useSlots } from 'vue'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 
 const props = defineProps<{
   value: any

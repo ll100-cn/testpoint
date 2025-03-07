@@ -39,18 +39,18 @@
 <script setup lang="ts">
 import * as q from '@/lib/requests'
 import useRequestList from '@bbb/useRequestList'
-import { Button } from '@/ui'
+import { Button } from '$ui/button'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap, Scene } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { computed, getCurrentInstance, reactive, ref, type Component } from 'vue'
 import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { STORYBOARD_MAIN_AXLE } from '@/constants'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { usePageStore } from '@/store'
 import SceneCreateDialogContent from './SceneCreateDialogContent.vue'
-import Validator from '@/ui/simple_form/Validator';
+import Validator from '$ui/simple_form/Validator';
 import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
 
 const route = useRoute()

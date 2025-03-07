@@ -32,10 +32,10 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import Separator from '@/ui/separator/Separator.vue'
+import Separator from '$ui/separator/Separator.vue'
 
 const route = useRoute()
 const router = useRouter()

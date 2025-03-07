@@ -52,8 +52,9 @@ import * as q from '@/lib/requests'
 import { usePageStore, useSessionStore } from '@/store'
 import _ from "lodash"
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 

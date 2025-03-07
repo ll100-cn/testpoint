@@ -30,7 +30,7 @@ import useRequestList from '@bbb/useRequestList'
 import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Nav, NavList, NavItem } from '@/ui'
+import { Nav, NavList, NavItem } from '$ui/nav'
 
 const reqs = useRequestList()
 const session = useSessionStore()

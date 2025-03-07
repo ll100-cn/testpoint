@@ -56,9 +56,9 @@ import { LoginCode } from "@/models"
 import { useSessionStore } from "@/store/session"
 import { getCurrentInstance, ref } from "vue"
 import { useRouter } from "vue-router"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!

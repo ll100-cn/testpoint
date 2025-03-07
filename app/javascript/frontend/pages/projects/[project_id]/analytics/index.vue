@@ -32,7 +32,8 @@
 import PageHeader from '@/components/PageHeader.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useRoute } from 'vue-router'
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Button } from '$ui/button'
 
 const route = useRoute()
 const params = route.params as any

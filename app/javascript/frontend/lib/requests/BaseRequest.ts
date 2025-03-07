@@ -1,7 +1,7 @@
 import { ErrorAccessDenied, ErrorUnauthorized } from "@/lib/requests"
 import { Pagination } from "@/models"
 import { ErrorsObject } from "@/models/ErrorsObject"
-import { UnprocessableEntityError } from "@/ui"
+import { UnprocessableEntityError } from "$ui/simple_form"
 import { DisposableRequest } from "@bbb/DisposableRequest"
 import { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
 import { type ClassConstructor, plainToInstance } from "class-transformer"

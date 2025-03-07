@@ -20,7 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory, Separator } from '@/ui'
+import { Button } from '$ui/button'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
 import useRequestList from '@bbb/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"

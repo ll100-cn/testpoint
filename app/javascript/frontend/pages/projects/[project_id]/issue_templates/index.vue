@@ -47,15 +47,15 @@ import { getCurrentInstance, ref, reactive } from 'vue'
 import useRequestList from '@bbb/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/lib/requests'
-import Validator from '@/ui/simple_form/Validator';
+import Validator from '$ui/simple_form/Validator';
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { IssueTemplate } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import Button from '@/ui/button/Button.vue';
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import Button from '$ui/button/Button.vue';
 
 const route = useRoute()
 const router = useRouter()

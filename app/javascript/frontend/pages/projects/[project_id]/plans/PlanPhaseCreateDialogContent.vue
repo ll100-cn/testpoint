@@ -32,9 +32,10 @@ import { Phase, PhaseInfo, Plan, PlanInfo } from '@/models'
 import _ from 'lodash'
 import { nextTick, ref, computed } from 'vue'
 import { useRoute } from "vue-router"
-import { Former, FormFactory, Separator } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import * as controls from '@/components/controls'
 
 const reqs = useRequestList()

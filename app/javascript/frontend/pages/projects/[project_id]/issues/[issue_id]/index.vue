@@ -153,15 +153,15 @@ import IssueUnresolveDialogContent from "./IssueUnresolveDialogContent.vue"
 import IssueWaitingDialogContent from "./IssueWaitingDialogContent.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import BlankDialog from "@/ui/BlankDialog.vue"
-import Button from "@/ui/button/Button.vue"
-import ButtonGroup from "@/ui/button/ButtonGroup.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import BlankDialog from "@/components/BlankDialog.vue"
+import Button from "$ui/button/Button.vue"
+import ButtonGroup from "$ui/button/ButtonGroup.vue"
 
-const comment_dialog = ref(null as InstanceType<typeof BlankDialog>)
-const issue_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
-const issue_comment_create_dialog = ref(null as InstanceType<typeof BlankDialog>)
-const issue_info_resolve_dialog = ref(null as InstanceType<typeof BlankDialog>)
+const comment_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_info_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_comment_create_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_info_resolve_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 
 const reqs = useRequestList()
 const route = useRoute()

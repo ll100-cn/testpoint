@@ -53,16 +53,16 @@
 
 <script setup lang="ts">
 import { LabelRepo, Platform, PlatformRepo, Requirement, RequirementStatRepo, SceneRepo } from '@/models'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
-import { Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
+import { Button } from '$ui/button'
 import { Handle, Position } from '@vue-flow/core'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "$ui/collapsible"
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import VueMarkdown from 'vue-markdown-render'
 import { usePageStore } from '@/store'
 import { Filter } from './type'
 import { computed } from 'vue'
-import { Callout, CalloutTitle, CalloutDescription } from '@/ui'
+import { Callout, CalloutTitle, CalloutDescription } from '$ui/callout'
 import * as utils from "@/lib/utils"
 
 const page = usePageStore()

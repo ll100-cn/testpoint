@@ -39,8 +39,9 @@ import _ from 'lodash'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PageHeader from '../PageHeader.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { Button, Former, FormFactory } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
 const reqs = useRequestList()

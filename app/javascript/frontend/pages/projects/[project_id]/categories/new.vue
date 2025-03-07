@@ -26,8 +26,9 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, Separator } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
 
 const route = useRoute()
 const router = useRouter()

@@ -57,8 +57,9 @@ import PaginationBar from '@/components/PaginationBar.vue'
 import { useRoute } from 'vue-router'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Button } from '$ui/button'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 
 const reqs = useRequestList()
 const router = useRouter()

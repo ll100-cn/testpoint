@@ -32,10 +32,10 @@ import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import * as q from '@/lib/requests'
 import { IssueInfo, IssueTemplate } from "@/models"
 import { getCurrentInstance, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const open = defineModel('open')

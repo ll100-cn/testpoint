@@ -65,12 +65,12 @@ import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent } from '@/ui'
-import { Nav, NavList, NavItem } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent } from '$ui/card'
+import { Nav, NavList, NavItem } from '$ui/nav'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import Button from '@/ui/button/Button.vue'
+import Button from '$ui/button/Button.vue'
 
 const reqs = useRequestList()
 const route = useRoute()

@@ -47,8 +47,8 @@ import { usePageStore, useSessionStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
 const reqs = useRequestList()

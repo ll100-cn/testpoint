@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { Former, FormFactory } from "@/ui";
+import { Former, FormFactory } from "$ui/simple_form";
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import * as controls from '@/components/controls'
 

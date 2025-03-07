@@ -20,9 +20,9 @@
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { Member } from '@/models'
 import OptionsForMember from "@/components/OptionsForMember.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import FormGroup from "@/ui/simple_form/FormGroup.vue"
+import FormGroup from "$ui/simple_form/FormGroup.vue"
 
 const props = defineProps<{
   former: Former<any>

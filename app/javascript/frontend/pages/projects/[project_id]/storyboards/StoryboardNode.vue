@@ -6,12 +6,13 @@
 
 <script setup lang="ts">
 import { Platform, PlatformRepo, Requirement, Storyboard } from '@/models'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
-import { Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
+import { Button } from '$ui/button'
 import { Handle, Position } from '@vue-flow/core'
-import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui";
+import { Badge } from '$ui/badge'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '$ui/tooltip'
 import PlatformBadge from '@/components/PlatformBadge.vue'
-import { Alert } from '@/ui';
+import { Alert } from '$ui/alert'
 
 import VueMarkdown from 'vue-markdown-render'
 import { usePageStore } from '@/store';

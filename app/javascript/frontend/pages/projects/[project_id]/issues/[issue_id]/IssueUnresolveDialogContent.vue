@@ -20,9 +20,9 @@ import { IssueInfo } from "@/models"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import { useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const router = useRouter()
 const reqs = useRequestList()

@@ -41,7 +41,8 @@ import _ from 'lodash'
 import { type Component, computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
 import TaskDetailsState from './TaskDetailsState.vue'
 import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Button } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { Button } from '$ui/button'
 
 const reqs = useRequestList()
 const page = usePageStore()

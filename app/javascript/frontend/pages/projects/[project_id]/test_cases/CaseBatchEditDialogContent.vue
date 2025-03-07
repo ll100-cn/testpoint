@@ -110,9 +110,9 @@ import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import _ from 'lodash'
 import { nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
-import Button from '@/ui/button/Button.vue'
-import { Former, FormFactory } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import Button from '$ui/button/Button.vue'
+import { Former, FormFactory } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 
 const validations = reactive<Validations>(new Validations())

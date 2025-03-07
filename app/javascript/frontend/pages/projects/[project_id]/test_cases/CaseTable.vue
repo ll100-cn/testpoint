@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/ui'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$ui/table'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from "@/models"
 import { usePageStore } from "@/store"
 import { type Component, computed, ref } from "vue"
@@ -49,7 +49,7 @@ import CaseBatchEditDialogContent from "./CaseBatchEditDialogContent.vue"
 import CaseLabelCell from "./CaseLabelCell.vue"
 import CaseShowDialogContent from "./CaseShowDialogContent.vue"
 import PlatformBadge from '@/components/PlatformBadge.vue'
-import { Badge } from '@/ui'
+import { Badge } from '$ui/badge'
 
 const page = usePageStore()
 const allow = page.inProject()!.allow

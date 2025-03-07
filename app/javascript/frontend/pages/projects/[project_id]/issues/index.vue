@@ -47,7 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardFooter, CardHeader, Nav, NavItem, NavList } from '@/ui'
+import { Card, CardContent, CardFooter, CardHeader } from '$ui/card'
+import { Nav, NavItem, NavList } from '$ui/nav'
 import useRequestList from '@bbb/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
@@ -64,8 +65,8 @@ import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
 import IssueList from "./IssueList.vue"
 import { Filter2, Search2 } from "./types"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
 const reqs = useRequestList()

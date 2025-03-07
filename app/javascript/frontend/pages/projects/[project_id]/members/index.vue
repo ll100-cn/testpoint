@@ -63,11 +63,11 @@ import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent } from '@/ui'
-import Validator from '@/ui/simple_form/Validator'
-import Button from "@/ui/button/Button.vue"
-import { Nav, NavList, NavItem } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent } from '$ui/card'
+import Validator from '$ui/simple_form/Validator'
+import Button from "$ui/button/Button.vue"
+import { Nav, NavList, NavItem } from '$ui/nav'
 
 const reqs = useRequestList()
 const route = useRoute()

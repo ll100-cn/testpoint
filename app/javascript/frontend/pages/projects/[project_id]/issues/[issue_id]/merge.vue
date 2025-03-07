@@ -72,20 +72,21 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory, UnprocessableEntityError } from '@/ui'
+import { Button } from '$ui/button'
+import { Former, FormFactory } from '$ui/simple_form'
 import useRequestList from '@bbb/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import { Issue } from "@/models"
 import _ from 'lodash'
 import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/lib/requests'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import { AxiosError } from 'axios'
 import { usePageStore } from '@/store'

@@ -32,7 +32,7 @@ import { onErrorCaptured, ref } from "vue"
 import { onBeforeRouteLeave, useRoute } from "vue-router"
 import Error from './Error.vue'
 import AppNavbar from '../components/AppNavbar.vue'
-import { Container } from "@/ui"
+import { Container } from "$ui/container"
 import SuspenseHelper from "@bbb/SuspenseHelper"
 import SuspenseWrapper from "@bbb/SuspenseWrapper.vue"
 

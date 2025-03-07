@@ -26,8 +26,8 @@ import { type InputHTMLAttributes, computed, provide, reactive } from 'vue'
 import * as helper from "../simple_form/helper"
 import { type ControlProps } from '../simple_form/helper'
 import { default as DropdownMenuItemVue } from './DropdownMenuItem.vue'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '@/ui/simple_form/types';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
 
 interface Props extends ControlProps {
   include_blank?: boolean | string

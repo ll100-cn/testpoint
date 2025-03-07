@@ -52,9 +52,10 @@ import { usePageStore } from '@/store'
 import { TestCaseLabel } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import Validator from '@/ui/simple_form/Validator';
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Button } from '$ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import Validator from '$ui/simple_form/Validator';
 
 const reqs = useRequestList()
 const route = useRoute()

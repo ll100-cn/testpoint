@@ -9,9 +9,10 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Nav, NavList } from '@/ui'
+import { Button } from '$ui/button'
+import { Nav, NavList } from '$ui/nav'
 import useRequestList from '@bbb/useRequestList'
-import BlankDialog from '@/ui/BlankDialog.vue'
+import BlankDialog from '@/components/BlankDialog.vue'
 import * as q from '@/lib/requests'
 import * as utils from "@/lib/utils"
 import { Storyboard } from '@/models'

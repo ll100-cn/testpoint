@@ -32,8 +32,8 @@ import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 import WdayIssuesConfirmTimeChart from './WdayIssuesConfirmTimeChart.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"

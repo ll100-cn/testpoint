@@ -41,10 +41,10 @@ import * as q from '@/lib/requests'
 import { Category, IssueInfo, MemberInfo } from "@/models"
 import { useSessionStore } from "@/store"
 import { nextTick, ref } from "vue"
-import { Former, FormFactory } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import { useRoute } from "vue-router"

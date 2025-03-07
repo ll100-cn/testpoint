@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import * as utils from "@/lib/utils"
-import { Alert, AlertTitle } from '@/ui'
+import { Alert, AlertTitle } from '$ui/alert'
 import type { Scene } from '@/models'
 
 const props = defineProps<{

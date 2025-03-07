@@ -24,9 +24,9 @@ import _ from 'lodash'
 import { getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
 import { usePageStore } from "@/store"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()
 const el = ref(null! as InstanceType<typeof HTMLElement>)

@@ -52,7 +52,7 @@ import { computed, reactive, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Search2, Filter2 } from "./types"
 import BSOption from "@/components/BSOption.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 
