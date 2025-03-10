@@ -20,16 +20,18 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory, Separator } from '@/ui'
+import { Button } from '$ui/button'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import * as q from '@/lib/requests'
-import { getCurrentInstance } from 'vue'
+import * as q from '@/requests'
 import { useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 
 const former = Former.build({
   email: "",
@@ -39,7 +41,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const user = await new q.admin.UserReq.Create().setup(proxy).perform(this.form)
+  const user = await reqs.add(q.admin.users.Create).setup().perform(this.form)
   router.push("/users")
 }
 

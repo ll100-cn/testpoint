@@ -45,36 +45,38 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref } from 'vue'
+import { reactive } from 'vue'
+import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import _ from 'lodash'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import { Platform } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import Validator from '@/ui/simple_form/Validator';
-import Button from '@/ui/button/Button.vue'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import Validator from '$ui/simple_form/Validator';
+import Button from '$ui/button/Button.vue'
 import PlatformBadge from '@/components/PlatformBadge.vue'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
+const session = useSessionStore()
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const platforms = ref(await new q.project.PlatformReq.List().setup(proxy, (req) => {
+const platforms = reqs.add(q.project.platforms.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
-
-const members = ref(await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform())
+}).wait()
+const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+await reqs.performAll()
 
 async function onRemove(id: number) {
   if (!confirm("是否删除平台？")) {
@@ -82,7 +84,7 @@ async function onRemove(id: number) {
   }
 
   try {
-    await new q.project.PlatformReq.Destroy().setup(proxy, (req) => {
+    await reqs.add(q.project.platforms.Destroy).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.platform_id = id
     }).perform()

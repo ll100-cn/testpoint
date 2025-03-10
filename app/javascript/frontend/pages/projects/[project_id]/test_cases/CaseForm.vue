@@ -33,15 +33,16 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import useRequestList from '@/lib/useRequestList'
 import { EntityRepo, Platform, Requirement, Roadmap, TestCase, TestCaseLabel } from '@/models'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import FormGroup from '@/ui/simple_form/FormGroup.vue'
-import * as q from '@/lib/requests'
-import { getCurrentInstance, ref, watch } from 'vue'
+import FormGroup from '$ui/simple_form/FormGroup.vue'
+import * as q from '@/requests'
+import { ref, watch } from 'vue'
 import { usePageStore } from '@/store'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const page = usePageStore()
 
 const props = defineProps<{
@@ -57,30 +58,30 @@ const emit = defineEmits<{
   (e: 'create', event: Event): void,
 }>()
 
-const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = page.inProject()!.project_id
-}).perform())
-
 const requirements = ref([] as Requirement[])
+
+const storyboards = reqs.add(q.project.storyboards.List).setup(req => {
+  req.interpolations.project_id = page.inProject()!.project_id
+}).wait()
 if (props.former.form.storyboard_id) {
-  requirements.value = (await requestRequirement(props.former.form.storyboard_id))
+  requestRequirement(props.former.form.storyboard_id)
 }
+await reqs.performAll()
 
 watch(() => props.former.form.storyboard_id, async (storyboard_id) => {
   if (storyboard_id) {
-    requirements.value = (await requestRequirement(storyboard_id))
+    requestRequirement(storyboard_id)
+    await reqs.performAll()
     props.former.form.requirement_id = null
   }
 })
 
-async function requestRequirement(storyboard_id: number) {
-  const new_requirements = await new q.project.RequirementReq.List().setup(proxy, (req) => {
+function requestRequirement(storyboard_id: number) {
+  reqs.add(q.project.requirements.List).setup(req => {
     req.interpolations.project_id = page.inProject()!.project_id
     req.interpolations.storyboard_id = storyboard_id
     req.query.roadmap_id = props.newest_roadmap.id
-  }).perform()
-
-  return new_requirements
+  }).waitFor(requirements)
 }
 
 watch

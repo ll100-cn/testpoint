@@ -25,19 +25,20 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import { usePageStore } from "@/store"
-import { getCurrentInstance, ref } from "vue"
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
+import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Nav, NavList, NavItem } from '@/ui'
+import { Nav, NavList, NavItem } from '$ui/nav'
 
-const page = usePageStore()
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
+const session = useSessionStore()
 
 defineProps<{
   current: string | number
 }>()
 
-const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
+const member_infos = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
+await reqs.performAll()
 </script>

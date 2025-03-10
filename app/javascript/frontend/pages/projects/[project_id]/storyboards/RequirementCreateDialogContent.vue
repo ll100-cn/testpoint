@@ -17,21 +17,20 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import * as controls from '@/components/controls'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
-import { computed, getCurrentInstance, ref } from 'vue'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import RequirementForm from './RequirementForm.vue'
 
 const route = useRoute()
 const params = route.params as any
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -57,7 +56,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_requirement = await new q.project.RequirementReq.Create().setup(proxy, (req) => {
+  const a_requirement = await reqs.add(q.project.requirements.Create).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
   }).perform(this.form)

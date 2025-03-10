@@ -12,7 +12,7 @@
       </template>
     </DialogHeader>
 
-    <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="hidden">{{ test_case.content }}</textarea>
+    <PageContent :content="test_case.content" />
 
     <div class="text-center p-1" :class="{ 'hidden': !collapsed }">
       <Button preset="ghost" @click="collapsed=false">
@@ -31,7 +31,7 @@
           </CollapsibleTrigger>
           <CollapsibleContent>
             <hr class="my-3">
-            <textarea v-model="version_case.content" data-controller="markdown" readonly class="hidden mt-2" />
+            <PageContent :content="version_case.content" class="mt-2" />
           </CollapsibleContent>
         </Collapsible>
       </div>
@@ -46,16 +46,19 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
 import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'
 import CaseEditDialogContent from './CaseEditDialogContent.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose, Well } from '@/ui'
-import Button from '@/ui/button/Button.vue'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { Well } from '$ui/well'
+import Button from '$ui/button/Button.vue'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '$ui/collapsible'
+import PageContent from '@/components/PageContent.vue'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 
 const props = defineProps<{
   readonly: boolean
@@ -79,7 +82,7 @@ async function reset(a_test_case: TestCase) {
   loading.value = true
   test_case.value = a_test_case
 
-  history.value = await new q.case.TestCaseHistory().setup(proxy, (req) => {
+  history.value = await reqs.add(q.case.test_cases.History).setup(req => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform()

@@ -31,24 +31,32 @@
 
 <script setup lang="ts">
 import { EntityRepo, IssueStat, Project } from '@/models'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import { ENUM_ISSUE_STAGES } from "@/constants"
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const page = usePageStore()
+const session = useSessionStore()
 
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const issue_stats = ref(await new q.profile.IssueStatReq.List().setup(proxy).perform())
+const issue_stats = reqs.add(q.profile.issue_stats.List).setup().wait()
+const member_infos = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
+const unhandled_issues =  reqs.add(q.profile.issues.Page).setup(req => {
+  req.query.per_page = 1
+  req.query.filter = 'unhandled'
+}).wait()
+await reqs.performAll()
 
-const member_infos = ref(await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
+const unhandled_issues_count = computed(() => unhandled_issues.value.total_count)
 const project_repo = computed(() => new EntityRepo<Project>().setup(member_infos.value.map(it => it.project)))
 
 const grouped_issue_stats = computed(() => {
@@ -89,10 +97,4 @@ const issue_stages_counts = computed(() => {
 
   return result
 })
-
-const unhandled_issues_count = ref((await new q.profile.IssueReq.Page().setup(proxy, req => {
-  req.query.per_page = 1
-  req.query.filter = 'unhandled'
-}).perform()).total_count)
-
 </script>

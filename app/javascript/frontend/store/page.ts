@@ -1,10 +1,11 @@
-import { BaseRequest } from '@/lib/requests'
+import { BaseRequest } from '@/requests'
 import _ from 'lodash'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSessionStore } from '.'
 import { Profile } from '@/models'
+import createCacheRequest from '@/lib/createCacheRequest'
 
 class ProjectCache {
   project_id!: number

@@ -1,18 +1,27 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "app/javascript/**/*", "app/javascript/**/*.vue"],
   "compilerOptions": {
-    // "verbatimModuleSyntax": false,
-    // "strictPropertyInitialization": false,
-    "noImplicitAny": false,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
-    // "strict": false,
+    /* Linting */
+    "strict": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    // "noUncheckedSideEffectImports": true,
+
+    /* Custom */
     "experimentalDecorators": true,
-    "composite": true,
-    "baseUrl": ".",
+    "useDefineForClassFields": true,
+
     "paths": {
-      "@/*": ["app/javascript/frontend/*"],
-      "$vendor/*": ["app/javascript/vendor/*"],
-    }
-  }
+      "@/*": ["./app/javascript/frontend/*"],
+      "$vendor/*": ["./app/javascript/vendor/*"],
+
+      "$ui/*": ["./app/javascript/ui/*"],
+      "$presets/*": ["./app/javascript/presets/*"],
+
+      "#vendor/*": ["./vendor/javascript/*"],
+    },
+  },
 }

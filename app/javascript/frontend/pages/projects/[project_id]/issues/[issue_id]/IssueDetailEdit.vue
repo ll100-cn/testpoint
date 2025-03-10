@@ -28,8 +28,8 @@
 
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { IssueInfo } from "@/models"
 import { ref } from "vue"

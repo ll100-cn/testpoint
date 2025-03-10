@@ -20,33 +20,36 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import { getCurrentInstance } from 'vue'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Button, Former, FormFactory, Separator } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Separator } from '$ui/separator'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const user = await new q.admin.UserReq.Get().setup(proxy, (req) => {
+const user = reqs.add(q.admin.users.Get).setup(req => {
   req.interpolations.id = params.user_id
-}).perform()
+}).wait()
+await reqs.performAll()
 
 const former = Former.build({
-  email: user.email,
-  name: user.name
+  email: user.value.email,
+  name: user.value.name
 })
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.admin.UserReq.Update().setup(proxy, (req) => {
-    req.interpolations.id = user.id
+  await reqs.add(q.admin.users.Update).setup(req => {
+    req.interpolations.id = user.value.id
   }).perform(this.form)
 
   router.push(`/users`)

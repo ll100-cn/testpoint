@@ -57,8 +57,8 @@ gem "fume", "0.10.0", require: false
 gem "uri_template", "0.7.0"
 
 # Assets
-gem 'vite_ruby', '3.3.1'
-gem 'vite_rails', '3.0.15'
+gem 'vite_rails', '3.0.19'
+gem 'vite_ruby', '3.9.1'
 
 # Use Active Storage variant
 gem 'image_processing', '1.12.1'

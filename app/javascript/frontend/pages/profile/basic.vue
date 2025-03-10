@@ -3,7 +3,7 @@
 
   <Card class="rounded-ss-none">
     <CardContent>
-      <div class="container page-md-box">
+      <div class="px-8 mx-auto page-md-box">
         <Card class="mx-auto w-full max-w-lg">
           <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
             <CardContent>
@@ -37,16 +37,18 @@
 </template>
 
 <script setup lang="ts">
-import * as q from "@/lib/requests"
+import * as q from "@/requests"
+import useRequestList from '@/lib/useRequestList'
 import { useSessionStore } from '@/store'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import PageHeader from './PageHeader.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { Button, Former, FormFactory } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 
@@ -65,7 +67,8 @@ watch(former.form, () => {
 })
 
 former.doPerform = async function() {
-  const account = await new q.profile.AccountReq.Update().setup(proxy).perform(this.form)
+  const account = await reqs.add(q.profile.accounts.Update).setup(req => {
+  }).perform(this.form)
   session.account = account
 
   success.value = true

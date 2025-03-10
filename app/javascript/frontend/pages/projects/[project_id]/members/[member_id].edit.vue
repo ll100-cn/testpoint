@@ -20,26 +20,29 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import { getCurrentInstance, ref } from 'vue'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
 
 const route = useRoute()
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const params = route.params as any
 
 const project_id = params.project_id
 const member_id = params.member_id
-const member = ref(await new q.project.MemberReq.Get().setup(proxy, (req) => {
+
+const member = reqs.add(q.project.members.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.member_id = member_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const former = Former.build({
   nickname: member.value.name,
@@ -49,10 +52,11 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.MemberReq.Update().setup(proxy, (req) => {
+  await reqs.add(q.project.members.Update).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.member_id = member_id
   }).perform(this.form)
+
   router.push('/projects/' + project_id + '/members')
 }
 </script>

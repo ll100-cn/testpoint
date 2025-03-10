@@ -26,19 +26,20 @@
 
 <script setup lang="ts">
 import { layouts } from "@/components/simple_form"
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 import WdayIssuesConfirmTimeChart from './WdayIssuesConfirmTimeChart.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 
 const wday_mapping = [ "星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ]
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -53,16 +54,17 @@ const former = Former.build(filter)
 
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
-const analytics = ref(await new q.project.IssueActivityChartReq.Get().setup(proxy, (req) => {
+const analytics = reqs.add(q.project.issue_activity_charts.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.plainToQuery(former.form, true)
-}).perform())
+}).wait()
+await reqs.performAll()
 
 former.doPerform = async function() {
   if (filter) {
     router.push({ query: utils.plainToQuery(filter, true) })
   } else {
-    router.push({ query: null })
+    router.push({ })
   }
 }
 

@@ -20,26 +20,29 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from 'vue'
+import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Separator } from '$ui/separator'
 
 const route = useRoute()
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const params = route.params as any
 
 const project_id = params.project_id
 const category_id = params.category_id
-const category = ref(await new q.project.CategoryInfoReq.Get().setup(proxy, (req) => {
+
+const category = reqs.add(q.project.categories.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.category_id = category_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const former = Former.build({
   name: category.value.name,
@@ -50,10 +53,11 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.CategoryInfoReq.Update().setup(proxy, (req) => {
+  await reqs.add(q.project.categories.InfoUpdate).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.category_id = category_id
   }).perform(this.form)
+
   router.push('/projects/' + project_id + '/categories')
 }
 

@@ -74,21 +74,22 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { MemberInfo } from '@/models'
 import { usePageStore } from '@/store'
 import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
-import { Nav, NavList, NavItem } from '@/ui'
-import { bva } from '@/ui/utils'
-import { type NavPresenter } from '@/ui/nav/types'
+import { Nav, NavList, NavItem } from '$ui/nav'
+import { bva } from '$ui/utils'
+import { type NavPresenter } from '$ui/nav/types'
 import RLink from './RLink.vue'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
-import { Container } from '@/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { Container } from '$ui/container'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 const page = usePageStore()
@@ -100,11 +101,11 @@ const member_infos = ref([] as MemberInfo[])
 const projects = computed(() => member_infos.value.map(it => it.project))
 
 if (account.value) {
-  member_infos.value = (await page.singleton(q.profile.MemberInfoReq.List).setup(proxy).perform())
+  member_infos.value = await reqs.raw(session.request(q.profile.members.InfoList)).setup().perform()
 }
 
 async function signOut() {
-  await new q.profile.Logout().setup(proxy).perform()
+  await reqs.add(q.profile.login.Destroy).setup().perform()
   session.clear()
   router.push('/')
 }

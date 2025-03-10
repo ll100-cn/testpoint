@@ -8,7 +8,7 @@
 import { EntityRepo, TestCaseLabel } from '@/models';
 import _ from 'lodash';
 import { type PropType, computed } from 'vue';
-import { Badge } from '@/ui';
+import { Badge } from '$ui/badge';
 
 const props = defineProps({
   label_repo: {

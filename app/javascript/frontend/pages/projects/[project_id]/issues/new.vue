@@ -56,35 +56,36 @@
 
 <script setup lang="ts">
 import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
-import BSOption from "@/components/BSOption.vue"
+import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { layouts } from "@/components/simple_form"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Attachment, Issue } from "@/models"
-import { usePageStore } from "@/store"
-import { computed, getCurrentInstance, ref, watch } from "vue"
+import { usePageStore, useSessionStore } from "@/store"
+import { computed, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider, Separator } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = page.inProject()!.allow
+const session = useSessionStore()
 
-const members = ref(await page.inProject()!.request(q.project.MemberInfoReq.List).setup(proxy).perform())
-
-const issue_templates = ref(await new q.project.IssueTemplateReq.List().setup(proxy, (req) => {
+const members = reqs.raw(session.request(q.project.members.InfoList, params.project_id)).setup().wait()
+const issue_templates = reqs.add(q.project.issue_templates.List).setup(req => {
   req.interpolations.project_id = params.project_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const issue_template = computed(() => {
   return issue_templates.value.find(it => it.id == former.form.issue_template_id)
@@ -104,7 +105,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const issue = await new q.bug.IssueReq.Create().setup(proxy, (req) => {
+  const issue = await reqs.add(q.bug.issues.Create).setup(req => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)
 

@@ -22,15 +22,17 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import useRequestList from '@/lib/useRequestList'
 import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Comment, Issue } from "@/models"
-import { getCurrentInstance, ref } from "vue"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { ref } from "vue"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -44,7 +46,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_comment = await new q.bug.IssueCommentReq.Convert().setup(proxy, (req) => {
+  const a_comment = await reqs.add(q.bug.issue_comments.Convert).setup(req => {
     req.interpolations.project_id = issue.value.project_id
     req.interpolations.issue_id = issue.value.id
     req.interpolations.comment_id = comment.value.id
@@ -54,8 +56,8 @@ former.doPerform = async function() {
   open.value = false
 }
 
-const issue = ref(null as Issue)
-const comment = ref(null as Comment)
+const issue = ref(null! as Issue)
+const comment = ref(null! as Comment)
 const loading = ref(true)
 
 function reset(a_issue: Issue, a_comment: Comment) {

@@ -50,17 +50,19 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { LoginCode } from "@/models"
 import { useSessionStore } from "@/store/session"
 import { getCurrentInstance, ref } from "vue"
 import { useRouter } from "vue-router"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 
@@ -72,7 +74,8 @@ const login_code = ref(null as LoginCode | null)
 const { Form: CodeForm, FormGroup: CodeFormGroup } = FormFactory<typeof code_former.form>()
 
 code_former.doPerform = async function() {
-  login_code.value = await new q.profile.LoginCodeDeliver().setup(proxy).perform(this.form)
+  login_code.value = await reqs.add(q.profile.login.Deliver).setup(req => {
+  }).perform(this.form)
   former.form.email = this.form.email
 }
 
@@ -85,7 +88,8 @@ const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
   try {
-    await new q.profile.LoginCodeVerify().setup(proxy).perform({ user: this.form })
+    await reqs.add(q.profile.login.Verify).setup(req => {
+    }).perform({ user: this.form })
     session.account = undefined
     await session.prepare(proxy)
     router.push("/")

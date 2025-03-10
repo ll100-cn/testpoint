@@ -128,9 +128,10 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
+import useRequestList from '@/lib/useRequestList'
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
@@ -152,36 +153,38 @@ import IssueUnresolveDialogContent from "./IssueUnresolveDialogContent.vue"
 import IssueWaitingDialogContent from "./IssueWaitingDialogContent.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import BlankDialog from "@/ui/BlankDialog.vue"
-import Button from "@/ui/button/Button.vue"
-import ButtonGroup from "@/ui/button/ButtonGroup.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import BlankDialog from "@/components/BlankDialog.vue"
+import Button from "$ui/button/Button.vue"
+import ButtonGroup from "$ui/button/ButtonGroup.vue"
 
-const comment_dialog = ref(null as InstanceType<typeof BlankDialog>)
-const issue_info_dialog = ref(null as InstanceType<typeof BlankDialog>)
-const issue_comment_create_dialog = ref(null as InstanceType<typeof BlankDialog>)
-const issue_info_resolve_dialog = ref(null as InstanceType<typeof BlankDialog>)
+const comment_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_info_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_comment_create_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_info_resolve_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const page = usePageStore()
-const profile = page.inProject().profile
+const profile = page.inProject()!.profile
 const allow = profile.allow
 
-const issue_info = ref(await new q.bug.IssueInfoReq.Get().setup(proxy, (req) => {
+const issue_info = reqs.add(q.bug.issues.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
-}).perform())
+}).wait()
+await reqs.performAll()
 page.meta.title = `#${issue_info.value.id} ${issue_info.value.title}`
 
 const readonly = computed(() => issue_info.value.project_id.toString() !== params.project_id)
-const comments = ref(await new q.bug.IssueCommentReq.List().setup(proxy, (req) => {
+const comments = reqs.add(q.bug.issue_comments.List).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_info.value.id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 const comment_repo = computed(() => {
   return new CommentRepo().setup(comments.value)
@@ -215,7 +218,7 @@ function onIssueCommentCreated(a_issue_info: IssueInfo, a_comment: Comment) {
 }
 
 async function onIssueConvert(a_issue_info: IssueInfo) {
-  await new q.bug.IssueBodyReq.Convert().setup(proxy, (req) => {
+  await reqs.add(q.bug.issue_bodies.Convert).setup(req => {
     req.interpolations.project_id = project_id
     req.interpolations.issue_id = a_issue_info.id
   }).perform()
@@ -227,7 +230,7 @@ const actioner = Actioner.build()
 
 async function changeIssueState(state: string) {
   actioner.perform(async function() {
-    const a_issue_info = await new q.bug.IssueInfoReq.Process().setup(proxy, (req) => {
+    const a_issue_info = await reqs.add(q.bug.issues.InfoProcess).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = params.issue_id
     }).perform({ state })

@@ -48,7 +48,8 @@
 
 <script setup lang="ts">
 import Validations from '@/components/simple_form/Validations'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -56,18 +57,20 @@ import PaginationBar from '@/components/PaginationBar.vue'
 import { useRoute } from 'vue-router'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Button } from '$ui/button'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const router = useRouter()
 const validations = reactive<Validations>(new Validations())
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
 
-const projects = ref(await new q.admin.ProjectReq.Page().setup(proxy, req => {
+const projects = reqs.add(q.admin.projects.Page).setup(req => {
   req.query = utils.plainToQuery(query)
-}).perform())
+}).wait()
+await reqs.performAll()
 
 async function onRemove(project_id) {
   if (!confirm("是否归档项目？")) {
@@ -75,7 +78,7 @@ async function onRemove(project_id) {
   }
 
   try {
-    await new q.admin.ProjectReq.Destroy().setup(proxy, (req) => {
+    await reqs.add(q.admin.projects.Destroy).setup(req => {
       req.interpolations.id = project_id
     }).perform()
 

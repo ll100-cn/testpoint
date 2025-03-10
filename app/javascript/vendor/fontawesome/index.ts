@@ -1,1 +1,1 @@
-import '@vendor/fontawesome-pro-web/css/all.css'
+import '#vendor/fontawesome-pro-web/css/all.css'

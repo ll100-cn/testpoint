@@ -1,4 +1,6 @@
+<template></template>
 <script setup lang="ts">
+import { onActivated } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 
@@ -8,5 +10,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 
-router.push(`/projects/${project_id}/issues`)
+onActivated(() => {
+  router.replace(`/projects/${project_id}/issues`)
+})
 </script>

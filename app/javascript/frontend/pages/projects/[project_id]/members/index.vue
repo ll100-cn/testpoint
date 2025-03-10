@@ -53,28 +53,29 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Member } from '@/models'
-import { usePageStore } from '@/store'
+import { usePageStore, useSessionStore } from '@/store'
 import { type PageQuery } from '@/types'
 import _ from 'lodash'
-import { getCurrentInstance, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as h from '@/lib/humanize'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import Validator from '@/ui/simple_form/Validator';
-import Button from "@/ui/button/Button.vue"
-import { Nav, NavList, NavItem } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent } from '$ui/card'
+import Validator from '$ui/simple_form/Validator'
+import Button from "$ui/button/Button.vue"
+import { Nav, NavList, NavItem } from '$ui/nav'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const session = useSessionStore()
 
 const active = ref('normal')
 
@@ -85,15 +86,12 @@ const currentQuery = ref<PageQuery>({
   page: _.toInteger(route.query.page) || 1,
 })
 
-const members = ref(await new q.project.MemberInfoReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
-  req.query = currentQuery.value
-}).perform())
+const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+await reqs.performAll()
 
 const grouped_members = ref(_.groupBy(members.value, (member) => {
   return member.archived_at ? "archived" : "normal"
 }))
-console.log(grouped_members.value)
 
 async function onArchive(id: number) {
   if (!confirm("是否归档成员？")) {
@@ -101,7 +99,7 @@ async function onArchive(id: number) {
   }
 
   try {
-    await new q.project.MemberReq.Archive().setup(proxy, (req) => {
+    await reqs.add(q.project.members.Archive).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.member_id = id
     }).perform()

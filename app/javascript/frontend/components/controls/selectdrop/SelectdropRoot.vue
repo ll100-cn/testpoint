@@ -6,7 +6,7 @@
       <SelectdropMenuText v-else v-bind="labelItem" />
     </DropdownMenuTrigger>
 
-    <DropdownMenuContent class="max-h-[30em] !overflow-auto min-w-[var(--radix-dropdown-menu-trigger-width)]">
+    <DropdownMenuContent class="max-h-[30em] overflow-auto! min-w-[var(--radix-dropdown-menu-trigger-width)]">
       <DropdownMenuLabel preset="plain" class="text-xs space-x-3" v-if="multiple">
         <a href="#" @click.prevent.stop="selectAll" class="link">全部 ({{ valueMapping.size }})</a>
         <a href="#" @click.prevent.stop="selectNone" class="link">无</a>
@@ -35,10 +35,10 @@ import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 
 import type { SelectdropMenuOption } from "./types"
 import SelectdropMenuItem from "./SelectdropMenuItem.vue"
 import SelectdropMenuText from "./SelectdropMenuText.vue"
-import { relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig, type SizeType } from '@/ui/simple_form/types'
-import Validation from '@/ui/simple_form/Validation'
-import { cn } from '@/ui/utils'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
+import { relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig, type SizeType } from '$ui/simple_form/types'
+import Validation from '$ui/simple_form/Validation'
+import { cn } from '$ui/utils'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { type SelectdropContext, selectdropContextKey, type SelectdropOption } from './types'
 import SelectdropItemExtractor from './SelectdropItemExtractor'
 import SelectdropOptionHelper from './SelectdropOptionHelper'
@@ -146,7 +146,7 @@ const variance = cva(`
     block w-full rounded-md text-foreground py-0
     border border-border shadow-sm bg-input-background
     disabled:text-muted
-    focus:outline-none focus:border-ring focus:ring-4 focus:ring-ring/30
+    focus:outline-hidden focus:border-ring focus:ring-4 focus:ring-ring/30
   `,
   {
     variants: {
@@ -280,4 +280,3 @@ function selectNone() {
   open.value = false
 }
 </script>
-

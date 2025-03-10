@@ -15,21 +15,23 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory } from '@/ui'
-import * as q from '@/lib/requests'
+import { Button } from '$ui/button'
+import { Former, FormFactory } from '$ui/simple_form'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Attachment, IssueInfo } from '@/models'
-import { getCurrentInstance, ref } from 'vue'
+import { ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
   updated: [IssueInfo]
 }>()
 
-const issue_info = ref(null as IssueInfo | null)
+const issue_info = ref(null! as IssueInfo)
 
 const former = Former.build({
   content: '',
@@ -39,7 +41,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_body = await new q.bug.IssueBodyReq.Update().setup(proxy, (req) => {
+  const a_issue_body = await reqs.add(q.bug.issue_bodies.Update).setup(req => {
     req.interpolations.project_id = issue_info.value.project_id
     req.interpolations.issue_id = issue_info.value.id
   }).perform(this.form)

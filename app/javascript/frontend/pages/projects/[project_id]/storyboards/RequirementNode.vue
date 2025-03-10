@@ -41,38 +41,32 @@
     </CardContent>
 
     <template v-if="main_axle == 'LR'">
-      <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-card rounded" />
-      <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-card rounded" />
+      <Handle type="target" :position="Position.Left" class="border w-2 h-5 bg-card-background rounded" />
+      <Handle type="source" :position="Position.Right" class="border w-2 h-5 bg-card-background rounded" />
     </template>
     <template v-else-if="main_axle == 'TB'">
-      <Handle type="target" :position="Position.Top" class="border w-5 h-2 bg-card rounded" />
-      <Handle type="source" :position="Position.Bottom" class="border w-5 h-2 bg-card rounded" />
+      <Handle type="target" :position="Position.Top" class="border w-5 h-2 bg-card-background rounded" />
+      <Handle type="source" :position="Position.Bottom" class="border w-5 h-2 bg-card-background rounded" />
     </template>
   </Card>
 </template>
 
 <script setup lang="ts">
 import { LabelRepo, Platform, PlatformRepo, Requirement, RequirementStatRepo, SceneRepo } from '@/models'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '@/ui'
-import { Button } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
+import { Button } from '$ui/button'
 import { Handle, Position } from '@vue-flow/core'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "$ui/collapsible"
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import VueMarkdown from 'vue-markdown-render'
 import { usePageStore } from '@/store'
 import { Filter } from './type'
-import { computed, getCurrentInstance, onMounted, onUpdated, ref } from 'vue'
-import * as q from '@/lib/requests'
-import { useRoute } from 'vue-router'
-import { useElementSize } from '@vueuse/core'
-import { Callout, CalloutTitle, CalloutDescription } from '@/ui'
+import { computed } from 'vue'
+import { Callout, CalloutTitle, CalloutDescription } from '$ui/callout'
 import * as utils from "@/lib/utils"
 
 const page = usePageStore()
 const allow = page.inProject()!.allow
-const route = useRoute()
-const params = route.params as any
-const proxy = getCurrentInstance()!.proxy as any
 
 const props = defineProps<{
   requirement: Requirement

@@ -20,15 +20,17 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Former, FormFactory, Separator } from '@/ui'
+import { Button } from '$ui/button'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Separator } from '$ui/separator'
+import useRequestList from '@/lib/useRequestList'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
-import { getCurrentInstance } from 'vue'
+import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -42,7 +44,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  await new q.project.MilestoneReq.Create().setup(proxy, (req) => {
+  await reqs.add(q.project.milestones.Create).setup(req => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)
 

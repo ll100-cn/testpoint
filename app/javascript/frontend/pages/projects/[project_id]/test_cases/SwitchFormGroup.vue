@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { FormFactory, type Former } from '@/ui';
+import { FormFactory, type Former } from '$ui/simple_form';
 import { layouts } from '@/components/simple_form'
 
 const props = defineProps<{

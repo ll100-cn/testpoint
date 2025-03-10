@@ -44,7 +44,8 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import Validations from '@/components/simple_form/Validations';
@@ -53,18 +54,20 @@ import { useRoute } from 'vue-router'
 import * as utils from "@/lib/utils"
 import PageHeader from '@/components/PageHeader.vue';
 import PageTitle from '@/components/PageTitle.vue';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Button } from '$ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const router = useRouter()
 const route = useRoute()
 const validations = reactive<Validations>(new Validations())
 const query = utils.queryToPlain(route.query)
 
-const users = ref(await new q.admin.UserReq.Page().setup(proxy, req => {
+const users = reqs.add(q.admin.users.Page).setup(req => {
   req.query = utils.plainToQuery(query)
-}).perform())
+}).wait()
+await reqs.performAll()
 
 async function onRemove(user_id) {
   if (!confirm("是否删除用户？")) {
@@ -72,7 +75,7 @@ async function onRemove(user_id) {
   }
 
   try {
-    await new q.admin.UserReq.Destroy().setup(proxy, (req) => {
+    await reqs.add(q.admin.users.Destroy).setup(req => {
       req.interpolations.id = user_id
     }).perform()
 

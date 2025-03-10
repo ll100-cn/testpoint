@@ -37,19 +37,21 @@
 
 <script setup lang="ts">
 import MoreDropdown from "@/components/MoreDropdown.vue"
+import useRequestList from '@/lib/useRequestList'
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { IssueInfo, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
-import { type Component, getCurrentInstance } from "vue"
+import { type Component } from "vue"
 import IssueSurveyEditDialogContent from "./IssueSurveyEditDialogContent.vue"
-import { Alert, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
-import Button from "@/ui/button/Button.vue"
+import { Card, CardContent } from '$ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import Button from "$ui/button/Button.vue"
+import { Alert } from "$ui/alert"
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const page = usePageStore()
-const allow = page.inProject().allow
+const allow = page.inProject()!.allow
 
 const props = defineProps<{
   issue_info: IssueInfo
@@ -62,7 +64,7 @@ const emit = defineEmits<{
 }>()
 
 async function deleteIssueSurvey(issue_survey: IssueSurvey) {
-  await new q.bug.IssueSurveyReq.Destroy().setup(proxy, (req) => {
+  await reqs.add(q.bug.issue_surveies.Destroy).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
     req.interpolations.issue_survey_id = issue_survey.id

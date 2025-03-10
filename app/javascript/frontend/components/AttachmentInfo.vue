@@ -61,18 +61,19 @@
 
 <script setup lang="ts">
 import { Validations, controls, layouts } from "@/components/simple_form"
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import { usePageStore } from "@/store"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import Well from "@/ui/well/Well.vue"
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import Well from "$ui/well/Well.vue"
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const page = usePageStore()
 const allow = page.inProject()?.allow
 
@@ -98,7 +99,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const attachment = await new q.project.AttachmentReq.Update().setup(proxy, (req) => {
+  const attachment = await reqs.add(q.project.attachments.Update).setup(req => {
     req.interpolations.attachment_id = props.attachment.id
   }).perform(this.form)
 
@@ -137,7 +138,7 @@ async function deleteAttachment() {
   validations.value.clear()
 
   try {
-    const attachment = await new q.project.AttachmentReq.Destroy().setup(proxy, (req) => {
+    const attachment = await reqs.add(q.project.attachments.Destroy).setup(req => {
       req.interpolations.attachment_id = props.attachment.id
     }).perform()
     if (attachment) {

@@ -21,7 +21,7 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { Platform, TestCaseStat } from "@/models"
 import _ from "lodash"
 import { computed } from 'vue'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 
 const props = withDefaults(defineProps<{

@@ -13,7 +13,7 @@
             </div>
             {{ milestone.title }}
             <p class="text-muted">
-              <textarea id="content" v-model="milestone.description" name="content" data-controller="markdown" readonly class="hidden" />
+              <PageContent :content="milestone.description" />
             </p>
           </li>
         </template>
@@ -23,20 +23,54 @@
 </template>
 
 <script setup lang="ts">
+import PageContent from '@/components/PageContent.vue'
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
 import _ from 'lodash'
-import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null
-const milestones = await new q.project.MilestoneReq.List().setup(proxy, (req) => {
-  req.interpolations.project_id = project_id
+const milestones = reqs.add(q.project.milestones.List, project_id).setup(req => {
   req.query.filter = "available"
-}).perform()
+}).wait()
+await reqs.performAll()
 </script>
+
+<style scoped>
+.timeline {
+  border-left: 1px solid hsl(0, 0%, 90%);
+  position: relative;
+  list-style: none;
+  padding-left: 20px;
+
+  .timeline-item {
+    position: relative;
+  }
+
+  .timeline-item:after {
+    position: absolute;
+    display: block;
+    top: 0;
+  }
+
+  .timeline-item:after {
+    background-color: hsl(0, 0%, 90%);
+    left: -26px;
+    top: 5px;
+    border-radius: 50%;
+    height: 11px;
+    width: 11px;
+    content: "";
+  }
+
+  .active:after {
+    background-color: hsl(152, 69%, 31%);
+  }
+}
+</style>

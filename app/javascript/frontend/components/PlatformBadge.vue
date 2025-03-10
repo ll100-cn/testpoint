@@ -12,7 +12,7 @@ import { EntityRepo, Platform } from '@/models';
 import _ from 'lodash';
 import { type PropType, computed } from 'vue';
 import * as utils from '@/lib/utils'
-import { Badge } from '@/ui';
+import { Badge } from '$ui/badge';
 
 const props = defineProps<{
   platform: Platform

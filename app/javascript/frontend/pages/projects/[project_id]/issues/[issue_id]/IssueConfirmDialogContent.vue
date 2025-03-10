@@ -35,22 +35,25 @@
 </template>
 
 <script setup lang="ts">
-import BSOption from "@/components/BSOption.vue"
+import useRequestList from '@/lib/useRequestList'
 import OptionsForMember from "@/components/OptionsForMember.vue"
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Category, IssueInfo, MemberInfo } from "@/models"
-import { usePageStore } from "@/store"
-import { getCurrentInstance, nextTick, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { useSessionStore } from "@/store"
+import { nextTick, ref } from "vue"
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import { useRoute } from "vue-router"
 
-const page = usePageStore()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
+const session = useSessionStore()
+const route = useRoute()
+const params = route.params as any
 
 const emit = defineEmits<{
   updated: [ IssueInfo ]
@@ -70,7 +73,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_issue_action = await new q.bug.IssueActionReq.Create().setup(proxy, (req) => {
+  const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform(this.form)
@@ -87,8 +90,9 @@ const categories = ref([] as Category[])
 async function reset() {
   loading.value = true
 
-  members.value = await page.inProject().request(q.project.MemberInfoReq.List).setup(proxy).perform()
-  categories.value = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
+  reqs.raw(session.request(q.project.members.InfoList, props.issue_info.project_id)).setup().waitFor(members)
+  reqs.add(q.project.categories.List, params.project_id).setup().waitFor(categories)
+  await reqs.performAll()
 
   nextTick(() => {
     loading.value = false

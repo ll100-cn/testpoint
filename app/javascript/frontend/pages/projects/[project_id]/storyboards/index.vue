@@ -9,19 +9,19 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Nav, NavList } from '@/ui'
-import BlankDialog from '@/ui/BlankDialog.vue'
-import PageHeader from '@/components/PageHeader.vue'
-import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
+import { Button } from '$ui/button'
+import { Nav, NavList } from '$ui/nav'
+import useRequestList from '@/lib/useRequestList'
+import BlankDialog from '@/components/BlankDialog.vue'
+import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { Storyboard } from '@/models'
 import { usePageStore } from '@/store'
-import { getCurrentInstance, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import StoryboardCreateDialogContent from './StoryboardCreateDialogContent.vue'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -33,9 +33,10 @@ const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const project_id = params.project_id
 
-const storyboards = ref(await new q.project.StoryboardReq.List().setup(proxy, (req) => {
+const storyboards = reqs.add(q.project.storyboards.List).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
+}).wait()
+await reqs.performAll()
 
 if (storyboards.value.length > 0) {
   router.push(`/projects/${params.project_id}/storyboards/${storyboards.value[0].id}`)

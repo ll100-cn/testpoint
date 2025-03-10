@@ -53,20 +53,24 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
+import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
-import * as q from '@/lib/requests'
-import { usePageStore } from '@/store'
+import * as q from '@/requests'
+import { usePageStore, useSessionStore } from '@/store'
 import OptionsForCategory from '@/components/OptionsForCategory.vue'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import Button from '@/ui/button/Button.vue'
+import Button from '$ui/button/Button.vue'
+import { useRoute } from 'vue-router'
 
-const proxy = getCurrentInstance()!.proxy as any
-const page = usePageStore()
+const reqs = useRequestList()
+const session = useSessionStore()
+const route = useRoute()
+const params = route.params as any
 
 const props = defineProps<{
   former: Former<any>
@@ -79,7 +83,7 @@ const lookup_by_build_form_collection = ref([
 
 const { FormGroup } = FormFactory<typeof props.former.form>()
 
-const categories = await page.inProject().request(q.project.CategoryReq.List).setup(proxy).perform()
+const categories = await reqs.raw(session.request(q.project.categories.List, params.project_id)).setup().perform()
 
 async function onRemoveInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)

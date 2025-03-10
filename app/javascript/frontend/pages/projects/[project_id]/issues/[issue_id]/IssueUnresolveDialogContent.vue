@@ -14,17 +14,18 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { IssueInfo } from "@/models"
-import { getCurrentInstance, ref } from "vue"
+import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import { useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const router = useRouter()
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -43,7 +44,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.perform = async function() {
-  const a_issue_info = await new q.bug.IssueInfoReq.Resolve().setup(proxy, (req) => {
+  const a_issue_info = await reqs.add(q.bug.issues.InfoResolve).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id
     req.interpolations.issue_id = props.issue_info.id
   }).perform({

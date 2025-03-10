@@ -37,26 +37,25 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import * as controls from '@/components/controls'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
+import { Button } from '$ui/button'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap, Scene } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { computed, getCurrentInstance, reactive, ref, type Component } from 'vue'
 import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { STORYBOARD_MAIN_AXLE } from '@/constants'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { usePageStore } from '@/store'
 import SceneCreateDialogContent from './SceneCreateDialogContent.vue'
-import Validator from '@/ui/simple_form/Validator';
+import Validator from '$ui/simple_form/Validator';
 import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
 
 const route = useRoute()
 const params = route.params as any
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 const page = usePageStore()
 const allow = page.inProject()!.allow
@@ -93,7 +92,7 @@ async function remove(a_scene: Scene) {
   }
 
   try {
-    await new q.project.SceneReq.Destroy().setup(proxy, (req) => {
+    await reqs.add(q.project.scenes.Destroy).setup(req => {
       req.interpolations.project_id = params.project_id
       req.interpolations.storyboard_id = params.storyboard_id
       req.interpolations.scene_id = a_scene.id

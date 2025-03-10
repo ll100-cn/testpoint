@@ -63,8 +63,8 @@ import ClipboardJS from "clipboard"
 import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { nextTick, onMounted, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
+import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
 const props = defineProps<{

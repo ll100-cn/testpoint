@@ -3,7 +3,7 @@
 
   <Card class="rounded-ss-none">
     <CardContent>
-      <div class="container page-md-box">
+      <div class="px-8 mx-auto page-md-box">
         <Card class="mx-auto w-full max-w-lg">
           <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
             <CardContent>
@@ -32,17 +32,19 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import * as q from "@/lib/requests"
+import useRequestList from '@/lib/useRequestList'
+import * as q from "@/requests"
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
 import { getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PageHeader from '../PageHeader.vue'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { Button, Former, FormFactory } from '@/ui'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
-const proxy = getCurrentInstance()!.proxy!
+const reqs = useRequestList()
 const router = useRouter()
 const route = useRoute()
 const page = usePageStore()
@@ -51,9 +53,8 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const account = ref(session.account)
-const profile = ref(session.profiles.get(project_id) ?? await new q.project.ProfileReq.Get().setup(proxy, req => {
-  req.interpolations.project_id = project_id
-}).perform())
+const profile = reqs.raw(session.request(q.project.profiles.Get, project_id)).setup().wait()
+await reqs.performAll()
 
 const former = Former.build({
   nickname: profile.value.nickname
@@ -67,15 +68,10 @@ watch(former.form, () => {
 })
 
 former.doPerform = async function() {
-  const a_profile = await new q.project.ProfileReq.Update().setup(proxy, req => {
+  await reqs.add(q.project.profiles.Update).setup(req => {
     req.interpolations.project_id = project_id
-  }).perform(this.form)
-
-  session.profiles.set(a_profile.project_id, a_profile)
+  }).waitFor(profile).perform(this.form)
 
   success.value = true
 }
-
-
-
 </script>

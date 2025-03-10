@@ -20,17 +20,18 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
+import useRequestList from '@/lib/useRequestList'
 import { Attachment, Comment, Issue } from "@/models"
 import _ from "lodash"
-import { getCurrentInstance, ref } from "vue"
+import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import PageContent from "@/components/PageContent.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '@/ui'
-import { Button } from '@/ui'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/ui'
+import { Former, FormFactory } from '$ui/simple_form'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -45,7 +46,7 @@ const former = Former.build({
 const { Form, FormGroup } = FormFactory<typeof former.form>()
 
 former.doPerform = async function() {
-  const a_comment = await new q.bug.IssueCommentReq.Create().setup(proxy, (req) => {
+  const a_comment = await reqs.add(q.bug.issue_comments.Create).setup(req => {
     req.interpolations.project_id = issue.value.project_id
     req.interpolations.issue_id = issue.value.id
   }).perform({ ...this.form, comment_id: comment.value.id })
@@ -54,8 +55,8 @@ former.doPerform = async function() {
   open.value = false
 }
 
-const issue = ref(null as Issue)
-const comment = ref(null as Comment)
+const issue = ref(null! as Issue)
+const comment = ref(null! as Comment)
 const loading = ref(true)
 
 function attachmentChange($event: Attachment[]) {

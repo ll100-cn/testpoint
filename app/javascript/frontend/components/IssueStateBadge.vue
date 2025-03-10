@@ -20,7 +20,8 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { ISSUE_STATE_MAPPING, ISSUE_STATE_COLORS } from "@/constants"
-import { Badge, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui";
+import { Badge } from "$ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$ui/tooltip";
 
 const props = defineProps<{
   state: string
@@ -87,6 +88,6 @@ const info_mapping = <Record<string, Info>>{
 }
 
 const info = computed(() => {
-  return info_mapping[props.state]
+  return info_mapping[props.state] ?? info_mapping.pending
 })
 </script>

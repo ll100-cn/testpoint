@@ -44,9 +44,10 @@
 
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
+import useRequestList from '@/lib/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Attachment, Comment, CommentRepo, Issue } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
@@ -58,11 +59,12 @@ import IssueCommentReply from "./IssueCommentReply.vue"
 import IssueCommentReplyDialogContent from "./IssueCommentReplyDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
 import { COMMENT_DISPLAY_OPTIONS } from "@/constants"
-import { Callout, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/ui'
-import Button from "@/ui/button/Button.vue"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Callout } from '$ui/callout'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import Button from "$ui/button/Button.vue"
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const store = useSessionStore()
 const user = store.account!.user
 const page = usePageStore()
@@ -97,7 +99,7 @@ async function deleteComment() {
   if (!confirm("确认删除该评论？")) {
     return
   }
-  await new q.bug.IssueCommentReq.Destroy().setup(proxy, (req) => {
+  await reqs.add(q.bug.issue_comments.Destroy).setup(req => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id
@@ -107,7 +109,7 @@ async function deleteComment() {
 }
 
 async function updateComment(data: Record<string, any>) {
-  const comment = await new q.bug.IssueCommentReq.Update().setup(proxy, (req) => {
+  const comment = await reqs.add(q.bug.issue_comments.Update).setup(req => {
     req.interpolations.project_id = props.issue.project_id
     req.interpolations.issue_id = props.issue.id
     req.interpolations.comment_id = props.comment.id

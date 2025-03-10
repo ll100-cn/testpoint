@@ -12,7 +12,8 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import * as q from '@/lib/requests';
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests';
 import { type PropType, getCurrentInstance, nextTick, ref } from 'vue';
 import CardShow from './CardShow.vue';
 import CaseEditFrame from './CaseEditFrame.vue';
@@ -28,7 +29,7 @@ const props = defineProps({
   }
 })
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void,
@@ -45,10 +46,12 @@ async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
 
-  history.value = await new q.case.TestCaseHistory().setup(proxy, (req) => {
+  history.value = await reqs.add(q.case.test_cases.History).setup(req => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform()
+
+  console.log(history.value)
 
   nextTick(() => {
     const $modal = Modal.getOrCreateInstance(modal.value)

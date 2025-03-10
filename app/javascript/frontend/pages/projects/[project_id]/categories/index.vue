@@ -52,17 +52,16 @@ import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/lib/requests'
+import * as q from '@/requests'
 import { Category } from '@/models'
 import { usePageStore } from '@/store'
-import { getCurrentInstance, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/ui'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '@/ui'
-import CardBody from '../test_cases/CardBody.vue'
-import Button from '@/ui/button/Button.vue'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import { Card, CardContent } from '$ui/card'
+import Button from '$ui/button/Button.vue'
+import useRequestList from '@/lib/useRequestList'
 
-const proxy = getCurrentInstance()!.proxy as any
+const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -71,15 +70,15 @@ const allow = page.inProject()!.allow
 
 const project_id = params.project_id
 
-const categories = ref(await new q.project.CategoryInfoReq.List().setup(proxy, (req) => {
+const categories = reqs.add(q.project.categories.InfoList).setup(req => {
   req.interpolations.project_id = project_id
-}).perform())
-
+}).wait()
+await reqs.performAll()
 const actioner = Actioner.build()
 
 function deleteCategory(id: number) {
   actioner.perform(async function() {
-    await new q.project.CategoryInfoReq.Destroy().setup(proxy, (req) => {
+    await reqs.add(q.project.categories.InfoDestroy).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.category_id = id
     }).perform()

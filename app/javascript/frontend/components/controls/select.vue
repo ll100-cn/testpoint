@@ -10,9 +10,9 @@ import { Validation } from "@/models"
 import * as helper from "../simple_form/helper"
 import { type ControlProps } from "../simple_form/helper"
 import { computed, provide, type HTMLAttributes } from "vue"
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '@/ui/simple_form/types';
+import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
 import { standard } from './presets'
-import { cn } from '@/ui/utils'
+import { cn } from '$ui/utils'
 
 export interface Props extends ControlProps {
   include_blank?: string | boolean
