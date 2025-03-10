@@ -33,7 +33,7 @@
     <div class="flex-col grow">
       <div v-if="editing" class="flex items-center">
         <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
-          <FormGroup class="mb-0" path="title"><controls.string /></FormGroup>
+          <FormGroup class="mb-0" path="title" label=""><controls.string /></FormGroup>
           <div class="space-x-3">
             <Button>更新</Button>
             <Button variant="secondary" @click.prevent="cancelEdit">取消</Button>

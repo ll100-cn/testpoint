@@ -42,7 +42,7 @@
             <Button v-if="allow('create', Comment)" @click="comment_dialog.show(IssueCommentCreateDialogContent, issue_info)">
               <i class="far fa-comment fa-fw" /> 新增评论
             </Button>
-            <Button @click="issue_info_dialog.show(IssueInfoRelationshipNewDialogContent)">
+            <Button v-if="allow('manage', issue_info)" @click="issue_info_dialog.show(IssueInfoRelationshipNewDialogContent)">
               <i class="far fa-link fa-fw" /> 关联其它问题
             </Button>
             <Button v-if="allow('create', IssueSurvey)" @click="issue_info_dialog.show(IssueSurveyCreateDialogContent)">
