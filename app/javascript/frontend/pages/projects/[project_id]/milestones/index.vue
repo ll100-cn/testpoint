@@ -36,7 +36,7 @@
             <TableCell>{{ milestone.title }}</TableCell>
             <TableCell>{{ h.datetime(milestone.published_at) }}</TableCell>
             <TableCell>
-              <textarea :value="milestone.description" data-controller="markdown" readonly class="hidden" />
+              <PageContent :content="milestone.description" />
             </TableCell>
             <TableCell>
               <div class="flex justify-end space-x-3">
@@ -71,6 +71,7 @@ import { Nav, NavList, NavItem } from '$ui/nav'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import Button from '$ui/button/Button.vue'
+import PageContent from '@/components/PageContent.vue'
 
 const reqs = useRequestList()
 const route = useRoute()

@@ -105,8 +105,7 @@ if (account.value) {
 }
 
 async function signOut() {
-  await reqs.add(q.profile.login.Destroy).setup(req => {
-  }).perform()
+  await reqs.add(q.profile.login.Destroy).setup().perform()
   session.clear()
   router.push('/')
 }

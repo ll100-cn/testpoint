@@ -4,11 +4,11 @@ import showdown from 'showdown'
 
 const checkboxRegex = /^\s*(?:\*|-|\+)\s+(\[(?:x| )?\])\s+/gm
 
-function checkboxExtension(options) {
+function checkboxExtension(options: any) {
   const checkbox = {
     type: 'lang',
-    filter: function(text, converter) {
-      return replaceMarkdownTaskList(text, function(mark, position, checked) {
+    filter: function(text: string, converter: any) {
+      return replaceMarkdownTaskList(text, function(mark: string, position: number, checked: boolean) {
         const attrs = []
         if (checked) {
           attrs.push("checked")
@@ -25,9 +25,9 @@ function checkboxExtension(options) {
   return checkbox
 }
 
-export function replaceMarkdownTaskList(markdown, callback) {
+export function replaceMarkdownTaskList(markdown: string, callback: (mark: string, position: number, checked: boolean) => string) {
   let position = 0
-  return markdown.replace(checkboxRegex, function(match, mark) {
+  return markdown.replace(checkboxRegex, function(match: string, mark: string) {
     position++
     const checked = (mark == "[x]")
     const newMark = callback(mark, position, checked)
@@ -35,7 +35,7 @@ export function replaceMarkdownTaskList(markdown, callback) {
   })
 }
 
-export function renderMarkdown(markdown, options = {}) {
+export function renderMarkdown(markdown: string, options: any = {}) {
   const checkboxOptions = options.checkbox || {}
   _.unset(options, "checkbox")
   _.merge(options, { "simpleLineBreaks": true })

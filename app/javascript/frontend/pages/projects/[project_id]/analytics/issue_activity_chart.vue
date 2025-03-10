@@ -64,7 +64,7 @@ former.doPerform = async function() {
   if (filter) {
     router.push({ query: utils.plainToQuery(filter, true) })
   } else {
-    router.push({ query: null })
+    router.push({ })
   }
 }
 

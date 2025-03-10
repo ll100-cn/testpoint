@@ -152,9 +152,6 @@ importers:
       showdown:
         specifier: 2.1.0
         version: 2.1.0
-      stimulus:
-        specifier: 1.1.1
-        version: 1.1.1
       tailwind-merge:
         specifier: 3.0.2
         version: 3.0.2
@@ -198,6 +195,9 @@ importers:
       '@types/qs':
         specifier: 6.9.16
         version: 6.9.16
+      '@types/showdown':
+        specifier: ^2.0.6
+        version: 2.0.6
     devDependencies:
       '@tailwindcss/forms':
         specifier: 0.5.10
@@ -229,9 +229,6 @@ importers:
       shadcn-vue:
         specifier: 0.10.5
         version: 0.10.5(@vitest/ui@2.1.5)(vitest@2.1.5)(vue@3.5.13(typescript@5.8.2))
-      stimulus-vite-helpers:
-        specifier: 3.0.1
-        version: 3.0.1
       tailwind-scrollbar:
         specifier: 4.0.1
         version: 4.0.1(react@19.0.0)(tailwindcss@4.0.11)
@@ -1282,18 +1279,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@stimulus/core@1.1.1':
-    resolution: {integrity: sha512-PVJv7IpuQx0MVPCBblXc6O2zbCmU8dlxXNH4bC9KK6LsvGaE+PCXXrXQfXUwAsse1/CmRu/iQG7Ov58himjiGg==}
-
-  '@stimulus/multimap@1.1.1':
-    resolution: {integrity: sha512-26R1fI3a8uUj0WlMmta4qcfIQGlagegdP4PTz6lz852q/dXlG6r+uPS/bx+H8GtfyS+OOXVr3SkZ0Zg0iRqRfQ==}
-
-  '@stimulus/mutation-observers@1.1.1':
-    resolution: {integrity: sha512-/zCnnw1KJlWO2mrx0yxYaRFZWMGnDMdOgSnI4hxDLxdWVuL2HMROU8FpHWVBLjKY3T9A+lGkcrmPGDHF3pfS9w==}
-
-  '@stimulus/webpack-helpers@1.1.1':
-    resolution: {integrity: sha512-XOkqSw53N9072FLHvpLM25PIwy+ndkSSbnTtjKuyzsv8K5yfkFB2rv68jU1pzqYa9FZLcvZWP4yazC0V38dx9A==}
-
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
@@ -1437,6 +1422,9 @@ packages:
 
   '@types/qs@6.9.16':
     resolution: {integrity: sha512-7i+zxXdPD0T4cKDuxCUXJ4wHcsJLwENa6Z3dCu8cfCK743OGy5Nu1RmAGqDPsoTDINVEcdXKRvR/zre+P2Ku1A==}
+
+  '@types/showdown@2.0.6':
+    resolution: {integrity: sha512-pTvD/0CIeqe4x23+YJWlX2gArHa8G0J0Oh6GKaVXV7TAeickpkkZiNOgFcFcmLQ5lB/K0qBJL1FtRYltBfbGCQ==}
 
   '@types/sizzle@2.3.9':
     resolution: {integrity: sha512-xzLEyKB50yqCUPUJkIsrVvoWNfFUbIZI+RspLWt8u+tIW/BetMBZtgV2LY/2o+tYH8dRvQ+eoPf3NdhQCcLE2w==}
@@ -2821,12 +2809,6 @@ packages:
   stdin-discarder@0.2.2:
     resolution: {integrity: sha512-UhDfHmA92YAlNnCfhmq0VeNL5bDbiZGg7sZ2IvPsXubGkiNa9EC+tUTsjBRsYUAz87btI6/1wf4XoVvQ3uRnmQ==}
     engines: {node: '>=18'}
-
-  stimulus-vite-helpers@3.0.1:
-    resolution: {integrity: sha512-v8vii8wTyzbH5REE3Z6DbtKqnXEuEQ3ylYs4jQRmLAQrH9vlii7p98MG8gIii1anEEPmnBB1JWWvxKXGZh7apQ==}
-
-  stimulus@1.1.1:
-    resolution: {integrity: sha512-R0mBqKp48YnRDZOxZ8hiOH4Ilph3Yj78CIFTBkCwyHs4iGCpe7xlEdQ7cjIxb+7qVCSxFKgxO+mAQbsNgt/5XQ==}
 
   string-width@7.2.0:
     resolution: {integrity: sha512-tsaTIkKW9b4N+AEj+SVA+WhJzV7/zMhcSu78mLKWSk7cXMOSHsBKFWUs0fWwq8QyK3MgJBQRX6Gbi4kYbdvGkQ==}
@@ -4223,18 +4205,6 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.34.9':
     optional: true
 
-  '@stimulus/core@1.1.1':
-    dependencies:
-      '@stimulus/mutation-observers': 1.1.1
-
-  '@stimulus/multimap@1.1.1': {}
-
-  '@stimulus/mutation-observers@1.1.1':
-    dependencies:
-      '@stimulus/multimap': 1.1.1
-
-  '@stimulus/webpack-helpers@1.1.1': {}
-
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
@@ -4378,6 +4348,9 @@ snapshots:
   '@types/prismjs@1.26.5': {}
 
   '@types/qs@6.9.16':
+    optional: true
+
+  '@types/showdown@2.0.6':
     optional: true
 
   '@types/sizzle@2.3.9':
@@ -5848,13 +5821,6 @@ snapshots:
   std-env@3.8.1: {}
 
   stdin-discarder@0.2.2: {}
-
-  stimulus-vite-helpers@3.0.1: {}
-
-  stimulus@1.1.1:
-    dependencies:
-      '@stimulus/core': 1.1.1
-      '@stimulus/webpack-helpers': 1.1.1
 
   string-width@7.2.0:
     dependencies:

@@ -4,7 +4,8 @@
       <DialogTitle>{{ task_upshot_info.test_case.title }}</DialogTitle>
     </DialogHeader>
 
-    <textarea v-if="content.length > 0" v-model="content" data-controller="markdown" data-action="render->markdown#render" class="hidden" :readonly="!is_last_phase || !allow('update', task_upshot_info)" />
+    <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', task_upshot_info)" />
+
     <small v-else class="text-muted">无详细信息</small>
 
     <hr>
@@ -43,6 +44,7 @@ import TaskDetailsState from './TaskDetailsState.vue'
 import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { Button } from '$ui/button'
+import PageContent from "@/components/PageContent.vue"
 
 const reqs = useRequestList()
 const page = usePageStore()

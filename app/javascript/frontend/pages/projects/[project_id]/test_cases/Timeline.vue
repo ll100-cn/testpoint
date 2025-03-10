@@ -13,7 +13,7 @@
             </div>
             {{ milestone.title }}
             <p class="text-muted">
-              <textarea id="content" v-model="milestone.description" name="content" data-controller="markdown" readonly class="hidden" />
+              <PageContent :content="milestone.description" />
             </p>
           </li>
         </template>
@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import PageContent from '@/components/PageContent.vue'
 import * as h from '@/lib/humanize'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'

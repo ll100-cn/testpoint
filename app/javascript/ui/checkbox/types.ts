@@ -20,6 +20,7 @@ export const {
 } = createProvideInject<Ref<CheckboxPresenter>>('checkbox-presenter')
 
 export interface CheckboxPresenters {
+  standard: CheckboxPresenter
 }
 
 export const {

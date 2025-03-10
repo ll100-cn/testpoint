@@ -1,10 +1,12 @@
 <template>
   <div class="p-4">
     <a v-if="!readonly && allow('update', TestCase)" href="#" @click="onBatch?.(CaseBatchEditDialogContent, select_test_cases)">编辑 ({{ select_test_case_ids.length }})</a>
-    <Table data-controller="select-all">
+    <Table>
       <TableHeader>
         <TableRow>
-          <TableHead v-if="!readonly && allow('update', TestCase)"><input type="checkbox" data-target="select-all.handle" data-action="select-all#toggleAll"></TableHead>
+          <TableHead v-if="!readonly && allow('update', TestCase)">
+            <CheckboxToggle v-model="select_test_case_ids" :collection="test_cases.map(it => it.id)" />
+          </TableHead>
           <TableHead scope="col">标题</TableHead>
           <TableHead scope="col">平台</TableHead>
           <TableHead scope="col">标签</TableHead>
@@ -13,10 +15,10 @@
       <TableBody>
         <TableRow v-for="test_case in test_cases" :key="test_case.id">
           <TableCell v-if="!readonly && allow('update', test_case)">
-            <input v-model="select_test_case_ids" type="checkbox" :value="test_case.id" role="switch" data-target="select-all.item" data-action="select-all#toggle">
+            <InputCheckbox v-model="select_test_case_ids" :value="test_case.id" />
           </TableCell>
           <TableCell>
-            <a href="#" @click="onModal?.(CaseShowDialogContent, test_case)" class="link">
+            <a href="#" @click.prevent="onModal?.(CaseShowDialogContent, test_case)" class="link">
               <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
               {{ test_case.title }}
             </a>
@@ -50,6 +52,8 @@ import CaseLabelCell from "./CaseLabelCell.vue"
 import CaseShowDialogContent from "./CaseShowDialogContent.vue"
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import { Badge } from '$ui/badge'
+import CheckboxToggle from '@/components/CheckboxToggle.vue'
+import { Checkbox, InputCheckbox } from '$ui/checkbox'
 
 const page = usePageStore()
 const allow = page.inProject()!.allow
@@ -69,7 +73,7 @@ export interface Props {
 
 const props = defineProps<Props & Listeners>()
 
-const select_test_case_ids = ref<number[]>([])
+const select_test_case_ids = ref([] as number[])
 
 const select_test_cases = computed(() => {
   return props.test_cases.filter((it) => {

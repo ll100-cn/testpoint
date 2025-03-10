@@ -12,7 +12,7 @@
       </template>
     </DialogHeader>
 
-    <textarea ref="textarea" readonly data-controller="markdown" data-action="render->markdown#render" class="hidden">{{ test_case.content }}</textarea>
+    <PageContent :content="test_case.content" />
 
     <div class="text-center p-1" :class="{ 'hidden': !collapsed }">
       <Button preset="ghost" @click="collapsed=false">
@@ -31,7 +31,7 @@
           </CollapsibleTrigger>
           <CollapsibleContent>
             <hr class="my-3">
-            <textarea v-model="version_case.content" data-controller="markdown" readonly class="hidden mt-2" />
+            <PageContent :content="version_case.content" class="mt-2" />
           </CollapsibleContent>
         </Collapsible>
       </div>
@@ -56,6 +56,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Well } from '$ui/well'
 import Button from '$ui/button/Button.vue'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '$ui/collapsible'
+import PageContent from '@/components/PageContent.vue'
 
 const reqs = useRequestList()
 

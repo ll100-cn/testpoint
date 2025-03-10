@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import type { CheckboxRootEmits } from 'radix-vue'
+import type { CheckboxRootEmits, CheckboxRootProps } from 'radix-vue'
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'radix-vue'
 import { CheckIcon } from '@radix-icons/vue'
 import { cn } from '$ui/utils'
-import { relayCheckboxPreseterConfig, useCheckboxPresenter, type CheckboxPresenterConfig } from './types'
+import { provideCheckboxPresenter, relayCheckboxPreseterConfig, useCheckboxPresenter, useCheckboxPresenters, type CheckboxPresenter, type CheckboxPresenterConfig } from './types'
+
+const presenters = useCheckboxPresenters()
 
 interface Props {
   class?: HTMLAttributes['class']
+  preset?: keyof typeof presenters | CheckboxPresenter
 }
 
-const props = withDefaults(defineProps<Props & Partial<CheckboxPresenterConfig>>(), {
+const props = withDefaults(defineProps<Props & Partial<CheckboxPresenterConfig> & CheckboxRootProps>(), {
+  preset: 'standard'
 })
 
 const emits = defineEmits<CheckboxRootEmits>()
@@ -22,7 +26,9 @@ const delegatedProps = computed(() => {
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 const presenterConfig = relayCheckboxPreseterConfig(props)
-const presenter = useCheckboxPresenter()
+const presenter = provideCheckboxPresenter(computed(() => {
+  return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
+}))
 </script>
 
 <template>
