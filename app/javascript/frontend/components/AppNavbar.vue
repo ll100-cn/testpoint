@@ -2,7 +2,7 @@
   <div class="bg-gray-800 py-2 sticky top-0 mb-6 z-10">
     <Container>
       <div class="flex">
-        <Nav :model-value="undefined">
+        <Nav :model-value="null">
           <NavList :preset="navbarPt">
             <NavItem class="ps-0" value="" as-child>
               <RLink to="/">Testpoint</RLink>
