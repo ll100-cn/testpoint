@@ -1,14 +1,4 @@
-/*====================
-  Base
----------------------*/
 @theme {
-  --color-foreground: hsl(210 11% 15%);
-  --color-background: hsl(210 17% 98%);
-  --color-border: hsl(0 0% 80%);
-  --color-ring: hsl(262.1 83.3% 57.8%);
-  --color-accent: hsl(220 14.3% 95.9%);
-  --color-accent-foreground: hsl(220.9 39.3% 11%);
-
   @keyframes accordion-down {
     0% { height: 0 }
     100% { height: var(--radix-accordion-content-height) }
@@ -35,6 +25,29 @@
   --animation-collapsible-up: collapsible-up 0.3s ease-out;
 }
 
+
+/*====================
+  Base
+---------------------*/
+:root {
+  @theme {
+    --color-foreground: hsl(210 11% 15%);
+    --color-background: hsl(210 17% 98%);
+    --color-border: hsl(0 0% 80%);
+    --color-ring: hsl(262.1 83.3% 57.8%);
+    --color-accent: hsl(220 14.3% 95.9%);
+    --color-accent-foreground: hsl(220.9 39.3% 11%);
+  }
+
+  @variant dark {
+    --color-foreground: hsl(210 20% 98%);
+    --color-background: hsl(224 71.4% 4.1%);
+    --color-accent: hsl(215 27.9% 16.9%);
+    --color-accent-foreground: hsl(210 20% 98%);
+  }
+}
+
+
 /*====================
   Variants
 ---------------------*/
@@ -55,19 +68,32 @@
   --color-destructive-foreground: hsl(210 20% 98%);
 }
 
+
 /*====================
   Components
 ====================*/
-@theme {
-  --color-card-background: hsl(0 0% 100%);
-  --color-card-foreground: hsl(210 11% 15%);
+:root {
+  @theme {
+    --color-card-background: hsl(0 0% 100%);
+    --color-card-foreground: hsl(210 11% 15%);
 
-  --color-popover-background: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(224 71.4% 4.1%);
+    --color-popover-background: hsl(0 0% 100%);
+    --color-popover-foreground: hsl(224 71.4% 4.1%);
 
-  --color-board-background: hsl(216 38% 97%);
-  --color-board-foreground: hsl(224 71.4% 4.1%);
+    --color-board-background: hsl(216 38% 97%);
+    --color-board-foreground: hsl(224 71.4% 4.1%);
 
-  --color-input-border: hsl(210 14% 89%);
-  --color-input-background: hsl(0 0% 100%);
+    --color-input-border: hsl(210 14% 89%);
+    --color-input-background: hsl(0 0% 100%);
+  }
+
+  @variant dark {
+    --color-card-background: hsl(224 71.4% 4.1%);
+    --color-card-foreground: hsl(210 20% 98%);
+
+    --color-popover-background: hsl(214 71.4% 4.1%);
+    --color-popover-foreground: hsl(210 20% 98%);
+
+    --color-input-background: hsl(215 27.9% 16.9%);
+  }
 }
