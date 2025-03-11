@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ControlValueKey, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form/types'
+import { ControlValueKey, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form/types'
 import { computed, provide } from "vue"
 import { SelectdropRoot } from './selectdrop'
 import SelectdropItem from './selectdrop/SelectdropItem.vue'
@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<Props & ControlConfig & FormPresenterConf
   includeBlank: true
 })
 
-const presenterConfig = relayInjectPreseterConfig(props)
+const presenterConfig = relayFormPresenterConfig(props)
 const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel<string | number | null>()
 const modelValue = useInjectControlValue(defaultModelValue)

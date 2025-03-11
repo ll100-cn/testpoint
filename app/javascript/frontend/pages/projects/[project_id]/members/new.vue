@@ -8,7 +8,7 @@
       <Fields :former="former">
         <template #default>
           <FormGroup path="user_email" label="邮箱">
-            <controls.string />
+            <controls.String />
           </FormGroup>
         </template>
       </Fields>
@@ -32,7 +32,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import Separator from '$ui/separator/Separator.vue'
@@ -50,7 +50,8 @@ const former = Former.build({
   role: ""
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   await reqs.add(q.project.members.Create).setup(req => {

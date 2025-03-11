@@ -1,11 +1,11 @@
 <template>
-  <Checkbox v-model:checked="modelValue" />
+  <CheckboxRaw v-model="modelValue" />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import _ from 'lodash'
-import { Checkbox, InputCheckbox } from '$ui/checkbox'
+import { CheckboxRaw } from '$ui/input'
 
 const props = defineProps<{
   collection: number[]

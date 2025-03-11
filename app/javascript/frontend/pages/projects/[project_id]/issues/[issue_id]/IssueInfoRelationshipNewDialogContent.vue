@@ -9,7 +9,7 @@
 
       <div class="space-y-3">
         <FormGroup path="target_id" label="关联的问题ID">
-          <controls.number />
+          <controls.Number />
         </FormGroup>
         <FormGroup path="creator_subscribe_target_issue" label="">
           <controls.checkboxes v-bind="{ collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
@@ -29,7 +29,7 @@ import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { IssueInfo } from "@/models"
 import { ref } from "vue"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -50,7 +50,8 @@ const former = Former.build({
   creator_subscribe_target_issue: true
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_relationship = await reqs.add(q.bug.issue_relationships.Create).setup(req => {

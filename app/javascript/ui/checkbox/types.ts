@@ -1,5 +1,5 @@
 import { type Ref } from "vue"
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface CheckboxPresenterConfig {
 }
@@ -10,8 +10,8 @@ export type CheckboxPresenter = {
 }
 
 export const {
-  relayInjectPreseterConfig: relayCheckboxPreseterConfig
-} = createRelayPreseterConfig<CheckboxPresenterConfig>('checkbox-presenter-config', {
+  relayInjectPresenterConfig: relayCheckboxPresenterConfig
+} = createRelayPresenterConfig<CheckboxPresenterConfig>('checkbox-presenter-config', {
 })
 
 export const {

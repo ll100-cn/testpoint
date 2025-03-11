@@ -3,27 +3,25 @@ import { type HTMLAttributes, computed } from 'vue'
 import {
   SelectContent,
   type SelectContentEmits,
+  type SelectContentProps,
   SelectPortal,
   SelectViewport,
   useForwardPropsEmits,
-} from 'radix-vue'
+} from 'reka-ui'
 import { SelectScrollDownButton, SelectScrollUpButton } from '.'
-import { cn } from '$ui/utils'
-import { relaySelectPreseterConfig, useSelectPresenter, type SelectPresenterConfig } from './types'
+import { cn } from '../utils'
+import { relaySelectPresenterConfig, useSelectPresenter } from './types'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-interface Props {
-  class?: HTMLAttributes['class']
-  position?: 'popper' | 'item-aligned'
-}
-
-const props = withDefaults(defineProps<Props & Partial<SelectPresenterConfig>>(), {
-  position: 'popper',
-})
-
+const props = withDefaults(
+  defineProps<SelectContentProps & { class?: HTMLAttributes['class'] }>(),
+  {
+    position: 'popper',
+  },
+)
 const emits = defineEmits<SelectContentEmits>()
 
 const delegatedProps = computed(() => {
@@ -33,7 +31,7 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-const presenterConfig = relaySelectPreseterConfig(props)
+const presenterConfig = relaySelectPresenterConfig(props)
 const presenter = useSelectPresenter()
 </script>
 
@@ -48,8 +46,9 @@ const presenter = useSelectPresenter()
       )
       "
     >
+      <slot name="before-viewport" />
       <SelectScrollUpButton />
-      <SelectViewport :class="cn('p-1', position === 'popper' && 'h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width)')">
+      <SelectViewport :class="cn('p-1', position === 'popper' && 'h-[--radix-select-trigger-height] w-full min-w-[--radix-select-trigger-width]')">
         <slot />
       </SelectViewport>
       <SelectScrollDownButton />

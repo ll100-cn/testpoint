@@ -59,7 +59,7 @@
 
       <div class="space-y-3">
         <FormGroup path="source_id" label="工单ID">
-          <controls.number />
+          <controls.Number />
         </FormGroup>
       </div>
       <DialogFooter>
@@ -73,7 +73,7 @@
 
 <script setup lang="ts">
 import { Button } from '$ui/button'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import PageHeader from '@/components/PageHeader.vue'
@@ -127,7 +127,8 @@ const former = Former.build({
   source_id: undefined,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   if (!former.form.source_id) {

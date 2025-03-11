@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
-import { SelectIcon, SelectTrigger, useForwardProps } from 'radix-vue'
-import { CaretSortIcon } from '@radix-icons/vue'
-import { cn } from '$ui/utils'
-import { relaySelectPreseterConfig, useSelectPresenter, type SelectPresenterConfig } from './types'
+import { type HTMLAttributes, computed, useAttrs } from 'vue'
+import { SelectIcon, SelectTrigger, type SelectTriggerProps, useForwardProps } from 'reka-ui'
+import SelectCaret from '../input1/SelectCaret.vue'
+import { cn } from '../utils'
+import { relaySelectPresenterConfig, useSelectPresenter } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
-
-const props = withDefaults(defineProps<Props & Partial<SelectPresenterConfig>>(), {})
+const props = defineProps<SelectTriggerProps & { class?: HTMLAttributes['class'] }>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
@@ -18,15 +14,15 @@ const delegatedProps = computed(() => {
 })
 
 const forwardedProps = useForwardProps(delegatedProps)
-const presenterConfig = relaySelectPreseterConfig(props)
+const presenterConfig = relaySelectPresenterConfig(props)
 const presenter = useSelectPresenter()
 </script>
 
 <template>
-  <SelectTrigger v-bind="forwardedProps" :class="cn(presenter.trigger(presenterConfig), props.class)">
-    <slot></slot>
+  <SelectTrigger v-bind="{ ...forwardedProps }" :class="cn(props.class)">
+    <slot />
     <SelectIcon as-child>
-      <CaretSortIcon class="w-4 h-4 opacity-50" />
+      <SelectCaret />
     </SelectIcon>
   </SelectTrigger>
 </template>

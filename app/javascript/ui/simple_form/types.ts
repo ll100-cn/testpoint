@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { computed, inject, type InjectionKey, type Ref } from "vue"
-import { createProvideInject, createRelayPreseterConfig, compactObject } from "../utils"
+import { createProvideInject, createRelayPresenterConfig, compactObject } from "../utils"
 import type Former from "./Former"
 import Validation from "./Validation"
 
@@ -27,8 +27,8 @@ export type FormPresenter = {
 }
 
 export const {
-  relayInjectPreseterConfig: relayInjectPreseterConfig
-} = createRelayPreseterConfig<FormPresenterConfig>('form-presenter-config', {
+  relayInjectPresenterConfig: relayFormPresenterConfig
+} = createRelayPresenterConfig<FormPresenterConfig>('form-presenter-config', {
   size: 'default',
   disabled: false,
 })

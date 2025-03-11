@@ -3,27 +3,27 @@
 
   <div class="space-y-3">
     <FormGroup path="name" label="模版名称">
-      <controls.string />
+      <controls.String />
     </FormGroup>
     <FormGroup path="lookup_by_build_form" label="新增问题时可选">
       <controls.checkboxes v-bind="{ collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
       <div class="text-muted text-sm">不勾选则新增工单时隐藏, 只能人工指给定已创建的工单</div>
     </FormGroup>
     <FormGroup path="title_suggestion" label="预设标题">
-      <controls.string />
+      <controls.String placeholder="请输入" />
     </FormGroup>
     <FormGroup path="default_category_id" label="预设分类">
-      <controls.select include_blank>
+      <controls.Select include-blank="请选择">
         <OptionsForCategory :collection="categories" />
-      </controls.select>
+      </controls.Select>
     </FormGroup>
     <FormGroup path="default_priority" label="预设优先级">
-      <controls.select include_blank>
+      <controls.Select include-blank>
         <OptionsForSelect :collection="ISSUE_PRIORITY_OPTIONS" />
-      </controls.select>
+      </controls.Select>
     </FormGroup>
     <FormGroup path="content_suggestion" label="预设内容">
-      <controls.markdown />
+      <controls.Markdown />
     </FormGroup>
     <FormGroup path="inputs" label="内容">
       <Card>
@@ -37,8 +37,8 @@
           </TableHeader>
           <TableBody>
             <TableRow v-for="(input, index) in former.form.inputs_attributes" :key="input.id">
-              <TableCell><controls.string v-model="input['label']" /></TableCell>
-              <TableCell><controls.number v-model="input['order_index']" /></TableCell>
+              <TableCell><controls.String v-model="input['label']" /></TableCell>
+              <TableCell><controls.Number v-model="input['order_index']" /></TableCell>
               <TableCell>
                 <a class="btn btn-danger" @click="onRemoveInput(index)">删除</a>
               </TableCell>
@@ -62,7 +62,7 @@ import OptionsForCategory from '@/components/OptionsForCategory.vue'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import Button from '$ui/button/Button.vue'
 import { useRoute } from 'vue-router'
@@ -81,7 +81,7 @@ const lookup_by_build_form_collection = ref([
   { label: "", value: true },
 ])
 
-const { FormGroup } = FormFactory<typeof props.former.form>()
+const FormGroup = GenericFormGroup<typeof props.former.form>
 
 const categories = await reqs.raw(session.request(q.project.categories.List, params.project_id)).setup().perform()
 

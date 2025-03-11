@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ProgressIndicator, ProgressRoot } from 'radix-vue'
 import { cn } from '$ui/utils'
-import { provideProgressPresenter, relayProgressPreseterConfig, type ProgressPresenter, type ProgressPresenterConfig, useProgressPresenters } from './types'
+import { provideProgressPresenter, relayProgressPresenterConfig, type ProgressPresenter, type ProgressPresenterConfig, useProgressPresenters } from './types'
 import { computed, type HTMLAttributes } from 'vue';
 
 const presenters = useProgressPresenters()
@@ -21,7 +21,7 @@ const delegatedProps = computed(() => {
   return delegated
 })
 
-const presenterConfig = relayProgressPreseterConfig(props)
+const presenterConfig = relayProgressPresenterConfig(props)
 const presenter = provideProgressPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))

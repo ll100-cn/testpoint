@@ -3,15 +3,15 @@
 
   <div class="row gy-3">
     <FormGroup path="name" label="名称">
-      <controls.string />
+      <controls.String />
     </FormGroup>
     <FormGroup path="icon_svg" label="svg图标">
-      <controls.text />
+      <controls.Text />
     </FormGroup>
     <FormGroup path="default_assignee_id" label="建议工单受理人">
-      <controls.select include_blank>
+      <controls.Select include-blank>
         <OptionsForMember :collection="members" except_level="reporter" />
-      </controls.select>
+      </controls.Select>
     </FormGroup>
   </div>
 </template>
@@ -20,13 +20,14 @@
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { Member } from '@/models'
 import OptionsForMember from "@/components/OptionsForMember.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from "$ui/simple_form"
 import * as controls from '@/components/controls'
-import FormGroup from "$ui/simple_form/FormGroup.vue"
 
 const props = defineProps<{
   former: Former<any>
   project_id: string
   members: Member[]
 }>()
+
+const FormGroup = GenericFormGroup<typeof props.former.form>
 </script>

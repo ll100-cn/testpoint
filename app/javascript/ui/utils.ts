@@ -28,10 +28,10 @@ export function compactObject(obj: Record<string, any> | null | undefined, exclu
   })
 }
 
-export function createRelayPreseterConfig<C>(name: string, defaults: NoUndefined<C>) {
+export function createRelayPresenterConfig<C>(name: string, defaults: NoUndefined<C>) {
   const key: InjectionKey<Ref<C>> = Symbol(name)
 
-  const relayInjectPreseterConfig = (props?: Partial<C> | undefined) => {
+  const relayInjectPresenterConfig = (props?: Partial<C> | undefined) => {
     const injectConfig = inject(key, null)
     const keys = Object.keys(defaults) as (keyof C)[]
 
@@ -49,7 +49,7 @@ export function createRelayPreseterConfig<C>(name: string, defaults: NoUndefined
     return config
   }
 
-  return { key, relayInjectPreseterConfig }
+  return { key, relayInjectPresenterConfig }
 }
 
 export function createProvideInject<T>(name: string) {
@@ -73,4 +73,3 @@ export function bva<C extends Record<string, any>>(
     variants: variants as any
   }) as (config: Partial<C>) => string
 }
-

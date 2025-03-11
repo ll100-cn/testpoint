@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { relayAlertDialogPreseterConfig, useAlertDialogPresenter, type AlertDialogPresenterConfig } from './types'
+import { cn } from '../utils'
+import { type AlertDialogPresenter, type AlertDialogPresenterConfig, relayAlertDialogPresenterConfig, useAlertDialogPresenter } from './types'
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -10,7 +10,7 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<AlertDialogPresenterConfig>>(), {
 })
 
-const presenterConfig = relayAlertDialogPreseterConfig(props)
+const presenterConfig = relayAlertDialogPresenterConfig()
 const presenter = useAlertDialogPresenter()
 </script>
 

@@ -1,5 +1,6 @@
-import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { provide, inject, type InjectionKey } from 'vue'
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface DialogPresenterConfig {
   variant?: 'primary'
@@ -16,8 +17,8 @@ export type DialogPresenter = {
 }
 
 export const {
-  relayInjectPreseterConfig: relayDialogPreseterConfig
-} = createRelayPreseterConfig<DialogPresenterConfig>('dialog-presenter-config', {
+  relayInjectPresenterConfig: relayDialogPresenterConfig
+} = createRelayPresenterConfig<DialogPresenterConfig>('dialog-presenter-config', {
   variant: 'primary'
 })
 

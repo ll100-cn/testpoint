@@ -10,7 +10,6 @@ import { type InputHTMLAttributes } from 'vue'
 
 export interface Props extends ControlProps, /* @vue-ignore */ Partial<InputHTMLAttributes> {
   validation?: Validation
-
   name?: string
 }
 

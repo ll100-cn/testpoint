@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { TooltipRoot, type TooltipRootEmits, useForwardPropsEmits } from 'radix-vue'
-import { provideTooltipPresenter, relayTooltipPreseterConfig, type TooltipPresenter, type TooltipPresenterConfig, useTooltipPresenters } from './types'
-import { computed, type HTMLAttributes } from 'vue';
+import { TooltipRoot, type TooltipRootEmits, type TooltipRootProps, useForwardPropsEmits } from 'radix-vue'
+import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { cn } from '../utils'
+import { provideTooltipPresenter, relayTooltipPresenterConfig, useTooltipPresenters, type TooltipPresenter, type TooltipPresenterConfig } from './types'
 
 const presenters = useTooltipPresenters()
 
@@ -11,16 +12,16 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props & Partial<TooltipPresenterConfig>>(), {
-  preset: 'standard'
+  preset: 'standard',
 })
 
-const emits = defineEmits<TooltipRootEmits>()
-
-const forwarded = useForwardPropsEmits(props, emits)
-const presenterConfig = relayTooltipPreseterConfig(props)
+const presenterConfig = relayTooltipPresenterConfig(props)
 const presenter = provideTooltipPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
+
+const emits = defineEmits<TooltipRootEmits>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

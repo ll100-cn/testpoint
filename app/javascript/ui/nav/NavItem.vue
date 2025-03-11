@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { cn } from '$ui/utils'
+import { type HTMLAttributes, computed } from 'vue'
 import { TabsTrigger, useForwardProps, type TabsTriggerProps } from 'radix-vue'
-import { computed, useAttrs, type HTMLAttributes } from 'vue'
-import { relayNavPreseterConfig, useNavPresenter } from './types'
+import { cn } from '../utils'
+import { relayNavPresenterConfig, useNavPresenter } from './types'
 
 const props = defineProps<TabsTriggerProps & { class?: HTMLAttributes['class'] }>()
 
@@ -13,7 +13,7 @@ const delegatedProps = computed(() => {
 
 const forwardedProps = useForwardProps(delegatedProps)
 
-const presenterConfig = relayNavPreseterConfig()
+const presenterConfig = relayNavPresenterConfig()
 const presenter = useNavPresenter()
 </script>
 

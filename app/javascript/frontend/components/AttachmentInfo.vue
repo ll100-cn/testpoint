@@ -33,7 +33,7 @@
     <div class="flex-col grow">
       <div v-if="editing" class="flex items-center">
         <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
-          <FormGroup class="mb-0" path="title" label=""><controls.string /></FormGroup>
+          <FormGroup class="mb-0" path="title" label=""><controls.String /></FormGroup>
           <div class="space-x-3">
             <Button>更新</Button>
             <Button variant="secondary" @click.prevent="cancelEdit">取消</Button>
@@ -69,7 +69,7 @@ import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { getCurrentInstance, nextTick, onMounted, ref } from "vue"
 import { usePageStore } from "@/store"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import Well from "$ui/well/Well.vue"
 
@@ -96,7 +96,8 @@ const former = Former.build({
   title: ""
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const attachment = await reqs.add(q.project.attachments.Update).setup(req => {

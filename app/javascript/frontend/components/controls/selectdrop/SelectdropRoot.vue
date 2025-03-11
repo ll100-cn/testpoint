@@ -35,7 +35,7 @@ import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 
 import type { SelectdropMenuOption } from "./types"
 import SelectdropMenuItem from "./SelectdropMenuItem.vue"
 import SelectdropMenuText from "./SelectdropMenuText.vue"
-import { relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig, type SizeType } from '$ui/simple_form/types'
+import { relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig, type SizeType } from '$ui/simple_form/types'
 import Validation from '$ui/simple_form/Validation'
 import { cn } from '$ui/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
@@ -48,7 +48,7 @@ const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<
   multiple: true
 })
 
-const presenterConfig = relayInjectPreseterConfig(props)
+const presenterConfig = relayFormPresenterConfig(props)
 const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel<(string | number)[]>()
 const rawModelValue = useInjectControlValue(defaultModelValue)

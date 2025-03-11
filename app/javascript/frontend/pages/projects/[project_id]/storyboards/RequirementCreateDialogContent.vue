@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -53,7 +53,8 @@ const former = Former.build({
   label_descriptions: {} as Record<string, string>
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_requirement = await reqs.add(q.project.requirements.Create).setup(req => {

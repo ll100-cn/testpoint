@@ -25,4 +25,5 @@ export const standard = {
     disabled:cursor-not-allowed disabled:opacity-50
     [&>span]:line-clamp-1
   `, {}),
+  itemText: bva('', {}),
 } satisfies SelectPresenter

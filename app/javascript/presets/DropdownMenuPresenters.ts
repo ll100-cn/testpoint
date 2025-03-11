@@ -14,6 +14,7 @@ export const standard = {
     data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
     data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2
   `, {}),
+  group: bva('', {}),
   item: bva(`
     relative flex w-full select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors
     cursor-pointer !text-foreground
@@ -23,6 +24,7 @@ export const standard = {
   label: bva(`
     px-2 py-1.5 text-sm
   `, {}),
+  radioGroup: bva('', {}),
   radioItem: bva(`
     relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-hidden transition-colors
     focus:bg-accent focus:text-accent-foreground
@@ -41,6 +43,7 @@ export const standard = {
     data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
     data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2
   `, {}),
+  sub: bva('', {}),
   subTrigger: bva(`
     flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden focus:bg-accent
   `, {}),

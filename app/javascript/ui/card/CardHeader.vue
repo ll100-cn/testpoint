@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { useSlots, type HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { relayCardPreseterConfig, useCardPresenter } from './types'
+import { inject, useSlots } from 'vue'
+import type { HTMLAttributes } from 'vue'
+import { cn } from '../utils'
+import { relayCardPresenterConfig, useCardPresenter } from './types'
 
 const props = defineProps<{
   class?: HTMLAttributes['class']
 }>()
 
-const slots = useSlots()
-
-const presenterConfig = relayCardPreseterConfig()
+const presenterConfig = relayCardPresenterConfig()
 const presenter = useCardPresenter()
+
+const slots = useSlots()
 </script>
 
 <template>
-  <div :class="cn(presenter.rounded(presenterConfig), 'rounded-b-none', presenter.header(presenterConfig), props.class)">
+  <div :class="cn(presenter.header(presenterConfig), props.class)">
     <div class="flex items-center w-auto">
       <slot></slot>
     </div>

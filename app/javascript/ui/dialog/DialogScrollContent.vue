@@ -9,8 +9,8 @@ import {
   DialogPortal,
   useForwardPropsEmits,
 } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relayDialogPreseterConfig, useDialogPresenter, type DialogPresenterConfig } from './types';
+import { cn } from '../utils'
+import { relayDialogPresenterConfig, useDialogPresenter, type DialogPresenterConfig } from './types'
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -27,7 +27,7 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-const presenterConfig = relayDialogPreseterConfig(props)
+const presenterConfig = relayDialogPresenterConfig(props)
 const presenter = useDialogPresenter()
 </script>
 
@@ -49,9 +49,7 @@ const presenter = useDialogPresenter()
       >
         <slot />
 
-        <DialogClose
-          class="absolute top-4 right-4 p-0.5 transition-colors rounded-md hover:bg-secondary"
-        >
+        <DialogClose class="absolute top-4 right-4 p-0.5 transition-colors rounded-md hover:bg-secondary">
           <Cross2Icon class="w-4 h-4" />
           <span class="sr-only">Close</span>
         </DialogClose>

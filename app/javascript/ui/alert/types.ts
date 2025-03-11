@@ -1,10 +1,8 @@
-import { cva } from 'class-variance-authority'
-import * as _ from 'radash'
-import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface AlertPresenterConfig {
-  variant?: 'primary' | 'secondary' | 'muted' | 'silence' | 'destructive' | 'successful' | 'tint'
+  variant?: 'default' | 'primary' | 'destructive' | 'constructive'
 }
 
 export type AlertPresenter = {
@@ -13,22 +11,22 @@ export type AlertPresenter = {
   description: (config: Partial<AlertPresenterConfig>) => string
 }
 
-export const {
-  relayInjectPreseterConfig: relayAlertPreseterConfig
-} = createRelayPreseterConfig<AlertPresenterConfig>('Alert-presenter-config', {
-  variant: 'primary'
-})
-
-export const {
-  useInject: useAlertPresenter,
-  useProvide: provideAlertPresenter
-} = createProvideInject<Ref<AlertPresenter>>('Alert-presenter')
-
 export interface AlertPresenters {
   standard: AlertPresenter
 }
 
 export const {
+  relayInjectPresenterConfig: relayAlertPresenterConfig
+} = createRelayPresenterConfig<AlertPresenterConfig>('alert-presenter-config', {
+  variant: 'default',
+})
+
+export const {
+  useInject: useAlertPresenter,
+  useProvide: provideAlertPresenter
+} = createProvideInject<Ref<AlertPresenter>>('alert-presenter')
+
+export const {
   useInject: useAlertPresenters,
   useProvide: provideAlertPresenters
-} = createProvideInject<AlertPresenters>('Alert-presenters')
+} = createProvideInject<AlertPresenters>('alert-presenters')

@@ -1,10 +1,9 @@
-import { cva } from 'class-variance-authority'
-import * as _ from 'radash'
-import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface BadgePresenterConfig {
-  variant?: 'primary' | 'secondary' | 'muted' | 'silence' | 'destructive' | 'successful' | 'tint'
+  variant?: 'primary' | 'secondary' | 'muted' | 'silence' | 'destructive' | 'constructive' | 'tint'
+  size?: 'default' | 'xs' | 'sm' | 'lg'
 }
 
 export type BadgePresenter = {
@@ -12,9 +11,10 @@ export type BadgePresenter = {
 }
 
 export const {
-  relayInjectPreseterConfig: relayBadgePreseterConfig
-} = createRelayPreseterConfig<BadgePresenterConfig>('badge-presenter-config', {
-  variant: 'primary'
+  relayInjectPresenterConfig: relayBadgePresenterConfig
+} = createRelayPresenterConfig<BadgePresenterConfig>('badge-presenter-config', {
+  variant: 'primary',
+  size: 'default',
 })
 
 export const {
@@ -29,4 +29,4 @@ export interface BadgePresenters {
 export const {
   useInject: useBadgePresenters,
   useProvide: provideBadgePresenters
-} = createProvideInject<BadgePresenters>('Badge-presenters')
+} = createProvideInject<BadgePresenters>('badge-presenters')

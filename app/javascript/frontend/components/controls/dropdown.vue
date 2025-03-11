@@ -27,7 +27,7 @@ import * as helper from "../simple_form/helper"
 import { type ControlProps } from '../simple_form/helper'
 import { default as DropdownMenuItemVue } from './DropdownMenuItem.vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
+import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
 
 interface Props extends ControlProps {
   include_blank?: boolean | string
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<
   include_blank: true
 })
 
-const presenterConfig = relayInjectPreseterConfig(props)
+const presenterConfig = relayFormPresenterConfig(props)
 const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel()
 const modelValue = useInjectControlValue(defaultModelValue)

@@ -3,16 +3,13 @@ import { type HTMLAttributes, computed } from 'vue'
 import {
   DropdownMenuSubContent,
   type DropdownMenuSubContentEmits,
+  type DropdownMenuSubContentProps,
   useForwardPropsEmits,
 } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
-
-const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {})
+const props = defineProps<DropdownMenuSubContentProps & { class?: HTMLAttributes['class'] }>()
 const emits = defineEmits<DropdownMenuSubContentEmits>()
 
 const delegatedProps = computed(() => {
@@ -22,12 +19,15 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
 </script>
 
 <template>
-  <DropdownMenuSubContent v-bind="forwarded" :class="cn(presenter.subContent(presenterConfig), props.class)">
+  <DropdownMenuSubContent
+    v-bind="forwarded"
+    :class="cn(presenter.subContent(presenterConfig), props.class)"
+  >
     <slot />
   </DropdownMenuSubContent>
 </template>

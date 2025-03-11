@@ -1,13 +1,13 @@
 <template>
-  <textarea v-model="modelValue" :class="cn(standard.input(presenterConfig), props.class)" />
+  <textarea v-model="modelValue" :class="cn(inputPresenter.input(inputPresenterConfig), props.class)" />
 </template>
 
 <script setup lang="ts">
 import { Validation } from '@/models'
 import { computed, type HTMLAttributes, type InputHTMLAttributes } from 'vue'
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
-import { standard } from './presets'
+import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
 import { cn } from '$ui/utils'
+import { useInputPresenters, type InputPresenterConfig } from '$ui/input'
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -15,11 +15,24 @@ interface Props {
 
 const props = defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>()
 
-const presenterConfig = relayInjectPreseterConfig(props)
+const inputPresenters = useInputPresenters()
+const inputPresenter = computed(() => inputPresenters.standard)
+
+const presenterConfig = relayFormPresenterConfig(props)
 const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel()
 const modelValue = useInjectControlValue(defaultModelValue)
 const validation = computed(() => controlConfig.value.validation ?? new Validation())
 
+const inputPresenterConfig = computed(() => {
+  const config = {} as InputPresenterConfig
 
+  if (presenterConfig.value.size == 'sm') {
+    config.size = 'sm'
+  } else if (presenterConfig.value.size == 'lg') {
+    config.size = 'lg'
+  }
+
+  return config
+})
 </script>

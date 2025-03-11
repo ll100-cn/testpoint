@@ -5,8 +5,8 @@
     <!-- <layouts.group code="category_id" label="分类">
       <controls.collection_select v-bind="{ collection: categories, labelMethod: 'name', valueMethod: 'id' }" />
     </layouts.group> -->
-    <layouts.group code="title" label="工单标题"><controls.string /></layouts.group>
-    <layouts.group code="content" label="工单内容"><controls.markdown /></layouts.group>
+    <layouts.group code="title" label="工单标题"><controls.String /></layouts.group>
+    <layouts.group code="content" label="工单内容"><controls.Markdown /></layouts.group>
     <!-- <layouts.group code="state" label="状态">
       <controls.collection_select v-bind="{ collection: issue_state_mapping_collection, labelMethod: 'label', valueMethod: 'value' }" />
     </layouts.group>

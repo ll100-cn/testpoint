@@ -18,15 +18,15 @@
 
         <template v-if="issue_template">
           <FormGroup v-if="allow('manage', Issue)" path="issue_attributes.creator_id" label="创建人">
-            <controls.select include_blank>
+            <controls.Select include-blank>
               <OptionsForMember :collection="members" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
           <FormGroup path="issue_attributes.title" label="标题">
-            <controls.string />
+            <controls.String />
           </FormGroup>
           <FormGroup path="issue_attributes.content" label="内容">
-            <controls.markdown />
+            <controls.Markdown />
           </FormGroup>
           <FormGroup label="">
             <AttachmentsUploader @changed="onAttachmentsChanged" :attachments="[]" />
@@ -39,7 +39,7 @@
 
         <div class="space-y-3">
           <FormGroup v-for="(input, index) in issue_template.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
-            <controls.string />
+            <controls.String />
           </FormGroup>
         </div>
 
@@ -66,7 +66,7 @@ import { Attachment, Issue } from "@/models"
 import { usePageStore, useSessionStore } from "@/store"
 import { computed, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
@@ -102,7 +102,8 @@ const former = Former.build({
   survey_attributes: { inputs_attributes: [] },
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const issue = await reqs.add(q.bug.issues.Create).setup(req => {

@@ -2,12 +2,12 @@
   <FormErrorAlert />
 
   <div class="space-y-3">
-    <FormGroup path="role_name" label="角色"><controls.string /></FormGroup>
-    <FormGroup path="scene_name" label="场景"><controls.string /></FormGroup>
-    <FormGroup path="group_name" label="分组"><controls.string /></FormGroup>
-    <FormGroup path="title" label="标题"><controls.string /></FormGroup>
+    <FormGroup path="role_name" label="角色"><controls.String /></FormGroup>
+    <FormGroup path="scene_name" label="场景"><controls.String /></FormGroup>
+    <FormGroup path="group_name" label="分组"><controls.String /></FormGroup>
+    <FormGroup path="title" label="标题"><controls.String /></FormGroup>
     <FormGroup path="content" label="内容">
-      <controls.markdown />
+      <controls.Markdown />
     </FormGroup>
     <FormGroup path="platform_ids" label="平台">
       <controls.checkboxes v-bind="{ name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
@@ -18,15 +18,15 @@
     </FormGroup>
 
     <FormGroup path="storyboard_id" label="所属故事板">
-      <controls.select include_blank>
+      <controls.Select include-blank>
         <option v-for="storyboard in storyboards" :value="storyboard.id">{{ storyboard.title }}</option>
-      </controls.select>
+      </controls.Select>
     </FormGroup>
 
     <FormGroup path="requirement_id" label="所属需求">
-      <controls.select include_blank>
+      <controls.Select include-blank>
         <option v-for="requirement in requirements" :value="requirement.id">{{ requirement.title }}</option>
-      </controls.select>
+      </controls.Select>
     </FormGroup>
   </div>
 </template>
@@ -35,9 +35,8 @@
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import useRequestList from '@/lib/useRequestList'
 import { EntityRepo, Platform, Requirement, Roadmap, TestCase, TestCaseLabel } from '@/models'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import FormGroup from '$ui/simple_form/FormGroup.vue'
 import * as q from '@/requests'
 import { ref, watch } from 'vue'
 import { usePageStore } from '@/store'
@@ -51,6 +50,9 @@ const props = defineProps<{
   former: Former<any>
   newest_roadmap: Roadmap
 }>()
+
+const FormGroup = GenericFormGroup<typeof props.former.form>
+const Form = GenericForm<typeof props.former.form>
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void,

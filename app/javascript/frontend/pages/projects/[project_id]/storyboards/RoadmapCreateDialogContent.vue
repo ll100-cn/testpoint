@@ -8,7 +8,7 @@
 
       <div class="space-y-3">
         <FormGroup path="title" label="名称">
-          <controls.string />
+          <controls.String />
         </FormGroup>
       </div>
 
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap } from '@/models'
@@ -45,7 +45,8 @@ const former = Former.build({
   title: "",
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_roadmap = await reqs.add(q.project.roadmaps.Create).setup(req => {

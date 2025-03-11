@@ -3,12 +3,13 @@ import { type HTMLAttributes, computed } from 'vue'
 import {
   DropdownMenuCheckboxItem,
   type DropdownMenuCheckboxItemEmits,
+  type DropdownMenuCheckboxItemProps,
   DropdownMenuItemIndicator,
   useForwardPropsEmits,
 } from 'radix-vue'
 import { CheckIcon } from '@radix-icons/vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -24,12 +25,18 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
 </script>
 
 <template>
-  <DropdownMenuCheckboxItem v-bind="forwarded" :class=" cn(presenter.checkboxItem(presenterConfig), props.class,)">
+  <DropdownMenuCheckboxItem
+    v-bind="forwarded"
+    :class=" cn(
+      presenter.checkboxItem(presenterConfig),
+      props.class,
+    )"
+  >
     <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuItemIndicator>
         <CheckIcon class="w-4 h-4" />

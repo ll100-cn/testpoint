@@ -1,5 +1,5 @@
 import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface ProgressPresenterConfig {
   variant?: 'primary'
@@ -11,8 +11,8 @@ export interface ProgressPresenter {
 }
 
 export const {
-  relayInjectPreseterConfig: relayProgressPreseterConfig
-} = createRelayPreseterConfig<ProgressPresenterConfig>('progress-presenter-config', {
+  relayInjectPresenterConfig: relayProgressPresenterConfig
+} = createRelayPresenterConfig<ProgressPresenterConfig>('progress-presenter-config', {
   variant: 'primary'
 })
 

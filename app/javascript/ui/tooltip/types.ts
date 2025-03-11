@@ -1,19 +1,24 @@
-import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface TooltipPresenterConfig {
-  variant?: 'primary'
 }
 
 export type TooltipPresenter = {
   root: (config: Partial<TooltipPresenterConfig>) => string
   content: (config: Partial<TooltipPresenterConfig>) => string
+  provider: (config: Partial<TooltipPresenterConfig>) => string
+  trigger: (config: Partial<TooltipPresenterConfig>) => string
+}
+
+export interface TooltipPresenters {
+  standard: TooltipPresenter
 }
 
 export const {
-  relayInjectPreseterConfig: relayTooltipPreseterConfig
-} = createRelayPreseterConfig<TooltipPresenterConfig>('tooltip-presenter-config', {
-  variant: 'primary'
+  relayInjectPresenterConfig: relayTooltipPresenterConfig
+} = createRelayPresenterConfig<TooltipPresenterConfig>('tooltip-presenter-config', {
+  size: 'default',
 })
 
 export const {
@@ -21,11 +26,7 @@ export const {
   useProvide: provideTooltipPresenter
 } = createProvideInject<Ref<TooltipPresenter>>('tooltip-presenter')
 
-export interface TooltipPresenters {
-  standard: TooltipPresenter
-}
-
 export const {
   useInject: useTooltipPresenters,
   useProvide: provideTooltipPresenters
-} = createProvideInject<TooltipPresenters>('Tooltip-presenters')
+} = createProvideInject<TooltipPresenters>('tooltip-presenters')

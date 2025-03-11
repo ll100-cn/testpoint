@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { SelectLabel } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relaySelectPreseterConfig, useSelectPresenter, type SelectPresenterConfig } from './types'
+import { SelectLabel, type SelectLabelProps } from 'radix-vue'
+import { cn } from '../utils'
+import { relaySelectPresenterConfig, useSelectPresenter } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
-
-const props = withDefaults(defineProps<Props & Partial<SelectPresenterConfig>>(), {})
-
-const presenterConfig = relaySelectPreseterConfig(props)
+const props = defineProps<SelectLabelProps & { class?: HTMLAttributes['class'] }>()
+const presenterConfig = relaySelectPresenterConfig(props)
 const presenter = useSelectPresenter()
 </script>
 
 <template>
-  <SelectLabel :class="cn(presenter.label(presenterConfig), props.class)">
+  <SelectLabel :class="cn(
+    presenter.label(presenterConfig),
+    props.class,
+  )">
     <slot />
   </SelectLabel>
 </template>

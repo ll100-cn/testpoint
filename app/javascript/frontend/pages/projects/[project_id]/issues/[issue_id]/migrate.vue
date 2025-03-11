@@ -9,16 +9,16 @@
 
       <div class="space-y-3">
         <FormGroup path="target_project_id" label="项目">
-          <controls.select include_blank>
+          <controls.Select include-blank>
             <OptionsForSelect :collection="projects.map(it => ({ label: it.name, value: it.id }))" />
-          </controls.select>
+          </controls.Select>
         </FormGroup>
 
         <FormGroup path="target_category_id" label="分类">
           <span class="form-control-plaintext text-muted" v-if="actioner.processing">载入中...</span>
-          <controls.select v-else include_blank>
+          <controls.Select v-else include-blank>
             <OptionsForCategory :collection="categories" />
-          </controls.select>
+          </controls.Select>
         </FormGroup>
       </div>
 
@@ -40,14 +40,13 @@ import OptionsForCategory from "@/components/OptionsForCategory.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { layouts } from "@/components/simple_form"
 import * as q from '@/requests'
 import { Category } from "@/models"
 import { usePageStore, useSessionStore } from "@/store"
 import _ from "lodash"
-import { computed, getCurrentInstance, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
@@ -73,7 +72,8 @@ const former = Former.build({
   target_category_id: null
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   await reqs.add(q.bug.issue_migrations.Create).setup(req => {

@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
-import { TabsContent } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relayTabsPreseterConfig, useTabsPresenter, type TabsPresenterConfig } from './types'
+import { cn } from '../utils'
+import { TabsContent, type TabsContentProps } from 'radix-vue'
+import { computed, type HTMLAttributes } from 'vue'
+import { provideTabsPresenter, relayTabsPresenterConfig, useTabsPresenter, useTabsPresenters, type TabsPresenter, type TabsPresenterConfig } from './types'
 
 interface Props {
   class?: HTMLAttributes['class']
 }
 
-const props = withDefaults(defineProps<Props & Partial<TabsPresenterConfig>>(), {})
+const props = defineProps<Props & Partial<TabsPresenterConfig> & TabsContentProps>()
+
+const presenterConfig = relayTabsPresenterConfig(props)
+const presenter = useTabsPresenter()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
 
   return delegated
 })
-
-const presenterConfig = relayTabsPreseterConfig(props)
-const presenter = useTabsPresenter()
 </script>
 
 <template>

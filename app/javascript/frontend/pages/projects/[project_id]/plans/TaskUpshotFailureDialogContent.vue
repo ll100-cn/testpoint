@@ -22,7 +22,7 @@
       <FormErrorAlert />
       <ActionerAlert :actioner="actioner" />
 
-      <IssueFormGroup path="issue_attributes.title" label="工单标题"><newControls.string /></IssueFormGroup>
+      <IssueFormGroup path="issue_attributes.title" label="工单标题"><newcontrols.String /></IssueFormGroup>
       <IssueFormGroup path="issue_attributes.content" label="工单内容"><newControls.markdown /></IssueFormGroup>
 
       <DialogFooter>
@@ -62,7 +62,7 @@ import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpsho
 import { Actioner } from "@/components/Actioner"
 import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
-import { Former as NewFormer, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former as NewFormer, GenericForm, GenericFormGroup, PresenterConfigProvider } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as newControls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -95,7 +95,8 @@ const issue_former = NewFormer.build({
   },
 })
 
-const { Form: IssueForm, FormGroup: IssueFormGroup } = FormFactory<typeof issue_former.form>()
+const IssueForm = GenericForm<typeof issue_former.form>
+const IssueFormGroup = GenericFormGroup<typeof issue_former.form>
 
 issue_former.doPerform = async function() {
   await reqs.add(q.bug.issues.Create).setup(req => {
@@ -114,7 +115,8 @@ const comment_former = NewFormer.build({
   attachments_params: []
 })
 
-const { Form: CommentForm, FormGroup: CommentFormGroup } = FormFactory<typeof comment_former.form>()
+const CommentForm = GenericForm<typeof comment_former.form>
+const CommentFormGroup = GenericFormGroup<typeof comment_former.form>
 
 comment_former.doPerform = async function() {
   await reqs.add(q.bug.issue_comments.Create).setup(req => {

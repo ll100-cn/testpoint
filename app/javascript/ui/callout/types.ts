@@ -1,10 +1,8 @@
-import { cva } from 'class-variance-authority'
-import * as _ from 'radash'
 import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface CalloutPresenterConfig {
-  variant?: 'primary' | 'secondary' | 'muted' | 'silence' | 'destructive' | 'successful' | 'tint'
+  variant?: 'primary' | 'secondary' | 'muted' | 'silence' | 'destructive' | 'constructive' | 'tint'
 }
 
 export type CalloutPresenter = {
@@ -14,8 +12,8 @@ export type CalloutPresenter = {
 }
 
 export const {
-  relayInjectPreseterConfig: relayCalloutPreseterConfig
-} = createRelayPreseterConfig<CalloutPresenterConfig>('callout-presenter-config', {
+  relayInjectPresenterConfig: relayCalloutPresenterConfig
+} = createRelayPresenterConfig<CalloutPresenterConfig>('callout-presenter-config', {
   variant: 'primary'
 })
 

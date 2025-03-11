@@ -10,10 +10,10 @@
 <script setup lang="ts">
 import { Validation } from "@/models";
 import $ from 'jquery'
-import { computed, nextTick, onMounted, provide, ref } from "vue"
+import { computed, nextTick, onMounted, provide, ref, useTemplateRef } from "vue"
 import * as helper from "../simple_form/helper"
 import { type ControlProps } from "../simple_form/helper"
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
+import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
 
 export interface Props extends ControlProps {
   include_blank?: string | boolean
@@ -24,13 +24,13 @@ const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<
   include_blank: false,
 })
 
-const presenterConfig = relayInjectPreseterConfig(props)
+const presenterConfig = relayFormPresenterConfig(props)
 const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel()
 const modelValue = useInjectControlValue(defaultModelValue)
 const validation = computed(() => controlConfig.value.validation ?? new Validation())
 
-const el = ref(null as HTMLSelectElement)
+const el = useTemplateRef('el')
 
 provide('model_value', modelValue)
 

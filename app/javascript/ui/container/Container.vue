@@ -1,38 +1,31 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
-import { Label, type LabelProps } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { computed, withDefaults, type HTMLAttributes } from 'vue';
+import { cn } from '../utils';
+import { provideContainerPresenter, relayContainerPresenterConfig, type ContainerPresenter, type ContainerPresenterConfig, useContainerPresenters } from './types';
 
-type PresetId = 'fluid' | 'fixed'
-
-const variance = cva('px-4', {
-  variants: {
-    preset: {
-      fluid: '',
-      fixed: 'mx-auto',
-    } satisfies Record<PresetId, string>,
-  },
-  defaultVariants: {
-    preset: 'fluid',
-  }
-})
+const presenters = useContainerPresenters()
 
 interface Props {
   class?: HTMLAttributes['class']
-  preset?: VariantProps<typeof variance>['preset']
+  preset?: keyof typeof presenters | ContainerPresenter
 }
 
-const props = defineProps<Props>()
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-  return delegated
+const props = withDefaults(defineProps<Props & Partial<ContainerPresenterConfig>>(), {
+  preset: 'fluid',
 })
+
+const presenterConfig = relayContainerPresenterConfig(props)
+const presenter = provideContainerPresenter(computed(() => {
+  if (typeof props.preset != 'string') {
+    return props.preset
+  }
+
+  return presenters[props.preset]
+}))
 </script>
 
 <template>
-  <div v-bind="delegatedProps" :class="cn(variance({ preset }), props.class)">
+  <div :class="cn(presenter.root(presenterConfig), props.class)">
     <slot></slot>
   </div>
 </template>

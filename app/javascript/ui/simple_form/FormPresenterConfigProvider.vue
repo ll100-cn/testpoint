@@ -3,8 +3,7 @@
 </template>
 
 <script setup lang="ts" generic="T extends object">
-import { relayInjectPreseterConfig, type FormPresenterConfig } from './types'
-
+import { relayFormPresenterConfig, type FormPresenterConfig } from './types'
 const props = defineProps<Partial<FormPresenterConfig>>()
-const presenterConfig = relayInjectPreseterConfig(props)
+const presenterConfig = relayFormPresenterConfig(props)
 </script>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
 import { DropdownMenuLabel, type DropdownMenuLabelProps, useForwardProps } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
 interface Props extends /* @vue-ignore */ DropdownMenuLabelProps {
   class?: HTMLAttributes['class']
@@ -21,7 +21,7 @@ const delegatedProps = computed(() => {
 })
 
 const forwardedProps = useForwardProps(delegatedProps)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
 </script>
 

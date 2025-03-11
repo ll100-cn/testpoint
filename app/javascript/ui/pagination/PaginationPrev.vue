@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
 import { PaginationPrev, type PaginationPrevProps } from 'radix-vue'
-import { ChevronLeftIcon } from '@radix-icons/vue'
-import { Button, } from '../button'
-import { cn } from '$ui/utils'
+import { computed, type HTMLAttributes } from 'vue'
 
 const props = withDefaults(defineProps<PaginationPrevProps & { class?: HTMLAttributes['class'] }>(), {
   asChild: true,

@@ -29,9 +29,9 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="priority" title="优先级">
         <template #editable>
           <FormGroup path="priority" label="">
-            <controls.select>
+            <controls.Select>
               <OptionsForSelect :collection="ISSUE_PRIORITY_OPTIONS" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -43,9 +43,9 @@
       <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former, issue_info }" code="creator_id" title="创建人">
         <template #editable>
           <FormGroup path="creator_id" label="">
-            <controls.select include_blank>
+            <controls.Select include-blank>
               <OptionsForMember :collection="members" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -57,9 +57,9 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="assignee_id" title="受理人">
         <template #editable>
           <FormGroup path="assignee_id" label="">
-            <controls.select include_blank>
+            <controls.Select include-blank>
               <OptionsForMember :collection="members" except_level="reporter" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -88,9 +88,9 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="milestone_id" title="里程碑">
         <template #editable>
           <FormGroup path="milestone_id" label="">
-            <controls.select>
+            <controls.Select>
               <OptionsForSelect :collection="milestones.map(it => ({ label: it.title, value: it.id }))" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -141,7 +141,7 @@ import { ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
 import { Badge } from "$ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$ui/tooltip"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
@@ -169,7 +169,9 @@ const former = Former.build({
   milestone_id: props.issue_info.milestone_id,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
+
 former.doPerform = async function(code: string) {
   const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id

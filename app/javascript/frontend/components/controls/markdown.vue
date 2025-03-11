@@ -1,49 +1,55 @@
 <template>
-  <div v-show="easy_mde" :class="{ 'is-invalid': validation.state == 'invalid' }">
+  <div v-show="easy_mde" v-bind="controlAttrs" :class="cn(inputPresenter.input(inputPresenterConfig), props.class)" class="markdown-editor">
     <textarea ref="el" class="form-control">{{ local_value }}</textarea>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Validation } from '@/models'
-import 'codemirror/lib/codemirror.css'
-import EasyMDE from '../../../vendor/easymde'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+
+import EasyMDE from '$vendor/easymde'
+import { computed, nextTick, onMounted, ref, watch, type HTMLAttributes } from 'vue'
 import * as helper from "../simple_form/helper"
 import { type ControlProps } from '../simple_form/helper'
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
+import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
+import { useInputPresenters, type InputPresenterConfig } from '$ui/input'
+import { cn } from '$ui/utils'
+
 
 interface Props extends ControlProps {
+  class?: HTMLAttributes['class']
 }
 
 const props = defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>()
 
-const presenterConfig = relayInjectPreseterConfig(props)
+const presenterConfig = relayFormPresenterConfig(props)
 const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel()
 const modelValue = useInjectControlValue(defaultModelValue)
 const validation = computed(() => controlConfig.value.validation ?? new Validation())
 
+const inputPresenters = useInputPresenters()
+const inputPresenter = computed(() => inputPresenters.standard)
+const inputPresenterConfig = computed(() => {
+  const config = {} as InputPresenterConfig
+
+  if (options.value.size == 'small') {
+    config.size = 'sm'
+  } else if (options.value.size == 'large') {
+    config.size = 'lg'
+  }
+
+  return config
+})
+
+const extraAttrs = ref(new Map<string, any>())
+
 const options = helper.buildControlConfig(props)
-const control_attrs = computed(() => {
+const controlAttrs = computed(() => {
   const attrs = { class: [] } as any
 
-  // if (options.value.size == 'small') {
-  //   attrs.class.push('btn-sm')
-  // } else if (options.value.size == 'large') {
-  //   attrs.class.push('btn-lg')
-  // }
-
-  if (validation.value.state == "invalid") {
-    attrs.class.push("is-invalid")
-  }
-
-  if (presenterConfig.value.disabled) {
-    attrs.disabled = true
-  }
-
-  if (options.value.control_id) {
-    attrs.id = options.value.control_id
+  for (const [key, value] of extraAttrs.value) {
+    attrs[key] = value
   }
 
   return attrs
@@ -84,8 +90,16 @@ function buildEasyMDE() {
   })
 
   easy_mde.value.codemirror.on("update", () => {
-    local_value.value = easy_mde.value.value()
+    local_value.value = easy_mde.value?.value() ?? ''
     modelValue.value = local_value.value
+  })
+
+  easy_mde.value.codemirror.on("focus", () => {
+    extraAttrs.value.set("data-focus", true)
+  })
+
+  easy_mde.value.codemirror.on("blur", () => {
+    extraAttrs.value.delete("data-focus")
   })
 }
 
@@ -98,10 +112,20 @@ watch(modelValue, (new_value) => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@reference "../../../../../assets/theme/main.css";
+
 .editor-preview {
   img {
     max-width: 100%;
   }
+}
+
+.markdown-editor::v-deep .editor-toolbar {
+  @apply border-0;
+}
+
+.markdown-editor::v-deep .CodeMirror {
+  @apply border-0 border-t border-input-border;
 }
 </style>

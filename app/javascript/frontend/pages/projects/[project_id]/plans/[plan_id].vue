@@ -102,7 +102,7 @@ import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import { Separator } from '$ui/separator'
 import { Nav, NavList, NavItem } from '$ui/nav'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import BlankDialog from '@/components/BlankDialog.vue'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
@@ -122,7 +122,8 @@ const searcher = Former.build({
   state_modify_is: null as string | null,
 })
 
-const { Form, FormGroup } = FormFactory<typeof searcher.form>()
+const Form = GenericForm<typeof searcher.form>
+const FormGroup = GenericFormGroup<typeof searcher.form>
 
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)

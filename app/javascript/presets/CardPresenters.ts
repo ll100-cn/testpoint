@@ -8,4 +8,6 @@ export const standard = {
   content: bva('px-4 py-4 grow', {}),
   table: bva('[&_tr>*:first-child]:ps-4', {}),
   footer: bva('flex bg-foreground/3 gap-2 border-t items-center px-4 py-2', {}),
+  description: bva('text-sm text-muted', {}),
+  title: bva('font-semibold leading-none tracking-tight', {}),
 } satisfies CardPresenter

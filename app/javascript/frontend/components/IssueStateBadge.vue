@@ -20,8 +20,8 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { ISSUE_STATE_MAPPING, ISSUE_STATE_COLORS } from "@/constants"
-import { Badge } from "$ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$ui/tooltip";
+import { Badge } from "$ui/badge"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$ui/tooltip"
 
 const props = defineProps<{
   state: string

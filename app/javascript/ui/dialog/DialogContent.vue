@@ -10,7 +10,7 @@ import {
 } from 'radix-vue'
 import { Cross2Icon } from '@radix-icons/vue'
 import { cn } from '$ui/utils'
-import { relayDialogPreseterConfig, useDialogPresenter, type DialogPresenterConfig } from './types';
+import { relayDialogPresenterConfig, useDialogPresenter, type DialogPresenterConfig } from './types';
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -30,7 +30,7 @@ const delegatedProps = computed(() => {
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
-const presenterConfig = relayDialogPreseterConfig(props)
+const presenterConfig = relayDialogPresenterConfig(props)
 const presenter = useDialogPresenter()
 </script>
 

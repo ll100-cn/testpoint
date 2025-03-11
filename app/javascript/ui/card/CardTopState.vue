@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, type HTMLAttributes } from 'vue'
 import { cn } from '$ui/utils'
-import { relayCardPreseterConfig, useCardPresenter } from './types'
+import { relayCardPresenterConfig, useCardPresenter } from './types'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 const variance = cva(`
@@ -22,7 +22,7 @@ const props = defineProps<{
   variant?: VariantProps<typeof variance>['variant']
 }>()
 
-const presenterConfig = relayCardPreseterConfig()
+const presenterConfig = relayCardPresenterConfig()
 const presenter = useCardPresenter()
 </script>
 

@@ -4,7 +4,7 @@ import type { CheckboxRootEmits, CheckboxRootProps } from 'radix-vue'
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'radix-vue'
 import { CheckIcon } from '@radix-icons/vue'
 import { cn } from '$ui/utils'
-import { provideCheckboxPresenter, relayCheckboxPreseterConfig, useCheckboxPresenter, useCheckboxPresenters, type CheckboxPresenter, type CheckboxPresenterConfig } from './types'
+import { provideCheckboxPresenter, relayCheckboxPresenterConfig, useCheckboxPresenter, useCheckboxPresenters, type CheckboxPresenter, type CheckboxPresenterConfig } from './types'
 
 const presenters = useCheckboxPresenters()
 
@@ -25,7 +25,7 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-const presenterConfig = relayCheckboxPreseterConfig(props)
+const presenterConfig = relayCheckboxPresenterConfig(props)
 const presenter = provideCheckboxPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))

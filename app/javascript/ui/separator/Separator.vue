@@ -2,7 +2,7 @@
 import { type HTMLAttributes, computed } from 'vue'
 import { Separator, type SeparatorProps } from 'radix-vue'
 import { cn } from '../utils'
-import { provideSeparatorPresenter, relaySeparatorPreseterConfig, type SeparatorPresenter, type SeparatorPresenterConfig, useSeparatorPresenters } from './types';
+import { provideSeparatorPresenter, relaySeparatorPresenterConfig, type SeparatorPresenter, type SeparatorPresenterConfig, useSeparatorPresenters } from './types';
 
 const presenters = useSeparatorPresenters()
 
@@ -16,7 +16,7 @@ const props = withDefaults(defineProps< SeparatorProps & Props & Partial<Separat
   preset: 'standard'
 })
 
-const presenterConfig = relaySeparatorPreseterConfig(props)
+const presenterConfig = relaySeparatorPresenterConfig(props)
 const presenter = provideSeparatorPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))

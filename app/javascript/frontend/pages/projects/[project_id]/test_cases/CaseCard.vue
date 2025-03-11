@@ -34,7 +34,7 @@
         </FormGroup>
 
         <FormGroup path="group_name_search" label="分组">
-          <controls.string />
+          <controls.String />
         </FormGroup>
 
         <FormGroup path="relate_state" label="关联需求">
@@ -86,7 +86,7 @@ import { usePageStore, useSessionStore } from '@/store'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import BlankDialog from '@/components/BlankDialog.vue'
 import CardNewDialog from './CardNewDialog.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
@@ -117,7 +117,8 @@ const filter = plainToClass(Filter, query.f ?? {})
 
 const former = Former.build(search.value)
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const data = utils.compactObject(this.form)

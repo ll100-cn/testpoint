@@ -5,7 +5,7 @@
     <template #actions>
       <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform(former.form)" class="mx-0">
         <FormGroup path="keyword" label="">
-          <controls.string placeholder="搜索问题或评论" />
+          <controls.String placeholder="搜索问题或评论" />
         </FormGroup>
 
         <Button class="w-auto">搜索</Button>
@@ -65,7 +65,7 @@ import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
 import IssueList from "./IssueList.vue"
 import { Filter2, Search2 } from "./types"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
@@ -85,7 +85,8 @@ const project_id = params.project_id
 
 const former = Former.build(search2)
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 search2.sorts ??= "id desc"
 former.doPerform = async function(search: Search2 | null) {

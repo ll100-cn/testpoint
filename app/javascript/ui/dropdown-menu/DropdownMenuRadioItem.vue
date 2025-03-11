@@ -4,17 +4,15 @@ import {
   DropdownMenuItemIndicator,
   DropdownMenuRadioItem,
   type DropdownMenuRadioItemEmits,
+  type DropdownMenuRadioItemProps,
   useForwardPropsEmits,
 } from 'radix-vue'
 import { DotFilledIcon } from '@radix-icons/vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
+const props = defineProps<DropdownMenuRadioItemProps & { class?: HTMLAttributes['class'] }>()
 
-const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {})
 const emits = defineEmits<DropdownMenuRadioItemEmits>()
 
 const delegatedProps = computed(() => {
@@ -24,7 +22,7 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
 </script>
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { computed, type HTMLAttributes } from 'vue'
 import { CollapsibleRoot, useForwardPropsEmits } from 'radix-vue'
 import type { CollapsibleRootEmits, CollapsibleRootProps } from 'radix-vue'
-import { provideCollapsiblePresenter, relayCollapsiblePreseterConfig, type CollapsiblePresenter, type CollapsiblePresenterConfig, useCollapsiblePresenters } from './types'
-import { computed, type HTMLAttributes } from 'vue';
+import { provideCollapsiblePresenter, relayCollapsiblePresenterConfig, type CollapsiblePresenter, type CollapsiblePresenterConfig, useCollapsiblePresenters } from './types'
 
 const presenters = useCollapsiblePresenters()
 
@@ -12,13 +12,13 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props & Partial<CollapsiblePresenterConfig>>(), {
-  preset: 'standard'
+  preset: 'standard',
 })
 
 const emits = defineEmits<CollapsibleRootEmits>()
 const forwarded = useForwardPropsEmits(props, emits)
 
-const presenterConfig = relayCollapsiblePreseterConfig(props)
+const presenterConfig = relayCollapsiblePresenterConfig(props)
 const presenter = provideCollapsiblePresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))

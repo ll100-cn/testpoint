@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { cn } from '$ui/utils'
+import { cn } from '../utils'
 import { TabsList, type TabsListProps } from 'radix-vue'
-import { computed, type HTMLAttributes } from 'vue'
-import { provideNavPresenter, relayNavPreseterConfig, type NavPresenter, type NavPresenterConfig, useNavPresenters } from './types'
+import { computed, useAttrs, type HTMLAttributes } from 'vue'
+import { provideNavPresenter, relayNavPresenterConfig, type NavPresenter, type NavPresenterConfig, useNavPresenters } from './types'
 
 const presenters = useNavPresenters()
 
@@ -13,7 +13,7 @@ interface Props extends TabsListProps {
 
 const props = defineProps<Props & Partial<NavPresenterConfig>>()
 
-const presenterConfig = relayNavPreseterConfig(props)
+const presenterConfig = relayNavPresenterConfig(props)
 const presenter = provideNavPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))

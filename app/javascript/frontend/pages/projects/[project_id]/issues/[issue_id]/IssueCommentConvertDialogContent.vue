@@ -9,7 +9,7 @@
 
       <div class="space-y-3">
         <FormGroup path="comment_id" label="评论 ID" hint="ID 为空则是评论">
-          <controls.number />
+          <controls.Number />
         </FormGroup>
       </div>
 
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import useRequestList from '@/lib/useRequestList'
 import * as controls from '@/components/controls'
@@ -43,7 +43,8 @@ const former = Former.build({
   comment_id: null as number | null
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_comment = await reqs.add(q.bug.issue_comments.Convert).setup(req => {

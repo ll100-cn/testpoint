@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
+import { cn } from '../utils'
+import { relayTablePresenterConfig, useTablePresenter, type TablePresenterConfig } from './types'
 
-const props = defineProps<{
+interface Props {
   class?: HTMLAttributes['class']
-}>()
+}
+
+const props = withDefaults(defineProps<Props & Partial<TablePresenterConfig>>(), {
+  class: '',
+})
+
+const presenterConfig = relayTablePresenterConfig(props)
+const presenter = useTablePresenter()
 </script>
 
 <template>
-  <tfoot :class="cn('border-t bg-muted/50 font-medium last:[&>tr]:border-b-0', props.class)">
+  <tfoot :class="cn(presenter.footer(presenterConfig), props.class)">
     <slot />
   </tfoot>
 </template>

@@ -2,17 +2,14 @@
 import { type HTMLAttributes, computed } from 'vue'
 import {
   DropdownMenuSubTrigger,
+  type DropdownMenuSubTriggerProps,
   useForwardProps,
 } from 'radix-vue'
 import { ChevronRightIcon } from '@radix-icons/vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
-
-const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {})
+const props = defineProps<DropdownMenuSubTriggerProps & { class?: HTMLAttributes['class'] }>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
@@ -21,17 +18,14 @@ const delegatedProps = computed(() => {
 })
 
 const forwardedProps = useForwardProps(delegatedProps)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
 </script>
 
 <template>
   <DropdownMenuSubTrigger
     v-bind="forwardedProps"
-    :class="cn(
-      presenter.subTrigger(presenterConfig),
-      props.class,
-    )"
+    :class="cn(presenter.subTrigger(presenterConfig), props.class)"
   >
     <slot />
     <ChevronRightIcon class="ml-auto h-4 w-4" />

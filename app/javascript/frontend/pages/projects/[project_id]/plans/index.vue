@@ -9,9 +9,9 @@
 
   <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
     <FormGroup path="creator_id_eq" label="成员">
-      <controls.select include_blank @change="onSearchInput">
+      <controls.Select include-blank @update:model-value="onSearchInput">
         <OptionsForMember :collection="members" except_level="reporter" />
-      </controls.select>
+      </controls.Select>
     </FormGroup>
   </Form>
 
@@ -72,7 +72,7 @@ import OptionsForMember from '@/components/OptionsForMember.vue'
 import { Badge } from '$ui/badge'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import { Progress } from '$ui/progress'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import BlankDialog from '@/components/BlankDialog.vue'
 import PlanCreateDialogContent from './PlanCreateDialogContent.vue'
@@ -97,7 +97,8 @@ class Search {
 const search = utils.instance(Search, query)
 const former = Former.build(search)
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const data = utils.compactObject(this.form)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { relayCalloutPreseterConfig, useCalloutPresenter, type CalloutPresenterConfig } from './types';
+import { cn } from '../utils'
+import { relayCalloutPresenterConfig, useCalloutPresenter, type CalloutPresenterConfig } from './types';
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -10,7 +10,7 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<CalloutPresenterConfig>>(), {
 })
 
-const presenterConfig = relayCalloutPreseterConfig(props)
+const presenterConfig = relayCalloutPresenterConfig(props)
 const presenter = useCalloutPresenter()
 </script>
 

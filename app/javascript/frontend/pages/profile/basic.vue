@@ -11,11 +11,11 @@
                 <FormErrorAlert />
 
                 <FormGroup path="email" label="邮箱">
-                  <controls.string v-model="account.user.email" readonly disabled />
+                  <controls.String v-model="account.user.email" readonly disabled />
                 </FormGroup>
 
                 <FormGroup path="name" label="姓名">
-                  <controls.string />
+                  <controls.String />
                 </FormGroup>
 
                 <FormGroup path="avatar" label="头像">
@@ -44,7 +44,7 @@ import { getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import PageHeader from './PageHeader.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
@@ -59,7 +59,8 @@ const former = Former.build({
   avatar: "",
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 const success = ref(false)
 watch(former.form, () => {

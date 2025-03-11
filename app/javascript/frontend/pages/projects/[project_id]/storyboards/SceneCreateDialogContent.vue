@@ -7,7 +7,7 @@
       <FormErrorAlert />
 
       <FormGroup path="name" label="">
-        <controls.string />
+        <controls.String />
       </FormGroup>
 
       <DialogFooter>
@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
@@ -49,7 +49,8 @@ const former = Former.build({
   name: "",
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_scene = await reqs.add(q.project.scenes.Create).setup(req => {

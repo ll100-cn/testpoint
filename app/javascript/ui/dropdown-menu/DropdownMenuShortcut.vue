@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
-interface Props {
+const props = defineProps<{
   class?: HTMLAttributes['class']
-}
+}>()
 
-const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {})
-
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
 </script>
 

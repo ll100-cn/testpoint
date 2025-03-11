@@ -146,7 +146,7 @@ import StoryboardUpdateDialogContent from './StoryboardUpdateDialogContent.vue'
 import RequirementCreateDialogContent from './RequirementCreateDialogContent.vue'
 import RequirementUpdateDialogContent from './RequirementUpdateDialogContent.vue'
 import dagre from '@dagrejs/dagre'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import { Filter } from './type'
 import SelectdropItem from '@/components/controls/selectdrop/SelectdropItem.vue'
@@ -554,10 +554,11 @@ async function save() {
 }
 
 const former = Former.build(new Filter())
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 function changeRoadmap(roadmap: Roadmap | null = null) {
   const data = utils.compactObject({ ...query, roadmap_id: roadmap?.id })
   router.push({ query: utils.plainToQuery(data) })
 }
-</script>π
+</script>

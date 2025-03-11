@@ -15,10 +15,11 @@ import { computed, ref, type HTMLAttributes } from 'vue'
 import FlatPickr from 'vue-flatpickr-component'
 import * as helper from "../simple_form/helper"
 import { type ControlProps } from '../simple_form/helper'
-import { type ControlConfig, type FormPresenterConfig, relayInjectPreseterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
+import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
 import { standard } from './presets'
 import { cn } from '$ui/utils'
-import { Button, ButtonGroup } from '$ui/button'
+import { Button } from '$ui/button'
+import { ButtonGroup } from '$ui/button-group'
 
 export interface Props extends ControlProps {
   class?: HTMLAttributes['class']
@@ -26,7 +27,7 @@ export interface Props extends ControlProps {
 
 const props = defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>()
 
-const presenterConfig = relayInjectPreseterConfig(props)
+const presenterConfig = relayFormPresenterConfig(props)
 const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel()
 const modelValue = useInjectControlValue(defaultModelValue)
@@ -71,7 +72,7 @@ const config = {
   dateFormat: "Y-m-d H:i",
 }
 
-function onUpdateModelValue(new_value) {
+function onUpdateModelValue(new_value: string) {
   if (new_value == null) {
     modelValue.value = null
   } else {

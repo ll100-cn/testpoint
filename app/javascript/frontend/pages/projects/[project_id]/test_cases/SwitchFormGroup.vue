@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { FormFactory, type Former } from '$ui/simple_form';
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form';
 import { layouts } from '@/components/simple_form'
 
 const props = defineProps<{
@@ -19,6 +19,7 @@ const props = defineProps<{
   former: Former<any>
 }>()
 
-const { Form, FormGroup } = FormFactory<typeof props.former.form>()
+const Form = GenericForm<typeof props.former.form>
+const FormGroup = GenericFormGroup<typeof props.former.form>
 
 </script>

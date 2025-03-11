@@ -1,5 +1,5 @@
 import { type Ref } from "vue"
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface SeparatorPresenterConfig {
   // size?: 'xs' | 'sm' | 'default'
@@ -10,9 +10,13 @@ export type SeparatorPresenter = {
   label: (config: Partial<SeparatorPresenterConfig>) => string
 }
 
+export interface SeparatorPresenters {
+  standard: SeparatorPresenter
+}
+
 export const {
-  relayInjectPreseterConfig: relaySeparatorPreseterConfig
-} = createRelayPreseterConfig<SeparatorPresenterConfig>('Separator-presenter-config', {
+  relayInjectPresenterConfig: relaySeparatorPresenterConfig
+} = createRelayPresenterConfig<SeparatorPresenterConfig>('Separator-presenter-config', {
   size: 'default',
 })
 
@@ -20,10 +24,6 @@ export const {
   useInject: useSeparatorPresenter,
   useProvide: provideSeparatorPresenter
 } = createProvideInject<Ref<SeparatorPresenter>>('Separator-presenter')
-
-export interface SeparatorPresenters {
-  standard: SeparatorPresenter
-}
 
 export const {
   useInject: useSeparatorPresenters,

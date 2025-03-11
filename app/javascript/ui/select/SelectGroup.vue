@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import { SelectGroup } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relaySelectPreseterConfig, useSelectPresenter, type SelectPresenterConfig } from './types'
+import { SelectGroup, type SelectGroupProps } from 'radix-vue'
+import { cn } from '../utils'
+import { relaySelectPresenterConfig, useSelectPresenter } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
-
-const props = withDefaults(defineProps<Props & Partial<SelectPresenterConfig>>(), {})
+const props = defineProps<SelectGroupProps & { class?: HTMLAttributes['class'] }>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
@@ -16,12 +12,15 @@ const delegatedProps = computed(() => {
   return delegated
 })
 
-const presenterConfig = relaySelectPreseterConfig(props)
+const presenterConfig = relaySelectPresenterConfig(props)
 const presenter = useSelectPresenter()
 </script>
 
 <template>
-  <SelectGroup :class="cn(presenter.group(presenterConfig), props.class)" v-bind="delegatedProps">
+  <SelectGroup :class="cn(
+    presenter.group(presenterConfig),
+    props.class,
+  )" v-bind="delegatedProps">
     <slot />
   </SelectGroup>
 </template>

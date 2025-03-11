@@ -10,7 +10,7 @@
       <div class="space-y-3">
         <FormGroup label="备注"><span>{{ issue_survey.remark }}</span></FormGroup>
         <FormGroup v-for="(input, index) in current_issue_template?.inputs" :path="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
-          <controls.string />
+          <controls.String />
         </FormGroup>
       </div>
       <DialogFooter>
@@ -28,7 +28,7 @@ import * as q from '@/requests'
 import { Issue, IssueInfo, IssueSurvey, IssueTemplate } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -44,7 +44,8 @@ const former = Former.build({
   inputs_attributes: []
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_survey = await reqs.add(q.bug.issue_surveies.Update).setup(req => {

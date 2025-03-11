@@ -11,23 +11,23 @@
 
           <div class="space-y-3">
             <SwitchFormGroup code="role_name" label="角色" :enableds="form_enabled_mapping" :former="former">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping" :former="former">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping" :former="former">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping" :former="former">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping" :former="former">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping" :former="former">
@@ -39,19 +39,19 @@
             </SwitchFormGroup>
 
             <!-- <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="group_name" label="分组" :enableds="form_enabled_mapping">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="title" label="标题" :enableds="form_enabled_mapping">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="content" label="内容" :enableds="form_enabled_mapping">
-              <controls.string />
+              <controls.String />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping">
@@ -112,7 +112,7 @@ import { nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import Button from '$ui/button/Button.vue'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 
 const validations = reactive<Validations>(new Validations())
@@ -143,7 +143,8 @@ const former = Former.build({
   label_ids: null as number[] | null | undefined
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   result.value = []

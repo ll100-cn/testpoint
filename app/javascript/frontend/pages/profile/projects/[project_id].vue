@@ -11,11 +11,11 @@
                 <FormErrorAlert />
 
                 <FormGroup label="项目">
-                  <controls.string v-model="profile.project_name" readonly disabled />
+                  <controls.String v-model="profile.project_name" readonly disabled />
                 </FormGroup>
 
                 <FormGroup path="nickname" label="昵称">
-                  <controls.string :placeholder="`${account.name} (默认值)`" />
+                  <controls.String :placeholder="`${account.name} (默认值)`" />
                 </FormGroup>
               </div>
             </CardContent>
@@ -40,7 +40,7 @@ import { getCurrentInstance, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PageHeader from '../PageHeader.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
@@ -60,7 +60,8 @@ const former = Former.build({
   nickname: profile.value.nickname
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 const success = ref(false)
 watch(former.form, () => {
