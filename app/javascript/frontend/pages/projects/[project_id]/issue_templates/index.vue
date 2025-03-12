@@ -47,7 +47,7 @@ import { getCurrentInstance, ref, reactive } from 'vue'
 import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
-import Validator from '$ui/simple_form/Validator';
+import { Validator } from '$ui/simple_form';
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { usePageStore } from '@/store'
 import { IssueTemplate } from '@/models'
@@ -83,11 +83,7 @@ async function onRemove(id: number) {
       req.interpolations.issue_template_id = id
     }).perform()
   } catch (error) {
-    if (validator.processError(error)) {
-      return
-    }
-
-    throw error
+    validator.processError(error)
   }
 }
 

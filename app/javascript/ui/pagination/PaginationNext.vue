@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PaginationNext, type PaginationNextProps } from 'radix-vue'
+import { PaginationNext, type PaginationNextProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 
 const props = withDefaults(defineProps<PaginationNextProps & { class?: HTMLAttributes['class'] }>(), {

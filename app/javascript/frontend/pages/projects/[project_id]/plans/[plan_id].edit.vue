@@ -35,7 +35,7 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
-import Validator from '$ui/simple_form/Validator';
+import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()
 const route = useRoute()

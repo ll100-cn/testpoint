@@ -57,7 +57,6 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"

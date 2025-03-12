@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cn } from '../utils'
-import { TabsList, type TabsListProps } from 'radix-vue'
+import { TabsList, type TabsListProps } from 'reka-ui'
 import { computed, useAttrs, type HTMLAttributes } from 'vue'
 import { provideNavPresenter, relayNavPresenterConfig, type NavPresenter, type NavPresenterConfig, useNavPresenters } from './types'
 

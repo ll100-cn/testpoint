@@ -10,7 +10,6 @@
 
 <script setup lang="ts">
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form';
-import { layouts } from '@/components/simple_form'
 
 const props = defineProps<{
   label: string

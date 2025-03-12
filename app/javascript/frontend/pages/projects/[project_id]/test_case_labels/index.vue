@@ -55,7 +55,7 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import Validator from '$ui/simple_form/Validator';
+import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -85,11 +85,7 @@ async function onRemove(id: number) {
 
     router.go(0)
   } catch (error) {
-    if (validator.processError(error)) {
-      return
-    }
-
-    throw error
+    validator.processError(error)
   }
 }
 

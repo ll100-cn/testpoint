@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { computed, useAttrs, type HTMLAttributes, withDefaults } from 'vue'
-import { Primitive, type PrimitiveProps } from 'radix-vue'
+import { Primitive, type PrimitiveProps } from 'reka-ui'
 import { cn } from '../utils'
 import { provideButtonPresenter, relayButtonPresenterConfig, type ButtonPresenter, type ButtonPresenterConfig, useButtonPresenters, useButtonPresenter } from './types'
 import type { RouteLocationRaw } from 'vue-router'

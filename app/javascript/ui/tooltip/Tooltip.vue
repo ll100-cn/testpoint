@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TooltipRoot, type TooltipRootEmits, type TooltipRootProps, useForwardPropsEmits } from 'radix-vue'
+import { TooltipRoot, type TooltipRootEmits, type TooltipRootProps, useForwardPropsEmits } from 'reka-ui'
 import { computed, type HTMLAttributes, withDefaults } from 'vue'
 import { cn } from '../utils'
 import { provideTooltipPresenter, relayTooltipPresenterConfig, useTooltipPresenters, type TooltipPresenter, type TooltipPresenterConfig } from './types'

@@ -8,7 +8,7 @@ import {
   DialogOverlay,
   DialogPortal,
   useForwardPropsEmits,
-} from 'radix-vue'
+} from 'reka-ui'
 import { cn } from '../utils'
 import { relayDialogPresenterConfig, useDialogPresenter, type DialogPresenterConfig } from './types'
 

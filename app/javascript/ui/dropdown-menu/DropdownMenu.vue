@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type HTMLAttributes, withDefaults } from 'vue'
-import { DropdownMenuRoot, type DropdownMenuRootEmits, type DropdownMenuRootProps, useForwardPropsEmits } from 'radix-vue'
+import { DropdownMenuRoot, type DropdownMenuRootEmits, type DropdownMenuRootProps, useForwardPropsEmits } from 'reka-ui'
 import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, provideDropdownMenuPresenter, type DropdownMenuPresenter, type DropdownMenuPresenterConfig, useDropdownMenuPresenters } from './types'
 
 const presenters = useDropdownMenuPresenters()

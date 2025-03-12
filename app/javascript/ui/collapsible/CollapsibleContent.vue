@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CollapsibleContent } from 'radix-vue'
+import { CollapsibleContent } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '../utils'
 import { relayCollapsiblePresenterConfig, useCollapsiblePresenter } from './types'

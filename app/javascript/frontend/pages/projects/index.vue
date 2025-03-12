@@ -47,7 +47,6 @@
 </template>
 
 <script setup lang="ts">
-import Validations from '@/components/simple_form/Validations'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import * as utils from "@/lib/utils"
@@ -60,10 +59,11 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Button } from '$ui/button'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()
 const router = useRouter()
-const validations = reactive<Validations>(new Validations())
+const validations = reactive<Validator>(new Validator())
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
 
@@ -84,12 +84,8 @@ async function onRemove(project_id) {
 
     router.go(0)
   } catch (error) {
-    if (validations.handleError(error)) {
-      alert(validations.avaliableFullMessages().join("\n"))
-      return
-    }
-
-    throw error
+    validations.processError(error)
+    alert(validations.errorMessages([]).join("\n"))
   }
 }
 </script>

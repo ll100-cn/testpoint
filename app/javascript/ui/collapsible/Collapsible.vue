@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, type HTMLAttributes } from 'vue'
-import { CollapsibleRoot, useForwardPropsEmits } from 'radix-vue'
-import type { CollapsibleRootEmits, CollapsibleRootProps } from 'radix-vue'
+import { CollapsibleRoot, useForwardPropsEmits } from 'reka-ui'
+import type { CollapsibleRootEmits, CollapsibleRootProps } from 'reka-ui'
 import { provideCollapsiblePresenter, relayCollapsiblePresenterConfig, type CollapsiblePresenter, type CollapsiblePresenterConfig, useCollapsiblePresenters } from './types'
 
 const presenters = useCollapsiblePresenters()

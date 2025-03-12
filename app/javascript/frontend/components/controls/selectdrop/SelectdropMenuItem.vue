@@ -15,7 +15,7 @@ import { computed } from 'vue'
 import { type SelectdropMenuOption } from "./types"
 import SelectdropMenuGroup from "./SelectdropMenuGroup.vue"
 import SelectdropMenuEntry from "./SelectdropMenuEntry.vue"
-import { useForwardProps } from 'radix-vue'
+import { useForwardProps } from 'reka-ui'
 
 const props = defineProps<Props>()
 

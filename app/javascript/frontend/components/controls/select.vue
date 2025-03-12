@@ -6,14 +6,12 @@
 </template>
 
 <script setup lang="ts">
-import { Validation } from "@/models"
-import * as helper from "../simple_form/helper"
-import { type ControlProps } from "../simple_form/helper"
-import { computed, provide, type HTMLAttributes } from "vue"
-import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
 import { Select, type InputPresenterConfig } from '$ui/input'
+import { relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form'
+import { Validation } from "@/models"
+import { computed, provide, type HTMLAttributes } from "vue"
 
-export interface Props extends ControlProps {
+interface Props {
   includeBlank?: string | boolean
   class?: HTMLAttributes['class']
 }
@@ -30,7 +28,6 @@ const validation = computed(() => controlConfig.value.validation ?? new Validati
 
 provide('model_value', modelValue)
 
-const options = helper.buildControlConfig(props)
 const inputPresenterConfig = computed(() => {
   const config = {} as InputPresenterConfig
   config.size = presenterConfig.value.size ?? 'default'
@@ -47,8 +44,8 @@ const inputAttrs = computed(() => {
     attrs['data-placeholder'] = true
   }
 
-  if (options.value.control_id) {
-    attrs.id = options.value.control_id
+  if (controlConfig.value.id) {
+    attrs.id = controlConfig.value.id
   }
 
   return attrs

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlertDialogTitle } from 'radix-vue'
+import { AlertDialogTitle } from 'reka-ui'
 import { type HTMLAttributes, computed } from 'vue'
 import { cn } from '../utils'
 import { type AlertDialogPresenter, type AlertDialogPresenterConfig, relayAlertDialogPresenterConfig, useAlertDialogPresenter } from './types'

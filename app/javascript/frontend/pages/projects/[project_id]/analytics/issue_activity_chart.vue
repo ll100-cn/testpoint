@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import * as utils from "@/lib/utils"

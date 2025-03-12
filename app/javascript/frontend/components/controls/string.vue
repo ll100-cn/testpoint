@@ -10,7 +10,7 @@ export interface Props {
 
 <script setup lang="ts">
 import { Text } from '$ui/input'
-import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
+import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form'
 import { Validation } from '@/models'
 import { computed, type HTMLAttributes } from 'vue'
 

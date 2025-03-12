@@ -1,7 +1,7 @@
 <template>
-  <ChevronDown data-role="caret" />
+  <Icon icon="ci:chevron-down" />
 </template>
 
 <script setup lang="ts">
-import { ChevronDown } from "lucide-vue-next"
+import { Icon } from '../input'
 </script>

@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, controls, layouts } from "@/components/simple_form"
+import * as controls from '@/components/controls'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Attachment } from "@/models"
@@ -89,7 +89,6 @@ const emits = defineEmits<{
 }>()
 
 const el = ref(null! as HTMLElement)
-const validations = ref(new Validations())
 const editing = ref(false)
 
 const former = Former.build({
@@ -129,14 +128,14 @@ function onEdit() {
 
 function cancelEdit() {
   editing.value = false
-  validations.value.clear()
+  former.validator.clear()
 }
 
 async function deleteAttachment() {
   if (!confirm("确认删除附件？")) {
     return
   }
-  validations.value.clear()
+  former.validator.clear()
 
   try {
     const attachment = await reqs.add(q.project.attachments.Destroy).setup(req => {
@@ -146,11 +145,7 @@ async function deleteAttachment() {
       emits('deleted', attachment)
     }
   } catch (err) {
-    if (validations.value.handleError(err)) {
-      return
-    }
-
-    throw err
+    former.validator.processError(err)
   }
 }
 </script>

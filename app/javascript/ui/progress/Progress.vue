@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ProgressIndicator, ProgressRoot } from 'radix-vue'
+import { ProgressIndicator, ProgressRoot } from 'reka-ui'
 import { cn } from '$ui/utils'
 import { provideProgressPresenter, relayProgressPresenterConfig, type ProgressPresenter, type ProgressPresenterConfig, useProgressPresenters } from './types'
 import { computed, type HTMLAttributes } from 'vue';

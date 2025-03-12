@@ -50,7 +50,7 @@ import { STORYBOARD_MAIN_AXLE } from '@/constants'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { usePageStore } from '@/store'
 import SceneCreateDialogContent from './SceneCreateDialogContent.vue'
-import Validator from '$ui/simple_form/Validator';
+import { Validator } from '$ui/simple_form'
 import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
 
 const route = useRoute()
@@ -101,11 +101,7 @@ async function remove(a_scene: Scene) {
 
     scenes.value = scenes.value.filter(scene => scene.id !== a_scene.id)
   } catch (error) {
-    if (validator.processError(error)) {
-      return
-    }
-
-    throw error
+    validator.processError(error)
   }
 }
 </script>

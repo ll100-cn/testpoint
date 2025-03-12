@@ -48,7 +48,6 @@ import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
-import Validations from '@/components/simple_form/Validations';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router'
 import * as utils from "@/lib/utils"
@@ -57,11 +56,12 @@ import PageTitle from '@/components/PageTitle.vue';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()
 const router = useRouter()
 const route = useRoute()
-const validations = reactive<Validations>(new Validations())
+const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
 
 const users = reqs.add(q.admin.users.Page).setup(req => {
@@ -81,12 +81,8 @@ async function onRemove(user_id) {
 
     router.go(0)
   } catch (error) {
-    if (validations.handleError(error)) {
-      alert(validations.avaliableFullMessages().join("\n"))
-      return
-    }
-
-    throw error
+    validations.processError(error)
+    alert(validations.errorMessages([]).join("\n"))
   }
 }
 </script>

@@ -104,7 +104,6 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import useRequestList from '@/lib/useRequestList'
-import { Validations } from "@/components/simple_form"
 import * as q from '@/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import _ from 'lodash'
@@ -112,10 +111,10 @@ import { nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import Button from '$ui/button/Button.vue'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 
-const validations = reactive<Validations>(new Validations())
+const validations = reactive(new Validator())
 const reqs = useRequestList()
 const state = ref('pending') // [ pending, submitting, submited ]
 
@@ -167,16 +166,12 @@ former.doPerform = async function() {
         req.interpolations.id = test_case.id
       }).perform(form_data)
     } catch (err) {
-      if (validations.handleError(err)) {
-        const errors_string = JSON.stringify(validations.fullMessages, null, 2)
+      validations.processError(err)
 
-        info.error = errors_string
-        result.value.push(info)
-        state.value = 'submitted'
-        return
-      }
-
-      throw err
+      const errors_string = JSON.stringify(validations.errorMessages([]), null, 2)
+      info.error = errors_string
+      result.value.push(info)
+      state.value = 'submitted'
     }
 
     result.value.push(info)

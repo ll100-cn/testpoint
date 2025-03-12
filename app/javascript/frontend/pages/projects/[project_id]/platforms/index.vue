@@ -57,7 +57,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import Validator from '$ui/simple_form/Validator';
+import { Validator } from '$ui/simple_form'
 import Button from '$ui/button/Button.vue'
 import PlatformBadge from '@/components/PlatformBadge.vue'
 
@@ -91,11 +91,7 @@ async function onRemove(id: number) {
 
     router.go(0)
   } catch (error) {
-    if (validator.processError(error)) {
-      return
-    }
-
-    throw error
+    validator.processError(error)
   }
 }
 

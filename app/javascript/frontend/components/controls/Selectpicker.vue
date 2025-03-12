@@ -13,11 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import { ControlValueKey, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form/types'
+import { ControlValueKey, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form'
 import { computed, provide } from "vue"
 import { SelectdropRoot } from './selectdrop'
 import SelectdropItem from './selectdrop/SelectdropItem.vue'
-import _ from 'lodash'
 
 interface Props {
   includeBlank?: boolean | string

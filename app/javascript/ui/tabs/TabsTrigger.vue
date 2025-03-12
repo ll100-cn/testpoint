@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cn } from '../utils'
-import { TabsTrigger, type TabsTriggerProps, useForwardProps } from 'radix-vue'
+import { TabsTrigger, type TabsTriggerProps, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 import { relayTabsPresenterConfig, useTabsPresenter, type TabsPresenterConfig } from './types';
 

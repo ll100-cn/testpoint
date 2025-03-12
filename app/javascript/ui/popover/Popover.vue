@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, type HTMLAttributes, withDefaults } from 'vue'
-import { PopoverRoot, useForwardPropsEmits } from 'radix-vue'
+import { PopoverRoot, useForwardPropsEmits } from 'reka-ui'
 import { providePopoverPresenter, relayPopoverPresenterConfig, type PopoverPresenter, type PopoverPresenterConfig, usePopoverPresenters } from './types'
-import type { PopoverRootEmits, PopoverRootProps } from 'radix-vue'
+import type { PopoverRootEmits, PopoverRootProps } from 'reka-ui'
 
 const presenters = usePopoverPresenters()
 

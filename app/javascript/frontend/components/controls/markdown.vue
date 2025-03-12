@@ -7,16 +7,14 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 
+import { useInputPresenters, type InputPresenterConfig } from '$ui/input'
+import { relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form'
+import { cn } from '$ui/utils'
 import EasyMDE from '$vendor/easymde'
 import { computed, nextTick, onMounted, ref, watch, type HTMLAttributes } from 'vue'
-import * as helper from "../simple_form/helper"
-import { type ControlProps } from '../simple_form/helper'
-import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
-import { useInputPresenters, type InputPresenterConfig } from '$ui/input'
-import { cn } from '$ui/utils'
 
 
-interface Props extends ControlProps {
+interface Props {
   class?: HTMLAttributes['class']
 }
 
@@ -37,8 +35,6 @@ const inputPresenterConfig = computed(() => {
 })
 
 const extraAttrs = ref(new Map<string, any>())
-
-const options = helper.buildControlConfig(props)
 const controlAttrs = computed(() => {
   const attrs = { class: [] } as any
 

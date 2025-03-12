@@ -119,9 +119,6 @@ importers:
       lodash:
         specifier: 4.17.15
         version: 4.17.15
-      lucide-vue-next:
-        specifier: 0.378.0
-        version: 0.378.0(vue@3.5.13(typescript@5.8.2))
       marked:
         specifier: 0.7.0
         version: 0.7.0
@@ -149,9 +146,6 @@ importers:
       radash:
         specifier: 12.1.0
         version: 12.1.0
-      radix-vue:
-        specifier: 1.9.2
-        version: 1.9.2(vue@3.5.13(typescript@5.8.2))
       reflect-metadata:
         specifier: 0.2.2
         version: 0.2.2
@@ -2429,11 +2423,6 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
-
-  lucide-vue-next@0.378.0:
-    resolution: {integrity: sha512-tz2IUhdOf1q0x1mPOTZEJZYfXVLreQorO2ax4M+CxGOTgCNgXH3cljIWWfJ4jUvxn5rbkFlGPbl9EIfIelZBRA==}
-    peerDependencies:
-      vue: '>=3.0.1'
 
   magic-string-ast@0.7.1:
     resolution: {integrity: sha512-ub9iytsEbT7Yw/Pd29mSo/cNQpaEu67zR1VVcXDiYjSFwzeBxNdTd0FMnSslLQXiRj8uGPzwsaoefrMD5XAmdw==}
@@ -5486,10 +5475,6 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
-
-  lucide-vue-next@0.378.0(vue@3.5.13(typescript@5.8.2)):
-    dependencies:
-      vue: 3.5.13(typescript@5.8.2)
 
   magic-string-ast@0.7.1:
     dependencies:

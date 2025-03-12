@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { Validation } from '@/models'
 import { computed, type HTMLAttributes, type InputHTMLAttributes } from 'vue'
-import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types';
+import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form';
 import { cn } from '$ui/utils'
 import { useInputPresenters, type InputPresenterConfig } from '$ui/input'
 

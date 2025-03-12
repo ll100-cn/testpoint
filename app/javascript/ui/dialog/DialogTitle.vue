@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import { DialogTitle, type DialogTitleProps, useForwardProps } from 'radix-vue'
+import { DialogTitle, type DialogTitleProps, useForwardProps } from 'reka-ui'
 import { cn } from '../utils'
 import { relayDialogPresenterConfig, useDialogPresenter, type DialogPresenterConfig } from './types'
 
