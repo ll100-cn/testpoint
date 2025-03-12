@@ -32,13 +32,7 @@ const inputPresenters = useInputPresenters()
 const inputPresenter = computed(() => inputPresenters.standard)
 const inputPresenterConfig = computed(() => {
   const config = {} as InputPresenterConfig
-
-  if (options.value.size == 'small') {
-    config.size = 'sm'
-  } else if (options.value.size == 'large') {
-    config.size = 'lg'
-  }
-
+  config.size = presenterConfig.value.size ?? 'default'
   return config
 })
 
@@ -113,7 +107,7 @@ watch(modelValue, (new_value) => {
 </script>
 
 <style scoped>
-@reference "../../../../../assets/theme/main.css";
+@reference "../../assets/theme/main.css";
 
 .editor-preview {
   img {

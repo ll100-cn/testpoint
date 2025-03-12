@@ -22,8 +22,8 @@
       <FormErrorAlert />
       <ActionerAlert :actioner="actioner" />
 
-      <IssueFormGroup path="issue_attributes.title" label="工单标题"><newcontrols.String /></IssueFormGroup>
-      <IssueFormGroup path="issue_attributes.content" label="工单内容"><newControls.markdown /></IssueFormGroup>
+      <IssueFormGroup path="issue_attributes.title" label="工单标题"><controls.String /></IssueFormGroup>
+      <IssueFormGroup path="issue_attributes.content" label="工单内容"><controls.Markdown /></IssueFormGroup>
 
       <DialogFooter>
         <Button type="button" variant="secondary" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_info)">取消</Button>
@@ -62,9 +62,9 @@ import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpsho
 import { Actioner } from "@/components/Actioner"
 import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
-import { Former as NewFormer, GenericForm, GenericFormGroup, PresenterConfigProvider } from '$ui/simple_form'
+import { Former as NewFormer, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import * as newControls from '@/components/controls'
+import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
 const reqs = useRequestList()

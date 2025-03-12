@@ -31,11 +31,11 @@
             </SwitchFormGroup>
 
             <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping" :former="former">
-              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.CheckboxCollection v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping" :former="former">
-              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.CheckboxCollection v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
             </SwitchFormGroup>
 
             <!-- <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">
@@ -55,11 +55,11 @@
             </SwitchFormGroup>
 
             <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping">
-              <controls.checkboxes v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.CheckboxCollection v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping">
-              <controls.checkboxes v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.CheckboxCollection v-bind="{ collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
             </SwitchFormGroup> -->
           </div>
 

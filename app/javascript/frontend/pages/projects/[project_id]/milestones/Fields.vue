@@ -3,7 +3,7 @@
 
   <div class="space-y-3">
     <FormGroup path="title" label="标题"><controls.String /></FormGroup>
-    <FormGroup path="published_at" label="发布时间"><controls.datetime /></FormGroup>
+    <FormGroup path="published_at" label="发布时间"><controls.Datetime /></FormGroup>
     <FormGroup path="description" label="描述"><controls.Text /></FormGroup>
   </div>
 </template>

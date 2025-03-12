@@ -3,7 +3,7 @@
     <slot name="prepend"></slot>
     <label v-if="label || label === ''" :class="cn(presenter.label(presenterConfig))" :for="controlId">{{ label }}</label>
 
-    <div class="flex-1">
+    <div :class="cn(presenter.control(presenterConfig))">
       <slot></slot>
       <div v-if="validation.state == 'invalid'" :class="cn('', presenter.error(presenterConfig))">{{ validation.messages[0] }}</div>
     </div>

@@ -11,9 +11,7 @@
         <FormGroup path="title" label="标题"><controls.String /></FormGroup>
         <FormGroup path="category_id" label="分类">
           <controls.Selectpicker>
-            <SelectdropItem v-for="category in categories" :value="category.id">
-              {{ category.name }}
-            </SelectdropItem>
+            <SelectDropdownItemsForCategory :categories="categories" />
           </controls.Selectpicker>
         </FormGroup>
         <FormGroup path="creator_id" label="创建人">
@@ -57,6 +55,7 @@ import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 
 const reqs = useRequestList()
 const route = useRoute()

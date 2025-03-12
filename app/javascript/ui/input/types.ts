@@ -31,3 +31,8 @@ export const {
   useInject: useInputPresenters,
   useProvide: provideInputPresenters
 } = createProvideInject<InputPresenters>('input-presenters')
+
+export type OptionItem = {
+  label: string
+  value: string | number | boolean | null
+}

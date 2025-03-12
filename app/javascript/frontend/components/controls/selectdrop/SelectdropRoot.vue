@@ -1,9 +1,12 @@
 <template>
   <DropdownMenu v-model:open="open">
-    <DropdownMenuTrigger :class="cn(variance(), 'min-w-48 text-start')" :disabled="presenterConfig.disabled">
-      <span v-if="labelItem == null" class="text-muted"></span>
+    <DropdownMenuTrigger :class="cn(inputPresenter.select(inputPresenterConfig), '')" :disabled="presenterConfig.disabled">
+      <span v-if="labelItem == null">&nbsp;</span>
       <span v-else-if="typeof labelItem == 'string'">{{ labelItem }}</span>
       <SelectdropMenuText v-else v-bind="labelItem" />
+      <span class="top-1/2 right-3 -translate-y-1/2 opacity-65 !stroke-[2.5]" data-role="indicator">
+        <Icon icon="ci:chevron-down" />
+      </span>
     </DropdownMenuTrigger>
 
     <DropdownMenuContent class="max-h-[30em] overflow-auto! min-w-[var(--radix-dropdown-menu-trigger-width)]">
@@ -43,6 +46,7 @@ import { type SelectdropContext, selectdropContextKey, type SelectdropOption } f
 import SelectdropItemExtractor from './SelectdropItemExtractor'
 import SelectdropOptionHelper from './SelectdropOptionHelper'
 import type { ComponentProps } from 'vue-component-type-helpers'
+import { useInputPresenters, type InputPresenter, type InputPresenterConfig, Icon } from '$ui/input'
 
 const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {
   multiple: true
@@ -55,6 +59,14 @@ const rawModelValue = useInjectControlValue(defaultModelValue)
 const validation = computed(() => controlConfig.value.validation ?? new Validation())
 const open = ref(false)
 const map = reactive(new Map<string, string>())
+
+const inputPresenters = useInputPresenters()
+const inputPresenter = computed(() => inputPresenters.standard)
+const inputPresenterConfig = computed(() => {
+  const config = {} as InputPresenterConfig
+  config.size = presenterConfig.value.size ?? 'default'
+  return config
+})
 
 const menuValues = reactive(new Set<string>())
 

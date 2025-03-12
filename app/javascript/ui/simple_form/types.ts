@@ -23,6 +23,7 @@ export type FormPresenter = {
   root(config: Partial<FormPresenterConfig>): string
   group(config: Partial<FormPresenterConfig>): string
   label(config: Partial<FormPresenterConfig>): string
+  control(config: Partial<FormPresenterConfig>): string
   error(config: Partial<FormPresenterConfig>): string
 }
 

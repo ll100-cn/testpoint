@@ -7,8 +7,8 @@
 
   <div class="mb-3">
     <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
-      <FormGroup path="starts_on" label=""><controls.datetime /></FormGroup>
-      <FormGroup path="ends_on" label=""><controls.datetime /></FormGroup>
+      <FormGroup path="starts_on" label=""><controls.Datetime /></FormGroup>
+      <FormGroup path="ends_on" label=""><controls.Datetime /></FormGroup>
 
       <Button class="w-auto">过滤</Button>
     </Form>

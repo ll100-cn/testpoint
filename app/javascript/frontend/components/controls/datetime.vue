@@ -1,83 +1,71 @@
 <template>
-  <ButtonGroup>
-    <FlatPickr :model-value="local_value" v-bind="input_attrs" :class="cn(standard.input(presenterConfig), props.class)" @update:model-value="onUpdateModelValue" :config="config" />
-    <Button preset="outline" variant="secondary" type="button" data-toggle>
-      <i class="far fa-calendar"></i>
-    </Button>
-  </ButtonGroup>
+  <DatePicker unstyled :pt="pt" v-model="modelValue" date-format="yy-mm-dd" show-time show-icon select-other-months show-button-bar icon-display="input" />
 </template>
 
 <script setup lang="ts">
-import { Validation } from '@/models'
-import dayjs from 'dayjs'
-import 'flatpickr/dist/flatpickr.css'
-import { computed, ref, type HTMLAttributes } from 'vue'
-import FlatPickr from 'vue-flatpickr-component'
-import * as helper from "../simple_form/helper"
-import { type ControlProps } from '../simple_form/helper'
-import { type ControlConfig, type FormPresenterConfig, relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue } from '$ui/simple_form/types'
-import { standard } from './presets'
-import { cn } from '$ui/utils'
-import { Button } from '$ui/button'
-import { ButtonGroup } from '$ui/button-group'
+import { useButtonPresenters, type ButtonPresenterConfig } from "$ui/button"
+import { useDropdownMenuPresenters, type DropdownMenuPresenterConfig } from "$ui/dropdown-menu"
+import { useInputPresenters, type InputPresenterConfig } from "$ui/input"
+import { relayFormPresenterConfig, useInjectControlValue, type FormPresenterConfig } from "$ui/simple_form"
+import dayjs from "dayjs"
+import DatePicker from 'primevue/datepicker'
+import { computed } from "vue"
+import { buildPassThrough } from './Date.vue'
 
-export interface Props extends ControlProps {
-  class?: HTMLAttributes['class']
+interface Props {
 }
 
-const props = defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>()
+const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), {})
 
+const defaultModelValue = defineModel<string | null>()
 const presenterConfig = relayFormPresenterConfig(props)
-const controlConfig = useInjectControlConfig(props)
-const defaultModelValue = defineModel()
-const modelValue = useInjectControlValue(defaultModelValue)
-const validation = computed(() => controlConfig.value.validation ?? new Validation())
+const rawModelValue = useInjectControlValue(defaultModelValue)
 
-const options = helper.buildControlConfig(props)
-const input_group_attrs = computed(() => {
-  const attrs = { class: [] } as any
-
-  if (options.value.size == 'small') {
-    attrs.class.push('input-group-sm')
-  } else if (options.value.size == 'large') {
-    attrs.class.push('input-group-lg')
+const modelValue = computed({
+  get: () => {
+    if (rawModelValue.value == null) {
+      return null
+    } else {
+      return dayjs(rawModelValue.value, 'YYYY-MM-DD HH:mm').toDate()
+    }
+  },
+  set: (value: Date | null) => {
+    if (value == null) {
+      rawModelValue.value = null
+    } else {
+      rawModelValue.value = dayjs(value).format('YYYY-MM-DD HH:mm')
+    }
   }
-
-  return attrs
 })
 
-const input_attrs = computed(() => {
-  const attrs = { class: [] } as any
-
-  if (validation.value.state == 'invalid') {
-    attrs.class.push("is-invalid")
-  }
-
-  if (presenterConfig.value.disabled) {
-    attrs.disabled = true
-  }
-
-  if (options.value.control_id) {
-    attrs.id = options.value.control_id
-  }
-
-  return attrs
+const buttonPresenters = useButtonPresenters()
+const buttonPresenterConfig = computed(() => {
+  const config = <ButtonPresenterConfig>{}
+  config.size = presenterConfig.value.size ?? 'default'
+  return config
 })
 
-const local_value = ref(modelValue.value)
+const inputPresenters = useInputPresenters()
+const inputPresenter = computed(() => inputPresenters.standard)
+const inputPresenterConfig = computed(() => {
+  const config = <InputPresenterConfig>{}
+  config.size = presenterConfig.value.size ?? 'default'
+  return config
+})
 
-const config = {
-  time_24hr: true,
-  enableTime: true,
-  dateFormat: "Y-m-d H:i",
-}
+const dropdownMenuPresenters = useDropdownMenuPresenters()
+const dropdownMenuPresenter = computed(() => dropdownMenuPresenters.standard)
+const dropdownMenuPresenterConfig = computed(() => {
+  const config = <DropdownMenuPresenterConfig>{}
+  return config
+})
 
-function onUpdateModelValue(new_value: string) {
-  if (new_value == null) {
-    modelValue.value = null
-  } else {
-    const current_datetime = dayjs(new_value).toDate()
-    modelValue.value = current_datetime
-  }
-}
+const pt = buildPassThrough({
+  inputPresenter,
+  inputPresenterConfig,
+  dropdownMenuPresenter,
+  dropdownMenuPresenterConfig,
+  buttonPresenters,
+  buttonPresenterConfig
+})
 </script>

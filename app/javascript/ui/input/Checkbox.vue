@@ -16,7 +16,7 @@ const checked = computed({
   get: () => modelValue.value.includes(props.value),
   set: (value: boolean) => {
     if (value) {
-      modelValue.value?.push(props.value)
+      modelValue.value = [ ...modelValue.value, props.value ]
     } else {
       modelValue.value = modelValue.value.filter((v) => v !== props.value)
     }

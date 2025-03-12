@@ -6,8 +6,8 @@
       <controls.String />
     </FormGroup>
     <FormGroup path="lookup_by_build_form" label="新增问题时可选">
-      <controls.checkboxes v-bind="{ collection: lookup_by_build_form_collection, labelMethod: 'label', valueMethod: 'value' }" />
-      <div class="text-muted text-sm">不勾选则新增工单时隐藏, 只能人工指给定已创建的工单</div>
+      <controls.Boolean />
+      <span class="text-muted text-sm">不勾选则新增工单时隐藏, 只能人工指给定已创建的工单</span>
     </FormGroup>
     <FormGroup path="title_suggestion" label="预设标题">
       <controls.String placeholder="请输入" />

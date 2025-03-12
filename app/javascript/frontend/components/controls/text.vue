@@ -26,13 +26,7 @@ const validation = computed(() => controlConfig.value.validation ?? new Validati
 
 const inputPresenterConfig = computed(() => {
   const config = {} as InputPresenterConfig
-
-  if (presenterConfig.value.size == 'sm') {
-    config.size = 'sm'
-  } else if (presenterConfig.value.size == 'lg') {
-    config.size = 'lg'
-  }
-
+  config.size = presenterConfig.value.size ?? 'default'
   return config
 })
 </script>

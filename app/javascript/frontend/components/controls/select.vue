@@ -33,13 +33,7 @@ provide('model_value', modelValue)
 const options = helper.buildControlConfig(props)
 const inputPresenterConfig = computed(() => {
   const config = {} as InputPresenterConfig
-
-  if (options.value.size == 'small') {
-    config.size = 'sm'
-  } else if (options.value.size == 'large') {
-    config.size = 'lg'
-  }
-
+  config.size = presenterConfig.value.size ?? 'default'
   return config
 })
 const inputAttrs = computed(() => {

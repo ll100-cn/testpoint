@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CheckboxRootEmits, CheckboxRootProps } from 'reka-ui'
-import { CheckboxRoot, useForwardPropsEmits } from 'reka-ui'
+import { CheckboxRoot, useForwardProps, useForwardPropsEmits } from 'reka-ui'
 import { computed, ref, watch, type HTMLAttributes } from 'vue'
 import { cn } from '../utils'
 import { provideInputPresenter, relayInputPresenterConfig, useInputPresenters, type InputPresenter, type InputPresenterConfig } from './types'
@@ -20,8 +20,8 @@ const props = withDefaults(defineProps<Props & Partial<InputPresenterConfig> & C
 
 const checked = ref(props.value === undefined ? props.defaultValue : props.modelValue)
 function onValueChanged(value: boolean | 'indeterminate') {
-  checked.value = value
   emits('update:modelValue', value)
+  checked.value = value
 }
 watch(computed(() => props.modelValue), (value) => {
   checked.value = value
@@ -34,15 +34,15 @@ const presenter = provideInputPresenter(computed(() => {
 }))
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+  const { class: _class, modelValue, defaultValue, ...delegated } = props
   return delegated
 })
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
+const forwarded = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <CheckboxRoot v-bind="forwarded" :class="cn(presenter.checkbox(presenterConfig), props.class)" @update:model-value="onValueChanged">
+  <CheckboxRoot v-bind="forwarded" :class="cn(presenter.checkbox(presenterConfig), props.class)" @click.prevent :model-value="checked" @update:model-value="onValueChanged">
     <span data-role="indicator">
       <Icon v-if="checked === 'indeterminate'" icon="tabler:minus" />
       <Icon v-if="checked === true" icon="tabler:check" />

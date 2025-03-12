@@ -72,10 +72,7 @@
         <template #editable>
           <FormGroup path="category_id" label="">
             <controls.Selectpicker>
-              <SelectdropItem v-for="category in categories" :value="category.id">
-                <i class="fas fa-circle" :style="{ color: category.color }"></i>
-                {{ category.name }}
-              </SelectdropItem>
+              <SelectDropdownItemsForCategory :categories="categories" />
             </controls.Selectpicker>
           </FormGroup>
         </template>
@@ -145,6 +142,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 
 const reqs = useRequestList()
 const session = useSessionStore()

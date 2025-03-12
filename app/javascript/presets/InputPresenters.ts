@@ -20,6 +20,8 @@ export const standard = {
 
   input: bva(`
     block w-full border border-input-border rounded-sm text-foreground bg-input-background
+    relative *:data-[role=indicator]:absolute *:data-[role=indicator]:stroke-3
+    text-start
     focus:border-ring/50 focus:ring-4 focus:ring-ring/25
     data-focus:border-ring/50 data-focus:ring-4 data-focus:ring-ring/25
     disabled:bg-silence/10
