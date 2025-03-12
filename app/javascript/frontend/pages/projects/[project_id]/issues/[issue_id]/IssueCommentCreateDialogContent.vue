@@ -4,10 +4,11 @@
       <DialogTitle>新增评论</DialogTitle>
     </DialogHeader>
 
+
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
       <IssueCommentForm :former="former" :attachments="[]" />
       <DialogFooter>
-        <DialogClose><Button variant="secondary" type="button">取消</Button></DialogClose>
+        <DialogClose as-child><Button variant="secondary" type="button">取消</Button></DialogClose>
         <Button>提交</Button>
       </DialogFooter>
     </Form>

@@ -7,8 +7,8 @@ export const standard = {
     focus:outline-hidden focus:border-ring/50 focus:ring-4 focus:ring-ring/25
     disabled:cursor-not-allowed disabled:bg-silence/10
 
-    relative *:data-[role=indicator]:absolute *:data-[role=indicator]:inset-0 *:data-[role=indicator]:stroke-3
-    *:data-[role=indicator]:flex *:data-[role=indicator]:items-center *:data-[role=indicator]:justify-center
+    relative *:data-role-indicator:absolute *:data-role-indicator:inset-0 *:data-role-indicator:stroke-3
+    *:data-role-indicator:flex *:data-role-indicator:items-center *:data-role-indicator:justify-center
 
     data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground
     group-data-[state=invalid]:border-destructive
@@ -20,7 +20,7 @@ export const standard = {
 
   input: bva(`
     block w-full border border-input-border rounded-sm text-foreground bg-input-background
-    relative *:data-[role=indicator]:absolute *:data-[role=indicator]:stroke-3
+    relative *:data-role-indicator:absolute *:data-role-indicator:stroke-3
     text-start
     focus:border-ring/50 focus:ring-4 focus:ring-ring/25
     data-focus:border-ring/50 data-focus:ring-4 data-focus:ring-ring/25

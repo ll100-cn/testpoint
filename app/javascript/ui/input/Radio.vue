@@ -38,7 +38,7 @@ const forwardedProps = useForwardProps(delegatedProps)
 
 <template>
   <CheckboxRoot :class="cn(presenter.radio(presenterConfig), props.class)" v-model="checked">
-    <span data-role="indicator">
+    <span data-role-indicator>
       <Icon v-if="checked" icon="tabler:point-filled" />
     </span>
   </CheckboxRoot>

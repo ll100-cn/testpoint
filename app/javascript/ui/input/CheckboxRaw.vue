@@ -43,7 +43,7 @@ const forwarded = useForwardProps(delegatedProps)
 
 <template>
   <CheckboxRoot v-bind="forwarded" :class="cn(presenter.checkbox(presenterConfig), props.class)" @click.prevent :model-value="checked" @update:model-value="onValueChanged">
-    <span data-role="indicator">
+    <span data-role-indicator>
       <Icon v-if="checked === 'indeterminate'" icon="tabler:minus" />
       <Icon v-if="checked === true" icon="tabler:check" />
     </span>

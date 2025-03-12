@@ -10,17 +10,18 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<DialogPresenterConfig>>(), {
 })
 
-const slots = useSlots()
 const presenterConfig = relayDialogPresenterConfig(props)
 const presenter = useDialogPresenter()
 </script>
 
 <template>
   <div :class="cn(presenter.header(presenterConfig), props.class)">
-    <slot />
+    <div data-role-inner>
+      <slot />
+    </div>
 
-    <template v-if="slots.actions">
-      <div class="ms-auto"><slot name="actions"></slot></div>
+    <template v-if="$slots.actions">
+      <div data-role-actions><slot name="actions"></slot></div>
     </template>
   </div>
 </template>

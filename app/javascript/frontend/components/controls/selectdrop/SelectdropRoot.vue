@@ -4,7 +4,7 @@
       <span v-if="labelItem == null">&nbsp;</span>
       <span v-else-if="typeof labelItem == 'string'">{{ labelItem }}</span>
       <SelectdropMenuText v-else v-bind="labelItem" />
-      <span class="top-1/2 right-3 -translate-y-1/2 opacity-65 !stroke-[2.5]" data-role="indicator">
+      <span class="top-1/2 right-3 -translate-y-1/2 opacity-65 !stroke-[2.5]" data-role-indicator>
         <Icon icon="ci:chevron-down" />
       </span>
     </DropdownMenuTrigger>

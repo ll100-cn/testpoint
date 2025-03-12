@@ -9,8 +9,9 @@ import {
   useForwardPropsEmits,
 } from 'reka-ui'
 import { Cross2Icon } from '@radix-icons/vue'
-import { cn } from '$ui/utils'
-import { relayDialogPresenterConfig, useDialogPresenter, type DialogPresenterConfig } from './types';
+import { cn, type NoUndefined } from '$ui/utils'
+import { relayDialogPresenterConfig, useDialogPresenter, type DialogPresenterConfig } from './types'
+import type { ComponentProps } from 'vue-component-type-helpers'
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -32,25 +33,29 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
 const presenterConfig = relayDialogPresenterConfig(props)
 const presenter = useDialogPresenter()
+
+type PointerDownOutsideEvent = Parameters<Required<ComponentProps<typeof DialogContent>>['onPointerDownOutside']>[0]
+function handlePointerDownOutside(event: PointerDownOutsideEvent) {
+  const originalEvent = event.detail.originalEvent;
+  const target = originalEvent.target as HTMLElement;
+  if (originalEvent.offsetX > target.clientWidth || originalEvent.offsetY > target.clientHeight) {
+    event.preventDefault();
+  }
+}
 </script>
 
 <template>
   <DialogPortal>
-    <DialogOverlay class="
-      fixed inset-0 z-50 bg-black/80
-      data-[state=open]:animate-in data-[state=closed]:animate-out
-      data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
-    " />
-    <DialogContent v-bind="forwarded" :class="cn(presenter.content(presenterConfig), props.class)">
+    <DialogOverlay :class="presenter.overlay(presenterConfig)" />
+    <DialogContent
+      v-bind="forwarded"
+      :class="cn(presenter.content(presenterConfig), props.class)"
+      @pointer-down-outside="presenterConfig.scroll === 'body' ? handlePointerDownOutside : undefined"
+    >
       <slot></slot>
 
-      <DialogClose v-if="closeable" class="
-        absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity
-        hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2
-        disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground
-      ">
-        <Cross2Icon class="w-4 h-4" />
-        <span class="sr-only">Close</span>
+      <DialogClose v-if="closeable" :class="presenter.closeIcon(presenterConfig)">
+        <Cross2Icon />
       </DialogClose>
     </DialogContent>
   </DialogPortal>

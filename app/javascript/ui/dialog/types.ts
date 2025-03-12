@@ -3,7 +3,7 @@ import { type Ref } from "vue"
 import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface DialogPresenterConfig {
-  variant?: 'primary'
+  scroll?: 'content' | 'body'
 }
 
 export type DialogPresenter = {
@@ -12,14 +12,15 @@ export type DialogPresenter = {
   description: (config: Partial<DialogPresenterConfig>) => string
   footer: (config: Partial<DialogPresenterConfig>) => string
   header: (config: Partial<DialogPresenterConfig>) => string
-  scrollContent: (config: Partial<DialogPresenterConfig>) => string
   title: (config: Partial<DialogPresenterConfig>) => string
+  overlay: (config: Partial<DialogPresenterConfig>) => string
+  closeIcon: (config: Partial<DialogPresenterConfig>) => string
 }
 
 export const {
   relayInjectPresenterConfig: relayDialogPresenterConfig
 } = createRelayPresenterConfig<DialogPresenterConfig>('dialog-presenter-config', {
-  variant: 'primary'
+  scroll: 'content'
 })
 
 export const {
