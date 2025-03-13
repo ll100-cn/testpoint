@@ -16,12 +16,12 @@ const presenter = useDialogPresenter()
 
 <template>
   <div :class="cn(presenter.header(presenterConfig), props.class)">
-    <div data-role-inner>
+    <div data-part-inner>
       <slot />
     </div>
 
     <template v-if="$slots.actions">
-      <div data-role-actions><slot name="actions"></slot></div>
+      <div data-part-actions><slot name="actions"></slot></div>
     </template>
   </div>
 </template>

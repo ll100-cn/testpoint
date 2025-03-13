@@ -4,7 +4,7 @@ export class UnprocessableEntityError extends Error {
   errors!: ErrorsObject
 
   constructor(errors: ErrorsObject) {
-    super('Unprocessable Entity Error');
+    super('Unprocessable Entity Error')
     this.errors = errors
   }
 }

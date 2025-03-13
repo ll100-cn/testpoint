@@ -1,14 +1,13 @@
 <template>
   <div v-show="easy_mde" v-bind="controlAttrs" :class="cn(inputPresenter.input(inputPresenterConfig), props.class)" class="markdown-editor">
-    <textarea ref="el" class="form-control">{{ local_value }}</textarea>
+    <textarea ref="el" class="form-control" :id="controlId">{{ local_value }}</textarea>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Validation } from '@/models'
 
 import { useInputPresenters, type InputPresenterConfig } from '$ui/input'
-import { relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form'
+import { relayFormPresenterConfig, useControlId, useControlValue, type FormPresenterConfig } from '$ui/simple_form'
 import { cn } from '$ui/utils'
 import EasyMDE from '$vendor/easymde'
 import { computed, nextTick, onMounted, ref, watch, type HTMLAttributes } from 'vue'
@@ -18,13 +17,12 @@ interface Props {
   class?: HTMLAttributes['class']
 }
 
-const props = defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>()
+const props = defineProps<Props & Partial<FormPresenterConfig>>()
 
 const presenterConfig = relayFormPresenterConfig(props)
-const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel()
-const modelValue = useInjectControlValue(defaultModelValue)
-const validation = computed(() => controlConfig.value.validation ?? new Validation())
+const modelValue = useControlValue(defaultModelValue)
+const controlId = useControlId()
 
 const inputPresenters = useInputPresenters()
 const inputPresenter = computed(() => inputPresenters.standard)

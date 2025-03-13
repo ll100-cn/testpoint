@@ -11,19 +11,27 @@ interface Props {
 
 const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {})
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
 const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
+
+const extraAttrs = computed(() => {
+  const result = {} as Record<string, any>
+
+  if (props.inset) {
+    result['data-inset'] = ''
+  }
+
+  return result
+})
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <DropdownMenuItem v-bind="forwardedProps" :class="cn(presenter.item(presenterConfig), inset && 'pl-8', props.class)">
+  <DropdownMenuItem v-bind="{ ...forwarded, ...extraAttrs }" :class="cn(presenter.item(presenterConfig), props.class)">
     <slot />
   </DropdownMenuItem>
 </template>

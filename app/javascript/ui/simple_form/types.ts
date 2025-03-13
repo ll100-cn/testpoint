@@ -1,8 +1,6 @@
-import _ from 'lodash'
-import { computed, inject, type InjectionKey, type Ref } from "vue"
-import { createProvideInject, createRelayPresenterConfig, compactObject } from "../utils"
+import { inject, type InjectionKey, type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from "../utils"
 import type Former from "./Former"
-import Validation from "./Validation"
 
 export type NestedKeyOf<ObjectType extends object> = {
   [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
@@ -12,7 +10,6 @@ export type NestedKeyOf<ObjectType extends object> = {
 
 
 export type SizeType = 'sm' | 'default' | 'lg'
-
 
 export type FormPresenterConfig = {
   size?: SizeType
@@ -39,42 +36,10 @@ export const {
   useProvide: provideFormPresenter
 } = createProvideInject<Ref<FormPresenter>>('form-presenter')
 
-
-
-export type ControlConfig = {
-  id?: string
-  validation?: Validation
-}
-
-export const FormerKey: InjectionKey<Former<any>> = Symbol('former')
-export function useInjectFormer<T extends object>() {
-  return inject(FormerKey) as Former<T> | undefined
-}
-
-export const ControlConfigKey: InjectionKey<Ref<ControlConfig>> = Symbol('control-config')
-export function useInjectControlConfig(props: ControlConfig) {
-  const injectControlConfig = inject(ControlConfigKey)
-
-  const config = computed(() => {
-    return {
-      ...injectControlConfig?.value,
-      ...compactObject(props),
-    } satisfies ControlConfig
-  })
-
-  return config
-}
-
-export const ControlValueKey: InjectionKey<Ref<any>> = Symbol('model-value')
-export function useInjectControlValue<T>(modelValue?: Ref<T | undefined>) {
-  if (modelValue && modelValue.value !== undefined) {
-    return modelValue as Ref<T>
-  }
-
-  const injectControlValue = inject(ControlValueKey, null)
-  return injectControlValue ?? modelValue as Ref<T>
-}
-
+export const {
+  useInject: useFormer,
+  useProvide: provideFormer
+} = createProvideInject<Former<any>>('former')
 export interface FormPresenters {
 }
 
@@ -82,3 +47,19 @@ export const {
   useInject: useFormPresenters,
   useProvide: provideFormPresenters
 } = createProvideInject<FormPresenters>('Form-presenters')
+
+
+export const {
+  useInject: useControlId,
+  useProvide: provideControlId
+} = createProvideInject<string>('control-id')
+
+export const ControlValueKey: InjectionKey<Ref<any>> = Symbol('model-value')
+export function useControlValue<T>(modelValue?: Ref<T | undefined>) {
+  if (modelValue && modelValue.value !== undefined) {
+    return modelValue as Ref<T>
+  }
+
+  const injectControlValue = inject(ControlValueKey, null)
+  return injectControlValue ?? modelValue as Ref<T>
+}

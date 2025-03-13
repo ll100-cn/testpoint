@@ -10,6 +10,10 @@
   @apply opacity-70 grayscale-50;
 }
 
+@utility center-center {
+  @apply flex items-center justify-center;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -24,7 +28,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    /* border-color: var(--color-gray-200, currentColor); */
   }
 }
 

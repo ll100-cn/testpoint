@@ -4,6 +4,7 @@ import { createProvideInject, createRelayPresenterConfig } from '../utils'
 export interface ButtonPresenterConfig {
   variant?: 'primary' | 'secondary' | 'destructive' | 'muted' | 'tint' | 'silence'
   size?: 'default' | 'xs' | 'sm' | 'lg'
+  shape?: 'rounded' | 'pill' | 'square-rounded' | 'circle'
 }
 
 export type ButtonPresenter = {
@@ -19,6 +20,7 @@ export const {
 } = createRelayPresenterConfig<ButtonPresenterConfig>('button-presenter-config', {
   variant: 'primary',
   size: 'default',
+  shape: 'rounded',
 })
 
 export const {

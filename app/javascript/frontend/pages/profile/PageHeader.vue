@@ -12,15 +12,13 @@
     </router-link>
   </div> -->
 
-  <Nav :model-value="current">
-    <NavList preset="tabs">
-      <NavItem value="basic" as-child>
-        <router-link to="/profile/basic">基本信息</router-link>
-      </NavItem>
-      <NavItem v-for="member_info in member_infos" :value="member_info.project_id" as-child>
-        <router-link :to="`/profile/projects/${member_info.project_id}`">{{ member_info.project.name }}</router-link>
-      </NavItem>
-    </NavList>
+  <Nav preset="tabs">
+    <NavItem value="basic" as-child>
+      <RLink to="/profile/basic">基本信息</RLink>
+    </NavItem>
+    <NavItem v-for="member_info in member_infos" :value="member_info.project_id" as-child>
+      <RLink :to="`/profile/projects/${member_info.project_id}`">{{ member_info.project.name }}</RLink>
+    </NavItem>
   </Nav>
 </template>
 
@@ -30,13 +28,14 @@ import useRequestList from '@/lib/useRequestList'
 import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
+import RLink from '@/components/RLink.vue'
 
 const reqs = useRequestList()
 const session = useSessionStore()
 
 defineProps<{
-  current: string | number
+  current?: string | number
 }>()
 
 const member_infos = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()

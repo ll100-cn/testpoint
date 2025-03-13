@@ -17,17 +17,14 @@ const props = withDefaults(defineProps<Props & Partial<TooltipPresenterConfig>>(
   sideOffset: 4
 })
 
-const emits = defineEmits<TooltipContentEmits>()
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
 const presenterConfig = relayTooltipPresenterConfig(props)
 const presenter = useTooltipPresenter()
+
+const emits = defineEmits<TooltipContentEmits>()
+const forwarded = useForwardPropsEmits(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}), emits)
 </script>
 
 <template>

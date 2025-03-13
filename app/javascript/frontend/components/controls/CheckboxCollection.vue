@@ -1,12 +1,13 @@
 <template>
-  <Checkbox v-bind="delegatedProps" v-model="modelValue" :options="options" />
+  <Checkbox v-bind="forworded" v-model="modelValue" :options="options" />
 </template>
 
 <script lang="ts" setup generic="T">
 import { type OptionItem } from "$ui/input"
-import { useInjectControlValue, type ControlConfig, type FormPresenterConfig } from "$ui/simple_form"
+import { useControlValue, type FormPresenterConfig } from "$ui/simple_form"
 import { computed } from 'vue'
 import Checkbox, { type Props as CheckboxProps } from "./Checkbox.vue"
+import { useForwardProps } from 'reka-ui'
 
 type ItemLabelProps = { [K in keyof T]: T[K] extends string ? K : never }[keyof T]
 type ItemValueProps = { [K in keyof T]: T[K] extends string | number | boolean ? K : never }[keyof T]
@@ -17,16 +18,15 @@ interface Props extends Omit<CheckboxProps, 'options'> {
   itemValue: ItemValueProps
 }
 
-const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {})
+const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), {})
 
 const defaultModelValue = defineModel<(number | string)[]>()
-const modelValue = useInjectControlValue(defaultModelValue)
+const modelValue = useControlValue(defaultModelValue)
 
-const delegatedProps = computed(() => {
+const forworded = useForwardProps(computed(() => {
   const { collection, itemLabel, itemValue, ...delegated } = props
-
   return delegated
-})
+}))
 
 const options = computed(() => {
   return props.collection.map(item => ({

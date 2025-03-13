@@ -10,14 +10,14 @@
   <FormErrorAlert :validator="validator" />
 
   <Card>
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>名称</TableHead>
             <TableHead>svg图标</TableHead>
             <TableHead>建议工单受理人</TableHead>
-            <TableHead />
+            <TableHead role="actions"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -28,19 +28,17 @@
                 <PlatformBadge :platform="platform" />
               </TableCell>
               <TableCell>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</TableCell>
-              <TableCell>
-                <div class="flex justify-end space-x-3">
-                  <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`" class="link">
-                    <i class="far fa-pencil-alt" /> 修改
-                  </router-link>
-                  <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
-                </div>
+              <TableCell role="actions">
+                <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`" class="link">
+                  <i class="far fa-pencil-alt" /> 修改
+                </router-link>
+                <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
   </Card>
 </template>
 
@@ -56,7 +54,7 @@ import { Platform } from '@/models'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
 import Button from '$ui/button/Button.vue'
 import PlatformBadge from '@/components/PlatformBadge.vue'

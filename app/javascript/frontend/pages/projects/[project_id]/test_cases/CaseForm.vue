@@ -10,11 +10,11 @@
       <controls.Markdown />
     </FormGroup>
     <FormGroup path="platform_ids" label="平台">
-      <controls.CheckboxCollection v-bind="{ name: 'platform_ids[]', collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+      <controls.CheckboxCollection :collection="platform_repo.values()" item-label="name" item-value="id" />
     </FormGroup>
 
     <FormGroup path="label_ids" label="标签">
-      <controls.CheckboxCollection v-bind="{ name: 'label_ids[]', collection: label_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+      <controls.CheckboxCollection :collection="label_repo.values()" item-label="name" item-value="id" />
     </FormGroup>
 
     <FormGroup path="storyboard_id" label="所属故事板">

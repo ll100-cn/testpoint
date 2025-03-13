@@ -7,26 +7,22 @@
 
 <script setup lang="ts">
 import { Select, type InputPresenterConfig } from '$ui/input'
-import { relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig } from '$ui/simple_form'
-import { Validation } from "@/models"
-import { computed, provide, type HTMLAttributes } from "vue"
+import { relayFormPresenterConfig, useControlId, useControlValue, type FormPresenterConfig } from '$ui/simple_form'
+import { computed, type HTMLAttributes } from "vue"
 
 interface Props {
   includeBlank?: string | boolean
   class?: HTMLAttributes['class']
 }
 
-const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {
+const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), {
   includeBlank: false,
 })
 
 const presenterConfig = relayFormPresenterConfig(props)
-const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel()
-const modelValue = useInjectControlValue(defaultModelValue)
-const validation = computed(() => controlConfig.value.validation ?? new Validation())
-
-provide('model_value', modelValue)
+const modelValue = useControlValue(defaultModelValue)
+const controlId = useControlId()
 
 const inputPresenterConfig = computed(() => {
   const config = {} as InputPresenterConfig
@@ -41,12 +37,10 @@ const inputAttrs = computed(() => {
   }
 
   if (isBlank.value) {
-    attrs['data-placeholder'] = true
+    attrs['data-placeholder'] = ''
   }
 
-  if (controlConfig.value.id) {
-    attrs.id = controlConfig.value.id
-  }
+  attrs.id = controlId
 
   return attrs
 })

@@ -8,7 +8,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props & Partial<TablePresenterConfig>>(), {
-  class: '',
 })
 
 const presenterConfig = relayTablePresenterConfig(props)

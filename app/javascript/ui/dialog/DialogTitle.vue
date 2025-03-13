@@ -11,19 +11,17 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<DialogPresenterConfig>>(), {
 })
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
 const presenterConfig = relayDialogPresenterConfig(props)
 const presenter = useDialogPresenter()
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <DialogTitle v-bind="forwardedProps" :class="cn(presenter.title(presenterConfig), props.class)">
+  <DialogTitle v-bind="forwarded" :class="cn(presenter.title(presenterConfig), props.class)">
     <slot />
   </DialogTitle>
 </template>

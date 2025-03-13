@@ -6,14 +6,14 @@ export interface CardPresenterConfig {
 }
 
 export type CardPresenter = {
-  rounded: (config: Partial<CardPresenterConfig>) => string
   root: (config: Partial<CardPresenterConfig>) => string
   header: (config: Partial<CardPresenterConfig>) => string
+  footer: (config: Partial<CardPresenterConfig>) => string
   title: (config: Partial<CardPresenterConfig>) => string
+  description: (config: Partial<CardPresenterConfig>) => string
   content: (config: Partial<CardPresenterConfig>) => string
   table: (config: Partial<CardPresenterConfig>) => string
-  footer: (config: Partial<CardPresenterConfig>) => string
-  description: (config: Partial<CardPresenterConfig>) => string
+  topState: (config: Partial<CardPresenterConfig>) => string
 }
 
 export const {

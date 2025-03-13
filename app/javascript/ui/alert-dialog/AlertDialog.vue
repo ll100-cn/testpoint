@@ -13,17 +13,14 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<AlertDialogPresenterConfig>>(), {
   preset: 'standard',
 })
-const emits = defineEmits<AlertDialogEmits>()
 
-const forwarded = useForwardPropsEmits(props, emits)
 const presenterConfig = relayAlertDialogPresenterConfig(props)
-const presenter = provideAlertDialogPresenter(computed(() => {
-  if (typeof props.preset != 'string') {
-    return props.preset
-  }
+const presenter = provideAlertDialogPresenter(computed(() =>
+  typeof props.preset != 'string' ? props.preset : presenters[props.preset]
+))
 
-  return presenters[props.preset]
-}))
+const emits = defineEmits<AlertDialogEmits>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

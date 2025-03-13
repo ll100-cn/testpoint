@@ -16,11 +16,7 @@ const props = withDefaults(defineProps<Props & Partial<ContainerPresenterConfig>
 
 const presenterConfig = relayContainerPresenterConfig(props)
 const presenter = provideContainerPresenter(computed(() => {
-  if (typeof props.preset != 'string') {
-    return props.preset
-  }
-
-  return presenters[props.preset]
+  return typeof props.preset !== 'string' ? props.preset : presenters[props.preset]
 }))
 </script>
 

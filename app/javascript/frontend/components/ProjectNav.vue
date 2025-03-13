@@ -44,7 +44,7 @@
 import { Category, Issue, IssueTemplate, Member, Milestone, Plan, Platform, TestCase, TestCaseLabel, Requirement, Storyboard } from '@/models'
 import { usePageStore } from '@/store'
 import NavItemDropdown from './NavItemDropdown.vue'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
 import RLink from './RLink.vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 

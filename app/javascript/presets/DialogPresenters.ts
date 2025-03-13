@@ -22,9 +22,9 @@ export const standard = {
   footer: bva('flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2 mt-2', {}),
   header: bva(`
     flex items-center
-    *:data-role-actions:ms-auto
-    *:data-role-inner:flex *:data-role-inner:flex-col *:data-role-inner:flex-1
-    *:data-role-inner:*:last:mb-0
+    *:data-part-actions:ms-auto
+    *:data-part-inner:flex *:data-part-inner:flex-col *:data-part-inner:flex-1
+    *:data-part-inner:*:last:mb-0
   `, {}),
   title: bva('', {}),
   description: bva('text-sm text-muted', {}),

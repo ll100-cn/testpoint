@@ -1,6 +1,8 @@
 <template>
   <div :class="cn(presenter.root(presenterConfig), props.class)">
-    <slot></slot>
+    <ButtonProvider v-bind="buttonPresenterConfig" :preset="preset">
+      <slot></slot>
+    </ButtonProvider>
   </div>
 </template>
 
@@ -9,6 +11,7 @@ import { computed, type HTMLAttributes } from 'vue'
 import { cn } from '../utils'
 import { provideButtonGroupPresenter, relayButtonGroupPresenterConfig, useButtonGroupPresenters, type ButtonGroupPresenter, type ButtonGroupPresenterConfig } from './types'
 import { provideButtonPresenter, relayButtonPresenterConfig, useButtonPresenters, type ButtonPresenter, type ButtonPresenterConfig } from '../button/types'
+import { ButtonProvider } from '$ui/button'
 
 const buttons = useButtonPresenters()
 const presenters = useButtonGroupPresenters()
@@ -29,8 +32,5 @@ const presenter = provideButtonGroupPresenter(computed(() => {
   return typeof props.group == 'string' ? presenters[props.group] : props.group
 }))
 
-relayButtonPresenterConfig(props)
-provideButtonPresenter(computed(() => {
-  return typeof props.preset == 'string' ? buttons[props.preset] : props.preset
-}))
+const buttonPresenterConfig = relayButtonPresenterConfig(props)
 </script>

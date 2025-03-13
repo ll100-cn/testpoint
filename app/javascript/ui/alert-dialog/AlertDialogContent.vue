@@ -12,17 +12,15 @@ import { cn } from '../utils'
 import { relayAlertDialogPresenterConfig, useAlertDialogPresenter } from './types'
 
 const props = defineProps<AlertDialogContentProps & { class?: HTMLAttributes['class'] }>()
-const emits = defineEmits<AlertDialogContentEmits>()
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-  return delegated
-})
-
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
 const presenterConfig = relayAlertDialogPresenterConfig()
 const presenter = useAlertDialogPresenter()
+
+const emits = defineEmits<AlertDialogContentEmits>()
+const forwarded = useForwardPropsEmits(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}), emits)
 </script>
 
 <template>

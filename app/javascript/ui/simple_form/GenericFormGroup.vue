@@ -12,9 +12,9 @@
 
 <script setup lang="ts" generic="T extends object">
 import _ from 'lodash'
-import { computed, provide, ref } from 'vue'
+import { computed, provide, useId } from 'vue'
 import { cn } from '../utils'
-import { ControlConfigKey, ControlValueKey, relayFormPresenterConfig, useFormPresenter, useInjectFormer, type FormPresenterConfig, type NestedKeyOf } from './types'
+import { ControlValueKey, provideControlId, relayFormPresenterConfig, useFormPresenter, useFormer, type FormPresenterConfig, type NestedKeyOf } from './types'
 import Validation from './Validation'
 
 type Props = {
@@ -26,14 +26,14 @@ type Props = {
 const props = defineProps<Props & Partial<FormPresenterConfig>>()
 const presenterConfig = relayFormPresenterConfig(props)
 const presenter = useFormPresenter()
-const controlId = ref(_.uniqueId("form-control-"))
+const controlId = provideControlId(useId())
 const validation = computed(() => {
   if (props.validation) {
     return props.validation
   }
 
   if (props.path) {
-    const former = useInjectFormer()
+    const former = useFormer()
     const formerValidation = former?.validator.get(props.path)
     if (formerValidation) {
       return formerValidation
@@ -44,16 +44,12 @@ const validation = computed(() => {
 })
 
 if (props.path) {
-  const former = useInjectFormer()
+  const former = useFormer()
   provide(ControlValueKey, computed({
     get: () => _.get(former?.form, props.path!),
     set: (value) => _.set(former?.form ?? {}, props.path!, value)
   }))
 }
-
-provide(ControlConfigKey, computed(() => {
-  return { id: controlId.value, validation: validation.value }
-}))
 
 const groupAttrs = computed(() => {
   const attrs = {} as Record<string, any>

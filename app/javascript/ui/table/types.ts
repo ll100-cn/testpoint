@@ -14,6 +14,7 @@ export type TablePresenter = {
   head: (config: Partial<TablePresenterConfig>) => string
   cell: (config: Partial<TablePresenterConfig>) => string
   footer: (config: Partial<TablePresenterConfig>) => string
+  empty: (config: Partial<TablePresenterConfig>) => string
 }
 
 export const {

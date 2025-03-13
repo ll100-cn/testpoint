@@ -8,7 +8,7 @@
 import { computed, provide, type FormHTMLAttributes } from 'vue'
 import { cn } from '../utils'
 import Former from './Former'
-import { FormerKey, provideFormPresenter, relayFormPresenterConfig, type FormPresenter, type FormPresenterConfig, useFormPresenters } from './types'
+import { provideFormPresenter, relayFormPresenterConfig, type FormPresenter, type FormPresenterConfig, useFormPresenters, provideFormer } from './types'
 
 const presenters = useFormPresenters()
 
@@ -28,6 +28,6 @@ const presenter = provideFormPresenter(computed(() => {
 }))
 
 if (props.former) {
-  provide(FormerKey, props.former)
+  provideFormer(props.former)
 }
 </script>

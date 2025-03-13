@@ -10,17 +10,15 @@ const props = defineProps<{
 
 const presenterConfig = relayCardPresenterConfig()
 const presenter = useCardPresenter()
-
-const slots = useSlots()
 </script>
 
 <template>
   <div :class="cn(presenter.header(presenterConfig), props.class)">
-    <div class="flex items-center w-auto">
+    <div data-part-inner>
       <slot></slot>
     </div>
 
-    <div class="ms-auto flex gap-x-1" v-if="slots.actions">
+    <div data-part-actions v-if="$slots.actions">
       <slot name="actions"></slot>
     </div>
   </div>

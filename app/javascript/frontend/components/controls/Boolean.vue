@@ -1,6 +1,6 @@
 <template>
   <label class="inline-flex items-center self-center">
-    <Checkbox :id="controlConfig.id" v-bind="radioAttrs" v-model="modelValue" :value="1" />
+    <Checkbox :id="controlId" v-bind="radioAttrs" v-model="modelValue" :value="1" />
     <span class="ms-1"><slot /></span>
   </label>
 </template>
@@ -13,18 +13,17 @@ export type Props = {
 
 <script lang="ts" setup>
 import { Checkbox, type InputPresenterConfig } from "$ui/input"
-import { relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, Validation, type ControlConfig, type FormPresenterConfig } from "$ui/simple_form"
+import { relayFormPresenterConfig, useControlId, useControlValue, type FormPresenterConfig } from "$ui/simple_form"
 import type { HTMLAttributes, InputHTMLAttributes } from 'vue'
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {
+const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), {
 })
 
 const presenterConfig = relayFormPresenterConfig(props)
-const controlConfig = useInjectControlConfig(props)
 const defaultModelValue = defineModel<boolean>()
-const rawModelValue = useInjectControlValue(defaultModelValue)
-const validation = computed(() => controlConfig.value.validation ?? new Validation())
+const rawModelValue = useControlValue(defaultModelValue)
+const controlId = useControlId()
 
 const modelValue = computed({
   get: () => rawModelValue.value ? [1] : [],

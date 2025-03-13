@@ -22,6 +22,7 @@ export const {
 } = createProvideInject<Ref<ProgressPresenter>>('progress-presenter')
 
 export interface ProgressPresenters {
+  standard: ProgressPresenter
 }
 
 export const {

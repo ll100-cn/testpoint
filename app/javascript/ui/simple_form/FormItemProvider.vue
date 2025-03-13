@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts" generic="T extends object">
-import _ from 'lodash';
-import { computed, provide, ref } from 'vue';
-import { type NestedKeyOf, ControlConfigKey, ControlValueKey, useInjectFormer } from './types';
-import Validation from './Validation';
+import _ from 'lodash'
+import { computed, provide, ref } from 'vue'
+import { type NestedKeyOf, ControlValueKey, useFormer } from './types'
+import Validation from './Validation'
 
 type Props = {
   path: NestedKeyOf<T>
@@ -17,18 +17,7 @@ const emit = defineEmits<{
 }>()
 const props = defineProps<Props>()
 
-const controlId = ref(_.uniqueId("form-control-"))
-const validation = computed(() => {
-  const former = useInjectFormer()
-  const formerValidation = former?.validator.get(props.path)
-  if (formerValidation) {
-    return formerValidation
-  }
-
-  return new Validation()
-})
-
-const former = useInjectFormer()
+const former = useFormer()
 const controlValue = computed({
   get: () => _.get(former?.form, props.path!),
   set: (value) => {
@@ -41,8 +30,4 @@ const controlValue = computed({
 })
 
 provide(ControlValueKey, controlValue)
-
-provide(ControlConfigKey, computed(() => {
-  return { id: controlId.value, validation: validation.value }
-}))
 </script>

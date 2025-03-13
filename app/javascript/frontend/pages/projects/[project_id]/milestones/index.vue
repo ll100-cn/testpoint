@@ -7,16 +7,14 @@
     </template>
   </PageHeader>
 
-  <Nav v-model:model-value="active">
-    <NavList preset="tabs">
-      <NavItem v-for="key in [ 'normal', 'archived' ]" :key="key" :value="key">
-        {{ key === 'normal' ? '正常' : '归档' }}
-      </NavItem>
-    </NavList>
+  <Nav preset="tabs" v-model="active">
+    <NavItem v-for="key in [ 'normal', 'archived' ]" :key="key" :value="key">
+      {{ key === 'normal' ? '正常' : '归档' }}
+    </NavItem>
   </Nav>
 
   <Card v-for="(group, key) in grouped_milestones" class="rounded-ss-none" :class="{ hidden: key != active }">
-    <CardContent>
+    <CardTable>
       <Table>
         <colgroup>
           <col>
@@ -28,7 +26,7 @@
             <TableHead>标题</TableHead>
             <TableHead>发布时间</TableHead>
             <TableHead>描述</TableHead>
-            <TableHead></TableHead>
+            <TableHead role="actions"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -38,21 +36,19 @@
             <TableCell>
               <PageContent :content="milestone.description" />
             </TableCell>
-            <TableCell>
-              <div class="flex justify-end space-x-3">
-                <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`" class="link">
-                  <i class="far fa-pencil-alt" /> 修改
-                </router-link>
+            <TableCell role="actions">
+              <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`" class="link">
+                <i class="far fa-pencil-alt" /> 修改
+              </router-link>
 
-                <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" @click.prevent="milestoneArchive(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
-                <a v-if="milestone.archived_at && allow('active', milestone)" href="#" @click.prevent="milestoneActive(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
-                <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
-              </div>
+              <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" @click.prevent="milestoneArchive(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
+              <a v-if="milestone.archived_at && allow('active', milestone)" href="#" @click.prevent="milestoneActive(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
+              <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
             </TableCell>
           </TableRow>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
   </Card>
 </template>
 
@@ -66,8 +62,8 @@ import _ from 'lodash'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent } from '$ui/card'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Card, CardContent, CardTable } from '$ui/card'
+import { Nav, NavItem } from '$ui/nav'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import Button from '$ui/button/Button.vue'

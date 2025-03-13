@@ -31,11 +31,11 @@
             </SwitchFormGroup>
 
             <SwitchFormGroup code="platform_ids" label="平台" :enableds="form_enabled_mapping" :former="former">
-              <controls.CheckboxCollection v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.CheckboxCollection :collection="platform_repo.values()" item-label="name" item-value="id" />
             </SwitchFormGroup>
 
             <SwitchFormGroup code="label_ids" label="标签" :enableds="form_enabled_mapping" :former="former">
-              <controls.CheckboxCollection v-bind="{ collection: platform_repo.values(), labelMethod: 'name', valueMethod: 'id' }" />
+              <controls.CheckboxCollection :collection="label_repo.values()" item-label="name" item-value="id" />
             </SwitchFormGroup>
 
             <!-- <SwitchFormGroup code="scene_name" label="场景" :enableds="form_enabled_mapping">

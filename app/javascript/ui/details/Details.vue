@@ -2,6 +2,7 @@
 import { computed, type HTMLAttributes, withDefaults } from 'vue'
 import { cn } from '../utils'
 import { provideDetailsPresenter, relayDetailsPresenterConfig, type DetailsPresenter, type DetailsPresenterConfig, useDetailsPresenters } from './types'
+import { useForwardProps } from 'reka-ui'
 
 const presenters = useDetailsPresenters()
 
@@ -15,13 +16,9 @@ const props = withDefaults(defineProps<Props & Partial<DetailsPresenterConfig>>(
 })
 
 const presenterConfig = relayDetailsPresenterConfig(props)
-const presenter = provideDetailsPresenter(computed(() => {
-  if (typeof props.preset != 'string') {
-    return props.preset
-  }
-
-  return presenters[props.preset]
-}))
+const presenter = provideDetailsPresenter(computed(() =>
+  typeof props.preset !== 'string' ? props.preset : presenters[props.preset]
+))
 </script>
 
 <template>

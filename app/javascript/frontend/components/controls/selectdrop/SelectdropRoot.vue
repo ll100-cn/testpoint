@@ -1,10 +1,10 @@
 <template>
   <DropdownMenu v-model:open="open">
-    <DropdownMenuTrigger :class="cn(inputPresenter.select(inputPresenterConfig), '')" :disabled="presenterConfig.disabled">
+    <DropdownMenuTrigger :class="cn(inputPresenter.select(inputPresenterConfig), 'min-w-36')" :disabled="presenterConfig.disabled" :id="controlId">
       <span v-if="labelItem == null">&nbsp;</span>
       <span v-else-if="typeof labelItem == 'string'">{{ labelItem }}</span>
       <SelectdropMenuText v-else v-bind="labelItem" />
-      <span class="top-1/2 right-3 -translate-y-1/2 opacity-65 !stroke-[2.5]" data-role-indicator>
+      <span class="top-1/2 right-3 -translate-y-1/2 opacity-65 !stroke-[2.5]" data-part-indicator>
         <Icon icon="ci:chevron-down" />
       </span>
     </DropdownMenuTrigger>
@@ -32,30 +32,31 @@ export type Props = {
 </script>
 
 <script setup lang="ts">
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { Icon, useInputPresenters, type InputPresenterConfig } from '$ui/input'
+import { relayFormPresenterConfig, useControlId, useControlValue, type FormPresenterConfig, type SizeType } from '$ui/simple_form'
+import { cn } from '$ui/utils'
 import { cva } from "class-variance-authority"
 import _ from "lodash"
 import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue'
-import type { SelectdropMenuOption } from "./types"
+import type { ComponentProps } from 'vue-component-type-helpers'
+import SelectdropItemExtractor from './SelectdropItemExtractor'
 import SelectdropMenuItem from "./SelectdropMenuItem.vue"
 import SelectdropMenuText from "./SelectdropMenuText.vue"
-import { relayFormPresenterConfig, useInjectControlConfig, useInjectControlValue, type ControlConfig, type FormPresenterConfig, type SizeType } from '$ui/simple_form'
-import { cn } from '$ui/utils'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
-import { type SelectdropContext, selectdropContextKey, type SelectdropOption } from './types'
-import SelectdropItemExtractor from './SelectdropItemExtractor'
 import SelectdropOptionHelper from './SelectdropOptionHelper'
-import type { ComponentProps } from 'vue-component-type-helpers'
-import { useInputPresenters, type InputPresenter, type InputPresenterConfig, Icon } from '$ui/input'
+import type { SelectdropMenuOption } from "./types"
+import { selectdropContextKey, type SelectdropContext, type SelectdropOption } from './types'
 
-const props = withDefaults(defineProps<Props & Partial<ControlConfig> & Partial<FormPresenterConfig>>(), {
+const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), {
   multiple: true
 })
 
 const presenterConfig = relayFormPresenterConfig(props)
 const defaultModelValue = defineModel<(string | number)[]>()
-const rawModelValue = useInjectControlValue(defaultModelValue)
+const rawModelValue = useControlValue(defaultModelValue)
 const open = ref(false)
 const map = reactive(new Map<string, string>())
+const controlId = useControlId()
 
 const inputPresenters = useInputPresenters()
 const inputPresenter = computed(() => inputPresenters.standard)

@@ -15,17 +15,13 @@ const props = withDefaults(defineProps<Props & Partial<PopoverPresenterConfig>>(
   preset: "standard"
 })
 
-const emits = defineEmits<PopoverRootEmits>()
-
-const forwarded = useForwardPropsEmits(props, emits)
 const presenterConfig = relayPopoverPresenterConfig(props)
-const presenter = providePopoverPresenter(computed(() => {
-  if (typeof props.preset != 'string') {
-    return props.preset
-  }
+const presenter = providePopoverPresenter(computed(() =>
+  typeof props.preset != 'string' ? props.preset : presenters[props.preset]
+))
 
-  return presenters[props.preset]
-}))
+const emits = defineEmits<PopoverRootEmits>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

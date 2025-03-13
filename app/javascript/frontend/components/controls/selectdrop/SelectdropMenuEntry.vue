@@ -1,10 +1,10 @@
 <template>
   <DropdownMenuLabel preset="plain" v-if="option.disabled">
-    <Checkbox class="me-1" v-model:checked="checked" @click.stop disabled v-if="context.multiple" />
+    <CheckboxRaw class="me-1" v-model="checked" @click.stop disabled v-if="context.multiple" />
     <SelectdropMenuText class="text-muted" :value="option.value" :content="option.content" :child-values="option.children?.map(it => it.value)" />
   </DropdownMenuLabel>
   <DropdownMenuItem v-else class="flex items-center" as="label" @click.prevent="clickEntry">
-    <Checkbox class="me-1" v-model:checked="checked" @click.stop :disabled="option.disabled" v-if="context.multiple"  />
+    <CheckboxRaw class="me-1" v-model="checked" @click.stop :disabled="option.disabled" v-if="context.multiple"  />
     <SelectdropMenuText :value="option.value" :content="option.content" :child-values="option.children?.map(it => it.value)" />
   </DropdownMenuItem>
 </template>
@@ -13,7 +13,7 @@
 import { computed, inject } from 'vue';
 import { type Props } from "./SelectdropMenuItem.vue";
 import SelectdropMenuText from "./SelectdropMenuText.vue";
-import { Checkbox } from '$ui/checkbox'
+import { CheckboxRaw } from '$ui/input'
 import { selectdropContextKey } from './types'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 

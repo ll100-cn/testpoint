@@ -2,8 +2,12 @@ import { bva } from "$ui/utils"
 import type { NavPresenter } from "$ui/nav"
 
 export const tabs = {
-  list: bva('flex border-b -mb-px relative z-10', { }),
+  list: bva(`
+    flex relative z-5 pb-px -mb-px
+    after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-border
+  `, { }),
   item: bva(`
+    relative z-20
     rounded-t-md px-4 py-2 box-border -mb-px border border-transparent text-primary block
     hover:border-border
     disabled:text-silence disabled:border-transparent

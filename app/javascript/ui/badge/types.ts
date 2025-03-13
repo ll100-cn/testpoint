@@ -3,7 +3,8 @@ import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface BadgePresenterConfig {
   variant?: 'primary' | 'secondary' | 'muted' | 'silence' | 'destructive' | 'constructive' | 'tint'
-  size?: 'default' | 'xs' | 'sm' | 'lg'
+  size?: 'default' | 'sm' | 'lg'
+  shape?: 'pill' | 'rounded'
 }
 
 export type BadgePresenter = {
@@ -15,6 +16,7 @@ export const {
 } = createRelayPresenterConfig<BadgePresenterConfig>('badge-presenter-config', {
   variant: 'primary',
   size: 'default',
+  shape: 'rounded',
 })
 
 export const {

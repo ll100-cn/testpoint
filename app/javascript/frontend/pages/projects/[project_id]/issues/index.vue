@@ -15,29 +15,27 @@
     </template>
   </PageHeader>
 
-  <Nav :model-value="search2.stage">
-    <NavList preset="tabs" class="inline-flex">
-      <NavItem value="all" as-child>
-        <router-link :to="{ query: utils.plainToQuery({ ...search2, stage: 'all' }, true) }">
-          全部 ({{ _(issue_stage_count).values().sum() }})
-        </router-link>
-      </NavItem>
-      <NavItem v-for="(name, code) in ENUM_ISSUE_STAGES" :value="code" as-child>
-        <router-link :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }">
-          {{ name }} ({{ issue_stage_count[code] ?? 0 }})
-        </router-link>
-      </NavItem>
-    </NavList>
+  <Nav preset="tabs" class="inline-flex peer after:inset-x-2">
+    <NavItem value="all" as-child>
+      <RLink :to="{ query: utils.plainToQuery({ ...search2, stage: 'all' }, true) }" active-by="query" active-column="stage">
+        全部 ({{ _(issue_stage_count).values().sum() }})
+      </RLink>
+    </NavItem>
+    <NavItem v-for="(name, code) in ENUM_ISSUE_STAGES" :value="code" as-child>
+      <RLink :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }" active-by="query" active-column="stage">
+        {{ name }} ({{ issue_stage_count[code] ?? 0 }})
+      </RLink>
+    </NavItem>
   </Nav>
 
-  <Card class="rounded-ss-none">
+  <Card class="peer-has-[*:first-child[data-state=active]]:rounded-ss-none peer-has-[*:first-child:hover]:rounded-ss-none">
     <CardHeader class="bg-transparent">
       <FilterBar :summary="issue_summary" />
     </CardHeader>
 
-    <CardContent class="py-0">
+    <CardTable>
       <IssueList :issues="pagination.list" :sorts="search2.sorts" />
-    </CardContent>
+    </CardTable>
 
     <CardFooter>
       <PaginationBar :pagination="pagination" />
@@ -47,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardFooter, CardHeader } from '$ui/card'
-import { Nav, NavItem, NavList } from '$ui/nav'
+import { Card, CardContent, CardFooter, CardHeader, CardTable } from '$ui/card'
+import { Nav, NavItem } from '$ui/nav'
 import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
@@ -68,6 +66,7 @@ import { Filter2, Search2 } from "./types"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
+import RLink from '@/components/RLink.vue'
 
 const reqs = useRequestList()
 const route = useRoute()

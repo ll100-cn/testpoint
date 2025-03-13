@@ -13,14 +13,14 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<DialogPresenterConfig>>(), {
   preset: 'standard'
 })
-const emits = defineEmits<DialogRootEmits>()
-
-const forwarded = useForwardPropsEmits(props, emits)
 
 const presenterConfig = relayDialogPresenterConfig(props)
 const presenter = provideDialogPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
+
+const emits = defineEmits<DialogRootEmits>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

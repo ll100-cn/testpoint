@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import {
-  DropdownMenuContent,
-  type DropdownMenuContentEmits,
-  type DropdownMenuContentProps,
-  DropdownMenuPortal,
-  useForwardPropsEmits,
-} from 'reka-ui'
+import { DropdownMenuContent, type DropdownMenuContentEmits, type DropdownMenuContentProps, DropdownMenuPortal, useForwardPropsEmits } from 'reka-ui'
 import { cn } from '../utils'
 import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
@@ -19,17 +13,14 @@ const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConf
   sideOffset: 4,
 })
 
-const emits = defineEmits<DropdownMenuContentEmits>()
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
 const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
+
+const emits = defineEmits<DropdownMenuContentEmits>()
+const forwarded = useForwardPropsEmits(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}), emits)
 </script>
 
 <template>

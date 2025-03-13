@@ -13,25 +13,14 @@ const props = defineProps<Props & Partial<TabsPresenterConfig> & TabsTriggerProp
 const presenterConfig = relayTabsPresenterConfig(props)
 const presenter = useTabsPresenter()
 
-const delegatedProps = computed(() => {
+const forwarded = useForwardProps(computed(() => {
   const { class: _, ...delegated } = props
-
   return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
+}))
 </script>
 
 <template>
-  <TabsTrigger
-    v-bind="forwardedProps"
-    :class="cn(
-      presenter.trigger(presenterConfig),
-      props.class,
-    )"
-  >
-    <span class="truncate">
-      <slot />
-    </span>
+  <TabsTrigger v-bind="forwarded" :class="cn(presenter.trigger(presenterConfig), props.class)">
+    <slot />
   </TabsTrigger>
 </template>

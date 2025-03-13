@@ -65,9 +65,11 @@ export function createProvideInject<T>(name: string) {
   return { key, useProvide, useInject }
 }
 
+export type VariantsConfig<C extends Record<string, any>> = Partial<Record<keyof C, Partial<Record<C[keyof C], string>>>>
+
 export function bva<C extends Record<string, any>>(
   base: string,
-  variants: Partial<Record<keyof C, Partial<Record<C[keyof C], string>>>>
+  variants: VariantsConfig<C>
 ) {
   return cva(base, {
     variants: variants as any

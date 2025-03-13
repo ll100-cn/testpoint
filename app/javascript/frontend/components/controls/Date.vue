@@ -1,5 +1,5 @@
 <template>
-  <DatePicker unstyled :pt="pt" v-model="modelValue" date-format="yy-mm-dd" show-icon show-button-bar icon-display="input" />
+  <DatePicker :input-id="controlId" unstyled :pt="pt" v-model="modelValue" date-format="yy-mm-dd" show-icon show-button-bar icon-display="input" />
 </template>
 
 <script lang="ts">
@@ -28,7 +28,7 @@ export function buildPassThrough(env: PassThroughEnv) {
 
       const result = {} as Record<string, any>
 
-      result['class'] = cn("relative")
+      result['class'] = cn("relative w-full")
       return result
     },
     pcInputText: () => {
@@ -244,7 +244,7 @@ export function buildPassThrough(env: PassThroughEnv) {
 
 <script setup lang="ts">
 import { cn } from '$ui/utils'
-import { relayFormPresenterConfig, useInjectControlValue, type FormPresenterConfig } from "$ui/simple_form"
+import { relayFormPresenterConfig, useControlId, useControlValue, type FormPresenterConfig } from "$ui/simple_form"
 import dayjs from 'dayjs'
 import DatePicker from 'primevue/datepicker'
 import { computed, type Ref } from 'vue'
@@ -255,8 +255,9 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), {})
 
 const defaultModelValue = defineModel<string | null>()
-const rawModelValue = useInjectControlValue(defaultModelValue)
+const rawModelValue = useControlValue(defaultModelValue)
 const presenterConfig = relayFormPresenterConfig(props)
+const controlId = useControlId()
 
 const modelValue = computed({
   get: () => {

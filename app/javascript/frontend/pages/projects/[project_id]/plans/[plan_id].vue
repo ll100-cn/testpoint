@@ -24,18 +24,16 @@
   </PageHeader>
 
 
-  <Nav v-bind:model-value="current_phase_info.id.toString()">
-    <NavList preset="pill" class="mb-4">
-      <NavItem v-for="(phase, index) in plan_info.phase_infos" :value="phase.id.toString()" as-child>
-        <router-link :to="{ query: { phase_index: index } }">
-          <span>{{ phase.title }}</span>
-        </router-link>
-      </NavItem>
-      <NavItem value="" v-if="allow('create', Phase)" @click.prevent="phase_dialog.show(PlanPhaseCreateDialogContent)">
-        <i class="far fa-plus-circle me-1" />
-        <span>开始新一轮测试</span>
-      </NavItem>
-    </NavList>
+  <Nav preset="pill" class="mb-4">
+    <NavItem v-for="(phase, index) in plan_info.phase_infos" as-child>
+      <RLink :to="{ query: { phase_index: index } }" active-by="query" active-column="phase_index">
+        <span>{{ phase.title }}</span>
+      </RLink>
+    </NavItem>
+    <NavItem value="" v-if="allow('create', Phase)" @click.prevent="phase_dialog.show(PlanPhaseCreateDialogContent)">
+      <i class="far fa-plus-circle me-1" />
+      <span>开始新一轮测试</span>
+    </NavItem>
   </Nav>
 
   <Card>
@@ -101,11 +99,12 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import { Separator } from '$ui/separator'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import BlankDialog from '@/components/BlankDialog.vue'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import RLink from '@/components/RLink.vue'
 
 const reqs = useRequestList()
 const route = useRoute()

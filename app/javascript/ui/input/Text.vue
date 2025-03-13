@@ -22,14 +22,12 @@ const presenter = provideInputPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 
-const delegatedProps = computed(() => {
+const forwarded = useForwardProps(computed(() => {
   const { class: _, ...delegated } = props
   return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
+}))
 </script>
 
 <template>
-  <input v-bind="forwardedProps" :class="cn(presenter.input(presenterConfig), props.class)" v-model="modelValue" />
+  <input v-bind="forwarded" :class="cn(presenter.input(presenterConfig), props.class)" v-model="modelValue" />
 </template>

@@ -6,23 +6,17 @@ import { relayDialogPresenterConfig, useDialogPresenter } from './types'
 
 const props = defineProps<DialogDescriptionProps & { class?: HTMLAttributes['class'] }>()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
-
 const presenterConfig = relayDialogPresenterConfig()
 const presenter = useDialogPresenter()
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <DialogDescription
-    v-bind="forwardedProps"
-    :class="cn(presenter.description(presenterConfig), props.class)"
-  >
+  <DialogDescription v-bind="forwarded" :class="cn(presenter.description(presenterConfig), props.class)">
     <slot />
   </DialogDescription>
 </template>

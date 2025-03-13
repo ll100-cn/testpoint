@@ -7,26 +7,35 @@ import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type Dropdo
 interface Props extends /* @vue-ignore */ DropdownMenuLabelProps {
   class?: HTMLAttributes['class']
   inset?: boolean
-  preset?: 'default' | 'plain'
+  role?: 'default' | 'plain'
 }
 
 const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {
-  preset: 'default',
+  role: 'default',
 })
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
 const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
+
+const extraAttrs = computed(() => {
+  const result = {} as Record<string, any>
+
+  result[`data-role-${props.role}`] = ''
+
+  if (props.inset) {
+    result['data-inset'] = ''
+  }
+
+  return result
+})
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <DropdownMenuLabel v-bind="forwardedProps" :class="cn(presenter.label(presenterConfig), props.preset == 'default' && 'font-semibold', inset && 'pl-8', props.class)">
+  <DropdownMenuLabel v-bind="{ ...forwarded, ...extraAttrs }" :class="cn(presenter.label(presenterConfig), props.class)">
     <slot />
   </DropdownMenuLabel>
 </template>

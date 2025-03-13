@@ -44,12 +44,20 @@ export default class Validator {
   }
 
   processError(e: any) {
-    if (e instanceof UnprocessableEntityError) {
-      this.processErrorsObject(e.errors)
+    if (this.handleError(e)) {
       return
     }
 
     throw e
+  }
+
+  handleError(e: any) {
+    if (e instanceof UnprocessableEntityError) {
+      this.processErrorsObject(e.errors)
+      return true
+    }
+
+    return false
   }
 
   hasError() {

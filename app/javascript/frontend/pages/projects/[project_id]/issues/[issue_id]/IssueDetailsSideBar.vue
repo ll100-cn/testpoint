@@ -103,16 +103,14 @@
           <Button v-else preset="outline" variant="secondary" class="w-full" @click="subscribe">订阅问题</Button>
           <div class="mt-2 text-sm text-muted">{{ issue_info.subscriptions.length }} 人订阅:</div>
           <div class="flex items-center gap-1">
-            <TooltipProvider v-for="subscription in issue_info.subscriptions">
-              <Tooltip>
-                <TooltipTrigger>
-                  <img class="rounded-full" :src="subscription.member.avatar_url" width="30">
-                </TooltipTrigger>
-                <TooltipContent>
-                  {{ subscription.member.name }}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip v-for="subscription in issue_info.subscriptions">
+              <TooltipTrigger>
+                <img class="rounded-full" :src="subscription.member.avatar_url" width="30">
+              </TooltipTrigger>
+              <TooltipContent>
+                {{ subscription.member.name }}
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -137,7 +135,7 @@ import _ from "lodash"
 import { ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
 import { Badge } from "$ui/badge"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "$ui/tooltip"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'

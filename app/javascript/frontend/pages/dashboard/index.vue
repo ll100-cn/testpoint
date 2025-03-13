@@ -2,7 +2,7 @@
   <PageHeader :issues_count="unhandled_issues_count" current="projects" />
 
   <Card>
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
@@ -25,7 +25,7 @@
           </TableRow>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
   </Card>
 </template>
 
@@ -40,7 +40,7 @@ import { ENUM_ISSUE_STAGES } from "@/constants"
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 
 const reqs = useRequestList()
 const page = usePageStore()

@@ -6,13 +6,7 @@ export const fluid = {
 } satisfies ContainerPresenter
 
 export const fixed = {
-  root: bva('px-4 mx-auto', {
-    size: {
-      default: '',
-      sm: 'max-w-screen-sm',
-      md: 'max-w-screen-md',
-      lg: 'max-w-screen-lg',
-    }
+  root: bva('px-4 mx-auto sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl', {
   }),
 } satisfies ContainerPresenter
 

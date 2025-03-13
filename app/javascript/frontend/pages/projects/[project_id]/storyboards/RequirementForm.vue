@@ -14,11 +14,11 @@
   </FormGroup>
 
   <FormGroup path="platform_ids" label="平台">
-    <controls.CheckboxCollection v-bind="{ name: 'platform_ids[]', collection: platforms, labelMethod: 'name', valueMethod: 'id' }" />
+    <controls.CheckboxCollection :collection="platforms" item-label="name" item-value="id" />
   </FormGroup>
 
   <FormGroup path="label_ids" label="标签">
-    <controls.CheckboxCollection v-bind="{ name: 'label_ids[]', collection: test_case_labels, labelMethod: 'name', valueMethod: 'id' }" />
+    <controls.CheckboxCollection :collection="test_case_labels" item-label="name" item-value="id" />
   </FormGroup>
 
   <template v-for="label in test_case_labels">

@@ -27,23 +27,20 @@ watch(computed(() => props.modelValue), (value) => {
   checked.value = value
 })
 
-
 const presenterConfig = relayInputPresenterConfig(props)
 const presenter = provideInputPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 
-const delegatedProps = computed(() => {
+const forwarded = useForwardProps(computed(() => {
   const { class: _class, modelValue, defaultValue, ...delegated } = props
   return delegated
-})
-
-const forwarded = useForwardProps(delegatedProps)
+}))
 </script>
 
 <template>
   <CheckboxRoot v-bind="forwarded" :class="cn(presenter.checkbox(presenterConfig), props.class)" @click.prevent :model-value="checked" @update:model-value="onValueChanged">
-    <span data-role-indicator>
+    <span data-part-indicator>
       <Icon v-if="checked === 'indeterminate'" icon="tabler:minus" />
       <Icon v-if="checked === true" icon="tabler:check" />
     </span>

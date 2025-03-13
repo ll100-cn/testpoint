@@ -15,13 +15,9 @@ const props = withDefaults(defineProps<Props & Partial<BreadcrumbPresenterConfig
 })
 
 const presenterConfig = relayBreadcrumbPresenterConfig(props)
-const presenter = provideBreadcrumbPresenter(computed(() => {
-  if (typeof props.preset != 'string') {
-    return props.preset
-  }
-
-  return presenters[props.preset]
-}))
+const presenter = provideBreadcrumbPresenter(computed(() =>
+  typeof props.preset != 'string' ? props.preset : presenters[props.preset]
+))
 </script>
 
 <template>

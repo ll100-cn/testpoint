@@ -2,7 +2,7 @@ import { type Ref } from "vue"
 import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface SeparatorPresenterConfig {
-  // size?: 'xs' | 'sm' | 'default'
+  orientation?: 'horizontal' | 'vertical'
 }
 
 export type SeparatorPresenter = {
@@ -17,7 +17,7 @@ export interface SeparatorPresenters {
 export const {
   relayInjectPresenterConfig: relaySeparatorPresenterConfig
 } = createRelayPresenterConfig<SeparatorPresenterConfig>('Separator-presenter-config', {
-  size: 'default',
+  orientation: 'horizontal',
 })
 
 export const {

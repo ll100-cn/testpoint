@@ -12,7 +12,9 @@
           <controls.Number />
         </FormGroup>
         <FormGroup path="creator_subscribe_target_issue" label="">
-          <controls.CheckboxCollection v-bind="{ collection: [{ label: '使创建人订阅关联的问题', value: true }], labelMethod: 'label', valueMethod: 'value' }" />
+          <controls.Boolean>
+            使创建人订阅关联的问题
+          </controls.Boolean>
         </FormGroup>
       </div>
       <DialogFooter>

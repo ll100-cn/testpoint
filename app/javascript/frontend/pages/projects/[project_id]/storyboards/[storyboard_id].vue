@@ -24,12 +24,10 @@
 
   <div class="flex items-center -mb-px">
     <div class="overflow-y-auto scrollbar-none">
-      <Nav v-model:model-value="storyboard.id">
-        <NavList preset="tabs">
-          <NavItem v-for="storyboard in storyboards" :value="storyboard.id" class="shrink-0" as-child>
-            <RLink :to="{ path: `/projects/${params.project_id}/storyboards/${storyboard.id}`, query: utils.plainToQuery(query) }">{{ storyboard.title }}</RLink>
-          </NavItem>
-        </NavList>
+      <Nav preset="tabs">
+        <NavItem v-for="storyboard in storyboards" class="shrink-0" as-child>
+          <RLink :to="{ path: `/projects/${params.project_id}/storyboards/${storyboard.id}`, query: utils.plainToQuery(query) }">{{ storyboard.title }}</RLink>
+        </NavItem>
       </Nav>
     </div>
     <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
@@ -130,7 +128,7 @@ import BlankDialog from '@/components/BlankDialog.vue'
 import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import { usePageStore } from '@/store'

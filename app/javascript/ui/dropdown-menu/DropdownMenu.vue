@@ -13,13 +13,13 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {
   preset: 'standard'
 })
-const emits = defineEmits<DropdownMenuRootEmits>()
-
-const forwarded = useForwardPropsEmits(props, emits)
 const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = provideDropdownMenuPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
+
+const emits = defineEmits<DropdownMenuRootEmits>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

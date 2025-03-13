@@ -28,17 +28,15 @@ const presenter = provideInputPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 
-const delegatedProps = computed(() => {
+const forwarded = useForwardProps(computed(() => {
   const { class: _, ...delegated } = props
   return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
+}))
 </script>
 
 <template>
   <CheckboxRoot :class="cn(presenter.radio(presenterConfig), props.class)" v-model="checked">
-    <span data-role-indicator>
+    <span data-part-indicator>
       <Icon v-if="checked" icon="tabler:point-filled" />
     </span>
   </CheckboxRoot>

@@ -21,7 +21,7 @@ const presenter = provideBadgePresenter(computed(() => {
 </script>
 
 <template>
-  <div :class="cn(presenter.root(presenterConfig), props.class)">
+  <div :class="cn(presenter.root(presenterConfig), props.class)" :data-shape="presenterConfig.shape">
     <slot></slot>
   </div>
 </template>

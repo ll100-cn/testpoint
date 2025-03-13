@@ -9,7 +9,7 @@
   </PageHeader>
 
   <Card>
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
@@ -17,7 +17,7 @@
             <TableHead>名称</TableHead>
             <TableHead>是否归档</TableHead>
             <TableHead>webhook_url</TableHead>
-            <TableHead></TableHead>
+            <TableHead role="actions"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -27,18 +27,16 @@
               <TableCell>{{ project.name }}</TableCell>
               <TableCell>{{ project.archived ? "是" : "否" }}</TableCell>
               <TableCell>{{ project.webhook_url }}</TableCell>
-              <TableCell>
-                <div class="flex justify-end space-x-3">
-                  <router-link :to="`/projects/${project.id}`" class="link"><i class="far fa-search"></i> 详情</router-link>
-                  <router-link :to="`/projects/${project.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
-                  <a href="#" @click.prevent="onRemove(project.id)" class="link"><i class="far fa-trash-alt" /> 归档</a>
-                </div>
+              <TableCell role="actions">
+                <router-link :to="`/projects/${project.id}`" class="link"><i class="far fa-search"></i> 详情</router-link>
+                <router-link :to="`/projects/${project.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                <a href="#" @click.prevent="onRemove(project.id)" class="link"><i class="far fa-trash-alt" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
 
     <CardFooter>
       <PaginationBar :pagination="projects" />
@@ -58,7 +56,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Button } from '$ui/button'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()

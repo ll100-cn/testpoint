@@ -46,7 +46,7 @@ const as = computed(() => {
 </script>
 
 <template>
-  <Primitive :to="to" :as="as" :as-child="asChild" :class="cn(presenter.root(presenterConfig), props.class)">
+  <Primitive :to="to" :as="as" :as-child="asChild" :class="cn(presenter.root(presenterConfig), props.class)" :data-shape="presenterConfig.shape" :data-size="presenterConfig.size">
     <slot></slot>
   </Primitive>
 </template>

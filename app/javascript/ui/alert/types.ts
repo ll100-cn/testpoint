@@ -2,7 +2,7 @@ import { type Ref } from "vue"
 import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface AlertPresenterConfig {
-  variant?: 'default' | 'primary' | 'destructive' | 'constructive'
+  variant?: 'primary' | 'secondary' | 'destructive' | 'constructive' | 'muted' | 'silence' | 'tint'
 }
 
 export type AlertPresenter = {
@@ -18,7 +18,7 @@ export interface AlertPresenters {
 export const {
   relayInjectPresenterConfig: relayAlertPresenterConfig
 } = createRelayPresenterConfig<AlertPresenterConfig>('alert-presenter-config', {
-  variant: 'default',
+  variant: 'primary',
 })
 
 export const {

@@ -11,20 +11,18 @@
         <TableRow>
           <TableHead>#ID</TableHead>
           <TableHead>名称</TableHead>
-          <TableHead></TableHead>
+          <TableHead role="actions"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow v-for="scene in scenes">
           <TableCell>{{ scene.id }}</TableCell>
           <TableCell>{{ scene.name }}</TableCell>
-          <TableCell>
-            <div class="flex justify-end space-x-3">
-              <a href="#" v-if="allow('update', scene)" class="link" @click.prevent="updateScene(scene)">
-                <i class="far fa-pencil-alt" /> 修改
-              </a>
-              <a v-if="allow('destroy', scene)" href="#" @click.prevent="remove(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
-            </div>
+          <TableCell role="actions">
+            <a href="#" v-if="allow('update', scene)" class="link" @click.prevent="updateScene(scene)">
+              <i class="far fa-pencil-alt" /> 修改
+            </a>
+            <a v-if="allow('destroy', scene)" href="#" @click.prevent="remove(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
           </TableCell>
         </TableRow>
       </TableBody>

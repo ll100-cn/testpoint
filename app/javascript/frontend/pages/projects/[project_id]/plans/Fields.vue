@@ -10,7 +10,7 @@
     </FormGroup>
 
     <FormGroup v-if="test_case_stats && test_case_stats.length > 0" path="role_names" label="角色">
-      <controls.CheckboxCollection v-bind="{ collection: test_case_stats_collection, labelMethod: 'label', valueMethod: 'value' }" />
+      <controls.CheckboxCollection :collection="test_case_stats_collection" item-label="label" item-value="value" />
     </FormGroup>
   </div>
 </template>

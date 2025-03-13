@@ -22,17 +22,14 @@ const props = withDefaults(defineProps<Props & Partial<DialogPresenterConfig>>()
   closeable: true
 })
 
-const emits = defineEmits<DialogContentEmits>()
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-  return delegated
-})
-
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
-
 const presenterConfig = relayDialogPresenterConfig(props)
 const presenter = useDialogPresenter()
+
+const emits = defineEmits<DialogContentEmits>()
+const forwarded = useForwardPropsEmits(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}) , emits)
 
 type PointerDownOutsideEvent = Parameters<Required<ComponentProps<typeof DialogContent>>['onPointerDownOutside']>[0]
 function handlePointerDownOutside(event: PointerDownOutsideEvent) {

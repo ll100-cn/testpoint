@@ -5,17 +5,13 @@ import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type Dropdo
 
 const props = defineProps<DropdownMenuTriggerProps>()
 
-const forwardedProps = useForwardProps(props)
+const forwarded = useForwardProps(props)
 const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
 </script>
 
 <template>
-  <DropdownMenuTrigger
-    class="outline-hidden"
-    v-bind="forwardedProps"
-    :class="cn(presenter.trigger(presenterConfig))"
-  >
+  <DropdownMenuTrigger v-bind="forwarded" :class="cn(presenter.trigger(presenterConfig))" >
     <slot />
   </DropdownMenuTrigger>
 </template>
