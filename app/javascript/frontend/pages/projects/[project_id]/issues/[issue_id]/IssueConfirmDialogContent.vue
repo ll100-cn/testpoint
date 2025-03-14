@@ -8,7 +8,7 @@
 
       <div class="space-y-3">
         <FormGroup path="title" label="标题">
-          <controls.string />
+          <controls.String />
         </FormGroup>
 
         <FormGroup path="category_id" label="分类">
@@ -21,9 +21,9 @@
         </FormGroup>
 
         <FormGroup path="assignee_id" label="受理人">
-          <controls.select include_blank>
+          <controls.Select include-blank>
             <OptionsForMember :collection="members" except_level="reporter" />
-          </controls.select>
+          </controls.Select>
         </FormGroup>
       </div>
       <DialogFooter>
@@ -41,7 +41,7 @@ import * as q from '@/requests'
 import { Category, IssueInfo, MemberInfo } from "@/models"
 import { useSessionStore } from "@/store"
 import { nextTick, ref } from "vue"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -70,7 +70,8 @@ const former = Former.build({
   state: 'confirmed',
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {

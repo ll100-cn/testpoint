@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { Button } from '$ui/button'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Attachment, IssueInfo } from '@/models'
@@ -38,7 +38,8 @@ const former = Former.build({
   attachments_params: [] as Partial<Attachment>[]
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_body = await reqs.add(q.bug.issue_bodies.Update).setup(req => {

@@ -1,34 +1,28 @@
 <script setup lang="ts">
-import { cva, type VariantProps } from 'class-variance-authority'
-import { type HTMLAttributes } from 'vue'
 import { cn } from '$ui/utils'
+import { computed, type HTMLAttributes } from 'vue'
+import { provideWellPresenter, relayWellPresenterConfig, useWellPresenters, type WellPresenter, type WellPresenterConfig } from './types'
 
-const variance = cva('border rounded-md inline-flex items-center p-2 shadow-xs', {
-  variants: {
-    variant: {
-      muted: "bg-muted/5",
-      primary: "bg-primary/15",
-      destructive: "bg-destructive/5",
-    }
-  },
-
-  defaultVariants: {
-    variant: 'muted'
-  }
-})
+const presenters = useWellPresenters()
 
 interface Props {
   class?: HTMLAttributes['class']
-  variant?: VariantProps<typeof variance>['variant']
+  preset?: keyof typeof presenters | WellPresenter
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props & Partial<WellPresenterConfig>>(), {
+  preset: 'standard',
 })
+
+const presenterConfig = relayWellPresenterConfig(props)
+const presenter = provideWellPresenter(computed(() => {
+  return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
+}))
 
 </script>
 
 <template>
-  <div :class="cn(variance({ variant }), props.class)">
+  <div :class="cn(presenter.root(presenterConfig), props.class)">
     <slot></slot>
   </div>
 </template>

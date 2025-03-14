@@ -1,10 +1,10 @@
+import { Validator } from "$ui/simple_form"
 import { reactive } from "vue"
-import { Validations } from "./simple_form"
 
 export class Actioner {
   confirm_text = "确定操作？"
   processing = false
-  validations = reactive(new Validations())
+  validations = reactive(new Validator())
 
   async confirm(text: boolean | string) {
     if (text === false) {
@@ -25,12 +25,8 @@ export class Actioner {
 
     try {
       await callback()
-    } catch(e) {
-      if (this.validations.handleError(e)) {
-        return
-      }
-
-      throw e
+    } catch (e) {
+      this.validations.processError(e)
     } finally {
       this.processing = false
     }

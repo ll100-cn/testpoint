@@ -1,8 +1,7 @@
-import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface CollapsiblePresenterConfig {
-  variant?: 'primary'
 }
 
 export type CollapsiblePresenter = {
@@ -10,10 +9,13 @@ export type CollapsiblePresenter = {
   content: (config: Partial<CollapsiblePresenterConfig>) => string
 }
 
+export interface CollapsiblePresenters {
+  standard: CollapsiblePresenter
+}
+
 export const {
-  relayInjectPreseterConfig: relayCollapsiblePreseterConfig
-} = createRelayPreseterConfig<CollapsiblePresenterConfig>('collapsible-presenter-config', {
-  variant: 'primary'
+  relayInjectPresenterConfig: relayCollapsiblePresenterConfig
+} = createRelayPresenterConfig<CollapsiblePresenterConfig>('collapsible-presenter-config', {
 })
 
 export const {
@@ -21,11 +23,7 @@ export const {
   useProvide: provideCollapsiblePresenter
 } = createProvideInject<Ref<CollapsiblePresenter>>('collapsible-presenter')
 
-export interface CollapsiblePresenters {
-  standard: CollapsiblePresenter
-}
-
 export const {
   useInject: useCollapsiblePresenters,
   useProvide: provideCollapsiblePresenters
-} = createProvideInject<CollapsiblePresenters>('Collapsible-presenters')
+} = createProvideInject<CollapsiblePresenters>('collapsible-presenters')

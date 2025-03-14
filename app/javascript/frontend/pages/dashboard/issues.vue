@@ -1,45 +1,43 @@
 <template>
   <PageHeader :issues_count="unhandled_issues_count" current="issues" />
 
-  <Nav :model-value="filter">
-    <NavList preset="tabs">
-      <NavItem value="unhandled" class="me-auto" as-child>
-        <router-link :to="{ query: {} }">
-          待处理的
-          <span class="badge bg-danger ms-1 rounded-pill">{{ unhandled_issues_count }}</span>
-        </router-link>
-      </NavItem>
+  <Nav preset="tabs">
+    <NavItem class="me-auto" as-child>
+      <RLink :to="{ query: {} }" active-by="query" active-column="filter">
+        待处理的
+        <Badge variant="destructive" shape="pill" size="sm" class="ms-1">{{ unhandled_issues_count }}</Badge>
+      </RLink>
+    </NavItem>
 
-      <NavItem value="created" as-child>
-        <router-link :to="{ query: { filter: 'created' } }">
-          创建的
-        </router-link>
-      </NavItem>
+    <NavItem as-child>
+      <RLink :to="{ query: { filter: 'created' } }" active-by="query" active-column="filter">
+        创建的
+      </RLink>
+    </NavItem>
 
-      <NavItem value="subscribed" as-child>
-        <router-link :to="{ query: { filter: 'subscribed' } }">
-          关注的
-        </router-link>
-      </NavItem>
+    <NavItem as-child>
+      <RLink :to="{ query: { filter: 'subscribed' } }" active-by="query" active-column="filter">
+        关注的
+      </RLink>
+    </NavItem>
 
-      <NavItem value="assigned" as-child>
-        <router-link :to="{ query: { filter: 'assigned' } }">
-          受理的
-        </router-link>
-      </NavItem>
+    <NavItem as-child>
+      <RLink :to="{ query: { filter: 'assigned' } }" active-by="query" active-column="filter">
+        受理的
+      </RLink>
+    </NavItem>
 
-      <NavItem value="archived" as-child>
-        <router-link :to="{ query: { filter: 'archived' } }">
-          归档的
-        </router-link>
-      </NavItem>
-    </NavList>
+    <NavItem as-child>
+      <RLink :to="{ query: { filter: 'archived' } }" active-by="query" active-column="filter">
+        归档的
+      </RLink>
+    </NavItem>
   </Nav>
 
   <Card class="rounded-t-none">
-    <CardContent>
+    <CardTable>
       <IssueList :issues="pagination.list" :columns="['project']" :sorts="sorts" />
-    </CardContent>
+    </CardTable>
     <CardFooter>
       <PaginationBar :pagination="pagination" />
     </CardFooter>
@@ -55,9 +53,11 @@ import { computed, getCurrentInstance, ref } from 'vue'
 import { useRoute } from "vue-router"
 import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
+import { Nav, NavItem } from '$ui/nav'
 import type { Issue, Pagination } from "@/models"
+import RLink from "@/components/RLink.vue"
+import { Badge } from "$ui/badge"
 
 const reqs = useRequestList()
 const route = useRoute()

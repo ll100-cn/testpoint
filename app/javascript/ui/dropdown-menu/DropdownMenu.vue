@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { DropdownMenuRoot, type DropdownMenuRootEmits, type DropdownMenuRootProps, useForwardPropsEmits } from 'radix-vue'
-import { provideDropdownMenuPresenter, relayDropdownMenuPreseterConfig, useDropdownMenuPresenters, type DropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
-import { computed, type HTMLAttributes } from 'vue';
+import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { DropdownMenuRoot, type DropdownMenuRootEmits, type DropdownMenuRootProps, useForwardPropsEmits } from 'reka-ui'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, provideDropdownMenuPresenter, type DropdownMenuPresenter, type DropdownMenuPresenterConfig, useDropdownMenuPresenters } from './types'
 
 const presenters = useDropdownMenuPresenters()
 
@@ -13,13 +13,13 @@ interface Props {
 const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {
   preset: 'standard'
 })
-const emits = defineEmits<DropdownMenuRootEmits>()
-
-const forwarded = useForwardPropsEmits(props, emits)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = provideDropdownMenuPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
+
+const emits = defineEmits<DropdownMenuRootEmits>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

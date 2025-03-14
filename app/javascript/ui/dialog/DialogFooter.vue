@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { relayDialogPreseterConfig, useDialogPresenter, type DialogPresenterConfig } from './types';
+import { cn } from '../utils'
+import { relayDialogPresenterConfig, useDialogPresenter } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
+const props = defineProps<{ class?: HTMLAttributes['class'] }>()
 
-const props = withDefaults(defineProps<Props & Partial<DialogPresenterConfig>>(), {
-})
-
-const presenterConfig = relayDialogPreseterConfig(props)
+const presenterConfig = relayDialogPresenterConfig()
 const presenter = useDialogPresenter()
 </script>
 

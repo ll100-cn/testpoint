@@ -29,9 +29,9 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="priority" title="优先级">
         <template #editable>
           <FormGroup path="priority" label="">
-            <controls.select>
+            <controls.Select>
               <OptionsForSelect :collection="ISSUE_PRIORITY_OPTIONS" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -43,9 +43,9 @@
       <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former, issue_info }" code="creator_id" title="创建人">
         <template #editable>
           <FormGroup path="creator_id" label="">
-            <controls.select include_blank>
+            <controls.Select include-blank>
               <OptionsForMember :collection="members" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -57,9 +57,9 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="assignee_id" title="受理人">
         <template #editable>
           <FormGroup path="assignee_id" label="">
-            <controls.select include_blank>
+            <controls.Select include-blank>
               <OptionsForMember :collection="members" except_level="reporter" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -72,10 +72,7 @@
         <template #editable>
           <FormGroup path="category_id" label="">
             <controls.Selectpicker>
-              <SelectdropItem v-for="category in categories" :value="category.id">
-                <i class="fas fa-circle" :style="{ color: category.color }"></i>
-                {{ category.name }}
-              </SelectdropItem>
+              <SelectDropdownItemsForCategory :categories="categories" />
             </controls.Selectpicker>
           </FormGroup>
         </template>
@@ -88,9 +85,9 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="milestone_id" title="里程碑">
         <template #editable>
           <FormGroup path="milestone_id" label="">
-            <controls.select>
+            <controls.Select>
               <OptionsForSelect :collection="milestones.map(it => ({ label: it.title, value: it.id }))" />
-            </controls.select>
+            </controls.Select>
           </FormGroup>
         </template>
 
@@ -106,16 +103,14 @@
           <Button v-else preset="outline" variant="secondary" class="w-full" @click="subscribe">订阅问题</Button>
           <div class="mt-2 text-sm text-muted">{{ issue_info.subscriptions.length }} 人订阅:</div>
           <div class="flex items-center gap-1">
-            <TooltipProvider v-for="subscription in issue_info.subscriptions">
-              <Tooltip>
-                <TooltipTrigger>
-                  <img class="rounded-full" :src="subscription.member.avatar_url" width="30">
-                </TooltipTrigger>
-                <TooltipContent>
-                  {{ subscription.member.name }}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip v-for="subscription in issue_info.subscriptions">
+              <TooltipTrigger>
+                <img class="rounded-full" :src="subscription.member.avatar_url" width="30">
+              </TooltipTrigger>
+              <TooltipContent>
+                {{ subscription.member.name }}
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -140,11 +135,12 @@ import _ from "lodash"
 import { ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
 import { Badge } from "$ui/badge"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "$ui/tooltip"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Tooltip, TooltipContent, TooltipTrigger } from "$ui/tooltip"
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 
 const reqs = useRequestList()
 const session = useSessionStore()
@@ -169,7 +165,9 @@ const former = Former.build({
   milestone_id: props.issue_info.milestone_id,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
+
 former.doPerform = async function(code: string) {
   const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
     req.interpolations.project_id = props.issue_info.project_id

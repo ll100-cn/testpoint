@@ -4,7 +4,7 @@
   </PageHeader>
 
   <Card>
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
@@ -40,7 +40,7 @@
         </TableRow>
       </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
     <CardFooter>
       <Button v-if="allow('manage', Issue)" variant="primary" @click="merge" :disabled="issues.length < 2">
         <i class="far fa-object-group"></i> 合并
@@ -59,7 +59,7 @@
 
       <div class="space-y-3">
         <FormGroup path="source_id" label="工单ID">
-          <controls.number />
+          <controls.Number />
         </FormGroup>
       </div>
       <DialogFooter>
@@ -73,13 +73,13 @@
 
 <script setup lang="ts">
 import { Button } from '$ui/button'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Issue } from "@/models"
 import _ from 'lodash'
 import { getCurrentInstance, ref } from 'vue'
@@ -127,7 +127,8 @@ const former = Former.build({
   source_id: undefined,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   if (!former.form.source_id) {

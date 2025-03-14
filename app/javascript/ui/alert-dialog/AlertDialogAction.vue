@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import { AlertDialogAction, type AlertDialogActionProps } from 'radix-vue'
+import { AlertDialogAction, useForwardProps, type AlertDialogActionProps } from 'reka-ui'
+import { cn } from '../utils'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
+const props = defineProps<AlertDialogActionProps & { class?: HTMLAttributes['class'] }>()
 
-const props = defineProps<Props & AlertDialogActionProps>()
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
+const forwarded = useForwardProps(computed(() => {
+  const { class: _class, ...delegated } = props
   return delegated
-})
+}))
 </script>
 
 <template>
-  <AlertDialogAction v-bind="delegatedProps">
+  <AlertDialogAction v-bind="forwarded" :class="cn(props.class)">
     <slot />
   </AlertDialogAction>
 </template>

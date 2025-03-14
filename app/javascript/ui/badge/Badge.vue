@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { cn } from '$ui/utils'
-import { computed, type HTMLAttributes } from 'vue'
-import { provideBadgePresenter, relayBadgePreseterConfig, useBadgePresenters, type BadgePresenter, type BadgePresenterConfig } from './types'
+import { computed, withDefaults, type HTMLAttributes } from 'vue'
+import { cn } from '../utils'
+import { provideBadgePresenter, relayBadgePresenterConfig, useBadgePresenters, type BadgePresenter, type BadgePresenterConfig } from './types'
 
 const presenters = useBadgePresenters()
 
@@ -14,14 +14,14 @@ const props = withDefaults(defineProps<Props & Partial<BadgePresenterConfig>>(),
   preset: 'standard'
 })
 
-const presenterConfig = relayBadgePreseterConfig(props)
+const presenterConfig = relayBadgePresenterConfig(props)
 const presenter = provideBadgePresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 </script>
 
 <template>
-  <div :class="cn(presenter.root(presenterConfig), props.class)">
+  <div :class="cn(presenter.root(presenterConfig), props.class)" :data-shape="presenterConfig.shape">
     <slot></slot>
   </div>
 </template>

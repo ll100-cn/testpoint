@@ -22,7 +22,7 @@ import useRequestList from '@/lib/useRequestList'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { nextTick, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
@@ -47,7 +47,8 @@ const former = Former.build({
   requirement_id: null as number | null,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
 former.doPerform = async function() {

@@ -9,15 +9,13 @@
 
   <FormErrorAlert :validator="validator" />
 
-  <Nav v-model:model-value="active">
-    <NavList preset="tabs">
-      <NavItem value="normal">正常</NavItem>
-      <NavItem value="archived">归档</NavItem>
-    </NavList>
+  <Nav preset="tabs" v-model="active">
+    <NavItem value="normal">正常</NavItem>
+    <NavItem value="archived">归档</NavItem>
   </Nav>
 
   <Card v-for="(group, key) in grouped_members" class="rounded-ss-none" :class="{ hidden: key != active }">
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
@@ -25,7 +23,7 @@
             <TableHead>名称</TableHead>
             <TableHead>邮箱</TableHead>
             <TableHead>角色</TableHead>
-            <TableHead></TableHead>
+            <TableHead role="actions"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -35,19 +33,17 @@
               <TableCell>{{ member.name }}</TableCell>
               <TableCell>{{ member.user.email }}</TableCell>
               <TableCell>{{ member.role_text }}</TableCell>
-              <TableCell>
-                <div class="flex justify-end space-x-3">
-                  <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`" class="link">
-                    <i class="far fa-pencil-alt" /> 修改
-                  </router-link>
-                  <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
-                </div>
+              <TableCell role="actions">
+                <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`" class="link">
+                  <i class="far fa-pencil-alt" /> 修改
+                </router-link>
+                <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
   </Card>
 </template>
 
@@ -64,10 +60,10 @@ import { useRoute, useRouter } from 'vue-router'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent } from '$ui/card'
-import Validator from '$ui/simple_form/Validator'
+import { Card, CardContent, CardTable } from '$ui/card'
+import { Validator } from '$ui/simple_form'
 import Button from "$ui/button/Button.vue"
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -106,11 +102,7 @@ async function onArchive(id: number) {
 
     router.go(0)
   } catch (error) {
-    if (validator.processError(error)) {
-      return
-    }
-
-    throw error
+    validator.processError(error)
   }
 }
 

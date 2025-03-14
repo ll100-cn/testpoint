@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, type HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { type CardPresenter, type CardPresenterConfig, relayCardPreseterConfig, provideCardPresenter, useCardPresenters } from './types'
+import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { cn } from '../utils'
+import { provideCardPresenter, relayCardPresenterConfig, type CardPresenter, type CardPresenterConfig, useCardPresenters } from './types'
 
 const presenters = useCardPresenters()
 
@@ -11,17 +11,17 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props & Partial<CardPresenterConfig>>(), {
-  preset: 'standard'
+  preset: 'standard',
 })
 
-const presenterConfig = relayCardPreseterConfig(props)
+const presenterConfig = relayCardPresenterConfig(props)
 const presenter = provideCardPresenter(computed(() => {
   return typeof props.preset == 'string' ? presenters[props.preset] : props.preset
 }))
 </script>
 
 <template>
-  <div :class="cn(presenter.rounded(presenterConfig), presenter.root(presenterConfig), props.class)">
+  <div :class="cn(presenter.root(presenterConfig), props.class)">
     <slot></slot>
   </div>
 </template>

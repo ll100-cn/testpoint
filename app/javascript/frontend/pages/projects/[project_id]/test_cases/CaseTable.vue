@@ -4,7 +4,7 @@
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead v-if="!readonly && allow('update', TestCase)">
+          <TableHead role="checkbox" v-if="!readonly && allow('update', TestCase)">
             <CheckboxToggle v-model="select_test_case_ids" :collection="test_cases.map(it => it.id)" />
           </TableHead>
           <TableHead scope="col">标题</TableHead>
@@ -14,8 +14,8 @@
       </TableHeader>
       <TableBody>
         <TableRow v-for="test_case in test_cases" :key="test_case.id">
-          <TableCell v-if="!readonly && allow('update', test_case)">
-            <InputCheckbox v-model="select_test_case_ids" :value="test_case.id" />
+          <TableCell role="checkbox" v-if="!readonly && allow('update', test_case)">
+            <Checkbox v-model="select_test_case_ids" :value="test_case.id" />
           </TableCell>
           <TableCell>
             <a href="#" @click.prevent="onModal?.(CaseShowDialogContent, test_case)" class="link">
@@ -53,7 +53,7 @@ import CaseShowDialogContent from "./CaseShowDialogContent.vue"
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import { Badge } from '$ui/badge'
 import CheckboxToggle from '@/components/CheckboxToggle.vue'
-import { Checkbox, InputCheckbox } from '$ui/checkbox'
+import { Checkbox } from '$ui/input'
 
 const page = usePageStore()
 const allow = page.inProject()!.allow

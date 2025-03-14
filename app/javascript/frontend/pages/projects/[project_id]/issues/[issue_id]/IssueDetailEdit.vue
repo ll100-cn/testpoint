@@ -27,10 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import * as controls from '@/components/controls'
 import { IssueInfo } from "@/models"
 import { ref } from "vue"
 
@@ -45,7 +43,8 @@ const props = withDefaults(defineProps<{
 })
 
 const mode = ref('show' as 'show' | 'edit')
-const { Form, FormGroup } = FormFactory<typeof props.former.form>()
+const Form = GenericForm<typeof props.former.form>
+const FormGroup = GenericFormGroup<typeof props.former.form>
 
 async function onSubmit() {
   await props.former.perform(props.code)

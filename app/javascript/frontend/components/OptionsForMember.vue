@@ -8,6 +8,7 @@
 </template>
 
 <script setup lang="ts">
+import { useControlValue } from '$ui/simple_form'
 import { Member, Role } from '@/models'
 import _ from 'lodash'
 import { type Ref, computed, inject } from 'vue'
@@ -17,7 +18,7 @@ const props = defineProps<{
   except_level?: Member['role']
 }>()
 
-const model_value = inject('model_value') as Ref<number | null>
+const modelValue = useControlValue<number | null>()
 
 const grouped_members = computed(() => {
   return _.groupBy(available_members.value, it => it.role)
@@ -26,7 +27,7 @@ const grouped_members = computed(() => {
 const available_members = computed(() => {
   return props.collection.filter(it => {
 
-    if (it.id == model_value.value) {
+    if (it.id == modelValue.value) {
       return true
     }
 

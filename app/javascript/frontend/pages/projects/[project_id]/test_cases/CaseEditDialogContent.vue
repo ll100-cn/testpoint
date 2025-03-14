@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { Validations, layouts } from "@/components/simple_form"
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
@@ -28,7 +27,7 @@ import { usePageStore } from "@/store"
 import $ from 'jquery'
 import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
@@ -36,7 +35,7 @@ const reqs = useRequestList()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
-const validations = reactive<Validations>(new Validations())
+const validations = reactive(new Validator())
 const open = defineModel('open')
 
 const props = defineProps<{
@@ -64,7 +63,8 @@ const former = Former.build({
   requirement_id: null as number | null,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const new_test_case = await reqs.add(q.case.test_cases.Update).setup(req => {
@@ -93,12 +93,8 @@ async function archiveTestCase(event: Event) {
     emit('destroyed', new_test_case)
     open.value = false
   } catch (err) {
-    if (validations.handleError(err)) {
-      alert(JSON.stringify(validations.fullMessages, null, 2))
-      return
-    }
-
-    throw err
+    validations.processError(err)
+    alert(validations.errorMessages([]).join("\n"))
   }
 }
 

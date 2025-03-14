@@ -1,8 +1,9 @@
-import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { provide, inject, type InjectionKey } from 'vue'
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface DialogPresenterConfig {
-  variant?: 'primary'
+  scroll?: 'content' | 'body'
 }
 
 export type DialogPresenter = {
@@ -11,14 +12,15 @@ export type DialogPresenter = {
   description: (config: Partial<DialogPresenterConfig>) => string
   footer: (config: Partial<DialogPresenterConfig>) => string
   header: (config: Partial<DialogPresenterConfig>) => string
-  scrollContent: (config: Partial<DialogPresenterConfig>) => string
   title: (config: Partial<DialogPresenterConfig>) => string
+  overlay: (config: Partial<DialogPresenterConfig>) => string
+  closeIcon: (config: Partial<DialogPresenterConfig>) => string
 }
 
 export const {
-  relayInjectPreseterConfig: relayDialogPreseterConfig
-} = createRelayPreseterConfig<DialogPresenterConfig>('dialog-presenter-config', {
-  variant: 'primary'
+  relayInjectPresenterConfig: relayDialogPresenterConfig
+} = createRelayPresenterConfig<DialogPresenterConfig>('dialog-presenter-config', {
+  scroll: 'content'
 })
 
 export const {

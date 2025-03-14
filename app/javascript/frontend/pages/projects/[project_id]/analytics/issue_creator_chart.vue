@@ -8,20 +8,20 @@
   <div class="mb-3">
     <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform(former.form)">
       <FormGroup path="starts_on" label="">
-        <controls.datetime />
+        <controls.Datetime />
       </FormGroup>
 
       <FormGroup path="ends_on" label="">
-        <controls.datetime />
+        <controls.Datetime />
       </FormGroup>
 
       <FormGroup path="role" label="">
-        <controls.select include_blank @change="former.perform(former.form)">
+        <controls.Select include-blank @update:model-value="former.perform(former.form)">
           <option value="owner">负责人</option>
           <option value="manager">管理员</option>
           <option value="developer">开发人员</option>
           <option value="reporter">报告人</option>
-        </controls.select>
+        </controls.Select>
       </FormGroup>
 
       <Button class="w-auto">过滤</Button>
@@ -46,7 +46,7 @@ import { useRoute, useRouter } from "vue-router"
 import IssueByMemberCard from "./IssueByMemberCard.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
@@ -75,9 +75,10 @@ await reqs.performAll()
 
 const former = Former.build(filter)
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function(filter) {
+former.doPerform = async function(filter: any) {
   if (filter) {
     router.push({ query: utils.plainToQuery(filter, true) })
   } else {

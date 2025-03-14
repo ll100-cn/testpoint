@@ -13,7 +13,7 @@ export default class Former<T extends object> {
   validator: Validator
   usedKeys: string[] = []
 
-  doPerform?: (...args: any[]) => Promise<void>
+  doPerform?: (...args: any) => Promise<void>
 
   constructor(form: T) {
     this.form = form
@@ -25,16 +25,14 @@ export default class Former<T extends object> {
     return path
   }
 
-  async perform(...args: any[]) {
+  async perform(...args: any) {
     this.loading = true
     this.validator.clear()
 
     try {
       await this.doPerform?.(...args)
     } catch(e) {
-      if (!this.validator.processError(e)) {
-        throw e
-      }
+      this.validator.processError(e)
     } finally {
       this.loading = false
     }

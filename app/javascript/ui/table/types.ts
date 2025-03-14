@@ -1,5 +1,5 @@
 import { type Ref } from "vue"
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface TablePresenterConfig {
   size?: 'xs' | 'sm' | 'default'
@@ -9,14 +9,17 @@ export type TablePresenter = {
   root: (config: Partial<TablePresenterConfig>) => string
   header: (config: Partial<TablePresenterConfig>) => string
   body: (config: Partial<TablePresenterConfig>) => string
+  caption: (config: Partial<TablePresenterConfig>) => string
   row: (config: Partial<TablePresenterConfig>) => string
   head: (config: Partial<TablePresenterConfig>) => string
   cell: (config: Partial<TablePresenterConfig>) => string
+  footer: (config: Partial<TablePresenterConfig>) => string
+  empty: (config: Partial<TablePresenterConfig>) => string
 }
 
 export const {
-  relayInjectPreseterConfig: relayTablePreseterConfig
-} = createRelayPreseterConfig<TablePresenterConfig>('table-presenter-config', {
+  relayInjectPresenterConfig: relayTablePresenterConfig
+} = createRelayPresenterConfig<TablePresenterConfig>('table-presenter-config', {
   size: 'default',
 })
 

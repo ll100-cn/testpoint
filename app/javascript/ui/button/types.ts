@@ -1,20 +1,26 @@
-import type { Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface ButtonPresenterConfig {
-  size?: 'xs' | 'sm' | 'default' | 'lg'
-  variant?: 'primary' | 'secondary' | 'muted' | 'silence' | 'destructive' | 'tint'
+  variant?: 'primary' | 'secondary' | 'destructive' | 'muted' | 'tint' | 'silence'
+  size?: 'default' | 'xs' | 'sm' | 'lg'
+  shape?: 'rounded' | 'pill' | 'square-rounded' | 'circle'
 }
 
 export type ButtonPresenter = {
   root: (config: Partial<ButtonPresenterConfig>) => string
 }
 
+export interface ButtonPresenters {
+  standard: ButtonPresenter
+}
+
 export const {
-  relayInjectPreseterConfig: relayButtonPreseterConfig
-} = createRelayPreseterConfig<ButtonPresenterConfig>('button-presenter-config', {
+  relayInjectPresenterConfig: relayButtonPresenterConfig
+} = createRelayPresenterConfig<ButtonPresenterConfig>('button-presenter-config', {
+  variant: 'primary',
   size: 'default',
-  variant: 'primary'
+  shape: 'rounded',
 })
 
 export const {
@@ -22,11 +28,7 @@ export const {
   useProvide: provideButtonPresenter
 } = createProvideInject<Ref<ButtonPresenter>>('button-presenter')
 
-export interface ButtonPresenters {
-  standard: ButtonPresenter
-}
-
 export const {
   useInject: useButtonPresenters,
   useProvide: provideButtonPresenters
-} = createProvideInject<ButtonPresenters>('Button-presenters')
+} = createProvideInject<ButtonPresenters>('button-presenters')

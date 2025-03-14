@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { cn } from '$ui/utils'
-import { CollapsibleContent } from 'radix-vue'
-import { type HTMLAttributes } from 'vue'
-import { relayCollapsiblePreseterConfig, useCollapsiblePresenter, type CollapsiblePresenterConfig } from './types'
+import { CollapsibleContent } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
+import { cn } from '../utils'
+import { relayCollapsiblePresenterConfig, useCollapsiblePresenter } from './types'
 
-interface Props {
+const props = defineProps<{
   class?: HTMLAttributes['class']
-}
+}>()
 
-const props = withDefaults(defineProps<Props & Partial<CollapsiblePresenterConfig>>(), {
-})
-
-const presenterConfig = relayCollapsiblePreseterConfig(props)
+const presenterConfig = relayCollapsiblePresenterConfig()
 const presenter = useCollapsiblePresenter()
 </script>
 

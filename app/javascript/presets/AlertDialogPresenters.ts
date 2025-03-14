@@ -11,8 +11,13 @@ export const standard = {
     data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]
     data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg
   `, {}),
-  description: bva('text-sm text-muted-foreground', {}),
+  description: bva('text-sm text-muted', {}),
   footer: bva('flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2', {}),
   header: bva('flex flex-col gap-y-2 text-center sm:text-left', {}),
-  title: bva('text-lg font-semibold', {})
+  title: bva('text-lg font-semibold', {}),
+  cancel: bva('', {}),
+  overlay: bva(`
+    fixed inset-0 z-50 bg-black/80
+    data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
+  `, {}),
 } satisfies AlertDialogPresenter

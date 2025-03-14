@@ -25,7 +25,7 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
   config: AxiosRequestConfig = {}
   ctx: RequestContext = { $axios: null! }
 
-  setup(ctx: { $axios: any }, callback: (instance: this) => void | null = null): this {
+  setup(ctx: { $axios: any }, callback?: (instance: this) => void | null): this {
     this.ctx = ctx
 
     if (callback) {

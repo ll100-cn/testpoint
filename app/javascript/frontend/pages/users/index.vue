@@ -9,14 +9,14 @@
   </PageHeader>
 
   <Card>
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>名称</TableHead>
             <TableHead>邮箱</TableHead>
-            <TableHead></TableHead>
+            <TableHead role="actions"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -25,17 +25,15 @@
               <TableCell>{{ user.id }}</TableCell>
               <TableCell>{{ user.name }}</TableCell>
               <TableCell>{{ user.email }}</TableCell>
-              <TableCell>
-                <div class="flex justify-end space-x-3">
-                  <router-link :to="`/users/${user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
-                  <a href="#" @click.prevent="onRemove(user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
-                </div>
+              <TableCell role="actions">
+                <router-link :to="`/users/${user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                <a href="#" @click.prevent="onRemove(user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
 
     <CardFooter>
       <PaginationBar :pagination="users" />
@@ -48,7 +46,6 @@ import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
-import Validations from '@/components/simple_form/Validations';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router'
 import * as utils from "@/lib/utils"
@@ -56,12 +53,13 @@ import PageHeader from '@/components/PageHeader.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Button } from '$ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
+import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()
 const router = useRouter()
 const route = useRoute()
-const validations = reactive<Validations>(new Validations())
+const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
 
 const users = reqs.add(q.admin.users.Page).setup(req => {
@@ -81,12 +79,8 @@ async function onRemove(user_id) {
 
     router.go(0)
   } catch (error) {
-    if (validations.handleError(error)) {
-      alert(validations.avaliableFullMessages().join("\n"))
-      return
-    }
-
-    throw error
+    validations.processError(error)
+    alert(validations.errorMessages([]).join("\n"))
   }
 }
 </script>

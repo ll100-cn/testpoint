@@ -7,7 +7,7 @@
         <FormErrorAlert />
         <div class="space-y-4">
           <CodeFormGroup path="email" label="邮箱">
-            <controls.string />
+            <controls.String />
           </CodeFormGroup>
         </div>
       </CardContent>
@@ -27,7 +27,7 @@
           </FormGroup>
 
           <FormGroup path="login_code" label="验证码">
-            <controls.string />
+            <controls.String />
           </FormGroup>
         </div>
       </CardContent>
@@ -57,7 +57,7 @@ import { useSessionStore } from "@/store/session"
 import { getCurrentInstance, ref } from "vue"
 import { useRouter } from "vue-router"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
@@ -71,7 +71,8 @@ const code_former = Former.build({
 })
 const login_code = ref(null as LoginCode | null)
 
-const { Form: CodeForm, FormGroup: CodeFormGroup } = FormFactory<typeof code_former.form>()
+const CodeForm = GenericForm<typeof code_former.form>
+const CodeFormGroup = GenericFormGroup<typeof code_former.form>
 
 code_former.doPerform = async function() {
   login_code.value = await reqs.add(q.profile.login.Deliver).setup(req => {
@@ -84,7 +85,8 @@ const former = Former.build({
   login_code: null as string | null
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   try {

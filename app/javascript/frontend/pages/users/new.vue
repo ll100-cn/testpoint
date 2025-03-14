@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { Button } from '$ui/button'
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
@@ -38,7 +38,8 @@ const former = Former.build({
   name: ""
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const user = await reqs.add(q.admin.users.Create).setup().perform(this.form)

@@ -8,12 +8,12 @@
 
       <div class="space-y-3">
         <FormGroup path="template_id" label="模版">
-          <controls.select>
+          <controls.Select>
             <OptionsForSelect :collection="issue_templates.map(it => ({ label: it.name, value: it.id }))" />
-          </controls.select>
+          </controls.Select>
         </FormGroup>
         <FormGroup path="remark" label="备注">
-          <controls.string />
+          <controls.String />
         </FormGroup>
       </div>
 
@@ -32,7 +32,7 @@ import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import * as q from '@/requests'
 import { IssueInfo, IssueTemplate } from "@/models"
 import { getCurrentInstance, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -53,7 +53,8 @@ const former = Former.build({
   remark: ""
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_survey = await reqs.add(q.bug.issue_surveies.Create).setup(req => {

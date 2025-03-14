@@ -52,7 +52,7 @@ import { computed, reactive, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Search2, Filter2 } from "./types"
 import BSOption from "@/components/BSOption.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 
@@ -69,7 +69,8 @@ const filter2 = reactive(utils.instance(Filter2, query))
 
 const former = Former.build(filter2)
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const data = utils.compactObject({ ...search2, ...this.form })

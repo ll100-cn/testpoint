@@ -8,23 +8,21 @@
       <FormErrorAlert />
 
       <div class="space-y-3">
-        <FormGroup path="title" label="标题"><controls.string /></FormGroup>
+        <FormGroup path="title" label="标题"><controls.String /></FormGroup>
         <FormGroup path="category_id" label="分类">
           <controls.Selectpicker>
-            <SelectdropItem v-for="category in categories" :value="category.id">
-              {{ category.name }}
-            </SelectdropItem>
+            <SelectDropdownItemsForCategory :categories="categories" />
           </controls.Selectpicker>
         </FormGroup>
         <FormGroup path="creator_id" label="创建人">
-          <controls.select include_blank>
+          <controls.Select include-blank>
             <OptionsForMember :collection="members" />
-          </controls.select>
+          </controls.Select>
         </FormGroup>
         <FormGroup path="assignee_id" label="受理人">
-          <controls.select include_blank>
+          <controls.Select include-blank>
             <OptionsForMember :collection="members" except_level="reporter" />
-          </controls.select>
+          </controls.Select>
         </FormGroup>
       </div>
 
@@ -52,11 +50,12 @@ import * as q from '@/requests'
 import { usePageStore, useSessionStore } from '@/store'
 import _ from "lodash"
 import { useRoute, useRouter } from "vue-router"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -83,7 +82,8 @@ const former = Former.build({
   creator_id: issue.value.creator_id,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {

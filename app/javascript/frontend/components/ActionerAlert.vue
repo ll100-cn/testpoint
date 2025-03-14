@@ -1,6 +1,6 @@
 <template>
-  <div v-if="actioner.validations.isAvaliableInvalid()" class="alert alert-danger" role="alert">
-    <div v-for="message in actioner.validations.avaliableFullMessages()" :key="message">
+  <div v-if="actioner.validations.hasError()" class="alert alert-danger" role="alert">
+    <div v-for="message in actioner.validations.errorMessages([])" :key="message">
       {{ message }}
     </div>
   </div>

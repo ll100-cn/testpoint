@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { type HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { relayCardPreseterConfig, useCardPresenter } from './types'
+import { computed, type HTMLAttributes } from 'vue'
+import { cn } from '../utils'
+import { relayCardPresenterConfig, useCardPresenter } from './types'
 
-interface Props {
+const props = defineProps<{
   class?: HTMLAttributes['class']
-}
+}>()
 
-const props = defineProps<Props>()
-
-const presenterConfig = relayCardPreseterConfig()
+const presenterConfig = relayCardPresenterConfig()
 const presenter = useCardPresenter()
 </script>
 

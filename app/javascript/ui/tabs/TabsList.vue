@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
-import { TabsList } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relayTabsPreseterConfig, useTabsPresenter, type TabsPresenterConfig } from './types'
+import { cn } from '../utils'
+import { TabsList, useForwardProps, type TabsListProps } from 'reka-ui'
+import { computed, type HTMLAttributes } from 'vue'
+import { relayTabsPresenterConfig, useTabsPresenter, type TabsPresenterConfig } from './types';
 
 interface Props {
   class?: HTMLAttributes['class']
 }
 
-const props = withDefaults(defineProps<Props & Partial<TabsPresenterConfig>>(), {})
+const props = defineProps<Props & Partial<TabsPresenterConfig> & TabsListProps>()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-const presenterConfig = relayTabsPreseterConfig(props)
+const presenterConfig = relayTabsPresenterConfig(props)
 const presenter = useTabsPresenter()
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _,...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <TabsList v-bind="delegatedProps" :class="cn(presenter.list(presenterConfig), props.class)">
-    <slot></slot>
+  <TabsList v-bind="forwarded" :class="cn( presenter.list(presenterConfig), props.class)">
+    <slot />
   </TabsList>
 </template>

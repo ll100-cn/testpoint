@@ -1,7 +1,6 @@
-import { AxiosError } from "axios"
-import Validation from "./Validation"
+import { type ErrorsObject } from "./ErrorsObject"
 import { UnprocessableEntityError } from "./UnprocessableEntityError"
-import type { ErrorsObject } from "./ErrorsObject"
+import Validation from "./Validation"
 
 export default class Validator {
   validations = new Map<string, Validation>()
@@ -24,14 +23,13 @@ export default class Validator {
 
   errorMessages(ignoreKeys: string[]) {
     const messages = [] as string[]
-
     for (const [key, validation] of this.validations.entries()) {
       if (!ignoreKeys.includes(key) && validation.state === 'invalid') {
-        messages.push(...validation.messages)
+        const name = this.names.get(key)
+        messages.push(name ? `${name} ${validation.messages}` : `${validation.messages}`)
       }
     }
-
-    return messages
+    return messages.sort((a, b) => a.length - b.length)
   }
 
   processErrorsObject(data: ErrorsObject) {
@@ -46,6 +44,14 @@ export default class Validator {
   }
 
   processError(e: any) {
+    if (this.handleError(e)) {
+      return
+    }
+
+    throw e
+  }
+
+  handleError(e: any) {
     if (e instanceof UnprocessableEntityError) {
       this.processErrorsObject(e.errors)
       return true
@@ -53,10 +59,13 @@ export default class Validator {
 
     return false
   }
-}
 
-// function if_const<T>(value: T, callback: (value: NonNullable<T>) => void) {
-//   if (value) {
-//     callback(value)
-//   }
-// }
+  hasError() {
+    for (const validation of this.validations.values()) {
+      if (validation.state === 'invalid') {
+      return true
+    }
+    }
+    return false
+  }
+}

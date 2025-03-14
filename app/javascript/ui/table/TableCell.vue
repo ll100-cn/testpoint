@@ -1,19 +1,29 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
-import { cn } from '$ui/utils'
-import { relayTablePreseterConfig, useTablePresenter, type TablePresenterConfig } from './types'
+import { computed, type HTMLAttributes } from 'vue'
+import { cn } from '../utils'
+import { relayTablePresenterConfig, useTablePresenter, type TablePresenterConfig } from './types'
 
 interface Props {
   class?: HTMLAttributes['class']
+  role?: 'default' | 'checkbox' | 'actions'
 }
 
-const props = defineProps<Props & Partial<TablePresenterConfig>>()
-const presenterConfig = relayTablePreseterConfig(props)
+const props = withDefaults(defineProps<Props & Partial<TablePresenterConfig>>(), {
+  role: 'default',
+})
+
+const extraAttrs = computed(() => {
+  const result = {} as Record<string, any>
+  result[`data-role-${props.role}`] = ''
+  return result
+})
+
+const presenterConfig = relayTablePresenterConfig(props)
 const presenter = useTablePresenter()
 </script>
 
 <template>
-  <td :class="cn(presenter.cell(presenterConfig), props.class)">
-    <slot></slot>
+  <td v-bind="extraAttrs" :class="cn(presenter.cell(presenterConfig), props.class)">
+    <slot />
   </td>
 </template>

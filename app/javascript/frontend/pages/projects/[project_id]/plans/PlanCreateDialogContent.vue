@@ -24,7 +24,7 @@ import _ from 'lodash'
 import { getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
 import { usePageStore } from "@/store"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
@@ -47,7 +47,8 @@ const former = Former.build({
   role_names: [],
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const plan = await reqs.add(q.test.plans.Create).setup(req => {

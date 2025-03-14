@@ -30,7 +30,7 @@
     <div class="flex-column flex-grow-1">
       <div v-if="editing" class="d-flex x-actions">
         <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
-          <FormGroup path="title" label=""><controls.string /></FormGroup>
+          <FormGroup path="title" label=""><controls.String /></FormGroup>
           <div class="space-x-3">
             <Button>确定</Button>
             <Button variant="secondary" @click.prevent="exitEditing">取消</Button>
@@ -57,13 +57,12 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
 import _ from "lodash"
 import prettyBytes from "pretty-bytes"
 import { nextTick, onMounted, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 
@@ -81,7 +80,8 @@ const former = Former.build({
   title: props.attachment.title
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const changes = <Partial<Attachment>>{ id: props.attachment.id }

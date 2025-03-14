@@ -1,20 +1,34 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
-import { PaginationEllipsis, type PaginationEllipsisProps } from 'radix-vue'
+import { type HTMLAttributes, computed, withDefaults } from 'vue'
+import { PaginationEllipsis, useForwardProps, type PaginationEllipsisProps } from 'reka-ui'
 import { DotsHorizontalIcon } from '@radix-icons/vue'
-import { cn } from '$ui/utils'
+import { cn } from '../utils'
+import { providePaginationPresenter, relayPaginationPresenterConfig, type PaginationPresenter, type PaginationPresenterConfig, usePaginationPresenters } from './types'
 
-const props = defineProps<PaginationEllipsisProps & { class?: HTMLAttributes['class'] }>()
+const presenters = usePaginationPresenters()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+interface Props {
+  class?: HTMLAttributes['class']
+  preset: keyof typeof presenters | PaginationPresenter
+}
 
-  return delegated
+const props = withDefaults(defineProps<Props & Partial<PaginationPresenterConfig>>(), {
+  preset: 'standard',
 })
+
+const presenterConfig = relayPaginationPresenterConfig()
+const presenter = providePaginationPresenter(computed(() => {
+  return typeof props.preset !== 'string' ? props.preset : presenters[props.preset]
+}))
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <PaginationEllipsis v-bind="delegatedProps" :class="cn('w-9 h-9 flex items-center justify-center', props.class)">
+  <PaginationEllipsis v-bind="forwarded" :class="cn(presenter.ellipsis(presenterConfig), props.class)">
     <slot>
       <DotsHorizontalIcon />
     </slot>

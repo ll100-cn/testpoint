@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import { DropdownMenuItem, useForwardProps } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { DropdownMenuItem, type DropdownMenuItemProps, useForwardProps } from 'reka-ui'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
 
 interface Props {
   class?: HTMLAttributes['class']
@@ -11,19 +11,27 @@ interface Props {
 
 const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {})
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
+const presenter = useDropdownMenuPresenter()
 
-  return delegated
+const extraAttrs = computed(() => {
+  const result = {} as Record<string, any>
+
+  if (props.inset) {
+    result['data-inset'] = ''
+  }
+
+  return result
 })
 
-const forwardedProps = useForwardProps(delegatedProps)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
-const presenter = useDropdownMenuPresenter()
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <DropdownMenuItem v-bind="forwardedProps" :class="cn(presenter.item(presenterConfig), inset && 'pl-8', props.class)">
+  <DropdownMenuItem v-bind="{ ...forwarded, ...extraAttrs }" :class="cn(presenter.item(presenterConfig), props.class)">
     <slot />
   </DropdownMenuItem>
 </template>

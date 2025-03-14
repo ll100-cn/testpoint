@@ -12,6 +12,7 @@ export const vertical = {
 
   group: bva('flex-auto', { }),
   label: bva('block mb-1 group-data-disabled:text-muted', { }),
+  control: bva('flex-1', { }),
   error: bva('text-muted group-data-[state=invalid]:text-destructive', {})
 } satisfies FormPresenter
 
@@ -27,6 +28,7 @@ export const horizontal = {
 
   group: bva('flex items-baseline mb-4 last:mb-0', { }),
   label: bva('block basis-32 text-end me-2 group-data-disabled:text-muted', { }),
+  control: bva('flex-1 flex items-baseline', { }),
   error: bva('text-muted group-data-[state=invalid]:text-destructive', {})
 } satisfies FormPresenter
 
@@ -49,6 +51,7 @@ export const inline = {
   }),
 
   label: bva('shrink-0', { }),
+  control: bva('flex-1', { }),
   error: bva('text-destructive', {})
 } satisfies FormPresenter
 

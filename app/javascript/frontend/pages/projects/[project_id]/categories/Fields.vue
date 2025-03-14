@@ -3,25 +3,25 @@
 
   <div class="space-y-4">
     <FormGroup path="name" label="名称">
-      <controls.string />
+      <controls.String />
     </FormGroup>
     <FormGroup path="description" label="描述">
-      <controls.text />
+      <controls.Text />
     </FormGroup>
     <FormGroup path="color" label="颜色">
-      <controls.color />
+      <controls.Color />
     </FormGroup>
   </div>
 </template>
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 
 const props = defineProps<{
   former: Former<any>
 }>()
 
-const { FormGroup } = FormFactory<typeof props.former.form>()
+const FormGroup = GenericFormGroup<typeof props.former.form>
 </script>

@@ -1,12 +1,14 @@
-import { type Ref } from 'vue'
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+
+import { type Ref } from "vue"
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface AlertDialogPresenterConfig {
-  variant?: 'primary'
 }
 
 export type AlertDialogPresenter = {
   root: (config: Partial<AlertDialogPresenterConfig>) => string
+  cancel: (config: Partial<AlertDialogPresenterConfig>) => string
+  overlay: (config: Partial<AlertDialogPresenterConfig>) => string
   content: (config: Partial<AlertDialogPresenterConfig>) => string
   description: (config: Partial<AlertDialogPresenterConfig>) => string
   footer: (config: Partial<AlertDialogPresenterConfig>) => string
@@ -14,20 +16,19 @@ export type AlertDialogPresenter = {
   title: (config: Partial<AlertDialogPresenterConfig>) => string
 }
 
+export interface AlertDialogPresenters {
+  standard: AlertDialogPresenter
+}
+
 export const {
-  relayInjectPreseterConfig: relayAlertDialogPreseterConfig
-} = createRelayPreseterConfig<AlertDialogPresenterConfig>('alert-dialog-presenter-config', {
-  variant: 'primary'
+  relayInjectPresenterConfig: relayAlertDialogPresenterConfig
+} = createRelayPresenterConfig<AlertDialogPresenterConfig>('alert-dialog-presenter-config', {
 })
 
 export const {
   useInject: useAlertDialogPresenter,
   useProvide: provideAlertDialogPresenter
 } = createProvideInject<Ref<AlertDialogPresenter>>('alert-dialog-presenter')
-
-export interface AlertDialogPresenters {
-  standard: AlertDialogPresenter
-}
 
 export const {
   useInject: useAlertDialogPresenters,

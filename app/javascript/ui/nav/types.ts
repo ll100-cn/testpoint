@@ -1,5 +1,5 @@
 import { type Ref } from "vue"
-import { createProvideInject, createRelayPreseterConfig } from '../utils'
+import { createProvideInject, createRelayPresenterConfig } from '../utils'
 
 export interface NavPresenterConfig {
   size?: 'xs' | 'sm' | 'default'
@@ -10,9 +10,12 @@ export type NavPresenter = {
   item: (config: Partial<NavPresenterConfig>) => string
 }
 
+export interface NavPresenters {
+}
+
 export const {
-  relayInjectPreseterConfig: relayNavPreseterConfig
-} = createRelayPreseterConfig<NavPresenterConfig>('nav-presenter-config', {
+  relayInjectPresenterConfig: relayNavPresenterConfig
+} = createRelayPresenterConfig<NavPresenterConfig>('nav-presenter-config', {
   size: 'default',
 })
 
@@ -21,10 +24,7 @@ export const {
   useProvide: provideNavPresenter
 } = createProvideInject<Ref<NavPresenter>>('nav-presenter')
 
-export interface NavPresenters {
-}
-
 export const {
   useInject: useNavPresenters,
   useProvide: provideNavPresenters
-} = createProvideInject<NavPresenters>('Nav-presenters')
+} = createProvideInject<NavPresenters>('nav-presenters')

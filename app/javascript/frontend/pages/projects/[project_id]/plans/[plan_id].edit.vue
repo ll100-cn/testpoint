@@ -32,10 +32,10 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
-import Validator from '$ui/simple_form/Validator';
+import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -60,7 +60,8 @@ const former = Former.build({
   platform_id: plan.value.platform_id,
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   await reqs.add(q.test.plans.Update).setup(req => {

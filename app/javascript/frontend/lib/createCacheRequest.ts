@@ -1,7 +1,7 @@
 // SNIP: 4d42436ba7cc1fb8a3500e3b65f791af
 import { KlassCache } from './KlassCache'
 import { RxInterruptedError } from './RxSimple'
-import type { BaseRequest } from './BaseRequest'
+import type { BaseRequest } from '@/requests'
 import type { Unsubscribable } from 'rxjs'
 import { ref } from 'vue'
 

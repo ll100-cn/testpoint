@@ -9,9 +9,9 @@
 
   <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
     <FormGroup path="creator_id_eq" label="成员">
-      <controls.select include_blank @change="onSearchInput">
+      <controls.Select include-blank @update:model-value="onSearchInput">
         <OptionsForMember :collection="members" except_level="reporter" />
-      </controls.select>
+      </controls.Select>
     </FormGroup>
   </Form>
 
@@ -32,7 +32,7 @@
               </p>
             </div>
 
-            <div class="flex gap-0.5">
+            <div class="flex *:not-first:rounded-s-none *:not-last:rounded-e-none">
               <Progress preset="standard" :model-value="100" v-if="plan.tasks_state_counts['failure'] ?? 0 > 0" class="text-destructive" :style="{ width: 100.0 * plan.tasks_state_counts['failure'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
               <Progress preset="standard" :model-value="100" v-if="plan.tasks_state_counts['pending'] ?? 0 > 0" class="text-muted" :style="{ width: 100.0 * plan.tasks_state_counts['pending'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
               <Progress preset="standard" :model-value="100" v-if="plan.tasks_state_counts['pass'] ?? 0 > 0" class="text-green-700" :style="{ width: 100.0 * plan.tasks_state_counts['pass'] / _(plan.tasks_state_counts).values().sum() + '%' }" />
@@ -58,7 +58,6 @@
 <script setup lang="ts">
 import PaginationBar from '@/components/PaginationBar.vue'
 import useRequestList from '@/lib/useRequestList'
-import { layouts } from "@/components/simple_form"
 import dayjs from '@/lib/dayjs'
 import * as q from '@/requests'
 import * as utils from '@/lib/utils'
@@ -72,7 +71,7 @@ import OptionsForMember from '@/components/OptionsForMember.vue'
 import { Badge } from '$ui/badge'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import { Progress } from '$ui/progress'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import BlankDialog from '@/components/BlankDialog.vue'
 import PlanCreateDialogContent from './PlanCreateDialogContent.vue'
@@ -97,7 +96,8 @@ class Search {
 const search = utils.instance(Search, query)
 const former = Former.build(search)
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const data = utils.compactObject(this.form)

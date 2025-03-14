@@ -7,8 +7,8 @@
 
   <div class="mb-3">
     <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
-      <FormGroup path="starts_on" label=""><controls.datetime /></FormGroup>
-      <FormGroup path="ends_on" label=""><controls.datetime /></FormGroup>
+      <FormGroup path="starts_on" label=""><controls.Datetime /></FormGroup>
+      <FormGroup path="ends_on" label=""><controls.Datetime /></FormGroup>
 
       <Button class="w-auto">过滤</Button>
     </Form>
@@ -25,14 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import { layouts } from "@/components/simple_form"
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router"
 import WdayIssuesConfirmTimeChart from './WdayIssuesConfirmTimeChart.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import PageHeader from "@/components/PageHeader.vue"
@@ -52,7 +51,8 @@ const filter = reactive({
 const project_id = params.project_id
 const former = Former.build(filter)
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 const analytics = reqs.add(q.project.issue_activity_charts.Get).setup(req => {
   req.interpolations.project_id = project_id

@@ -10,7 +10,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, 
 import { Button } from '$ui/button'
 import { Handle, Position } from '@vue-flow/core'
 import { Badge } from '$ui/badge'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '$ui/tooltip'
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import { Alert } from '$ui/alert'
 

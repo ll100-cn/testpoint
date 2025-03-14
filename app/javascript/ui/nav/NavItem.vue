@@ -1,24 +1,32 @@
 <script setup lang="ts">
-import { cn } from '$ui/utils'
-import { TabsTrigger, useForwardProps, type TabsTriggerProps } from 'radix-vue'
-import { computed, useAttrs, type HTMLAttributes } from 'vue'
-import { relayNavPreseterConfig, useNavPresenter } from './types'
+import { type HTMLAttributes, computed, useId } from 'vue'
+import { TabsTrigger, useForwardProps, type TabsTriggerProps } from 'reka-ui'
+import { cn } from '../utils'
+import { relayNavPresenterConfig, useNavPresenter } from './types'
 
-const props = defineProps<TabsTriggerProps & { class?: HTMLAttributes['class'] }>()
+type Props = {
+  class?: HTMLAttributes['class']
+}
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-  return delegated
+type OptionalTabsTriggerProps = Omit<TabsTriggerProps, 'value'> & Partial<Pick<TabsTriggerProps, 'value'>>
+const props = defineProps<OptionalTabsTriggerProps & Props>()
+
+const presenterConfig = relayNavPresenterConfig()
+const presenter = useNavPresenter()
+
+const id = useId()
+const value = computed(() => {
+  return props.value ?? id
 })
 
-const forwardedProps = useForwardProps(delegatedProps)
-
-const presenterConfig = relayNavPreseterConfig()
-const presenter = useNavPresenter()
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <TabsTrigger v-bind="forwardedProps" :class="cn(presenter.item(presenterConfig), props.class)">
+  <TabsTrigger v-bind="{ ...forwarded, value }" :class="cn(presenter.item(presenterConfig), props.class)">
     <slot></slot>
   </TabsTrigger>
 </template>

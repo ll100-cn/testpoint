@@ -1,72 +1,68 @@
 <template>
   <div class="bg-gray-800 py-2 sticky top-0 mb-6 z-10">
-    <Container>
+    <Container preset="fluid">
       <div class="flex">
-        <Nav :model-value="null">
-          <NavList :preset="navbarPt">
-            <NavItem class="ps-0" value="" as-child>
-              <RLink to="/">Testpoint</RLink>
-            </NavItem>
+        <Nav :preset="navbarPt">
+          <NavItem class="ps-0" as-child>
+            <RLink to="/">Testpoint</RLink>
+          </NavItem>
 
-            <template v-if="account">
-              <NavItem value="">
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <span>{{ profile?.project_name ?? "选择项目" }}</span>
-                    <i class="fa-solid fa-caret-down ms-1"></i>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem v-for="project in projects" :key="project.id" class="justify-between" as-child>
-                      <RLink :to="`/projects/${project.id}`">
-                        <span>{{ project.name }}</span>
-                        <i class="fal fa-sign-in-alt fa-fw"></i>
-                      </RLink>
-                    </DropdownMenuItem>
-
-                    <template v-if="account?.admin">
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem class="justify-between" as-child>
-                        <RLink to="/projects">
-                          <span>项目设置</span>
-                          <i class="fal fa-cogs fa-fw"></i>
-                        </RLink>
-                      </DropdownMenuItem>
-                    </template>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </NavItem>
-
-              <ProjectNav v-if="profile" :project_id="profile.project_id" />
-            </template>
-          </NavList>
-        </Nav>
-
-        <Nav v-if="account">
-          <NavList :preset="navbarPt" class="ms-auto">
-            <NavItem value="">
+          <template v-if="account">
+            <NavItem>
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <span v-if="profile">
-                    <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
-                    {{ profile?.nickname ?? account.name }} ({{ profile.role_text }})
-                  </span>
-
-                  <span v-else>
-                    <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
-                    {{ account.name }}
-                  </span>
-
+                  <span>{{ profile?.project_name ?? "选择项目" }}</span>
                   <i class="fa-solid fa-caret-down ms-1"></i>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent :align="'end'">
-                  <DropdownMenuItem as-child>
-                    <RLink to="/profile/basic">个人中心</RLink>
+                <DropdownMenuContent>
+                  <DropdownMenuItem v-for="project in projects" :key="project.id" class="justify-between" as-child>
+                    <RLink :to="`/projects/${project.id}`">
+                      <span>{{ project.name }}</span>
+                      <i class="fal fa-sign-in-alt fa-fw"></i>
+                    </RLink>
                   </DropdownMenuItem>
-                  <DropdownMenuItem @click.prevent="signOut">退出</DropdownMenuItem>
+
+                  <template v-if="account?.admin">
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem class="justify-between" as-child>
+                      <RLink to="/projects">
+                        <span>项目设置</span>
+                        <i class="fal fa-cogs fa-fw"></i>
+                      </RLink>
+                    </DropdownMenuItem>
+                  </template>
                 </DropdownMenuContent>
               </DropdownMenu>
             </NavItem>
-          </NavList>
+
+            <ProjectNav v-if="profile" :project_id="profile.project_id" />
+          </template>
+        </Nav>
+
+        <Nav :preset="navbarPt" v-if="account" class="ms-auto">
+          <NavItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <span v-if="profile">
+                  <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
+                  {{ profile?.nickname ?? account.name }} ({{ profile.role_text }})
+                </span>
+
+                <span v-else>
+                  <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
+                  {{ account.name }}
+                </span>
+
+                <i class="fa-solid fa-caret-down ms-1"></i>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent :align="'end'">
+                <DropdownMenuItem as-child>
+                  <RLink to="/profile/basic">个人中心</RLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem @click.prevent="signOut">退出</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </NavItem>
         </Nav>
       </div>
     </Container>
@@ -82,7 +78,7 @@ import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
 import { bva } from '$ui/utils'
 import { type NavPresenter } from '$ui/nav/types'
 import RLink from './RLink.vue'

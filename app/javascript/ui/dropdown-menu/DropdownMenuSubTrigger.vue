@@ -1,39 +1,26 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import {
-  DropdownMenuSubTrigger,
-  useForwardProps,
-} from 'radix-vue'
-import { ChevronRightIcon } from '@radix-icons/vue'
-import { cn } from '$ui/utils'
-import { relayDropdownMenuPreseterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { DropdownMenuSubTrigger, type DropdownMenuSubTriggerProps, useForwardProps } from 'reka-ui'
+import { cn } from '../utils'
+import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, type DropdownMenuPresenterConfig } from './types'
+import { Icon } from '../input'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
+const props = defineProps<DropdownMenuSubTriggerProps & { class?: HTMLAttributes['class'] }>()
 
-const props = withDefaults(defineProps<Props & Partial<DropdownMenuPresenterConfig>>(), {})
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
-const presenterConfig = relayDropdownMenuPreseterConfig(props)
+const presenterConfig = relayDropdownMenuPresenterConfig(props)
 const presenter = useDropdownMenuPresenter()
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <DropdownMenuSubTrigger
-    v-bind="forwardedProps"
-    :class="cn(
-      presenter.subTrigger(presenterConfig),
-      props.class,
-    )"
-  >
+  <DropdownMenuSubTrigger v-bind="forwarded" :class="cn(presenter.subTrigger(presenterConfig), props.class)" >
     <slot />
-    <ChevronRightIcon class="ml-auto h-4 w-4" />
+    <span data-part-indicator>
+      <Icon icon="ci:chevron-right" />
+    </span>
   </DropdownMenuSubTrigger>
 </template>

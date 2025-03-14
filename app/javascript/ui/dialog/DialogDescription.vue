@@ -1,32 +1,22 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
-import { DialogDescription, useForwardProps } from 'radix-vue'
-import { cn } from '$ui/utils'
-import { relayDialogPreseterConfig, useDialogPresenter, type DialogPresenterConfig } from './types';
+import { DialogDescription, type DialogDescriptionProps, useForwardProps } from 'reka-ui'
+import { cn } from '../utils'
+import { relayDialogPresenterConfig, useDialogPresenter } from './types'
 
-interface Props {
-  class?: HTMLAttributes['class']
-}
+const props = defineProps<DialogDescriptionProps & { class?: HTMLAttributes['class'] }>()
 
-const props = withDefaults(defineProps<Props & Partial<DialogPresenterConfig>>(), {
-})
-
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
-
-const forwardedProps = useForwardProps(delegatedProps)
-const presenterConfig = relayDialogPreseterConfig(props)
+const presenterConfig = relayDialogPresenterConfig()
 const presenter = useDialogPresenter()
+
+const forwarded = useForwardProps(computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+}))
 </script>
 
 <template>
-  <DialogDescription
-    v-bind="forwardedProps"
-    :class="cn(presenter.description(presenterConfig), props.class)"
-  >
+  <DialogDescription v-bind="forwarded" :class="cn(presenter.description(presenterConfig), props.class)">
     <slot />
   </DialogDescription>
 </template>

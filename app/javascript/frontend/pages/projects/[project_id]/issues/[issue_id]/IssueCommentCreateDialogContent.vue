@@ -4,10 +4,11 @@
       <DialogTitle>新增评论</DialogTitle>
     </DialogHeader>
 
+
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
       <IssueCommentForm :former="former" :attachments="[]" />
       <DialogFooter>
-        <DialogClose><Button variant="secondary" type="button">取消</Button></DialogClose>
+        <DialogClose as-child><Button variant="secondary" type="button">取消</Button></DialogClose>
         <Button>提交</Button>
       </DialogFooter>
     </Form>
@@ -20,7 +21,7 @@ import useRequestList from '@/lib/useRequestList'
 import { Issue, IssueSurvey, Comment } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
@@ -36,7 +37,8 @@ const former = Former.build({
   attachments_params: []
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_comment = await reqs.add(q.bug.issue_comments.Create).setup(req => {

@@ -6,8 +6,8 @@
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" class="space-y-4">
       <FormErrorAlert />
 
-      <FormGroup path="title" label="标题"><controls.string /></FormGroup>
-      <FormGroup path="release_revision" label="版本构建号" hint="*选填，仅用于备注"><controls.string /></FormGroup>
+      <FormGroup path="title" label="标题"><controls.String /></FormGroup>
+      <FormGroup path="release_revision" label="版本构建号" hint="*选填，仅用于备注"><controls.String /></FormGroup>
 
       <Separator preset="standard" />
 
@@ -32,7 +32,7 @@ import { Phase, PhaseInfo, Plan, PlanInfo } from '@/models'
 import _ from 'lodash'
 import { nextTick, ref, computed } from 'vue'
 import { useRoute } from "vue-router"
-import { Former, FormFactory } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -60,7 +60,8 @@ const former = Former.build({
   release_revision: ""
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const phase = await reqs.add(q.test.plan_phases.Create).setup(req => {

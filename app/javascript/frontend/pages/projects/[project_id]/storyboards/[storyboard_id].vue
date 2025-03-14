@@ -24,12 +24,10 @@
 
   <div class="flex items-center -mb-px">
     <div class="overflow-y-auto scrollbar-none">
-      <Nav v-model:model-value="storyboard.id">
-        <NavList preset="tabs">
-          <NavItem v-for="storyboard in storyboards" :value="storyboard.id" class="shrink-0" as-child>
-            <RLink :to="{ path: `/projects/${params.project_id}/storyboards/${storyboard.id}`, query: utils.plainToQuery(query) }">{{ storyboard.title }}</RLink>
-          </NavItem>
-        </NavList>
+      <Nav preset="tabs">
+        <NavItem v-for="storyboard in storyboards" class="shrink-0" as-child>
+          <RLink :to="{ path: `/projects/${params.project_id}/storyboards/${storyboard.id}`, query: utils.plainToQuery(query) }">{{ storyboard.title }}</RLink>
+        </NavItem>
       </Nav>
     </div>
     <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
@@ -130,7 +128,7 @@ import BlankDialog from '@/components/BlankDialog.vue'
 import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
-import { Nav, NavList, NavItem } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import { usePageStore } from '@/store'
@@ -146,7 +144,7 @@ import StoryboardUpdateDialogContent from './StoryboardUpdateDialogContent.vue'
 import RequirementCreateDialogContent from './RequirementCreateDialogContent.vue'
 import RequirementUpdateDialogContent from './RequirementUpdateDialogContent.vue'
 import dagre from '@dagrejs/dagre'
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import { Filter } from './type'
 import SelectdropItem from '@/components/controls/selectdrop/SelectdropItem.vue'
@@ -554,10 +552,11 @@ async function save() {
 }
 
 const former = Former.build(new Filter())
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 function changeRoadmap(roadmap: Roadmap | null = null) {
   const data = utils.compactObject({ ...query, roadmap_id: roadmap?.id })
   router.push({ query: utils.plainToQuery(data) })
 }
-</script>π
+</script>

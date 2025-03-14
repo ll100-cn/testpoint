@@ -19,7 +19,7 @@ import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
 import { IssueInfo } from "@/models"
 import { getCurrentInstance, ref } from "vue"
-import { Former, FormFactory, PresenterConfigProvider } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
@@ -39,7 +39,8 @@ const former = Former.build({
   attachment_ids: []
 })
 
-const { Form, FormGroup } = FormFactory<typeof former.form>()
+const Form = GenericForm<typeof former.form>
+const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_info = await reqs.add(q.bug.issues.InfoResolve).setup(req => {

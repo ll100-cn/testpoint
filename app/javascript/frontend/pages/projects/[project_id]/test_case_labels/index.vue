@@ -10,14 +10,14 @@
   <FormErrorAlert :validator="validator" />
 
   <Card>
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>标签</TableHead>
             <TableHead>描述</TableHead>
             <TableHead>案例</TableHead>
-            <TableHead></TableHead>
+            <TableHead role="actions"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -26,19 +26,17 @@
               <TableCell>{{ test_case_label.name }}</TableCell>
               <TableCell>{{ test_case_label.description }}</TableCell>
               <TableCell>{{ test_case_label.test_case_count }}</TableCell>
-              <TableCell>
-                <div class="flex justify-end space-x-3">
-                  <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`" class="link">
-                    <i class="far fa-pencil-alt" /> 修改
-                  </router-link>
-                  <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
-                </div>
+              <TableCell role="actions">
+                <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`" class="link">
+                  <i class="far fa-pencil-alt" /> 修改
+                </router-link>
+                <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
   </Card>
 </template>
 
@@ -54,8 +52,8 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Button } from '$ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import Validator from '$ui/simple_form/Validator';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
+import { Validator } from '$ui/simple_form'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -85,11 +83,7 @@ async function onRemove(id: number) {
 
     router.go(0)
   } catch (error) {
-    if (validator.processError(error)) {
-      return
-    }
-
-    throw error
+    validator.processError(error)
   }
 }
 

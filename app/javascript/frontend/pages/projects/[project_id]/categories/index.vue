@@ -10,7 +10,7 @@
   <ActionerAlert :actioner="actioner" />
 
   <Card>
-    <CardContent>
+    <CardTable>
       <Table>
         <TableHeader>
           <TableRow>
@@ -18,7 +18,7 @@
             <TableHead>名称</TableHead>
             <TableHead>描述</TableHead>
             <TableHead>关联问题数</TableHead>
-            <TableHead></TableHead>
+            <TableHead role="actions"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -30,19 +30,17 @@
               </TableCell>
               <TableCell>{{ category.description }}</TableCell>
               <TableCell>{{ category.issue_count }}</TableCell>
-              <TableCell>
-                <div class="flex justify-end space-x-3">
-                  <router-link class="link" v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
-                    <i class="far fa-pencil-alt" /> 修改
-                  </router-link>
-                  <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
-                </div>
+              <TableCell role="actions">
+                <router-link class="link" v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
+                  <i class="far fa-pencil-alt" /> 修改
+                </router-link>
+                <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
         </TableBody>
       </Table>
-    </CardContent>
+    </CardTable>
   </Card>
 </template>
 
@@ -56,10 +54,16 @@ import * as q from '@/requests'
 import { Category } from '@/models'
 import { usePageStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent } from '$ui/card'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, TableEmpty } from '$ui/table'
+import { Card, CardContent, CardTable, CardTopState } from '$ui/card'
 import Button from '$ui/button/Button.vue'
 import useRequestList from '@/lib/useRequestList'
+import { Alert, AlertDescription, AlertTitle } from '$ui/alert'
+import { Badge } from '$ui/badge'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { ref } from 'vue'
+import { DropdownMenuItemIndicator, DropdownMenuPortal } from 'reka-ui'
+import { Progress } from '$ui/progress'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -69,6 +73,10 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 
 const project_id = params.project_id
+
+const showStatusBar = ref(false)
+const showActivityBar = ref(false)
+const showPanel = ref(false)
 
 const categories = reqs.add(q.project.categories.InfoList).setup(req => {
   req.interpolations.project_id = project_id
@@ -87,4 +95,9 @@ function deleteCategory(id: number) {
   })
 }
 
+const attrs = {
+  'data-test': null,
+}
+
+const progress = ref(13)
 </script>
