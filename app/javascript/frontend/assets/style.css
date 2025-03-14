@@ -1,4 +1,4 @@
-@reference './theme/main.css';
+@reference '$presets/theme/main.css';
 
 .no-margin-bottom {
   overflow: hidden;

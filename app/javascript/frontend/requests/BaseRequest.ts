@@ -25,7 +25,7 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
   config: AxiosRequestConfig = {}
   ctx: RequestContext = { $axios: null! }
 
-  setup(ctx: { $axios: any }, callback?: (instance: this) => void | null): this {
+  setup(ctx: { $axios: any }, callback: (instance: this) => void | null ): this {
     this.ctx = ctx
 
     if (callback) {
@@ -94,6 +94,10 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
     if (data) {
       const formData = data instanceof FormData ? data : this.buildFormData(data, config.headers!["Content-Type"])
       config.data = formData
+    }
+
+    if (config.method == "PATCH" || config.method == "POST" || config.method == "DELETE") {
+      config.headers!["X-CSRF-Token"] = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content")
     }
 
     const resp = await $axios.request(config)

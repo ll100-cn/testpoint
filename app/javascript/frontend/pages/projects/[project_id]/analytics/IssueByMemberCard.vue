@@ -10,7 +10,7 @@
           </Progress>
         </div>
 
-        <!-- <div class="progress flex-grow-1" style="height: 0.75rem; opacity: 0.7;">
+        <!-- <div class="progress grow-1" style="height: 0.75rem; opacity: 0.7;">
           <template v-for="category in categories" :key="category.id">
             <div v-if="getCount(category, member) != 0" class="progress-bar" :style="`background-color: ${category.color}; width: ${ buildPercentStr(getCount(category, member), total_count) };`" role="progressbar" />
           </template>

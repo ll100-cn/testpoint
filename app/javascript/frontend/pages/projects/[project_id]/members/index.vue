@@ -53,7 +53,6 @@ import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Member } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
-import { type PageQuery } from '@/types'
 import _ from 'lodash'
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -77,10 +76,6 @@ const active = ref('normal')
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
-
-const currentQuery = ref<PageQuery>({
-  page: _.toInteger(route.query.page) || 1,
-})
 
 const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
 await reqs.performAll()

@@ -8,4 +8,4 @@
 @plugin 'tailwind-scrollbar';
 
 
-@config '../../../../../tailwind.config.ts';
+@config '../../../../tailwind.config.ts';

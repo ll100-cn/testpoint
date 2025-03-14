@@ -101,7 +101,7 @@ watch(modelValue, (new_value) => {
 </script>
 
 <style scoped>
-@reference "../../assets/theme/main.css";
+@reference "$presets/theme/main.css";
 
 .editor-preview {
   img {

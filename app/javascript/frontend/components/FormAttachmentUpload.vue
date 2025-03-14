@@ -1,13 +1,13 @@
 <template>
-  <div class="d-flex border bg-light p-2 align-items-center">
+  <div class="flex border bg-light p-2 items-center">
     <div class="me-2" style="width: 3rem">
-      <div class="ratio ratio-1x1">
+      <div class="aspect-square">
         <img src="@/assets/images/file.png" class="h-100" alt="">
       </div>
     </div>
-    <div class="flex-grow-1 flex-column">
+    <div class="grow-1 flex-column">
       <span class="mb-0">{{ upload_file.file.name }}</span>
-      <div class="d-flex align-items-center justify-content-between">
+      <div class="flex items-center justify-content-between">
         <div class="text-secondary small">
           <span class="upload-size">{{ prettyBytes(upload_file.loaded) }}</span> / {{ prettyBytes(upload_file.total) }}
         </div>

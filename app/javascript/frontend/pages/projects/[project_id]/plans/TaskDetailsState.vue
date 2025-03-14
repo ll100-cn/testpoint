@@ -2,7 +2,7 @@
   <ul>
     <template v-for="{ phase_info, task_upshot, issues } in items">
       <li :style="{ listStyleType: current_phase_id == task_upshot.phase_id ? 'disclosure-closed' : 'initial'}">
-        <div class="d-flex align-items-center">
+        <div class="flex items-center">
           <span class="me-2">{{ phase_info.title }}</span>
 
           <TaskStateLabel v-if="task_upshot.state_override" :state="task_upshot.state_override" />
