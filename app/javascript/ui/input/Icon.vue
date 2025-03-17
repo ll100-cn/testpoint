@@ -1,3 +1,6 @@
+<!--
+  SNIP: ca0f84dbd46db17b68bb6558d749a0c7
+-->
 <template>
   <IconifyIcon v-bind="$attrs" :icon="icon" :customise="cleanStrokeWidth" />
 </template>

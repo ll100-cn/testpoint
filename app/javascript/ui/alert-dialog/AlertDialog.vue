@@ -1,3 +1,19 @@
+<!--
+  SNIP: ed524a4e5c4819c66579868d8245d2de
+  FILES:
+   - AlertDialogAction.vue
+   - AlertDialogCancel.vue
+   - AlertDialogContent.vue
+   - AlertDialogDescription.vue
+   - AlertDialogFooter.vue
+   - AlertDialogHeader.vue
+   - AlertDialogTitle.vue
+   - AlertDialogTrigger.vue
+   - types.ts => AlertDialog-types.ts
+   - index.ts => AlertDialog-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import { type AlertDialogEmits, AlertDialogRoot, useForwardPropsEmits } from 'reka-ui'
 import { computed, type HTMLAttributes, withDefaults } from 'vue'

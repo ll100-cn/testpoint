@@ -1,3 +1,18 @@
+<!--
+  SNIP: 33d22c009dfa835af4047fb887798c4d
+  FILES:
+   - DialogClose.vue
+   - DialogContent.vue
+   - DialogDescription.vue
+   - DialogFooter.vue
+   - DialogHeader.vue
+   - DialogTitle.vue
+   - DialogTrigger.vue
+   - types.ts => Dialog-types.ts
+   - index.ts => Dialog-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import { DialogRoot, type DialogRootEmits, useForwardPropsEmits } from 'reka-ui'
 import { provideDialogPresenter, relayDialogPresenterConfig, type DialogPresenter, type DialogPresenterConfig, useDialogPresenters } from './types'

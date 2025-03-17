@@ -1,3 +1,6 @@
+<!--
+  SNIP: ca0f84dbd46db17b68bb6558d749a0c7
+-->
 <script setup lang="ts" generic="T">
 import { type HTMLAttributes, computed } from 'vue'
 import { CheckboxRoot, RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps, useForwardProps } from 'reka-ui'

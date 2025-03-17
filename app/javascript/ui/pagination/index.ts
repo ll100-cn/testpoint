@@ -1,8 +1,5 @@
-export {
-  PaginationRoot as Pagination,
-  PaginationList,
-  PaginationListItem,
-} from 'reka-ui'
+export { PaginationList, PaginationListItem } from 'reka-ui'
+export { default as Pagination } from './Pagination.vue'
 export { default as PaginationEllipsis } from './PaginationEllipsis.vue'
 export { default as PaginationFirst } from './PaginationFirst.vue'
 export { default as PaginationLast } from './PaginationLast.vue'

@@ -1,3 +1,11 @@
+<!--
+  SNIP: 7f2d49c778b99ac99546f6b00b3656b0
+  FILES:
+   - types.ts => Well-types.ts
+   - index.ts => Well-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import { cn } from '$ui/utils'
 import { computed, type HTMLAttributes } from 'vue'

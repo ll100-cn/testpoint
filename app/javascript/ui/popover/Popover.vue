@@ -1,3 +1,13 @@
+<!--
+  SNIP: dea357fc26c9e75163c9be72443bd4e3
+  FILES:
+   - PopoverContent.vue
+   - PopoverTrigger.vue
+   - types.ts => Popover-types.ts
+   - index.ts => Popover-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import { computed, type HTMLAttributes, withDefaults } from 'vue'
 import { PopoverRoot, useForwardPropsEmits } from 'reka-ui'

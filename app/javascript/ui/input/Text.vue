@@ -1,3 +1,6 @@
+<!--
+  SNIP: ca0f84dbd46db17b68bb6558d749a0c7
+-->
 <script setup lang="ts" generic="T">
 import { type HTMLAttributes, type InputHTMLAttributes, computed } from 'vue'
 import { useForwardProps } from 'reka-ui'

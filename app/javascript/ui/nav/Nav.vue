@@ -1,3 +1,13 @@
+<!--
+  SNIP: dea357fc26c9e75163c9be72443bd4e3
+  FILES:
+   - NavItem.vue
+   - NavList.vue
+   - types.ts => Nav-types.ts
+   - index.ts => Nav-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import { cn } from '../utils'
 import { TabsList, TabsRoot, useForwardPropsEmits, type TabsListProps, type TabsRootEmits, type TabsRootProps } from 'reka-ui'

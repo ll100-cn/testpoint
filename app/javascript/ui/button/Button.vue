@@ -1,3 +1,12 @@
+<!--
+  SNIP: ed524a4e5c4819c66579868d8245d2de
+  FILES:
+   - ButtonProvider.vue
+   - types.ts => Button-types.ts
+   - index.ts => Button-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { computed, useAttrs, type HTMLAttributes, withDefaults } from 'vue'

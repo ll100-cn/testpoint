@@ -1,3 +1,13 @@
+<!--
+  SNIP: 7f2d49c778b99ac99546f6b00b3656b0
+  FILES:
+   - TooltipContent.vue
+   - TooltipTrigger.vue
+   - types.ts => Tooltip-types.ts
+   - index.ts => Tooltip-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import { TooltipProvider, TooltipRoot, type TooltipRootEmits, type TooltipRootProps, useForwardPropsEmits } from 'reka-ui'
 import { computed, type HTMLAttributes, withDefaults } from 'vue'

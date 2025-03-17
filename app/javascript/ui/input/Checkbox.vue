@@ -1,3 +1,8 @@
+<!--
+  SNIP: ca0f84dbd46db17b68bb6558d749a0c7
+  FILES:
+   - CheckboxRaw.vue
+-->
 <template>
   <CheckboxRaw v-model="checked" />
 </template>

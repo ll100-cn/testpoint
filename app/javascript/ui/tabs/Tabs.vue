@@ -1,3 +1,15 @@
+<!--
+  SNIP: 7f2d49c778b99ac99546f6b00b3656b0
+  FILES:
+   - Tabs.vue
+   - TabsContent.vue
+   - TabsList.vue
+   - TabsTrigger.vue
+   - types.ts => Tabs-types.ts
+   - index.ts => Tabs-index.ts
+  CHANGELOG:
+   - 2025-03-17 整理代码
+-->
 <script setup lang="ts">
 import type { TabsRootEmits, TabsRootProps } from 'reka-ui'
 import { TabsRoot, useForwardPropsEmits } from 'reka-ui'
