@@ -45,25 +45,20 @@
 </template>
 
 <script setup lang="ts">
+import Button from '$ui/button/Button.vue'
+import { Card, CardTable } from '$ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$ui/table'
 import { Actioner } from '@/components/Actioner'
 import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import * as q from '@/requests'
-import { Category } from '@/models'
-import { usePageStore } from '@/store'
-import { useRoute, useRouter } from 'vue-router'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, TableEmpty } from '$ui/table'
-import { Card, CardContent, CardTable, CardTopState } from '$ui/card'
-import Button from '$ui/button/Button.vue'
 import useRequestList from '@/lib/useRequestList'
-import { Alert, AlertDescription, AlertTitle } from '$ui/alert'
-import { Badge } from '$ui/badge'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { Category } from '@/models'
+import * as q from '@/requests'
+import { usePageStore } from '@/store'
 import { ref } from 'vue'
-import { DropdownMenuItemIndicator, DropdownMenuPortal } from 'reka-ui'
-import { Progress } from '$ui/progress'
+import { useRoute, useRouter } from 'vue-router'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -73,10 +68,6 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 
 const project_id = params.project_id
-
-const showStatusBar = ref(false)
-const showActivityBar = ref(false)
-const showPanel = ref(false)
 
 const categories = reqs.add(q.project.categories.InfoList).setup(req => {
   req.interpolations.project_id = project_id
