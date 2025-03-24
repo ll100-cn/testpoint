@@ -35,4 +35,4 @@ export interface TablePresenters {
 export const {
   useInject: useTablePresenters,
   useProvide: provideTablePresenters
-} = createProvideInject<TablePresenters>('Table-presenters')
+} = createProvideInject<TablePresenters>('table-presenters')

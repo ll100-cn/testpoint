@@ -43,18 +43,18 @@
       <template #actions>
         <Form preset="inline" size="sm" :former="searcher">
           <FormGroup path="state_eq" label="状态">
-            <controls.Selectpicker>
-              <SelectdropItem value="pending"><TaskStateLabel state="pending" /></SelectdropItem>
-              <SelectdropItem value="pass"><TaskStateLabel state="pass" /></SelectdropItem>
-              <SelectdropItem value="failure"><TaskStateLabel state="failure" /></SelectdropItem>
-            </controls.Selectpicker>
+            <controls.SelectPicker>
+              <SelectItem value="pending"><TaskStateLabel state="pending" /></SelectItem>
+              <SelectItem value="pass"><TaskStateLabel state="pass" /></SelectItem>
+              <SelectItem value="failure"><TaskStateLabel state="failure" /></SelectItem>
+            </controls.SelectPicker>
           </FormGroup>
 
           <FormGroup path="state_modify_is" label="本轮操作">
-            <controls.Selectpicker>
-              <SelectdropItem value="not_overrided">未操作</SelectdropItem>
-              <SelectdropItem value="overrided">已操作</SelectdropItem>
-            </controls.Selectpicker>
+            <controls.SelectPicker>
+              <SelectItem value="not_overrided">未操作</SelectItem>
+              <SelectItem value="overrided">已操作</SelectItem>
+            </controls.SelectPicker>
           </FormGroup>
         </Form>
       </template>
@@ -103,8 +103,8 @@ import { Nav, NavItem } from '$ui/nav'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import BlankDialog from '@/components/BlankDialog.vue'
 import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
 import RLink from '@/components/RLink.vue'
+import { SelectItem } from '$ui/select'
 
 const reqs = useRequestList()
 const route = useRoute()

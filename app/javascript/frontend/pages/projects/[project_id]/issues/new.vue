@@ -9,11 +9,11 @@
 
       <div class="space-y-3">
         <FormGroup path="issue_template_id" label="选择问题模版">
-          <controls.Selectpicker include_blank>
-            <SelectdropItem v-for="item in issue_templates" :value="item.id">
+          <controls.SelectPicker include-blank>
+            <SelectItem v-for="item in issue_templates" :value="item.id">
               {{ item.name }}
-            </SelectdropItem>
-          </controls.Selectpicker>
+            </SelectItem>
+          </controls.SelectPicker>
         </FormGroup>
 
         <template v-if="issue_template">
@@ -70,7 +70,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
+import { SelectItem } from "$ui/select"
 
 const reqs = useRequestList()
 const route = useRoute()

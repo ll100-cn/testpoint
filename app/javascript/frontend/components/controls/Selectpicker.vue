@@ -1,63 +1,63 @@
 <template>
-  <SelectdropRoot :multiple="false">
-    <SelectdropItem :value="null" v-if="includeBlankText != null">
-      <span v-if="includeBlankText.trim() == ''">&nbsp;</span>
-      <span v-else>{{ includeBlankText }}</span>
-    </SelectdropItem>
-    <slot></slot>
+  <Select v-model="modelValue" :items-repo="itemsRepo" v-model:open="open">
+    <SelectTrigger>
+      <SelectValue #="{ compactSelectedNodes }">
+        <span data-placeholder v-if="isBlank">{{ includeBlankText }}</span>
+        <template v-else>
+          <template v-for="vnode in compactSelectedNodes[0]">
+            <component :is="vnode" />
+          </template>
+        </template>
+      </SelectValue>
+    </SelectTrigger>
+    <SelectContent #="{ counts }">
+      <SelectItem v-if="allowIncludeBlank" :value="null">
+        <span data-placeholder>{{ includeBlankText }}&nbsp;</span>
+      </SelectItem>
 
-    <template v-if="slots.menuAfter" #menuAfter>
-      <slot name="menuAfter"></slot>
-    </template>
-  </SelectdropRoot>
+      <slot></slot>
+    </SelectContent>
+  </Select>
 </template>
 
 <script setup lang="ts">
-import { ControlValueKey, relayFormPresenterConfig, useControlValue, type FormPresenterConfig } from '$ui/simple_form'
-import { computed, provide } from "vue"
-import { SelectdropRoot } from './selectdrop'
-import SelectdropItem from './selectdrop/SelectdropItem.vue'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, type SelectItemAttrs, } from '$ui/select'
+import { useControlValue } from '$ui/simple_form'
+import { computed, ref } from 'vue'
 
-interface Props {
+const props = withDefaults(defineProps<{
   includeBlank?: boolean | string
-}
-
-const props = withDefaults(defineProps<Props & FormPresenterConfig>(), {
+}>(), {
   includeBlank: true
 })
 
-const presenterConfig = relayFormPresenterConfig(props)
 const defaultModelValue = defineModel<string | number | null>()
-const modelValue = useControlValue(defaultModelValue)
+const modelValueRaw = useControlValue(defaultModelValue)
+const modelValue = computed<string | number | null>({
+  get() { return modelValueRaw.value ?? null },
+  set(value) { modelValueRaw.value = value },
+})
 
-const slots = defineSlots()
+const isBlank = computed(() => {
+  return !modelValue.value
+})
+
+const allowIncludeBlank = computed(() => {
+  return props.includeBlank !== false
+})
 
 const includeBlankText = computed(() => {
-  if (props.includeBlank === false) {
-    return null
+  if (props.includeBlank === true) {
+    return ' '
   }
 
-  if (props.includeBlank === true || props.includeBlank == '') {
-    return ''
+  if (props.includeBlank === '') {
+    return ' '
   }
 
   return props.includeBlank
 })
 
-provide(ControlValueKey, computed<(string | number)[]>({
-  get: () => {
-    if (modelValue.value) {
-      return [modelValue.value]
-    } else {
-      return []
-    }
-  },
-  set: (value) => {
-    if (value) {
-      modelValue.value = value[0] ?? null
-    } else {
-      modelValue.value = null
-    }
-  }
-}))
+const itemsRepo = ref(new Map<string, SelectItemAttrs>())
+const open = ref(false)
 </script>

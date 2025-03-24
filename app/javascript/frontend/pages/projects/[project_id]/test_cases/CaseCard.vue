@@ -3,34 +3,32 @@
     <CardHeader>
       <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()" size="sm">
         <FormGroup path="platform_id" label="平台">
-          <controls.Selectpicker include-blank="任意">
-            <SelectdropItem v-for="platform in _platforms" :value="platform.id">
+          <controls.SelectPicker include-blank="任意">
+            <SelectItem v-for="platform in _platforms" :value="platform.id">
               <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
               {{ platform.name }}
-            </SelectdropItem>
+            </SelectItem>
 
-            <template #menuAfter>
-              <DropdownMenuSeparator></DropdownMenuSeparator>
-              <DropdownMenuItem as-child>
-                <router-link target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
-              </DropdownMenuItem>
-            </template>
-          </controls.Selectpicker>
+            <SelectSeparator />
+
+            <div class="px-3 py-2">
+              <router-link target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
+            </div>
+          </controls.SelectPicker>
         </FormGroup>
 
         <FormGroup path="label_id" label="标签">
-          <controls.Selectpicker include-blank="任意">
-            <SelectdropItem v-for="label in _labels" :value="label.id">
+          <controls.SelectPicker include-blank="任意">
+            <SelectItem v-for="label in _labels" :value="label.id">
               {{ label.name }}
-            </SelectdropItem>
+            </SelectItem>
 
-            <template #menuAfter>
-              <DropdownMenuSeparator></DropdownMenuSeparator>
-              <DropdownMenuItem as-child>
-                <router-link target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
-              </DropdownMenuItem>
-            </template>
-          </controls.Selectpicker>
+            <SelectSeparator />
+
+            <div class="px-3 py-2">
+              <router-link target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
+            </div>
+          </controls.SelectPicker>
         </FormGroup>
 
         <FormGroup path="group_name_search" label="分组">
@@ -38,11 +36,11 @@
         </FormGroup>
 
         <FormGroup path="relate_state" label="关联需求">
-          <controls.Selectpicker include_blank>
-            <SelectdropItem v-for="state in Object.keys(TEST_CASE_RELATE_STATES)" :value="state">
+          <controls.SelectPicker include-blank>
+            <SelectItem v-for="state in Object.keys(TEST_CASE_RELATE_STATES)" :value="state">
               {{ TEST_CASE_RELATE_STATES[state] }}
-            </SelectdropItem>
-          </controls.Selectpicker>
+            </SelectItem>
+          </controls.SelectPicker>
         </FormGroup>
       </Form>
 
@@ -89,9 +87,8 @@ import CardNewDialog from './CardNewDialog.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { TEST_CASE_RELATE_STATES } from '@/constants'
+import { SelectItem, SelectSeparator } from '$ui/select'
 
 const reqs = useRequestList()
 const route = useRoute()

@@ -14,6 +14,10 @@ import { computed, type HTMLAttributes, withDefaults } from 'vue'
 import { cn } from '../utils'
 import { provideTooltipPresenter, relayTooltipPresenterConfig, useTooltipPresenters, type TooltipPresenter, type TooltipPresenterConfig } from './types'
 
+defineOptions({
+  inheritAttrs: false
+})
+
 const presenters = useTooltipPresenters()
 
 interface Props {
@@ -36,7 +40,7 @@ const forwarded = useForwardPropsEmits(props, emits)
 
 <template>
   <TooltipProvider>
-    <TooltipRoot v-bind="forwarded">
+    <TooltipRoot v-bind="{ ...$attrs, ...forwarded }">
       <slot />
     </TooltipRoot>
   </TooltipProvider>

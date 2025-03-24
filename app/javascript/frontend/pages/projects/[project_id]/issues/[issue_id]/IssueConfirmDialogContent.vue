@@ -12,12 +12,12 @@
         </FormGroup>
 
         <FormGroup path="category_id" label="分类">
-          <controls.Selectpicker>
-            <SelectdropItem v-for="category in categories" :value="category.id">
+          <controls.SelectPicker>
+            <SelectItem v-for="category in categories" :value="category.id">
               <i class="fas fa-circle" :style="{ color: category.color }"></i>
               {{ category.name }}
-            </SelectdropItem>
-          </controls.Selectpicker>
+            </SelectItem>
+          </controls.SelectPicker>
         </FormGroup>
 
         <FormGroup path="assignee_id" label="受理人">
@@ -46,8 +46,8 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { SelectdropItem } from '@/components/controls/selectdrop'
 import { useRoute } from "vue-router"
+import { SelectItem } from '$ui/select'
 
 const reqs = useRequestList()
 const open = defineModel('open')

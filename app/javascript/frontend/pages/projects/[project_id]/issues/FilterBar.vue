@@ -1,45 +1,45 @@
 <template>
   <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
     <FormGroup label="分类" path="category_id_eq">
-      <controls.Selectpicker include-blank="全部">
+      <controls.SelectPicker include-blank="全部">
         <template v-for="category_stat in summary.by_category">
-          <SelectdropItem v-if="category_stat.count > 0" :value="category_stat.category?.id ?? -1">
+          <SelectItem v-if="category_stat.count > 0" :value="category_stat.category?.id ?? -1">
             {{ category_stat.category?.name ?? '未分配' }} ({{ category_stat.count }})
-          </SelectdropItem>
+          </SelectItem>
         </template>
-      </controls.Selectpicker>
+      </controls.SelectPicker>
     </FormGroup>
 
     <FormGroup label="里程碑" path="milestone_id_eq">
-      <controls.Selectpicker include-blank="全部">
-        <SelectdropItem v-for="milestone in milestone_collection" :value="milestone.id">
+      <controls.SelectPicker include-blank="全部">
+        <SelectItem v-for="milestone in milestone_collection" :value="milestone.id">
           {{ milestone.title }}
-        </SelectdropItem>
-      </controls.Selectpicker>
+        </SelectItem>
+      </controls.SelectPicker>
     </FormGroup>
 
     <FormGroup label="受理人" path="assignee_id_eq">
-      <controls.Selectpicker include-blank="全部">
-        <SelectdropItem v-for="assignee in assignee_collection" :value="assignee.id">
+      <controls.SelectPicker include-blank="全部">
+        <SelectItem v-for="assignee in assignee_collection" :value="assignee.id">
           {{ assignee.name }}
-        </SelectdropItem>
-      </controls.Selectpicker>
+        </SelectItem>
+      </controls.SelectPicker>
     </FormGroup>
 
     <FormGroup label="创建人" path="creator_id_eq">
-      <controls.Selectpicker include_blank="任意">
-        <SelectdropItem v-for="creator in creator_collection" :value="creator.id">
+      <controls.SelectPicker include-blank="任意">
+        <SelectItem v-for="creator in creator_collection" :value="creator.id">
           {{ creator.name }}
-        </SelectdropItem>
-      </controls.Selectpicker>
+        </SelectItem>
+      </controls.SelectPicker>
     </FormGroup>
 
     <FormGroup label="问题类型" path="task_id_is">
-      <controls.Selectpicker include_blank="所有">
-        <SelectdropItem v-for="item in issue_type_collection" :value="item.value">
+      <controls.SelectPicker include-blank="所有">
+        <SelectItem v-for="item in issue_type_collection" :value="item.value">
           {{ item.label }}
-        </SelectdropItem>
-      </controls.Selectpicker>
+        </SelectItem>
+      </controls.SelectPicker>
     </FormGroup>
   </Form>
 </template>
@@ -54,7 +54,7 @@ import { Search2, Filter2 } from "./types"
 import BSOption from "@/components/BSOption.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
+import { SelectItem } from "$ui/select"
 
 const route = useRoute()
 const router = useRouter()

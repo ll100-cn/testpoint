@@ -5,10 +5,7 @@ export interface TooltipPresenterConfig {
 }
 
 export type TooltipPresenter = {
-  root: (config: Partial<TooltipPresenterConfig>) => string
   content: (config: Partial<TooltipPresenterConfig>) => string
-  provider: (config: Partial<TooltipPresenterConfig>) => string
-  trigger: (config: Partial<TooltipPresenterConfig>) => string
 }
 
 export interface TooltipPresenters {
@@ -18,7 +15,6 @@ export interface TooltipPresenters {
 export const {
   relayInjectPresenterConfig: relayTooltipPresenterConfig
 } = createRelayPresenterConfig<TooltipPresenterConfig>('tooltip-presenter-config', {
-  size: 'default',
 })
 
 export const {

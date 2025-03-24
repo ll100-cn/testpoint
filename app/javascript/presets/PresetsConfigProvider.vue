@@ -87,4 +87,8 @@ import * as WellPresenters from './presenters/WellPresenters'
 import { provideWellPresenters } from '$ui/well'
 provideWellPresenters(WellPresenters)
 
+import * as SelectPresenters from './presenters/SelectPresenters'
+import { provideSelectPresenters } from '$ui/select'
+provideSelectPresenters(SelectPresenters)
+
 </script>

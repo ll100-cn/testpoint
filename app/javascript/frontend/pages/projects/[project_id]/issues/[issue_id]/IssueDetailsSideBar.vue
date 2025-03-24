@@ -13,11 +13,11 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="state" title="状态">
         <template #editable>
           <FormGroup path="state" label="">
-            <controls.Selectpicker>
-              <SelectdropItem v-for="item in OPTIONS_FOR_ISSUE_STATE" :value="item.value">
+            <controls.SelectPicker>
+              <SelectItem v-for="item in OPTIONS_FOR_ISSUE_STATE" :value="item.value">
                 <IssueStateBadge :state="item.value" />
-              </SelectdropItem>
-            </controls.Selectpicker>
+              </SelectItem>
+            </controls.SelectPicker>
           </FormGroup>
         </template>
 
@@ -71,9 +71,9 @@
       <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="category_id" title="分类">
         <template #editable>
           <FormGroup path="category_id" label="">
-            <controls.Selectpicker>
+            <controls.SelectPicker>
               <SelectDropdownItemsForCategory :categories="categories" />
-            </controls.Selectpicker>
+            </controls.SelectPicker>
           </FormGroup>
         </template>
 
@@ -139,8 +139,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "$ui/tooltip"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
+import { SelectItem } from '$ui/select'
 
 const reqs = useRequestList()
 const session = useSessionStore()

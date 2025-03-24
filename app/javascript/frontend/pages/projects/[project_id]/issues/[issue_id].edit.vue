@@ -10,9 +10,9 @@
       <div class="space-y-3">
         <FormGroup path="title" label="标题"><controls.String /></FormGroup>
         <FormGroup path="category_id" label="分类">
-          <controls.Selectpicker>
+          <controls.SelectPicker>
             <SelectDropdownItemsForCategory :categories="categories" />
-          </controls.Selectpicker>
+          </controls.SelectPicker>
         </FormGroup>
         <FormGroup path="creator_id" label="创建人">
           <controls.Select include-blank>
@@ -54,7 +54,6 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 
 const reqs = useRequestList()

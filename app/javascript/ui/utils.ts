@@ -75,3 +75,13 @@ export function bva<C extends Record<string, any>>(
     variants: variants as any
   }) as (config: Partial<C>) => string
 }
+
+export function omitProps<T extends Record<string, any>>(obj: T, ...keys: (keyof T)[]): Omit<T, typeof keys[number]> {
+  const result: Record<string, any> = {}
+  for (const key in obj) {
+    if (!keys.includes(key)) {
+      result[key] = obj[key]
+    }
+  }
+  return result as Omit<T, typeof keys[number]>
+}

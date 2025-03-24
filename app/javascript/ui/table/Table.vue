@@ -4,7 +4,7 @@
    - TableBody.vue
    - TableCaption.vue
    - TableCell.vue
-   - TableEmnpty.vue
+   - TableEmpty.vue
    - TableFooter.vue
    - TableHead.vue
    - TableHeader.vue
@@ -15,7 +15,7 @@
    - 2025-03-17 整理代码
 -->
 <script setup lang="ts">
-import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { computed, type HTMLAttributes } from 'vue'
 import { cn } from '../utils'
 import { provideTablePresenter, relayTablePresenterConfig, useTablePresenters, type TablePresenter, type TablePresenterConfig } from './types'
 
@@ -23,7 +23,7 @@ const presenters = useTablePresenters()
 
 interface Props {
   class?: HTMLAttributes['class']
-  preset?: keyof typeof presenters
+  preset?: keyof typeof presenters | TablePresenter
 }
 
 const props = withDefaults(defineProps<Props & Partial<TablePresenterConfig>>(), {

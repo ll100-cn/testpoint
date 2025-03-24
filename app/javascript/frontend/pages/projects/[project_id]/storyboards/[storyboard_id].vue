@@ -37,26 +37,26 @@
     <CardHeader class="bg-transparent">
       <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()" size="sm">
         <FormGroup path="platform_id_eq" label="平台">
-          <controls.Selectpicker include-blank="任意">
-            <SelectdropItem v-for="platform in platforms" :value="platform.id">
+          <controls.SelectPicker include-blank="任意">
+            <SelectItem v-for="platform in platforms" :value="platform.id">
               <span class="fas fa-circle me-2 small" :style="{ color: utils.calcColorHex(platform.name) }" />
               {{ platform.name }}
-            </SelectdropItem>
-          </controls.Selectpicker>
+            </SelectItem>
+          </controls.SelectPicker>
         </FormGroup>
         <FormGroup path="label_id_eq" label="标签">
-          <controls.Selectpicker include-blank="任意">
-            <SelectdropItem v-for="label in test_case_labels" :value="label.id">
+          <controls.SelectPicker include-blank="任意">
+            <SelectItem v-for="label in test_case_labels" :value="label.id">
               {{ label.name }}
-            </SelectdropItem>
-          </controls.Selectpicker>
+            </SelectItem>
+          </controls.SelectPicker>
         </FormGroup>
         <FormGroup path="relate_stat_eq" label="关联状态">
-          <controls.Selectpicker include-blank="任意">
-            <SelectdropItem v-for="relate_stat in REQUIREMENT_RELATE_STATS" :value="relate_stat.value">
+          <controls.SelectPicker include-blank="任意">
+            <SelectItem v-for="relate_stat in REQUIREMENT_RELATE_STATS" :value="relate_stat.value">
               {{ relate_stat.label }}
-            </SelectdropItem>
-          </controls.Selectpicker>
+            </SelectItem>
+          </controls.SelectPicker>
         </FormGroup>
       </Form>
 
@@ -147,9 +147,6 @@ import dagre from '@dagrejs/dagre'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import { Filter } from './type'
-import SelectdropItem from '@/components/controls/selectdrop/SelectdropItem.vue'
-import { Actioner } from '@/components/Actioner'
-import ActionerAlert from '@/components/ActionerAlert.vue'
 import { useElementSize } from '@vueuse/core'
 import { Background } from '@vue-flow/background'
 import _, { debounce } from 'lodash'
