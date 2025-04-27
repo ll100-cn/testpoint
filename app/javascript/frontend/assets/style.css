@@ -16,6 +16,8 @@
 .markdown-body {
   p {
     margin-bottom: 1em;
+    word-break: break-word;
+    overflow-wrap: break-word;
 
     a {
       @apply text-primary hover:underline;
