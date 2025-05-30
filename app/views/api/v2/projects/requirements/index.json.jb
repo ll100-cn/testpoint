@@ -1,0 +1,14 @@
+json = {
+  list: render(partial: "box", collection: @requirements, as: :requirement)
+}
+
+if resource_graph_columns.include?("counts")
+  json[:requirement_stats] = @test_case_stats.map do |requirement_id, test_cases_count|
+    {
+      id: requirement_id,
+      test_cases_count: test_cases_count,
+    }
+  end
+end
+
+json

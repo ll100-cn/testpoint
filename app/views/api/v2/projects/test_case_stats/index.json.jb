@@ -1,0 +1,12 @@
+json = []
+
+@mapping.each do |(archived, role_name, scene_path), test_cases|
+  json << {
+    archived: archived,
+    role_name: role_name,
+    scene_path: scene_path,
+    count: test_cases.count
+  }
+end
+
+json

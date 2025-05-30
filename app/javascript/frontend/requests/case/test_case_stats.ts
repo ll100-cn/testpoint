@@ -6,7 +6,7 @@ export const List = class extends BaseRequest<Array<TestCaseStat>> {
   constructor() {
     super()
     this.method = "GET"
-    this.endpoint = "/api/projects/{project_id}/test_case_stats"
+    this.endpoint = "/api/v2/projects/{project_id}/test_case_stats"
   }
 
   processResponse(response: AxiosResponse) {

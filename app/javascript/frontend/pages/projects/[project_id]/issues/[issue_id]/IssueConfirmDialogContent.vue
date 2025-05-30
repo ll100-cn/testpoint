@@ -13,16 +13,16 @@
 
         <FormGroup path="category_id" label="分类">
           <controls.Selectpicker>
-            <SelectdropItem v-for="category in categories" :value="category.id">
-              <i class="fas fa-circle" :style="{ color: category.color }"></i>
-              {{ category.name }}
+            <SelectdropItem v-for="category_box in category_boxes" :value="category_box.category.id">
+              <i class="fas fa-circle" :style="{ color: category_box.category.color }"></i>
+              {{ category_box.category.name }}
             </SelectdropItem>
           </controls.Selectpicker>
         </FormGroup>
 
         <FormGroup path="assignee_id" label="受理人">
           <controls.Select include-blank>
-            <OptionsForMember :collection="members" except_level="reporter" />
+            <OptionsForMember :collection="member_boxes" except_level="reporter" />
           </controls.Select>
         </FormGroup>
       </div>
@@ -38,9 +38,9 @@
 import useRequestList from '@/lib/useRequestList'
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import * as q from '@/requests'
-import { Category, IssueInfo, MemberInfo } from "@/models"
+import { Category, Issue, MemberInfo, IssueBox } from "@/models"
 import { useSessionStore } from "@/store"
-import { nextTick, ref } from "vue"
+import { nextTick, ref, computed } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
@@ -56,17 +56,17 @@ const route = useRoute()
 const params = route.params as any
 
 const emit = defineEmits<{
-  updated: [ IssueInfo ]
+  updated: [IssueBox]
 }>()
 
 const props = defineProps<{
-  issue_info: IssueInfo
+  issue_box: IssueBox
 }>()
 
 const former = Former.build({
-  title: props.issue_info.title,
-  category_id: props.issue_info.category_id,
-  assignee_id: props.issue_info.assignee_id,
+  title: props.issue_box.issue.title,
+  category_id: props.issue_box.issue.category_id,
+  assignee_id: props.issue_box.issue.assignee_id,
   state: 'confirmed',
 })
 
@@ -75,30 +75,30 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_info.project_id
-    req.interpolations.issue_id = props.issue_info.id
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
   }).perform(this.form)
 
-  Object.assign(props.issue_info, a_issue_action.issue)
-  props.issue_info.activities.push(...a_issue_action.activities)
-  emit('updated', props.issue_info)
+  Object.assign(props.issue_box.issue, a_issue_action.issue)
+  props.issue_box.activities.push(...a_issue_action.activities)
+  emit('updated', props.issue_box)
   open.value = false
 }
 
 const loading = ref(true)
-const members = ref([] as MemberInfo[])
-const categories = ref([] as Category[])
-async function reset() {
-  loading.value = true
+const member_page = ref(null! as any)
+const category_page = ref(null! as any)
 
-  reqs.raw(session.request(q.project.members.InfoList, props.issue_info.project_id)).setup().waitFor(members)
-  reqs.add(q.project.categories.List, params.project_id).setup().waitFor(categories)
-  await reqs.performAll()
+reqs.raw(session.request(q.project.members.InfoList, props.issue_box.issue.project_id)).setup().waitFor(member_page)
+reqs.raw(session.request(q.project.categories.List, props.issue_box.issue.project_id)).setup().waitFor(category_page)
+await reqs.performAll()
 
-  nextTick(() => {
-    loading.value = false
-  })
-}
+const member_boxes = computed(() => member_page.value.list)
+const category_boxes = computed(() => category_page.value.list)
+
+nextTick(() => {
+  loading.value = false
+})
 
 defineExpose({
   reset

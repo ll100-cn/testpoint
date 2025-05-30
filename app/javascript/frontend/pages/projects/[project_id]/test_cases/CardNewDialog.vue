@@ -52,11 +52,11 @@ const FormGroup = GenericFormGroup<typeof former.form>
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
 former.doPerform = async function() {
-  const new_test_case = await reqs.add(q.case.test_cases.Create).setup(req => {
+  const new_test_case_box = await reqs.add(q.case.test_cases.Create).setup(req => {
     req.interpolations.project_id = project_id.value
   }).perform(this.form)
 
-  emit('create', new_test_case)
+  emit('create', new_test_case_box.test_case)
   open.value = false
 }
 

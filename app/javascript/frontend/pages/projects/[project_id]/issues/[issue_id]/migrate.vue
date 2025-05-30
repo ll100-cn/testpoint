@@ -10,14 +10,14 @@
       <div class="space-y-3">
         <FormGroup path="target_project_id" label="项目">
           <controls.Select include-blank>
-            <OptionsForSelect :collection="projects.map(it => ({ label: it.name, value: it.id }))" />
+            <OptionsForSelect :collection="member_boxes.map(it => ({ label: it.member.name, value: it.member.id }))" />
           </controls.Select>
         </FormGroup>
 
         <FormGroup path="target_category_id" label="分类">
           <span class="form-control-plaintext text-muted" v-if="actioner.processing">载入中...</span>
           <controls.Select v-else include-blank>
-            <OptionsForCategory :collection="categories" />
+            <OptionsForCategory :collection="category_boxes.map(it => it.category)" />
           </controls.Select>
         </FormGroup>
       </div>
@@ -41,7 +41,7 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/requests'
-import { Category } from "@/models"
+import { Category, CategoryBox, CategoryPage, IssueBox, MemberBox, MemberPage } from "@/models"
 import { usePageStore, useSessionStore } from "@/store"
 import _ from "lodash"
 import { computed, ref, watch } from 'vue'
@@ -60,11 +60,12 @@ const session = useSessionStore()
 const project_id = _.toNumber(params.project_id)
 const issue_id = _.toNumber(params.issue_id)
 
-const issue = reqs.add(q.bug.issues.Get).setup(req => {
+const issue_box = reqs.add(q.bug.issues.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).wait()
-const member_infos = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
+const member_page = ref(null! as MemberPage<MemberBox>)
+const category_page = ref(null! as CategoryPage<CategoryBox>)
 await reqs.performAll()
 
 const former = Former.build({
@@ -83,10 +84,17 @@ former.doPerform = async function() {
   router.push({ path: `/projects/${former.form.target_project_id}/issues/${issue_id}` })
 }
 
-const projects = computed(() => member_infos.value.filter(it => {
-  return ['manager', 'owner'].includes(it.role) && it.project_id != project_id
-}).map(it => it.project))
-const categories = ref([] as Category[])
+async function onProjectChange() {
+  member_page.value = await reqs.raw(session.request(q.project.members.InfoList, project_id)).setup(req => {
+    req.interpolations.project_id = project_id
+  }).perform()
+  category_page.value = await reqs.raw(session.request(q.project.categories.List, project_id)).setup(req => {
+    req.interpolations.project_id = project_id
+  }).perform()
+}
+
+const member_boxes = computed(() => member_page.value.list)
+const category_boxes = computed(() => category_page.value.list)
 
 const actioner = Actioner.build<{
   loadCategories: (project_id: number) => void
@@ -94,7 +102,7 @@ const actioner = Actioner.build<{
 
 actioner.loadCategories = function(project_id: number) {
   this.perform(async function() {
-    categories.value = await reqs.add(q.project.categories.List, project_id).setup(req => {
+    category_page.value = await reqs.add(q.project.categories.List, project_id).setup(req => {
       req.interpolations.project_id = project_id
     }).perform()
 
@@ -104,7 +112,7 @@ actioner.loadCategories = function(project_id: number) {
 
 watch(computed(() => former.form.target_project_id), function(new_value) {
   if (new_value == null) {
-    categories.value = []
+    category_page.value.list = []
     former.form.target_category_id = null
   } else {
     actioner.loadCategories(new_value)

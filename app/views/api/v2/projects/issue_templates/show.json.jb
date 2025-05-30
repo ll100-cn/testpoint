@@ -1,0 +1,1 @@
+render "box", issue_template: @issue_template

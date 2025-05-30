@@ -19,13 +19,15 @@
 
     <FormGroup path="storyboard_id" label="所属故事板">
       <controls.Select include-blank>
-        <option v-for="storyboard in storyboards" :value="storyboard.id">{{ storyboard.title }}</option>
+        <option v-for="storyboard_box in storyboard_page.list" :value="storyboard_box.storyboard.id">
+          {{ storyboard_box.storyboard.title }}
+        </option>
       </controls.Select>
     </FormGroup>
 
     <FormGroup path="requirement_id" label="所属需求">
       <controls.Select include-blank>
-        <option v-for="requirement in requirements" :value="requirement.id">{{ requirement.title }}</option>
+        <option v-for="requirement in (requirement_page?.list.map(box => box.requirement) ?? [])" :value="requirement.id">{{ requirement.title }}</option>
       </controls.Select>
     </FormGroup>
   </div>
@@ -34,7 +36,7 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import useRequestList from '@/lib/useRequestList'
-import { EntityRepo, Platform, Requirement, Roadmap, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, Requirement, RequirementBox, RequirementPage, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import * as q from '@/requests'
@@ -60,9 +62,9 @@ const emit = defineEmits<{
   (e: 'create', event: Event): void,
 }>()
 
-const requirements = ref([] as Requirement[])
+const requirement_page = ref(null as RequirementPage<RequirementBox> | null)
 
-const storyboards = reqs.add(q.project.storyboards.List).setup(req => {
+const storyboard_page = reqs.add(q.project.storyboards.List).setup(req => {
   req.interpolations.project_id = page.inProject()!.project_id
 }).wait()
 if (props.former.form.storyboard_id) {
@@ -83,9 +85,7 @@ function requestRequirement(storyboard_id: number) {
     req.interpolations.project_id = page.inProject()!.project_id
     req.interpolations.storyboard_id = storyboard_id
     req.query.roadmap_id = props.newest_roadmap.id
-  }).waitFor(requirements)
+  }).waitFor(requirement_page)
 }
-
-watch
 
 </script>

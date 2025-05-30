@@ -21,16 +21,16 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="item in issue_templates" :key="item.id">
+          <template v-for="box in issue_template_boxes" :key="box.issue_template.id">
             <TableRow>
-              <TableCell>{{ item.id }}</TableCell>
-              <TableCell>{{ item.name }}</TableCell>
-              <TableCell>{{ item.lookup_by_build_form ? "可见" : "隐藏" }}</TableCell>
+              <TableCell>{{ box.issue_template.id }}</TableCell>
+              <TableCell>{{ box.issue_template.name }}</TableCell>
+              <TableCell>{{ box.issue_template.lookup_by_build_form ? "可见" : "隐藏" }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', item)" :to="`/projects/${project_id}/issue_templates/${item.id}/edit`">
+                <router-link class="link" v-if="allow('update', box.issue_template)" :to="`/projects/${project_id}/issue_templates/${box.issue_template.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', item)" href="#" @click.prevent="onRemove(item.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', box.issue_template)" href="#" @click.prevent="onRemove(box.issue_template.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref, reactive } from 'vue'
+import { getCurrentInstance, ref, reactive, computed } from 'vue'
 import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
@@ -65,10 +65,11 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const issue_templates = reqs.add(q.project.issue_templates.List).setup(req => {
+const issue_template_page = reqs.add(q.project.issue_templates.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
 await reqs.performAll()
+const issue_template_boxes = computed(() => issue_template_page.value.list)
 
 async function onRemove(id: number) {
   if (!confirm("是否删除问题模版？")) {

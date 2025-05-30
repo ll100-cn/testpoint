@@ -1,34 +1,34 @@
 <template>
   <PageHeader>
-    <PageTitle class="me-1">#{{ issue_info.id }} {{ issue_info.titleWithPriority() }}</PageTitle>
+    <PageTitle class="me-1">#{{ issue_box.issue.id }} {{ issue_box.issue.titleWithPriority() }}</PageTitle>
     <span class="me-1">
-      <IssueStateBadge :state="issue_info.state" />
+      <IssueStateBadge :state="issue_box.issue.state" />
     </span>
     <div class="flex ms-auto space-x-3 items-center">
       <Button v-if="!readonly && allow('update', Issue)" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</Button>
-      <Button variant="destructive" v-if="!readonly && allow('manage', Issue)" :to="`/projects/${project_id}/issues/${issue_info.id}/merge`">合并</Button>
+      <Button variant="destructive" v-if="!readonly && allow('manage', Issue)" :to="`/projects/${project_id}/issues/${issue_box.issue.id}/merge`">合并</Button>
     </div>
   </PageHeader>
 
-  <div v-if="issue_info.archived_at" class="alert alert-danger">
+  <div v-if="issue_box.issue.archived_at" class="alert alert-danger">
     该问题已完结
   </div>
 
   <div class="flex gap-x-6">
     <div class="flex-1 space-y-4">
-      <IssueRelatedTask v-if="issue_info.task" :task="issue_info.task" :project_id="project_id" />
-      <IssueContent :readonly="readonly" :issue_info="issue_info" @updated="onIssueInfoUpdated" @convert="onIssueConvert" />
-      <IssueSurveyCard :readonly="readonly" :issue_info="issue_info" v-if="issue_info.surveys.length > 0" @modal="(...args) => issue_info_dialog.show(...args)" />
+      <IssueRelatedTask v-if="issue_box.issue.task" :task="issue_box.issue.task" :project_id="project_id" />
+      <IssueContent :readonly="readonly" :issue_box="issue_box" @updated="onIssueUpdated" @convert="onIssueConvert" />
+      <IssueSurveyCard :readonly="readonly" :issue_box="issue_box" v-if="issue_box.surveys?.length > 0" @modal="(...args) => issue_dialog.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
         <template v-if="(item instanceof Comment)">
-          <IssueComment :readonly="readonly" :issue="issue_info" :comment="item" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_dialog.show(...args)" />
+          <IssueComment :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBox.from(item)" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_dialog.show(...args)" />
         </template>
         <template v-else-if="(item instanceof IssueActivity)">
-          <IssueActivityInfo :issue="issue_info" :issue_activity="item" />
+          <IssueActivityInfo :issue_box="issue_box" :issue_activity="item" />
         </template>
         <template v-else-if="(item instanceof IssueRelationship)">
-          <IssueRelationshipInfo :readonly="readonly" :issue_info="issue_info" :issue_relationship="item" @updated="onIssueInfoUpdated" />
+          <IssueRelationshipInfo :readonly="readonly" :issue_box="issue_box" :issue_relationship="item" @updated="onIssueUpdated" />
         </template>
       </div>
 
@@ -39,20 +39,20 @@
         <CardContent>
           <ActionerAlert :actioner="actioner" />
           <div class="flex items-center gap-x-2">
-            <Button v-if="allow('create', Comment)" @click="comment_dialog.show(IssueCommentCreateDialogContent, issue_info)">
+            <Button v-if="allow('create', Comment)" @click="comment_dialog.show(IssueCommentCreateDialogContent, issue_box)">
               <i class="far fa-comment fa-fw" /> 新增评论
             </Button>
-            <Button v-if="allow('manage', issue_info)" @click="issue_info_dialog.show(IssueInfoRelationshipNewDialogContent)">
+            <Button v-if="allow('manage', issue_box.issue)" @click="issue_dialog.show(IssueRelationshipNewDialogContent)">
               <i class="far fa-link fa-fw" /> 关联其它问题
             </Button>
-            <Button v-if="allow('create', IssueSurvey)" @click="issue_info_dialog.show(IssueSurveyCreateDialogContent)">
+            <Button v-if="allow('create', IssueSurvey)" @click="issue_dialog.show(IssueSurveyCreateDialogContent)">
               <i class="far fa-file-lines fa-fw" /> 新增问题模版
             </Button>
 
-            <template v-if="allow('manage', issue_info) || issue_info.assignee_id == profile.member_id">
-              <template v-if="issue_info.assignee && ['confirmed', 'processing', 'processed'].includes(issue_info.state)">
+            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.assignee_id == profile.member_id">
+              <template v-if="issue_box.issue.assignee && ['confirmed', 'processing', 'processed'].includes(issue_box.issue.state)">
                 <ButtonGroup class="ms-auto">
-                  <template v-if="issue_info.state == 'confirmed'">
+                  <template v-if="issue_box.issue.state == 'confirmed'">
                     <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processing')">
                       <span class="me-1">设置为</span><IssueStateBadge state="processing" />
                     </Button>
@@ -61,7 +61,7 @@
                     </Button>
                   </template>
 
-                  <template v-if="issue_info.state == 'processing'">
+                  <template v-if="issue_box.issue.state == 'processing'">
                     <Button preset="outline" variant="secondary" disabled @click.prevent="changeIssueState('processing')">
                       已设置 <IssueStateBadge state="processing" />
                     </Button>
@@ -70,7 +70,7 @@
                     </Button>
                   </template>
 
-                  <template v-if="issue_info.state == 'processed'">
+                  <template v-if="issue_box.issue.state == 'processed'">
                     <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processing')">
                       <span class="me-1">设置为</span><IssueStateBadge state="processing" />
                     </Button>
@@ -82,31 +82,31 @@
               </template>
             </template>
 
-            <template v-if="allow('manage', issue_info) && issue_info.state == 'pending'">
+            <template v-if="allow('manage', issue_box.issue) && issue_box.issue.state == 'pending'">
               <ButtonGroup class="ms-auto">
-                <Button preset="outline" variant="secondary" @click.prevent="issue_comment_create_dialog.show(IssueWaitingDialogContent, issue_info)">
+                <Button preset="outline" variant="secondary" @click.prevent="issue_comment_create_dialog.show(IssueWaitingDialogContent, issue_box)">
                   <span class="me-1">设置为</span><IssueStateBadge state="waiting" />
                 </Button>
-                <Button preset="outline" variant="secondary" @click.prevent="issue_info_dialog.show(IssueConfirmDialogContent)">
+                <Button preset="outline" variant="secondary" @click.prevent="issue_dialog.show(IssueConfirmDialogContent)">
                   <span class="me-1">设置为</span><IssueStateBadge state="confirmed" />
                 </Button>
               </ButtonGroup>
             </template>
 
-            <template v-if="allow('manage', issue_info) || issue_info.creator_id == profile.member_id">
-              <template v-if="issue_info.state == 'resolved' && !issue_info.archived_at">
+            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.creator_id == profile.member_id">
+              <template v-if="issue_box.issue.state == 'resolved' && !issue_box.issue.archived_at">
                 <ButtonGroup class="ms-auto">
-                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_info_resolve_dialog.show(IssueResolveDialogContent)">
+                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_resolve_dialog.show(IssueResolveDialogContent)">
                     <span class="me-1">设置为</span><IssueStateBadge state="archived" text="已完结" />
                   </Button>
 
-                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_info_dialog.show(IssueUnresolveDialogContent)">
+                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_dialog.show(IssueUnresolveDialogContent)">
                     <span class="me-1">设置为</span><IssueStateBadge state="pending" text="未解决" />
                   </Button>
                 </ButtonGroup>
               </template>
-              <template v-if="issue_info.state == 'closed' && !issue_info.archived_at">
-                <Button preset="outline" variant="silence" size="sm" @click.prevent="issue_info_dialog.show(IssueResolveDialogContent)">
+              <template v-if="issue_box.issue.state == 'closed' && !issue_box.issue.archived_at">
+                <Button preset="outline" variant="silence" size="sm" @click.prevent="issue_dialog.show(IssueResolveDialogContent)">
                   <span class="me-1">设置为</span><IssueStateBadge state="archived" text="确认完结" />
                 </Button>
               </template>
@@ -115,14 +115,14 @@
         </CardContent>
       </Card>
     </div>
-    <IssueDetailsSideBar :readonly="readonly" class="w-full md:w-1/4" :issue_info="issue_info" @updated="onIssueInfoUpdated" />
+    <IssueDetailsSideBar :readonly="readonly" class="w-full md:w-1/4" :issue_box="issue_box" @updated="onIssueUpdated" />
   </div>
 
   <teleport to="body">
     <BlankDialog ref="comment_dialog" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
-    <BlankDialog ref="issue_info_dialog" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
-    <BlankDialog ref="issue_comment_create_dialog" @created="onIssueCommentCreated" v-bind="{ issue_info }" />
-    <BlankDialog ref="issue_info_resolve_dialog" @updated="onIssueInfoUpdated" v-bind="{ issue_info }" />
+    <BlankDialog ref="issue_dialog" @updated="onIssueUpdated" v-bind="{ issue_box }" />
+    <BlankDialog ref="issue_comment_create_dialog" @created="onIssueCommentCreated" v-bind="{ issue_box }" />
+    <BlankDialog ref="issue_resolve_dialog" @updated="onIssueUpdated" v-bind="{ issue_box }" />
   </teleport>
 </template>
 
@@ -132,7 +132,7 @@ import useRequestList from '@/lib/useRequestList'
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/requests'
-import { Comment, CommentRepo, Issue, IssueActivity, IssueInfo, IssueRelationship, IssueSurvey } from "@/models"
+import { Comment, CommentBox, CommentRepo, Issue, IssueActivity, IssueBox, IssueRelationship, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
@@ -143,9 +143,9 @@ import IssueCommentCreateDialogContent from "./IssueCommentCreateDialogContent.v
 import IssueConfirmDialogContent from "./IssueConfirmDialogContent.vue"
 import IssueContent from "./IssueContent.vue"
 import IssueDetailsSideBar from "./IssueDetailsSideBar.vue"
-import IssueInfoRelationshipNewDialogContent from "./IssueInfoRelationshipNewDialogContent.vue"
 import IssueRelatedTask from "./IssueRelatedTask.vue"
 import IssueRelationshipInfo from "./IssueRelationshipInfo.vue"
+import IssueRelationshipNewDialogContent from "./IssueRelationshipNewDialogContent.vue"
 import IssueResolveDialogContent from "./IssueResolveDialogContent.vue"
 import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateDialogContent from "./IssueSurveyCreateDialogContent.vue"
@@ -159,9 +159,9 @@ import Button from "$ui/button/Button.vue"
 import ButtonGroup from "$ui/button-group/ButtonGroup.vue"
 
 const comment_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const issue_info_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const issue_comment_create_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const issue_info_resolve_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const issue_resolve_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -172,55 +172,56 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = profile.allow
 
-const issue_info = reqs.add(q.bug.issues.InfoGet).setup(req => {
+const issue_box = reqs.add(q.bug.issues.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
 }).wait()
 await reqs.performAll()
-page.meta.title = `#${issue_info.value.id} ${issue_info.value.title}`
 
-const readonly = computed(() => issue_info.value.project_id.toString() !== params.project_id)
-const comments = reqs.add(q.bug.issue_comments.List).setup(req => {
+page.meta.title = `#${issue_box.value.issue.id} ${issue_box.value.issue.title}`
+
+const readonly = computed(() => issue_box.value.issue.project_id.toString() !== params.project_id)
+const comment_page = reqs.add(q.bug.issue_comments.List).setup(req => {
   req.interpolations.project_id = project_id
-  req.interpolations.issue_id = issue_info.value.id
+  req.interpolations.issue_id = issue_box.value.issue.id
 }).wait()
 await reqs.performAll()
 
 const comment_repo = computed(() => {
-  return new CommentRepo().setup(comments.value)
+  return new CommentRepo().setup(comment_page.value.list.map(it => it.comment))
 })
 
 const timelines = computed(() => {
-  return _.orderBy([ ...comment_repo.value.parent_id.findAll(null), ...issue_info.value.activities, ...issue_info.value.target_relationships, ...issue_info.value.source_relationships ], [ "created_at" ])
+  return _.orderBy([ ...comment_repo.value.parent_id.findAll(null), ...issue_box.value.activities, ...issue_box.value.target_relationships, ...issue_box.value.source_relationships ], [ "created_at" ])
 })
 
-function onIssueInfoUpdated(new_issue_info: IssueInfo) {
-  issue_info.value = new_issue_info
+function onIssueUpdated(new_issue_box: IssueBox) {
+  issue_box.value = new_issue_box
 }
 
-function onCommentCreated(comment: Comment) {
-  comments.value.push(comment)
+function onCommentCreated(comment_box: CommentBox) {
+  comment_page.value.list.push(comment_box)
 }
 
-function onCommentDestroyed(comment: Comment) {
-  const index = comments.value.findIndex(it => it.id === comment.id)
-  comments.value.splice(index, 1)
+function onCommentDestroyed(comment_box: CommentBox) {
+  const index = comment_page.value.list.findIndex(it => it.comment.id === comment_box.comment.id)
+  comment_page.value.list.splice(index, 1)
 }
 
-async function onCommentUpdated(comment: Comment) {
-  const index = comments.value.findIndex(it => it.id === comment.id)
-  comments.value[index] = comment
+async function onCommentUpdated(comment_box: CommentBox   ) {
+  const index = comment_page.value.list.findIndex(it => it.comment.id === comment_box.comment.id)
+  comment_page.value.list[index] = comment_box
 }
 
-function onIssueCommentCreated(a_issue_info: IssueInfo, a_comment: Comment) {
-  issue_info.value = a_issue_info
-  comments.value.push(a_comment)
+function onIssueCommentCreated(a_issue_box: IssueBox, a_comment_box: CommentBox) {
+  issue_box.value = a_issue_box
+  comment_page.value.list.push(a_comment_box)
 }
 
-async function onIssueConvert(a_issue_info: IssueInfo) {
+async function onIssueConvert(a_issue_box: IssueBox) {
   await reqs.add(q.bug.issue_bodies.Convert).setup(req => {
     req.interpolations.project_id = project_id
-    req.interpolations.issue_id = a_issue_info.id
+    req.interpolations.issue_id = a_issue_box.issue.id
   }).perform()
 
   router.go(0)
@@ -230,12 +231,13 @@ const actioner = Actioner.build()
 
 async function changeIssueState(state: string) {
   actioner.perform(async function() {
-    const a_issue_info = await reqs.add(q.bug.issues.InfoProcess).setup(req => {
+    const a_issue_box = await reqs.add(q.bug.issues.InfoProcess).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = params.issue_id
     }).perform({ state })
 
-    issue_info.value = a_issue_info
+    console.log("a_issue_box", a_issue_box)
+    issue_box.value = a_issue_box
   })
 }
 </script>

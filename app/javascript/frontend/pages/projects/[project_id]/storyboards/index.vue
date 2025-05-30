@@ -31,14 +31,14 @@ const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const project_id = params.project_id
 
-const storyboards = reqs.add(q.project.storyboards.List).setup(req => {
+const storyboard_page = reqs.add(q.project.storyboards.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
 await reqs.performAll()
 
 onActivated(() => {
-  if (storyboards.value.length > 0) {
-    router.replace(`/projects/${params.project_id}/storyboards/${storyboards.value[0].id}`)
+  if (storyboard_page.value.list.length > 0) {
+    router.replace(`/projects/${params.project_id}/storyboards/${storyboard_page.value.list[0].storyboard.id}`)
   }
 })
 

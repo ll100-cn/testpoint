@@ -1,0 +1,1 @@
+render partial: "api/v2/shared/task_upshot_box", locals: { task_upshot: @upshot }

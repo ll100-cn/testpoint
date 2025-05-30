@@ -57,4 +57,38 @@ RSpec.describe Api::V2::Projects::IssuesController, type: :controller do
       end
     end
   end
+
+  describe "POST create" do
+    let!(:title) { "issue title create" }
+    let(:attributes) { { issue_attributes: { title: title, content: "content for issue" } } }
+    action { post :create, params: attributes.merge({ project_id: project.id,
+      issue_template_id: template.id }), format: :json }
+
+    context "assignee other members as creator" do
+      let!(:user) { create :user }
+      let!(:member) { create :member, project: project, user: user }
+      before { attributes[:creator_id] = member.id }
+
+      it { is_expected.to respond_with :success
+           expect(Issue.count).to eq 1
+           expect(Issue.last.title).to eq title }
+    end
+
+    context "admin create the issue" do
+      before { attributes[:title] =  "Mail delivery test" }
+      it { is_expected.to respond_with :success
+           expect(Issue.count).to eq 1
+           expect(Issue.last.title).to eq title }
+    end
+  end
+
+  describe "GET show" do
+    action { get :show, params: { project_id: project.id, id: issue.id }, format: :json }
+    it { is_expected.to respond_with :success }
+  end
+
+  describe "DELETE destroy" do
+    action { delete :destroy, params: { project_id: project.id, id: issue.id }, format: :json }
+    it { is_expected.to respond_with :success }
+  end
 end

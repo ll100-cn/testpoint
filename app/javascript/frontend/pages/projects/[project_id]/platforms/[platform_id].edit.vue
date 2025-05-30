@@ -5,7 +5,7 @@
 
   <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
     <div class="w-full max-w-4xl mx-auto">
-      <Fields :former="former" :members="members" :project_id="project_id" />
+      <Fields :former="former" :member_boxes="member_boxes" :project_id="project_id" />
 
       <Separator class="my-4" preset="through" />
 
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import { usePageStore, useSessionStore } from "@/store"
@@ -42,17 +42,18 @@ const session = useSessionStore()
 const project_id = params.project_id
 const platform_id = params.platform_id
 
-const platform = reqs.add(q.project.platforms.Get).setup(req => {
+const platform_box = reqs.add(q.project.platforms.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.platform_id = platform_id
 }).wait()
-const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
 await reqs.performAll()
+const member_boxes = computed(() => member_page.value.list)
 
 const former = Former.build({
-  name: platform.value.name,
-  icon_svg: platform.value.icon_svg,
-  default_assignee_id: platform.value.default_assignee_id,
+  name: platform_box.value.platform.name,
+  icon_svg: platform_box.value.platform.icon_svg,
+  default_assignee_id: platform_box.value.platform.default_assignee_id,
 })
 
 const Form = GenericForm<typeof former.form>

@@ -9,7 +9,7 @@
 
   <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
     <div class="w-full max-w-4xl mx-auto">
-      <Fields :former="former" :platforms="platforms" />
+      <Fields :former="former" :platform_boxes="platform_boxes" />
 
       <Separator class="my-4" preset="through" />
 
@@ -27,7 +27,7 @@
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
 import _ from 'lodash'
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from '@/components/PageHeader.vue'
@@ -44,20 +44,22 @@ const params = route.params as any
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan = reqs.add(q.test.plans.InfoGet).setup(req => {
+const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).wait()
-const platforms = reqs.add(q.project.platforms.List).setup(req => {
+const platform_page = reqs.add(q.project.platforms.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
 await reqs.performAll()
 
+const platform_boxes = computed(() => platform_page.value.list)
+
 const validator = reactive<Validator>(new Validator())
 
 const former = Former.build({
-  title: plan.value.title,
-  platform_id: plan.value.platform_id,
+  title: plan_box.value.plan.title,
+  platform_id: plan_box.value.plan.platform_id,
 })
 
 const Form = GenericForm<typeof former.form>
@@ -69,12 +71,11 @@ former.doPerform = async function() {
     req.interpolations.plan_id = plan_id
   }).perform(this.form)
 
-  router.push({ path: `/projects/${project_id}/plans/${plan_id}`, params: { project_id } })
+  router.push(`/projects/${project_id}/plans/${plan_id}`)
 }
 
-
 function onCancel() {
-  router.push({ path: `/projects/${project_id}/plans/${plan_id}`, params: { project_id } })
+  router.push(`/projects/${project_id}/plans/${plan_id}`)
 }
 
 async function onDestroy() {
@@ -87,7 +88,7 @@ async function onDestroy() {
     req.interpolations.plan_id = plan_id
   }).perform()
 
-  router.push({ path: `/projects/${project_id}/plans`, params: { project_id } })
+  router.push(`/projects/${project_id}/plans`)
 }
 
 </script>

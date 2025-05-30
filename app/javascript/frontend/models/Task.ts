@@ -1,13 +1,12 @@
-import { Type } from "class-transformer"
+import * as t from "@/lib/transforms"
 
 export class Task {
-  id: number
-  plan_id: number
-  state: string
-  finished: boolean
-  phase_id: number
-  test_case_id: number
+  id!: number
+  plan_id!: number
+  state!: string
+  finished!: boolean
+  phase_id!: number
+  test_case_id: number | null = null
 
-  @Type(() => Date)
-  ignore_at: Date | null
+  @t.Date ignore_at: Date | null = null
 }

@@ -1,7 +1,7 @@
 export class TestCaseStat {
-  archived: boolean
-  role_name: string | null
-  scene_path: string[]
-  count: number
-  ignored: boolean | null
+  archived: boolean | null = null
+  role_name: string | null = null
+  scene_path: string[] = []
+  count: number = 0
+  ignored: boolean | null = null
 }

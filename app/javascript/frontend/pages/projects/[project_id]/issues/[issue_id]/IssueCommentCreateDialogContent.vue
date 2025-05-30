@@ -4,7 +4,6 @@
       <DialogTitle>新增评论</DialogTitle>
     </DialogHeader>
 
-
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" v-if="!loading">
       <IssueCommentForm :former="former" :attachments="[]" />
       <DialogFooter>
@@ -16,20 +15,20 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { Issue, IssueSurvey, Comment } from "@/models"
-import { getCurrentInstance, ref } from "vue"
-import IssueCommentForm from './IssueCommentForm.vue'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import useRequestList from '@/lib/useRequestList'
+import { Comment, CommentBox, IssueBox } from "@/models"
+import * as q from '@/requests'
+import { ref } from "vue"
+import IssueCommentForm from './IssueCommentForm.vue'
 
 const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
-  created: [ Comment ]
+  created: [ CommentBox ]
 }>()
 
 const former = Former.build({
@@ -39,22 +38,24 @@ const former = Former.build({
 
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
+const issue_box = ref(null! as IssueBox)
+const loading = ref(true)
 
 former.doPerform = async function() {
-  const a_comment = await reqs.add(q.bug.issue_comments.Create).setup(req => {
-    req.interpolations.project_id = issue.value.project_id
-    req.interpolations.issue_id = issue.value.id
+  console.log('issue_box project_id is', issue_box.value.issue)
+  console.log('issue_box project_id is', issue_box.value.issue.project_id)
+  const a_comment_box = await reqs.add(q.bug.issue_comments.Create).setup(req => {
+    req.interpolations.project_id = issue_box.value.issue.project_id
+    req.interpolations.issue_id = issue_box.value.issue.id
   }).perform(this.form)
 
-  emit("created", a_comment)
+  emit("created", a_comment_box)
   open.value = false
 }
 
-const issue = ref(null! as Issue)
-const loading = ref(true)
-
-function reset(a_issue: Issue) {
-  issue.value = a_issue
+function reset(a_issue_box: IssueBox) {
+  console.log("a_issue_box is", a_issue_box)
+  issue_box.value = a_issue_box
   loading.value = false
 }
 

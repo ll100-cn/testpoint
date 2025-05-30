@@ -15,7 +15,8 @@ export const useSessionStore = defineStore('session', () => {
     }
 
     try {
-      account.value = await new q.profile.accounts.Get().setup(ctx).perform1()
+      const account_box = await new q.profile.accounts.Get().setup(ctx, () => {}).perform1()
+      account.value = account_box.account
     } catch (e) {
       if (e instanceof q.ErrorUnauthorized) {
         account.value = null
@@ -36,9 +37,8 @@ export const useSessionStore = defineStore('session', () => {
       return
     }
 
-    const profile = await new q.project.profiles.Get(project_id).setup(ctx, req => {
-    }).perform1()
-    profiles.set(project_id, profile)
+    const profile_box = await new q.project.profiles.Get(project_id).setup(ctx, req => {}).perform1()
+    profiles.set(project_id, profile_box.profile)
   }
 
   function clear() {

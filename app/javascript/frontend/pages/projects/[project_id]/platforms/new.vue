@@ -5,7 +5,7 @@
 
   <Form preset="horizontal" v-bind="{ former }" @submit.prevent="former.perform()">
     <div class="w-full max-w-4xl mx-auto">
-      <Fields :former="former" :members="members" :project_id="project_id" />
+      <Fields :former="former" :member_boxes="member_boxes" :project_id="project_id" />
 
       <Separator class="my-4" preset="through" />
 
@@ -30,6 +30,7 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -40,8 +41,9 @@ const session = useSessionStore()
 
 const project_id = params.project_id
 
-const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
 await reqs.performAll()
+const member_boxes = computed(() => member_page.value.list)
 
 const former = Former.build({
   name: "",

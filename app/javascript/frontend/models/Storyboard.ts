@@ -1,4 +1,5 @@
-import { Type } from "class-transformer"
+import * as t from '@/lib/transforms'
+import { Pagination } from './Pagination'
 
 export class Storyboard {
   id!: number
@@ -8,4 +9,12 @@ export class Storyboard {
   description?: string
 
   positions: Record<string, { x: number, y: number }> = {}
+}
+
+export class StoryboardBox {
+  @t.Klass(Storyboard) storyboard!: Storyboard
+}
+
+export class StoryboardPage<Box extends StoryboardBox> extends Pagination<Box> {
+  @t.Klass(StoryboardBox) list: Box[] = []
 }

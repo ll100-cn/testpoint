@@ -5,12 +5,12 @@
     <div class="flex flex-col gap-y-4">
       <div>
         <div class="text-sm text-muted mb-2">创建时间</div>
-        <span>{{ h.datetime(issue_info.created_at) }}</span>
+        <span>{{ h.datetime(issue_box.issue.created_at) }}</span>
       </div>
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="state" title="状态">
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="state" title="状态">
         <template #editable>
           <FormGroup path="state" label="">
             <controls.Selectpicker>
@@ -21,12 +21,12 @@
           </FormGroup>
         </template>
 
-        <IssueStateBadge :state="issue_info.state" />
+        <IssueStateBadge :state="issue_box.issue.state" />
       </IssueDetailEdit>
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="priority" title="优先级">
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="priority" title="优先级">
         <template #editable>
           <FormGroup path="priority" label="">
             <controls.Select>
@@ -35,63 +35,63 @@
           </FormGroup>
         </template>
 
-        <span :class="{'text-danger': issue_info.priority == 'important'}">{{ issue_info.priority_text }}</span>
+        <span :class="{'text-danger': issue_box.issue.priority == 'important'}">{{ issue_box.issue.priority_text }}</span>
       </IssueDetailEdit>
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('manage', issue_info)" v-bind="{ former, issue_info }" code="creator_id" title="创建人">
+      <IssueDetailEdit :editable="!readonly && allow('manage', issue_box.issue)" v-bind="{ former, issue_box }" code="creator_id" title="创建人">
         <template #editable>
           <FormGroup path="creator_id" label="">
             <controls.Select include-blank>
-              <OptionsForMember :collection="members" />
+              <OptionsForMember :collection="member_boxes" />
             </controls.Select>
           </FormGroup>
         </template>
 
-        {{ issue_info.creator.name }}
+        {{ issue_box.issue.creator.name }}
       </IssueDetailEdit>
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="assignee_id" title="受理人">
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="assignee_id" title="受理人">
         <template #editable>
           <FormGroup path="assignee_id" label="">
             <controls.Select include-blank>
-              <OptionsForMember :collection="members" except_level="reporter" />
+              <OptionsForMember :collection="member_boxes" except_level="reporter" />
             </controls.Select>
           </FormGroup>
         </template>
 
-        {{ issue_info.assignee?.name ?? '无' }}
+        {{ issue_box.issue.assignee?.name ?? '无' }}
       </IssueDetailEdit>
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="category_id" title="分类">
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="category_id" title="分类">
         <template #editable>
           <FormGroup path="category_id" label="">
             <controls.Selectpicker>
-              <SelectDropdownItemsForCategory :categories="categories" />
+              <SelectDropdownItemsForCategory :categories="category_boxes.map(it => it.category)" />
             </controls.Selectpicker>
           </FormGroup>
         </template>
 
-        <CategoryBadgeVue :category="_.find(categories, { id: issue_info.category_id })" />
+        <CategoryBadgeVue :category="_.find(category_boxes.map(it => it.category), { id: issue_box.issue.category_id })" />
       </IssueDetailEdit>
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_info)" v-bind="{ former, issue_info }" code="milestone_id" title="里程碑">
+      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="milestone_id" title="里程碑">
         <template #editable>
           <FormGroup path="milestone_id" label="">
             <controls.Select>
-              <OptionsForSelect :collection="milestones.map(it => ({ label: it.title, value: it.id }))" />
+              <OptionsForSelect :collection="milestone_boxes.map(it => ({ label: it.milestone.title, value: it.milestone.id }))" />
             </controls.Select>
           </FormGroup>
         </template>
 
-        {{ _.find(milestones, { id: issue_info.milestone_id })?.title ?? '无' }}
+        {{ _.find(milestone_boxes, { milestone: { id: issue_box.issue.milestone_id } })?.milestone.title ?? '无' }}
       </IssueDetailEdit>
 
       <hr>
@@ -99,11 +99,11 @@
       <div class="flex flex-col" v-if="!readonly">
         <div class="h5">订阅</div>
         <div class="mt-1">
-          <Button v-if="_.find(issue_info.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click="unsubscribe">取消订阅</Button>
+          <Button v-if="_.find(issue_box.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click="unsubscribe">取消订阅</Button>
           <Button v-else preset="outline" variant="secondary" class="w-full" @click="subscribe">订阅问题</Button>
-          <div class="mt-2 text-sm text-muted">{{ issue_info.subscriptions.length }} 人订阅:</div>
+          <div class="mt-2 text-sm text-muted">{{ issue_box.subscriptions.length }} 人订阅:</div>
           <div class="flex items-center gap-1">
-            <Tooltip v-for="subscription in issue_info.subscriptions">
+            <Tooltip v-for="subscription in issue_box.subscriptions">
               <TooltipTrigger>
                 <img class="rounded-full" :src="subscription.member.avatar_url" width="30">
               </TooltipTrigger>
@@ -128,11 +128,11 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { IssueInfo } from "@/models"
+import { Issue, IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import IssueDetailEdit from "./IssueDetailEdit.vue"
 import { Badge } from "$ui/badge"
 import { Tooltip, TooltipContent, TooltipTrigger } from "$ui/tooltip"
@@ -149,20 +149,20 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 
 const props = defineProps<{
-  issue_info: IssueInfo
   readonly: boolean
+  issue_box: IssueBox
 }>()
 const emit = defineEmits<{
-  updated: [ IssueInfo ]
+  updated: [IssueBox]
 }>()
 
 const former = Former.build({
-  state: props.issue_info.state,
-  priority: props.issue_info.priority,
-  creator_id: props.issue_info.creator_id,
-  assignee_id: props.issue_info.assignee_id,
-  category_id: props.issue_info.category_id,
-  milestone_id: props.issue_info.milestone_id,
+  state: props.issue_box.issue.state,
+  priority: props.issue_box.issue.priority,
+  creator_id: props.issue_box.issue.creator_id,
+  assignee_id: props.issue_box.issue.assignee_id,
+  category_id: props.issue_box.issue.category_id,
+  milestone_id: props.issue_box.issue.milestone_id,
 })
 
 const Form = GenericForm<typeof former.form>
@@ -170,39 +170,42 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function(code: string) {
   const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_info.project_id
-    req.interpolations.issue_id = props.issue_info.id
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
   }).perform({ [code]: this.form[code] })
 
-  Object.assign(props.issue_info, a_issue_action.issue)
-  props.issue_info.activities.push(...a_issue_action.activities)
-  emit('updated', props.issue_info)
+  Object.assign(props.issue_box.issue, a_issue_action.issue)
+  props.issue_box.activities.push(...a_issue_action.activities)
+  emit('updated', props.issue_box)
 }
 
-const members = reqs.raw(session.request(q.project.members.InfoList, props.issue_info.project_id)).setup().wait()
-const categories = reqs.add(q.project.categories.List, props.issue_info.project_id).setup().wait()
-const milestones = reqs.add(q.project.milestones.List, props.issue_info.project_id).setup().wait()
+const member_page = reqs.raw(session.request(q.project.members.InfoList, props.issue_box.issue.project_id)).setup().wait()
+const category_page = reqs.raw(session.request(q.project.categories.List, props.issue_box.issue.project_id)).setup().wait()
+const milestone_page = reqs.add(q.project.milestones.List, props.issue_box.issue.project_id).setup().wait()
 await reqs.performAll()
+
+const member_boxes = computed(() => member_page.value.list)
+const category_boxes = computed(() => category_page.value.list)
+const milestone_boxes = computed(() => milestone_page.value.list)
 
 async function subscribe() {
   const a_subscription = await reqs.add(q.bug.subscriptions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_info.project_id
-    req.interpolations.issue_id = props.issue_info.id
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
   }).perform()
 
-  props.issue_info.subscriptions.push(a_subscription)
-  emit("updated", props.issue_info)
+  props.issue_box.subscriptions.push(a_subscription)
+  emit("updated", props.issue_box)
 }
 
 async function unsubscribe() {
   await reqs.add(q.bug.subscriptions.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_info.project_id
-    req.interpolations.issue_id = props.issue_info.id
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
   }).perform()
 
-  const index = props.issue_info.subscriptions.findIndex(it => it.user_id == current_user.id)
-  props.issue_info.subscriptions.splice(index, 1)
-  emit("updated", props.issue_info)
+  const index = props.issue_box.subscriptions.findIndex(it => it.user_id == current_user.id)
+  props.issue_box.subscriptions.splice(index, 1)
+  emit("updated", props.issue_box)
 }
-
 </script>

@@ -22,7 +22,7 @@ import useRequestList from '@/lib/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { IssueInfo, IssueRelationship } from "@/models"
+import { Issue, IssueBox, IssueRelationship } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance } from "vue"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
@@ -32,16 +32,16 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 
 const props = defineProps<{
-  issue_info: IssueInfo
-  issue_relationship: IssueRelationship
   readonly: boolean
+  issue_box: IssueBox
+  issue_relationship: IssueRelationship
 }>()
 const emit = defineEmits<{
-  updated: [ IssueInfo ]
+  updated: [IssueBox]
 }>()
 
 const direction = computed(() => {
-  return props.issue_relationship.source.id === props.issue_info.id ? "source" : "target"
+  return props.issue_relationship.source.id === props.issue_box.issue.id ? "source" : "target"
 })
 
 const other = computed(() => {
@@ -54,19 +54,19 @@ async function deleteIssueRelationShip() {
   }
 
   await reqs.add(q.bug.issue_relationships.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_info.project_id
-    req.interpolations.issue_id = props.issue_info.id
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
     req.interpolations.issue_relationship_id = props.issue_relationship.id
   }).perform()
 
   if (direction.value === 'source') {
-    const source_index = props.issue_info.source_relationships.findIndex(it => it.id == props.issue_relationship.id)
-    props.issue_info.source_relationships.splice(source_index, 1)
+    const source_index = props.issue_box.source_relationships.findIndex((it: IssueRelationship) => it.id == props.issue_relationship.id)
+    props.issue_box.source_relationships.splice(source_index, 1)
   } else {
-    const target_index = props.issue_info.target_relationships.findIndex(it => it.id == props.issue_relationship.id)
-    props.issue_info.target_relationships.splice(target_index, 1)
+    const target_index = props.issue_box.target_relationships.findIndex((it: IssueRelationship) => it.id == props.issue_relationship.id)
+    props.issue_box.target_relationships.splice(target_index, 1)
   }
 
-  emit("updated", props.issue_info)
+  emit("updated", props.issue_box)
 }
 </script>

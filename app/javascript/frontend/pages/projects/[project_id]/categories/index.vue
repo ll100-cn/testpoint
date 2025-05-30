@@ -22,19 +22,19 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="category in categories" :key="category.id">
+          <template v-for="category_box in category_boxes" :key="category_box.category.id">
             <TableRow>
-              <TableCell>{{ category.id }}</TableCell>
+              <TableCell>{{ category_box.category.id }}</TableCell>
               <TableCell>
-                <CategoryBadge :category="category" />
+                <CategoryBadge :category="category_box.category" />
               </TableCell>
-              <TableCell>{{ category.description }}</TableCell>
-              <TableCell>{{ category.issue_count }}</TableCell>
+              <TableCell>{{ category_box.category.description }}</TableCell>
+              <TableCell>{{ category_box.issue_count }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
+                <router-link class="link" v-if="allow('update', category_box.category)" :to="`/projects/${project_id}/categories/${category_box.category.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
+                <a href="#" v-if="allow('destroy', category_box.category)" @click.prevent="deleteCategory(category_box.category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -57,7 +57,7 @@ import useRequestList from '@/lib/useRequestList'
 import { Category } from '@/models'
 import * as q from '@/requests'
 import { usePageStore } from '@/store'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const reqs = useRequestList()
@@ -69,10 +69,12 @@ const allow = page.inProject()!.allow
 
 const project_id = params.project_id
 
-const categories = reqs.add(q.project.categories.InfoList).setup(req => {
+const category_page = reqs.add(q.project.categories.InfoList).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
 await reqs.performAll()
+const category_boxes = computed(() => category_page.value.list)
+
 const actioner = Actioner.build()
 
 function deleteCategory(id: number) {

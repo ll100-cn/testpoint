@@ -75,7 +75,7 @@ import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
-import { EntityRepo, Milestone, Platform, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Milestone, MilestoneBox, MilestonePage, Platform, TestCase, TestCaseLabel } from '@/models'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
@@ -133,29 +133,37 @@ const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void
 }>()
 
-const _milestones = ref([] as Milestone[])
+const _milestone_page = ref(null! as MilestonePage<MilestoneBox>)
 
 const project_id = _.toNumber(params.project_id)
 
 if (query.milestone_id) {
-  reqs.raw(session.request(q.project.milestones.List, project_id)).setup().waitFor(_milestones)
+  reqs.raw(session.request(q.project.milestones.List, project_id)).setup().waitFor(_milestone_page)
 }
-const test_cases = reqs.add(q.case.test_cases.List).setup(req => {
+const test_case_page = reqs.add(q.case.test_cases.List).setup(req => {
   req.interpolations.project_id = project_id
   req.query.milestone_id = query.milestone_id
 }).wait()
-const _labels = reqs.add(q.project.test_case_labels.List).setup(req => {
+const _label_page = reqs.add(q.project.test_case_labels.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
-const _platforms = reqs.add(q.project.platforms.List).setup(req => {
+const _platform_page = reqs.add(q.project.platforms.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
-const _roadmaps = reqs.add(q.project.roadmaps.List).setup(req => {
+const _roadmap_page = reqs.add(q.project.roadmaps.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
 await reqs.performAll()
 
-const milestone = computed(() => _milestones.value.find(it => it.id === _.toNumber(query.milestone_id)) ?? null)
+const test_cases = computed(() => test_case_page.value.list.map(it => it.test_case))
+const _labels = computed(() => _label_page.value.list.map(it => it.test_case_label))
+const _platforms = computed(() => _platform_page.value.list.map(it => it.platform))
+const _roadmaps = computed(() => _roadmap_page.value.list.map(it => it.roadmap))
+const milestone = computed(() => {
+  if (_milestone_page.value) {
+    return _milestone_page.value.list.find(it => it.milestone.id === _.toNumber(query.milestone_id))?.milestone
+  }
+})
 const readonly = computed(() => milestone.value != null)
 const label_repo = computed(() => {
   return new EntityRepo<TestCaseLabel>().setup(_labels.value)
@@ -167,7 +175,7 @@ const newest_roadmap = computed(() => {
   const newest = _roadmaps.value.sort((a, b) => b.id - a.id)[0]
 
   if (milestone.value) {
-    return _roadmaps.value.filter((it) => it.created_at < milestone.value!.published_at).sort((a, b) => b.id - a.id)[0] ?? newest
+    return _roadmaps.value.filter((it) => (milestone!.value!.published_at != null && it.created_at < milestone!.value!.published_at)).sort((a, b) => b.id - a.id)[0] ?? newest
   } else {
     return newest
   }

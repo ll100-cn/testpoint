@@ -21,18 +21,18 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="platform in platforms" :key="platform.id">
+          <template v-for="platform_box in platform_boxes" :key="platform_box.platform.id">
             <TableRow>
-              <TableCell>{{ platform.name }}</TableCell>
+              <TableCell>{{ platform_box.platform.name }}</TableCell>
               <TableCell>
-                <PlatformBadge :platform="platform" />
+                <PlatformBadge :platform="platform_box.platform" />
               </TableCell>
-              <TableCell>{{ _.find(members, { id: platform.default_assignee_id })?.name ?? "无" }}</TableCell>
+              <TableCell>{{ _.find(member_boxes, { member: { id: platform_box.platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`" class="link">
+                <router-link v-if="allow('update', platform_box.platform)" :to="`/projects/${project_id}/platforms/${platform_box.platform.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', platform_box.platform)" href="#" @click.prevent="onRemove(platform_box.platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
@@ -70,11 +70,13 @@ const session = useSessionStore()
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const platforms = reqs.add(q.project.platforms.List).setup(req => {
+const platform_page = reqs.add(q.project.platforms.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
-const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
 await reqs.performAll()
+const member_boxes = computed(() => member_page.value.list)
+const platform_boxes = computed(() => platform_page.value.list)
 
 async function onRemove(id: number) {
   if (!confirm("是否删除平台？")) {

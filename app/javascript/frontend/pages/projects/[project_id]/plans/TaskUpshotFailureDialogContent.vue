@@ -5,17 +5,17 @@
     </DialogHeader>
 
     <template v-if="addon == null">
-      <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
+      <TaskUpshotFailureType v-model="addon" :task_box="task_box" />
       <ActionerAlert :actioner="actioner" />
 
       <DialogFooter>
-        <Button variant="secondary" type="button" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_info)">取消</Button>
+        <Button variant="secondary" type="button" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_box)">取消</Button>
         <Button variant="destructive" type="button" @click.prevent="actioner.failTaskUpshot()">设置为不通过</Button>
       </DialogFooter>
     </template>
 
     <IssueForm preset="vertical" v-else-if="addon == 'new_issue'" v-bind="{ former: issue_former }" @submit.prevent="issue_former.perform()">
-      <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
+      <TaskUpshotFailureType v-model="addon" :task_box="task_box" />
 
       <hr>
 
@@ -26,14 +26,14 @@
       <IssueFormGroup path="issue_attributes.content" label="工单内容"><controls.Markdown /></IssueFormGroup>
 
       <DialogFooter>
-        <Button type="button" variant="secondary" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_info)">取消</Button>
+        <Button type="button" variant="secondary" @click.prevent="emit('switch', TaskUpshotInfoDialogContent, task_upshot_box)">取消</Button>
         <Button>提交</Button>
       </DialogFooter>
     </IssueForm>
 
     <template v-else>
       <CommentForm preset="vertical" v-bind="{ former: comment_former }" @submit.prevent="comment_former.perform()">
-        <TaskUpshotFailureType v-model="addon" :task_info="task_info" />
+        <TaskUpshotFailureType v-model="addon" :task_box="task_box" />
 
         <hr>
 
@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Category, IssueTemplate, Member, PhaseInfo, Plan, PlanInfo, TaskInfo, TaskUpshot, TaskUpshotInfo } from '@/models'
+import { Category, IssueTemplate, IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, PlanBox, TaskBox, TaskUpshot, TaskUpshotBox } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
 import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
 import TaskUpshotInfoDialogContent from "./TaskUpshotInfoDialogContent.vue"
@@ -72,20 +72,18 @@ const page = usePageStore()
 const session = useSessionStore()
 
 const props = defineProps<{
-  plan_info: PlanInfo
+  plan_box: PlanBox
 }>()
 
 const emit = defineEmits<{
   updated: [task_upshot: TaskUpshot]
-  switch: [Component, TaskUpshotInfo]
+  switch: [Component, TaskUpshotBox]
 }>()
 
 const addon = ref(null as AddonType)
-const task_upshot_info = ref(null! as TaskUpshotInfo)
-const task_info = ref(null! as TaskInfo)
-const members = ref([] as Member[])
-const categories = ref([] as Category[])
-const issue_templates = ref([] as IssueTemplate[])
+const task_upshot_box = ref(null! as TaskUpshotBox)
+const task_box = ref(null! as TaskBox)
+const issue_template_page = ref(null! as IssueTemplatePage<IssueTemplateBox>)
 
 const issue_former = NewFormer.build({
   from_task_id: null as number | null,
@@ -100,14 +98,14 @@ const IssueFormGroup = GenericFormGroup<typeof issue_former.form>
 
 issue_former.doPerform = async function() {
   await reqs.add(q.bug.issues.Create).setup(req => {
-    req.interpolations.project_id = props.plan_info.project_id
+    req.interpolations.project_id = props.plan_box.plan.project_id
   }).perform(this.form)
 
   await actioner.failTaskUpshot()
 }
 
 const comment_issue = computed(() => {
-  return task_info.value.issues.find(it => it.id === addon.value)
+  return task_box.value.issues?.find(it => it.id === addon.value)
 })
 
 const comment_former = NewFormer.build({
@@ -133,40 +131,38 @@ const actioner = Actioner.build<{
 
 actioner.failTaskUpshot = async function() {
   this.perform(async function() {
-    const a_task_upshot = await reqs.add(q.test.task_upshot_states.Update).setup(req => {
-      req.interpolations.project_id = props.plan_info.project_id
-      req.interpolations.plan_id = props.plan_info.id
-      req.interpolations.task_id = task_info.value.id
-      req.interpolations.upshot_id = task_upshot_info.value.id
+    const a_task_upshot_box = await reqs.add(q.test.task_upshot_states.Update).setup(req => {
+      req.interpolations.project_id = props.plan_box.plan.project_id
+      req.interpolations.plan_id = props.plan_box.plan.id
+      req.interpolations.task_id = task_box.value.task.id
+      req.interpolations.upshot_id = task_upshot_box.value.task_upshot.id
     }).perform({
       task_upshot: {
         state_override: 'failure',
       }
     })
 
-    Object.assign(task_upshot_info.value, a_task_upshot)
-    emit('switch', TaskUpshotInfoDialogContent, task_upshot_info.value)
+    Object.assign(task_upshot_box.value.task_upshot, a_task_upshot_box.task_upshot)
+    emit('switch', TaskUpshotInfoDialogContent, task_upshot_box.value)
   })
 }
 
 const loading = ref(true)
-async function reset(a_task_upshot_info: TaskUpshotInfo, a_task_info: TaskInfo) {
+async function reset(a_task_upshot_box: TaskUpshotBox, a_task_box: TaskBox) {
   loading.value = true
 
-  task_upshot_info.value = a_task_upshot_info
-  task_info.value = a_task_info
+  task_upshot_box.value = a_task_upshot_box
+  task_box.value = a_task_box
   addon.value = null
 
   reqs.add(q.project.issue_templates.List).setup(req => {
-    req.interpolations.project_id = props.plan_info.project_id
-  }).waitFor(issue_templates)
-  reqs.raw(session.request(q.project.members.InfoList, props.plan_info.project_id)).setup().waitFor(members as any)
-  reqs.raw(session.request(q.project.categories.List, props.plan_info.project_id)).setup().waitFor(categories)
+    req.interpolations.project_id = props.plan_box.plan.project_id
+  }).waitFor(issue_template_page)
   await reqs.performAll()
 
-  issue_former.form.issue_attributes.title = `「${props.plan_info.platform.name}」 ${task_upshot_info.value.test_case.title}`
-  issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_info.value.content ?? task_upshot_info.value.test_case.content}\n\n实际效果:\n`
-  issue_former.form.from_task_id = task_upshot_info.value.task.id
+  issue_former.form.issue_attributes.title = `「${props.plan_box.plan.platform.name}」 ${task_upshot_box.value.test_case?.title}`
+  issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content}\n\n实际效果:\n`
+  issue_former.form.from_task_id = task_upshot_box.value.task!.id
 
   nextTick(() => {
     loading.value = false

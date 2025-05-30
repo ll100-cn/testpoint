@@ -27,7 +27,7 @@
           <TableCell>{{ issue.creator?.name }}</TableCell>
           <TableCell><IssueStateBadge :state="issue.state" /></TableCell>
           <TableCell class="text-right">
-            <button v-if="issue.id !== head.id" @click="removeSource(issue)"><i class="far fa-trash-alt"></i></button>
+            <button v-if="issue.id !== head.issue.id" @click="removeSource(issue)"><i class="far fa-trash-alt"></i></button>
             <span v-else><i class="far fa-check-circle"></i> 主工单</span>
           </TableCell>
         </TableRow>
@@ -73,7 +73,7 @@
 
 <script setup lang="ts">
 import { Button } from '$ui/button'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import { Former, GenericForm, GenericFormGroup, UnprocessableEntityError } from '$ui/simple_form'
 import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import PageHeader from '@/components/PageHeader.vue'
@@ -109,7 +109,7 @@ const head = reqs.add(q.bug.issues.Get).setup(req => {
 }).wait()
 await reqs.performAll()
 
-issues.value.push(head.value)
+issues.value.push(head.value.issue)
 
 function newSource() {
   add_dialog_open.value = true
@@ -142,17 +142,17 @@ former.doPerform = async function() {
   }
 
   try {
-    const issue = await reqs.add(q.bug.issues.Get).setup(req => {
+    const issueBox = await reqs.add(q.bug.issues.Get).setup(req => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = former.form.source_id
     }).perform()
 
-    if (issue.state == 'closed') {
+    if (issueBox.issue.state == 'closed') {
       former.validator.get('source_id').invalid(['已关闭的工单不能添加'])
       return
     }
 
-    issues.value.push(issue)
+    issues.value.push(issueBox.issue)
 
     add_dialog_open.value = false
   } catch(e) {
@@ -171,14 +171,14 @@ async function merge() {
   }
 
   try {
-    const issue = await reqs.add(q.bug.issues.Merge).setup(req => {
+    const issue_box = await reqs.add(q.bug.issues.Merge).setup(req => {
       req.interpolations.project_id = project_id
-      req.interpolations.issue_id = head.value.id
+      req.interpolations.issue_id = head.value.issue.id
     }).perform({
-      source_ids: issues.value.filter(issue => issue.id !== head.value.id).map(issue => issue.id)
+      source_ids: issues.value.filter(issue => issue.id !== head.value.issue.id).map(issue => issue.id)
     })
 
-    router.push(`/projects/${project_id}/issues/${issue.id}`)
+    router.push(`/projects/${project_id}/issues/${issue_box.issue.id}`)
   } catch(e) {
     if (e instanceof UnprocessableEntityError) {
       alert(e.errors.errorMessages.join("\n"))

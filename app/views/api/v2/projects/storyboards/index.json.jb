@@ -1,0 +1,5 @@
+json = {
+  list: render(partial: "box", collection: @storyboards, as: :storyboard)
+}
+
+json

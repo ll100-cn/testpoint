@@ -56,13 +56,13 @@ former.doPerform = async function() {
   router.push(`/projects/${project_id}/milestones`)
 }
 
-const milestone = reqs.add(q.project.milestones.Get).setup(req => {
+const milestone_box = reqs.add(q.project.milestones.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.id = _.toNumber(params.milestone_id)
 }).wait()
 await reqs.performAll()
 
-former.form.title = milestone.value.title
-former.form.published_at = milestone.value.published_at
-former.form.description = milestone.value.description
+former.form.title = milestone_box.value.milestone.title
+former.form.published_at = milestone_box.value.milestone.published_at ?? null
+former.form.description = milestone_box.value.milestone.description ?? null
 </script>

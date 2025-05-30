@@ -10,16 +10,16 @@
       <div class="space-y-3">
         <FormGroup path="issue_template_id" label="选择问题模版">
           <controls.Selectpicker include_blank>
-            <SelectdropItem v-for="item in issue_templates" :value="item.id">
-              {{ item.name }}
+            <SelectdropItem v-for="item in issue_template_boxes" :value="item.issue_template.id">
+              {{ item.issue_template.name }}
             </SelectdropItem>
           </controls.Selectpicker>
         </FormGroup>
 
-        <template v-if="issue_template">
+        <template v-if="issue_template_box">
           <FormGroup v-if="allow('manage', Issue)" path="issue_attributes.creator_id" label="创建人">
             <controls.Select include-blank>
-              <OptionsForMember :collection="members" />
+              <OptionsForMember :collection="member_boxes" />
             </controls.Select>
           </FormGroup>
           <FormGroup path="issue_attributes.title" label="标题">
@@ -34,11 +34,11 @@
         </template>
       </div>
 
-      <template v-if="issue_template">
+      <template v-if="issue_template_box">
         <Separator class="my-4" preset="through" />
 
         <div class="space-y-3">
-          <FormGroup v-for="(input, index) in issue_template.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
+          <FormGroup v-for="(input, index) in issue_template_box.issue_template.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
             <controls.String />
           </FormGroup>
         </div>
@@ -81,14 +81,15 @@ const profile = page.inProject()!.profile
 const allow = page.inProject()!.allow
 const session = useSessionStore()
 
-const members = reqs.raw(session.request(q.project.members.InfoList, params.project_id)).setup().wait()
-const issue_templates = reqs.add(q.project.issue_templates.List).setup(req => {
+const member_page = reqs.raw(session.request(q.project.members.InfoList, params.project_id)).setup().wait()
+const issue_template_page = reqs.add(q.project.issue_templates.List).setup(req => {
   req.interpolations.project_id = params.project_id
 }).wait()
 await reqs.performAll()
-
-const issue_template = computed(() => {
-  return issue_templates.value.find(it => it.id == former.form.issue_template_id)
+const member_boxes = computed(() => member_page.value.list)
+const issue_template_boxes = computed(() => issue_template_page.value.list)
+const issue_template_box = computed(() => {
+  return issue_template_boxes.value.find(it => it.issue_template.id == former.form.issue_template_id)
 })
 
 const former = Former.build({
@@ -106,19 +107,21 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const issue = await reqs.add(q.bug.issues.Create).setup(req => {
+  const issue_box = await reqs.add(q.bug.issues.Create).setup(req => {
     req.interpolations.project_id = params.project_id
   }).perform(this.form)
 
-  router.push(`/projects/${params.project_id}/issues/${issue.id}`)
+  router.push(`/projects/${params.project_id}/issues/${issue_box.issue.id}`)
 }
 
-watch(issue_template, function(new_value) {
-  former.form.issue_attributes.title ||= new_value?.title_suggestion
-  former.form.issue_attributes.content ||= new_value?.content_suggestion
-  former.form.survey_attributes.inputs_attributes = (new_value?.inputs ?? []).map(input => {
-    return { template_input_id: input.id, value: "" }
-  })
+watch(issue_template_box, function(new_value) {
+  if (new_value) {
+    former.form.issue_attributes.title ||= new_value.issue_template.title_suggestion
+    former.form.issue_attributes.content ||= new_value.issue_template.content_suggestion
+    former.form.survey_attributes.inputs_attributes = (new_value?.issue_template.inputs ?? []).map(input => {
+      return { template_input_id: input.id, value: "" }
+    })
+  }
 })
 
 function onAttachmentsChanged(attachments: Partial<Attachment>[]) {

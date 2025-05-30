@@ -1,64 +1,65 @@
-import { Plan, Pagination, PlanInfo } from "@/models"
+import { Plan, PlanBox, PlanPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<Plan> {
+export const Create = class extends BaseRequest<PlanBox> {
   constructor() {
     super()
     this.method = "POST"
-    this.endpoint = "/api/projects/{project_id}/plans"
+    this.endpoint = "/api/v2/projects/{project_id}/plans"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(Plan, response)
+    return this.responseToObject(PlanBox, response)
   }
 }
 
-export const Update = class extends BaseRequest<Plan> {
+export const Update = class extends BaseRequest<PlanBox> {
   constructor() {
     super()
     this.method = "PATCH"
-    this.endpoint = "/api/projects/{project_id}/plans/{plan_id}"
+    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(Plan, response)
+    return this.responseToObject(PlanBox, response)
   }
 }
 
-export const Destroy = class extends BaseRequest<Plan> {
+export const Destroy = class extends BaseRequest<PlanBox> {
   constructor() {
     super()
     this.method = "DELETE"
-    this.endpoint = "/api/projects/{project_id}/plans/{plan_id}"
+    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(Plan, response)
+    return this.responseToObject(PlanBox, response)
   }
 }
 
-export const Page = class extends BaseRequest<Pagination<Plan>> {
+export const Page = class extends BaseRequest<PlanPage<PlanBox>> {
   constructor() {
     super()
     this.method = "GET"
-    this.endpoint = "/api/projects/{project_id}/plans"
+    this.endpoint = "/api/v2/projects/{project_id}/plans"
+    this.graph = "counts"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToPagination(Plan, response)
+    return this.responseToObject(PlanPage<PlanBox>, response)
   }
 }
 
-
-export const InfoGet = class extends BaseRequest<PlanInfo> {
+export const InfoGet = class extends BaseRequest<PlanBox> {
   constructor() {
     super()
     this.method = "GET"
-    this.endpoint = "/api/projects/{project_id}/plan_infos/{plan_id}"
+    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}"
+    this.graph = "counts, info"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanInfo, response)
+    return this.responseToObject(PlanBox, response)
   }
 }

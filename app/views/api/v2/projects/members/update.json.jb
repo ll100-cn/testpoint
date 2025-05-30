@@ -1,0 +1,1 @@
+render "api/v2/shared/member_box", member: @member

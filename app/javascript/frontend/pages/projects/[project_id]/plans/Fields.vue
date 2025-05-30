@@ -5,7 +5,7 @@
     <FormGroup path="title" label="标题"><controls.String /></FormGroup>
     <FormGroup path="platform_id" label="平台">
       <controls.Select>
-        <OptionsForSelect :collection="platforms.map(it => ({ label: it.name, value: it.id }))" />
+        <OptionsForSelect :collection="platform_boxes.map(it => ({ label: it.platform.name, value: it.platform.id }))" />
       </controls.Select>
     </FormGroup>
 
@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
-import { Platform, TestCaseStat } from "@/models"
+import { Platform, PlatformBox, TestCaseStat } from "@/models"
 import _ from "lodash"
 import { computed } from 'vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
@@ -26,7 +26,7 @@ import * as controls from '@/components/controls'
 
 const props = withDefaults(defineProps<{
   former: Former<any>
-  platforms: Platform[]
+  platform_boxes: PlatformBox[]
   test_case_stats?: TestCaseStat[]
 }>(), {
 })

@@ -14,7 +14,7 @@
     <NavItem value="archived">归档</NavItem>
   </Nav>
 
-  <Card v-for="(group, key) in grouped_members" class="rounded-ss-none" :class="{ hidden: key != active }">
+  <Card v-for="(group, key) in grouped_member_boxes" class="rounded-ss-none" :class="{ hidden: key != active }">
     <CardTable>
       <Table>
         <TableHeader>
@@ -27,17 +27,17 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="member in group" :key="member.id">
-            <TableRow :class="{ 'block-discard': member.archived_at }">
-              <TableCell>{{ member.id }}</TableCell>
-              <TableCell>{{ member.name }}</TableCell>
-              <TableCell>{{ member.user.email }}</TableCell>
-              <TableCell>{{ member.role_text }}</TableCell>
+          <template v-for="member_box in group" :key="member_box.member.id">
+            <TableRow :class="{ 'block-discard': member_box.member.archived_at }">
+              <TableCell>{{ member_box.member.id }}</TableCell>
+              <TableCell>{{ member_box.member.name }}</TableCell>
+              <TableCell>{{ member_box.user!.email }}</TableCell>
+              <TableCell>{{ member_box.member.role_text }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`" class="link">
+                <router-link v-if="allow('update', member_box.member)" :to="`/projects/${project_id}/members/${member_box.member.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
+                <a href="#" v-if="allow('archive', member_box.member)" @click.prevent="onArchive(member_box.member.id)" class="link"><i class="far fa-archive" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
@@ -77,11 +77,11 @@ const active = ref('normal')
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
 await reqs.performAll()
 
-const grouped_members = ref(_.groupBy(members.value, (member) => {
-  return member.archived_at ? "archived" : "normal"
+const grouped_member_boxes = ref(_.groupBy(member_page.value.list, (member_box) => {
+  return member_box.member.archived_at ? "archived" : "normal"
 }))
 
 async function onArchive(id: number) {

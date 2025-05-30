@@ -1,0 +1,6 @@
+json = {
+  **(render "api/v2/shared/pager", items: @projects),
+  list: render(partial: "box", collection: @projects, as: :project)
+}
+
+json

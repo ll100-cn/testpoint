@@ -124,10 +124,88 @@ Rails.application.routes.draw do
     end
 
     namespace :v2 do
+      namespace :admin do
+        resources :users
+        resources :projects
+      end
+
       resources :projects do
         scope module: 'projects' do
-          resources :issues
+          resource :profile
+
+          resources :roadmaps
+          resources :storyboards do
+            resources :scenes
+            resources :requirements
+          end
+
+          resources :issues do
+            member do
+              post :merge
+              patch :resolve
+              patch :process, to: "issues#process2"
+            end
+
+            resources :issue_actions
+            resource :body, controller: "issue_bodies" do
+              member do
+                patch :convert_comment
+              end
+            end
+            resources :issue_relationships
+
+            resources :comments do
+              member do
+                get :comment
+                patch :convert
+              end
+            end
+          end
+          resources :issue_summaries
+
+          resources :members do
+            patch :archive, on: :member
+          end
+          resources :categories
+          resources :milestones do
+            patch :archive, on: :member
+            patch :active, on: :member
+          end
+          resources :issue_templates
+          resources :test_case_labels
+          resources :platforms
+
+          resources :test_cases do
+            get :history, on: :member
+          end
+          resources :test_case_stats
+
+          resources :plans do
+            resources :phases do
+              resources :task_upshots
+            end
+
+            resources :tasks do
+              member do
+                patch :ignore
+                patch :unignore
+              end
+
+              resources :upshots do
+                member do
+                  patch :state
+                  patch :content
+                end
+              end
+            end
+          end
         end
+      end
+
+      namespace :profile do
+        resource :account
+        resources :issues
+        resources :members
       end
     end
   end

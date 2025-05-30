@@ -1,0 +1,5 @@
+json = {
+  milestone: (render partial: "api/shared/milestone", locals: { milestone: milestone })
+}
+
+json

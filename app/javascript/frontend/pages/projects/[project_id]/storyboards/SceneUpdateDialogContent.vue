@@ -47,13 +47,13 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const a_scene = await reqs.add(q.project.scenes.Update).setup(req => {
+  const a_scene_box = await reqs.add(q.project.scenes.Update).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = params.storyboard_id
     req.interpolations.scene_id = scene.value.id
   }).perform(this.form)
 
-  emit('updated', a_scene)
+  emit('updated', a_scene_box.scene)
   open.value = false
 }
 

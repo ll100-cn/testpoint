@@ -28,30 +28,29 @@
 </route>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
-import * as q from '@/requests'
-import { getCurrentInstance } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import Fields from './Fields.vue'
-import PageHeader from '@/components/PageHeader.vue'
-import PageTitle from '@/components/PageTitle.vue'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Separator } from '$ui/separator'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import useRequestList from '@/lib/useRequestList'
+import * as q from '@/requests'
+import { useRoute, useRouter } from 'vue-router'
+import Fields from './Fields.vue'
 
 const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const project = reqs.add(q.admin.projects.Get).setup(req => {
+const project_box = reqs.add(q.admin.projects.Get).setup(req => {
   req.interpolations.project_id = params.project_id
 }).wait()
 await reqs.performAll()
 
 const former = Former.build({
-  name: project.value.name,
-  webhook_url: project.value.webhook_url,
+  name: project_box.value.project.name,
+  webhook_url: project_box.value.project.webhook_url,
 })
 
 const Form = GenericForm<typeof former.form>
@@ -59,7 +58,7 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   await reqs.add(q.admin.projects.Update).setup(req => {
-    req.interpolations.id = project.value.id
+    req.interpolations.id = project_box.value.project.id
   }).perform(this.form)
 
   router.push(`/projects`)

@@ -1,63 +1,63 @@
-import { User, Pagination } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { UserBox, UserPage } from "@/models"
 import type { AxiosResponse } from "axios"
+import { BaseRequest } from "../BaseRequest"
 
-export const Update = class extends BaseRequest<User> {
+export const Update = class extends BaseRequest<UserBox> {
   constructor() {
     super()
     this.method = "PATCH"
-    this.endpoint = "/api/admin/users/{id}"
+    this.endpoint = "/api/v2/admin/users/{id}"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(User, response)
+    return this.responseToObject(UserBox, response)
   }
 }
 
-export const Get = class extends BaseRequest<User> {
+export const Get = class extends BaseRequest<UserBox> {
   constructor() {
     super()
     this.method = "GET"
-    this.endpoint = "/api/admin/users/{id}"
+    this.endpoint = "/api/v2/admin/users/{id}"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(User, response)
+    return this.responseToObject(UserBox, response)
   }
 }
 
-export const Destroy = class extends BaseRequest<User> {
+export const Destroy = class extends BaseRequest<UserBox> {
   constructor() {
     super()
     this.method = "DELETE"
-    this.endpoint = "/api/admin/users/{id}"
+    this.endpoint = "/api/v2/admin/users/{id}"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(User, response)
+    return this.responseToObject(UserBox, response)
   }
 }
 
-export const Create = class extends BaseRequest<User> {
+export const Create = class extends BaseRequest<UserBox> {
   constructor() {
     super()
     this.method = "POST"
-    this.endpoint = "/api/admin/users"
+    this.endpoint = "/api/v2/admin/users"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(User, response)
+    return this.responseToObject(UserBox, response)
   }
 }
 
-export const Page = class extends BaseRequest<Pagination<User>> {
+export const Page = class extends BaseRequest<UserPage<UserBox>> {
   constructor() {
     super()
     this.method = "GET"
-    this.endpoint = "/api/admin/users"
+    this.endpoint = "/api/v2/admin/users"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToPagination(User, response)
+    return this.responseToObject(UserPage<UserBox>, response)
   }
 }

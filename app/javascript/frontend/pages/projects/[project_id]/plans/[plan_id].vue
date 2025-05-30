@@ -1,11 +1,11 @@
 <template>
   <PageHeader>
-    <PageTitle class="me-3">{{ plan_info.title }}</PageTitle>
+    <PageTitle class="me-3">{{ plan_box.plan.title }}</PageTitle>
 
     <div class="flex">
       <div class="px-2">
         <span class="text-secondary font-bold">
-          平台: {{ plan_info.platform.name }}
+          平台: {{ plan_box.plan.platform.name }}
         </span>
       </div>
 
@@ -13,21 +13,21 @@
 
       <div class="px-2">
         <span class="text-secondary font-bold">
-          创建人: {{ plan_info.creator_name }}
+          创建人: {{ plan_box.plan.creator_name }}
         </span>
       </div>
     </div>
 
     <template #actions>
-      <Button preset="ghost" v-if="allow('update', plan_info)" :to="`${plan_id}/edit`">设置</Button>
+      <Button preset="ghost" v-if="allow('update', plan_box)" :to="`${plan_id}/edit`">设置</Button>
     </template>
   </PageHeader>
 
 
   <Nav preset="pill" class="mb-4">
-    <NavItem v-for="(phase, index) in plan_info.phase_infos" as-child>
+    <NavItem v-for="(phase_info, index) in plan_box.phase_infos" as-child>
       <RLink :to="{ query: { phase_index: index } }" active-by="query" active-column="phase_index">
-        <span>{{ phase.title }}</span>
+        <span>{{ phase_info.phase.title }}</span>
       </RLink>
     </NavItem>
     <NavItem value="" v-if="allow('create', Phase)" @click.prevent="phase_dialog.show(PlanPhaseCreateDialogContent)">
@@ -68,21 +68,21 @@
       <Separator orientation="vertical" class="h-auto" />
 
       <div class="w-full md:w-3/4 xl:w-5/6 px-4">
-        <TaskRow v-for="task_upshot_info in avaiable_task_upshot_infos" :task_upshot_info="task_upshot_info" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_info)" />
+        <TaskRow v-for="task_upshot_box in avaiable_task_upshot_boxes" :task_upshot_box="task_upshot_box" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_box)" />
       </div>
     </CardContent>
   </Card>
 
   <teleport to="body">
-    <BlankDialog ref="phase_dialog" :plan_info="plan_info" @created="onPhaseCreated" />
-    <BlankDialog ref="task_upshot_info_dialog" :plan_info="plan_info" :current_phase_id="current_phase_info.id" @updated="onTaskUpshotInfoUpdated" />
+    <BlankDialog ref="phase_dialog" :plan_box="plan_box" @created="onPhaseCreated" />
+    <BlankDialog ref="task_upshot_info_dialog" :plan_box="plan_box" :current_phase_id="current_phase_info.phase.id" @updated="onTaskUpshotInfoUpdated" />
   </teleport>
 </template>
 
 <script setup lang="ts">
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Phase, TaskUpshotInfo, TestCaseStat } from '@/models'
+import { Phase, TaskUpshotBox, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
@@ -127,21 +127,21 @@ const FormGroup = GenericFormGroup<typeof searcher.form>
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan_info = reqs.add(q.test.plans.InfoGet).setup(req => {
+const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
 }).wait()
 await reqs.performAll()
 
 const current_phase_info = computed(() => {
-  const phase_infos = plan_info.value.phase_infos
+  const phase_infos = plan_box.value.phase_infos
   return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
-const task_upshot_infos = reqs.add(q.test.task_upshots.InfoList).setup(req => {
+const task_upshot_page = reqs.add(q.test.task_upshots.InfoList).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
-  req.interpolations.phase_id = current_phase_info.value.id
+  req.interpolations.phase_id = current_phase_info.value.phase.id
 }).wait()
 await reqs.performAll()
 
@@ -149,9 +149,9 @@ const filter = ref(new Filter())
 filter.value.archived = null
 
 const test_case_stats = computed(() => {
-  const result = _(task_upshot_infos.value).groupBy((it) => {
+  const result = _(task_upshot_page.value.list).groupBy((it) => {
     const test_case = it.test_case
-    return JSON.stringify({ ignored: it.is_ignored(), role_name: test_case.role_name, scene_path: test_case.scene_path })
+    return JSON.stringify({ ignored: it.is_ignored(), role_name: test_case?.role_name, scene_path: test_case?.scene_path })
   }).mapValues((it) => {
     return it.length
   }).map((count, json) => {
@@ -164,24 +164,25 @@ const test_case_stats = computed(() => {
 })
 
 const columns = new ColumnFilter()
-const avaiable_task_upshot_infos = computed(() => {
-  return _.filter(task_upshot_infos.value, (it) => {
+const avaiable_task_upshot_boxes = computed(() => {
+  return _.filter(task_upshot_page.value.list, (it) => {
     const test_case = it.test_case
+    const task_upshot = it.task_upshot
 
     if (searcher.form.state_eq) {
-      if (it.state !== searcher.form.state_eq) {
+      if (task_upshot.state !== searcher.form.state_eq) {
         return false
       }
     }
 
     if (searcher.form.state_modify_is == 'not_overrided') {
-      if (it.state_override !== null) {
+      if (task_upshot.state_override !== null) {
         return false
       }
     }
 
     if (searcher.form.state_modify_is == 'overrided') {
-      if (it.state_override === null) {
+      if (task_upshot.state_override === null) {
         return false
       }
     }
@@ -196,7 +197,7 @@ const avaiable_task_upshot_infos = computed(() => {
       }
     }
 
-    return filter.value.isMatch(test_case, columns)
+    return filter.value.isMatch(test_case!, columns)
   })
 })
 
@@ -206,15 +207,15 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 
 provide("changeFilter", changeFilter)
 
-function onTaskUpshotInfoUpdated(task_upshot_info: TaskUpshotInfo) {
-  const index = task_upshot_infos.value.findIndex(it => it.id == task_upshot_info.id)
-  task_upshot_infos.value[index] = task_upshot_info
+function onTaskUpshotInfoUpdated(task_upshot_box: TaskUpshotBox) {
+  const index = task_upshot_page.value.list.findIndex(it => it.task_upshot.id == task_upshot_box.task_upshot.id)
+  task_upshot_page.value.list[index] = task_upshot_box
 
-  const counts = _.countBy(task_upshot_infos.value, it => it.state)
+  const counts = _.countBy(task_upshot_page.value.list, it => it.task_upshot.state)
   current_phase_info.value.upshots_state_counts = counts as any
 }
 
 function onPhaseCreated(phase: Phase) {
-  router.push({ query: { phase_index: plan_info.value.phase_infos.length } })
+  router.push({ query: { phase_index: plan_box.value.phase_infos.length } })
 }
 </script>

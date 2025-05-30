@@ -1,8 +1,12 @@
 class Api::Projects::IssuesController < Api::Projects::BaseController
   before_action -> { @project = current_project }
-  load_and_authorize_resource through: :project, authorization_action: ->(action) {
-    { archive: :create, unresolve: :create, body: :update, merge: :manage }[action]
-  }
+  load_and_authorize_resource through: :project,
+    with_scope: ->(base) {
+      params[:action] == "show" ? base.in_project(@project) : base.where(project_id: @project.id)
+    },
+    authorization_action: ->(action) {
+      { archive: :create, merge: :manage }[action]
+    }
 
   def index
     @stage = params[:stage] || "pending"
@@ -65,7 +69,6 @@ class Api::Projects::IssuesController < Api::Projects::BaseController
     @form.submit(current_member)
     respond_with @form
   end
-
 protected
 
   def issue_build_form_params

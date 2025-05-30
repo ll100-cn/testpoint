@@ -38,15 +38,15 @@ const params = route.params as any
 const project_id = params.project_id
 const member_id = params.member_id
 
-const member = reqs.add(q.project.members.Get).setup(req => {
+const member_box = reqs.add(q.project.members.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.member_id = member_id
 }).wait()
 await reqs.performAll()
 
 const former = Former.build({
-  nickname: member.value.name,
-  role: member.value.role
+  nickname: member_box.value.member.name,
+  role: member_box.value.member.role
 })
 
 const Form = GenericForm<typeof former.form>

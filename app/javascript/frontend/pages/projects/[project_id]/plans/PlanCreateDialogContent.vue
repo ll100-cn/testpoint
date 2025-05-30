@@ -5,7 +5,7 @@
     </DialogHeader>
 
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
-      <Fields :former="former" :platforms="platforms" :test_case_stats="test_case_stats" />
+      <Fields :former="former" :platform_boxes="platform_boxes" :test_case_stats="test_case_stats" />
 
       <DialogFooter>
         <DialogClose><Button variant="secondary" type="button">关闭</Button></DialogClose>
@@ -19,9 +19,9 @@
 import * as h from '@/lib/humanize'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Plan, Platform, TestCaseStat } from '@/models'
+import { Plan, Platform, PlatformBox, PlatformPage, TestCaseStat } from '@/models'
 import _ from 'lodash'
-import { getCurrentInstance, nextTick, ref } from 'vue'
+import { computed, getCurrentInstance, nextTick, ref } from 'vue'
 import Fields from "./Fields.vue"
 import { usePageStore } from "@/store"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
@@ -38,7 +38,8 @@ const emit = defineEmits<{
   created: [plan: Plan]
 }>()
 
-const platforms = ref([] as Platform[])
+const platform_page = ref(null! as PlatformPage<PlatformBox>)
+const platform_boxes = computed(() => platform_page.value.list)
 
 const former = Former.build({
   title: null as string | null,
@@ -51,11 +52,11 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const plan = await reqs.add(q.test.plans.Create).setup(req => {
+  const plan_box = await reqs.add(q.test.plans.Create).setup(req => {
     req.interpolations.project_id = profile.project_id
   }).perform(this.form)
 
-  emit('created', plan)
+  emit('created', plan_box.plan)
   open.value = false
 }
 
@@ -69,11 +70,11 @@ async function reset(new_test_case_stats: TestCaseStat[]) {
 
   reqs.add(q.project.platforms.List).setup(req => {
     req.interpolations.project_id = profile.project_id
-  }).waitFor(platforms)
+  }).waitFor(platform_page)
   await reqs.performAll()
 
   former.form.title = `Test Plan: ${h.datetime(new Date(), "YYYY-MM-DD")}`
-  former.form.platform_id = platforms.value[0]?.id
+  former.form.platform_id = platform_boxes.value[0]?.platform.id
   former.form.milestone_id = null
   former.form.role_names = []
 

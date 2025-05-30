@@ -6,14 +6,14 @@
     <hr class="my-4">
     <div>
       <ul class="timeline">
-        <template v-for="milestone in milestones" :key="milestone.id">
-          <li class="timeline-item mb-5" :class="{ 'active': milestone.id == milestone_id }">
-            <div class="text-sm mb-2" :class="{ 'text-muted': milestone.id != milestone_id }">
-              <router-link :to="{ query: { milestone_id: milestone.id }}" class="link">{{ h.datetime(milestone.published_at) ?? '尚未发布' }}</router-link>
+        <template v-for="milestone_box in milestone_boxes" :key="milestone_box.milestone.id">
+          <li class="timeline-item mb-5" :class="{ 'active': milestone_box.milestone.id == milestone_id }">
+            <div class="text-sm mb-2" :class="{ 'text-muted': milestone_box.milestone.id != milestone_id }">
+              <router-link :to="{ query: { milestone_id: milestone_box.milestone.id }}" class="link">{{ h.datetime(milestone_box.milestone.published_at ?? null) ?? '尚未发布' }}</router-link>
             </div>
-            {{ milestone.title }}
+            {{ milestone_box.milestone.title }}
             <p class="text-muted">
-              <PageContent :content="milestone.description" />
+              <PageContent :content="milestone_box.milestone.description ?? ''" />
             </p>
           </li>
         </template>
@@ -28,6 +28,7 @@ import * as h from '@/lib/humanize'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import _ from 'lodash'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const reqs = useRequestList()
@@ -36,10 +37,12 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null
-const milestones = reqs.add(q.project.milestones.List, project_id).setup(req => {
+const milestone_page = reqs.add(q.project.milestones.List, project_id).setup(req => {
   req.query.filter = "available"
 }).wait()
 await reqs.performAll()
+
+const milestone_boxes = computed(() => milestone_page.value.list)
 </script>
 
 <style scoped>

@@ -67,12 +67,12 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const new_test_case = await reqs.add(q.case.test_cases.Update).setup(req => {
+  const new_test_case_box = await reqs.add(q.case.test_cases.Update).setup(req => {
     req.interpolations.project_id = test_case.value.project_id
     req.interpolations.id = test_case.value.id
   }).perform(this.form)
 
-  emit('updated', new_test_case)
+  emit('updated', new_test_case_box.test_case)
   open.value = false
 }
 
@@ -85,12 +85,12 @@ async function archiveTestCase(event: Event) {
   }
 
   try {
-    const new_test_case = await reqs.add(q.case.test_cases.Destroy).setup(req => {
+    const test_case_box = await reqs.add(q.case.test_cases.Destroy).setup(req => {
       req.interpolations.project_id = test_case.value.project_id
       req.interpolations.id = test_case.value.id
     }).perform()
 
-    emit('destroyed', new_test_case)
+    emit('destroyed', test_case_box.test_case)
     open.value = false
   } catch (err) {
     validations.processError(err)

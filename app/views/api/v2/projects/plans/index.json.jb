@@ -1,0 +1,6 @@
+json = {
+  **(render "api/v2/shared/pager", items: @plans),
+  list: render(partial: "box", collection: @plans, as: :plan, locals: { tasks_state_counts_mapping: @tasks_state_counts_mapping })
+}
+
+json

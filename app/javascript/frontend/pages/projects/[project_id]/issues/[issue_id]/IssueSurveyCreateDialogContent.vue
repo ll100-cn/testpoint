@@ -30,7 +30,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import useRequestList from '@/lib/useRequestList'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import * as q from '@/requests'
-import { IssueInfo, IssueTemplate } from "@/models"
+import { Issue, IssueTemplate, IssueBox } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
@@ -41,11 +41,11 @@ const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
-  updated: [ IssueInfo ]
+  updated: [IssueBox]
 }>()
 
 const props = defineProps<{
-  issue_info: IssueInfo
+  issue_box: IssueBox
 }>()
 
 const former = Former.build({
@@ -58,12 +58,12 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_survey = await reqs.add(q.bug.issue_surveies.Create).setup(req => {
-    req.interpolations.project_id = props.issue_info.project_id
-    req.interpolations.issue_id = props.issue_info.id
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
   }).perform(this.form)
 
-  props.issue_info.surveys.push(a_issue_survey)
-  emit('updated', props.issue_info)
+  props.issue_box.surveys.push(a_issue_survey)
+  emit('updated', props.issue_box)
 
   open.value = false
 }
@@ -75,9 +75,10 @@ async function reset() {
   loading.value = true
 
   try {
-    issue_templates.value = await reqs.add(q.project.issue_templates.List).setup(req => {
-      req.interpolations.project_id = props.issue_info.project_id
+    const issue_template_page = await reqs.add(q.project.issue_templates.List).setup(req => {
+      req.interpolations.project_id = props.issue_box.issue.project_id
     }).perform()
+    issue_templates.value = issue_template_page.list.map(it => it.issue_template)
   } finally {
     loading.value = false
   }

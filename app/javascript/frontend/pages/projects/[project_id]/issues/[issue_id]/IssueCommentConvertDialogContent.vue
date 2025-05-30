@@ -28,7 +28,7 @@ import useRequestList from '@/lib/useRequestList'
 import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import * as q from '@/requests'
-import { Comment, Issue } from "@/models"
+import { Comment, Issue, IssueBox } from "@/models"
 import { ref } from "vue"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 
@@ -48,8 +48,8 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_comment = await reqs.add(q.bug.issue_comments.Convert).setup(req => {
-    req.interpolations.project_id = issue.value.project_id
-    req.interpolations.issue_id = issue.value.id
+    req.interpolations.project_id = issue_box.value.issue.project_id
+    req.interpolations.issue_id = issue_box.value.issue.id
     req.interpolations.comment_id = comment.value.id
   }).perform(this.form)
 
@@ -57,12 +57,12 @@ former.doPerform = async function() {
   open.value = false
 }
 
-const issue = ref(null! as Issue)
+const issue_box = ref(null! as IssueBox)
 const comment = ref(null! as Comment)
 const loading = ref(true)
 
-function reset(a_issue: Issue, a_comment: Comment) {
-  issue.value = a_issue
+function reset(a_issue_box: IssueBox, a_comment: Comment) {
+  issue_box.value = a_issue_box
   comment.value = a_comment
 
   former.form.comment_id = comment.value.comment_id

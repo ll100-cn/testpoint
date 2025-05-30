@@ -82,10 +82,12 @@ async function reset(a_test_case: TestCase) {
   loading.value = true
   test_case.value = a_test_case
 
-  history.value = await reqs.add(q.case.test_cases.History).setup(req => {
+  const history_page = await reqs.add(q.case.test_cases.History).setup(req => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
   }).perform()
+
+  history.value = history_page.list.map(it => it.test_case)
 
   nextTick(() => {
     loading.value = false

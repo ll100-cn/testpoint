@@ -57,12 +57,12 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const a_requirement = await reqs.add(q.project.requirements.Create).setup(req => {
+  const a_requirement_box = await reqs.add(q.project.requirements.Create).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = props.storyboard.id
   }).perform(this.form)
 
-  emit('created', a_requirement)
+  emit('created', a_requirement_box.requirement)
   open.value = false
 }
 

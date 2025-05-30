@@ -1,0 +1,1 @@
+render "api/v2/shared/issue_box", issue: @form.head

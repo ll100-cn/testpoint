@@ -29,8 +29,8 @@
   </div>
 
   <div class="grid grid-cols-3 gap-4">
-    <template v-for="member in current_members" :key="member.id">
-      <IssueByMemberCard :member="member" :categories="categories" :analytics="analytics" />
+    <template v-for="member_box in current_member_boxes" :key="member_box.member.id">
+      <IssueByMemberCard :member="member_box.member" :categories="category_boxes.map(it => it.category)" :analytics="analytics" />
     </template>
   </div>
 </template>
@@ -66,12 +66,16 @@ const filter = reactive({
 })
 const project_id = params.project_id
 
-const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-const categories = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
+const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const category_page = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
 const analytics = reqs.add(q.project.issue_creator_charts.Get).setup(req => {
+  req.interpolations.project_id = project_id
   req.query = { ...filter }
 }).wait()
 await reqs.performAll()
+
+const member_boxes = computed(() => member_page.value.list)
+const category_boxes = computed(() => category_page.value.list)
 
 const former = Former.build(filter)
 
@@ -85,9 +89,9 @@ former.doPerform = async function(filter: any) {
     router.push({})
   }
 }
-const current_members = computed(() => {
-  return _.filter(members.value, (member) => {
-    return member.role == (former.form.role || "reporter")
+const current_member_boxes = computed(() => {
+  return _.filter(member_boxes.value, (member_box) => {
+    return member_box.member.role == (former.form.role || "reporter")
   })
 })
 </script>

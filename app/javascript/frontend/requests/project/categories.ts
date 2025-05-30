@@ -1,29 +1,30 @@
-import { Category, CategoryInfo } from "@/models"
+import { Category, CategoryBox, CategoryInfo, CategoryPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<Array<Category>> {
+export const List = class extends BaseRequest<CategoryPage<CategoryBox>> {
   constructor(project_id: number) {
     super()
     this.method = "GET"
-    this.endpoint = "/api/projects/{project_id}/categories"
+    this.endpoint = "/api/v2/projects/{project_id}/categories"
     this.interpolations.project_id = project_id
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToArray(Category, response)
+    return this.responseToObject(CategoryPage<CategoryBox>, response)
   }
 }
 
-export const InfoList = class extends BaseRequest<Array<CategoryInfo>> {
+export const InfoList = class extends BaseRequest<CategoryPage<CategoryBox>> {
   constructor() {
     super()
     this.method = "GET"
-    this.endpoint = "/api/projects/{project_id}/category_infos"
+    this.endpoint = "/api/v2/projects/{project_id}/categories"
+    this.graph = "info"
   }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToArray(CategoryInfo, response)
+    return this.responseToObject(CategoryPage<CategoryBox>, response)
   }
 }
 

@@ -148,8 +148,6 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import { Filter } from './type'
 import SelectdropItem from '@/components/controls/selectdrop/SelectdropItem.vue'
-import { Actioner } from '@/components/Actioner'
-import ActionerAlert from '@/components/ActionerAlert.vue'
 import { useElementSize } from '@vueuse/core'
 import { Background } from '@vue-flow/background'
 import _, { debounce } from 'lodash'
@@ -182,27 +180,39 @@ const node_size_mapping = reactive(new Map<string, { dimensions: { width: number
 const roadmap = ref(null as Roadmap | null)
 const { updateNodeData, updateNode, addNodes, addEdges, getNodes } = useVueFlow()
 
-const platforms = reqs.add(q.project.platforms.List).setup(req => {
+const platform_page = reqs.add(q.project.platforms.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
-const test_case_labels = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
+const test_case_label_page = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
-const roadmaps = reqs.add(q.project.roadmaps.List).setup(req => {
+const roadmap_page = reqs.add(q.project.roadmaps.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
-const storyboards = reqs.add(q.project.storyboards.List).setup(req => {
+const storyboard_page = reqs.add(q.project.storyboards.List).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
-const storyboard = reqs.add(q.project.storyboards.Get).setup(req => {
-  req.interpolations.project_id = project_id
-  req.interpolations.storyboard_id = params.storyboard_id
-}).wait()
-const scenes = reqs.add(q.project.scenes.List).setup(req => {
+const scene_page = reqs.add(q.project.scenes.List).setup(req => {
   req.interpolations.project_id = params.project_id
   req.interpolations.storyboard_id = params.storyboard_id
 }).wait()
 await reqs.performAll()
+
+const platform_boxes = computed(() => platform_page.value.list)
+const platforms = computed(() => platform_boxes.value.map(it => it.platform))
+const test_case_label_boxes = computed(() => test_case_label_page.value.list)
+const test_case_labels = computed(() => test_case_label_boxes.value.map(it => it.test_case_label))
+const roadmap_boxes = computed(() => roadmap_page.value.list)
+const roadmaps = ref([] as Roadmap[])
+roadmaps.value = roadmap_boxes.value.map(it => it.roadmap)
+const storyboard_boxes = computed(() => storyboard_page.value.list)
+const storyboards = ref([] as Storyboard[])
+const storyboard = ref(null! as  Storyboard)
+storyboards.value = storyboard_boxes.value.map(it => it.storyboard)
+storyboard.value = storyboards.value.find(it => it.id.toString() == params.storyboard_id.toString())!
+const scene_boxes = computed(() => scene_page.value.list)
+const scenes = ref([] as Scene[])
+scenes.value = scene_boxes.value.map(it => it.scene)
 
 if (query.roadmap_id) {
   roadmap.value = roadmaps.value.find((r) => r.id === _.toInteger(query.roadmap_id)) ?? null
@@ -217,14 +227,7 @@ const position_mapping = computed(() => {
   return result
 })
 
-const requirements = reqs.add(q.project.requirements.List).setup(req => {
-  req.interpolations.project_id = project_id
-  req.interpolations.storyboard_id = storyboard.value.id
-  if (roadmap.value) {
-    req.query = { roadmap_id: roadmap.value.id }
-  }
-}).wait()
-const requirement_stats = reqs.add(q.project.requirement_stats.List).setup(req => {
+const requirement_page = reqs.add(q.project.requirements.List).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = storyboard.value.id
   if (roadmap.value) {
@@ -233,9 +236,13 @@ const requirement_stats = reqs.add(q.project.requirement_stats.List).setup(req =
 }).wait()
 await reqs.performAll()
 
+const requirement_boxes = computed(() => requirement_page.value.list)
+const requirements = ref([] as Requirement[])
+requirements.value = requirement_boxes.value.map(it => it.requirement)
+
 const requirement_repo = ref(new RequirementRepo().setup(requirements.value))
 const requirement_stat_repo = computed(() => {
-  return new RequirementStatRepo().setup(requirement_stats.value)
+  return new RequirementStatRepo().setup(requirement_page.value.requirement_stats)
 })
 
 function rebuildRequirementRepo() {
@@ -323,6 +330,7 @@ function rebuildNodes() {
 const platform_repo = computed(() => {
   return new PlatformRepo().setup(platforms.value)
 })
+console.log("platform_repo", platform_repo.value)
 
 const label_repo = computed(() => {
   return new LabelRepo().setup(test_case_labels.value)
@@ -443,15 +451,15 @@ function updateScenePositions() {
 }
 
 async function updateRequirement(requirement: Requirement, data: any) {
-  const a_requirement = await reqs.add(q.project.requirements.Update).setup(req => {
+  const a_requirement_box = await reqs.add(q.project.requirements.Update).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
     req.interpolations.requirement_id = requirement.id
   }).perform(data)
 
-  requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
+  requirements.value = requirements.value.map((r) => r.id === a_requirement_box.requirement.id ? a_requirement_box.requirement : r)
   rebuildRequirementRepo()
-  updateNodeData(requimentNodeId(a_requirement), { requirement: a_requirement })
+  updateNodeData(requimentNodeId(a_requirement_box.requirement), { requirement: a_requirement_box.requirement })
   updateScenePositions()
 }
 
@@ -541,14 +549,14 @@ async function save() {
     return acc
   }, {} as Record<string, { x: number, y: number }>)
 
-  const a_storyboard = await reqs.add(q.project.storyboards.Update).setup(req => {
+  const a_storyboard_box = await reqs.add(q.project.storyboards.Update).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.storyboard_id = storyboard.value.id
   }).perform({
     positions: position_mapping_data
   })
 
-  storyboard.value = a_storyboard
+  storyboard.value = a_storyboard_box.storyboard
 }
 
 const former = Former.build(new Filter())

@@ -16,12 +16,12 @@
         </FormGroup>
         <FormGroup path="creator_id" label="创建人">
           <controls.Select include-blank>
-            <OptionsForMember :collection="members" />
+            <OptionsForMember :collection="member_boxes" />
           </controls.Select>
         </FormGroup>
         <FormGroup path="assignee_id" label="受理人">
           <controls.Select include-blank>
-            <OptionsForMember :collection="members" except_level="reporter" />
+            <OptionsForMember :collection="member_boxes" except_level="reporter" />
           </controls.Select>
         </FormGroup>
       </div>
@@ -32,7 +32,7 @@
         <div class="space-x-3">
           <Button>更新问题</Button>
           <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</Button>
-          <Button variant="destructive" v-if="allow('manage', issue)" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
+          <Button variant="destructive" v-if="allow('manage', issue_box)" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
         </div>
       </FormGroup>
     </div>
@@ -48,6 +48,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import * as q from '@/requests'
 import { usePageStore, useSessionStore } from '@/store'
+import { MemberBox } from '@/models'
 import _ from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
@@ -56,6 +57,7 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
+import { computed } from 'vue'
 
 const reqs = useRequestList()
 const route = useRoute()
@@ -67,19 +69,22 @@ const page = usePageStore()
 const session = useSessionStore()
 const allow = page.inProject()!.allow
 
-const issue = reqs.add(q.bug.issues.Get).setup(req => {
+const issue_box = reqs.add(q.bug.issues.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
 }).wait()
-const categories = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
-const members = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
+const category_page = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
+const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
 await reqs.performAll()
 
+const categories = computed(() => category_page.value.list.map(it => it.category))
+const member_boxes = computed(() => member_page.value.list)
+
 const former = Former.build({
-  title: issue.value.title,
-  category_id: issue.value.category_id,
-  assignee_id: issue.value.assignee_id,
-  creator_id: issue.value.creator_id,
+  title: issue_box.value.issue.title,
+  category_id: issue_box.value.issue.category_id,
+  assignee_id: issue_box.value.issue.assignee_id,
+  creator_id: issue_box.value.issue.creator_id,
 })
 
 const Form = GenericForm<typeof former.form>

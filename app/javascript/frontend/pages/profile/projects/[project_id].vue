@@ -11,11 +11,11 @@
                 <FormErrorAlert />
 
                 <FormGroup label="项目">
-                  <controls.String v-model="profile.project_name" readonly disabled />
+                  <controls.String v-model="profile_box.profile.project_name" readonly disabled />
                 </FormGroup>
 
                 <FormGroup path="nickname" label="昵称">
-                  <controls.String :placeholder="`${account.name} (默认值)`" />
+                  <controls.String :placeholder="`${account?.name} (默认值)`" />
                 </FormGroup>
               </div>
             </CardContent>
@@ -53,11 +53,11 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const account = ref(session.account)
-const profile = reqs.raw(session.request(q.project.profiles.Get, project_id)).setup().wait()
+const profile_box = reqs.raw(session.request(q.project.profiles.Get, project_id)).setup().wait()
 await reqs.performAll()
 
 const former = Former.build({
-  nickname: profile.value.nickname
+  nickname: profile_box.value.profile.nickname
 })
 
 const Form = GenericForm<typeof former.form>
@@ -71,7 +71,7 @@ watch(former.form, () => {
 former.doPerform = async function() {
   await reqs.add(q.project.profiles.Update).setup(req => {
     req.interpolations.project_id = project_id
-  }).waitFor(profile).perform(this.form)
+  }).waitFor(profile_box).perform(this.form)
 
   success.value = true
 }

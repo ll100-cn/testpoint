@@ -34,7 +34,7 @@
     </CardHeader>
 
     <CardTable>
-      <IssueList :issues="pagination.list" :sorts="search2.sorts" />
+      <IssueList :issue_boxes="pagination.list" :sorts="search2.sorts" />
     </CardTable>
 
     <CardFooter>
@@ -101,10 +101,6 @@ const pagination = reqs.add(q.bug.issues.Page).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
 }).wait()
-const pagination2 = reqs.add(q.v2.bug.issues.page).setup(req => {
-  req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
-}).wait()
 const issue_summary = reqs.add(q.bug.issue_summaries.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2 })
@@ -112,6 +108,6 @@ const issue_summary = reqs.add(q.bug.issue_summaries.Get).setup(req => {
 await reqs.performAll()
 
 const issue_stage_count = computed(() => {
-  return _(pagination2.value.issue_stats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
+  return _(pagination.value.issue_stats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
 })
 </script>

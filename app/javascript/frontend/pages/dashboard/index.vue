@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, IssueStat, Project } from '@/models'
+import { EntityRepo, IssueStat, Project, MemberBox } from '@/models'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -48,16 +48,16 @@ const session = useSessionStore()
 
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const issue_stats = reqs.add(q.profile.issue_stats.List).setup().wait()
-const member_infos = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
-const unhandled_issues =  reqs.add(q.profile.issues.Page).setup(req => {
+const member_page = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
+const unhandled_issue_page =  reqs.add(q.profile.issues.Page).setup(req => {
   req.query.per_page = 1
   req.query.filter = 'unhandled'
 }).wait()
 await reqs.performAll()
 
-const unhandled_issues_count = computed(() => unhandled_issues.value.total_count)
-const project_repo = computed(() => new EntityRepo<Project>().setup(member_infos.value.map(it => it.project)))
+const member_boxes = computed(() => member_page.value.list)
+const unhandled_issues_count = computed(() => unhandled_issue_page.value.total_count)
+const project_repo = computed(() => new EntityRepo<Project>().setup(member_boxes.value.map(it => it.project!)))
 
 const grouped_issue_stats = computed(() => {
   const result = new Map<Project, Map<string, IssueStat[]>>()
@@ -66,7 +66,7 @@ const grouped_issue_stats = computed(() => {
     result.set(project, new Map<string, IssueStat[]>())
   }
 
-  for (const issue_stat of issue_stats.value) {
+  for (const issue_stat of unhandled_issue_page.value.issue_stats) {
     const project = project_repo.value.id.find(issue_stat.project_id)
 
     let issue_stats_mapping = result.get(project)
@@ -90,7 +90,7 @@ const grouped_issue_stats = computed(() => {
 const issue_stages_counts = computed(() => {
   const result = new Map<string, number>()
 
-  for (const issue_stat of issue_stats.value) {
+  for (const issue_stat of unhandled_issue_page.value.issue_stats) {
     const count = result.get(issue_stat.stage) || 0
     result.set(issue_stat.stage, count + issue_stat.count)
   }

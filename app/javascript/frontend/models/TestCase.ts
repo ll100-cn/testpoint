@@ -1,4 +1,7 @@
 import { Type } from "class-transformer"
+import * as t from '@/lib/transforms'
+import { Pagination } from './Pagination'
+
 export class TestCase {
   id!: number
   project_id!: number
@@ -17,4 +20,12 @@ export class TestCase {
   roadmap_id: number | null = null
 
   @Type(() => Date) updated_at!: Date
+}
+
+export class TestCaseBox {
+  @t.Klass(TestCase) test_case!: TestCase
+}
+
+export class TestCasePage<Box extends TestCaseBox> extends Pagination<Box> {
+  @t.Klass(TestCaseBox) list: Box[] = []
 }

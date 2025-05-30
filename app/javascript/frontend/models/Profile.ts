@@ -1,20 +1,20 @@
 import * as t from '@/lib/transforms'
 
 export class Profile {
-  member_id: number
-  role: string
-  role_text: string
-  nickname: string | null
-  project_id: number
-  project_name: string
+  member_id!: number
+  role!: string
+  role_text!: string
+  nickname: string | null = null
+  project_id!: number
+  project_name!: string
 
-  @t.Klass(Map<string, string[]>) permissions: Map<string, string[]>
+  @t.Klass(Map<string, string[]>) permissions!: Map<string, string[]>
 
   constructor() {
     this.allow = this.allow.bind(this)
   }
 
-  findKlass(resource: any) {
+  findKlass(resource: any): string[] {
     if (typeof resource == 'string') {
       return [ resource ]
     } else if (typeof resource == 'object') {
@@ -45,4 +45,8 @@ export class Profile {
 
     return false
   }
+}
+
+export class ProfileBox {
+  @t.Klass(Profile) profile!: Profile
 }

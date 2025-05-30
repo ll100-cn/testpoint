@@ -1,0 +1,20 @@
+json = {
+  plan: (render partial: "api/shared/plan", locals: { plan: plan })
+}
+
+if resource_graph_columns.include?("counts")
+  tasks_state_counts_mapping ||= {}
+  json[:tasks_state_counts] = tasks_state_counts_mapping[plan.id] || {}
+end
+
+if resource_graph_columns.include?("info")
+  upshots_state_counts_mapping ||= {}
+  json[:phase_infos] = plan.phases.ranked.map do |phase|
+    {
+      phase: render(partial: "api/shared/phase", locals: { phase: phase }),
+      upshots_state_counts: upshots_state_counts_mapping[phase.id] || {}
+    }
+  end
+end
+
+json

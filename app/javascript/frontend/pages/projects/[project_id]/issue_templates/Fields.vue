@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance, ref, computed } from 'vue'
 import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
@@ -83,7 +83,9 @@ const lookup_by_build_form_collection = ref([
 
 const FormGroup = GenericFormGroup<typeof props.former.form>
 
-const categories = await reqs.raw(session.request(q.project.categories.List, params.project_id)).setup().perform()
+const category_page = reqs.add(q.project.categories.List, params.project_id).setup().wait()
+await reqs.performAll()
+const categories = computed(() => category_page.value.list.map(it => it.category))
 
 async function onRemoveInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)

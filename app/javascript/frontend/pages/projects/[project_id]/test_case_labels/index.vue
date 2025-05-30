@@ -21,16 +21,16 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="test_case_label in test_case_labels" :key="test_case_label.id">
+          <template v-for="test_case_label_box in test_case_label_boxes" :key="test_case_label_box.test_case_label.id">
             <TableRow>
-              <TableCell>{{ test_case_label.name }}</TableCell>
-              <TableCell>{{ test_case_label.description }}</TableCell>
-              <TableCell>{{ test_case_label.test_case_count }}</TableCell>
+              <TableCell>{{ test_case_label_box.test_case_label.name }}</TableCell>
+              <TableCell>{{ test_case_label_box.test_case_label.description }}</TableCell>
+              <TableCell>{{ test_case_label_box.test_case_count }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`" class="link">
+                <router-link v-if="allow('update', test_case_label_box.test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label_box.test_case_label.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', test_case_label_box.test_case_label)" href="#" @click.prevent="onRemove(test_case_label_box.test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
@@ -65,10 +65,11 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const test_case_labels = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
+const test_case_label_page = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
   req.interpolations.project_id = project_id
 }).wait()
 await reqs.performAll()
+const test_case_label_boxes = computed(() => test_case_label_page.value.list)
 
 async function onRemove(id: number) {
   if (!confirm("是否删除标签？")) {

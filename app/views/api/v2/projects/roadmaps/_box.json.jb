@@ -1,0 +1,5 @@
+json = {
+  roadmap: render(partial: "api/shared/roadmap", locals: { roadmap: roadmap })
+}
+
+json

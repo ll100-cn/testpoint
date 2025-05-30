@@ -1,5 +1,5 @@
 json = plan.slice(:id, :title, :created_at, :creator_id, :platform_id, :project_id, :milestone_id)
 json[:creator_name] = plan.creator.name
 json[:platform] = render partial: "api/shared/platform", locals: { platform: plan.platform }
-json[:tasks_state_counts] = tasks_state_counts_mapping[plan.id] || {}
+
 json

@@ -1,7 +1,7 @@
 <template>
   <DialogContent class="max-w-4xl">
     <DialogHeader>
-      <DialogTitle>{{ plan_info.title }}</DialogTitle>
+      <DialogTitle>{{ plan_box.plan.title }}</DialogTitle>
     </DialogHeader>
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()" class="space-y-4">
       <FormErrorAlert />
@@ -28,7 +28,7 @@
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Phase, PhaseInfo, Plan, PlanInfo } from '@/models'
+import { Phase, PhaseInfo, Plan, PlanBox } from '@/models'
 import _ from 'lodash'
 import { nextTick, ref, computed } from 'vue'
 import { useRoute } from "vue-router"
@@ -44,7 +44,7 @@ const params = route.params as any
 const el = ref(null! as HTMLElement)
 
 const props = defineProps<{
-  plan_info: PlanInfo
+  plan_box: PlanBox
 }>()
 
 const emit = defineEmits<{
@@ -52,11 +52,11 @@ const emit = defineEmits<{
 }>()
 
 const upshots_state_counts = computed(() => {
-  return _.last(props.plan_info.phase_infos)?.upshots_state_counts ?? {}
+  return _.last(props.plan_box.phase_infos)?.upshots_state_counts ?? {}
 })
 
 const former = Former.build({
-  title: `第 ${(props.plan_info.phase_infos ?? []).length + 1} 轮`,
+  title: `第 ${(props.plan_box.phase_infos ?? []).length + 1} 轮`,
   release_revision: ""
 })
 
@@ -64,12 +64,12 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const phase = await reqs.add(q.test.plan_phases.Create).setup(req => {
+  const phase_box = await reqs.add(q.test.plan_phases.Create).setup(req => {
     req.interpolations.project_id = params.project_id
     req.interpolations.plan_id = params.plan_id
   }).perform(this.form)
 
-  emit('created', phase)
+  emit('created', phase_box.phase)
 }
 
 const loading = ref(true)

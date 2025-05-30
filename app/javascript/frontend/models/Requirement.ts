@@ -1,6 +1,7 @@
-import { Type } from "class-transformer"
 import * as t from '@/lib/transforms'
 import { EntityIndex, EntityRepo } from "./EntityRepo"
+import { Pagination } from "./Pagination"
+import { RequirementStat } from './RequirementStat'
 
 export class Requirement {
   id!: number
@@ -16,6 +17,15 @@ export class Requirement {
   roles: string[] = []
 
   @t.Date updated_at!: Date
+}
+
+export class RequirementBox {
+  @t.Klass(Requirement) requirement!: Requirement
+}
+
+export class RequirementPage<Box extends RequirementBox> extends Pagination<Box> {
+  @t.Klass(RequirementBox) list: Box[] = []
+  @t.Klass(RequirementStat) requirement_stats: RequirementStat[] = []
 }
 
 export class RequirementRepo extends EntityRepo<Requirement> {

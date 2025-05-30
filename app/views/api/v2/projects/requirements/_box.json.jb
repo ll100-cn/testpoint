@@ -1,0 +1,5 @@
+json = {
+  requirement: render(partial: "api/shared/requirement", locals: { requirement: requirement })
+}
+
+json

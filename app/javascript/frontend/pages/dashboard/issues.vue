@@ -36,7 +36,7 @@
 
   <Card class="rounded-t-none">
     <CardTable>
-      <IssueList :issues="pagination.list" :columns="['project']" :sorts="sorts" />
+      <IssueList :issue_boxes="pagination.list" :columns="['project']" :sorts="sorts" />
     </CardTable>
     <CardFooter>
       <PaginationBar :pagination="pagination" />
@@ -55,7 +55,7 @@ import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Nav, NavItem } from '$ui/nav'
-import type { Issue, Pagination } from "@/models"
+import type { Issue, IssueBox, IssuePage, Pagination } from "@/models"
 import RLink from "@/components/RLink.vue"
 import { Badge } from "$ui/badge"
 
@@ -72,12 +72,12 @@ const pagination = reqs.add(q.profile.issues.Page).setup(req => {
   req.query.sorts = sorts.value
 }).wait()
 
-let unhandled_issues = ref(null as Pagination<Issue> | null)
+let unhandled_issue_page = ref(null as IssuePage<IssueBox> | null)
 if (filter != 'unhandled') {
   reqs.add(q.profile.issues.Page).setup(req => {
     req.query.per_page = 1
     req.query.filter = 'unhandled'
-  }).waitFor(unhandled_issues)
+  }).waitFor(unhandled_issue_page)
 }
 await reqs.performAll()
 
@@ -85,7 +85,7 @@ const unhandled_issues_count = computed(() => {
   if (filter == 'unhandled') {
     return pagination.value.total_count
   } else {
-    return unhandled_issues.value?.total_count ?? 0
+    return unhandled_issue_page.value?.total_count ?? 0
   }
 })
 </script>

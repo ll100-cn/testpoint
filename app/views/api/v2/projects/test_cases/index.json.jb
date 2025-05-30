@@ -1,0 +1,5 @@
+json = {
+  list: render(partial: "box", collection: @test_cases, as: :test_case)
+}
+
+json

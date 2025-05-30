@@ -39,15 +39,15 @@ const params = route.params as any
 const project_id = params.project_id as string
 const test_case_label_id = params.test_case_label_id
 
-const test_case_label = reqs.add(q.project.test_case_labels.InfoGet).setup(req => {
+const test_case_label_box = reqs.add(q.project.test_case_labels.InfoGet).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.test_case_label_id = test_case_label_id
 }).wait()
 await reqs.performAll()
 
 const former = Former.build({
-  name: test_case_label.value.name,
-  description: test_case_label.value.description,
+  name: test_case_label_box.value.test_case_label.name,
+  description: test_case_label_box.value.test_case_label.description,
 })
 
 const Form = GenericForm<typeof former.form>

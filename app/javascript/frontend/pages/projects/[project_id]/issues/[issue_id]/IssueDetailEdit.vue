@@ -29,13 +29,13 @@
 <script setup lang="ts">
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import { IssueInfo } from "@/models"
+import { IssueBox } from "@/models"
 import { ref } from "vue"
 
 const props = withDefaults(defineProps<{
   code: string
   title: string
-  issue_info: IssueInfo
+  issue_box: IssueBox
   former: Former<any>
   editable?: boolean
 }>(), {
@@ -53,12 +53,12 @@ async function onSubmit() {
 
 function switchMode(a_mode: 'show' | 'edit') {
   if (a_mode == 'edit') {
-    props.former.form['state'] = props.issue_info.state
-    props.former.form['priority'] = props.issue_info.priority
-    props.former.form['creator_id'] = props.issue_info.creator_id
-    props.former.form['assignee_id'] = props.issue_info.assignee_id
-    props.former.form['category_id'] = props.issue_info.category_id
-    props.former.form['milestone_id'] = props.issue_info.milestone_id
+    props.former.form['state'] = props.issue_box.issue.state
+    props.former.form['priority'] = props.issue_box.issue.priority
+    props.former.form['creator_id'] = props.issue_box.issue.creator_id
+    props.former.form['assignee_id'] = props.issue_box.issue.assignee_id
+    props.former.form['category_id'] = props.issue_box.issue.category_id
+    props.former.form['milestone_id'] = props.issue_box.issue.milestone_id
   }
   console.log('former')
 

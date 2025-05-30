@@ -1,8 +1,8 @@
 <template>
   <p class="flex items-center">
     <span class="text-muted">该问题来自测试</span>
-    <span><router-link :to="`/projects/${project_id}/plans/${task.plan_id}`">{{ test_case.title }}</router-link></span>
-    <Badge preset="standard" variant="secondary" class="ms-1">{{ plan_info.platform.name }}</Badge>
+    <span><router-link :to="`/projects/${project_id}/plans/${task.plan_id}`">{{ test_case_box.test_case.title }}</router-link></span>
+    <Badge preset="standard" variant="secondary" class="ms-1">{{ plan_box.plan.platform.name }}</Badge>
   </p>
 </template>
 
@@ -19,11 +19,11 @@ const props = defineProps<{
   project_id: number
 }>()
 
-const test_case = reqs.add(q.case.test_cases.Get).setup(req => {
+const test_case_box = reqs.add(q.case.test_cases.Get).setup(req => {
   req.interpolations.project_id = props.project_id
   req.interpolations.test_case_id = props.task.test_case_id
 }).wait()
-const plan_info = reqs.add(q.test.plans.InfoGet).setup(req => {
+const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
   req.interpolations.project_id = props.project_id
   req.interpolations.plan_id = props.task.plan_id
 }).wait()

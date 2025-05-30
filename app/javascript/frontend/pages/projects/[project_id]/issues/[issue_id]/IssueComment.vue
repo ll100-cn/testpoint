@@ -1,27 +1,27 @@
 <template>
   <Card>
-    <CardHeader :class="{ 'bg-destructive/10': comment.display == 'important' }">
-      <MemberLabel :member="comment.member" class="me-1" />
+    <CardHeader :class="{ 'bg-destructive/10': comment_box.comment.display == 'important' }">
+      <MemberLabel :member="comment_box.comment.member" class="me-1" />
 
-      <span class="ms-1 text-sm text-muted">添加于 {{ h.datetime(comment.created_at) }}</span>
+      <span class="ms-1 text-sm text-muted">添加于 {{ h.datetime(comment_box.comment.created_at) }}</span>
 
-      <span class="ms-1 text-sm text-body-tertiary">[{{ comment.id }}]</span>
+      <span class="ms-1 text-sm text-body-tertiary">[{{ comment_box.comment.id }}]</span>
 
       <template #actions>
         <Button preset="ghost" variant="secondary" size="sm" v-if="display == 'collapsed'" @click.prevent="changeDisplay()">展开</Button>
 
         <MoreDropdown>
-          <DropdownMenuItem v-if="!readonly && allow('create', Comment)" @click.prevent="emit('modal', IssueCommentReplyDialogContent, issue, comment)">回复</DropdownMenuItem>
+          <DropdownMenuItem v-if="!readonly && allow('create', Comment)" @click.prevent="emit('modal', IssueCommentReplyDialogContent, issue_box, comment_box)">回复</DropdownMenuItem>
 
-          <template v-if="!readonly && allow('update', comment)">
-            <DropdownMenuItem @click.prevent="emit('modal', IssueCommentEditDialogContent, issue, comment)">修改</DropdownMenuItem>
-            <DropdownMenuItem v-if="children.length == 0" @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue, comment)">关联</DropdownMenuItem>
+          <template v-if="!readonly && allow('update', comment_box.comment)">
+            <DropdownMenuItem @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
+            <DropdownMenuItem v-if="children.length == 0" @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue_box, comment_box)">关联</DropdownMenuItem>
             <!-- <DropdownMenuItem v-if="allow('destroy', comment)" @click.prevent="deleteComment">删除</DropdownMenuItem> -->
 
             <DropdownMenuSeparator />
 
             <template v-for="option in COMMENT_DISPLAY_OPTIONS">
-              <DropdownMenuItem v-if="option.value != comment.display" @click.prevent="updateComment({ display: option.value })">
+              <DropdownMenuItem v-if="option.value != comment_box.comment.display" @click.prevent="updateComment({ display: option.value })">
                 设为: {{ option.label }}
               </DropdownMenuItem>
             </template>
@@ -31,11 +31,11 @@
     </CardHeader>
 
     <CardContent :id="content_id" :class="{ hidden: display == 'collapsed' }">
-      <ContentBody :body="comment" :editable="!readonly && allow('update', comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+      <ContentBody :body="comment_box.comment" :editable="!readonly && allow('update', comment_box.comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
       <Callout class="mt-3 py-1" v-if="children.length > 0">
         <template v-for="(child, index) in children">
           <div class="mt-4" v-if="index != 0"></div>
-          <IssueCommentReply :readonly="readonly" :issue="issue" :comment="child" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
+          <IssueCommentReply :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBox.from(child)" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
         </template>
       </Callout>
     </CardContent>
@@ -48,7 +48,7 @@ import useRequestList from '@/lib/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Attachment, Comment, CommentRepo, Issue } from "@/models"
+import { Attachment, Comment, CommentBox, CommentRepo, Issue, IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
@@ -71,26 +71,26 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 
 const props = defineProps<{
-  issue: Issue
-  comment: Comment
+  issue_box: IssueBox
+  comment_box: CommentBox
   comment_repo: CommentRepo
   readonly: boolean
 }>()
 
 const emit = defineEmits<{
-  destroyed: [ Comment ]
-  updated: [ Comment ]
+  destroyed: [ CommentBox ]
+  updated: [ CommentBox ]
 
   modal: [ component: Component, ...args: any[] ]
 }>()
 
-const display = ref(props.comment.display)
+const display = ref(props.comment_box.comment.display)
 function changeDisplay() {
   display.value = display.value == 'collapsed' ? 'normal' : 'collapsed'
 }
 
 const children = computed(() => {
-  return props.comment_repo.parent_id.findAll(props.comment.id).sort((a, b) => a.created_at > b.created_at ? 1 : -1)
+  return props.comment_repo.parent_id.findAll(props.comment_box.comment.id).sort((a, b) => a.created_at > b.created_at ? 1 : -1)
 })
 
 const content_id = _.uniqueId("content_")
@@ -100,34 +100,34 @@ async function deleteComment() {
     return
   }
   await reqs.add(q.bug.issue_comments.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue.project_id
-    req.interpolations.issue_id = props.issue.id
-    req.interpolations.comment_id = props.comment.id
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
+    req.interpolations.comment_id = props.comment_box.comment.id
   }).perform()
 
-  emit("destroyed", props.comment)
+  emit("destroyed", props.comment_box)
 }
 
 async function updateComment(data: Record<string, any>) {
-  const comment = await reqs.add(q.bug.issue_comments.Update).setup(req => {
-    req.interpolations.project_id = props.issue.project_id
-    req.interpolations.issue_id = props.issue.id
-    req.interpolations.comment_id = props.comment.id
+  const a_comment_box = await reqs.add(q.bug.issue_comments.Update).setup(req => {
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
+    req.interpolations.comment_id = props.comment_box.comment.id
   }).perform(data)
 
-  display.value = comment.display
-  emit('updated', comment)
+  display.value = a_comment_box.comment.display
+  emit('updated', a_comment_box)
 }
 
 function onAttachmentUpdated(attachment: Attachment) {
-  const index = props.comment.attachments.findIndex(it => it.id === attachment.id)
-  props.comment.attachments[index] = attachment
-  emit('updated', props.comment)
+  const index = props.comment_box.comment.attachments.findIndex(it => it.id === attachment.id)
+  props.comment_box.comment.attachments[index] = attachment
+  emit('updated', props.comment_box)
 }
 
 function onAttachmentDestroyed(attachment: Attachment) {
-  const index = props.comment.attachments.findIndex(it => it.id === attachment.id)
-  props.comment.attachments.splice(index, 1)
-  emit('updated', props.comment)
+  const index = props.comment_box.comment.attachments.findIndex(it => it.id === attachment.id)
+  props.comment_box.comment.attachments.splice(index, 1)
+  emit('updated', props.comment_box)
 }
 </script>

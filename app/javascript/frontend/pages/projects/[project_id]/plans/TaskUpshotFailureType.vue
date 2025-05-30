@@ -8,7 +8,7 @@
     </label>
   </div>
 
-  <div v-for="issue in task_info.issues" class="form-check">
+  <div v-for="issue in task_box.issues ?? []" class="form-check">
     <label class="form-check-label">
       <input class="form-check-input" type="radio" v-model="model_value" :value="issue.id">
       追加评论
@@ -27,12 +27,12 @@
 
 <script setup lang="ts">
 import IssueRichLink from '@/components/IssueRichLink.vue'
-import { TaskInfo } from '@/models'
+import { TaskBox } from '@/models'
 
 export type ModalValue = 'new_issue' | number | null
 const model_value = defineModel<ModalValue>()
 
 const props = defineProps<{
-  task_info: TaskInfo
+  task_box: TaskBox
 }>()
 </script>

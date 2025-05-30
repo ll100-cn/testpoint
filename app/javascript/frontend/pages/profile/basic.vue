@@ -54,8 +54,8 @@ const session = useSessionStore()
 
 const account = session.account
 const former = Former.build({
-  name: account.user.name,
-  email: account.email,
+  name: account?.user.name,
+  email: account?.email,
   avatar: "",
 })
 
@@ -68,9 +68,9 @@ watch(former.form, () => {
 })
 
 former.doPerform = async function() {
-  const account = await reqs.add(q.profile.accounts.Update).setup(req => {
+  const account_box = await reqs.add(q.profile.accounts.Update).setup(req => {
   }).perform(this.form)
-  session.account = account
+  session.account = account_box.account
 
   success.value = true
 }

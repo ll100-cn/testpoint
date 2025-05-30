@@ -36,4 +36,80 @@ class Api::V2::Projects::IssuesController < Api::V2::Projects::BaseController
       @project_issue_stats = all_issues_scope.group(:project_id, :stage, :category_id).select(:project_id, :stage, :category_id, "COUNT(*) as count")
     end
   end
+
+  def show
+  end
+
+  def create
+    with_email_notification do
+      @issue.creator ||= current_member
+
+      @template = @project.issue_templates.find(params[:issue_template_id]) if params[:issue_template_id].present?
+      @issue_build_form = IssueBuildForm.new(template: @template, issue: @issue)
+      @issue_build_form.prepare
+      @issue_build_form.submit(issue_build_form_params)
+    end
+    @issue = @issue_build_form.issue
+    respond_with @issue_build_form, location: ok_url_or_default(action: :index)
+  end
+
+  def destroy
+    @issue.destroy
+    respond_with @issue
+  end
+
+  def merge
+    form_params = params.permit(source_ids: [])
+    @form = IssueMergeForm.new(form_params)
+    @form.project = @project
+    @form.head = @issue
+    @form.submit(current_member)
+    respond_with @form
+  end
+
+  def resolve
+    if @issue.resolve(resolve_params, current_member)
+      IssueNotifyJob.perform_later(@issue.id)
+    end
+    respond_with @issue
+  end
+
+  def process2
+    if @issue.process(process_params, current_member)
+      IssueNotifyJob.perform_later(@issue.id)
+    end
+    respond_with @issue
+  end
+
+protected
+
+  def issue_build_form_params
+    issue_names = [ :priority, :title, :content, attachments_params: [ :id, :title ] ]
+    issue_names << :creator_id if can? :manage, Issue
+
+    params.permit(
+      :from_task_id,
+      issue_attributes: issue_names,
+      survey_attributes: [inputs_attributes: [:template_input_id, :value]]
+    )
+  end
+
+  def with_email_notification
+    yield
+    if (changes = @issue.previous_changes).any?
+      @issue.notify_creator if changes.fetch("state", []).last == "resolved"
+      current_user.subscribe(@issue)
+      @issue.notify_changed_by(current_member, changes)
+    end
+  end
+
+  def resolve_params
+    ActionController::Parameters.new(request.request_parameters).permit(:action, comment_attributes: [
+      :content, attachments_params: [ :id, :title ]
+    ])
+  end
+
+  def process_params
+    params.permit(:state)
+  end
 end

@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
-import { MemberInfo } from '@/models'
+import { MemberBox, MemberInfo, MemberPage } from '@/models'
 import { usePageStore } from '@/store'
 import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -92,12 +92,12 @@ const page = usePageStore()
 
 const account = computed(() => session.account)
 const profile = computed(() => page.inProject()?.profile)
-const member_infos = ref([] as MemberInfo[])
+const member_page = ref(null! as MemberPage<MemberBox>)
 
-const projects = computed(() => member_infos.value.map(it => it.project))
+const projects = computed(() => member_page.value.list.map(it => it.project!))
 
 if (account.value) {
-  member_infos.value = await reqs.raw(session.request(q.profile.members.InfoList)).setup().perform()
+  member_page.value = await reqs.raw(session.request(q.profile.members.InfoList)).setup().perform()
 }
 
 async function signOut() {

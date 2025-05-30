@@ -18,14 +18,11 @@ const props = withDefaults(defineProps<Props & Partial<InputPresenterConfig> & C
   preset: 'standard'
 })
 
-const checked = ref(props.value === undefined ? props.defaultValue : props.modelValue)
+const checkedRaw = defineModel<boolean | 'indeterminate'>()
+const checked = computed(() => checkedRaw.value === undefined ? props.defaultValue : checkedRaw.value)
 function onValueChanged(value: boolean | 'indeterminate') {
   emits('update:modelValue', value)
-  checked.value = value
 }
-watch(computed(() => props.modelValue), (value) => {
-  checked.value = value
-})
 
 const presenterConfig = relayInputPresenterConfig(props)
 const presenter = provideInputPresenter(computed(() => {

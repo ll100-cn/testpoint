@@ -20,14 +20,14 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="user in users.list">
+          <template v-for="user_box in user_page.list">
             <TableRow>
-              <TableCell>{{ user.id }}</TableCell>
-              <TableCell>{{ user.name }}</TableCell>
-              <TableCell>{{ user.email }}</TableCell>
+              <TableCell>{{ user_box.user.id }}</TableCell>
+              <TableCell>{{ user_box.user.name }}</TableCell>
+              <TableCell>{{ user_box.user.email }}</TableCell>
               <TableCell role="actions">
-                <router-link :to="`/users/${user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
-                <a href="#" @click.prevent="onRemove(user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <router-link :to="`/users/${user_box.user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                <a href="#" @click.prevent="onRemove(user_box.user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -36,7 +36,7 @@
     </CardTable>
 
     <CardFooter>
-      <PaginationBar :pagination="users" />
+      <PaginationBar :pagination="user_page" />
     </CardFooter>
   </Card>
 </template>
@@ -62,12 +62,12 @@ const route = useRoute()
 const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
 
-const users = reqs.add(q.admin.users.Page).setup(req => {
+const user_page = reqs.add(q.admin.users.Page).setup(req => {
   req.query = utils.plainToQuery(query)
 }).wait()
 await reqs.performAll()
 
-async function onRemove(user_id) {
+async function onRemove(user_id: number) {
   if (!confirm("是否删除用户？")) {
     return
   }

@@ -23,6 +23,8 @@ const props = withDefaults(defineProps<Props & Partial<FormPresenterConfig>>(), 
 const defaultModelValue = defineModel<(number | string)[]>()
 const modelValue = useControlValue(defaultModelValue)
 
+console.log("CheckboxCollection", modelValue.value)
+
 const forworded = useForwardProps(computed(() => {
   const { collection, itemLabel, itemValue, ...delegated } = props
   return delegated

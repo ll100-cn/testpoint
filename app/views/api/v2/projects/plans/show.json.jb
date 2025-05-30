@@ -1,0 +1,1 @@
+render "box", plan: @plan, tasks_state_counts_mapping: @tasks_state_counts_mapping, upshots_state_counts_mapping: @upshots_state_counts_mapping

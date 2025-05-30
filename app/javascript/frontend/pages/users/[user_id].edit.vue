@@ -35,14 +35,14 @@ const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const user = reqs.add(q.admin.users.Get).setup(req => {
+const user_box = reqs.add(q.admin.users.Get).setup(req => {
   req.interpolations.id = params.user_id
 }).wait()
 await reqs.performAll()
 
 const former = Former.build({
-  email: user.value.email,
-  name: user.value.name
+  email: user_box.value.user.email,
+  name: user_box.value.user.name
 })
 
 const Form = GenericForm<typeof former.form>
@@ -50,7 +50,7 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   await reqs.add(q.admin.users.Update).setup(req => {
-    req.interpolations.id = user.value.id
+    req.interpolations.id = user_box.value.user.id
   }).perform(this.form)
 
   router.push(`/users`)

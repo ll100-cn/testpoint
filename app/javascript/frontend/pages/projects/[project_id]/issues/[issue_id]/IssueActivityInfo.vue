@@ -57,13 +57,13 @@
     </span>
     <span v-else-if="issue_activity.property == 'project_id'" class="flex items-center space-x-1">
       <span>将</span><span class="text-info">项目</span><span>从</span>
-      <router-link :to="`/projects/${issue_activity.before_value}/issues/${issue.id}`">
+      <router-link :to="`/projects/${issue_activity.before_value}/issues/${issue_box.issue.id}`">
         <span class="text-primary">{{ issue_activity.before_project!.name }}</span>
       </router-link>
 
       <span>修改为</span>
 
-      <router-link :to="`/projects/${issue_activity.after_value}/issues/${issue.id}`">
+      <router-link :to="`/projects/${issue_activity.after_value}/issues/${issue_box.issue.id}`">
         <span class="text-primary">{{ issue_activity.after_project!.name }}</span>
       </router-link>
     </span>
@@ -77,10 +77,10 @@ import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import MemberLabel from '@/components/MemberLabel.vue'
 import * as h from '@/lib/humanize'
-import { Issue, IssueActivity } from "@/models"
+import { IssueBox, IssueActivity } from "@/models"
 
 const props = defineProps<{
-  issue: Issue
+  issue_box: IssueBox
   issue_activity: IssueActivity
 }>()
 </script>

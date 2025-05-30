@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
-import { IssueInfo } from "@/models"
+import { Issue, IssueBox } from "@/models"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import { useRouter } from "vue-router"
@@ -29,11 +29,11 @@ const reqs = useRequestList()
 const open = defineModel('open')
 
 const emit = defineEmits<{
-  updated: [ IssueInfo ]
+  updated: [IssueBox]
 }>()
 
 const props = defineProps<{
-  issue_info: IssueInfo
+  issue_box: IssueBox
 }>()
 
 const former = Former.build({
@@ -45,9 +45,9 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.perform = async function() {
-  const a_issue_info = await reqs.add(q.bug.issues.InfoResolve).setup(req => {
-    req.interpolations.project_id = props.issue_info.project_id
-    req.interpolations.issue_id = props.issue_info.id
+  const a_issue_box = await reqs.add(q.bug.issues.InfoResolve).setup(req => {
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.issue_id = props.issue_box.issue.id
   }).perform({
     action: 'unresolve',
     comment_attributes: this.form

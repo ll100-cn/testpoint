@@ -10,7 +10,7 @@
       <Separator class="my-4" preset="through" />
 
       <FormGroup label="">
-        <div class="space-y-3">
+        <div class="space-x-3">
           <Button>修改问题模版</Button>
           <Button variant="secondary" :to="`/projects/${project_id}/issue_templates`">取消</Button>
         </div>
@@ -38,20 +38,20 @@ const params = route.params as any
 const project_id = params.project_id
 const issue_template_id = params.issue_template_id
 
-const issue_template = reqs.add(q.project.issue_templates.Get).setup(req => {
+const issue_template_box = reqs.add(q.project.issue_templates.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_template_id = issue_template_id
 }).wait()
 await reqs.performAll()
 
 const former = Former.build({
-  name: issue_template.value.name,
-  content_suggestion: issue_template.value.content_suggestion,
-  lookup_by_build_form: issue_template.value.lookup_by_build_form,
-  title_suggestion: issue_template.value.title_suggestion,
-  default_priority: issue_template.value.default_priority,
-  default_category_id: issue_template.value.default_category_id,
-  inputs_attributes: issue_template.value.inputs
+  name: issue_template_box.value.issue_template.name,
+  content_suggestion: issue_template_box.value.issue_template.content_suggestion,
+  lookup_by_build_form: issue_template_box.value.issue_template.lookup_by_build_form,
+  title_suggestion: issue_template_box.value.issue_template.title_suggestion,
+  default_priority: issue_template_box.value.issue_template.default_priority,
+  default_category_id: issue_template_box.value.issue_template.default_category_id,
+  inputs_attributes: issue_template_box.value.issue_template.inputs
 })
 
 const Form = GenericForm<typeof former.form>

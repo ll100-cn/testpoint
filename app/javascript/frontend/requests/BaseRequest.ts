@@ -19,7 +19,7 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
   interpolations = {} as { [ x: string]: any }
   query = {} as { [ x: string]: any }
   data: any = {}
-  method!: Method
+  method!: Method | string
   graph: string | null = null
   headers = {}
   config: AxiosRequestConfig = {}

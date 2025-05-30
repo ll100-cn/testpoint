@@ -1,0 +1,5 @@
+json = {
+  issue_relationship: render("api/shared/issue_relationship", issue_relationship: issue_relationship)
+}
+
+json

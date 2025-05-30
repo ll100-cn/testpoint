@@ -25,7 +25,7 @@
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Issue, IssueInfo, IssueSurvey, IssueTemplate } from "@/models"
+import { Issue, IssueSurvey, IssueTemplate, IssueBox, IssueTemplateBox } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
@@ -37,7 +37,7 @@ const reqs = useRequestList()
 const open = defineModel('open')
 
 const emits = defineEmits<{
-  updated: [ IssueInfo ]
+  updated: [Issue]
 }>()
 
 const former = Former.build({
@@ -49,38 +49,38 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
   const a_issue_survey = await reqs.add(q.bug.issue_surveies.Update).setup(req => {
-    req.interpolations.project_id = issue_info.value.project_id
-    req.interpolations.issue_id = issue_info.value.id
+    req.interpolations.project_id = issue_box.value.issue.project_id
+    req.interpolations.issue_id = issue_box.value.issue.id
     req.interpolations.issue_survey_id = issue_survey.value.id
   }).perform(this.form)
 
-  const index = issue_info.value.surveys.findIndex(it => it.id == a_issue_survey.id)
-  issue_info.value.surveys[index] = a_issue_survey
+  const index = issue_box.value.surveys.findIndex(it => it.id == a_issue_survey.id)
+  issue_box.value.surveys[index] = a_issue_survey
 
-  emits("updated", issue_info.value)
+  emits("updated", issue_box.value.issue)
   open.value = false
 }
 
-const current_issue_template = ref<IssueTemplate>()
+const current_issue_template_box = ref<IssueTemplateBox>()
 
 function build_inputs_attributes() {
-  return _.map(current_issue_template.value?.inputs, (input, index) => {
+  return _.map(current_issue_template_box.value?.issue_template.inputs, (input, index) => {
     return { template_input_id: input.id, value: issue_survey.value.values[input.id] ?? null }
   })
 }
 
-const issue_info = ref(null! as IssueInfo)
+const issue_box = ref(null! as IssueBox)
 const issue_survey = ref(null! as IssueSurvey)
 const loading = ref(true)
 
-async function reset(a_issue_info: IssueInfo, a_issue_survey: IssueSurvey) {
+async function reset(a_issue_box: IssueBox, a_issue_survey: IssueSurvey) {
   loading.value = true
-  issue_info.value = a_issue_info
+  issue_box.value = a_issue_box
   issue_survey.value = a_issue_survey
 
   try {
-    current_issue_template.value = await reqs.add(q.project.issue_templates.Get).setup(req => {
-      req.interpolations.project_id = issue_info.value.project_id
+    current_issue_template_box.value = await reqs.add(q.project.issue_templates.Get).setup(req => {
+      req.interpolations.project_id = issue_box.value.issue.project_id
       req.interpolations.issue_template_id = issue_survey.value.template_id
     }).perform()
 

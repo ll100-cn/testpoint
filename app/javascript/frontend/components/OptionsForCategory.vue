@@ -3,14 +3,15 @@
 </template>
 
 <script setup lang="ts">
+import { useControlValue } from '$ui/simple_form';
 import { Category } from '@/models'
-import { Ref, computed, inject } from 'vue'
+import { computed, inject, type Ref } from 'vue'
 
 const props = defineProps<{
   collection: Category[]
 }>()
 
-const model_value = inject('model_value') as Ref<number | null>
+const model_value = useControlValue<number | null>()
 
 const available_categories = computed(() => {
   return props.collection.filter(it => {
