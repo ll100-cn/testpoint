@@ -4,11 +4,17 @@ module AllowGraphAddons
   included do
     helper_method :with_graph
     helper_method :resource_graph
+    helper_method :resource_graph_columns
   end
 
   def resource_graph
     return @resource_graph if defined?(@resource_graph)
     @resource_graph = request.headers["HTTP_X_RESOURCE_GRAPH"].presence&.to_sym
+  end
+
+  def resource_graph_columns
+    return @resource_graph_columns if defined?(@resource_graph_columns)
+    @resource_graph_columns = resource_graph.to_s.split(",").map(&:strip)
   end
 
   def with_graph(name)

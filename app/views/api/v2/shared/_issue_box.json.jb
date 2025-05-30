@@ -1,0 +1,5 @@
+json = {}
+
+json[:issue] = render partial: "api/v2/shared/issue", locals: { issue: issue }
+
+json

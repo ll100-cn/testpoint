@@ -101,17 +101,17 @@ const pagination = reqs.add(q.bug.issues.Page).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
 }).wait()
+const pagination2 = reqs.add(q.v2.bug.issues.page).setup(req => {
+  req.interpolations.project_id = project_id
+  req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
+}).wait()
 const issue_summary = reqs.add(q.bug.issue_summaries.Get).setup(req => {
   req.interpolations.project_id = project_id
   req.query = utils.compactObject({ ...search2, ...filter2 })
 }).wait()
-const issue_stats = reqs.add(q.bug.issue_stats.List).setup(req => {
-  req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ keyword: search2.keyword })
-}).wait()
 await reqs.performAll()
 
 const issue_stage_count = computed(() => {
-  return _(issue_stats.value).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
+  return _(pagination2.value.issue_stats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
 })
 </script>

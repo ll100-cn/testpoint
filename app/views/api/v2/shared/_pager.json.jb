@@ -1,0 +1,7 @@
+json = {}
+
+json[:total_count] = items.total_count
+json[:offset] = (items.current_page - 1) * items.limit_value
+json[:limit] = items.limit_value
+
+json

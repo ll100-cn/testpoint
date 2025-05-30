@@ -122,6 +122,14 @@ Rails.application.routes.draw do
       resources :users
       resources :projects
     end
+
+    namespace :v2 do
+      resources :projects do
+        scope module: 'projects' do
+          resources :issues
+        end
+      end
+    end
   end
 
   root to: "main#root"
