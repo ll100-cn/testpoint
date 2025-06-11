@@ -23,8 +23,10 @@ import IssueCommentForm from "./IssueCommentForm.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import Button from "$ui/button/Button.vue"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -44,16 +46,24 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  const a_comment_box = await reqs.add(q.bug.issue_comments.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform(this.form)
+const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform({ state: "waiting" })
+const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+former.doPerform = async function() {
+  const a_comment_box = await create_comment_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    body: former.form
+  })
+
+  const a_issue_action = await create_issue_action_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    body: { action: "waiting" }
+  })
 
   Object.assign(props.issue_box.issue, a_issue_action.issue)
   props.issue_box.activities.push(...a_issue_action.activities)

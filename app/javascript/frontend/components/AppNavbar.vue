@@ -84,24 +84,29 @@ import { type NavPresenter } from '$ui/nav/types'
 import RLink from './RLink.vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { Container } from '$ui/container'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 const page = usePageStore()
+const line = useQueryLine()
 
 const account = computed(() => session.account)
 const profile = computed(() => page.inProject()?.profile)
-const member_page = ref(null! as MemberPage<MemberBox>)
 
 const projects = computed(() => member_page.value.list.map(it => it.project!))
+const { data: member_page } = line.request(q.profile.members.InfoList, (req, it) => {
+  return it.useQuery({ ...req.toQueryConfig(), enabled: !!account.value })
+})
+await line.wait()
 
-if (account.value) {
-  member_page.value = await reqs.raw(session.request(q.profile.members.InfoList)).setup().perform()
-}
+const { mutateAsync: destroy_login_action } = line.request(q.profile.login.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
 async function signOut() {
-  await reqs.add(q.profile.login.Destroy).setup().perform()
+  await destroy_login_action({})
   session.clear()
   router.push('/')
 }

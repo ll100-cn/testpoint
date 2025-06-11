@@ -84,16 +84,19 @@ await line.wait()
 const member_boxes = computed(() => member_page.value.list)
 const platform_boxes = computed(() => platform_page.value.list)
 
+const { mutateAsync: destroy_platform_action } = line.request(q.project.platforms.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function onRemove(id: number) {
   if (!confirm("是否删除平台？")) {
     return
   }
 
   try {
-    await reqs.add(q.project.platforms.Destroy).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.platform_id = id
-    }).perform()
+    await destroy_platform_action({
+      interpolations: { project_id, platform_id: id }
+    })
 
     router.go(0)
   } catch (error) {

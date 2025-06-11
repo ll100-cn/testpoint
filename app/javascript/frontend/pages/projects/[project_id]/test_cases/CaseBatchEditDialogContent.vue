@@ -113,9 +113,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import Button from '$ui/button/Button.vue'
 import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
 import * as controls from '@/components/controls'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const validations = reactive(new Validator())
 const reqs = useRequestList()
+const line = useQueryLine()
 const state = ref('pending') // [ pending, submitting, submited ]
 
 const props = defineProps<{
@@ -145,6 +147,10 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_test_case_action } = line.request(q.case.test_cases.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
   result.value = []
   state.value = 'submitting'
@@ -161,10 +167,10 @@ former.doPerform = async function() {
     }
 
     try {
-      await reqs.add(q.case.test_cases.Update).setup(req => {
-        req.interpolations.project_id = test_case.project_id
-        req.interpolations.id = test_case.id
-      }).perform(form_data)
+      await update_test_case_action({
+        interpolations: { project_id: test_case.project_id, id: test_case.id },
+        body: form_data
+      })
     } catch (err) {
       validations.processError(err)
 

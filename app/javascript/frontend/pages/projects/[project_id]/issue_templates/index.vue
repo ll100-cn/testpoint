@@ -74,16 +74,21 @@ const { data: issue_template_page } = line.request(q.project.issue_templates.Lis
 await line.wait()
 const issue_template_boxes = computed(() => issue_template_page.value.list)
 
+const { mutateAsync: destroy_issue_template_action } = line.request(q.project.issue_templates.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function onRemove(id: number) {
   if (!confirm("是否删除问题模版？")) {
     return
   }
 
   try {
-    await reqs.add(q.project.issue_templates.Destroy).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.issue_template_id = id
-    }).perform()
+    await destroy_issue_template_action({
+      interpolations: { project_id, issue_template_id: id }
+    })
+
+    router.go(0)
   } catch (error) {
     validator.processError(error)
   }

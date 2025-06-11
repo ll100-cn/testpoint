@@ -91,41 +91,50 @@ await line.wait()
 
 const grouped_milestones = ref(_.groupBy(milestone_page.value.list, (m) => m.milestone.archived_at ? 'archived' : 'normal'))
 
-function milestoneDestroy(milestone: Milestone) {
+const { mutateAsync: destroy_milestone_action } = line.request(q.project.milestones.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: archive_milestone_action } = line.request(q.project.milestones.Archive, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: active_milestone_action } = line.request(q.project.milestones.Active, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+async function milestoneDestroy(milestone: Milestone) {
   if (!confirm('确定要删除吗？')) {
     return
   }
 
-  reqs.add(q.project.milestones.Destroy).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.id = milestone.id
-  }).perform()
+  await destroy_milestone_action({
+    interpolations: { project_id, id: milestone.id }
+  })
 
   router.go(0)
 }
 
-function milestoneArchive(milestone: Milestone) {
+async function milestoneArchive(milestone: Milestone) {
   if (!confirm('确定要归档吗？')) {
     return
   }
 
-  reqs.add(q.project.milestones.Archive).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.id = milestone.id
-  }).perform()
+  await archive_milestone_action({
+    interpolations: { project_id, id: milestone.id }
+  })
 
   router.go(0)
 }
 
-function milestoneActive(milestone: Milestone) {
+async function milestoneActive(milestone: Milestone) {
   if (!confirm('确定要取消归档吗？')) {
     return
   }
 
-  reqs.add(q.project.milestones.Active).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.id = milestone.id
-  }).perform()
+  await active_milestone_action({
+    interpolations: { project_id, id: milestone.id }
+  })
 
   router.go(0)
 }

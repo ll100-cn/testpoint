@@ -170,11 +170,23 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: create_subscription_action } = line.request(q.bug.subscriptions.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_subscription_action } = line.request(q.bug.subscriptions.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function(code: string) {
-  const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform({ [code]: this.form[code] })
+  const a_issue_action = await create_issue_action_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    body: { [code]: this.form[code] }
+  })
 
   Object.assign(props.issue_box.issue, a_issue_action.issue)
   props.issue_box.activities.push(...a_issue_action.activities)
@@ -200,20 +212,18 @@ const category_boxes = computed(() => category_page.value.list)
 const milestone_boxes = computed(() => milestone_page.value.list)
 
 async function subscribe() {
-  const a_subscription = await reqs.add(q.bug.subscriptions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform()
+  const a_subscription = await create_subscription_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id }
+  })
 
   props.issue_box.subscriptions.push(a_subscription)
   emit("updated", props.issue_box)
 }
 
 async function unsubscribe() {
-  await reqs.add(q.bug.subscriptions.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform()
+  await destroy_subscription_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id, subscription_id: props.issue_box.issue.subscription_id }
+  })
 
   const index = props.issue_box.subscriptions.findIndex(it => it.user_id == current_user.id)
   props.issue_box.subscriptions.splice(index, 1)

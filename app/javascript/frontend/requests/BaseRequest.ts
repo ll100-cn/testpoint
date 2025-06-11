@@ -11,9 +11,11 @@ import URI from 'urijs'
 import { parseTemplate } from 'url-template'
 import type { MutationOptions, QueryClient, QueryFilters, UseQueryOptions } from "@tanstack/vue-query"
 import { matchEndpoint } from "@/lib/EndpointMatch"
+import { computed, toValue } from "vue"
+import type { Ref } from "vue"
 
 export type RequestOptions = {
-  interpolations?: Record<string, any>
+  interpolations?: Record<string, number | string | Ref<number | string>>
   query?: Record<string, any>
   body?: Record<string, any>
 }
@@ -23,7 +25,7 @@ export interface RequestContext {
 
 export abstract class BaseRequest<T> {
   endpoint!: string[]
-  interpolations = {} as { [ x: string]: any }
+  interpolations: Required<RequestOptions>["interpolations"] = {}
   query = {} as { [ x: string]: any }
   data: any = {}
   method!: Method | string
@@ -48,7 +50,7 @@ export abstract class BaseRequest<T> {
 
     return {
       queryKey,
-      queryFn: () => {
+      queryFn: (context) => {
         return this.perform()
       },
       throwOnError: true,
@@ -102,11 +104,14 @@ export abstract class BaseRequest<T> {
   }
 
   buildEndpointUrl(options: RequestOptions) {
-    return this.endpoint.map(it => parseTemplate(it).expand(options.interpolations ?? {}))
+    return this.endpoint.map(it => computed(() => {
+      const interpolations = _.mapValues(options.interpolations ?? {}, it => toValue(it))
+      return parseTemplate(it).expand(interpolations)
+    }))
   }
 
   buildUrl(options: RequestOptions) {
-    const url = this.buildEndpointUrl(options).join("")
+    const url = this.buildEndpointUrl(options).map(it => it.value).join("")
     const uri = new URI(url)
     const query_string = queryString.stringify(options.query ?? {}, { arrayFormat: "bracket" })
     return uri.query(query_string).toString()

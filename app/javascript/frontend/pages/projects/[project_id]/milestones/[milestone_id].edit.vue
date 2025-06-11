@@ -57,11 +57,15 @@ const { data: milestone_box } = line.request(q.project.milestones.Get, (req, it)
 })
 await line.wait()
 
+const { mutateAsync: update_milestone_action } = line.request(q.project.milestones.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.project.milestones.Update).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.id = params.milestone_id
-  }).perform(this.form)
+  await update_milestone_action({
+    interpolations: { project_id, id: params.milestone_id },
+    body: former.form,
+  })
 
   router.push(`/projects/${project_id}/milestones`)
 }

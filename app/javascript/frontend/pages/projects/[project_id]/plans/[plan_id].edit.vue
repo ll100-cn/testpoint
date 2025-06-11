@@ -70,11 +70,19 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_plan_action } = line.request(q.test.plans.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_plan_action } = line.request(q.test.plans.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.test.plans.Update).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.plan_id = plan_id
-  }).perform(this.form)
+  await update_plan_action({
+    interpolations: { project_id, plan_id },
+    body: former.form,
+  })
 
   router.push(`/projects/${project_id}/plans/${plan_id}`)
 }
@@ -88,10 +96,9 @@ async function onDestroy() {
     return
   }
 
-  await reqs.add(q.test.plans.Destroy).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.plan_id = plan_id
-  }).perform()
+  await destroy_plan_action({
+    interpolations: { project_id, plan_id }
+  })
 
   router.push(`/projects/${project_id}/plans`)
 }

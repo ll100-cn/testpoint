@@ -73,10 +73,15 @@ watch(former.form, () => {
   success.value = false
 })
 
+const { mutateAsync: update_profile_action } = line.request(q.project.profiles.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.project.profiles.Update).setup(req => {
-    req.interpolations.project_id = project_id
-  }).waitFor(profile_box).perform(this.form)
+  await update_profile_action({
+    interpolations: { project_id },
+    body: former.form,
+  })
 
   success.value = true
 }

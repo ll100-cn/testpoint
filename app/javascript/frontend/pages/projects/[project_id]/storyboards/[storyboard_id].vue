@@ -458,12 +458,23 @@ function updateScenePositions() {
   }
 }
 
+const { mutateAsync: update_requirement_action } = line.request(q.project.requirements.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: update_storyboard_action } = line.request(q.project.storyboards.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function updateRequirement(requirement: Requirement, data: any) {
-  const a_requirement_box = await reqs.add(q.project.requirements.Update).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = storyboard.value.id
-    req.interpolations.requirement_id = requirement.id
-  }).perform(data)
+  const a_requirement_box = await update_requirement_action({
+    interpolations: {
+      project_id: params.project_id,
+      storyboard_id: storyboard.value.id,
+      requirement_id: requirement.id
+    },
+    body: data
+  })
 
   requirements.value = requirements.value.map((r) => r.id === a_requirement_box.requirement.id ? a_requirement_box.requirement : r)
   rebuildRequirementRepo()
@@ -557,11 +568,14 @@ async function save() {
     return acc
   }, {} as Record<string, { x: number, y: number }>)
 
-  const a_storyboard_box = await reqs.add(q.project.storyboards.Update).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = storyboard.value.id
-  }).perform({
-    positions: position_mapping_data
+  const a_storyboard_box = await update_storyboard_action({
+    interpolations: {
+      project_id: params.project_id,
+      storyboard_id: storyboard.value.id
+    },
+    body: {
+      positions: position_mapping_data
+    }
   })
 
   storyboard.value = a_storyboard_box.storyboard

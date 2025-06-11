@@ -26,8 +26,10 @@ import { Issue, IssueBox, IssueRelationship } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, getCurrentInstance } from "vue"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -48,16 +50,22 @@ const other = computed(() => {
   return direction.value === 'source' ? props.issue_relationship.target : props.issue_relationship.source
 })
 
+const { mutateAsync: destroy_issue_relationship_action } = line.request(q.bug.issue_relationships.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function deleteIssueRelationShip() {
   if (!confirm("确认删除问题的关联？")) {
     return
   }
 
-  await reqs.add(q.bug.issue_relationships.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.issue_relationship_id = props.issue_relationship.id
-  }).perform()
+  await destroy_issue_relationship_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      issue_relationship_id: props.issue_relationship.id
+    }
+  })
 
   if (direction.value === 'source') {
     const source_index = props.issue_box.source_relationships.findIndex((it: IssueRelationship) => it.id == props.issue_relationship.id)

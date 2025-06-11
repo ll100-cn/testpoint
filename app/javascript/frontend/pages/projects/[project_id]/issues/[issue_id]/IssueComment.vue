@@ -63,8 +63,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, 
 import { Callout } from '$ui/callout'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import Button from "$ui/button/Button.vue"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const store = useSessionStore()
 const user = store.account!.user
 const page = usePageStore()
@@ -95,25 +97,39 @@ const children = computed(() => {
 
 const content_id = _.uniqueId("content_")
 
+const { mutateAsync: destroy_comment_action } = line.request(q.bug.issue_comments.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function deleteComment() {
   if (!confirm("确认删除该评论？")) {
     return
   }
-  await reqs.add(q.bug.issue_comments.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.comment_id = props.comment_box.comment.id
-  }).perform()
+
+  await destroy_comment_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      comment_id: props.comment_box.comment.id
+    }
+  })
 
   emit("destroyed", props.comment_box)
 }
 
 async function updateComment(data: Record<string, any>) {
-  const a_comment_box = await reqs.add(q.bug.issue_comments.Update).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.comment_id = props.comment_box.comment.id
-  }).perform(data)
+  const a_comment_box = await update_comment_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      comment_id: props.comment_box.comment.id
+    },
+    body: data
+  })
 
   display.value = a_comment_box.comment.display
   emit('updated', a_comment_box)

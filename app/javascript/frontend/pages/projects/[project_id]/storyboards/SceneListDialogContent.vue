@@ -22,7 +22,7 @@
             <a href="#" v-if="allow('update', scene)" class="link" @click.prevent="updateScene(scene)">
               <i class="far fa-pencil-alt" /> 修改
             </a>
-            <a v-if="allow('destroy', scene)" href="#" @click.prevent="remove(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+            <a v-if="allow('destroy', scene)" href="#" @click.prevent="deleteScene(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
           </TableCell>
         </TableRow>
       </TableBody>
@@ -50,10 +50,12 @@ import { usePageStore } from '@/store'
 import SceneCreateDialogContent from './SceneCreateDialogContent.vue'
 import { Validator } from '$ui/simple_form'
 import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const params = route.params as any
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 const page = usePageStore()
 const allow = page.inProject()!.allow
@@ -84,20 +86,26 @@ function updateScene(a_scene: Scene) {
   emit('switch', SceneUpdateDialogContent, a_scene)
 }
 
-async function remove(a_scene: Scene) {
-  if (!confirm("是否删除场景？")) {
+const { mutateAsync: destroy_scene_action } = line.request(q.project.scenes.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+async function deleteScene(scene: Scene) {
+  if (!confirm("确认删除？")) {
     return
   }
 
   try {
-    await reqs.add(q.project.scenes.Destroy).setup(req => {
-      req.interpolations.project_id = params.project_id
-      req.interpolations.storyboard_id = params.storyboard_id
-      req.interpolations.scene_id = a_scene.id
-    }).perform()
-    emit('destroyed', a_scene)
+    await destroy_scene_action({
+      interpolations: {
+        project_id: params.project_id,
+        storyboard_id: params.storyboard_id,
+        scene_id: scene.id
+      }
+    })
+    emit('destroyed', scene)
 
-    scenes.value = scenes.value.filter(scene => scene.id !== a_scene.id)
+    scenes.value = scenes.value.filter(scene => scene.id !== scene.id)
   } catch (error) {
     validator.processError(error)
   }

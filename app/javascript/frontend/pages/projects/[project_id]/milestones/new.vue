@@ -28,9 +28,11 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -44,10 +46,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_milestone_action } = line.request(q.project.milestones.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.project.milestones.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-  }).perform(this.form)
+  await create_milestone_action({
+    interpolations: { project_id: params.project_id },
+    body: former.form,
+  })
 
   router.push(`/projects/${params.project_id}/milestones`)
 }

@@ -4,10 +4,12 @@ import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import _ from 'lodash'
 import createCacheRequest from '@/lib/createCacheRequest'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 export const useSessionStore = defineStore('session', () => {
   const account = ref(undefined! as Account | null)
   const profiles = reactive(new Map<number, Profile>)
+  const line = useQueryLine()
 
   async function prepare(ctx: any) {
     if (account.value !== undefined) {
@@ -15,8 +17,12 @@ export const useSessionStore = defineStore('session', () => {
     }
 
     try {
-      const account_box = await new q.profile.accounts.Get().setup(ctx, () => {}).perform1()
-      account.value = account_box.account
+      const { data: account_box, suspense } = line.request(q.profile.accounts.Get, (req, it) => {
+        return it.useQuery(req.toQueryConfig())
+      })
+      await suspense()
+
+      account.value = account_box.value.account
     } catch (e) {
       if (e instanceof q.ErrorUnauthorized) {
         account.value = null
@@ -37,8 +43,13 @@ export const useSessionStore = defineStore('session', () => {
       return
     }
 
-    const profile_box = await new q.project.profiles.Get(project_id).setup(ctx, req => {}).perform1()
-    profiles.set(project_id, profile_box.profile)
+    const { data: profile_box } = line.request(q.project.profiles.Get, (req, it) => {
+      req.interpolations.project_id = project_id
+      return it.useQuery(req.toQueryConfig())
+    })
+    await line.wait()
+
+    profiles.set(project_id, profile_box.value.profile)
   }
 
   function clear() {

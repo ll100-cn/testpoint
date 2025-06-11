@@ -37,8 +37,10 @@ import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import * as controls from '@/components/controls'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const params = route.params as any
 const el = ref(null! as HTMLElement)
@@ -63,11 +65,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_plan_phase_action } = line.request(q.test.plan_phases.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const phase_box = await reqs.add(q.test.plan_phases.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.plan_id = params.plan_id
-  }).perform(this.form)
+  const phase_box = await create_plan_phase_action({
+    interpolations: { project_id: params.project_id, plan_id: params.plan_id },
+    body: former.form
+  })
 
   emit('created', phase_box.phase)
 }

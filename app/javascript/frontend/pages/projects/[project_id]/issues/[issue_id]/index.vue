@@ -222,11 +222,18 @@ function onIssueCommentCreated(a_issue_box: IssueBox, a_comment_box: CommentBox)
   comment_page.value.list.push(a_comment_box)
 }
 
+const { mutateAsync: convert_issue_body_action } = line.request(q.bug.issue_bodies.Convert, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: process_issue_action } = line.request(q.bug.issues.InfoProcess, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function onIssueConvert(a_issue_box: IssueBox) {
-  await reqs.add(q.bug.issue_bodies.Convert).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.issue_id = a_issue_box.issue.id
-  }).perform()
+  await convert_issue_body_action({
+    interpolations: { project_id, issue_id: a_issue_box.issue.id }
+  })
 
   router.go(0)
 }
@@ -235,10 +242,10 @@ const actioner = Actioner.build()
 
 async function changeIssueState(state: string) {
   actioner.perform(async function() {
-    const a_issue_box = await reqs.add(q.bug.issues.InfoProcess).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.issue_id = params.issue_id
-    }).perform({ state })
+    const a_issue_box = await process_issue_action({
+      interpolations: { project_id, issue_id: params.issue_id },
+      body: { state }
+    })
 
     console.log("a_issue_box", a_issue_box)
     issue_box.value = a_issue_box

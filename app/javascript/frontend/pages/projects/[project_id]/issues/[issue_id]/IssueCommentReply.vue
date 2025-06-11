@@ -30,8 +30,10 @@ import ContentBody from "./ContentBody.vue"
 import IssueCommentEditDialogContent from "./IssueCommentEditDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const store = useSessionStore()
 const user = store.account!.user
 const page = usePageStore()
@@ -50,6 +52,10 @@ const emit = defineEmits<{
   modal: [ component: Component, ...args: any[] ]
 }>()
 
+const { mutateAsync: destroy_comment_action } = line.request(q.bug.issue_comments.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 function onAttachmentUpdated(attachment: Attachment) {
   const index = props.comment_box.comment.attachments.findIndex(it => it.id === attachment.id)
   props.comment_box.comment.attachments[index] = attachment
@@ -66,11 +72,14 @@ async function deleteComment() {
   if (!confirm("确认删除该评论？")) {
     return
   }
-  await reqs.add(q.bug.issue_comments.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.comment_id = props.comment_box.comment.id
-  }).perform()
+
+  await destroy_comment_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      comment_id: props.comment_box.comment.id
+    }
+  })
 
   emit("destroyed", props.comment_box)
 }

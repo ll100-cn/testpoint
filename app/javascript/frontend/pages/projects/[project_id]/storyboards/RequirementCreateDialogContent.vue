@@ -27,10 +27,12 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import RequirementForm from './RequirementForm.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const params = route.params as any
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -56,11 +58,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_requirement_action } = line.request(q.project.requirements.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_requirement_box = await reqs.add(q.project.requirements.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard.id
-  }).perform(this.form)
+  const a_requirement_box = await create_requirement_action({
+    interpolations: { project_id: params.project_id, storyboard_id: props.storyboard.id },
+    body: former.form
+  })
 
   emit('created', a_requirement_box.requirement)
   open.value = false

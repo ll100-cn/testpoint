@@ -25,8 +25,10 @@ import CaseForm from './CaseForm.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = ref(false)
 
 const props = defineProps<{
@@ -51,10 +53,15 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
+const { mutateAsync: create_test_case_action } = line.request(q.case.test_cases.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const new_test_case_box = await reqs.add(q.case.test_cases.Create).setup(req => {
-    req.interpolations.project_id = project_id.value
-  }).perform(this.form)
+  const new_test_case_box = await create_test_case_action({
+    interpolations: { project_id: project_id.value },
+    body: former.form
+  })
 
   emit('create', new_test_case_box.test_case)
   open.value = false

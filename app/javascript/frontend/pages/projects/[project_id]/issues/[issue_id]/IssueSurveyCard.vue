@@ -48,8 +48,10 @@ import { Card, CardContent } from '$ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import Button from "$ui/button/Button.vue"
 import { Alert } from "$ui/alert"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -63,12 +65,18 @@ const emit = defineEmits<{
   modal: [ component: Component, ...args: any[] ]
 }>()
 
+const { mutateAsync: destroy_issue_survey_action } = line.request(q.bug.issue_surveies.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function deleteIssueSurvey(issue_survey: IssueSurvey) {
-  await reqs.add(q.bug.issue_surveies.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.issue_survey_id = issue_survey.id
-  }).perform()
+  await destroy_issue_survey_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      issue_survey_id: issue_survey.id
+    }
+  })
 
   const index = props.issue_box.surveys.findIndex(it => it.id == issue_survey.id)
   props.issue_box.surveys.splice(index , 1)

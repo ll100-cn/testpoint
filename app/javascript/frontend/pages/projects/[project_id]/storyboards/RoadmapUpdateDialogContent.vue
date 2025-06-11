@@ -31,10 +31,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const params = route.params as any
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -48,13 +50,17 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  const a_roadmap = await reqs.add(q.project.roadmaps.Update).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.roadmap_id = roadmap.value.id
-  }).perform(this.form)
+const { mutateAsync: update_roadmap_action } = line.request(q.project.roadmaps.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  emit('updated', a_roadmap)
+former.doPerform = async function() {
+  const box = await update_roadmap_action({
+    interpolations: { project_id: params.project_id, roadmap_id: roadmap.value.id },
+    body: former.form
+  })
+
+  emit('updated', box.roadmap)
   open.value = false
 }
 

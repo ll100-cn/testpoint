@@ -80,12 +80,15 @@ const category_boxes = computed(() => category_page.value.list)
 
 const actioner = Actioner.build()
 
+const { mutateAsync: destroy_category_action } = line.request(q.project.categories.InfoDestroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 function deleteCategory(id: number) {
   actioner.perform(async function() {
-    await reqs.add(q.project.categories.InfoDestroy).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.category_id = id
-    }).perform()
+    await destroy_category_action({
+      interpolations: { project_id, category_id: id }
+    })
 
     router.go(0)
   })

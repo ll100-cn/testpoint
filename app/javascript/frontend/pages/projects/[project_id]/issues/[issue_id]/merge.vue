@@ -145,17 +145,19 @@ former.doPerform = async function() {
   }
 
   try {
-    const issueBox = await reqs.add(q.bug.issues.Get).setup(req => {
+    const { data: issueBox, suspense } = line.request(q.bug.issues.Get, (req, it) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = former.form.source_id
-    }).perform()
+      return it.useQuery(req.toQueryConfig())
+    })
+    await suspense()
 
-    if (issueBox.issue.state == 'closed') {
+    if (issueBox.value.issue.state == 'closed') {
       former.validator.get('source_id').invalid(['已关闭的工单不能添加'])
       return
     }
 
-    issues.value.push(issueBox.issue)
+    issues.value.push(issueBox.value.issue)
 
     add_dialog_open.value = false
   } catch(e) {
@@ -168,17 +170,24 @@ former.doPerform = async function() {
   }
 }
 
+const { mutateAsync: merge_issue_action } = line.request(q.bug.issues.Merge, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function merge() {
   if (!confirm("确认合并？")) {
     return
   }
 
   try {
-    const issue_box = await reqs.add(q.bug.issues.Merge).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.issue_id = head.value.issue.id
-    }).perform({
-      source_ids: issues.value.filter(issue => issue.id !== head.value.issue.id).map(issue => issue.id)
+    const issue_box = await merge_issue_action({
+      interpolations: {
+        project_id: project_id,
+        issue_id: head.value.issue.id
+      },
+      body: {
+        source_ids: issues.value.filter(issue => issue.id !== head.value.issue.id).map(issue => issue.id)
+      }
     })
 
     router.push(`/projects/${project_id}/issues/${issue_box.issue.id}`)

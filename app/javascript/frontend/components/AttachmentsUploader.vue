@@ -31,11 +31,13 @@ import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue"
 import FormAttachmentInfo from "./FormAttachmentInfo.vue"
 import FormAttachmentUpload from "./FormAttachmentUpload.vue"
 import { UploadFile } from './types'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const props = defineProps<{
   attachments?: Attachment[]
 }>()
 const reqs = useRequestList()
+const line = useQueryLine()
 
 class Item {
   upload_file?: UploadFile
@@ -61,6 +63,10 @@ onMounted(() => {
   })
 })
 
+const { mutateAsync: create_attachment_action } = line.request(q.project.attachments.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function upload(file: File) {
   if (!file) return
 
@@ -69,15 +75,18 @@ async function upload(file: File) {
   item.upload_file = upload_file
   items.value.push(item)
 
+  // TODO
   try {
-    const attachment = await reqs.add(q.project.attachments.Create).setup(req => {
-      req.config.onUploadProgress = (progressEvent: AxiosProgressEvent) => {
-        upload_file.state = "uploading"
-        upload_file.loaded = progressEvent.loaded
-        upload_file.total = progressEvent.total
+    const attachment = await create_attachment_action({
+      body: { file: file },
+      config: {
+        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+          upload_file.state = "uploading"
+          upload_file.loaded = progressEvent.loaded
+          upload_file.total = progressEvent.total
+        }
       }
-
-    }).perform({ file: file })
+    })
 
     item.attachment = attachment
     item.upload_file = null

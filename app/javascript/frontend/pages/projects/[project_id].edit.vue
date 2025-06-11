@@ -59,10 +59,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_project_action } = line.request(q.admin.projects.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.admin.projects.Update).setup(req => {
-    req.interpolations.id = project_box.value.project.id
-  }).perform(this.form)
+  await update_project_action({
+    interpolations: { id: project_box.value.project.id },
+    body: former.form,
+  })
 
   router.push(`/projects`)
 }

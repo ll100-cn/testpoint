@@ -25,8 +25,10 @@ import * as q from '@/requests'
 import _ from "lodash"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -41,12 +43,19 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_comment = await reqs.add(q.bug.issue_comments.Update).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-    req.interpolations.comment_id = comment_box.value.comment.id
-  }).perform(this.form)
+  const a_comment = await update_comment_action({
+    interpolations: {
+      project_id: issue_box.value.issue.project_id,
+      issue_id: issue_box.value.issue.id,
+      comment_id: comment_box.value.comment.id
+    },
+    body: former.form
+  })
 
   emit("updated", a_comment)
   open.value = false

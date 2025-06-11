@@ -70,15 +70,19 @@ const { data: user_page } = line.request(q.admin.users.Page, (req, it) => {
 })
 await line.wait()
 
+const { mutateAsync: destroy_user_action } = line.request(q.admin.users.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function onRemove(user_id: number) {
   if (!confirm("是否删除用户？")) {
     return
   }
 
   try {
-    await reqs.add(q.admin.users.Destroy).setup(req => {
-      req.interpolations.id = user_id
-    }).perform()
+    await destroy_user_action({
+      interpolations: { id: user_id }
+    })
 
     router.go(0)
   } catch (error) {

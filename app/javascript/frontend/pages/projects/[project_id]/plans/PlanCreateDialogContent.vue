@@ -27,8 +27,10 @@ import { usePageStore } from "@/store"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const el = ref(null! as InstanceType<typeof HTMLElement>)
 const page = usePageStore()
 const profile = page.inProject()!.profile
@@ -51,10 +53,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_plan_action } = line.request(q.test.plans.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const plan_box = await reqs.add(q.test.plans.Create).setup(req => {
-    req.interpolations.project_id = profile.project_id
-  }).perform(this.form)
+  const plan_box = await create_plan_action({
+    interpolations: { project_id: profile.project_id },
+    body: former.form
+  })
 
   emit('created', plan_box.plan)
   open.value = false
@@ -68,10 +75,12 @@ async function reset(new_test_case_stats: TestCaseStat[]) {
 
   test_case_stats.value = new_test_case_stats
 
-  reqs.add(q.project.platforms.List).setup(req => {
+  const { data: a_platform_page, suspense } = line.request(q.project.platforms.List, (req, it) => {
     req.interpolations.project_id = profile.project_id
-  }).waitFor(platform_page)
-  await reqs.performAll()
+    return it.useQuery(req.toQueryConfig())
+  })
+  await suspense()
+  platform_page.value = a_platform_page.value
 
   former.form.title = `Test Plan: ${h.datetime(new Date(), "YYYY-MM-DD")}`
   former.form.platform_id = platform_boxes.value[0]?.platform.id

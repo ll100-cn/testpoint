@@ -40,7 +40,7 @@ import { EntityRepo, Platform, Requirement, RequirementBox, RequirementPage, Roa
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import * as q from '@/requests'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { usePageStore } from '@/store'
 import { useQueryLine } from '@/lib/useQueryLine'
 
@@ -64,31 +64,27 @@ const emit = defineEmits<{
   (e: 'create', event: Event): void,
 }>()
 
-const requirement_page = ref(null as RequirementPage<RequirementBox> | null)
+const storyboard_id = computed(() => props.former.form.storyboard_id)
+
+const { data: requirement_page } = line.request(q.project.requirements.List, (req, it) => {
+  req.interpolations.project_id = page.inProject()!.project_id
+  req.interpolations.storyboard_id = storyboard_id
+  req.query.roadmap_id = props.newest_roadmap.id
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    enabled: storyboard_id
+  })
+})
 
 const { data: storyboard_page } = line.request(q.project.storyboards.List, (req, it) => {
   req.interpolations.project_id = page.inProject()!.project_id
   return it.useQuery(req.toQueryConfig())
 })
-if (props.former.form.storyboard_id) {
-  requestRequirement(props.former.form.storyboard_id)
-}
 await line.wait()
 
-watch(() => props.former.form.storyboard_id, async (storyboard_id) => {
-  if (storyboard_id) {
-    requestRequirement(storyboard_id)
-    await reqs.performAll()
+watch(storyboard_id, async (new_storyboard_id) => {
+  if (new_storyboard_id) {
     props.former.form.requirement_id = null
   }
 })
-
-function requestRequirement(storyboard_id: number) {
-  reqs.add(q.project.requirements.List).setup(req => {
-    req.interpolations.project_id = page.inProject()!.project_id
-    req.interpolations.storyboard_id = storyboard_id
-    req.query.roadmap_id = props.newest_roadmap.id
-  }).waitFor(requirement_page)
-}
-
 </script>

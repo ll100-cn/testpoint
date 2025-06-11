@@ -74,16 +74,19 @@ const { data: test_case_label_page } = line.request(q.project.test_case_labels.I
 await line.wait()
 const test_case_label_boxes = computed(() => test_case_label_page.value.list)
 
+const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.InfoDestroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function onRemove(id: number) {
   if (!confirm("是否删除标签？")) {
     return
   }
 
   try {
-    await reqs.add(q.project.test_case_labels.InfoDestroy).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.test_case_label_id = id
-    }).perform()
+    await destroy_test_case_label_action({
+      interpolations: { project_id, test_case_label_id: id }
+    })
 
     router.go(0)
   } catch (error) {

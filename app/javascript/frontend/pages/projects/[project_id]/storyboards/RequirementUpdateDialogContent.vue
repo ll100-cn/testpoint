@@ -34,10 +34,12 @@ import { useRoute } from 'vue-router'
 import * as utils from '@/lib/utils'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import RequirementForm from './RequirementForm.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const params = route.params as any
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -68,16 +70,26 @@ async function reset(a_requirement: Requirement) {
   })
 }
 
+const { mutateAsync: destroy_requirement_action } = line.request(q.project.requirements.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: update_requirement_action } = line.request(q.project.requirements.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function destroyRequirement() {
   if (!confirm("确认删除？")) {
     return
   }
 
-  await reqs.add(q.project.requirements.Destroy).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard.id
-    req.interpolations.requirement_id = requirement.value.id
-  }).perform()
+  await destroy_requirement_action({
+    interpolations: {
+      project_id: params.project_id,
+      storyboard_id: props.storyboard.id,
+      requirement_id: requirement.value.id
+    }
+  })
 
   emit('destroyed', requirement.value)
   open.value = false
@@ -95,12 +107,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function(a_platforms: Platform[]) {
-  const a_requirement_box = await reqs.add(q.project.requirements.Update).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard.id
-    req.interpolations.requirement_id = requirement.value.id
-  }).perform(this.form)
+former.doPerform = async function() {
+  const a_requirement_box = await update_requirement_action({
+    interpolations: {
+      project_id: params.project_id,
+      storyboard_id: props.storyboard.id,
+      requirement_id: requirement.value.id
+    },
+    body: former.form
+  })
 
   emit('updated', a_requirement_box.requirement)
   open.value = false

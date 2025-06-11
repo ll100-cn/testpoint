@@ -89,16 +89,19 @@ const grouped_member_boxes = ref(_.groupBy(member_page.value.list, (member_box) 
   return member_box.member.archived_at ? "archived" : "normal"
 }))
 
+const { mutateAsync: archive_member_action } = line.request(q.project.members.Archive, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function onArchive(id: number) {
   if (!confirm("是否归档成员？")) {
     return
   }
 
   try {
-    await reqs.add(q.project.members.Archive).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.member_id = id
-    }).perform()
+    await archive_member_action({
+      interpolations: { project_id, member_id: id }
+    })
 
     router.go(0)
   } catch (error) {

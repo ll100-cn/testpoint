@@ -56,11 +56,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_category_action } = line.request(q.project.categories.InfoUpdate, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.project.categories.InfoUpdate).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.category_id = category_id
-  }).perform(this.form)
+  await update_category_action({
+    interpolations: { project_id, category_id },
+    body: former.form,
+  })
 
   router.push('/projects/' + project_id + '/categories')
 }

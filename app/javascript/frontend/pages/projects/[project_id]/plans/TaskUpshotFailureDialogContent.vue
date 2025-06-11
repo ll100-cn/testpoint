@@ -66,8 +66,10 @@ import { Former as NewFormer, GenericForm, GenericFormGroup } from '$ui/simple_f
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const session = useSessionStore()
 
@@ -96,10 +98,19 @@ const issue_former = NewFormer.build({
 const IssueForm = GenericForm<typeof issue_former.form>
 const IssueFormGroup = GenericFormGroup<typeof issue_former.form>
 
+const { mutateAsync: create_issue_action } = line.request(q.bug.issues.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.task_upshot_states.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 issue_former.doPerform = async function() {
-  await reqs.add(q.bug.issues.Create).setup(req => {
-    req.interpolations.project_id = props.plan_box.plan.project_id
-  }).perform(this.form)
+  const issue_box = await create_issue_action({
+    interpolations: { project_id: props.plan_box.plan.project_id },
+    body: this.form
+  })
 
   await actioner.failTaskUpshot()
 }
@@ -116,11 +127,18 @@ const comment_former = NewFormer.build({
 const CommentForm = GenericForm<typeof comment_former.form>
 const CommentFormGroup = GenericFormGroup<typeof comment_former.form>
 
+const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 comment_former.doPerform = async function() {
-  await reqs.add(q.bug.issue_comments.Create).setup(req => {
-    req.interpolations.project_id = comment_issue.value!.project_id
-    req.interpolations.issue_id = comment_issue.value!.id
-  }).perform(this.form)
+  await create_comment_action({
+    interpolations: {
+      project_id: comment_issue.value!.project_id,
+      issue_id: comment_issue.value!.id
+    },
+    body: this.form
+  })
 
   await actioner.failTaskUpshot()
 }
@@ -131,14 +149,17 @@ const actioner = Actioner.build<{
 
 actioner.failTaskUpshot = async function() {
   this.perform(async function() {
-    const a_task_upshot_box = await reqs.add(q.test.task_upshot_states.Update).setup(req => {
-      req.interpolations.project_id = props.plan_box.plan.project_id
-      req.interpolations.plan_id = props.plan_box.plan.id
-      req.interpolations.task_id = task_box.value.task.id
-      req.interpolations.upshot_id = task_upshot_box.value.task_upshot.id
-    }).perform({
-      task_upshot: {
-        state_override: 'failure',
+    const a_task_upshot_box = await update_task_upshot_state_action({
+      interpolations: {
+        project_id: props.plan_box.plan.project_id,
+        plan_id: props.plan_box.plan.id,
+        task_id: task_box.value.task.id,
+        upshot_id: task_upshot_box.value.task_upshot.id
+      },
+      body: {
+        task_upshot: {
+          state_override: 'failure',
+        }
       }
     })
 
@@ -155,10 +176,12 @@ async function reset(a_task_upshot_box: TaskUpshotBox, a_task_box: TaskBox) {
   task_box.value = a_task_box
   addon.value = null
 
-  reqs.add(q.project.issue_templates.List).setup(req => {
+  const { data: a_issue_template_page, suspense } = line.request(q.project.issue_templates.List, (req, it) => {
     req.interpolations.project_id = props.plan_box.plan.project_id
-  }).waitFor(issue_template_page)
-  await reqs.performAll()
+    return it.useQuery(req.toQueryConfig())
+  })
+  await suspense()
+  issue_template_page.value = a_issue_template_page.value
 
   issue_former.form.issue_attributes.title = `「${props.plan_box.plan.platform.name}」 ${task_upshot_box.value.test_case?.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content}\n\n实际效果:\n`

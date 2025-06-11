@@ -104,11 +104,15 @@ const member_boxes = computed(() => member_page.value.list)
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_issue_action_mutation } = line.request(q.bug.issue_actions.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.issue_id = issue_id
-  }).perform(this.form)
+  const issue_action = await create_issue_action_mutation({
+    interpolations: { project_id, issue_id },
+    body: former.form,
+  })
 
   router.push({ path: `/projects/${project_id}/issues/${issue_id}` })
 }

@@ -45,8 +45,10 @@ import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { Button } from '$ui/button'
 import PageContent from "@/components/PageContent.vue"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -88,14 +90,33 @@ const actioner = Actioner.build<{
   updateTaskUpshotState: (state_override: "pass" | "pending" | null) => void
 }>()
 
+const { mutateAsync: update_task_upshot_content_action } = line.request(q.test.task_upshot_contents.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: ignore_task_action } = line.request(q.test.tasks.Ignore, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: unignore_task_action } = line.request(q.test.tasks.Unignore, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.task_upshot_states.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 actioner.submitContent = function(content: string) {
   this.perform(async () => {
-    const a_task_upshot_box = await reqs.add(q.test.task_upshot_contents.Update).setup(req => {
-      req.interpolations.project_id = props.plan_box.plan.project_id
-      req.interpolations.plan_id = props.plan_box.plan.id
-      req.interpolations.task_id = task_upshot_box.value.task!.id
-      req.interpolations.upshot_id = task_upshot_box.value.task_upshot.id
-    }).perform({ content })
+    const a_task_upshot_box = await update_task_upshot_content_action({
+      interpolations: {
+        project_id: props.plan_box.plan.project_id,
+        plan_id: props.plan_box.plan.id,
+        task_id: task_upshot_box.value.task!.id,
+        upshot_id: task_upshot_box.value.task_upshot.id
+      },
+      body: { content }
+    })
 
     Object.assign(task_upshot_box.value.task_upshot, a_task_upshot_box.task_upshot)
     const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.task_upshot.id)
@@ -108,11 +129,13 @@ actioner.submitContent = function(content: string) {
 
 actioner.ignoreTask = function() {
   this.perform(async function() {
-    const a_task_box = await reqs.add(q.test.tasks.Ignore).setup(req => {
-      req.interpolations.project_id = props.plan_box.plan.project_id
-      req.interpolations.plan_id = props.plan_box.plan.id
-      req.interpolations.id = task_box.value.task.id
-    }).perform()
+    const a_task_box = await ignore_task_action({
+      interpolations: {
+        project_id: props.plan_box.plan.project_id,
+        plan_id: props.plan_box.plan.id,
+        task_id: task_box.value.task.id
+      }
+    })
 
     Object.assign(task_box.value.task, a_task_box.task)
     task_upshot_box.value.task = a_task_box.task
@@ -122,11 +145,13 @@ actioner.ignoreTask = function() {
 
 actioner.unignoreTask = function() {
   this.perform(async function() {
-    const a_task_box = await reqs.add(q.test.tasks.Unignore).setup(req => {
-      req.interpolations.project_id = props.plan_box.plan.project_id
-      req.interpolations.plan_id = props.plan_box.plan.id
-      req.interpolations.id = task_box.value.task.id
-    }).perform()
+    const a_task_box = await unignore_task_action({
+      interpolations: {
+        project_id: props.plan_box.plan.project_id,
+        plan_id: props.plan_box.plan.id,
+        task_id: task_box.value.task.id
+      }
+    })
 
     Object.assign(task_box.value.task, a_task_box.task)
     task_upshot_box.value.task = a_task_box.task
@@ -136,12 +161,15 @@ actioner.unignoreTask = function() {
 
 actioner.updateTaskUpshotState = function(state_override: "pass" | "pending" | null) {
   this.perform(async function() {
-    const a_task_upshot_box = await reqs.add(q.test.task_upshot_states.Update).setup(req => {
-      req.interpolations.project_id = props.plan_box.plan.project_id
-      req.interpolations.plan_id = props.plan_box.plan.id
-      req.interpolations.task_id = task_box.value.task.id
-      req.interpolations.upshot_id = task_upshot_box.value.task_upshot.id
-    }).perform({ task_upshot: { state_override } })
+    const a_task_upshot_box = await update_task_upshot_state_action({
+      interpolations: {
+        project_id: props.plan_box.plan.project_id,
+        plan_id: props.plan_box.plan.id,
+        task_id: task_box.value.task.id,
+        upshot_id: task_upshot_box.value.task_upshot.id
+      },
+      body: { task_upshot: { state_override } }
+    })
 
     Object.assign(task_upshot_box.value.task_upshot, a_task_upshot_box.task_upshot)
     const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.task_upshot.id)
@@ -157,11 +185,15 @@ async function reset(a_task_upshot_box: TaskUpshotBox) {
   loading.value = true
 
   task_upshot_box.value = a_task_upshot_box
-  task_box.value = await reqs.add(q.test.tasks.InfoGet).setup(req => {
+
+  const { data: a_task_box, suspense } = line.request(q.test.tasks.InfoGet, (req, it) => {
     req.interpolations.project_id = props.plan_box.plan.project_id
     req.interpolations.plan_id = props.plan_box.plan.id
     req.interpolations.task_id = task_upshot_box.value.task!.id
-  }).perform()
+    return it.useQuery(req.toQueryConfig())
+  })
+  await suspense()
+  task_box.value = a_task_box.value
 
   content.value = task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content ?? ""
 

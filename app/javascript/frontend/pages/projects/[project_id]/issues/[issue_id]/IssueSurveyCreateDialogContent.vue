@@ -36,8 +36,10 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -56,11 +58,18 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_issue_survey_action } = line.request(q.bug.issue_surveies.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_survey = await reqs.add(q.bug.issue_surveies.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform(this.form)
+  const a_issue_survey = await create_issue_survey_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id
+    },
+    body: former.form
+  })
 
   props.issue_box.surveys.push(a_issue_survey)
   emit('updated', props.issue_box)
@@ -75,10 +84,13 @@ async function reset() {
   loading.value = true
 
   try {
-    const issue_template_page = await reqs.add(q.project.issue_templates.List).setup(req => {
+    const { data: issue_template_page, suspense } = line.request(q.project.issue_templates.List, (req, it) => {
       req.interpolations.project_id = props.issue_box.issue.project_id
-    }).perform()
-    issue_templates.value = issue_template_page.list.map(it => it.issue_template)
+      return it.useQuery(req.toQueryConfig())
+    })
+    await suspense()
+
+    issue_templates.value = issue_template_page.value.list.map(it => it.issue_template)
   } finally {
     loading.value = false
   }

@@ -23,8 +23,10 @@ import { Attachment, Issue, IssueBox } from '@/models'
 import { ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -41,11 +43,18 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_issue_body_action } = line.request(q.bug.issue_bodies.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_body = await reqs.add(q.bug.issue_bodies.Update).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-  }).perform(this.form)
+  const a_issue_body = await update_issue_body_action({
+    interpolations: {
+      project_id: issue_box.value.issue.project_id,
+      issue_id: issue_box.value.issue.id
+    },
+    body: former.form
+  })
 
   Object.assign(issue_box.value.issue, a_issue_body.issue)
   issue_box.value.attachments = a_issue_body.attachments

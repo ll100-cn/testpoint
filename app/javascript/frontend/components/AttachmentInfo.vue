@@ -72,8 +72,10 @@ import { usePageStore } from "@/store"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import Well from "$ui/well/Well.vue"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()?.allow
 
@@ -98,10 +100,19 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_attachment_action } = line.request(q.project.attachments.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_attachment_action } = line.request(q.project.attachments.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const attachment = await reqs.add(q.project.attachments.Update).setup(req => {
-    req.interpolations.attachment_id = props.attachment.id
-  }).perform(this.form)
+  const attachment = await update_attachment_action({
+    interpolations: { attachment_id: props.attachment.id },
+    body: former.form,
+  })
 
   editing.value = false
   emits('edited', attachment)
@@ -138,9 +149,9 @@ async function deleteAttachment() {
   former.validator.clear()
 
   try {
-    const attachment = await reqs.add(q.project.attachments.Destroy).setup(req => {
-      req.interpolations.attachment_id = props.attachment.id
-    }).perform()
+    const attachment = await destroy_attachment_action({
+      interpolations: { attachment_id: props.attachment.id }
+    })
     if (attachment) {
       emits('deleted', attachment)
     }

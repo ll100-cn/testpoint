@@ -13,11 +13,9 @@ import App from "./App.vue"
 
 const app = createApp(App)
 
-import * as initializers from "./initializers"
-
-for (const key in initializers) {
-  const initializer = initializers[key as keyof typeof initializers]
-  initializer(app)
+const initializers = import.meta.glob('./initializers/*.ts', { eager: true })
+for (const initializer of Object.values(initializers)) {
+  (initializer as any).default(app)
 }
 
 app.mount('#app')

@@ -32,8 +32,10 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emits = defineEmits<{
@@ -47,12 +49,19 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_issue_survey_action } = line.request(q.bug.issue_surveies.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_survey = await reqs.add(q.bug.issue_surveies.Update).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-    req.interpolations.issue_survey_id = issue_survey.value.id
-  }).perform(this.form)
+  const a_issue_survey = await update_issue_survey_action({
+    interpolations: {
+      project_id: issue_box.value.issue.project_id,
+      issue_id: issue_box.value.issue.id,
+      issue_survey_id: issue_survey.value.id
+    },
+    body: former.form
+  })
 
   const index = issue_box.value.surveys.findIndex(it => it.id == a_issue_survey.id)
   issue_box.value.surveys[index] = a_issue_survey
@@ -79,10 +88,14 @@ async function reset(a_issue_box: IssueBox, a_issue_survey: IssueSurvey) {
   issue_survey.value = a_issue_survey
 
   try {
-    current_issue_template_box.value = await reqs.add(q.project.issue_templates.Get).setup(req => {
+    const { data: a_issue_template_box, suspense } = line.request(q.project.issue_templates.Get, (req, it) => {
       req.interpolations.project_id = issue_box.value.issue.project_id
       req.interpolations.issue_template_id = issue_survey.value.template_id
-    }).perform()
+      return it.useQuery(req.toQueryConfig())
+    })
+    await suspense()
+
+    current_issue_template_box.value = a_issue_template_box.value
 
     former.form.inputs_attributes = build_inputs_attributes()
   } finally {

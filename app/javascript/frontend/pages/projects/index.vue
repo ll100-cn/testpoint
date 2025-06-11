@@ -58,19 +58,28 @@ import * as utils from "@/lib/utils"
 import * as q from '@/requests'
 import { reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useSessionStore } from '@/store'
+import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
 const reqs = useRequestList()
 const line = useQueryLine()
-const router = useRouter()
-const validations = reactive<Validator>(new Validator())
 const route = useRoute()
+const router = useRouter()
+const session = useSessionStore()
+
 const query = utils.queryToPlain(route.query)
 
+const validator = reactive(new Validator())
+
 const { data: project_page } = line.request(q.admin.projects.Page, (req, it) => {
-  req.query = { ...query }
+  req.query = utils.plainToQuery(query)
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
+
+const { mutateAsync: destroy_project_action } = line.request(q.admin.projects.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
 async function onRemove(project_id: number) {
   if (!confirm("是否归档项目？")) {
@@ -78,14 +87,14 @@ async function onRemove(project_id: number) {
   }
 
   try {
-    await reqs.add(q.admin.projects.Destroy).setup(req => {
-      req.interpolations.id = project_id
-    }).perform()
+    await destroy_project_action({
+      interpolations: { id: project_id }
+    })
 
     router.go(0)
   } catch (error) {
-    validations.processError(error)
-    alert(validations.errorMessages([]).join("\n"))
+    validator.processError(error)
+    alert(validator.errorMessages([]).join("\n"))
   }
 }
 </script>

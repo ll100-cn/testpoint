@@ -23,8 +23,10 @@ import { Comment, CommentBox, IssueBox } from "@/models"
 import * as q from '@/requests'
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -41,13 +43,15 @@ const FormGroup = GenericFormGroup<typeof former.form>
 const issue_box = ref(null! as IssueBox)
 const loading = ref(true)
 
+const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  console.log('issue_box project_id is', issue_box.value.issue)
-  console.log('issue_box project_id is', issue_box.value.issue.project_id)
-  const a_comment_box = await reqs.add(q.bug.issue_comments.Create).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-  }).perform(this.form)
+  const a_comment_box = await create_comment_action({
+    interpolations: { project_id: issue_box.value.issue.project_id, issue_id: issue_box.value.issue.id },
+    body: former.form,
+  })
 
   emit("created", a_comment_box)
   open.value = false

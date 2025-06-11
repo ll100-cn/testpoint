@@ -31,8 +31,10 @@ import * as q from '@/requests'
 import { Comment, Issue, IssueBox } from "@/models"
 import { ref } from "vue"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
 const emit = defineEmits<{
@@ -46,14 +48,21 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  const a_comment = await reqs.add(q.bug.issue_comments.Convert).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-    req.interpolations.comment_id = comment.value.id
-  }).perform(this.form)
+const { mutateAsync: convert_comment_action } = line.request(q.bug.issue_comments.Convert, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  emit("updated", a_comment)
+former.doPerform = async function() {
+  const a_comment_box = await convert_comment_action({
+    interpolations: {
+      project_id: issue_box.value.issue.project_id,
+      issue_id: issue_box.value.issue.id,
+      comment_id: comment.value.id
+    },
+    body: former.form
+  })
+
+  emit("updated", a_comment_box.comment)
   open.value = false
 }
 

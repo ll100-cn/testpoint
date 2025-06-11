@@ -28,10 +28,12 @@ import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/requests'
 import { useRouter } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
 
 const router = useRouter()
 const reqs = useRequestList()
+const line = useQueryLine()
 
 const former = Former.build({
   email: "",
@@ -41,8 +43,14 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_user_action } = line.request(q.admin.users.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const user = await reqs.add(q.admin.users.Create).setup().perform(this.form)
+  await create_user_action({
+    body: former.form,
+  })
   router.push("/users")
 }
 

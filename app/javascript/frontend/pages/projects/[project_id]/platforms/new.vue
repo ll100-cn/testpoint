@@ -59,10 +59,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_platform_action } = line.request(q.project.platforms.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.project.platforms.Create).setup(req => {
-    req.interpolations.project_id = project_id
-  }).perform(this.form)
+  await create_platform_action({
+    interpolations: { project_id },
+    body: former.form,
+  })
 
   router.push('/projects/' + project_id + '/platforms')
 }

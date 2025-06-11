@@ -76,24 +76,20 @@ const former = Former.build({
   target_category_id: null
 })
 
+const { mutateAsync: create_issue_migration_action } = line.request(q.bug.issue_migrations.Create, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  await reqs.add(q.bug.issue_migrations.Create).setup(req => {
-    req.interpolations.project_id = project_id
-  }).perform({ ...former.form, source_issue_id: issue_id })
+  await create_issue_migration_action({
+    interpolations: { project_id: project_id },
+    body: { ...former.form, source_issue_id: issue_id }
+  })
 
   router.push({ path: `/projects/${former.form.target_project_id}/issues/${issue_id}` })
-}
-
-async function onProjectChange() {
-  member_page.value = await reqs.raw(session.request(q.project.members.InfoList, project_id)).setup(req => {
-    req.interpolations.project_id = project_id
-  }).perform()
-  category_page.value = await reqs.raw(session.request(q.project.categories.List, project_id)).setup(req => {
-    req.interpolations.project_id = project_id
-  }).perform()
 }
 
 const member_boxes = computed(() => member_page.value.list)
@@ -105,9 +101,12 @@ const actioner = Actioner.build<{
 
 actioner.loadCategories = function(project_id: number) {
   this.perform(async function() {
-    category_page.value = await reqs.add(q.project.categories.List, project_id).setup(req => {
+    const { data: a_category_page, suspense } = line.request(q.project.categories.List, (req, it) => {
       req.interpolations.project_id = project_id
-    }).perform()
+      return it.useQuery(req.toQueryConfig())
+    })
+    await suspense()
+    category_page.value = a_category_page.value
 
     former.form.target_category_id = null
   }, { confirm_text: false })

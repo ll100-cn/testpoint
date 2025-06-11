@@ -30,8 +30,10 @@ import CaseForm from './CaseForm.vue'
 import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -66,11 +68,19 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_test_case_action } = line.request(q.case.test_cases.Update, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_test_case_action } = line.request(q.case.test_cases.Destroy, (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const new_test_case_box = await reqs.add(q.case.test_cases.Update).setup(req => {
-    req.interpolations.project_id = test_case.value.project_id
-    req.interpolations.id = test_case.value.id
-  }).perform(this.form)
+  const new_test_case_box = await update_test_case_action({
+    interpolations: { project_id: test_case.value.project_id, id: test_case.value.id },
+    body: former.form,
+  })
 
   emit('updated', new_test_case_box.test_case)
   open.value = false
@@ -85,10 +95,9 @@ async function archiveTestCase(event: Event) {
   }
 
   try {
-    const test_case_box = await reqs.add(q.case.test_cases.Destroy).setup(req => {
-      req.interpolations.project_id = test_case.value.project_id
-      req.interpolations.id = test_case.value.id
-    }).perform()
+    const test_case_box = await destroy_test_case_action({
+      interpolations: { project_id: test_case.value.project_id, id: test_case.value.id }
+    })
 
     emit('destroyed', test_case_box.test_case)
     open.value = false
