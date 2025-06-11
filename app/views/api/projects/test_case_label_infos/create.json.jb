@@ -1,1 +1,0 @@
-render "api/shared/test_case_label_info", test_case_label: @test_case_label

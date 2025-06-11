@@ -1,1 +1,0 @@
-render partial: "api/shared/test_case", collection: @test_cases, as: :test_case

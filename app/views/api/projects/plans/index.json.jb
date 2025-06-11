@@ -1,3 +1,0 @@
-json = render partial: "api/shared/plan", collection: @plans, as: :plan, locals: { tasks_state_counts_mapping: @tasks_state_counts_mapping }
-
-json

@@ -1,4 +1,4 @@
-import { Issue, IssueBox, IssuePage, Pagination } from "@/models"
+import { Issue, IssueBox, IssuePage, IssueSummary, Pagination } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -66,5 +66,14 @@ export const InfoProcess = class extends BaseRequest<IssueBox> {
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBox, response)
+  }
+}
+
+export const Summary = class extends BaseRequest<IssueSummary> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/summary" ]
+
+  processResponse(response: AxiosResponse) {
+    return this.responseToObject(IssueSummary, response)
   }
 }

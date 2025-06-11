@@ -78,3 +78,10 @@ export class IssuePage<Box extends IssueBox> extends Pagination<Box> {
   @Type(() => IssueBox) list: Box[] = []
   @Type(() => IssueStat) issue_stats!: IssueStat[]
 }
+
+export class IssueSummary {
+  by_category: { category: Category, count: number }[] = []
+  by_milestone: { milestone: Milestone, count: number }[] = []
+  by_assignee: { assignee: Member, count: number }[] = []
+  by_creator: { creator: Member, count: number }[] = []
+}

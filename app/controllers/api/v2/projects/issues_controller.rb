@@ -1,7 +1,7 @@
 class Api::V2::Projects::IssuesController < Api::V2::Projects::BaseController
   before_action -> { @project = current_project }
   load_and_authorize_resource through: :project, authorization_action: ->(action) {
-    { archive: :create, unresolve: :create, body: :update, merge: :manage }[action]
+    { archive: :create, unresolve: :create, body: :update, merge: :manage, summary: :index }[action]
   }
 
   def index
@@ -81,6 +81,15 @@ class Api::V2::Projects::IssuesController < Api::V2::Projects::BaseController
     respond_with @issue
   end
 
+  def summary
+    @issues_scope = IssueSearcher.build_scope(@issues, search_params)
+
+    @categories_counts = IssueSearcher.build_scope(@issues_scope, filter_params.except(:category_id_eq)).group(:category).count
+    @milestone_counts = IssueSearcher.build_scope(@issues_scope, filter_params.except(:milestone_id_eq)).group(:milestone).count
+    @assignee_counts = IssueSearcher.build_scope(@issues_scope, filter_params.except(:assignee_id_eq)).group(:assignee).count
+    @creator_counts = IssueSearcher.build_scope(@issues_scope, filter_params.except(:creator_id_eq)).group(:creator).count
+  end
+
 protected
 
   def issue_build_form_params
@@ -111,5 +120,13 @@ protected
 
   def process_params
     params.permit(:state)
+  end
+
+  def search_params
+    params.permit(:keyword, :stage)
+  end
+
+  def filter_params
+    params.permit(:category_id_eq, :milestone_id_eq, :assignee_id_eq, :creator_id_eq)
   end
 end
