@@ -3,10 +3,11 @@ import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
 export const Get = class extends BaseRequest<ProfileBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/profile" ]
+
   constructor(project_id: number) {
     super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/profile"
     this.interpolations.project_id = project_id
   }
 
@@ -16,11 +17,8 @@ export const Get = class extends BaseRequest<ProfileBox> {
 }
 
 export const Update = class extends BaseRequest<ProfileBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/profile"
-  }
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/profile" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(ProfileBox, response)

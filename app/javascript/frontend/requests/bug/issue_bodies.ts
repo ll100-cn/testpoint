@@ -3,11 +3,8 @@ import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
 export const Update = class extends BaseRequest<IssueBodyBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/body"
-  }
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/body" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBodyBox, response)
@@ -15,11 +12,8 @@ export const Update = class extends BaseRequest<IssueBodyBox> {
 }
 
 export const Convert = class extends BaseRequest<IssueBodyBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/body/convert_comment"
-  }
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/body/convert_comment" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBodyBox, response)

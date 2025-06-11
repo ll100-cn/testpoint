@@ -6,52 +6,85 @@ import { DisposableRequest } from "@/lib/DisposableRequest"
 import { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
 import { type ClassConstructor, plainToInstance } from "class-transformer"
 import _ from "lodash"
-import * as qs from "qs"
+import queryString from "query-string"
 import URI from 'urijs'
-import URITemplate from "urijs/src/URITemplate"
+import { parseTemplate } from 'url-template'
+import type { MutationOptions, QueryClient, QueryFilters, UseQueryOptions } from "@tanstack/vue-query"
+import { matchEndpoint } from "@/lib/EndpointMatch"
 
+export type RequestOptions = {
+  interpolations?: Record<string, any>
+  query?: Record<string, any>
+  body?: Record<string, any>
+}
 export interface RequestContext {
   $axios: AxiosInstance,
 }
 
-export abstract class BaseRequest<T> extends DisposableRequest<T> {
-  endpoint!: string
+export abstract class BaseRequest<T> {
+  endpoint!: string[]
   interpolations = {} as { [ x: string]: any }
   query = {} as { [ x: string]: any }
   data: any = {}
   method!: Method | string
   graph: string | null = null
+  declare readonly _responseType: T
   headers = {}
   config: AxiosRequestConfig = {}
   ctx: RequestContext = { $axios: null! }
+  abortSignal?: AbortSignal
 
-  setup(ctx: { $axios: any }, callback: (instance: this) => void | null ): this {
-    this.ctx = ctx
+  toQueryConfig() {
+    const config = {
+      interpolations: this.interpolations ?? {},
+      query: this.query ?? {},
+    } satisfies RequestOptions
 
-    if (callback) {
-      callback(this)
+    const queryKey: Array<string | Record<string, any>> = [ ...this.buildEndpointUrl(config) ]
+    if (this.graph) {
+      queryKey.push(`+${this.graph}`)
     }
+    queryKey.push({ ...config.query })
 
-    return this
+    return {
+      queryKey,
+      queryFn: () => {
+        return this.perform()
+      },
+      throwOnError: true,
+    } satisfies UseQueryOptions<T>
   }
 
-  perform(data?: any) {
-    this.data = data
-    return this
+  toMutationConfig({ client }: { client: QueryClient }, { onSuccess, mutationFn }: Pick<MutationOptions<T, Error, RequestOptions>, "onSuccess" | "mutationFn"> = {}) {
+    return {
+      mutationFn: mutationFn ?? ((options: RequestOptions) => this.perform(options)),
+      onSuccess: onSuccess ?? ((data, options) => {
+        client.invalidateQueries(this.invalidatePredicate(options))
+      }),
+    } satisfies MutationOptions<T, Error, RequestOptions>
   }
 
-  async perform1(data?): Promise<T> {
-    this.data = data
-    return await this.request()
+  invalidatePredicate({ interpolations }: RequestOptions) {
+    return {
+      predicate: (query) => matchEndpoint(query.queryKey, { endpoint: this.endpoint, interpolations })
+    } satisfies QueryFilters
   }
 
-  async request(): Promise<T> {
+  async perform(overrides: RequestOptions = {}): Promise<T> {
+    this.interpolations = overrides.interpolations ?? this.interpolations
+    this.query = overrides.query ?? this.query
+
+    const options = {
+      interpolations: overrides.interpolations ?? this.interpolations,
+      query: overrides.query ?? this.query,
+      body: overrides.body,
+    }
+    const config = this.buildPerformConfig(options)
     try {
-      const resp = await this.axiosRequest(this.data)
-      const result = this.processResponse(resp)
-      return result
+      const resp = await this.ctx.$axios.request(config)
+      return this.processResponse(resp)
     } catch (e) {
-      return await this.processError(e)
+      return this.processError(e)
     }
   }
 
@@ -68,20 +101,23 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
     }
   }
 
-  abstract processResponse(response: AxiosResponse): T
-
-  buildUrl() {
-    const url = URITemplate(this.endpoint).expand(this.interpolations)
-    const uri = new URI(url)
-    const queryString = qs.stringify(this.query, { arrayFormat: "brackets" })
-    return uri.query(queryString).toString()
+  buildEndpointUrl(options: RequestOptions) {
+    return this.endpoint.map(it => parseTemplate(it).expand(options.interpolations ?? {}))
   }
 
-  async axiosRequest(data: any): Promise<AxiosResponse> {
-    const { $axios } = this.ctx
+  buildUrl(options: RequestOptions) {
+    const url = this.buildEndpointUrl(options).join("")
+    const uri = new URI(url)
+    const query_string = queryString.stringify(options.query ?? {}, { arrayFormat: "bracket" })
+    return uri.query(query_string).toString()
+  }
+
+  abstract processResponse(response: AxiosResponse): T
+
+  buildPerformConfig(options: RequestOptions) {
     const config: AxiosRequestConfig = {
-      signal: this.aborter.signal,
-      url: this.buildUrl(),
+      signal: this.abortSignal,
+      url: this.buildUrl(options),
       method: this.method,
       headers: this.headers,
       ...this.config,
@@ -91,8 +127,8 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
       config.headers!["X-Resource-Graph"] = this.graph
     }
 
-    if (data) {
-      const formData = data instanceof FormData ? data : this.buildFormData(data, config.headers!["Content-Type"])
+    if (options.body) {
+      const formData = options.body instanceof FormData ? options.body : this.buildFormData(options.body, config.headers!["Content-Type"])
       config.data = formData
     }
 
@@ -100,11 +136,10 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
       config.headers!["X-CSRF-Token"] = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content")
     }
 
-    const resp = await $axios.request(config)
-    return resp
+    return config
   }
 
-  buildFormData(params, contentType: string) {
+  buildFormData(params: Record<string, any>, contentType: string) {
     if (contentType === "application/json") {
       return params
     }
@@ -118,7 +153,7 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
     return formData
   }
 
-  fillFormData(formData, name, value) {
+  fillFormData(formData: FormData, name: string, value: any) {
     if (_.isArray(value)) {
       for (const [ key, val ] of value.entries()) {
         if (_.isPlainObject(val)) {
@@ -133,7 +168,13 @@ export abstract class BaseRequest<T> extends DisposableRequest<T> {
         this.fillFormData(formData, `${name}[${attr}]`, val)
       }
     } else {
-      _.isNull(value) ? formData.append(name, "") : formData.append(name, value)
+      if (typeof value === "number") {
+        formData.append(name, value.toString())
+      } else if (_.isNull(value)) {
+        formData.append(name, "")
+      } else {
+        formData.append(name, value)
+      }
     }
   }
 

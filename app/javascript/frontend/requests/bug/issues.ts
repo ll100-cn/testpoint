@@ -3,11 +3,8 @@ import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
 export const Create = class extends BaseRequest<IssueBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/issues"
-  }
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBox, response)
@@ -15,11 +12,8 @@ export const Create = class extends BaseRequest<IssueBox> {
 }
 
 export const Get = class extends BaseRequest<IssueBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}"
-  }
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBox, response)
@@ -28,7 +22,7 @@ export const Get = class extends BaseRequest<IssueBox> {
 
 export const Page = class extends BaseRequest<IssuePage<IssueBox>> {
   method = "GET"
-  endpoint = "/api/v2/projects/{project_id}/issues"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues" ]
   graph = "counts"
 
   processResponse(response: AxiosResponse) {
@@ -37,11 +31,8 @@ export const Page = class extends BaseRequest<IssuePage<IssueBox>> {
 }
 
 export const Merge = class extends BaseRequest<IssueBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/merge"
-  }
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/merge" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBox, response)
@@ -49,12 +40,9 @@ export const Merge = class extends BaseRequest<IssueBox> {
 }
 
 export const InfoGet = class extends BaseRequest<IssueBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}"
-    this.graph = "info"
-  }
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
+  graph = "info"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBox, response)
@@ -62,12 +50,9 @@ export const InfoGet = class extends BaseRequest<IssueBox> {
 }
 
 export const InfoResolve = class extends BaseRequest<IssueBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/resolve"
-    this.graph = "info"
-  }
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/resolve" ]
+  graph = "info"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBox, response)
@@ -75,12 +60,9 @@ export const InfoResolve = class extends BaseRequest<IssueBox> {
 }
 
 export const InfoProcess = class extends BaseRequest<IssueBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/process"
-    this.graph = "info"
-  }
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/process" ]
+  graph = "info"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBox, response)
