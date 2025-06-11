@@ -103,7 +103,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import _ from 'lodash'
@@ -116,7 +115,6 @@ import * as controls from '@/components/controls'
 import { useQueryLine } from '@/lib/useQueryLine'
 
 const validations = reactive(new Validator())
-const reqs = useRequestList()
 const line = useQueryLine()
 const state = ref('pending') // [ pending, submitting, submited ]
 

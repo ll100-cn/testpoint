@@ -24,7 +24,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { Attachment } from "@/models"
 import { type AxiosProgressEvent } from "axios"
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue"
@@ -36,7 +35,6 @@ import { useQueryLine } from '@/lib/useQueryLine'
 const props = defineProps<{
   attachments?: Attachment[]
 }>()
-const reqs = useRequestList()
 const line = useQueryLine()
 
 class Item {
@@ -64,7 +62,9 @@ onMounted(() => {
 })
 
 const { mutateAsync: create_attachment_action } = line.request(q.project.attachments.Create, (req, it) => {
-  return it.useMutation(req.toMutationConfig(it))
+  return it.useMutation({
+    ...req.toMutationConfig(it),
+  })
 })
 
 async function upload(file: File) {
@@ -75,17 +75,9 @@ async function upload(file: File) {
   item.upload_file = upload_file
   items.value.push(item)
 
-  // TODO
   try {
     const attachment = await create_attachment_action({
-      body: { file: file },
-      config: {
-        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-          upload_file.state = "uploading"
-          upload_file.loaded = progressEvent.loaded
-          upload_file.total = progressEvent.total
-        }
-      }
+      body: { upload_file: upload_file },
     })
 
     item.attachment = attachment

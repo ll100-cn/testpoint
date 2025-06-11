@@ -44,7 +44,6 @@
 
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
 import _ from 'lodash'
@@ -60,7 +59,6 @@ import Button from '$ui/button/Button.vue'
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

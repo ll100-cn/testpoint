@@ -53,7 +53,6 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
-import useRequestList from '@/lib/useRequestList'
 import * as utils from "@/lib/utils"
 import * as q from '@/requests'
 import { reactive } from 'vue'
@@ -61,7 +60,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useSessionStore } from '@/store'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

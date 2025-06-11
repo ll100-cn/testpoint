@@ -71,7 +71,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { MemberBox, MemberInfo, MemberPage } from '@/models'
 import { usePageStore } from '@/store'
 import { useSessionStore } from '@/store/session'
@@ -86,7 +85,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Container } from '$ui/container'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 const page = usePageStore()

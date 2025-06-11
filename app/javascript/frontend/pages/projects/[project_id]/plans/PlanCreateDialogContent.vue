@@ -17,7 +17,6 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Plan, Platform, PlatformBox, PlatformPage, TestCaseStat } from '@/models'
 import _ from 'lodash'
@@ -29,7 +28,6 @@ import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const el = ref(null! as InstanceType<typeof HTMLElement>)
 const page = usePageStore()

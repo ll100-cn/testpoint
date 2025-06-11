@@ -47,7 +47,6 @@
 <script setup lang="ts">
 import { Card, CardContent, CardFooter, CardHeader, CardTable } from '$ui/card'
 import { Nav, NavItem } from '$ui/nav'
-import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
@@ -69,7 +68,6 @@ import * as controls from '@/components/controls'
 import RLink from '@/components/RLink.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

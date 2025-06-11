@@ -23,7 +23,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Issue, IssueSurvey, IssueTemplate, IssueBox, IssueTemplateBox } from "@/models"
 import _ from "lodash"
@@ -34,7 +33,6 @@ import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const open = defineModel('open')
 

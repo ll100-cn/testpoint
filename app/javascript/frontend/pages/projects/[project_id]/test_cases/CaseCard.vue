@@ -72,7 +72,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Milestone, MilestoneBox, MilestonePage, Platform, TestCase, TestCaseLabel } from '@/models'
@@ -94,7 +93,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { TEST_CASE_RELATE_STATES } from '@/constants'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

@@ -37,7 +37,6 @@
 
 <script setup lang="ts">
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import useRequestList from '@/lib/useRequestList'
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
 import { Issue, IssueBox, IssueSurvey } from "@/models"
@@ -50,7 +49,6 @@ import Button from "$ui/button/Button.vue"
 import { Alert } from "$ui/alert"
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow

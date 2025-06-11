@@ -53,7 +53,6 @@ import ActionerAlert from '@/components/ActionerAlert.vue'
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import useRequestList from '@/lib/useRequestList'
 import { Category } from '@/models'
 import * as q from '@/requests'
 import { usePageStore } from '@/store'
@@ -61,7 +60,6 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

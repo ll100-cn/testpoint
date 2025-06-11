@@ -36,7 +36,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { Button } from '$ui/button'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap, Scene } from '@/models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
@@ -54,7 +53,6 @@ import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const params = route.params as any
-const reqs = useRequestList()
 const line = useQueryLine()
 const open = defineModel('open')
 const page = usePageStore()

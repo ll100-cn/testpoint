@@ -33,7 +33,6 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
-import useRequestList from '@/lib/useRequestList'
 import { TASK_UPSHOT_STATES } from "@/constants"
 import * as q from '@/requests'
 import { PlanBox, TaskBox, TaskUpshotBox } from '@/models'
@@ -47,7 +46,6 @@ import { Button } from '$ui/button'
 import PageContent from "@/components/PageContent.vue"
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow

@@ -128,7 +128,6 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
-import useRequestList from '@/lib/useRequestList'
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/requests'
@@ -164,7 +163,6 @@ const issue_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const issue_comment_create_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const issue_resolve_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

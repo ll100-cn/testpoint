@@ -37,7 +37,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import * as utils from "@/lib/utils"
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
@@ -51,7 +50,6 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

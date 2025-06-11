@@ -46,7 +46,6 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
@@ -59,7 +58,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '$ui/collaps
 import PageContent from '@/components/PageContent.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 
 const props = defineProps<{
   readonly: boolean

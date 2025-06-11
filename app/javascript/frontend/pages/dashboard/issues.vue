@@ -46,7 +46,6 @@
 
 <script setup lang="ts">
 import PaginationBar from "@/components/PaginationBar.vue"
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -60,7 +59,6 @@ import RLink from "@/components/RLink.vue"
 import { Badge } from "$ui/badge"
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const query = utils.queryToPlain(route.query)

@@ -33,13 +33,11 @@ import { Separator } from '$ui/separator'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

@@ -52,7 +52,6 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Category, IssueTemplate, IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, PlanBox, TaskBox, TaskUpshot, TaskUpshotBox } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
@@ -68,7 +67,6 @@ import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const page = usePageStore()
 const session = useSessionStore()

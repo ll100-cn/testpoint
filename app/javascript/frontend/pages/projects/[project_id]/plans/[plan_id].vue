@@ -80,7 +80,6 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Phase, TaskUpshotBox, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
@@ -107,7 +106,6 @@ import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import RLink from '@/components/RLink.vue'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

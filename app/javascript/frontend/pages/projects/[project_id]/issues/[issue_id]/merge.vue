@@ -74,7 +74,6 @@
 <script setup lang="ts">
 import { Button } from '$ui/button'
 import { Former, GenericForm, GenericFormGroup, UnprocessableEntityError } from '$ui/simple_form'
-import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
@@ -92,7 +91,6 @@ import { AxiosError } from 'axios'
 import { usePageStore } from '@/store'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

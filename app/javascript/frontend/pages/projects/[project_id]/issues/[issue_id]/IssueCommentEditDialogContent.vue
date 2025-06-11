@@ -19,7 +19,6 @@
 import { Button } from '$ui/button'
 import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import useRequestList from '@/lib/useRequestList'
 import { Attachment, CommentBox, IssueBox } from "@/models"
 import * as q from '@/requests'
 import _ from "lodash"
@@ -27,7 +26,6 @@ import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const open = defineModel('open')
 

@@ -29,12 +29,10 @@ import * as q from '@/requests'
 import _ from 'lodash'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
-import useRequestList from '@/lib/useRequestList'
 import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
 const line = useQueryLine()
 const params = route.params as any
 

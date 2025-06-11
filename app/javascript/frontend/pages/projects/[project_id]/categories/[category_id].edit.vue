@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
 import Fields from './Fields.vue'
@@ -33,7 +32,6 @@ import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
 const line = useQueryLine()
 const params = route.params as any
 

@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
-import useRequestList from '@/lib/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
@@ -32,7 +31,6 @@ import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const store = useSessionStore()
 const user = store.account!.user

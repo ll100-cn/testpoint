@@ -7,14 +7,12 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 
 import { Task } from "@/models"
 import * as q from '@/requests'
 import Badge from "$ui/badge/Badge.vue";
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const props = defineProps<{
   task: Task

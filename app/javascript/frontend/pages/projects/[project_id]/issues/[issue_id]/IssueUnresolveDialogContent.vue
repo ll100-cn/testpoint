@@ -15,7 +15,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { Issue, IssueBox } from "@/models"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
@@ -26,7 +25,6 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useQueryLine } from '@/lib/useQueryLine'
 
 const router = useRouter()
-const reqs = useRequestList()
 const line = useQueryLine()
 const open = defineModel('open')
 

@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Phase, PhaseInfo, Plan, PlanBox } from '@/models'
 import _ from 'lodash'
@@ -39,7 +38,6 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import * as controls from '@/components/controls'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const params = route.params as any

@@ -25,14 +25,12 @@
 <script setup lang="ts">
 import PageContent from '@/components/PageContent.vue'
 import * as h from '@/lib/humanize'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import _ from 'lodash'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const params = route.params as any

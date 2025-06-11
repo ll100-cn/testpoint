@@ -41,7 +41,6 @@
 
 <script setup lang="ts">
 import BSOption from '@/components/BSOption.vue'
-import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForMember from '@/components/OptionsForMember.vue'
 import PageHeader from '@/components/PageHeader.vue'
@@ -62,7 +61,6 @@ import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
 const line = useQueryLine()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)

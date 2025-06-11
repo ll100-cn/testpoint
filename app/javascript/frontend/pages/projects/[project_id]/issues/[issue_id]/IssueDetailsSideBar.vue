@@ -119,7 +119,6 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
@@ -143,7 +142,6 @@ import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const session = useSessionStore()
 const current_user = session.account!.user

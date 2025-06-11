@@ -35,7 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import * as q from '@/requests'
 import { Category, Issue, MemberInfo, IssueBox } from "@/models"
@@ -50,7 +49,6 @@ import { SelectdropItem } from '@/components/controls/selectdrop'
 import { useRoute } from "vue-router"
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const open = defineModel('open')
 const session = useSessionStore()

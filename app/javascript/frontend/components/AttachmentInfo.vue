@@ -61,7 +61,6 @@
 
 <script setup lang="ts">
 import * as controls from '@/components/controls'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
@@ -74,7 +73,6 @@ import { Button } from '$ui/button'
 import Well from "$ui/well/Well.vue"
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()?.allow

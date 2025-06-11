@@ -35,7 +35,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import { EntityRepo, Platform, Requirement, RequirementBox, RequirementPage, Roadmap, TestCase, TestCaseLabel } from '@/models'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
@@ -44,7 +43,6 @@ import { computed, ref, watch } from 'vue'
 import { usePageStore } from '@/store'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const page = usePageStore()
 

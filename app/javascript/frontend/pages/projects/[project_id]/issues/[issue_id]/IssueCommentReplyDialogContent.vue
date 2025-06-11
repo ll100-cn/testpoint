@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { Attachment, Comment, CommentBox, IssueBox } from "@/models"
 import _ from "lodash"
 import { ref } from "vue"
@@ -32,7 +31,6 @@ import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const open = defineModel('open')
 

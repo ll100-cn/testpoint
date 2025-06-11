@@ -11,7 +11,7 @@
                 <FormErrorAlert />
 
                 <FormGroup path="email" label="邮箱">
-                  <controls.String v-model="account?.user.email" readonly disabled />
+                  <controls.String v-model="email" readonly disabled />
                 </FormGroup>
 
                 <FormGroup path="name" label="姓名">
@@ -38,9 +38,8 @@
 
 <script setup lang="ts">
 import * as q from "@/requests"
-import useRequestList from '@/lib/useRequestList'
 import { useSessionStore } from '@/store'
-import { getCurrentInstance, ref, watch } from 'vue'
+import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import PageHeader from './PageHeader.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
@@ -49,7 +48,6 @@ import { Button } from '$ui/button'
 import { useQueryLine } from '@/lib/useQueryLine'
 import * as controls from '@/components/controls'
 
-const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 const line = useQueryLine()
@@ -81,4 +79,6 @@ former.doPerform = async function() {
 
   success.value = true
 }
+
+const email = computed(() => account?.user.email)
 </script>

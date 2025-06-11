@@ -23,7 +23,6 @@
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Separator } from '$ui/separator'
-import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/requests'
@@ -33,7 +32,6 @@ import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
 
 const router = useRouter()
-const reqs = useRequestList()
 const line = useQueryLine()
 
 const former = Former.build({

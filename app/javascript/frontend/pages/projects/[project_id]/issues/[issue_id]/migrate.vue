@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { Actioner } from "@/components/Actioner"
-import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForCategory from "@/components/OptionsForCategory.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
@@ -51,7 +50,6 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

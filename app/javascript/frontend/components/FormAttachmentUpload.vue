@@ -22,7 +22,6 @@
 
 <script setup lang="ts">
 import prettyBytes from 'pretty-bytes'
-import useRequestList from '@/lib/useRequestList'
 import { UploadFile } from './types'
 
 const props = defineProps<{

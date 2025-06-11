@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { Issue, IssueBox } from "@/models"
 import { getCurrentInstance, ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
@@ -24,7 +23,6 @@ import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const open = defineModel('open')
 

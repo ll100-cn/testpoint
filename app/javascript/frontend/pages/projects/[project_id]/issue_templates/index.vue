@@ -42,7 +42,6 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref, reactive, computed } from 'vue'
-import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
 import { Validator } from '$ui/simple_form';
@@ -58,7 +57,6 @@ import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
 const line = useQueryLine()
 const params = route.params as any
 const page = usePageStore()

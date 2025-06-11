@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
-import useRequestList from '@/lib/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
@@ -28,7 +27,6 @@ import { computed, getCurrentInstance } from "vue"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow

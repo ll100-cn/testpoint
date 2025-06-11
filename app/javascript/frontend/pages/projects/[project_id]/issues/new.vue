@@ -56,7 +56,6 @@
 
 <script setup lang="ts">
 import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
-import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import PageHeader from "@/components/PageHeader.vue"
@@ -73,7 +72,6 @@ import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

@@ -59,7 +59,6 @@
 
 <script setup lang="ts">
 import PaginationBar from '@/components/PaginationBar.vue'
-import useRequestList from '@/lib/useRequestList'
 import dayjs from '@/lib/dayjs'
 import * as q from '@/requests'
 import * as utils from '@/lib/utils'
@@ -82,7 +81,6 @@ import PageTitle from '@/components/PageTitle.vue'
 import Button from '$ui/button/Button.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const session = useSessionStore()
 const route = useRoute()

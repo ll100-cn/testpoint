@@ -53,7 +53,6 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref, computed } from 'vue'
-import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 import * as q from '@/requests'
@@ -68,7 +67,6 @@ import Button from '$ui/button/Button.vue'
 import { useRoute } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const session = useSessionStore()
 const route = useRoute()

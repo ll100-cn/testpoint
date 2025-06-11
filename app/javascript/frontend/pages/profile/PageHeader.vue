@@ -15,7 +15,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { usePageStore, useSessionStore } from "@/store"
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
@@ -23,7 +22,6 @@ import { Nav, NavItem } from '$ui/nav'
 import RLink from '@/components/RLink.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const session = useSessionStore()
 const line = useQueryLine()
 

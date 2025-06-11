@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests';
 import { type PropType, getCurrentInstance, nextTick, ref } from 'vue';
 import CardShow from './CardShow.vue';
@@ -30,7 +29,6 @@ const props = defineProps({
   }
 })
 
-const reqs = useRequestList()
 const line = useQueryLine()
 
 const emit = defineEmits<{

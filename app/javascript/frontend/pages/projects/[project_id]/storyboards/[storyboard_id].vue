@@ -122,7 +122,6 @@
 
 <script setup lang="ts">
 import PageHeader from '@/components/PageHeader.vue'
-import useRequestList from '@/lib/useRequestList'
 import PageTitle from '@/components/PageTitle.vue'
 import BlankDialog from '@/components/BlankDialog.vue'
 import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from 'vue'
@@ -160,7 +159,6 @@ import SceneListDialogContent from './SceneListDialogContent.vue'
 import SceneNode from './SceneNode.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

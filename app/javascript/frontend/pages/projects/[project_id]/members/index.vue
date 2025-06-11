@@ -49,7 +49,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Member } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
@@ -65,7 +64,6 @@ import Button from "$ui/button/Button.vue"
 import { Nav, NavItem } from '$ui/nav'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

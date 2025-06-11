@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import * as utils from "@/lib/utils"
 import { getCurrentInstance, reactive, ref } from 'vue'
@@ -39,7 +38,6 @@ import PageTitle from "@/components/PageTitle.vue"
 import { useQueryLine } from '@/lib/useQueryLine'
 
 const wday_mapping = [ "星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ]
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

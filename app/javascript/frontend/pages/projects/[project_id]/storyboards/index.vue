@@ -9,7 +9,6 @@
 <script setup lang="ts">
 import { Button } from '$ui/button'
 import { Nav } from '$ui/nav'
-import useRequestList from '@/lib/useRequestList'
 import BlankDialog from '@/components/BlankDialog.vue'
 import * as q from '@/requests'
 import * as utils from "@/lib/utils"
@@ -20,7 +19,6 @@ import { useRoute, useRouter } from 'vue-router'
 import StoryboardCreateDialogContent from './StoryboardCreateDialogContent.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

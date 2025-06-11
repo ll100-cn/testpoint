@@ -50,7 +50,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { LoginCode } from "@/models"
 import { useSessionStore } from "@/store/session"
@@ -63,7 +62,6 @@ import { useQueryLine } from '@/lib/useQueryLine'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!
-const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
 const line = useQueryLine()

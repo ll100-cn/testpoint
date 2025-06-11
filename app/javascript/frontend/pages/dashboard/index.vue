@@ -31,7 +31,6 @@
 
 <script setup lang="ts">
 import { EntityRepo, IssueStat, Project, MemberBox } from '@/models'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
@@ -43,7 +42,6 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const page = usePageStore()
 const session = useSessionStore()

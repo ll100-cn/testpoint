@@ -54,7 +54,6 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Milestone } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
@@ -70,7 +69,6 @@ import Button from '$ui/button/Button.vue'
 import PageContent from '@/components/PageContent.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()

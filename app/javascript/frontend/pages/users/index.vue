@@ -43,7 +43,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import { useRouter } from 'vue-router';
@@ -57,7 +56,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, 
 import { Validator } from '$ui/simple_form'
 import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const line = useQueryLine()
 const router = useRouter()
 const route = useRoute()
