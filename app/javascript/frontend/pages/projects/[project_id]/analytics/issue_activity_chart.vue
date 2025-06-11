@@ -36,9 +36,11 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const wday_mapping = [ "星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ]
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -54,11 +56,12 @@ const former = Former.build(filter)
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const analytics = reqs.add(q.project.issue_activity_charts.Get).setup(req => {
+const { data: analytics } = line.request(q.project.issue_activity_charts.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.query = utils.plainToQuery(former.form, true)
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 former.doPerform = async function() {
   if (filter) {

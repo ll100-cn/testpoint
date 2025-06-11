@@ -58,28 +58,30 @@ import { Nav, NavItem } from '$ui/nav'
 import type { Issue, IssueBox, IssuePage, Pagination } from "@/models"
 import RLink from "@/components/RLink.vue"
 import { Badge } from "$ui/badge"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
 
 const filter = query.filter || 'unhandled'
 const sorts = ref(query.sorts ?? 'id desc')
 
-const pagination = reqs.add(q.profile.issues.Page).setup(req => {
-  req.query = utils.plainToQuery(query)
-  req.query.filter = filter
-  req.query.sorts = sorts.value
-}).wait()
+const { data: pagination } = line.request(q.profile.issues.Page, (req, it) => {
+  req.query = { ...utils.plainToQuery(query), filter: filter, sorts: sorts.value }
+  return it.useQuery(req.toQueryConfig())
+})
 
 let unhandled_issue_page = ref(null as IssuePage<IssueBox> | null)
 if (filter != 'unhandled') {
-  reqs.add(q.profile.issues.Page).setup(req => {
-    req.query.per_page = 1
-    req.query.filter = 'unhandled'
-  }).waitFor(unhandled_issue_page)
+  const { data: unhandled_temp } = line.request(q.profile.issues.Page, (req, it) => {
+    req.query = { per_page: 1, filter: 'unhandled' }
+    return it.useQuery(req.toQueryConfig())
+  })
+  unhandled_issue_page = unhandled_temp
 }
-await reqs.performAll()
+await line.wait()
 
 const unhandled_issues_count = computed(() => {
   if (filter == 'unhandled') {

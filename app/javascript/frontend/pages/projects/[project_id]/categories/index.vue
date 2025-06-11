@@ -59,8 +59,10 @@ import * as q from '@/requests'
 import { usePageStore } from '@/store'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -69,10 +71,11 @@ const allow = page.inProject()!.allow
 
 const project_id = params.project_id
 
-const category_page = reqs.add(q.project.categories.InfoList).setup(req => {
+const { data: category_page } = line.request(q.project.categories.InfoList, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 const category_boxes = computed(() => category_page.value.list)
 
 const actioner = Actioner.build()

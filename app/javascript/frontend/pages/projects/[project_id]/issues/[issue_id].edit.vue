@@ -58,10 +58,12 @@ import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 import { computed } from 'vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
+const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const issue_id = _.toInteger(params.issue_id)
@@ -69,23 +71,35 @@ const page = usePageStore()
 const session = useSessionStore()
 const allow = page.inProject()!.allow
 
-const issue_box = reqs.add(q.bug.issues.Get).setup(req => {
+const { data: issue_box } = line.request(q.bug.issues.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
-}).wait()
-const category_page = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
-const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: milestone_page } = line.request(q.project.milestones.List, (req, it) => {
+  req.interpolations.project_id = project_id
+  req.query = { filter: "available" }
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const categories = computed(() => category_page.value.list.map(it => it.category))
 const member_boxes = computed(() => member_page.value.list)
 
-const former = Former.build({
-  title: issue_box.value.issue.title,
-  category_id: issue_box.value.issue.category_id,
-  assignee_id: issue_box.value.issue.assignee_id,
-  creator_id: issue_box.value.issue.creator_id,
-})
+  const former = Former.build({
+    title: issue_box.value.issue.title,
+    category_id: issue_box.value.issue.category_id,
+    assignee_id: issue_box.value.issue.assignee_id,
+    creator_id: issue_box.value.issue.creator_id,
+  })
 
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>

@@ -80,8 +80,10 @@ import PlanCreateDialogContent from './PlanCreateDialogContent.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import Button from '$ui/button/Button.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const session = useSessionStore()
 const route = useRoute()
 const router = useRouter()
@@ -108,16 +110,20 @@ former.doPerform = async function() {
 
 const project_id = _.toNumber(params.project_id)
 
-const plan_page = reqs.add(q.test.plans.Page).setup(req => {
+const { data: plan_page } = line.request(q.test.plans.Page, (req, it) => {
   req.interpolations.project_id = project_id
-  req.query = utils.plainToQuery(query)
-  req.query.q = search
-}).wait()
-const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-const test_case_stats = reqs.add(q.case.test_case_stats.List).setup(req => {
+  req.query = { ...utils.plainToQuery(query), q: search }
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: test_case_stats } = line.request(q.case.test_case_stats.List, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const member_boxes = computed(() => member_page.value.list)
 const progress_bg_mapping = ref({ pass: "bg-success", failure: "bg-danger" })

@@ -55,17 +55,20 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const router = useRouter()
 const route = useRoute()
 const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
 
-const user_page = reqs.add(q.admin.users.Page).setup(req => {
+const { data: user_page } = line.request(q.admin.users.Page, (req, it) => {
   req.query = utils.plainToQuery(query)
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 async function onRemove(user_id: number) {
   if (!confirm("是否删除用户？")) {

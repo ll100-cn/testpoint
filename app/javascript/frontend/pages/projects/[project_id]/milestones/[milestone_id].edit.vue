@@ -30,13 +30,16 @@ import _ from 'lodash'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import useRequestList from '@/lib/useRequestList'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
+const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 
 const project_id = params.project_id
+const milestone_id = params.milestone_id
 
 const former = Former.build({
   title: null as string | null,
@@ -47,6 +50,13 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { data: milestone_box } = line.request(q.project.milestones.Get, (req, it) => {
+  req.interpolations.project_id = project_id
+  req.interpolations.milestone_id = milestone_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
+
 former.doPerform = async function() {
   await reqs.add(q.project.milestones.Update).setup(req => {
     req.interpolations.project_id = project_id
@@ -55,12 +65,6 @@ former.doPerform = async function() {
 
   router.push(`/projects/${project_id}/milestones`)
 }
-
-const milestone_box = reqs.add(q.project.milestones.Get).setup(req => {
-  req.interpolations.project_id = project_id
-  req.interpolations.id = _.toNumber(params.milestone_id)
-}).wait()
-await reqs.performAll()
 
 former.form.title = milestone_box.value.milestone.title
 former.form.published_at = milestone_box.value.milestone.published_at ?? null

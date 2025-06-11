@@ -41,19 +41,23 @@ import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const session = useSessionStore()
 
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const member_page = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
-const unhandled_issue_page =  reqs.add(q.profile.issues.Page).setup(req => {
-  req.query.per_page = 1
-  req.query.filter = 'unhandled'
-}).wait()
-await reqs.performAll()
+const { data: member_page } = line.request(q.profile.members.InfoList, (req, it) => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: unhandled_issue_page } = line.request(q.profile.issues.Page, (req, it) => {
+  req.query = { per_page: 1, filter: 'unhandled' }
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const member_boxes = computed(() => member_page.value.list)
 const unhandled_issues_count = computed(() => unhandled_issue_page.value.total_count)

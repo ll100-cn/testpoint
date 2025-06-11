@@ -42,8 +42,10 @@ import * as controls from '@/components/controls'
 import * as q from '@/requests'
 import { ref, watch } from 'vue'
 import { usePageStore } from '@/store'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 
 const props = defineProps<{
@@ -64,13 +66,14 @@ const emit = defineEmits<{
 
 const requirement_page = ref(null as RequirementPage<RequirementBox> | null)
 
-const storyboard_page = reqs.add(q.project.storyboards.List).setup(req => {
+const { data: storyboard_page } = line.request(q.project.storyboards.List, (req, it) => {
   req.interpolations.project_id = page.inProject()!.project_id
-}).wait()
+  return it.useQuery(req.toQueryConfig())
+})
 if (props.former.form.storyboard_id) {
   requestRequirement(props.former.form.storyboard_id)
 }
-await reqs.performAll()
+await line.wait()
 
 watch(() => props.former.form.storyboard_id, async (storyboard_id) => {
   if (storyboard_id) {

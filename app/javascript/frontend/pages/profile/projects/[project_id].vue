@@ -43,8 +43,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, 
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const router = useRouter()
 const route = useRoute()
 const page = usePageStore()
@@ -53,8 +55,11 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const account = ref(session.account)
-const profile_box = reqs.raw(session.request(q.project.profiles.Get, project_id)).setup().wait()
-await reqs.performAll()
+const { data: profile_box } = line.request(q.project.profiles.Get, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   nickname: profile_box.value.profile.nickname

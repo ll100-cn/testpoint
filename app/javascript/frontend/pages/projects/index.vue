@@ -52,6 +52,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 import useRequestList from '@/lib/useRequestList'
 import * as utils from "@/lib/utils"
 import * as q from '@/requests'
@@ -59,15 +60,17 @@ import { reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const router = useRouter()
 const validations = reactive<Validator>(new Validator())
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
 
-const project_page = reqs.add(q.admin.projects.Page).setup(req => {
-  req.query = utils.plainToQuery(query)
-}).wait()
-await reqs.performAll()
+const { data: project_page } = line.request(q.admin.projects.Page, (req, it) => {
+  req.query = { ...query }
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 async function onRemove(project_id: number) {
   if (!confirm("是否归档项目？")) {

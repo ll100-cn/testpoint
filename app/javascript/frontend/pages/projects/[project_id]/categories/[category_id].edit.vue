@@ -29,20 +29,23 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Separator } from '$ui/separator'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
 const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 
 const project_id = params.project_id
 const category_id = params.category_id
 
-const category = reqs.add(q.project.categories.InfoGet).setup(req => {
+const { data: category } = line.request(q.project.categories.InfoGet, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.category_id = category_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   name: category.value.name,

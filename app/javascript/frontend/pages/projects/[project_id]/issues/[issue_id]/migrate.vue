@@ -49,8 +49,10 @@ import { useRoute, useRouter } from "vue-router"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -60,13 +62,14 @@ const session = useSessionStore()
 const project_id = _.toNumber(params.project_id)
 const issue_id = _.toNumber(params.issue_id)
 
-const issue_box = reqs.add(q.bug.issues.Get).setup(req => {
+const { data: issue_box } = line.request(q.bug.issues.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
-}).wait()
+  return it.useQuery(req.toQueryConfig())
+})
 const member_page = ref(null! as MemberPage<MemberBox>)
 const category_page = ref(null! as CategoryPage<CategoryBox>)
-await reqs.performAll()
+await line.wait()
 
 const former = Former.build({
   target_project_id: null,

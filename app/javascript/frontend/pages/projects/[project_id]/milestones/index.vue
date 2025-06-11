@@ -68,8 +68,10 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import Button from '$ui/button/Button.vue'
 import PageContent from '@/components/PageContent.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -81,8 +83,11 @@ const active = ref('normal')
 
 const project_id = _.toNumber(params.project_id)
 
-const milestone_page = reqs.raw(session.request(q.project.milestones.List, project_id)).setup().wait()
-await reqs.performAll()
+const { data: milestone_page } = line.request(q.project.milestones.List, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const grouped_milestones = ref(_.groupBy(milestone_page.value.list, (m) => m.milestone.archived_at ? 'archived' : 'normal'))
 

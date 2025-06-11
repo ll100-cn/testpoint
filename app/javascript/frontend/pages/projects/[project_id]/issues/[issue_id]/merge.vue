@@ -90,8 +90,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import { AxiosError } from 'axios'
 import { usePageStore } from '@/store'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -103,11 +105,12 @@ const add_dialog_open = ref(false)
 
 const issues = ref([] as Issue[])
 
-const head = reqs.add(q.bug.issues.Get).setup(req => {
+const { data: head } = line.request(q.bug.issues.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 issues.value.push(head.value.issue)
 

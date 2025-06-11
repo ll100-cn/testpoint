@@ -18,8 +18,10 @@ import { usePageStore } from '@/store'
 import { onActivated, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import StoryboardCreateDialogContent from './StoryboardCreateDialogContent.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -31,10 +33,11 @@ const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const project_id = params.project_id
 
-const storyboard_page = reqs.add(q.project.storyboards.List).setup(req => {
+const { data: storyboard_page } = line.request(q.project.storyboards.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 onActivated(() => {
   if (storyboard_page.value.list.length > 0) {

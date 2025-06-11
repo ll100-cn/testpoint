@@ -157,6 +157,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, 
 import BlankDialog from "@/components/BlankDialog.vue"
 import Button from "$ui/button/Button.vue"
 import ButtonGroup from "$ui/button-group/ButtonGroup.vue"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const comment_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const issue_dialog = ref(null! as InstanceType<typeof BlankDialog>)
@@ -164,6 +165,7 @@ const issue_comment_create_dialog = ref(null! as InstanceType<typeof BlankDialog
 const issue_resolve_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -172,20 +174,22 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = profile.allow
 
-const issue_box = reqs.add(q.bug.issues.InfoGet).setup(req => {
+const { data: issue_box } = line.request(q.bug.issues.InfoGet, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 page.meta.title = `#${issue_box.value.issue.id} ${issue_box.value.issue.title}`
 
 const readonly = computed(() => issue_box.value.issue.project_id.toString() !== params.project_id)
-const comment_page = reqs.add(q.bug.issue_comments.List).setup(req => {
+const { data: comment_page } = line.request(q.bug.issue_comments.List, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_box.value.issue.id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const comment_repo = computed(() => {
   return new CommentRepo().setup(comment_page.value.list.map(it => it.comment))

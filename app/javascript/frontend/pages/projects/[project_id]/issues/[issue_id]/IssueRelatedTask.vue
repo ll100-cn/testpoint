@@ -12,20 +12,24 @@ import useRequestList from '@/lib/useRequestList'
 import { Task } from "@/models"
 import * as q from '@/requests'
 import Badge from "$ui/badge/Badge.vue";
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const props = defineProps<{
   task: Task
   project_id: number
 }>()
 
-const test_case_box = reqs.add(q.case.test_cases.Get).setup(req => {
+const { data: test_case_box } = line.request(q.case.test_cases.Get, (req, it) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.test_case_id = props.task.test_case_id
-}).wait()
-const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: plan_box } = line.request(q.test.plans.InfoGet, (req, it) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.plan_id = props.task.plan_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 </script>

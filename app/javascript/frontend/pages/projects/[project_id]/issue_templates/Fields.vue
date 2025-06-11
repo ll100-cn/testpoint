@@ -66,8 +66,10 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import Button from '$ui/button/Button.vue'
 import { useRoute } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const session = useSessionStore()
 const route = useRoute()
 const params = route.params as any
@@ -83,8 +85,11 @@ const lookup_by_build_form_collection = ref([
 
 const FormGroup = GenericFormGroup<typeof props.former.form>
 
-const category_page = reqs.add(q.project.categories.List, params.project_id).setup().wait()
-await reqs.performAll()
+const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+  req.interpolations.project_id = params.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 const categories = computed(() => category_page.value.list.map(it => it.category))
 
 async function onRemoveInput(index: number) {

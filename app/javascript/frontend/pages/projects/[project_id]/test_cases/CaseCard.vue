@@ -92,8 +92,10 @@ import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { TEST_CASE_RELATE_STATES } from '@/constants'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -138,22 +140,30 @@ const _milestone_page = ref(null! as MilestonePage<MilestoneBox>)
 const project_id = _.toNumber(params.project_id)
 
 if (query.milestone_id) {
-  reqs.raw(session.request(q.project.milestones.List, project_id)).setup().waitFor(_milestone_page)
+  const { data: milestone_page_temp } = line.request(q.project.milestones.List, (req, it) => {
+    req.interpolations.project_id = project_id
+    return it.useQuery(req.toQueryConfig())
+  })
+  _milestone_page.value = milestone_page_temp.value
 }
-const test_case_page = reqs.add(q.case.test_cases.List).setup(req => {
+const { data: test_case_page } = line.request(q.case.test_cases.List, (req, it) => {
   req.interpolations.project_id = project_id
-  req.query.milestone_id = query.milestone_id
-}).wait()
-const _label_page = reqs.add(q.project.test_case_labels.List).setup(req => {
+  req.query = { milestone_id: query.milestone_id }
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: _label_page } = line.request(q.project.test_case_labels.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-const _platform_page = reqs.add(q.project.platforms.List).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: _platform_page } = line.request(q.project.platforms.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-const _roadmap_page = reqs.add(q.project.roadmaps.List).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: _roadmap_page } = line.request(q.project.roadmaps.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const test_cases = computed(() => test_case_page.value.list.map(it => it.test_case))
 const _labels = computed(() => _label_page.value.list.map(it => it.test_case_label))

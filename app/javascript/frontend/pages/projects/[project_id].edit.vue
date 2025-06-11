@@ -37,16 +37,19 @@ import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 
-const project_box = reqs.add(q.admin.projects.Get).setup(req => {
+const { data: project_box } = line.request(q.admin.projects.Get, (req, it) => {
   req.interpolations.project_id = params.project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   name: project_box.value.project.name,

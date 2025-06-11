@@ -54,8 +54,10 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -65,10 +67,11 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const test_case_label_page = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
+const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 const test_case_label_boxes = computed(() => test_case_label_page.value.list)
 
 async function onRemove(id: number) {

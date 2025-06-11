@@ -30,20 +30,23 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
 const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 
 const project_id = params.project_id as string
 const test_case_label_id = params.test_case_label_id
 
-const test_case_label_box = reqs.add(q.project.test_case_labels.InfoGet).setup(req => {
+const { data: test_case_label_box } = line.request(q.project.test_case_labels.InfoGet, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.test_case_label_id = test_case_label_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   name: test_case_label_box.value.test_case_label.name,

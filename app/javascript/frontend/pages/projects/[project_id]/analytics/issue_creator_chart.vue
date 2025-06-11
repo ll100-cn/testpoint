@@ -49,8 +49,10 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -66,13 +68,20 @@ const filter = reactive({
 })
 const project_id = params.project_id
 
-const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-const category_page = reqs.raw(session.request(q.project.categories.List, project_id)).setup().wait()
-const analytics = reqs.add(q.project.issue_creator_charts.Get).setup(req => {
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: analytics } = line.request(q.project.issue_creator_charts.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { ...filter }
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const member_boxes = computed(() => member_page.value.list)
 const category_boxes = computed(() => category_page.value.list)

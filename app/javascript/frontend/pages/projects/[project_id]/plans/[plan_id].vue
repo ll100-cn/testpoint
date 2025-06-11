@@ -88,6 +88,7 @@ import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 import FolderSide from '../FolderSide.vue'
 import { type ChangeFilterFunction, ColumnFilter, Filter } from '../types'
 import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
@@ -107,6 +108,7 @@ import { SelectdropItem } from '@/components/controls/selectdrop'
 import RLink from '@/components/RLink.vue'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -127,23 +129,25 @@ const FormGroup = GenericFormGroup<typeof searcher.form>
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
+const { data: plan_box } = line.request(q.test.plans.InfoGet, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const current_phase_info = computed(() => {
   const phase_infos = plan_box.value.phase_infos
   return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
-const task_upshot_page = reqs.add(q.test.task_upshots.InfoList).setup(req => {
+const { data: task_upshot_page } = line.request(q.test.task_upshots.InfoList, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_id = current_phase_info.value.phase.id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const filter = ref(new Filter())
 filter.value.archived = null

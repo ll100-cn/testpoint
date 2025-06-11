@@ -29,16 +29,20 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Separator } from '$ui/separator'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
+const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 
-const user_box = reqs.add(q.admin.users.Get).setup(req => {
-  req.interpolations.id = params.user_id
-}).wait()
-await reqs.performAll()
+const user_id = params.user_id
+const { data: user_box } = line.request(q.admin.users.Get, (req, it) => {
+  req.interpolations.id = user_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   email: user_box.value.user.email,

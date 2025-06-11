@@ -158,8 +158,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { REQUIREMENT_RELATE_STATS } from '@/constants'
 import SceneListDialogContent from './SceneListDialogContent.vue'
 import SceneNode from './SceneNode.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -180,23 +182,28 @@ const node_size_mapping = reactive(new Map<string, { dimensions: { width: number
 const roadmap = ref(null as Roadmap | null)
 const { updateNodeData, updateNode, addNodes, addEdges, getNodes } = useVueFlow()
 
-const platform_page = reqs.add(q.project.platforms.List).setup(req => {
+const { data: platform_page } = line.request(q.project.platforms.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-const test_case_label_page = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-const roadmap_page = reqs.add(q.project.roadmaps.List).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: roadmap_page } = line.request(q.project.roadmaps.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-const storyboard_page = reqs.add(q.project.storyboards.List).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: storyboard_page } = line.request(q.project.storyboards.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-const scene_page = reqs.add(q.project.scenes.List).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: scene_page } = line.request(q.project.scenes.List, (req, it) => {
   req.interpolations.project_id = params.project_id
   req.interpolations.storyboard_id = params.storyboard_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const platform_boxes = computed(() => platform_page.value.list)
 const platforms = computed(() => platform_boxes.value.map(it => it.platform))
@@ -227,14 +234,15 @@ const position_mapping = computed(() => {
   return result
 })
 
-const requirement_page = reqs.add(q.project.requirements.List).setup(req => {
+const { data: requirement_page } = line.request(q.project.requirements.List, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = storyboard.value.id
   if (roadmap.value) {
     req.query = { roadmap_id: roadmap.value.id }
   }
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const requirement_boxes = computed(() => requirement_page.value.list)
 const requirements = ref([] as Requirement[])

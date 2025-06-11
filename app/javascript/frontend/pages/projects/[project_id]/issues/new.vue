@@ -71,8 +71,10 @@ import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -81,11 +83,15 @@ const profile = page.inProject()!.profile
 const allow = page.inProject()!.allow
 const session = useSessionStore()
 
-const member_page = reqs.raw(session.request(q.project.members.InfoList, params.project_id)).setup().wait()
-const issue_template_page = reqs.add(q.project.issue_templates.List).setup(req => {
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
   req.interpolations.project_id = params.project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: issue_template_page } = line.request(q.project.issue_templates.List, (req, it) => {
+  req.interpolations.project_id = params.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 const member_boxes = computed(() => member_page.value.list)
 const issue_template_boxes = computed(() => issue_template_page.value.list)
 const issue_template_box = computed(() => {

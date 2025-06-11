@@ -31,10 +31,12 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
 const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 const page = usePageStore()
 const session = useSessionStore()
@@ -42,12 +44,17 @@ const session = useSessionStore()
 const project_id = params.project_id
 const platform_id = params.platform_id
 
-const platform_box = reqs.add(q.project.platforms.Get).setup(req => {
+const { data: platform_box } = line.request(q.project.platforms.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.platform_id = platform_id
-}).wait()
-const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
+
 const member_boxes = computed(() => member_page.value.list)
 
 const former = Former.build({

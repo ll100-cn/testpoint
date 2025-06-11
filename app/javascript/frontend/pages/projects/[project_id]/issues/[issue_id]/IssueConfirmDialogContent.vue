@@ -48,8 +48,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import { useRoute } from "vue-router"
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 const session = useSessionStore()
 const route = useRoute()
@@ -86,12 +88,15 @@ former.doPerform = async function() {
 }
 
 const loading = ref(true)
-const member_page = ref(null! as any)
-const category_page = ref(null! as any)
-
-reqs.raw(session.request(q.project.members.InfoList, props.issue_box.issue.project_id)).setup().waitFor(member_page)
-reqs.raw(session.request(q.project.categories.List, props.issue_box.issue.project_id)).setup().waitFor(category_page)
-await reqs.performAll()
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const member_boxes = computed(() => member_page.value.list)
 const category_boxes = computed(() => category_page.value.list)

@@ -67,8 +67,10 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import RLink from '@/components/RLink.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const query = utils.queryToPlain(route.query)
@@ -97,15 +99,17 @@ former.doPerform = async function(search: Search2 | null) {
   }
 }
 
-const pagination = reqs.add(q.bug.issues.Page).setup(req => {
+const { data: pagination } = line.request(q.bug.issues.Page, (req, it) => {
   req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
-}).wait()
-const issue_summary = reqs.add(q.bug.issue_summaries.Get).setup(req => {
+  req.query = { ...search2, ...filter2, ...page2 }
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: issue_summary } = line.request(q.bug.issue_summaries.Get, (req, it) => {
   req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...search2, ...filter2 })
-}).wait()
-await reqs.performAll()
+  req.query = { ...search2, ...filter2 }
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const issue_stage_count = computed(() => {
   return _(pagination.value.issue_stats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()

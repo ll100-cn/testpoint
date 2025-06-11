@@ -54,10 +54,12 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import Button from '$ui/button/Button.vue';
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
 const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
@@ -65,10 +67,11 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const issue_template_page = reqs.add(q.project.issue_templates.List).setup(req => {
+const { data: issue_template_page } = line.request(q.project.issue_templates.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 const issue_template_boxes = computed(() => issue_template_page.value.list)
 
 async function onRemove(id: number) {

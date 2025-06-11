@@ -141,8 +141,10 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const session = useSessionStore()
 const current_user = session.account!.user
 const page = usePageStore()
@@ -179,10 +181,19 @@ former.doPerform = async function(code: string) {
   emit('updated', props.issue_box)
 }
 
-const member_page = reqs.raw(session.request(q.project.members.InfoList, props.issue_box.issue.project_id)).setup().wait()
-const category_page = reqs.raw(session.request(q.project.categories.List, props.issue_box.issue.project_id)).setup().wait()
-const milestone_page = reqs.add(q.project.milestones.List, props.issue_box.issue.project_id).setup().wait()
-await reqs.performAll()
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: milestone_page } = line.request(q.project.milestones.List, (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const member_boxes = computed(() => member_page.value.list)
 const category_boxes = computed(() => category_page.value.list)

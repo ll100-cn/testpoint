@@ -26,32 +26,37 @@
 <script setup lang="ts">
 import * as q from '@/requests'
 import useRequestList from '@/lib/useRequestList'
-import _ from 'lodash'
-import { computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
-import PageHeader from '@/components/PageHeader.vue'
-import PageTitle from '@/components/PageTitle.vue'
+import PageHeader from "@/components/PageHeader.vue"
+import PageTitle from "@/components/PageTitle.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { computed, reactive } from 'vue'
+import _ from 'lodash'
 import { Validator } from '$ui/simple_form'
 
-const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
+const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
-const project_id = _.toNumber(params.project_id)
-const plan_id = _.toNumber(params.plan_id)
 
-const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
+const project_id = params.project_id
+const plan_id = params.plan_id
+
+const { data: plan_box } = line.request(q.test.plans.InfoGet, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
-}).wait()
-const platform_page = reqs.add(q.project.platforms.List).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: platform_page } = line.request(q.project.platforms.List, (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const platform_boxes = computed(() => platform_page.value.list)
 

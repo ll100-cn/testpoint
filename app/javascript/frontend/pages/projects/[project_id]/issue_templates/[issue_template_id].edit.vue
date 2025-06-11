@@ -29,20 +29,23 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const router = useRouter()
 const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 
 const project_id = params.project_id
 const issue_template_id = params.issue_template_id
 
-const issue_template_box = reqs.add(q.project.issue_templates.Get).setup(req => {
+const { data: issue_template_box } = line.request(q.project.issue_templates.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_template_id = issue_template_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   name: issue_template_box.value.issue_template.name,

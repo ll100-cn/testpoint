@@ -63,8 +63,10 @@ import { Card, CardContent, CardTable } from '$ui/card'
 import { Validator } from '$ui/simple_form'
 import Button from "$ui/button/Button.vue"
 import { Nav, NavItem } from '$ui/nav'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -77,8 +79,11 @@ const active = ref('normal')
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-await reqs.performAll()
+const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const grouped_member_boxes = ref(_.groupBy(member_page.value.list, (member_box) => {
   return member_box.member.archived_at ? "archived" : "normal"
