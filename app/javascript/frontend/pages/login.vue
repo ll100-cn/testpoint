@@ -74,7 +74,7 @@ const login_code = ref(null as LoginCode | null)
 const CodeForm = GenericForm<typeof code_former.form>
 const CodeFormGroup = GenericFormGroup<typeof code_former.form>
 
-const { mutateAsync: deliver_login_code_action } = line.request(q.profile.login.Deliver, (req, it) => {
+const { mutateAsync: deliver_login_code_action } = line.request(q.profile.login.Deliver(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -93,7 +93,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: verify_login_action } = line.request(q.profile.login.Verify, (req, it) => {
+const { mutateAsync: verify_login_action } = line.request(q.profile.login.Verify(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

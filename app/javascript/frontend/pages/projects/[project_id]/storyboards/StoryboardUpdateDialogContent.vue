@@ -65,11 +65,11 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_storyboard_action } = line.request(q.project.storyboards.Update, (req, it) => {
+const { mutateAsync: update_storyboard_action } = line.request(q.project.storyboards.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: destroy_storyboard_action } = line.request(q.project.storyboards.Destroy, (req, it) => {
+const { mutateAsync: destroy_storyboard_action } = line.request(q.project.storyboards.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

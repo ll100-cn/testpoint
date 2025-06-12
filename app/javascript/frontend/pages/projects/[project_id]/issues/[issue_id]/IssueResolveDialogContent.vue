@@ -42,7 +42,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: resolve_issue_action } = line.request(q.bug.issues.InfoResolve, (req, it) => {
+const { mutateAsync: resolve_issue_action } = line.request(q.bug.issues.InfoResolve(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

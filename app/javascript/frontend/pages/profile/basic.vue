@@ -67,7 +67,7 @@ watch(former.form, () => {
   success.value = false
 })
 
-const { mutateAsync: update_account_action } = line.request(q.profile.accounts.Update, (req, it) => {
+const { mutateAsync: update_account_action } = line.request(q.profile.accounts.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

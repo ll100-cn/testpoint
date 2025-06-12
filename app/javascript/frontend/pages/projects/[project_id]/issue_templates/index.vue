@@ -65,13 +65,13 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: issue_template_boxes } = line.request(q.project.issue_templates.List, (req, it) => {
+const { data: issue_template_boxes } = line.request(q.project.issue_templates.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const { mutateAsync: destroy_issue_template_action } = line.request(q.project.issue_templates.Destroy, (req, it) => {
+const { mutateAsync: destroy_issue_template_action } = line.request(q.project.issue_templates.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

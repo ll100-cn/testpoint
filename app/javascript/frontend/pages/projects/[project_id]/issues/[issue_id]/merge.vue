@@ -103,7 +103,7 @@ const add_dialog_open = ref(false)
 
 const issues = ref([] as Issue[])
 
-const { data: head } = line.request(q.bug.issues.Get, (req, it) => {
+const { data: head } = line.request(q.bug.issues.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
   return it.useQuery(req.toQueryConfig())
@@ -143,7 +143,7 @@ former.doPerform = async function() {
   }
 
   try {
-    const { data: issueBox, suspense } = line.request(q.bug.issues.Get, (req, it) => {
+    const { data: issueBox, suspense } = line.request(q.bug.issues.Get(), (req, it) => {
       req.interpolations.project_id = project_id
       req.interpolations.issue_id = former.form.source_id
       return it.useQuery(req.toQueryConfig())
@@ -168,7 +168,7 @@ former.doPerform = async function() {
   }
 }
 
-const { mutateAsync: merge_issue_action } = line.request(q.bug.issues.Merge, (req, it) => {
+const { mutateAsync: merge_issue_action } = line.request(q.bug.issues.Merge(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

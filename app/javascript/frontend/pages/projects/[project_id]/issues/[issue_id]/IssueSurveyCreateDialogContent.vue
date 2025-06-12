@@ -56,13 +56,13 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_issue_survey_action } = line.request(q.bug.issue_surveies.Create, (req, it) => {
+const { mutateAsync: create_issue_survey_action } = line.request(q.bug.issue_surveies.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
 const project_id = computed(() => props.issue_box.issue.project_id)
 
-const { data: issue_template_boxes, isLoading: loading } = line.request(q.project.issue_templates.List, (req, it) => {
+const { data: issue_template_boxes, isLoading: loading } = line.request(q.project.issue_templates.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })

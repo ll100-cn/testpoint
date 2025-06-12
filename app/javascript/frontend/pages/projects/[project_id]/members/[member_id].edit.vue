@@ -38,7 +38,7 @@ const params = route.params as any
 const project_id = params.project_id
 const member_id = params.member_id
 
-const { data: member_box } = line.request(q.project.members.Get, (req, it) => {
+const { data: member_box } = line.request(q.project.members.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.member_id = member_id
   return it.useQuery(req.toQueryConfig())
@@ -53,7 +53,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_member_action } = line.request(q.project.members.Update, (req, it) => {
+const { mutateAsync: update_member_action } = line.request(q.project.members.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -48,7 +48,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_roadmap_action } = line.request(q.project.roadmaps.Update, (req, it) => {
+const { mutateAsync: update_roadmap_action } = line.request(q.project.roadmaps.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

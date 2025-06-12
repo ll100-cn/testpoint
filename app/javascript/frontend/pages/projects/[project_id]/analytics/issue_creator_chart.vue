@@ -66,15 +66,15 @@ const filter = reactive({
 })
 const project_id = params.project_id
 
-const { data: member_boxes } = line.request2(q.project.members.List(), (req, it) => {
-  req.interpolations.project_id = project_id
-  return it.useQuery(req.toQueryConfig())
-}) as any
-const { data: category_boxes } = line.request(q.project.categories.List, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: analytics } = line.request(q.project.issue_creator_charts.Get, (req, it) => {
+const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: analytics } = line.request(q.project.issue_creator_charts.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { ...filter }
   return it.useQuery(req.toQueryConfig())

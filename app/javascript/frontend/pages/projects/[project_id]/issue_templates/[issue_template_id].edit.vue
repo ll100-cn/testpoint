@@ -38,7 +38,7 @@ const params = route.params as any
 const project_id = params.project_id
 const issue_template_id = params.issue_template_id
 
-const { data: issue_template_box } = line.request(q.project.issue_templates.Get, (req, it) => {
+const { data: issue_template_box } = line.request(q.project.issue_templates.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_template_id = issue_template_id
   return it.useQuery(req.toQueryConfig())
@@ -58,7 +58,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_issue_template_action } = line.request(q.project.issue_templates.Update, (req, it) => {
+const { mutateAsync: update_issue_template_action } = line.request(q.project.issue_templates.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

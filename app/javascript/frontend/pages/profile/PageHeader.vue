@@ -29,7 +29,7 @@ defineProps<{
   current?: string | number
 }>()
 
-const { data: member_page } = line.request(q.profile.members.InfoList, (req, it) => {
+const { data: member_page } = line.request(q.profile.members.InfoList(), (req, it) => {
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()

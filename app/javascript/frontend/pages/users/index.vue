@@ -62,13 +62,13 @@ const route = useRoute()
 const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
 
-const { data: user_page } = line.request(q.admin.users.Page, (req, it) => {
+const { data: user_page } = line.request(q.admin.users.Page(), (req, it) => {
   req.query = utils.plainToQuery(query)
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const { mutateAsync: destroy_user_action } = line.request(q.admin.users.Destroy, (req, it) => {
+const { mutateAsync: destroy_user_action } = line.request(q.admin.users.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

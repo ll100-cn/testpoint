@@ -70,18 +70,18 @@ const session = useSessionStore()
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: platform_page } = line.request(q.project.platforms.List, (req, it) => {
+const { data: platform_page } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 const platform_boxes = computed(() => platform_page.value.list)
 
-const { mutateAsync: destroy_platform_action } = line.request(q.project.platforms.Destroy, (req, it) => {
+const { mutateAsync: destroy_platform_action } = line.request(q.project.platforms.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

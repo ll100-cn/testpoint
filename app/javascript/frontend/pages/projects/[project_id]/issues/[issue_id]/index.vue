@@ -172,7 +172,7 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = profile.allow
 
-const { data: issue_box } = line.request(q.bug.issues.InfoGet, (req, it) => {
+const { data: issue_box } = line.request(q.bug.issues.InfoGet(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
   return it.useQuery(req.toQueryConfig())
@@ -182,7 +182,7 @@ await line.wait()
 page.meta.title = `#${issue_box.value.issue.id} ${issue_box.value.issue.title}`
 
 const readonly = computed(() => issue_box.value.issue.project_id.toString() !== params.project_id)
-const { data: comment_page } = line.request(q.bug.issue_comments.List, (req, it) => {
+const { data: comment_page } = line.request(q.bug.issue_comments.List(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_box.value.issue.id
   return it.useQuery(req.toQueryConfig())
@@ -220,11 +220,11 @@ function onIssueCommentCreated(a_issue_box: IssueBox, a_comment_box: CommentBox)
   comment_page.value.list.push(a_comment_box)
 }
 
-const { mutateAsync: convert_issue_body_action } = line.request(q.bug.issue_bodies.Convert, (req, it) => {
+const { mutateAsync: convert_issue_body_action } = line.request(q.bug.issue_bodies.Convert(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: process_issue_action } = line.request(q.bug.issues.InfoProcess, (req, it) => {
+const { mutateAsync: process_issue_action } = line.request(q.bug.issues.InfoProcess(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

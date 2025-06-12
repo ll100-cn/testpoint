@@ -48,14 +48,14 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { data: milestone_box } = line.request(q.project.milestones.Get, (req, it) => {
+const { data: milestone_box } = line.request(q.project.milestones.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.milestone_id = milestone_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const { mutateAsync: update_milestone_action } = line.request(q.project.milestones.Update, (req, it) => {
+const { mutateAsync: update_milestone_action } = line.request(q.project.milestones.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

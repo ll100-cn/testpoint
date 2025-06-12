@@ -88,19 +88,19 @@ const actioner = Actioner.build<{
   updateTaskUpshotState: (state_override: "pass" | "pending" | null) => void
 }>()
 
-const { mutateAsync: update_task_upshot_content_action } = line.request(q.test.task_upshot_contents.Update, (req, it) => {
+const { mutateAsync: update_task_upshot_content_action } = line.request(q.test.task_upshot_contents.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: ignore_task_action } = line.request(q.test.tasks.Ignore, (req, it) => {
+const { mutateAsync: ignore_task_action } = line.request(q.test.tasks.Ignore(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: unignore_task_action } = line.request(q.test.tasks.Unignore, (req, it) => {
+const { mutateAsync: unignore_task_action } = line.request(q.test.tasks.Unignore(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.task_upshot_states.Update, (req, it) => {
+const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.task_upshot_states.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -184,7 +184,7 @@ async function reset(a_task_upshot_box: TaskUpshotBox) {
 
   task_upshot_box.value = a_task_upshot_box
 
-  const { data: a_task_box, suspense } = line.request(q.test.tasks.InfoGet, (req, it) => {
+  const { data: a_task_box, suspense } = line.request(q.test.tasks.InfoGet(), (req, it) => {
     req.interpolations.project_id = props.plan_box.plan.project_id
     req.interpolations.plan_id = props.plan_box.plan.id
     req.interpolations.task_id = task_upshot_box.value.task!.id

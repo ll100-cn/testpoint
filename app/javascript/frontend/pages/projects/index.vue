@@ -69,13 +69,13 @@ const query = utils.queryToPlain(route.query)
 
 const validator = reactive(new Validator())
 
-const { data: project_page } = line.request(q.admin.projects.Page, (req, it) => {
+const { data: project_page } = line.request(q.admin.projects.Page(), (req, it) => {
   req.query = utils.plainToQuery(query)
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const { mutateAsync: destroy_project_action } = line.request(q.admin.projects.Destroy, (req, it) => {
+const { mutateAsync: destroy_project_action } = line.request(q.admin.projects.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -77,13 +77,13 @@ const active = ref('normal')
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: member_boxes } = line.request2(q.project.members.List('+user'), (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List('+user'), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const { mutateAsync: archive_member_action } = line.request(q.project.members.Archive, (req, it) => {
+const { mutateAsync: archive_member_action } = line.request(q.project.members.Archive(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

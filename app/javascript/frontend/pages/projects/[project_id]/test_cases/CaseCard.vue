@@ -138,26 +138,26 @@ const _milestone_page = ref(null! as MilestonePage<MilestoneBox>)
 const project_id = _.toNumber(params.project_id)
 
 if (query.milestone_id) {
-  const { data: milestone_page_temp } = line.request(q.project.milestones.List, (req, it) => {
+  const { data: milestone_page_temp } = line.request(q.project.milestones.List(), (req, it) => {
     req.interpolations.project_id = project_id
     return it.useQuery(req.toQueryConfig())
   })
   _milestone_page.value = milestone_page_temp.value
 }
-const { data: test_case_page } = line.request(q.case.test_cases.List, (req, it) => {
+const { data: test_case_page } = line.request(q.case.test_cases.List(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { milestone_id: query.milestone_id }
   return it.useQuery(req.toQueryConfig())
 })
-const { data: _label_page } = line.request(q.project.test_case_labels.List, (req, it) => {
+const { data: _label_page } = line.request(q.project.test_case_labels.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: _platform_page } = line.request(q.project.platforms.List, (req, it) => {
+const { data: _platform_page } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: _roadmap_page } = line.request(q.project.roadmaps.List, (req, it) => {
+const { data: _roadmap_page } = line.request(q.project.roadmaps.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })

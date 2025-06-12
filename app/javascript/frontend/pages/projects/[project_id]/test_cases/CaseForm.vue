@@ -64,7 +64,7 @@ const emit = defineEmits<{
 
 const storyboard_id = computed(() => props.former.form.storyboard_id)
 
-const { data: requirement_page } = line.request(q.project.requirements.List, (req, it) => {
+const { data: requirement_page } = line.request(q.project.requirements.List(), (req, it) => {
   req.interpolations.project_id = page.inProject()!.project_id
   req.interpolations.storyboard_id = storyboard_id
   req.query.roadmap_id = props.newest_roadmap.id
@@ -74,7 +74,7 @@ const { data: requirement_page } = line.request(q.project.requirements.List, (re
   })
 })
 
-const { data: storyboard_page } = line.request(q.project.storyboards.List, (req, it) => {
+const { data: storyboard_page } = line.request(q.project.storyboards.List(), (req, it) => {
   req.interpolations.project_id = page.inProject()!.project_id
   return it.useQuery(req.toQueryConfig())
 })

@@ -41,7 +41,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_user_action } = line.request(q.admin.users.Create, (req, it) => {
+const { mutateAsync: create_user_action } = line.request(q.admin.users.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

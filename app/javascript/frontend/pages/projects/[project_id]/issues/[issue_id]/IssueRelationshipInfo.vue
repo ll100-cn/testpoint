@@ -48,7 +48,7 @@ const other = computed(() => {
   return direction.value === 'source' ? props.issue_relationship.target : props.issue_relationship.source
 })
 
-const { mutateAsync: destroy_issue_relationship_action } = line.request(q.bug.issue_relationships.Destroy, (req, it) => {
+const { mutateAsync: destroy_issue_relationship_action } = line.request(q.bug.issue_relationships.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

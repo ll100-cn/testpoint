@@ -46,7 +46,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: convert_comment_action } = line.request(q.bug.issue_comments.Convert, (req, it) => {
+const { mutateAsync: convert_comment_action } = line.request(q.bug.issue_comments.Convert(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

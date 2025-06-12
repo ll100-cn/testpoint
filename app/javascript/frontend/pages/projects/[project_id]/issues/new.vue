@@ -81,11 +81,11 @@ const profile = page.inProject()!.profile
 const allow = page.inProject()!.allow
 const session = useSessionStore()
 
-const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = params.project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: issue_template_boxes } = line.request(q.project.issue_templates.List, (req, it) => {
+const { data: issue_template_boxes } = line.request(q.project.issue_templates.List(), (req, it) => {
   req.interpolations.project_id = params.project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -108,7 +108,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_issue_action } = line.request(q.bug.issues.Create, (req, it) => {
+const { mutateAsync: create_issue_action } = line.request(q.bug.issues.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

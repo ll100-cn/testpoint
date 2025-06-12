@@ -84,7 +84,7 @@ function updateScene(a_scene: Scene) {
   emit('switch', SceneUpdateDialogContent, a_scene)
 }
 
-const { mutateAsync: destroy_scene_action } = line.request(q.project.scenes.Destroy, (req, it) => {
+const { mutateAsync: destroy_scene_action } = line.request(q.project.scenes.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

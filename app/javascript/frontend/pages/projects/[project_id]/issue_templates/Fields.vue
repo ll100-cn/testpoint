@@ -83,7 +83,7 @@ const lookup_by_build_form_collection = ref([
 
 const FormGroup = GenericFormGroup<typeof props.former.form>
 
-const { data: category_boxes } = line.request(q.project.categories.List, (req, it) => {
+const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
   req.interpolations.project_id = params.project_id
   return it.useQuery(req.toQueryConfig())
 })

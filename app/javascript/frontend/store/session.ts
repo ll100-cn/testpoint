@@ -17,7 +17,7 @@ export const useSessionStore = defineStore('session', () => {
     }
 
     try {
-      const { data: account_box, suspense } = line.request(q.profile.accounts.Get, (req, it) => {
+      const { data: account_box, suspense } = line.request(q.profile.accounts.Get(), (req, it) => {
         return it.useQuery(req.toQueryConfig())
       })
       await suspense()
@@ -43,7 +43,7 @@ export const useSessionStore = defineStore('session', () => {
       return
     }
 
-    const { data: profile_box } = line.request(q.project.profiles.Get, (req, it) => {
+    const { data: profile_box } = line.request(q.project.profiles.Get(), (req, it) => {
       req.interpolations.project_id = project_id
       return it.useQuery(req.toQueryConfig())
     })

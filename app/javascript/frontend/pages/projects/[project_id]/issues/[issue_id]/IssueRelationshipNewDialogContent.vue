@@ -55,7 +55,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_issue_relationship_action } = line.request(q.bug.issue_relationships.Create, (req, it) => {
+const { mutateAsync: create_issue_relationship_action } = line.request(q.bug.issue_relationships.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

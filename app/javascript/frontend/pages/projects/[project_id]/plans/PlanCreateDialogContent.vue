@@ -51,7 +51,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_plan_action } = line.request(q.test.plans.Create, (req, it) => {
+const { mutateAsync: create_plan_action } = line.request(q.test.plans.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -73,7 +73,7 @@ async function reset(new_test_case_stats: TestCaseStat[]) {
 
   test_case_stats.value = new_test_case_stats
 
-  const { data: a_platform_page, suspense } = line.request(q.project.platforms.List, (req, it) => {
+  const { data: a_platform_page, suspense } = line.request(q.project.platforms.List(), (req, it) => {
     req.interpolations.project_id = profile.project_id
     return it.useQuery(req.toQueryConfig())
   })

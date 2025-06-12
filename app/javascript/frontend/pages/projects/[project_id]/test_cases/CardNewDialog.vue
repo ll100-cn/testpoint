@@ -51,7 +51,7 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
-const { mutateAsync: create_test_case_action } = line.request(q.case.test_cases.Create, (req, it) => {
+const { mutateAsync: create_test_case_action } = line.request(q.case.test_cases.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

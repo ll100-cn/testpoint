@@ -95,11 +95,11 @@ const issue_former = NewFormer.build({
 const IssueForm = GenericForm<typeof issue_former.form>
 const IssueFormGroup = GenericFormGroup<typeof issue_former.form>
 
-const { mutateAsync: create_issue_action } = line.request(q.bug.issues.Create, (req, it) => {
+const { mutateAsync: create_issue_action } = line.request(q.bug.issues.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.task_upshot_states.Update, (req, it) => {
+const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.task_upshot_states.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -124,7 +124,7 @@ const comment_former = NewFormer.build({
 const CommentForm = GenericForm<typeof comment_former.form>
 const CommentFormGroup = GenericFormGroup<typeof comment_former.form>
 
-const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create, (req, it) => {
+const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

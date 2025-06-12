@@ -68,11 +68,11 @@ async function reset(a_requirement: Requirement) {
   })
 }
 
-const { mutateAsync: destroy_requirement_action } = line.request(q.project.requirements.Destroy, (req, it) => {
+const { mutateAsync: destroy_requirement_action } = line.request(q.project.requirements.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: update_requirement_action } = line.request(q.project.requirements.Update, (req, it) => {
+const { mutateAsync: update_requirement_action } = line.request(q.project.requirements.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

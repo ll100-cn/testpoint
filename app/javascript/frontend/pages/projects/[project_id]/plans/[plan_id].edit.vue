@@ -45,12 +45,12 @@ const params = route.params as any
 const project_id = params.project_id
 const plan_id = params.plan_id
 
-const { data: plan_box } = line.request(q.test.plans.InfoGet, (req, it) => {
+const { data: plan_box } = line.request(q.test.plans.InfoGet(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: platform_page } = line.request(q.project.platforms.List, (req, it) => {
+const { data: platform_page } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -68,11 +68,11 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_plan_action } = line.request(q.test.plans.Update, (req, it) => {
+const { mutateAsync: update_plan_action } = line.request(q.test.plans.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: destroy_plan_action } = line.request(q.test.plans.Destroy, (req, it) => {
+const { mutateAsync: destroy_plan_action } = line.request(q.test.plans.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -180,23 +180,23 @@ const node_size_mapping = reactive(new Map<string, { dimensions: { width: number
 const roadmap = ref(null as Roadmap | null)
 const { updateNodeData, updateNode, addNodes, addEdges, getNodes } = useVueFlow()
 
-const { data: platform_page } = line.request(q.project.platforms.List, (req, it) => {
+const { data: platform_page } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList, (req, it) => {
+const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: roadmap_page } = line.request(q.project.roadmaps.List, (req, it) => {
+const { data: roadmap_page } = line.request(q.project.roadmaps.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: storyboard_page } = line.request(q.project.storyboards.List, (req, it) => {
+const { data: storyboard_page } = line.request(q.project.storyboards.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: scene_page } = line.request(q.project.scenes.List, (req, it) => {
+const { data: scene_page } = line.request(q.project.scenes.List(), (req, it) => {
   req.interpolations.project_id = params.project_id
   req.interpolations.storyboard_id = params.storyboard_id
   return it.useQuery(req.toQueryConfig())
@@ -232,7 +232,7 @@ const position_mapping = computed(() => {
   return result
 })
 
-const { data: requirement_page } = line.request(q.project.requirements.List, (req, it) => {
+const { data: requirement_page } = line.request(q.project.requirements.List(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = storyboard.value.id
   if (roadmap.value) {
@@ -456,11 +456,11 @@ function updateScenePositions() {
   }
 }
 
-const { mutateAsync: update_requirement_action } = line.request(q.project.requirements.Update, (req, it) => {
+const { mutateAsync: update_requirement_action } = line.request(q.project.requirements.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: update_storyboard_action } = line.request(q.project.storyboards.Update, (req, it) => {
+const { mutateAsync: update_storyboard_action } = line.request(q.project.storyboards.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -168,15 +168,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create, (req, it) => {
+const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: create_subscription_action } = line.request(q.bug.subscriptions.Create, (req, it) => {
+const { mutateAsync: create_subscription_action } = line.request(q.bug.subscriptions.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: destroy_subscription_action } = line.request(q.bug.subscriptions.Destroy, (req, it) => {
+const { mutateAsync: destroy_subscription_action } = line.request(q.bug.subscriptions.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -191,15 +191,15 @@ former.doPerform = async function(code: string) {
   emit('updated', props.issue_box)
 }
 
-const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = props.issue_box.issue.project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: category_boxes } = line.request(q.project.categories.List, (req, it) => {
+const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
   req.interpolations.project_id = props.issue_box.issue.project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: milestone_page } = line.request(q.project.milestones.List, (req, it) => {
+const { data: milestone_page } = line.request(q.project.milestones.List(), (req, it) => {
   req.interpolations.project_id = props.issue_box.issue.project_id
   return it.useQuery(req.toQueryConfig())
 })

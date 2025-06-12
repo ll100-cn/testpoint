@@ -66,14 +66,14 @@ const query = utils.queryToPlain(route.query)
 const filter = query.filter || 'unhandled'
 const sorts = ref(query.sorts ?? 'id desc')
 
-const { data: pagination } = line.request(q.profile.issues.Page, (req, it) => {
+const { data: pagination } = line.request(q.profile.issues.Page(), (req, it) => {
   req.query = { ...utils.plainToQuery(query), filter: filter, sorts: sorts.value }
   return it.useQuery(req.toQueryConfig())
 })
 
 let unhandled_issue_page = ref(null as IssuePage<IssueBox> | null)
 if (filter != 'unhandled') {
-  const { data: unhandled_temp } = line.request(q.profile.issues.Page, (req, it) => {
+  const { data: unhandled_temp } = line.request(q.profile.issues.Page(), (req, it) => {
     req.query = { per_page: 1, filter: 'unhandled' }
     return it.useQuery(req.toQueryConfig())
   })

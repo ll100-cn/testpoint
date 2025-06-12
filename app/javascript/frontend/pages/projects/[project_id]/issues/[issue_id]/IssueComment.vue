@@ -95,11 +95,11 @@ const children = computed(() => {
 
 const content_id = _.uniqueId("content_")
 
-const { mutateAsync: destroy_comment_action } = line.request(q.bug.issue_comments.Destroy, (req, it) => {
+const { mutateAsync: destroy_comment_action } = line.request(q.bug.issue_comments.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments.Update, (req, it) => {
+const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

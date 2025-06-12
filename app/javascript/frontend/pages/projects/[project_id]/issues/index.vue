@@ -97,12 +97,12 @@ former.doPerform = async function(search: Search2 | null) {
   }
 }
 
-const { data: pagination } = line.request(q.bug.issues.Page, (req, it) => {
+const { data: pagination } = line.request(q.bug.issues.Page(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { ...search2, ...filter2, ...page2 }
   return it.useQuery(req.toQueryConfig())
 })
-const { data: issue_summary } = line.request(q.bug.issues.Summary, (req, it) => {
+const { data: issue_summary } = line.request(q.bug.issues.Summary(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { ...search2, ...filter2 }
   return it.useQuery(req.toQueryConfig())

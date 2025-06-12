@@ -53,7 +53,7 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const account = ref(session.account)
-const { data: profile_box } = line.request(q.project.profiles.Get, (req, it) => {
+const { data: profile_box } = line.request(q.project.profiles.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -71,7 +71,7 @@ watch(former.form, () => {
   success.value = false
 })
 
-const { mutateAsync: update_profile_action } = line.request(q.project.profiles.Update, (req, it) => {
+const { mutateAsync: update_profile_action } = line.request(q.project.profiles.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

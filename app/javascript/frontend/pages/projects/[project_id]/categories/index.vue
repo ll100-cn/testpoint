@@ -69,7 +69,7 @@ const allow = page.inProject()!.allow
 
 const project_id = params.project_id
 
-const { data: category_page } = line.request(q.project.categories.Page, (req, it) => {
+const { data: category_page } = line.request(q.project.categories.Page(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -79,7 +79,7 @@ const issues_counts = computed(() => category_page.value.issues_counts ?? {})
 
 const actioner = Actioner.build()
 
-const { mutateAsync: destroy_category_action } = line.request(q.project.categories.Destroy, (req, it) => {
+const { mutateAsync: destroy_category_action } = line.request(q.project.categories.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

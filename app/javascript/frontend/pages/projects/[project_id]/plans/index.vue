@@ -108,16 +108,16 @@ former.doPerform = async function() {
 
 const project_id = _.toNumber(params.project_id)
 
-const { data: plan_page } = line.request(q.test.plans.Page, (req, it) => {
+const { data: plan_page } = line.request(q.test.plans.Page(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { ...utils.plainToQuery(query), q: search }
   return it.useQuery(req.toQueryConfig())
 })
-const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: test_case_stats } = line.request(q.case.test_case_stats.List, (req, it) => {
+const { data: test_case_stats } = line.request(q.case.test_case_stats.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })

@@ -42,12 +42,12 @@ const session = useSessionStore()
 const project_id = params.project_id
 const platform_id = params.platform_id
 
-const { data: platform_box } = line.request(q.project.platforms.Get, (req, it) => {
+const { data: platform_box } = line.request(q.project.platforms.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.platform_id = platform_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -62,7 +62,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_platform_action } = line.request(q.project.platforms.Update, (req, it) => {
+const { mutateAsync: update_platform_action } = line.request(q.project.platforms.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -63,7 +63,7 @@ const emit = defineEmits<{
   modal: [ component: Component, ...args: any[] ]
 }>()
 
-const { mutateAsync: destroy_issue_survey_action } = line.request(q.bug.issue_surveies.Destroy, (req, it) => {
+const { mutateAsync: destroy_issue_survey_action } = line.request(q.bug.issue_surveies.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

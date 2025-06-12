@@ -65,14 +65,14 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList, (req, it) => {
+const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 const test_case_label_boxes = computed(() => test_case_label_page.value.list)
 
-const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.InfoDestroy, (req, it) => {
+const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.InfoDestroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -66,17 +66,17 @@ const former = Former.build({
 })
 const target_project_id = computed(() => former.form.target_project_id)
 
-const { data: issue_box } = line.request(q.bug.issues.Get, (req, it) => {
+const { data: issue_box } = line.request(q.bug.issues.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
   return it.useQuery(req.toQueryConfig())
 })
 
-const { data: member_page } = line.request(q.profile.members.InfoList, (req, it) => {
+const { data: member_page } = line.request(q.profile.members.InfoList(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: target_category_boxes, isLoading } = line.request(q.project.categories.List, (req, it) => {
+const { data: target_category_boxes, isLoading } = line.request(q.project.categories.List(), (req, it) => {
   req.interpolations.project_id = target_project_id
   return it.useQuery({
     ...req.toQueryConfig(),
@@ -87,7 +87,7 @@ await line.wait()
 
 const target_projects = computed(() => member_page.value.list.map(it => it.project!))
 
-const { mutateAsync: create_issue_migration_action } = line.request(q.bug.issue_migrations.Create, (req, it) => {
+const { mutateAsync: create_issue_migration_action } = line.request(q.bug.issue_migrations.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

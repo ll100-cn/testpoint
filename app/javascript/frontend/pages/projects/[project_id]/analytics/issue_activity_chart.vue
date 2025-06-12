@@ -54,7 +54,7 @@ const former = Former.build(filter)
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { data: analytics } = line.request(q.project.issue_activity_charts.Get, (req, it) => {
+const { data: analytics } = line.request(q.project.issue_activity_charts.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = utils.plainToQuery(former.form, true)
   return it.useQuery(req.toQueryConfig())

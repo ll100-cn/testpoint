@@ -36,7 +36,7 @@ const line = useQueryLine()
 const params = route.params as any
 
 const user_id = params.user_id
-const { data: user_box } = line.request(q.admin.users.Get, (req, it) => {
+const { data: user_box } = line.request(q.admin.users.Get(), (req, it) => {
   req.interpolations.id = user_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -50,7 +50,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_user_action } = line.request(q.admin.users.Update, (req, it) => {
+const { mutateAsync: update_user_action } = line.request(q.admin.users.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -81,7 +81,7 @@ const active = ref('normal')
 
 const project_id = _.toNumber(params.project_id)
 
-const { data: milestone_page } = line.request(q.project.milestones.List, (req, it) => {
+const { data: milestone_page } = line.request(q.project.milestones.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -89,15 +89,15 @@ await line.wait()
 
 const grouped_milestones = ref(_.groupBy(milestone_page.value.list, (m) => m.milestone.archived_at ? 'archived' : 'normal'))
 
-const { mutateAsync: destroy_milestone_action } = line.request(q.project.milestones.Destroy, (req, it) => {
+const { mutateAsync: destroy_milestone_action } = line.request(q.project.milestones.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: archive_milestone_action } = line.request(q.project.milestones.Archive, (req, it) => {
+const { mutateAsync: archive_milestone_action } = line.request(q.project.milestones.Archive(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: active_milestone_action } = line.request(q.project.milestones.Active, (req, it) => {
+const { mutateAsync: active_milestone_action } = line.request(q.project.milestones.Active(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

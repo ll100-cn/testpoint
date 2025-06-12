@@ -94,12 +94,12 @@ const account = computed(() => session.account)
 const profile = computed(() => page.inProject()?.profile)
 
 const projects = computed(() => member_page.value.list.map(it => it.project!))
-const { data: member_page } = line.request(q.profile.members.InfoList, (req, it) => {
+const { data: member_page } = line.request(q.profile.members.InfoList(), (req, it) => {
   return it.useQuery({ ...req.toQueryConfig(), enabled: !!account.value })
 })
 await line.wait()
 
-const { mutateAsync: destroy_login_action } = line.request(q.profile.login.Destroy, (req, it) => {
+const { mutateAsync: destroy_login_action } = line.request(q.profile.login.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -50,7 +50,7 @@ const emit = defineEmits<{
   modal: [ component: Component, ...args: any[] ]
 }>()
 
-const { mutateAsync: destroy_comment_action } = line.request(q.bug.issue_comments.Destroy, (req, it) => {
+const { mutateAsync: destroy_comment_action } = line.request(q.bug.issue_comments.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

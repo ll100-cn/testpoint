@@ -44,11 +44,11 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create, (req, it) => {
+const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create, (req, it) => {
+const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

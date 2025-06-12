@@ -48,10 +48,10 @@ const session = useSessionStore()
 
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const { data: member_page } = line.request(q.profile.members.InfoList, (req, it) => {
+const { data: member_page } = line.request(q.profile.members.InfoList(), (req, it) => {
   return it.useQuery(req.toQueryConfig())
 })
-const { data: unhandled_issue_page } = line.request(q.profile.issues.Page, (req, it) => {
+const { data: unhandled_issue_page } = line.request(q.profile.issues.Page(), (req, it) => {
   req.query = { per_page: 1, filter: 'unhandled' }
   return it.useQuery(req.toQueryConfig())
 })

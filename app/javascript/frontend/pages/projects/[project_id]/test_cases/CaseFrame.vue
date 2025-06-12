@@ -46,7 +46,7 @@ async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
 
-  const { data: history_page, suspense } = line.request(q.case.test_cases.History, (req, it) => {
+  const { data: history_page, suspense } = line.request(q.case.test_cases.History(), (req, it) => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
     return it.useQuery(req.toQueryConfig())

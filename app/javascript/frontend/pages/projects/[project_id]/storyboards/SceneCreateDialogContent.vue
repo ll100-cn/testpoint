@@ -52,7 +52,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_scene_action } = line.request(q.project.scenes.Create, (req, it) => {
+const { mutateAsync: create_scene_action } = line.request(q.project.scenes.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

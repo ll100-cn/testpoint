@@ -48,7 +48,7 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 const issue_box = ref(null! as IssueBox)
 
-const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create, (req, it) => {
+const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -47,7 +47,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_issue_survey_action } = line.request(q.bug.issue_surveies.Update, (req, it) => {
+const { mutateAsync: update_issue_survey_action } = line.request(q.bug.issue_surveies.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -86,7 +86,7 @@ async function reset(a_issue_box: IssueBox, a_issue_survey: IssueSurvey) {
   issue_survey.value = a_issue_survey
 
   try {
-    const { data: a_issue_template_box, suspense } = line.request(q.project.issue_templates.Get, (req, it) => {
+    const { data: a_issue_template_box, suspense } = line.request(q.project.issue_templates.Get(), (req, it) => {
       req.interpolations.project_id = issue_box.value.issue.project_id
       req.interpolations.issue_template_id = issue_survey.value.template_id
       return it.useQuery(req.toQueryConfig())

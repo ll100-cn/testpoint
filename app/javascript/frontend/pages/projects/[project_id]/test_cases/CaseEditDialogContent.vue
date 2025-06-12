@@ -66,11 +66,11 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_test_case_action } = line.request(q.case.test_cases.Update, (req, it) => {
+const { mutateAsync: update_test_case_action } = line.request(q.case.test_cases.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: destroy_test_case_action } = line.request(q.case.test_cases.Destroy, (req, it) => {
+const { mutateAsync: destroy_test_case_action } = line.request(q.case.test_cases.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

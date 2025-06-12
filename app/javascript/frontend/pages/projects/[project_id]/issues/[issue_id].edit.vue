@@ -69,21 +69,21 @@ const page = usePageStore()
 const session = useSessionStore()
 const allow = page.inProject()!.allow
 
-const { data: issue_box } = line.request(q.bug.issues.Get, (req, it) => {
+const { data: issue_box } = line.request(q.bug.issues.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: category_boxes } = line.request(q.project.categories.List, (req, it) => {
+const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: milestone_page } = line.request(q.project.milestones.List, (req, it) => {
+const { data: milestone_page } = line.request(q.project.milestones.List(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { filter: "available" }
   return it.useQuery(req.toQueryConfig())
 })
-const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -101,7 +101,7 @@ const categories = computed(() => category_boxes.value.map(it => it.category))
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_issue_action_mutation } = line.request(q.bug.issue_actions.Create, (req, it) => {
+const { mutateAsync: create_issue_action_mutation } = line.request(q.bug.issue_actions.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

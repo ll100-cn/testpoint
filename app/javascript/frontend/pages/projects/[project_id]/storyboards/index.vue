@@ -31,7 +31,7 @@ const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
 const project_id = params.project_id
 
-const { data: storyboard_page } = line.request(q.project.storyboards.List, (req, it) => {
+const { data: storyboard_page } = line.request(q.project.storyboards.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })

@@ -46,7 +46,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_scene_action } = line.request(q.project.scenes.Update, (req, it) => {
+const { mutateAsync: update_scene_action } = line.request(q.project.scenes.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

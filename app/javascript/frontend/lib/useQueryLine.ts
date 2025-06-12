@@ -79,15 +79,7 @@ export class QueryLine {
     await Promise.all(this.suspenses.map(it => it()))
   }
 
-  request<Req extends BaseRequest<any>, Ret>(RequestClass: new (...args: any[]) => Req, callback: (request: Req, it: ReqWrapper<Req>) => Ret): Ret {
-    const request = new RequestClass() as Req
-    const wrapper = new ReqWrapper<Req>()
-    wrapper.line = this
-    wrapper.request = request
-    return callback(request, wrapper)
-  }
-
-  request2<Req extends BaseRequest<any>, Ret>(request: Req, callback: (request: Req, it: ReqWrapper<Req>) => Ret): Ret {
+  request<Req extends BaseRequest<any>, Ret>(request: Req, callback: (request: Req, it: ReqWrapper<Req>) => Ret): Ret {
     const wrapper = new ReqWrapper<Req>()
     wrapper.line = this
     wrapper.request = request
