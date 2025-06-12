@@ -2,7 +2,7 @@ import { Subscription } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Destroy = class extends BaseRequest<Subscription> {
+class DestroyRequest extends BaseRequest<Subscription> {
   method = "DELETE"
   endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/subscription" ]
 
@@ -10,8 +10,10 @@ export const Destroy = class extends BaseRequest<Subscription> {
     return this.responseToObject(Subscription, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<Subscription> {
+
+class CreateRequest extends BaseRequest<Subscription> {
   method = "POST"
   endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/subscription" ]
 
@@ -19,3 +21,4 @@ export const Create = class extends BaseRequest<Subscription> {
     return this.responseToObject(Subscription, response)
   }
 }
+export const Create = () => new CreateRequest()

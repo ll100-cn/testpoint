@@ -2,7 +2,7 @@ import { Requirement, RequirementBox, RequirementPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<RequirementPage<RequirementBox>> {
+class ListRequest extends BaseRequest<RequirementPage<RequirementBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
   graph = 'counts'
@@ -11,8 +11,10 @@ export const List = class extends BaseRequest<RequirementPage<RequirementBox>> {
     return this.responseToObject(RequirementPage<RequirementBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Create = class extends BaseRequest<RequirementBox> {
+
+class CreateRequest extends BaseRequest<RequirementBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
 
@@ -20,8 +22,10 @@ export const Create = class extends BaseRequest<RequirementBox> {
     return this.responseToObject(RequirementBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<RequirementBox> {
+
+class UpdateRequest extends BaseRequest<RequirementBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements", "/{requirement_id}" ]
 
@@ -29,8 +33,10 @@ export const Update = class extends BaseRequest<RequirementBox> {
     return this.responseToObject(RequirementBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<RequirementBox> {
+
+class DestroyRequest extends BaseRequest<RequirementBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements", "/{requirement_id}" ]
 
@@ -38,3 +44,4 @@ export const Destroy = class extends BaseRequest<RequirementBox> {
     return this.responseToObject(RequirementBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

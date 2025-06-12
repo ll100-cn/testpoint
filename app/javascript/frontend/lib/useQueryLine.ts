@@ -86,6 +86,13 @@ export class QueryLine {
     wrapper.request = request
     return callback(request, wrapper)
   }
+
+  request2<Req extends BaseRequest<any>, Ret>(request: Req, callback: (request: Req, it: ReqWrapper<Req>) => Ret): Ret {
+    const wrapper = new ReqWrapper<Req>()
+    wrapper.line = this
+    wrapper.request = request
+    return callback(request, wrapper)
+  }
 }
 
 export function useQueryLine() {

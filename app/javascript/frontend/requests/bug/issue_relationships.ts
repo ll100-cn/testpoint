@@ -2,7 +2,7 @@ import { IssueRelationshipBox } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<IssueRelationshipBox> {
+class CreateRequest extends BaseRequest<IssueRelationshipBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_relationships" ]
 
@@ -10,8 +10,10 @@ export const Create = class extends BaseRequest<IssueRelationshipBox> {
     return this.responseToObject(IssueRelationshipBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Destroy = class extends BaseRequest<IssueRelationshipBox> {
+
+class DestroyRequest extends BaseRequest<IssueRelationshipBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_relationships", "/{issue_relationship_id}" ]
 
@@ -19,3 +21,4 @@ export const Destroy = class extends BaseRequest<IssueRelationshipBox> {
     return this.responseToObject(IssueRelationshipBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

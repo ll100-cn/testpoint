@@ -2,7 +2,7 @@ import { Task, TaskBox } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Ignore = class extends BaseRequest<TaskBox> {
+class IgnoreRequest extends BaseRequest<TaskBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{id}", "/ignore" ]
 
@@ -10,8 +10,10 @@ export const Ignore = class extends BaseRequest<TaskBox> {
     return this.responseToObject(TaskBox, response)
   }
 }
+export const Ignore = () => new IgnoreRequest()
 
-export const Unignore = class extends BaseRequest<TaskBox> {
+
+class UnignoreRequest extends BaseRequest<TaskBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{id}", "/unignore" ]
 
@@ -19,8 +21,10 @@ export const Unignore = class extends BaseRequest<TaskBox> {
     return this.responseToObject(TaskBox, response)
   }
 }
+export const Unignore = () => new UnignoreRequest()
 
-export const InfoGet = class extends BaseRequest<TaskBox> {
+
+class InfoGetRequest extends BaseRequest<TaskBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}" ]
   graph = "info"
@@ -29,3 +33,4 @@ export const InfoGet = class extends BaseRequest<TaskBox> {
     return this.responseToObject(TaskBox, response)
   }
 }
+export const InfoGet = () => new InfoGetRequest()

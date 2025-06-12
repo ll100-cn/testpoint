@@ -2,7 +2,7 @@ import { CommentBox, CommentPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
-export const Create = class extends BaseRequest<CommentBox> {
+class CreateRequest extends BaseRequest<CommentBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
 
@@ -10,8 +10,10 @@ export const Create = class extends BaseRequest<CommentBox> {
     return this.responseToObject(CommentBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const List = class extends BaseRequest<CommentPage<CommentBox>> {
+
+class ListRequest extends BaseRequest<CommentPage<CommentBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
 
@@ -19,8 +21,10 @@ export const List = class extends BaseRequest<CommentPage<CommentBox>> {
     return this.responseToObject(CommentPage<CommentBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Update = class extends BaseRequest<CommentBox> {
+
+class UpdateRequest extends BaseRequest<CommentBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
 
@@ -28,8 +32,10 @@ export const Update = class extends BaseRequest<CommentBox> {
     return this.responseToObject(CommentBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Convert = class extends BaseRequest<CommentBox> {
+
+class ConvertRequest extends BaseRequest<CommentBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}", "/convert" ]
 
@@ -37,8 +43,10 @@ export const Convert = class extends BaseRequest<CommentBox> {
     return this.responseToObject(CommentBox, response)
   }
 }
+export const Convert = () => new ConvertRequest()
 
-export const Destroy = class extends BaseRequest<CommentBox> {
+
+class DestroyRequest extends BaseRequest<CommentBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
 
@@ -46,3 +54,4 @@ export const Destroy = class extends BaseRequest<CommentBox> {
     return this.responseToObject(CommentBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

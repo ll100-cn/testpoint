@@ -1,8 +1,8 @@
-import { Issue, IssueBox, IssuePage, Pagination } from "@/models"
+import { IssueBox, IssuePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Page = class extends BaseRequest<IssuePage<IssueBox>> {
+class PageRequest extends BaseRequest<IssuePage<IssueBox>> {
   method = "GET"
   endpoint = [ "/api/v2/profile/issues" ]
   graph = "counts"
@@ -11,3 +11,4 @@ export const Page = class extends BaseRequest<IssuePage<IssueBox>> {
     return this.responseToObject(IssuePage<IssueBox>, response)
   }
 }
+export const Page = () => new PageRequest()

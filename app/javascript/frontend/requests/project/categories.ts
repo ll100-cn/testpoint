@@ -2,7 +2,7 @@ import { Category, CategoryBox, CategoryPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<CategoryBox[]> {
+class ListRequest extends BaseRequest<CategoryBox[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories" ]
 
@@ -10,8 +10,10 @@ export const List = class extends BaseRequest<CategoryBox[]> {
     return this.responseToObject(CategoryPage<CategoryBox>, response).list
   }
 }
+export const List = () => new ListRequest()
 
-export const Page = class extends BaseRequest<CategoryPage<CategoryBox>> {
+
+class PageRequest extends BaseRequest<CategoryPage<CategoryBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories" ]
   graph = "counts"
@@ -20,8 +22,10 @@ export const Page = class extends BaseRequest<CategoryPage<CategoryBox>> {
     return this.responseToObject(CategoryPage<CategoryBox>, response)
   }
 }
+export const Page = () => new PageRequest()
 
-export const Create = class extends BaseRequest<CategoryBox> {
+
+class CreateRequest extends BaseRequest<CategoryBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories" ]
 
@@ -29,8 +33,10 @@ export const Create = class extends BaseRequest<CategoryBox> {
     return this.responseToObject(CategoryBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<CategoryBox> {
+
+class GetRequest extends BaseRequest<CategoryBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
@@ -38,8 +44,10 @@ export const Get = class extends BaseRequest<CategoryBox> {
     return this.responseToObject(CategoryBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Update = class extends BaseRequest<CategoryBox> {
+
+class UpdateRequest extends BaseRequest<CategoryBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
@@ -47,8 +55,10 @@ export const Update = class extends BaseRequest<CategoryBox> {
     return this.responseToObject(CategoryBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<CategoryBox> {
+
+class DestroyRequest extends BaseRequest<CategoryBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
@@ -56,3 +66,4 @@ export const Destroy = class extends BaseRequest<CategoryBox> {
     return this.responseToObject(CategoryBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

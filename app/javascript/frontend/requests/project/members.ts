@@ -3,7 +3,7 @@ import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import { type Required } from 'utility-types'
 
-export const Create = class extends BaseRequest<MemberBox> {
+class CreateRequest extends BaseRequest<MemberBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/members" ]
 
@@ -11,8 +11,10 @@ export const Create = class extends BaseRequest<MemberBox> {
     return this.responseToObject(MemberBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<MemberBox> {
+
+class GetRequest extends BaseRequest<MemberBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
 
@@ -20,8 +22,10 @@ export const Get = class extends BaseRequest<MemberBox> {
     return this.responseToObject(MemberBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Update = class extends BaseRequest<MemberBox> {
+
+class UpdateRequest extends BaseRequest<MemberBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
 
@@ -29,8 +33,10 @@ export const Update = class extends BaseRequest<MemberBox> {
     return this.responseToObject(MemberBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<MemberBox> {
+
+class DestroyRequest extends BaseRequest<MemberBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
 
@@ -38,8 +44,10 @@ export const Destroy = class extends BaseRequest<MemberBox> {
     return this.responseToObject(MemberBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Archive = class extends BaseRequest<MemberBox> {
+
+class ArchiveRequest extends BaseRequest<MemberBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}", "/archive" ]
 
@@ -47,25 +55,31 @@ export const Archive = class extends BaseRequest<MemberBox> {
     return this.responseToObject(MemberBox, response)
   }
 }
+export const Archive = () => new ArchiveRequest()
 
-type MemberBoxWithUser = Required<MemberBox, 'user'>
-export const ListWithUser = class extends BaseRequest<MemberBoxWithUser[]> {
-  method = "GET"
+
+class ListRequest<Box extends MemberBox> extends BaseRequest<Box[]> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/members" ]
-  graph = "info"
+  method = "GET"
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberPage<MemberBoxWithUser>, response).list
+    return this.responseToObject(MemberPage<Box>, response).list
   }
 }
+export function List(): InstanceType<typeof ListRequest<MemberBox>>
+export function List(graph: '+user'): InstanceType<typeof ListRequest<Required<MemberBox, 'user'>>>
+export function List(graph: '+project'): InstanceType<typeof ListRequest<Required<MemberBox, 'project'>>>
+export function List(graph?: string) {
+  const request = new ListRequest<MemberBox>()
+  request.graph = graph ?? null
 
-export const List = class Abc extends BaseRequest<MemberBox[]> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/members" ]
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberPage<MemberBox>, response).list
+  if (graph == '+user') {
+    request.graph = 'info'
   }
 
-  static withUser = ListWithUser
+  if (graph == '+project') {
+    request.graph = 'info'
+  }
+
+  return request as any
 }

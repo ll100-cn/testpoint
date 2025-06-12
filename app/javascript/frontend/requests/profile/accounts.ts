@@ -2,7 +2,7 @@ import { Account, AccountBox } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Get = class extends BaseRequest<AccountBox> {
+class GetRequest extends BaseRequest<AccountBox> {
   method = "GET"
   endpoint = [ "/api/v2/profile/account" ]
 
@@ -10,8 +10,10 @@ export const Get = class extends BaseRequest<AccountBox> {
     return this.responseToObject(AccountBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Update = class extends BaseRequest<AccountBox> {
+
+class UpdateRequest extends BaseRequest<AccountBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/profile/account" ]
 
@@ -19,3 +21,4 @@ export const Update = class extends BaseRequest<AccountBox> {
     return this.responseToObject(AccountBox, response)
   }
 }
+export const Update = () => new UpdateRequest()

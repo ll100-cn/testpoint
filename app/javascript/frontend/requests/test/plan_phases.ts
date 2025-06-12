@@ -2,7 +2,7 @@ import { Phase, PhaseBox } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<PhaseBox> {
+class CreateRequest extends BaseRequest<PhaseBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/phases" ]
 
@@ -10,3 +10,4 @@ export const Create = class extends BaseRequest<PhaseBox> {
     return this.responseToObject(PhaseBox, response)
   }
 }
+export const Create = () => new CreateRequest()

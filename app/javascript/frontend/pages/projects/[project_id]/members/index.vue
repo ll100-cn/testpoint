@@ -77,7 +77,7 @@ const active = ref('normal')
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: member_boxes } = line.request(q.project.members.List.withUser, (req, it) => {
+const { data: member_boxes } = line.request2(q.project.members.List('+user'), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })

@@ -2,7 +2,7 @@ import { Roadmap, RoadmapBox, RoadmapPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<RoadmapPage<RoadmapBox>> {
+class ListRequest extends BaseRequest<RoadmapPage<RoadmapBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps" ]
 
@@ -10,8 +10,10 @@ export const List = class extends BaseRequest<RoadmapPage<RoadmapBox>> {
     return this.responseToObject(RoadmapPage<RoadmapBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Create = class extends BaseRequest<RoadmapBox> {
+
+class CreateRequest extends BaseRequest<RoadmapBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps" ]
 
@@ -19,8 +21,10 @@ export const Create = class extends BaseRequest<RoadmapBox> {
     return this.responseToObject(RoadmapBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<RoadmapBox> {
+
+class UpdateRequest extends BaseRequest<RoadmapBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps", "/{roadmap_id}" ]
 
@@ -28,8 +32,10 @@ export const Update = class extends BaseRequest<RoadmapBox> {
     return this.responseToObject(RoadmapBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<RoadmapBox> {
+
+class DestroyRequest extends BaseRequest<RoadmapBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps", "/{roadmap_id}" ]
 
@@ -37,3 +43,4 @@ export const Destroy = class extends BaseRequest<RoadmapBox> {
     return this.responseToObject(RoadmapBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

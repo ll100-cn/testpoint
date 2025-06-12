@@ -2,7 +2,7 @@ import { TestCaseLabel, TestCaseLabelBox, TestCaseLabelInfo, TestCaseLablePage }
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
+class ListRequest extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
 
@@ -10,8 +10,10 @@ export const List = class extends BaseRequest<TestCaseLablePage<TestCaseLabelBox
     return this.responseToObject(TestCaseLablePage<TestCaseLabelBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const InfoList = class extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
+
+class InfoListRequest extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
   graph = "info"
@@ -20,8 +22,10 @@ export const InfoList = class extends BaseRequest<TestCaseLablePage<TestCaseLabe
     return this.responseToObject(TestCaseLablePage<TestCaseLabelBox>, response)
   }
 }
+export const InfoList = () => new InfoListRequest()
 
-export const InfoCreate = class extends BaseRequest<TestCaseLabelBox> {
+
+class InfoCreateRequest extends BaseRequest<TestCaseLabelBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
   graph = "info"
@@ -30,8 +34,10 @@ export const InfoCreate = class extends BaseRequest<TestCaseLabelBox> {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
+export const InfoCreate = () => new InfoCreateRequest()
 
-export const InfoUpdate = class extends BaseRequest<TestCaseLabelBox> {
+
+class InfoUpdateRequest extends BaseRequest<TestCaseLabelBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
   graph = "info"
@@ -40,8 +46,10 @@ export const InfoUpdate = class extends BaseRequest<TestCaseLabelBox> {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
+export const InfoUpdate = () => new InfoUpdateRequest()
 
-export const InfoDestroy = class extends BaseRequest<TestCaseLabelBox> {
+
+class InfoDestroyRequest extends BaseRequest<TestCaseLabelBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
 
@@ -49,8 +57,10 @@ export const InfoDestroy = class extends BaseRequest<TestCaseLabelBox> {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
+export const InfoDestroy = () => new InfoDestroyRequest()
 
-export const InfoGet = class extends BaseRequest<TestCaseLabelBox> {
+
+class InfoGetRequest extends BaseRequest<TestCaseLabelBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
   graph = "info"
@@ -59,3 +69,4 @@ export const InfoGet = class extends BaseRequest<TestCaseLabelBox> {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
+export const InfoGet = () => new InfoGetRequest()

@@ -2,7 +2,7 @@ import { IssueStat } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<Array<IssueStat>> {
+class ListRequest extends BaseRequest<Array<IssueStat>> {
   method = "GET"
   endpoint = [ "/api/profile/issue_stats" ]
 
@@ -10,3 +10,4 @@ export const List = class extends BaseRequest<Array<IssueStat>> {
     return this.responseToArray(IssueStat, response)
   }
 }
+export const List = () => new ListRequest()

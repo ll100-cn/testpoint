@@ -3,7 +3,7 @@ import { BaseRequest, type RequestOptions } from "../BaseRequest"
 import type { AxiosProgressEvent, AxiosResponse } from "axios"
 import type { UploadFile } from "@/components/types"
 
-export const Create = class extends BaseRequest<Attachment> {
+class CreateRequest extends BaseRequest<Attachment> {
   method = "POST"
   endpoint = [ "/api/attachments" ]
   headers = {
@@ -24,7 +24,7 @@ export const Create = class extends BaseRequest<Attachment> {
     config.onUploadProgress = (progressEvent: AxiosProgressEvent) => {
       upload_file.state = "uploading"
       upload_file.loaded = progressEvent.loaded
-      upload_file.total = progressEvent.total
+      upload_file.total = progressEvent.total ?? 0
     }
     try {
       const resp = await this.ctx.$axios.request(config)
@@ -38,8 +38,10 @@ export const Create = class extends BaseRequest<Attachment> {
     return this.responseToObject(Attachment, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<Attachment> {
+
+class UpdateRequest extends BaseRequest<Attachment> {
   method = "PATCH"
   endpoint = [ "/api/attachments", "/{attachment_id}" ]
 
@@ -47,8 +49,10 @@ export const Update = class extends BaseRequest<Attachment> {
     return this.responseToObject(Attachment, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<Attachment> {
+
+class DestroyRequest extends BaseRequest<Attachment> {
   method = "DELETE"
   endpoint = [ "/api/attachments", "/{attachment_id}" ]
 
@@ -56,3 +60,4 @@ export const Destroy = class extends BaseRequest<Attachment> {
     return this.responseToObject(Attachment, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

@@ -2,7 +2,7 @@ import { IssueSurvey } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<IssueSurvey> {
+class CreateRequest extends BaseRequest<IssueSurvey> {
   method = "POST"
   endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
 
@@ -10,8 +10,10 @@ export const Create = class extends BaseRequest<IssueSurvey> {
     return this.responseToObject(IssueSurvey, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Destroy = class extends BaseRequest<IssueSurvey> {
+
+class DestroyRequest extends BaseRequest<IssueSurvey> {
   method = "DELETE"
   endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
@@ -19,8 +21,10 @@ export const Destroy = class extends BaseRequest<IssueSurvey> {
     return this.responseToObject(IssueSurvey, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const List = class extends BaseRequest<Array<IssueSurvey>> {
+
+class ListRequest extends BaseRequest<Array<IssueSurvey>> {
   method = "GET"
   endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
 
@@ -28,8 +32,10 @@ export const List = class extends BaseRequest<Array<IssueSurvey>> {
     return this.responseToArray(IssueSurvey, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Update = class extends BaseRequest<IssueSurvey> {
+
+class UpdateRequest extends BaseRequest<IssueSurvey> {
   method = "PATCH"
   endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
@@ -37,3 +43,4 @@ export const Update = class extends BaseRequest<IssueSurvey> {
     return this.responseToObject(IssueSurvey, response)
   }
 }
+export const Update = () => new UpdateRequest()

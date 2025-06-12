@@ -2,7 +2,7 @@ import { Scene, SceneBox, ScenePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<ScenePage<SceneBox>> {
+class ListRequest extends BaseRequest<ScenePage<SceneBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes" ]
 
@@ -10,8 +10,10 @@ export const List = class extends BaseRequest<ScenePage<SceneBox>> {
     return this.responseToObject(ScenePage<SceneBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Create = class extends BaseRequest<SceneBox> {
+
+class CreateRequest extends BaseRequest<SceneBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes" ]
 
@@ -19,8 +21,10 @@ export const Create = class extends BaseRequest<SceneBox> {
     return this.responseToObject(SceneBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<SceneBox> {
+
+class UpdateRequest extends BaseRequest<SceneBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes", "/{scene_id}" ]
 
@@ -28,8 +32,10 @@ export const Update = class extends BaseRequest<SceneBox> {
     return this.responseToObject(SceneBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<SceneBox> {
+
+class DestroyRequest extends BaseRequest<SceneBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes", "/{scene_id}" ]
 
@@ -37,3 +43,4 @@ export const Destroy = class extends BaseRequest<SceneBox> {
     return this.responseToObject(SceneBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

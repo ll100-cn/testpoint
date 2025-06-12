@@ -2,7 +2,7 @@ import { IssueTemplate, IssueTemplateBox, IssueTemplatePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse, Method } from "axios"
 
-export const Create = class extends BaseRequest<IssueTemplateBox> {
+class CreateRequest extends BaseRequest<IssueTemplateBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates" ]
 
@@ -10,8 +10,10 @@ export const Create = class extends BaseRequest<IssueTemplateBox> {
     return this.responseToObject(IssueTemplateBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<IssueTemplateBox> {
+
+class GetRequest extends BaseRequest<IssueTemplateBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
@@ -19,8 +21,10 @@ export const Get = class extends BaseRequest<IssueTemplateBox> {
     return this.responseToObject(IssueTemplateBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Update = class extends BaseRequest<IssueTemplateBox> {
+
+class UpdateRequest extends BaseRequest<IssueTemplateBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
@@ -28,8 +32,10 @@ export const Update = class extends BaseRequest<IssueTemplateBox> {
     return this.responseToObject(IssueTemplateBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<IssueTemplateBox> {
+
+class DestroyRequest extends BaseRequest<IssueTemplateBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
@@ -37,8 +43,10 @@ export const Destroy = class extends BaseRequest<IssueTemplateBox> {
     return this.responseToObject(IssueTemplateBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const List = class extends BaseRequest<IssueTemplateBox[]> {
+
+class ListRequest extends BaseRequest<IssueTemplateBox[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates" ]
 
@@ -46,3 +54,4 @@ export const List = class extends BaseRequest<IssueTemplateBox[]> {
     return this.responseToObject(IssueTemplatePage<IssueTemplateBox>, response).list
   }
 }
+export const List = () => new ListRequest()

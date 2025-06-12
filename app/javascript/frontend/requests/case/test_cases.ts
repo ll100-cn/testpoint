@@ -2,7 +2,7 @@ import { TestCase, TestCaseBox, TestCasePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Update = class extends BaseRequest<TestCaseBox> {
+class UpdateRequest extends BaseRequest<TestCaseBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases", "/{id}" ]
 
@@ -10,8 +10,10 @@ export const Update = class extends BaseRequest<TestCaseBox> {
     return this.responseToObject(TestCaseBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const List = class extends BaseRequest<TestCasePage<TestCaseBox>> {
+
+class ListRequest extends BaseRequest<TestCasePage<TestCaseBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases" ]
 
@@ -19,8 +21,10 @@ export const List = class extends BaseRequest<TestCasePage<TestCaseBox>> {
     return this.responseToObject(TestCasePage<TestCaseBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Get = class extends BaseRequest<TestCaseBox> {
+
+class GetRequest extends BaseRequest<TestCaseBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases", "/{test_case_id}" ]
 
@@ -28,8 +32,10 @@ export const Get = class extends BaseRequest<TestCaseBox> {
     return this.responseToObject(TestCaseBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Destroy = class extends BaseRequest<TestCaseBox> {
+
+class DestroyRequest extends BaseRequest<TestCaseBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases", "/{id}" ]
 
@@ -37,8 +43,10 @@ export const Destroy = class extends BaseRequest<TestCaseBox> {
     return this.responseToObject(TestCaseBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<TestCaseBox> {
+
+class CreateRequest extends BaseRequest<TestCaseBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases" ]
 
@@ -46,8 +54,10 @@ export const Create = class extends BaseRequest<TestCaseBox> {
     return this.responseToObject(TestCaseBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const History = class extends BaseRequest<TestCasePage<TestCaseBox>> {
+
+class HistoryRequest extends BaseRequest<TestCasePage<TestCaseBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases", "/{id}", "/history" ]
 
@@ -55,3 +65,4 @@ export const History = class extends BaseRequest<TestCasePage<TestCaseBox>> {
     return this.responseToObject(TestCasePage<TestCaseBox>, response)
   }
 }
+export const History = () => new HistoryRequest()

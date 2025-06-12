@@ -2,7 +2,7 @@ import { Account, LoginCode } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Deliver = class extends BaseRequest<LoginCode> {
+class DeliverRequest extends BaseRequest<LoginCode> {
   method = "POST"
   endpoint = [ "/api/deliver" ]
 
@@ -10,8 +10,10 @@ export const Deliver = class extends BaseRequest<LoginCode> {
     return this.responseToObject(LoginCode, response)
   }
 }
+export const Deliver = () => new DeliverRequest()
 
-export const Verify = class extends BaseRequest<LoginCode> {
+
+class VerifyRequest extends BaseRequest<LoginCode> {
   method = "POST"
   endpoint = [ "/api/sign_in" ]
 
@@ -19,8 +21,10 @@ export const Verify = class extends BaseRequest<LoginCode> {
     return this.responseToObject(LoginCode, response)
   }
 }
+export const Verify = () => new VerifyRequest()
 
-export const Destroy = class extends BaseRequest<Account> {
+
+class DestroyRequest extends BaseRequest<Account> {
   method = "DELETE"
   endpoint = [ "/api/sign_out" ]
 
@@ -28,3 +32,4 @@ export const Destroy = class extends BaseRequest<Account> {
     return this.responseToObject(Account, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

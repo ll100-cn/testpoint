@@ -2,7 +2,7 @@ import { Milestone, MilestoneBox, MilestonePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<MilestoneBox> {
+class CreateRequest extends BaseRequest<MilestoneBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones" ]
 
@@ -10,8 +10,10 @@ export const Create = class extends BaseRequest<MilestoneBox> {
     return this.responseToObject(MilestoneBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<MilestoneBox> {
+
+class GetRequest extends BaseRequest<MilestoneBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}" ]
 
@@ -19,8 +21,10 @@ export const Get = class extends BaseRequest<MilestoneBox> {
     return this.responseToObject(MilestoneBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const List = class extends BaseRequest<MilestonePage<MilestoneBox>> {
+
+class ListRequest extends BaseRequest<MilestonePage<MilestoneBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones" ]
 
@@ -28,8 +32,10 @@ export const List = class extends BaseRequest<MilestonePage<MilestoneBox>> {
     return this.responseToObject(MilestonePage<MilestoneBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Update = class extends BaseRequest<MilestoneBox> {
+
+class UpdateRequest extends BaseRequest<MilestoneBox> {
   method = "PUT"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}" ]
 
@@ -37,8 +43,10 @@ export const Update = class extends BaseRequest<MilestoneBox> {
     return this.responseToObject(MilestoneBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<MilestoneBox> {
+
+class DestroyRequest extends BaseRequest<MilestoneBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}" ]
 
@@ -46,8 +54,10 @@ export const Destroy = class extends BaseRequest<MilestoneBox> {
     return this.responseToObject(MilestoneBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Archive = class extends BaseRequest<MilestoneBox> {
+
+class ArchiveRequest extends BaseRequest<MilestoneBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}", "/archive" ]
 
@@ -55,8 +65,10 @@ export const Archive = class extends BaseRequest<MilestoneBox> {
     return this.responseToObject(MilestoneBox, response)
   }
 }
+export const Archive = () => new ArchiveRequest()
 
-export const Active = class extends BaseRequest<MilestoneBox> {
+
+class ActiveRequest extends BaseRequest<MilestoneBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}", "/active" ]
 
@@ -64,3 +76,4 @@ export const Active = class extends BaseRequest<MilestoneBox> {
     return this.responseToObject(MilestoneBox, response)
   }
 }
+export const Active = () => new ActiveRequest()

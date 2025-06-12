@@ -2,7 +2,7 @@ import { Issue, IssueBox, IssuePage, IssueSummary, Pagination } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<IssueBox> {
+class CreateRequest extends BaseRequest<IssueBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues" ]
 
@@ -10,8 +10,10 @@ export const Create = class extends BaseRequest<IssueBox> {
     return this.responseToObject(IssueBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<IssueBox> {
+
+class GetRequest extends BaseRequest<IssueBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
 
@@ -19,8 +21,10 @@ export const Get = class extends BaseRequest<IssueBox> {
     return this.responseToObject(IssueBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Page = class extends BaseRequest<IssuePage<IssueBox>> {
+
+class PageRequest extends BaseRequest<IssuePage<IssueBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues" ]
   graph = "counts"
@@ -29,8 +33,10 @@ export const Page = class extends BaseRequest<IssuePage<IssueBox>> {
     return this.responseToObject(IssuePage, response)
   }
 }
+export const Page = () => new PageRequest()
 
-export const Merge = class extends BaseRequest<IssueBox> {
+
+class MergeRequest extends BaseRequest<IssueBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/merge" ]
 
@@ -38,8 +44,10 @@ export const Merge = class extends BaseRequest<IssueBox> {
     return this.responseToObject(IssueBox, response)
   }
 }
+export const Merge = () => new MergeRequest()
 
-export const InfoGet = class extends BaseRequest<IssueBox> {
+
+class InfoGetRequest extends BaseRequest<IssueBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
   graph = "info"
@@ -48,8 +56,10 @@ export const InfoGet = class extends BaseRequest<IssueBox> {
     return this.responseToObject(IssueBox, response)
   }
 }
+export const InfoGet = () => new InfoGetRequest()
 
-export const InfoResolve = class extends BaseRequest<IssueBox> {
+
+class InfoResolveRequest extends BaseRequest<IssueBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/resolve" ]
   graph = "info"
@@ -58,8 +68,10 @@ export const InfoResolve = class extends BaseRequest<IssueBox> {
     return this.responseToObject(IssueBox, response)
   }
 }
+export const InfoResolve = () => new InfoResolveRequest()
 
-export const InfoProcess = class extends BaseRequest<IssueBox> {
+
+class InfoProcessRequest extends BaseRequest<IssueBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/process" ]
   graph = "info"
@@ -68,8 +80,10 @@ export const InfoProcess = class extends BaseRequest<IssueBox> {
     return this.responseToObject(IssueBox, response)
   }
 }
+export const InfoProcess = () => new InfoProcessRequest()
 
-export const Summary = class extends BaseRequest<IssueSummary> {
+
+class SummaryRequest extends BaseRequest<IssueSummary> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/summary" ]
 
@@ -77,3 +91,4 @@ export const Summary = class extends BaseRequest<IssueSummary> {
     return this.responseToObject(IssueSummary, response)
   }
 }
+export const Summary = () => new SummaryRequest()

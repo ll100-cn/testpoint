@@ -1,8 +1,8 @@
 import { MemberBox, MemberPage } from "@/models"
-import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
+import type { AxiosResponse } from "axios"
 
-export const InfoList = class extends BaseRequest<MemberPage<MemberBox>> {
+class InfoListRequest extends BaseRequest<MemberPage<MemberBox>> {
   method = "GET"
   endpoint = [ "/api/v2/profile/members" ]
   graph = "info"
@@ -11,3 +11,4 @@ export const InfoList = class extends BaseRequest<MemberPage<MemberBox>> {
     return this.responseToObject(MemberPage<MemberBox>, response)
   }
 }
+export const InfoList = () => new InfoListRequest()

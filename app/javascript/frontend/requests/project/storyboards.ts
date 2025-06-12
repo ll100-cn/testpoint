@@ -2,7 +2,7 @@ import { Storyboard, StoryboardBox, StoryboardPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<StoryboardPage<StoryboardBox>> {
+class ListRequest extends BaseRequest<StoryboardPage<StoryboardBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards" ]
 
@@ -10,8 +10,10 @@ export const List = class extends BaseRequest<StoryboardPage<StoryboardBox>> {
     return this.responseToObject(StoryboardPage<StoryboardBox>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Get = class extends BaseRequest<StoryboardBox> {
+
+class GetRequest extends BaseRequest<StoryboardBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
 
@@ -19,8 +21,10 @@ export const Get = class extends BaseRequest<StoryboardBox> {
     return this.responseToObject(StoryboardBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Create = class extends BaseRequest<StoryboardBox> {
+
+class CreateRequest extends BaseRequest<StoryboardBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards" ]
 
@@ -28,8 +32,10 @@ export const Create = class extends BaseRequest<StoryboardBox> {
     return this.responseToObject(StoryboardBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<StoryboardBox> {
+
+class UpdateRequest extends BaseRequest<StoryboardBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
   headers = { 'Content-Type': 'application/json' }
@@ -38,8 +44,10 @@ export const Update = class extends BaseRequest<StoryboardBox> {
     return this.responseToObject(StoryboardBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<StoryboardBox> {
+
+class DestroyRequest extends BaseRequest<StoryboardBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
 
@@ -47,3 +55,4 @@ export const Destroy = class extends BaseRequest<StoryboardBox> {
     return this.responseToObject(StoryboardBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

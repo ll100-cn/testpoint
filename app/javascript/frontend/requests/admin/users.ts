@@ -2,7 +2,7 @@ import { UserBox, UserPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
-export const Update = class extends BaseRequest<UserBox> {
+class UpdateRequest extends BaseRequest<UserBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
@@ -10,8 +10,10 @@ export const Update = class extends BaseRequest<UserBox> {
     return this.responseToObject(UserBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Get = class extends BaseRequest<UserBox> {
+
+class GetRequest extends BaseRequest<UserBox> {
   method = "GET"
   endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
@@ -19,8 +21,10 @@ export const Get = class extends BaseRequest<UserBox> {
     return this.responseToObject(UserBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Destroy = class extends BaseRequest<UserBox> {
+
+class DestroyRequest extends BaseRequest<UserBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
@@ -28,8 +32,10 @@ export const Destroy = class extends BaseRequest<UserBox> {
     return this.responseToObject(UserBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<UserBox> {
+
+class CreateRequest extends BaseRequest<UserBox> {
   method = "POST"
   endpoint = [ "/api/v2/admin/users" ]
 
@@ -37,8 +43,10 @@ export const Create = class extends BaseRequest<UserBox> {
     return this.responseToObject(UserBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Page = class extends BaseRequest<UserPage<UserBox>> {
+
+class PageRequest extends BaseRequest<UserPage<UserBox>> {
   method = "GET"
   endpoint = [ "/api/v2/admin/users" ]
 
@@ -46,3 +54,4 @@ export const Page = class extends BaseRequest<UserPage<UserBox>> {
     return this.responseToObject(UserPage<UserBox>, response)
   }
 }
+export const Page = () => new PageRequest()

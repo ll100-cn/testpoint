@@ -2,7 +2,7 @@ import { Issue } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<void> {
+class CreateRequest extends BaseRequest<void> {
   method = "POST"
   endpoint = [ "/api/projects", "/{project_id}", "/issue_migrations" ]
 
@@ -10,3 +10,4 @@ export const Create = class extends BaseRequest<void> {
     return this.responseToObject(Issue, response)
   }
 }
+export const Create = () => new CreateRequest()

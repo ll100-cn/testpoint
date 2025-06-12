@@ -2,7 +2,7 @@ import { ProjectBox, ProjectPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
-export const Update = class extends BaseRequest<ProjectBox> {
+class UpdateRequest extends BaseRequest<ProjectBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/admin/projects", "/{id}" ]
 
@@ -10,8 +10,10 @@ export const Update = class extends BaseRequest<ProjectBox> {
     return this.responseToObject(ProjectBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Get = class extends BaseRequest<ProjectBox> {
+
+class GetRequest extends BaseRequest<ProjectBox> {
   method = "GET"
   endpoint = [ "/api/v2/admin/projects", "/{project_id}" ]
 
@@ -19,8 +21,10 @@ export const Get = class extends BaseRequest<ProjectBox> {
     return this.responseToObject(ProjectBox, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Destroy = class extends BaseRequest<ProjectBox> {
+
+class DestroyRequest extends BaseRequest<ProjectBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/admin/projects", "/{id}" ]
 
@@ -28,8 +32,10 @@ export const Destroy = class extends BaseRequest<ProjectBox> {
     return this.responseToObject(ProjectBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<ProjectBox> {
+
+class CreateRequest extends BaseRequest<ProjectBox> {
   method = "POST"
   endpoint = [ "/api/v2/admin/projects" ]
 
@@ -37,8 +43,10 @@ export const Create = class extends BaseRequest<ProjectBox> {
     return this.responseToObject(ProjectBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Page = class extends BaseRequest<ProjectPage<ProjectBox>> {
+
+class PageRequest extends BaseRequest<ProjectPage<ProjectBox>> {
   method = "GET"
   endpoint = [ "/api/v2/admin/projects" ]
 
@@ -46,3 +54,4 @@ export const Page = class extends BaseRequest<ProjectPage<ProjectBox>> {
     return this.responseToObject(ProjectPage<ProjectBox>, response)
   }
 }
+export const Page = () => new PageRequest()

@@ -2,7 +2,7 @@ import { Plan, PlanBox, PlanPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<PlanBox> {
+class CreateRequest extends BaseRequest<PlanBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans" ]
 
@@ -10,8 +10,10 @@ export const Create = class extends BaseRequest<PlanBox> {
     return this.responseToObject(PlanBox, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<PlanBox> {
+
+class UpdateRequest extends BaseRequest<PlanBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
 
@@ -19,8 +21,10 @@ export const Update = class extends BaseRequest<PlanBox> {
     return this.responseToObject(PlanBox, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<PlanBox> {
+
+class DestroyRequest extends BaseRequest<PlanBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
 
@@ -28,8 +32,10 @@ export const Destroy = class extends BaseRequest<PlanBox> {
     return this.responseToObject(PlanBox, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Page = class extends BaseRequest<PlanPage<PlanBox>> {
+
+class PageRequest extends BaseRequest<PlanPage<PlanBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans" ]
   graph = "counts"
@@ -38,8 +44,10 @@ export const Page = class extends BaseRequest<PlanPage<PlanBox>> {
     return this.responseToObject(PlanPage<PlanBox>, response)
   }
 }
+export const Page = () => new PageRequest()
 
-export const InfoGet = class extends BaseRequest<PlanBox> {
+
+class InfoGetRequest extends BaseRequest<PlanBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
   graph = "counts, info"
@@ -48,3 +56,4 @@ export const InfoGet = class extends BaseRequest<PlanBox> {
     return this.responseToObject(PlanBox, response)
   }
 }
+export const InfoGet = () => new InfoGetRequest()
