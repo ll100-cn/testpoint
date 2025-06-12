@@ -1,6 +1,9 @@
 import { Issue, IssueBox, IssuePage, IssueSummary, Pagination } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
+import type { Required } from "utility-types"
+
+type IssueBoxInfoFields = 'activities' | 'attachments' | 'source_relationships' | 'subscriptions' | 'surveys' | 'target_relationships'
 
 class CreateRequest extends BaseRequest<IssueBox> {
   method = "POST"
@@ -11,17 +14,6 @@ class CreateRequest extends BaseRequest<IssueBox> {
   }
 }
 export const Create = () => new CreateRequest()
-
-
-class GetRequest extends BaseRequest<IssueBox> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response)
-  }
-}
-export const Get = () => new GetRequest()
 
 
 class PageRequest extends BaseRequest<IssuePage<IssueBox>> {
@@ -47,40 +39,70 @@ class MergeRequest extends BaseRequest<IssueBox> {
 export const Merge = () => new MergeRequest()
 
 
-class InfoGetRequest extends BaseRequest<IssueBox> {
+class GetRequest<Box extends IssueBox> extends BaseRequest<Box> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
-  graph = "info"
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response)
+    return this.responseToObject(IssueBox, response) as Box
   }
 }
-export const InfoGet = () => new InfoGetRequest()
+export function Get(): InstanceType<typeof GetRequest<IssueBox>>
+export function Get(graph: '+info'): InstanceType<typeof GetRequest<Required<IssueBox, IssueBoxInfoFields>>>
+export function Get(graph?: string) {
+  const request = new GetRequest<IssueBox>()
+  request.graph = graph ?? null
+
+  if (graph == '+info') {
+    request.graph = 'info'
+  }
+
+  return request as any
+}
 
 
-class InfoResolveRequest extends BaseRequest<IssueBox> {
+class ResolveRequest<Box extends IssueBox> extends BaseRequest<Box> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/resolve" ]
-  graph = "info"
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response)
+    return this.responseToObject(IssueBox, response) as Box
   }
 }
-export const InfoResolve = () => new InfoResolveRequest()
+export function Resolve(): InstanceType<typeof GetRequest<IssueBox>>
+export function Resolve(graph: '+info'): InstanceType<typeof GetRequest<Required<IssueBox, IssueBoxInfoFields>>>
+export function Resolve(graph?: string) {
+  const request = new ResolveRequest<IssueBox>()
+  request.graph = graph ?? null
+
+  if (graph == '+info') {
+    request.graph = 'info'
+  }
+
+  return request as any
+}
 
 
-class InfoProcessRequest extends BaseRequest<IssueBox> {
+class ProcessRequest<Box extends IssueBox> extends BaseRequest<Box> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/process" ]
-  graph = "info"
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response)
+    return this.responseToObject(IssueBox, response) as Box
   }
 }
-export const InfoProcess = () => new InfoProcessRequest()
+export function Process(): InstanceType<typeof ProcessRequest<IssueBox>>
+export function Process(graph: '+info'): InstanceType<typeof ProcessRequest<Required<IssueBox, IssueBoxInfoFields>>>
+export function Process(graph?: string) {
+  const request = new ProcessRequest<IssueBox>()
+  request.graph = graph ?? null
+
+  if (graph == '+info') {
+    request.graph = 'info'
+  }
+
+  return request as any
+}
 
 
 class SummaryRequest extends BaseRequest<IssueSummary> {

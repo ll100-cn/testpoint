@@ -21,18 +21,18 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="platform_box in platform_boxes" :key="platform_box.platform.id">
+          <template v-for="{ platform } in platform_boxes" :key="platform.id">
             <TableRow>
-              <TableCell>{{ platform_box.platform.name }}</TableCell>
+              <TableCell>{{ platform.name }}</TableCell>
               <TableCell>
-                <PlatformBadge :platform="platform_box.platform" />
+                <PlatformBadge :platform="platform" />
               </TableCell>
-              <TableCell>{{ _.find(member_boxes, { member: { id: platform_box.platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
+              <TableCell>{{ _.find(member_boxes, { member: { id: platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', platform_box.platform)" :to="`/projects/${project_id}/platforms/${platform_box.platform.id}/edit`" class="link">
+                <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', platform_box.platform)" href="#" @click.prevent="onRemove(platform_box.platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -70,7 +70,7 @@ const session = useSessionStore()
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: platform_page } = line.request(q.project.platforms.List(), (req, it) => {
+const { data: platform_boxes } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -79,7 +79,6 @@ const { data: member_boxes } = line.request(q.project.members.List(), (req, it) 
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-const platform_boxes = computed(() => platform_page.value.list)
 
 const { mutateAsync: destroy_platform_action } = line.request(q.project.platforms.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))

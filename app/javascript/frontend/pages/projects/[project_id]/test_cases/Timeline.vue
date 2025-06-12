@@ -37,14 +37,12 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null
-const { data: milestone_page } = line.request(q.project.milestones.List(), (req, it) => {
+const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { filter: "available" }
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-
-const milestone_boxes = computed(() => milestone_page.value.list)
 </script>
 
 <style scoped>

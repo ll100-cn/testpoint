@@ -98,11 +98,11 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_attachment_action } = line.request(q.project.attachments.Update, (req, it) => {
+const { mutateAsync: update_attachment_action } = line.request(q.project.attachments.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: destroy_attachment_action } = line.request(q.project.attachments.Destroy, (req, it) => {
+const { mutateAsync: destroy_attachment_action } = line.request(q.project.attachments.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

@@ -19,7 +19,7 @@
     </div>
 
     <template #actions>
-      <Button preset="ghost" v-if="allow('update', plan_box)" :to="`${plan_id}/edit`">设置</Button>
+      <Button preset="ghost" v-if="allow('update', plan_box.plan)" :to="`${plan_id}/edit`">设置</Button>
     </template>
   </PageHeader>
 
@@ -127,7 +127,7 @@ const FormGroup = GenericFormGroup<typeof searcher.form>
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const { data: plan_box } = line.request(q.test.plans.InfoGet(), (req, it) => {
+const { data: plan_box } = line.request(q.test.plans.Get('+phase'), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   return it.useQuery(req.toQueryConfig())
@@ -139,7 +139,7 @@ const current_phase_info = computed(() => {
   return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
-const { data: task_upshot_page } = line.request(q.test.task_upshots.InfoList(), (req, it) => {
+const { data: task_upshot_page } = line.request(q.test.task_upshots.List('+info'), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_id = current_phase_info.value.phase.id

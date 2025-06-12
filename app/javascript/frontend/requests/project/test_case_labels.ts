@@ -2,54 +2,52 @@ import { TestCaseLabel, TestCaseLabelBox, TestCaseLabelInfo, TestCaseLablePage }
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-class ListRequest extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
+class ListRequest<Box extends TestCaseLabelBox> extends BaseRequest<Box[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseLablePage<TestCaseLabelBox>, response)
+    return this.responseToObject(TestCaseLablePage<Box>, response).list
   }
 }
 export const List = () => new ListRequest()
 
 
-class InfoListRequest extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
+class PageRequest extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
-  graph = "info"
+  graph = "counts"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLablePage<TestCaseLabelBox>, response)
   }
 }
-export const InfoList = () => new InfoListRequest()
+export const Page = () => new PageRequest()
 
 
-class InfoCreateRequest extends BaseRequest<TestCaseLabelBox> {
+class CreateRequest extends BaseRequest<TestCaseLabelBox> {
   method = "POST"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
-  graph = "info"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
-export const InfoCreate = () => new InfoCreateRequest()
+export const Create = () => new CreateRequest()
 
 
-class InfoUpdateRequest extends BaseRequest<TestCaseLabelBox> {
+class UpdateRequest extends BaseRequest<TestCaseLabelBox> {
   method = "PATCH"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
-  graph = "info"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
-export const InfoUpdate = () => new InfoUpdateRequest()
+export const Update = () => new UpdateRequest()
 
 
-class InfoDestroyRequest extends BaseRequest<TestCaseLabelBox> {
+class DestroyRequest extends BaseRequest<TestCaseLabelBox> {
   method = "DELETE"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
 
@@ -57,16 +55,15 @@ class InfoDestroyRequest extends BaseRequest<TestCaseLabelBox> {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
-export const InfoDestroy = () => new InfoDestroyRequest()
+export const Destroy = () => new DestroyRequest()
 
 
-class InfoGetRequest extends BaseRequest<TestCaseLabelBox> {
+class GetRequest extends BaseRequest<TestCaseLabelBox> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
-  graph = "info"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLabelBox, response)
   }
 }
-export const InfoGet = () => new InfoGetRequest()
+export const Get = () => new GetRequest()

@@ -93,8 +93,8 @@ const line = useQueryLine()
 const account = computed(() => session.account)
 const profile = computed(() => page.inProject()?.profile)
 
-const projects = computed(() => member_page.value.list.map(it => it.project!))
-const { data: member_page } = line.request(q.profile.members.InfoList(), (req, it) => {
+const projects = computed(() => member_boxes.value.map(it => it.project))
+const { data: member_boxes } = line.request(q.profile.members.List('+project'), (req, it) => {
   return it.useQuery({ ...req.toQueryConfig(), enabled: !!account.value })
 })
 await line.wait()

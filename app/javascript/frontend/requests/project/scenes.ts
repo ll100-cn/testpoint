@@ -2,12 +2,12 @@ import { Scene, SceneBox, ScenePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-class ListRequest extends BaseRequest<ScenePage<SceneBox>> {
+class ListRequest<Box extends SceneBox> extends BaseRequest<Box[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ScenePage<SceneBox>, response)
+    return this.responseToObject(ScenePage<Box>, response).list
   }
 }
 export const List = () => new ListRequest()

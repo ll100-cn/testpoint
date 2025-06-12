@@ -172,7 +172,7 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = profile.allow
 
-const { data: issue_box } = line.request(q.bug.issues.InfoGet(), (req, it) => {
+const { data: issue_box } = line.request(q.bug.issues.Get('+info'), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = params.issue_id
   return it.useQuery(req.toQueryConfig())
@@ -224,7 +224,7 @@ const { mutateAsync: convert_issue_body_action } = line.request(q.bug.issue_bodi
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const { mutateAsync: process_issue_action } = line.request(q.bug.issues.InfoProcess(), (req, it) => {
+const { mutateAsync: process_issue_action } = line.request(q.bug.issues.Process('+info'), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -245,7 +245,6 @@ async function changeIssueState(state: string) {
       body: { state }
     })
 
-    console.log("a_issue_box", a_issue_box)
     issue_box.value = a_issue_box
   })
 }

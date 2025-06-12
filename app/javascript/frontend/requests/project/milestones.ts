@@ -24,12 +24,12 @@ class GetRequest extends BaseRequest<MilestoneBox> {
 export const Get = () => new GetRequest()
 
 
-class ListRequest extends BaseRequest<MilestonePage<MilestoneBox>> {
+class ListRequest<Box extends MilestoneBox> extends BaseRequest<Box[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestonePage<MilestoneBox>, response)
+    return this.responseToObject(MilestonePage<Box>, response).list
   }
 }
 export const List = () => new ListRequest()

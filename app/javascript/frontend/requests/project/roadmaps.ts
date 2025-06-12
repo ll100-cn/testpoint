@@ -2,12 +2,12 @@ import { Roadmap, RoadmapBox, RoadmapPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-class ListRequest extends BaseRequest<RoadmapPage<RoadmapBox>> {
+class ListRequest<Box extends RoadmapBox> extends BaseRequest<Box[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapPage<RoadmapBox>, response)
+    return this.responseToObject(RoadmapPage<Box>, response).list
   }
 }
 export const List = () => new ListRequest()

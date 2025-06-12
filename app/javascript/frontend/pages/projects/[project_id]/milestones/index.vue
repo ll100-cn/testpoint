@@ -13,7 +13,7 @@
     </NavItem>
   </Nav>
 
-  <Card v-for="(group, key) in grouped_milestones" class="rounded-ss-none" :class="{ hidden: key != active }">
+  <Card class="rounded-ss-none">
     <CardTable>
       <Table>
         <colgroup>
@@ -30,20 +30,20 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow v-for="milestone_box in group" :key="milestone_box.milestone.id" :class="{ 'block-discard': milestone_box.milestone.isPublished() }">
-            <TableCell>{{ milestone_box.milestone.title }}</TableCell>
-            <TableCell>{{ h.datetime(milestone_box.milestone.published_at ?? null) }}</TableCell>
+          <TableRow v-for="{ milestone } in filtered_milestone_boxes" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
+            <TableCell>{{ milestone.title }}</TableCell>
+            <TableCell>{{ h.datetime(milestone.published_at ?? null) }}</TableCell>
             <TableCell>
-              <PageContent :content="milestone_box.milestone.description ?? ''" />
+              <PageContent :content="milestone.description ?? ''" />
             </TableCell>
             <TableCell role="actions">
-              <router-link v-if="allow('update', milestone_box.milestone)" :to="`/projects/${project_id}/milestones/${milestone_box.milestone.id}/edit`" class="link">
+              <router-link v-if="allow('update', milestone)" :to="`/projects/${project_id}/milestones/${milestone.id}/edit`" class="link">
                 <i class="far fa-pencil-alt" /> 修改
               </router-link>
 
-              <a v-if="milestone_box.milestone.archived_at === null && allow('archive', milestone_box.milestone)" href="#" @click.prevent="milestoneArchive(milestone_box.milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
-              <a v-if="milestone_box.milestone.archived_at && allow('active', milestone_box.milestone)" href="#" @click.prevent="milestoneActive(milestone_box.milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
-              <a v-if="allow('destroy', milestone_box.milestone)" href="#" @click.prevent="milestoneDestroy(milestone_box.milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
+              <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" @click.prevent="milestoneArchive(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
+              <a v-if="milestone.archived_at && allow('active', milestone)" href="#" @click.prevent="milestoneActive(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
+              <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
             </TableCell>
           </TableRow>
         </TableBody>
@@ -58,7 +58,7 @@ import * as q from '@/requests'
 import { Milestone } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent, CardTable } from '$ui/card'
@@ -81,13 +81,13 @@ const active = ref('normal')
 
 const project_id = _.toNumber(params.project_id)
 
-const { data: milestone_page } = line.request(q.project.milestones.List(), (req, it) => {
+const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const grouped_milestones = ref(_.groupBy(milestone_page.value.list, (m) => m.milestone.archived_at ? 'archived' : 'normal'))
+const grouped_milestones = ref(_.groupBy(milestone_boxes.value, (m) => m.milestone.archived_at ? 'archived' : 'normal'))
 
 const { mutateAsync: destroy_milestone_action } = line.request(q.project.milestones.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
@@ -136,5 +136,9 @@ async function milestoneActive(milestone: Milestone) {
 
   router.go(0)
 }
+
+const filtered_milestone_boxes = computed(() => {
+  return milestone_boxes.value.filter(it => active.value == (it.milestone.isArchived() ? 'archived' : 'normal'))
+})
 
 </script>

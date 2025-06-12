@@ -199,13 +199,11 @@ const { data: category_boxes } = line.request(q.project.categories.List(), (req,
   req.interpolations.project_id = props.issue_box.issue.project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: milestone_page } = line.request(q.project.milestones.List(), (req, it) => {
+const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
   req.interpolations.project_id = props.issue_box.issue.project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-
-const milestone_boxes = computed(() => milestone_page.value.list)
 
 async function subscribe() {
   const a_subscription = await create_subscription_action({

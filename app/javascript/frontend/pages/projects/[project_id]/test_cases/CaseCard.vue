@@ -133,43 +133,42 @@ const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void
 }>()
 
-const _milestone_page = ref(null! as MilestonePage<MilestoneBox>)
-
 const project_id = _.toNumber(params.project_id)
 
-if (query.milestone_id) {
-  const { data: milestone_page_temp } = line.request(q.project.milestones.List(), (req, it) => {
-    req.interpolations.project_id = project_id
-    return it.useQuery(req.toQueryConfig())
+const { data: _milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    enabled: computed(() => !!query.milestone_id)
   })
-  _milestone_page.value = milestone_page_temp.value
-}
+})
+
 const { data: test_case_page } = line.request(q.case.test_cases.List(), (req, it) => {
   req.interpolations.project_id = project_id
   req.query = { milestone_id: query.milestone_id }
   return it.useQuery(req.toQueryConfig())
 })
-const { data: _label_page } = line.request(q.project.test_case_labels.List(), (req, it) => {
+const { data: _label_boxes } = line.request(q.project.test_case_labels.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: _platform_page } = line.request(q.project.platforms.List(), (req, it) => {
+const { data: _platform_boxes } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: _roadmap_page } = line.request(q.project.roadmaps.List(), (req, it) => {
+const { data: _roadmap_boxes } = line.request(q.project.roadmaps.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
 const test_cases = computed(() => test_case_page.value.list.map(it => it.test_case))
-const _labels = computed(() => _label_page.value.list.map(it => it.test_case_label))
-const _platforms = computed(() => _platform_page.value.list.map(it => it.platform))
-const _roadmaps = computed(() => _roadmap_page.value.list.map(it => it.roadmap))
+const _labels = computed(() => _label_boxes.value.map(it => it.test_case_label))
+const _platforms = computed(() => _platform_boxes.value.map(it => it.platform))
+const _roadmaps = computed(() => _roadmap_boxes.value.map(it => it.roadmap))
 const milestone = computed(() => {
-  if (_milestone_page.value) {
-    return _milestone_page.value.list.find(it => it.milestone.id === _.toNumber(query.milestone_id))?.milestone
+  if (_milestone_boxes.value) {
+    return _milestone_boxes.value.find(it => it.milestone.id === _.toNumber(query.milestone_id))?.milestone
   }
 })
 const readonly = computed(() => milestone.value != null)

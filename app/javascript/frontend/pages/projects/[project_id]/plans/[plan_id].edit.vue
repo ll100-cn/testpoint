@@ -45,18 +45,16 @@ const params = route.params as any
 const project_id = params.project_id
 const plan_id = params.plan_id
 
-const { data: plan_box } = line.request(q.test.plans.InfoGet(), (req, it) => {
+const { data: plan_box } = line.request(q.test.plans.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: platform_page } = line.request(q.project.platforms.List(), (req, it) => {
+const { data: platform_boxes } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-
-const platform_boxes = computed(() => platform_page.value.list)
 
 const validator = reactive<Validator>(new Validator())
 

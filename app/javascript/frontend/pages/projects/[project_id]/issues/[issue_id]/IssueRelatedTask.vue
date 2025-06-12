@@ -24,7 +24,7 @@ const { data: test_case_box } = line.request(q.case.test_cases.Get(), (req, it) 
   req.interpolations.test_case_id = props.task.test_case_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: plan_box } = line.request(q.test.plans.InfoGet(), (req, it) => {
+const { data: plan_box } = line.request(q.test.plans.Get(), (req, it) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.plan_id = props.task.plan_id
   return it.useQuery(req.toQueryConfig())

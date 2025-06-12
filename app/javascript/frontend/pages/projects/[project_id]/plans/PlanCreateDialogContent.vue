@@ -38,9 +38,6 @@ const emit = defineEmits<{
   created: [plan: Plan]
 }>()
 
-const platform_page = ref(null! as PlatformPage<PlatformBox>)
-const platform_boxes = computed(() => platform_page.value.list)
-
 const former = Former.build({
   title: null as string | null,
   platform_id: null as number | null,
@@ -50,6 +47,7 @@ const former = Former.build({
 
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
+const platform_boxes = ref([] as PlatformBox[])
 
 const { mutateAsync: create_plan_action } = line.request(q.test.plans.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
@@ -73,15 +71,15 @@ async function reset(new_test_case_stats: TestCaseStat[]) {
 
   test_case_stats.value = new_test_case_stats
 
-  const { data: a_platform_page, suspense } = line.request(q.project.platforms.List(), (req, it) => {
+  const { data: a_platform_boxes, suspense } = line.request(q.project.platforms.List(), (req, it) => {
     req.interpolations.project_id = profile.project_id
     return it.useQuery(req.toQueryConfig())
   })
   await suspense()
-  platform_page.value = a_platform_page.value
 
+  platform_boxes.value = a_platform_boxes.value
   former.form.title = `Test Plan: ${h.datetime(new Date(), "YYYY-MM-DD")}`
-  former.form.platform_id = platform_boxes.value[0]?.platform.id
+  former.form.platform_id = a_platform_boxes.value[0]?.platform.id
   former.form.milestone_id = null
   former.form.role_names = []
 

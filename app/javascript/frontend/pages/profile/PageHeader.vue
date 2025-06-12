@@ -7,8 +7,8 @@
     <NavItem value="basic" as-child>
       <RLink to="/profile/basic">基本信息</RLink>
     </NavItem>
-    <NavItem v-for="member_box in member_page.list" :value="member_box.member.project_id" as-child>
-      <RLink :to="`/profile/projects/${member_box.member.project_id}`">{{ member_box.project!.name }}</RLink>
+    <NavItem v-for="{ project } in member_boxes" :value="project.id" as-child>
+      <RLink :to="`/profile/projects/${project.id}`">{{ project.name }}</RLink>
     </NavItem>
   </Nav>
 </template>
@@ -29,7 +29,7 @@ defineProps<{
   current?: string | number
 }>()
 
-const { data: member_page } = line.request(q.profile.members.InfoList(), (req, it) => {
+const { data: member_boxes } = line.request(q.profile.members.List('+project'), (req, it) => {
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()

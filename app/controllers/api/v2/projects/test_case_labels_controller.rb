@@ -3,6 +3,9 @@ class Api::V2::Projects::TestCaseLabelsController < Api::V2::Projects::BaseContr
   load_and_authorize_resource :test_case_label, through: :project, parent: false
 
   def index
+    if resource_graph_columns.include?("counts")
+      @cases_counts = TestCase.where(project: @project).group("unnest(label_ids)").count
+    end
   end
 
   def show

@@ -1,6 +1,7 @@
-import { Plan, PlanBox, PlanPage } from "@/models"
+import { MemberPage, Plan, PlanBox, PlanPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
+import type { Required } from "utility-types"
 
 class CreateRequest extends BaseRequest<PlanBox> {
   method = "POST"
@@ -57,3 +58,25 @@ class InfoGetRequest extends BaseRequest<PlanBox> {
   }
 }
 export const InfoGet = () => new InfoGetRequest()
+
+
+class GetRequest<Box extends PlanBox> extends BaseRequest<Box> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
+
+  processResponse(response: AxiosResponse) {
+    return this.responseToObject(PlanBox, response) as Box
+  }
+}
+export function Get(): InstanceType<typeof GetRequest<PlanBox>>
+export function Get(graph: '+phase'): InstanceType<typeof GetRequest<Required<PlanBox, 'phase_infos'>>>
+export function Get(graph?: string) {
+  const request = new GetRequest<PlanBox>()
+  request.graph = graph ?? null
+
+  if (graph == "+phase") {
+    request.graph = 'info'
+  }
+
+  return request as any
+}

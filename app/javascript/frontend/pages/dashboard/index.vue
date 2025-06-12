@@ -48,7 +48,7 @@ const session = useSessionStore()
 
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const { data: member_page } = line.request(q.profile.members.InfoList(), (req, it) => {
+const { data: member_boxes } = line.request(q.profile.members.List('+project'), (req, it) => {
   return it.useQuery(req.toQueryConfig())
 })
 const { data: unhandled_issue_page } = line.request(q.profile.issues.Page(), (req, it) => {
@@ -57,9 +57,8 @@ const { data: unhandled_issue_page } = line.request(q.profile.issues.Page(), (re
 })
 await line.wait()
 
-const member_boxes = computed(() => member_page.value.list)
 const unhandled_issues_count = computed(() => unhandled_issue_page.value.total_count)
-const project_repo = computed(() => new EntityRepo<Project>().setup(member_boxes.value.map(it => it.project!)))
+const project_repo = computed(() => new EntityRepo<Project>().setup(member_boxes.value.map(it => it.project)))
 
 const grouped_issue_stats = computed(() => {
   const result = new Map<Project, Map<string, IssueStat[]>>()

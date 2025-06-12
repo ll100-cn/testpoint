@@ -13,9 +13,9 @@ export class LabelRepo extends EntityRepo<TestCaseLabel> {
 
 export class TestCaseLabelBox {
   @t.Klass(TestCaseLabel) test_case_label!: TestCaseLabel
-  test_case_count: number | null = null
 }
 
 export class TestCaseLablePage<Box extends TestCaseLabelBox> extends Pagination<Box> {
   @t.Klass(TestCaseLabelBox) list: Box[] = []
+  cases_counts: Record<string, number> = {}
 }

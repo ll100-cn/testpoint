@@ -22,10 +22,12 @@ export class Plan {
 
 export class PlanBox {
   @t.Klass(Plan) plan!: Plan
-  tasks_state_counts: { [x in "pass" | "failure" | "pending"]: number } | null = null
+
   @t.Klass(PhaseInfo) phase_infos: PhaseInfo[] = []
 }
 
+type TasksStateCounts = { [x in "pass" | "failure" | "pending"]: number }
 export class PlanPage<Box extends PlanBox> extends Pagination<Box> {
   @t.Klass(Plan) list: Box[] = []
+  tasks_state_counts: { [plan_id: string]: TasksStateCounts } = {}
 }

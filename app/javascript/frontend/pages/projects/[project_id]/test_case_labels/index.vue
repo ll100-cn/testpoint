@@ -21,16 +21,16 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="test_case_label_box in test_case_label_boxes" :key="test_case_label_box.test_case_label.id">
+          <template v-for="{test_case_label} in test_case_label_page.list" :key="test_case_label.id">
             <TableRow>
-              <TableCell>{{ test_case_label_box.test_case_label.name }}</TableCell>
-              <TableCell>{{ test_case_label_box.test_case_label.description }}</TableCell>
-              <TableCell>{{ test_case_label_box.test_case_count }}</TableCell>
+              <TableCell>{{ test_case_label.name }}</TableCell>
+              <TableCell>{{ test_case_label.description }}</TableCell>
+              <TableCell>{{ cases_counts[test_case_label.id.toString()] }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', test_case_label_box.test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label_box.test_case_label.id}/edit`" class="link">
+                <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', test_case_label_box.test_case_label)" href="#" @click.prevent="onRemove(test_case_label_box.test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -65,14 +65,14 @@ const allow = page.inProject()!.allow
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList(), (req, it) => {
+const { data: test_case_label_page } = line.request(q.project.test_case_labels.Page(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-const test_case_label_boxes = computed(() => test_case_label_page.value.list)
+const cases_counts = computed(() => test_case_label_page.value.cases_counts)
 
-const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.InfoDestroy(), (req, it) => {
+const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

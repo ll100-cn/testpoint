@@ -32,7 +32,7 @@
         <div class="space-x-3">
           <Button>更新问题</Button>
           <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</Button>
-          <Button variant="destructive" v-if="allow('manage', issue_box)" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
+          <Button variant="destructive" v-if="allow('manage', issue_box.issue)" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
         </div>
       </FormGroup>
     </div>
@@ -76,11 +76,6 @@ const { data: issue_box } = line.request(q.bug.issues.Get(), (req, it) => {
 })
 const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
   req.interpolations.project_id = project_id
-  return it.useQuery(req.toQueryConfig())
-})
-const { data: milestone_page } = line.request(q.project.milestones.List(), (req, it) => {
-  req.interpolations.project_id = project_id
-  req.query = { filter: "available" }
   return it.useQuery(req.toQueryConfig())
 })
 const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {

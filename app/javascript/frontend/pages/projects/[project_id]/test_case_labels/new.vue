@@ -46,7 +46,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: create_test_case_label_action } = line.request(q.project.test_case_labels.InfoCreate(), (req, it) => {
+const { mutateAsync: create_test_case_label_action } = line.request(q.project.test_case_labels.Create(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

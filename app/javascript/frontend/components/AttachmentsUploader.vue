@@ -61,7 +61,7 @@ onMounted(() => {
   })
 })
 
-const { mutateAsync: create_attachment_action } = line.request(q.project.attachments.Create, (req, it) => {
+const { mutateAsync: create_attachment_action } = line.request(q.project.attachments.Create(), (req, it) => {
   return it.useMutation({
     ...req.toMutationConfig(it),
   })
@@ -81,9 +81,9 @@ async function upload(file: File) {
     })
 
     item.attachment = attachment
-    item.upload_file = null
+    item.upload_file = undefined
     onAttachmenChanged(attachment, { id: attachment.id })
-  } catch (error) {
+  } catch (error: any) {
     if (error.name == "CanceledError") {
       const index = items.value.findIndex((it) => it.upload_file === upload_file)
       if (index !== -1) {
@@ -147,7 +147,7 @@ async function onClipboardInput() {
         upload(file)
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(error.message);
   }
 }

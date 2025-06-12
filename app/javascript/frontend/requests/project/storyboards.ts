@@ -2,12 +2,12 @@ import { Storyboard, StoryboardBox, StoryboardPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-class ListRequest extends BaseRequest<StoryboardPage<StoryboardBox>> {
+class ListRequest<Box extends StoryboardBox> extends BaseRequest<Box[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardPage<StoryboardBox>, response)
+    return this.responseToObject(StoryboardPage<Box>, response).list
   }
 }
 export const List = () => new ListRequest()

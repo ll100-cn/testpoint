@@ -13,12 +13,12 @@ class UpdateRequest extends BaseRequest<PlatformBox> {
 export const Update = () => new UpdateRequest()
 
 
-class ListRequest extends BaseRequest<PlatformPage<PlatformBox>> {
+class ListRequest<Box extends PlatformBox> extends BaseRequest<Box[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/platforms" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformPage<PlatformBox>, response)
+    return this.responseToObject(PlatformPage<Box>, response).list
   }
 }
 export const List = () => new ListRequest()

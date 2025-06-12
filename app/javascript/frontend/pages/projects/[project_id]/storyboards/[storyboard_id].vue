@@ -180,42 +180,37 @@ const node_size_mapping = reactive(new Map<string, { dimensions: { width: number
 const roadmap = ref(null as Roadmap | null)
 const { updateNodeData, updateNode, addNodes, addEdges, getNodes } = useVueFlow()
 
-const { data: platform_page } = line.request(q.project.platforms.List(), (req, it) => {
+const { data: platform_boxes } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: test_case_label_page } = line.request(q.project.test_case_labels.InfoList(), (req, it) => {
+const { data: test_case_label_boxes } = line.request(q.project.test_case_labels.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: roadmap_page } = line.request(q.project.roadmaps.List(), (req, it) => {
+const { data: roadmap_boxes } = line.request(q.project.roadmaps.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: storyboard_page } = line.request(q.project.storyboards.List(), (req, it) => {
+const { data: storyboard_boxes } = line.request(q.project.storyboards.List(), (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: scene_page } = line.request(q.project.scenes.List(), (req, it) => {
+const { data: scene_boxes } = line.request(q.project.scenes.List(), (req, it) => {
   req.interpolations.project_id = params.project_id
   req.interpolations.storyboard_id = params.storyboard_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const platform_boxes = computed(() => platform_page.value.list)
 const platforms = computed(() => platform_boxes.value.map(it => it.platform))
-const test_case_label_boxes = computed(() => test_case_label_page.value.list)
 const test_case_labels = computed(() => test_case_label_boxes.value.map(it => it.test_case_label))
-const roadmap_boxes = computed(() => roadmap_page.value.list)
 const roadmaps = ref([] as Roadmap[])
 roadmaps.value = roadmap_boxes.value.map(it => it.roadmap)
-const storyboard_boxes = computed(() => storyboard_page.value.list)
 const storyboards = ref([] as Storyboard[])
 const storyboard = ref(null! as  Storyboard)
 storyboards.value = storyboard_boxes.value.map(it => it.storyboard)
 storyboard.value = storyboards.value.find(it => it.id.toString() == params.storyboard_id.toString())!
-const scene_boxes = computed(() => scene_page.value.list)
 const scenes = ref([] as Scene[])
 scenes.value = scene_boxes.value.map(it => it.scene)
 
@@ -232,7 +227,7 @@ const position_mapping = computed(() => {
   return result
 })
 
-const { data: requirement_page } = line.request(q.project.requirements.List(), (req, it) => {
+const { data: requirement_page } = line.request(q.project.requirements.Page(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.storyboard_id = storyboard.value.id
   if (roadmap.value) {
@@ -242,9 +237,8 @@ const { data: requirement_page } = line.request(q.project.requirements.List(), (
 })
 await line.wait()
 
-const requirement_boxes = computed(() => requirement_page.value.list)
 const requirements = ref([] as Requirement[])
-requirements.value = requirement_boxes.value.map(it => it.requirement)
+requirements.value = requirement_page.value.list.map(it => it.requirement)
 
 const requirement_repo = ref(new RequirementRepo().setup(requirements.value))
 const requirement_stat_repo = computed(() => {

@@ -4,7 +4,7 @@
       <DialogTitle>{{ task_upshot_box.test_case?.title }}</DialogTitle>
     </DialogHeader>
 
-    <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', task_upshot_box)" />
+    <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', task_upshot_box.task_upshot)" />
 
     <small v-else class="text-muted">无详细信息</small>
 
@@ -184,7 +184,7 @@ async function reset(a_task_upshot_box: TaskUpshotBox) {
 
   task_upshot_box.value = a_task_upshot_box
 
-  const { data: a_task_box, suspense } = line.request(q.test.tasks.InfoGet(), (req, it) => {
+  const { data: a_task_box, suspense } = line.request(q.test.tasks.Get('+info'), (req, it) => {
     req.interpolations.project_id = props.plan_box.plan.project_id
     req.interpolations.plan_id = props.plan_box.plan.id
     req.interpolations.task_id = task_upshot_box.value.task!.id

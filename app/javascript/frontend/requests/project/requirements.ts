@@ -2,16 +2,28 @@ import { Requirement, RequirementBox, RequirementPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-class ListRequest extends BaseRequest<RequirementPage<RequirementBox>> {
+class ListRequest<Box extends RequirementBox> extends BaseRequest<Box[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
   graph = 'counts'
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementPage<RequirementBox>, response)
+    return this.responseToObject(RequirementPage<Box>, response).list
   }
 }
 export const List = () => new ListRequest()
+
+
+class PageRequest<Box extends RequirementBox> extends BaseRequest<RequirementPage<Box>> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
+  graph = 'counts'
+
+  processResponse(response: AxiosResponse) {
+    return this.responseToObject(RequirementPage<Box>, response)
+  }
+}
+export const Page = () => new PageRequest()
 
 
 class CreateRequest extends BaseRequest<RequirementBox> {

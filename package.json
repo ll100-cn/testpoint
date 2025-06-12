@@ -46,7 +46,8 @@
     "vue": "3.5.13",
     "vue-component-type-helpers": "2.2.8",
     "vue-markdown-render": "2.2.1",
-    "vue-router": "4.5.0"
+    "vue-router": "4.5.0",
+    "vue-temp-var": "2.0.1"
   },
   "optionalDependencies": {
     "@types/big.js": "6.2.2",

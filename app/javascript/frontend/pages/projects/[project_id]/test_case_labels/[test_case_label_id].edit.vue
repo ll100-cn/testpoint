@@ -39,7 +39,7 @@ const params = route.params as any
 const project_id = params.project_id as string
 const test_case_label_id = params.test_case_label_id
 
-const { data: test_case_label_box } = line.request(q.project.test_case_labels.InfoGet(), (req, it) => {
+const { data: test_case_label_box } = line.request(q.project.test_case_labels.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.test_case_label_id = test_case_label_id
   return it.useQuery(req.toQueryConfig())
@@ -54,7 +54,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_test_case_label_action } = line.request(q.project.test_case_labels.InfoUpdate(), (req, it) => {
+const { mutateAsync: update_test_case_label_action } = line.request(q.project.test_case_labels.Update(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

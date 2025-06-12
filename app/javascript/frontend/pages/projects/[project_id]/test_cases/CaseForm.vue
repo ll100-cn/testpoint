@@ -19,15 +19,15 @@
 
     <FormGroup path="storyboard_id" label="所属故事板">
       <controls.Select include-blank>
-        <option v-for="storyboard_box in storyboard_page.list" :value="storyboard_box.storyboard.id">
-          {{ storyboard_box.storyboard.title }}
+        <option v-for="{ storyboard } in storyboard_boxes" :value="storyboard.id">
+          {{ storyboard.title }}
         </option>
       </controls.Select>
     </FormGroup>
 
     <FormGroup path="requirement_id" label="所属需求">
       <controls.Select include-blank>
-        <option v-for="requirement in (requirement_page?.list.map(box => box.requirement) ?? [])" :value="requirement.id">{{ requirement.title }}</option>
+        <option v-for="{ requirement } in requirement_boxes" :value="requirement.id">{{ requirement.title }}</option>
       </controls.Select>
     </FormGroup>
   </div>
@@ -64,7 +64,7 @@ const emit = defineEmits<{
 
 const storyboard_id = computed(() => props.former.form.storyboard_id)
 
-const { data: requirement_page } = line.request(q.project.requirements.List(), (req, it) => {
+const { data: requirement_boxes } = line.request(q.project.requirements.List(), (req, it) => {
   req.interpolations.project_id = page.inProject()!.project_id
   req.interpolations.storyboard_id = storyboard_id
   req.query.roadmap_id = props.newest_roadmap.id
@@ -74,7 +74,7 @@ const { data: requirement_page } = line.request(q.project.requirements.List(), (
   })
 })
 
-const { data: storyboard_page } = line.request(q.project.storyboards.List(), (req, it) => {
+const { data: storyboard_boxes } = line.request(q.project.storyboards.List(), (req, it) => {
   req.interpolations.project_id = page.inProject()!.project_id
   return it.useQuery(req.toQueryConfig())
 })
