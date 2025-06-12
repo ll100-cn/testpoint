@@ -47,13 +47,11 @@ const { data: platform_box } = line.request(q.project.platforms.Get, (req, it) =
   req.interpolations.platform_id = platform_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-
-const member_boxes = computed(() => member_page.value.list)
 
 const former = Former.build({
   name: platform_box.value.platform.name,

@@ -14,7 +14,7 @@
     <NavItem value="archived">归档</NavItem>
   </Nav>
 
-  <Card v-for="(group, key) in grouped_member_boxes" class="rounded-ss-none" :class="{ hidden: key != active }">
+  <Card class="rounded-ss-none">
     <CardTable>
       <Table>
         <TableHeader>
@@ -27,17 +27,17 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="member_box in group" :key="member_box.member.id">
-            <TableRow :class="{ 'block-discard': member_box.member.archived_at }">
-              <TableCell>{{ member_box.member.id }}</TableCell>
-              <TableCell>{{ member_box.member.name }}</TableCell>
-              <TableCell>{{ member_box.user!.email }}</TableCell>
-              <TableCell>{{ member_box.member.role_text }}</TableCell>
+          <template v-for="{ member, user } in filtered_member_boxes" :key="member.id">
+            <TableRow :class="{ 'block-discard': member.archived_at }">
+              <TableCell>{{ member.id }}</TableCell>
+              <TableCell>{{ member.name }}</TableCell>
+              <TableCell>{{ user.email }}</TableCell>
+              <TableCell>{{ member.role_text }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', member_box.member)" :to="`/projects/${project_id}/members/${member_box.member.id}/edit`" class="link">
+                <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('archive', member_box.member)" @click.prevent="onArchive(member_box.member.id)" class="link"><i class="far fa-archive" /> 归档</a>
+                <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
@@ -53,7 +53,7 @@ import * as q from '@/requests'
 import { Member } from '@/models'
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
@@ -77,15 +77,11 @@ const active = ref('normal')
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 
-const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List.withUser, (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-
-const grouped_member_boxes = ref(_.groupBy(member_page.value.list, (member_box) => {
-  return member_box.member.archived_at ? "archived" : "normal"
-}))
 
 const { mutateAsync: archive_member_action } = line.request(q.project.members.Archive, (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
@@ -106,5 +102,9 @@ async function onArchive(id: number) {
     validator.processError(error)
   }
 }
+
+const filtered_member_boxes = computed(() => {
+  return member_boxes.value.filter(({ member }) => active.value == (member.archived_at ? "archived" : "normal"))
+})
 
 </script>

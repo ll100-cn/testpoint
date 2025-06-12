@@ -38,11 +38,11 @@ export const Destroy = class extends BaseRequest<IssueTemplateBox> {
   }
 }
 
-export const List = class extends BaseRequest<IssueTemplatePage<IssueTemplateBox>> {
+export const List = class extends BaseRequest<IssueTemplateBox[]> {
   method = "GET"
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplatePage<IssueTemplateBox>, response)
+    return this.responseToObject(IssueTemplatePage<IssueTemplateBox>, response).list
   }
 }

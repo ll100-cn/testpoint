@@ -3,7 +3,6 @@
 export * from "./Account"
 export * from "./Attachment"
 export * from "./Category"
-export * from "./CategoryInfo"
 export * from "./Comment"
 export * from "./EntityRepo"
 export * from "./ErrorsObject"

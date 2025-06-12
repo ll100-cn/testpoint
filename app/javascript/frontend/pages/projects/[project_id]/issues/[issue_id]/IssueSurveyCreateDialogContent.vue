@@ -9,7 +9,7 @@
       <div class="space-y-3">
         <FormGroup path="template_id" label="模版">
           <controls.Select>
-            <OptionsForSelect :collection="issue_templates.map(it => ({ label: it.name, value: it.id }))" />
+            <OptionsForSelect :collection="issue_template_boxes.map(it => ({ label: it.issue_template.name!, value: it.issue_template.id }))" />
           </controls.Select>
         </FormGroup>
         <FormGroup path="remark" label="备注">
@@ -30,7 +30,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import * as q from '@/requests'
 import { Issue, IssueTemplate, IssueBox } from "@/models"
-import { getCurrentInstance, ref } from "vue"
+import { computed, getCurrentInstance, ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
@@ -60,6 +60,13 @@ const { mutateAsync: create_issue_survey_action } = line.request(q.bug.issue_sur
   return it.useMutation(req.toMutationConfig(it))
 })
 
+const project_id = computed(() => props.issue_box.issue.project_id)
+
+const { data: issue_template_boxes, isLoading: loading } = line.request(q.project.issue_templates.List, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+
 former.doPerform = async function() {
   const a_issue_survey = await create_issue_survey_action({
     interpolations: {
@@ -75,23 +82,7 @@ former.doPerform = async function() {
   open.value = false
 }
 
-const issue_templates = ref([] as IssueTemplate[])
-
-const loading = ref(true)
 async function reset() {
-  loading.value = true
-
-  try {
-    const { data: issue_template_page, suspense } = line.request(q.project.issue_templates.List, (req, it) => {
-      req.interpolations.project_id = props.issue_box.issue.project_id
-      return it.useQuery(req.toQueryConfig())
-    })
-    await suspense()
-
-    issue_templates.value = issue_template_page.value.list.map(it => it.issue_template)
-  } finally {
-    loading.value = false
-  }
 }
 
 defineExpose({

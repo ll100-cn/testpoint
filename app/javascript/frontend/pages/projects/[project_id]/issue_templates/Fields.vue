@@ -83,12 +83,12 @@ const lookup_by_build_form_collection = ref([
 
 const FormGroup = GenericFormGroup<typeof props.former.form>
 
-const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+const { data: category_boxes } = line.request(q.project.categories.List, (req, it) => {
   req.interpolations.project_id = params.project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-const categories = computed(() => category_page.value.list.map(it => it.category))
+const categories = computed(() => category_boxes.value.map(it => it.category))
 
 async function onRemoveInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)

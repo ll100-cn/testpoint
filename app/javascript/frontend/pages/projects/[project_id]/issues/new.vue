@@ -81,17 +81,15 @@ const profile = page.inProject()!.profile
 const allow = page.inProject()!.allow
 const session = useSessionStore()
 
-const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
   req.interpolations.project_id = params.project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: issue_template_page } = line.request(q.project.issue_templates.List, (req, it) => {
+const { data: issue_template_boxes } = line.request(q.project.issue_templates.List, (req, it) => {
   req.interpolations.project_id = params.project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-const member_boxes = computed(() => member_page.value.list)
-const issue_template_boxes = computed(() => issue_template_page.value.list)
 const issue_template_box = computed(() => {
   return issue_template_boxes.value.find(it => it.issue_template.id == former.form.issue_template_id)
 })

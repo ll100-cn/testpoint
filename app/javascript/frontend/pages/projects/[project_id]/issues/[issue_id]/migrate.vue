@@ -10,14 +10,14 @@
       <div class="space-y-3">
         <FormGroup path="target_project_id" label="项目">
           <controls.Select include-blank>
-            <OptionsForSelect :collection="member_boxes.map(it => ({ label: it.member.name, value: it.member.id }))" />
+            <OptionsForSelect :collection="target_projects.map(it => ({ label: it.name!, value: it.id }))" />
           </controls.Select>
         </FormGroup>
 
         <FormGroup path="target_category_id" label="分类">
-          <span class="form-control-plaintext text-muted" v-if="actioner.processing">载入中...</span>
+          <span class="form-control-plaintext text-muted" v-if="isLoading">载入中...</span>
           <controls.Select v-else include-blank>
-            <OptionsForCategory :collection="category_boxes.map(it => it.category)" />
+            <OptionsForCategory :collection="target_category_boxes?.map(it => it.category) ?? []" />
           </controls.Select>
         </FormGroup>
       </div>
@@ -25,7 +25,7 @@
       <hr class="x-form-divider-through">
 
       <div class="space-x-3">
-        <Button :disabled="actioner.processing">迁移</Button>
+        <Button :disabled="isLoading">迁移</Button>
         <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</Button>
       </div>
     </div>
@@ -60,19 +60,32 @@ const session = useSessionStore()
 const project_id = _.toNumber(params.project_id)
 const issue_id = _.toNumber(params.issue_id)
 
+const former = Former.build({
+  target_project_id: null as number | null,
+  target_category_id: null
+})
+const target_project_id = computed(() => former.form.target_project_id)
+
 const { data: issue_box } = line.request(q.bug.issues.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_id
   return it.useQuery(req.toQueryConfig())
 })
-const member_page = ref(null! as MemberPage<MemberBox>)
-const category_page = ref(null! as CategoryPage<CategoryBox>)
+
+const { data: member_page } = line.request(q.profile.members.InfoList, (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: target_category_boxes, isLoading } = line.request(q.project.categories.List, (req, it) => {
+  req.interpolations.project_id = target_project_id
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    enabled: computed(() => !!target_project_id.value),
+  })
+})
 await line.wait()
 
-const former = Former.build({
-  target_project_id: null,
-  target_category_id: null
-})
+const target_projects = computed(() => member_page.value.list.map(it => it.project!))
 
 const { mutateAsync: create_issue_migration_action } = line.request(q.bug.issue_migrations.Create, (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
@@ -90,32 +103,7 @@ former.doPerform = async function() {
   router.push({ path: `/projects/${former.form.target_project_id}/issues/${issue_id}` })
 }
 
-const member_boxes = computed(() => member_page.value.list)
-const category_boxes = computed(() => category_page.value.list)
-
-const actioner = Actioner.build<{
-  loadCategories: (project_id: number) => void
-}>()
-
-actioner.loadCategories = function(project_id: number) {
-  this.perform(async function() {
-    const { data: a_category_page, suspense } = line.request(q.project.categories.List, (req, it) => {
-      req.interpolations.project_id = project_id
-      return it.useQuery(req.toQueryConfig())
-    })
-    await suspense()
-    category_page.value = a_category_page.value
-
-    former.form.target_category_id = null
-  }, { confirm_text: false })
-}
-
 watch(computed(() => former.form.target_project_id), function(new_value) {
-  if (new_value == null) {
-    category_page.value.list = []
-    former.form.target_category_id = null
-  } else {
-    actioner.loadCategories(new_value)
-  }
+  former.form.target_category_id = null
 })
 </script>

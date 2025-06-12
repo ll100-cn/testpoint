@@ -29,6 +29,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Separator } from '$ui/separator'
 import { useQueryLine } from '@/lib/useQueryLine'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -38,12 +39,13 @@ const params = route.params as any
 const project_id = params.project_id
 const category_id = params.category_id
 
-const { data: category } = line.request(q.project.categories.InfoGet, (req, it) => {
+const { data: category_box } = line.request(q.project.categories.Get, (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.category_id = category_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
+const category = computed(() => category_box.value.category)
 
 const former = Former.build({
   name: category.value.name,
@@ -54,7 +56,7 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-const { mutateAsync: update_category_action } = line.request(q.project.categories.InfoUpdate, (req, it) => {
+const { mutateAsync: update_category_action } = line.request(q.project.categories.Update, (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 

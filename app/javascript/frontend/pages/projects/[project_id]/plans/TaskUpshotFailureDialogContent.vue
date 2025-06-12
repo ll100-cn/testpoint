@@ -83,7 +83,6 @@ const emit = defineEmits<{
 const addon = ref(null as AddonType)
 const task_upshot_box = ref(null! as TaskUpshotBox)
 const task_box = ref(null! as TaskBox)
-const issue_template_page = ref(null! as IssueTemplatePage<IssueTemplateBox>)
 
 const issue_former = NewFormer.build({
   from_task_id: null as number | null,
@@ -173,13 +172,6 @@ async function reset(a_task_upshot_box: TaskUpshotBox, a_task_box: TaskBox) {
   task_upshot_box.value = a_task_upshot_box
   task_box.value = a_task_box
   addon.value = null
-
-  const { data: a_issue_template_page, suspense } = line.request(q.project.issue_templates.List, (req, it) => {
-    req.interpolations.project_id = props.plan_box.plan.project_id
-    return it.useQuery(req.toQueryConfig())
-  })
-  await suspense()
-  issue_template_page.value = a_issue_template_page.value
 
   issue_former.form.issue_attributes.title = `「${props.plan_box.plan.platform.name}」 ${task_upshot_box.value.test_case?.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content}\n\n实际效果:\n`

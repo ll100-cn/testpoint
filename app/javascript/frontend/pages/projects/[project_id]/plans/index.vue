@@ -113,7 +113,7 @@ const { data: plan_page } = line.request(q.test.plans.Page, (req, it) => {
   req.query = { ...utils.plainToQuery(query), q: search }
   return it.useQuery(req.toQueryConfig())
 })
-const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -122,9 +122,6 @@ const { data: test_case_stats } = line.request(q.case.test_case_stats.List, (req
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-
-const member_boxes = computed(() => member_page.value.list)
-const progress_bg_mapping = ref({ pass: "bg-success", failure: "bg-danger" })
 
 function onSearchInput() {
   setTimeout(() => {

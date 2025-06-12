@@ -1,6 +1,6 @@
 // SNIP: 172183d46c2c08a2f2e3700f2f6adb93
 
-import { useMutation, useQuery, useQueryClient, type QueryFunctionContext } from "@tanstack/vue-query"
+import { useMutation, useQuery, useQueryClient, type QueryFunctionContext, type UseQueryOptions } from "@tanstack/vue-query"
 import type { Ref } from "vue"
 import type { BaseRequest } from "../requests"
 
@@ -22,7 +22,11 @@ class ReqWrapper<Req extends BaseRequest<any>> {
       return originQueryFn(context)
     }
 
-    return this.line.useQuery<TQueryFnData, TError, TData, TQueryKey>(hackOptions)
+    const { suspense, data, ...rest } = useQuery<TQueryFnData, TError, TData, TQueryKey>(options, this.client)
+    if (!hackOptions.enabled) {
+      this.line.suspenses.push(suspense)
+    }
+    return { data: data as Ref<TData>, suspense, ...rest }
   }
 
   useMutation<

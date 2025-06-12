@@ -4,6 +4,10 @@ class Api::V2::Projects::CategoriesController < Api::V2::Projects::BaseControlle
 
   def index
     @categories
+
+    if resource_graph_columns.include?("counts")
+      @issues_counts = @project.issues.group(:category_id).count
+    end
   end
 
   def create

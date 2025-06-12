@@ -15,7 +15,7 @@ import { computed, toValue } from "vue"
 import type { Ref } from "vue"
 
 export type RequestOptions = {
-  interpolations?: Record<string, number | string | Ref<number | string>>
+  interpolations?: Record<string, number | string | Ref<null | number | string>>
   query?: Record<string, any>
   body?: Record<string, any>
 }

@@ -22,19 +22,19 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="category_box in category_boxes" :key="category_box.category.id">
+          <template v-for="{ category } in category_boxes" :key="category.id">
             <TableRow>
-              <TableCell>{{ category_box.category.id }}</TableCell>
+              <TableCell>{{ category.id }}</TableCell>
               <TableCell>
-                <CategoryBadge :category="category_box.category" />
+                <CategoryBadge :category="category" />
               </TableCell>
-              <TableCell>{{ category_box.category.description }}</TableCell>
-              <TableCell>{{ category_box.issue_count }}</TableCell>
+              <TableCell>{{ category.description }}</TableCell>
+              <TableCell>{{ issues_counts[category.id.toString()] ?? 0 }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', category_box.category)" :to="`/projects/${project_id}/categories/${category_box.category.id}/edit`">
+                <router-link class="link" v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('destroy', category_box.category)" @click.prevent="deleteCategory(category_box.category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
+                <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -69,16 +69,17 @@ const allow = page.inProject()!.allow
 
 const project_id = params.project_id
 
-const { data: category_page } = line.request(q.project.categories.InfoList, (req, it) => {
+const { data: category_page } = line.request(q.project.categories.Page, (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 const category_boxes = computed(() => category_page.value.list)
+const issues_counts = computed(() => category_page.value.issues_counts ?? {})
 
 const actioner = Actioner.build()
 
-const { mutateAsync: destroy_category_action } = line.request(q.project.categories.InfoDestroy, (req, it) => {
+const { mutateAsync: destroy_category_action } = line.request(q.project.categories.Destroy, (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
@@ -91,10 +92,4 @@ function deleteCategory(id: number) {
     router.go(0)
   })
 }
-
-const attrs = {
-  'data-test': null,
-}
-
-const progress = ref(13)
 </script>

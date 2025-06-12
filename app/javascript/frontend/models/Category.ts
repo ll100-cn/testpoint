@@ -12,9 +12,10 @@ export class Category {
 
 export class CategoryBox {
   @t.Klass(Category) category!: Category
-  issue_count?: number
 }
 
 export class CategoryPage<Box extends CategoryBox> extends Pagination<Box> {
   @t.Klass(CategoryBox) list: Box[] = []
+
+  issues_counts?: Record<string, number>
 }

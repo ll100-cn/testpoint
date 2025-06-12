@@ -191,11 +191,11 @@ former.doPerform = async function(code: string) {
   emit('updated', props.issue_box)
 }
 
-const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
   req.interpolations.project_id = props.issue_box.issue.project_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+const { data: category_boxes } = line.request(q.project.categories.List, (req, it) => {
   req.interpolations.project_id = props.issue_box.issue.project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -205,8 +205,6 @@ const { data: milestone_page } = line.request(q.project.milestones.List, (req, i
 })
 await line.wait()
 
-const member_boxes = computed(() => member_page.value.list)
-const category_boxes = computed(() => category_page.value.list)
 const milestone_boxes = computed(() => milestone_page.value.list)
 
 async function subscribe() {

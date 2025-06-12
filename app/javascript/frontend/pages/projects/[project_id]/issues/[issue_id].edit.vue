@@ -74,7 +74,7 @@ const { data: issue_box } = line.request(q.bug.issues.Get, (req, it) => {
   req.interpolations.issue_id = issue_id
   return it.useQuery(req.toQueryConfig())
 })
-const { data: category_page } = line.request(q.project.categories.List, (req, it) => {
+const { data: category_boxes } = line.request(q.project.categories.List, (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
@@ -83,14 +83,13 @@ const { data: milestone_page } = line.request(q.project.milestones.List, (req, i
   req.query = { filter: "available" }
   return it.useQuery(req.toQueryConfig())
 })
-const { data: member_page } = line.request(q.project.members.InfoList, (req, it) => {
+const { data: member_boxes } = line.request(q.project.members.List, (req, it) => {
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
-const categories = computed(() => category_page.value.list.map(it => it.category))
-const member_boxes = computed(() => member_page.value.list)
+const categories = computed(() => category_boxes.value.map(it => it.category))
 
   const former = Former.build({
     title: issue_box.value.issue.title,
