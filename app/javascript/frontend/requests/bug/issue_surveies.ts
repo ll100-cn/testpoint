@@ -1,46 +1,46 @@
-import { IssueSurvey } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { IssueSurveyBox, IssueSurveyPage } from "@/models"
 import type { AxiosResponse } from "axios"
+import { BaseRequest } from "../BaseRequest"
 
-class CreateRequest extends BaseRequest<IssueSurvey> {
+class CreateRequest extends BaseRequest<IssueSurveyBox> {
   method = "POST"
-  endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyBox, response)
   }
 }
 export const Create = () => new CreateRequest()
 
 
-class DestroyRequest extends BaseRequest<IssueSurvey> {
+class DestroyRequest extends BaseRequest<IssueSurveyBox> {
   method = "DELETE"
-  endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyBox, response)
   }
 }
 export const Destroy = () => new DestroyRequest()
 
 
-class ListRequest extends BaseRequest<Array<IssueSurvey>> {
+class ListRequest extends BaseRequest<IssueSurveyBox[]> {
   method = "GET"
-  endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToArray(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyPage<IssueSurveyBox>, response).list
   }
 }
 export const List = () => new ListRequest()
 
 
-class UpdateRequest extends BaseRequest<IssueSurvey> {
+class UpdateRequest extends BaseRequest<IssueSurveyBox> {
   method = "PATCH"
-  endpoint = [ "/api/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyBox, response)
   }
 }
 export const Update = () => new UpdateRequest()

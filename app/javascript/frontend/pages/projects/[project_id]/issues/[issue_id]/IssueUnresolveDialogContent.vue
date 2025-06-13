@@ -23,14 +23,13 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueStateFrameEmits } from '@/components/IssueStateFrame'
 
 const router = useRouter()
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueStateFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox

@@ -1,6 +1,7 @@
 <template>
   <Card>
     <CardContent>
+      <div> surverys counts is {{ issue_box.surveys.length }} </div>
       <template v-for="(issue_survey, index) in issue_box.surveys">
         <hr class="my-4" v-if="index > 0">
 
@@ -48,6 +49,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import Button from "$ui/button/Button.vue"
 import { Alert } from "$ui/alert"
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueFrameEmits } from "@/components/IssueFrame"
 
 const line = useQueryLine()
 const page = usePageStore()
@@ -58,8 +60,7 @@ const props = defineProps<{
   issue_box: IssueBox
 }>()
 
-const emit = defineEmits<{
-  updated: [IssueBox]
+const emit = defineEmits<IssueFrameEmits & {
   modal: [ component: Component, ...args: any[] ]
 }>()
 
@@ -76,9 +77,8 @@ async function deleteIssueSurvey(issue_survey: IssueSurvey) {
     }
   })
 
-  const index = props.issue_box.surveys.findIndex(it => it.id == issue_survey.id)
-  props.issue_box.surveys.splice(index , 1)
-  emit("updated", props.issue_box)
+  const new_surveys = props.issue_box.surveys.filter(it => it.id !== issue_survey.id)
+  emit("updated", { ...props.issue_box, surveys: new_surveys })
 }
 
 function onSurveyChanged(issue_survey: IssueSurvey) {

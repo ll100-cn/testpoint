@@ -30,13 +30,12 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueCommentFrameEmits } from '@/components/IssueCommentFrame'
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  created: [ CommentBox ]
-}>()
+const emit = defineEmits<IssueCommentFrameEmits>()
 
 const former = Former.build({
   content: "",

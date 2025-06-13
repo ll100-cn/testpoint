@@ -20,22 +20,7 @@ Rails.application.routes.draw do
           get 'issue_creator_chart', on: :collection
           get 'issue_activity_chart', on: :collection
         end
-        resources :category_infos
-        resources :storyboards do
-          resources :requirement_stats
-        end
-        resources :issues do
-          resource :subscription
-          resources :issue_surveys
-        end
-        resources :issue_stats
-        resources :issue_migrations
       end
-    end
-
-    namespace :profile do
-      resources :issues
-      resources :issue_stats
     end
 
     devise_scope :user do
@@ -43,8 +28,6 @@ Rails.application.routes.draw do
       post :sign_in, to: "sessions#create"
       delete :sign_out, to: "sessions#destroy"
     end
-
-
 
     namespace :v2 do
       namespace :admin do
@@ -68,7 +51,6 @@ Rails.application.routes.draw do
               patch :resolve
               patch :process, to: "issues#process2"
             end
-
             get :summary, on: :collection
 
             resources :issue_actions
@@ -78,6 +60,7 @@ Rails.application.routes.draw do
               end
             end
             resources :issue_relationships
+            resources :issue_surveys
 
             resources :comments do
               member do
@@ -85,7 +68,9 @@ Rails.application.routes.draw do
                 patch :convert
               end
             end
+            resource :subscription
           end
+          resources :issue_migrations
 
           resources :members do
             patch :archive, on: :member

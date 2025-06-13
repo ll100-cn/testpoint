@@ -18,18 +18,17 @@
 import { Button } from '$ui/button'
 import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Comment, CommentBox, IssueBox } from "@/models"
+import type { IssueCommentFrameEmits } from '@/components/IssueCommentFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { IssueBox } from "@/models"
 import * as q from '@/requests'
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  created: [ CommentBox ]
-}>()
+const emit = defineEmits<IssueCommentFrameEmits>()
 
 const former = Former.build({
   content: "",
@@ -37,7 +36,6 @@ const former = Former.build({
 })
 
 const Form = GenericForm<typeof former.form>
-const FormGroup = GenericFormGroup<typeof former.form>
 const issue_box = ref(null! as IssueBox)
 const loading = ref(true)
 
@@ -56,7 +54,6 @@ former.doPerform = async function() {
 }
 
 function reset(a_issue_box: IssueBox) {
-  console.log("a_issue_box is", a_issue_box)
   issue_box.value = a_issue_box
   loading.value = false
 }

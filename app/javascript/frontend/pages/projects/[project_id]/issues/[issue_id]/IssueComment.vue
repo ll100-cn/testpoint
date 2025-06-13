@@ -63,6 +63,7 @@ import { Callout } from '$ui/callout'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import Button from "$ui/button/Button.vue"
 import { useQueryLine } from '@/lib/useQueryLine'
+import { type IssueCommentFrameEmits } from "@/components/IssueCommentFrame"
 
 const line = useQueryLine()
 const store = useSessionStore()
@@ -77,10 +78,7 @@ const props = defineProps<{
   readonly: boolean
 }>()
 
-const emit = defineEmits<{
-  destroyed: [ CommentBox ]
-  updated: [ CommentBox ]
-
+const emit = defineEmits<IssueCommentFrameEmits & {
   modal: [ component: Component, ...args: any[] ]
 }>()
 

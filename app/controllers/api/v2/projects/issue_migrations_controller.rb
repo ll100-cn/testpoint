@@ -1,4 +1,4 @@
-class Api::Projects::IssueMigrationsController < Api::Projects::BaseController
+class Api::V2::Projects::IssueMigrationsController < Api::V2::Projects::BaseController
   before_action -> { @project = current_project }
 
   def create

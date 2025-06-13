@@ -15,20 +15,19 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import { Issue, IssueBox } from "@/models"
-import { getCurrentInstance, ref } from "vue"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
 import { useQueryLine } from '@/lib/useQueryLine'
+import { IssueBox } from "@/models"
+import * as q from '@/requests'
+import { ref } from "vue"
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox

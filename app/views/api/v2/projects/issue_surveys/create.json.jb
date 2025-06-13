@@ -1,0 +1,1 @@
+render "box", issue_survey: @issue_survey

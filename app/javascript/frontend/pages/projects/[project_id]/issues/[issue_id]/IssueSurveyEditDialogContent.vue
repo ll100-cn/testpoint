@@ -9,7 +9,7 @@
 
       <div class="space-y-3">
         <FormGroup label="备注"><span>{{ issue_survey.remark }}</span></FormGroup>
-        <FormGroup v-for="(input, index) in current_issue_template?.inputs" :path="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
+        <FormGroup v-for="(input, index) in current_issue_template_box?.issue_template.inputs" :path="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
           <controls.String />
         </FormGroup>
       </div>
@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import * as q from '@/requests'
-import { Issue, IssueSurvey, IssueTemplate, IssueBox, IssueTemplateBox } from "@/models"
+import { IssueSurvey, IssueBox, IssueTemplateBox } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
@@ -32,13 +32,12 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emits = defineEmits<{
-  updated: [Issue]
-}>()
+const emits = defineEmits<IssueFrameEmits>()
 
 const former = Former.build({
   inputs_attributes: []
@@ -52,7 +51,7 @@ const { mutateAsync: update_issue_survey_action } = line.request(q.bug.issue_sur
 })
 
 former.doPerform = async function() {
-  const a_issue_survey = await update_issue_survey_action({
+  const a_issue_survey_box = await update_issue_survey_action({
     interpolations: {
       project_id: issue_box.value.issue.project_id,
       issue_id: issue_box.value.issue.id,
@@ -61,10 +60,10 @@ former.doPerform = async function() {
     body: former.form
   })
 
-  const index = issue_box.value.surveys.findIndex(it => it.id == a_issue_survey.id)
-  issue_box.value.surveys[index] = a_issue_survey
+  const index = issue_box.value.surveys.findIndex(it => it.id == a_issue_survey_box.issue_survey.id)
+  issue_box.value.surveys[index] = a_issue_survey_box.issue_survey
 
-  emits("updated", issue_box.value.issue)
+  emits("updated", issue_box.value)
   open.value = false
 }
 

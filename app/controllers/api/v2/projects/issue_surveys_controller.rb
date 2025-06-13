@@ -1,4 +1,4 @@
-class Api::Projects::IssueSurveysController < Api::Projects::BaseController
+class Api::V2::Projects::IssueSurveysController < Api::V2::Projects::BaseController
   load_and_authorize_resource :project
   load_and_authorize_resource :issue
   load_and_authorize_resource through: :issue

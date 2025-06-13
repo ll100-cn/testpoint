@@ -26,23 +26,22 @@
 </template>
 
 <script setup lang="ts">
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import OptionsForSelect from '@/components/OptionsForSelect.vue'
-import * as q from '@/requests'
-import { Issue, IssueTemplate, IssueBox } from "@/models"
-import { computed, getCurrentInstance, ref } from "vue"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
+import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import { IssueBox } from "@/models"
+import * as q from '@/requests'
+import { computed } from "vue"
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox
@@ -68,7 +67,7 @@ const { data: issue_template_boxes, isLoading: loading } = line.request(q.projec
 })
 
 former.doPerform = async function() {
-  const a_issue_survey = await create_issue_survey_action({
+  const a_issue_survey_box = await create_issue_survey_action({
     interpolations: {
       project_id: props.issue_box.issue.project_id,
       issue_id: props.issue_box.issue.id
@@ -76,7 +75,7 @@ former.doPerform = async function() {
     body: former.form
   })
 
-  props.issue_box.surveys.push(a_issue_survey)
+  props.issue_box.surveys = [ ...props.issue_box.surveys, a_issue_survey_box.issue_survey ]
   emit('updated', props.issue_box)
 
   open.value = false

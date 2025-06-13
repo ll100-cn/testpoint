@@ -206,20 +206,25 @@ const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req
 await line.wait()
 
 async function subscribe() {
-  const a_subscription = await create_subscription_action({
+  const a_subscription_box = await create_subscription_action({
     interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id }
   })
 
-  props.issue_box.subscriptions.push(a_subscription)
+  props.issue_box.subscriptions.push(a_subscription_box.subscription)
   emit("updated", props.issue_box)
 }
 
 async function unsubscribe() {
+  const index = props.issue_box.subscriptions.findIndex(it => it.user_id == current_user.id)
+  if (index == -1) {
+    return
+  }
+
+  const subscription = props.issue_box.subscriptions[index]
   await destroy_subscription_action({
-    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id, subscription_id: props.issue_box.issue.subscription_id }
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id, subscription_id: subscription.id }
   })
 
-  const index = props.issue_box.subscriptions.findIndex(it => it.user_id == current_user.id)
   props.issue_box.subscriptions.splice(index, 1)
   emit("updated", props.issue_box)
 }

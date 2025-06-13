@@ -35,13 +35,12 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox

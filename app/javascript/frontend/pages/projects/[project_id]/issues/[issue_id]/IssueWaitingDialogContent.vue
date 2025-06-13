@@ -15,21 +15,20 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import { Comment, CommentBox, Issue, IssueBox } from "@/models"
-import { getCurrentInstance, nextTick, ref } from "vue"
-import IssueCommentForm from "./IssueCommentForm.vue"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import Button from "$ui/button/Button.vue"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import type { IssueStateFrameEmits } from '@/components/IssueStateFrame'
 import { useQueryLine } from '@/lib/useQueryLine'
+import { IssueBox } from "@/models"
+import * as q from '@/requests'
+import { nextTick, ref } from "vue"
+import IssueCommentForm from "./IssueCommentForm.vue"
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  created: [IssueBox, CommentBox]
-}>()
+const emit = defineEmits<IssueStateFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox
@@ -60,7 +59,7 @@ former.doPerform = async function() {
 
   const a_issue_action = await create_issue_action_action({
     interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
-    body: { action: "waiting" }
+    body: { state: "waiting" }
   })
 
   Object.assign(props.issue_box.issue, a_issue_action.issue)

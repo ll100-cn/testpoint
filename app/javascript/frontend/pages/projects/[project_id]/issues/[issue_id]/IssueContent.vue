@@ -35,8 +35,10 @@ import { usePageStore } from "@/store"
 import { computed, ref } from "vue"
 import ContentBody from "./ContentBody.vue"
 import IssueContentEditDialogContent from "./IssueContentEditDialogContent.vue"
+import type { IssueFrameComponent } from '@/components/IssueFrame'
 
-const blank_dialog = ref(null!as InstanceType<typeof BlankDialog>)
+const IssueDialog = BlankDialog as typeof BlankDialog & IssueFrameComponent
+const blank_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueFrameComponent>)
 const page = usePageStore()
 const allow = page.inProject()!.allow
 

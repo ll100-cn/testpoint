@@ -18,6 +18,7 @@
     <div class="flex-1 space-y-4">
       <IssueRelatedTask v-if="issue_box.issue.task" :task="issue_box.issue.task" :project_id="project_id" />
       <IssueContent :readonly="readonly" :issue_box="issue_box" @updated="onIssueUpdated" @convert="onIssueConvert" />
+      <div>outline issue_box.surveys counts is {{ issue_box.surveys.length }} </div>
       <IssueSurveyCard :readonly="readonly" :issue_box="issue_box" v-if="issue_box.surveys?.length > 0" @modal="(...args) => issue_dialog.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
@@ -84,7 +85,7 @@
 
             <template v-if="allow('manage', issue_box.issue) && issue_box.issue.state == 'pending'">
               <ButtonGroup class="ms-auto">
-                <Button preset="outline" variant="secondary" @click.prevent="issue_comment_create_dialog.show(IssueWaitingDialogContent, issue_box)">
+                <Button preset="outline" variant="secondary" @click.prevent="issue_state_dialog.show(IssueWaitingDialogContent, issue_box)">
                   <span class="me-1">设置为</span><IssueStateBadge state="waiting" />
                 </Button>
                 <Button preset="outline" variant="secondary" @click.prevent="issue_dialog.show(IssueConfirmDialogContent)">
@@ -96,11 +97,11 @@
             <template v-if="allow('manage', issue_box.issue) || issue_box.issue.creator_id == profile.member_id">
               <template v-if="issue_box.issue.state == 'resolved' && !issue_box.issue.archived_at">
                 <ButtonGroup class="ms-auto">
-                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_resolve_dialog.show(IssueResolveDialogContent)">
+                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_dialog.show(IssueResolveDialogContent)">
                     <span class="me-1">设置为</span><IssueStateBadge state="archived" text="已完结" />
                   </Button>
 
-                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_dialog.show(IssueUnresolveDialogContent)">
+                  <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_state_dialog.show(IssueUnresolveDialogContent)">
                     <span class="me-1">设置为</span><IssueStateBadge state="pending" text="未解决" />
                   </Button>
                 </ButtonGroup>
@@ -119,10 +120,9 @@
   </div>
 
   <teleport to="body">
-    <BlankDialog ref="comment_dialog" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
-    <BlankDialog ref="issue_dialog" @updated="onIssueUpdated" v-bind="{ issue_box }" />
-    <BlankDialog ref="issue_comment_create_dialog" @created="onIssueCommentCreated" v-bind="{ issue_box }" />
-    <BlankDialog ref="issue_resolve_dialog" @updated="onIssueUpdated" v-bind="{ issue_box }" />
+    <IssueCommentDialog ref="comment_dialog" @created="onCommentCreated" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" />
+    <IssueDialog ref="issue_dialog" @updated="onIssueUpdated" v-bind="{ issue_box }" />
+    <IssueStateDialog ref="issue_state_dialog" @created="onIssueCommentCreated" v-bind="{ issue_box }" />
   </teleport>
 </template>
 
@@ -139,7 +139,6 @@ import { useRoute, useRouter } from "vue-router"
 import IssueActivityInfo from "./IssueActivityInfo.vue"
 import IssueComment from "./IssueComment.vue"
 import IssueCommentCreateDialogContent from "./IssueCommentCreateDialogContent.vue"
-import IssueConfirmDialogContent from "./IssueConfirmDialogContent.vue"
 import IssueContent from "./IssueContent.vue"
 import IssueDetailsSideBar from "./IssueDetailsSideBar.vue"
 import IssueRelatedTask from "./IssueRelatedTask.vue"
@@ -150,6 +149,7 @@ import IssueSurveyCard from "./IssueSurveyCard.vue"
 import IssueSurveyCreateDialogContent from "./IssueSurveyCreateDialogContent.vue"
 import IssueUnresolveDialogContent from "./IssueUnresolveDialogContent.vue"
 import IssueWaitingDialogContent from "./IssueWaitingDialogContent.vue"
+import IssueConfirmDialogContent from "./IssueConfirmDialogContent.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
@@ -157,11 +157,16 @@ import BlankDialog from "@/components/BlankDialog.vue"
 import Button from "$ui/button/Button.vue"
 import ButtonGroup from "$ui/button-group/ButtonGroup.vue"
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueCommentFrameComponent } from "@/components/IssueCommentFrame"
+import type { IssueFrameComponent } from "@/components/IssueFrame"
+import type { IssueStateFrameComponent } from "@/components/IssueStateFrame"
 
-const comment_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const issue_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const issue_comment_create_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const issue_resolve_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const IssueCommentDialog = BlankDialog as typeof BlankDialog & IssueCommentFrameComponent
+const comment_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueCommentFrameComponent>)
+const IssueDialog = BlankDialog as typeof BlankDialog & IssueFrameComponent
+const issue_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueFrameComponent>)
+const IssueStateDialog = BlankDialog as typeof BlankDialog & IssueStateFrameComponent
+const issue_state_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueStateFrameComponent>)
 
 const line = useQueryLine()
 const route = useRoute()
@@ -198,6 +203,7 @@ const timelines = computed(() => {
 })
 
 function onIssueUpdated(new_issue_box: IssueBox) {
+  console.log("onIssueUpdated", new_issue_box.surveys.length)
   issue_box.value = new_issue_box
 }
 
@@ -210,7 +216,7 @@ function onCommentDestroyed(comment_box: CommentBox) {
   comment_page.value.list.splice(index, 1)
 }
 
-async function onCommentUpdated(comment_box: CommentBox   ) {
+async function onCommentUpdated(comment_box: CommentBox) {
   const index = comment_page.value.list.findIndex(it => it.comment.id === comment_box.comment.id)
   comment_page.value.list[index] = comment_box
 }

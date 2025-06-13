@@ -42,5 +42,3 @@ export * from "./TestCaseLabelInfo"
 export * from "./TestCaseStat"
 export * from "./User"
 export { default as Validation } from "./Validation"
-
-export * as v2 from  './v2'

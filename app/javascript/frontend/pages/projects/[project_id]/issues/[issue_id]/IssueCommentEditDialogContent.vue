@@ -25,13 +25,12 @@ import _ from "lodash"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueCommentFrameEmits } from '@/components/IssueCommentFrame'
 
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [ CommentBox ]
-}>()
+const emit = defineEmits<IssueCommentFrameEmits>()
 
 const former = Former.build({
   content: "",

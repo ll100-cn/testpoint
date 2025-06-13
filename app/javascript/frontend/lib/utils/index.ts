@@ -9,6 +9,8 @@ import { toValue } from 'vue'
 
 const color_cache = new Map<string, string>()
 
+export * from './EmitsAsProps'
+
 export function calcColorHex(text: string) {
   if (!color_cache.has(text)) {
     const hex = md5.array(text).slice(0, 3)

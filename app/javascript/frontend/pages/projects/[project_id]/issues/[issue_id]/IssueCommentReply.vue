@@ -30,6 +30,7 @@ import IssueCommentEditDialogContent from "./IssueCommentEditDialogContent.vue"
 import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent.vue"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueCommentFrameEmits } from "@/components/IssueCommentFrame"
 
 const line = useQueryLine()
 const store = useSessionStore()
@@ -43,10 +44,7 @@ const props = defineProps<{
   readonly: boolean
 }>()
 
-const emit = defineEmits<{
-  changed: [ CommentBox ]
-  destroyed: [ CommentBox ]
-
+const emit = defineEmits<IssueCommentFrameEmits & {
   modal: [ component: Component, ...args: any[] ]
 }>()
 

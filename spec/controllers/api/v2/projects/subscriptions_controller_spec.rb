@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::Projects::SubscriptionsController, type: :controller do
+RSpec.describe Api::V2::Projects::SubscriptionsController, type: :controller do
   let!(:project) { create :project }
   let(:issue) { create :issue, project: project }
   let!(:superadmin) { create :user, :superadmin }

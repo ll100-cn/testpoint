@@ -1,1 +1,0 @@
-render partial: "api/shared/issue_state", collection: @project_issues_mapping, as: :issue_stat
