@@ -47,7 +47,7 @@
 
         <div class="space-x-3">
           <Button>新增问题</Button>
-          <Button variant="secondary" :to="`/projects/${params.project_id}/issues`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </template>
     </div>
@@ -71,6 +71,7 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from "@/lib/PathHelper"
 
 const line = useQueryLine()
 const route = useRoute()
@@ -80,6 +81,7 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = page.inProject()!.allow
 const session = useSessionStore()
+const path_info = PathHelper.parseCollection(route.path, 'new')
 
 const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = params.project_id
@@ -118,7 +120,7 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(`/projects/${params.project_id}/issues/${issue_box.issue.id}`)
+  router.push(`${path_info.collection}/${issue_box.issue.id}`)
 }
 
 watch(issue_template_box, function(new_value) {

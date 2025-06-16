@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增平台</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/platforms`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -31,6 +31,7 @@ import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import { computed } from 'vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -40,6 +41,7 @@ const page = usePageStore()
 const session = useSessionStore()
 
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'new')
 
 const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = project_id
@@ -66,6 +68,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push('/projects/' + project_id + '/platforms')
+  router.push(path_info.collection)
 }
 </script>

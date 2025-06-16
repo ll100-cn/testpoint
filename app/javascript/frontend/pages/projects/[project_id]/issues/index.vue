@@ -11,7 +11,7 @@
         <Button class="w-auto">搜索</Button>
       </Form>
 
-      <Button v-if="allow('create', Issue)" :to="`/projects/${project_id}/issues/new`">新增问题</Button>
+      <Button v-if="allow('create', Issue)" :to="`${path_info.collection}/new`">新增问题</Button>
     </template>
   </PageHeader>
 
@@ -67,6 +67,7 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import RLink from '@/components/RLink.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -75,6 +76,7 @@ const query = utils.queryToPlain(route.query)
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
 const page2 = utils.instance(Page, query)
 const search2 = reactive(utils.instance(Search2, query))

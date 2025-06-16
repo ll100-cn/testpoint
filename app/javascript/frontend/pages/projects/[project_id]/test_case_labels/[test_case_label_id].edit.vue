@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>修改标签</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/test_case_labels`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -30,6 +30,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -38,6 +39,7 @@ const params = route.params as any
 
 const project_id = params.project_id as string
 const test_case_label_id = params.test_case_label_id
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
 const { data: test_case_label_box } = line.request(q.project.test_case_labels.Get(), (req, it) => {
   req.interpolations.project_id = project_id
@@ -64,6 +66,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push('/projects/' + project_id + '/test_case_labels')
+  router.push(path_info.collection)
 }
 </script>

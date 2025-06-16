@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>修改平台</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/platforms`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -31,6 +31,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -41,6 +42,7 @@ const session = useSessionStore()
 
 const project_id = params.project_id
 const platform_id = params.platform_id
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
 const { data: platform_box } = line.request(q.project.platforms.Get(), (req, it) => {
   req.interpolations.project_id = project_id
@@ -72,6 +74,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push('/projects/' + project_id + '/platforms')
+  router.push(path_info.collection)
 }
 </script>

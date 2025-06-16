@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>修改分类</Button>
-          <Button variant="secondary" :to="`/projects/${params.project_id}/categories`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -30,6 +30,7 @@ import { Button } from '$ui/button'
 import { Separator } from '$ui/separator'
 import { useQueryLine } from '@/lib/useQueryLine'
 import { computed } from 'vue'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -38,6 +39,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 const category_id = params.category_id
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
 const { data: category_box } = line.request(q.project.categories.Get(), (req, it) => {
   req.interpolations.project_id = project_id
@@ -66,7 +68,7 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push('/projects/' + project_id + '/categories')
+  router.push(path_info.collection)
 }
 
 </script>

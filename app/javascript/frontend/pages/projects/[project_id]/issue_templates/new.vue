@@ -11,7 +11,7 @@
 
       <div class="space-x-3">
         <Button>新增问题模版</Button>
-        <Button variant="secondary" :to="`/projects/${project_id}/issue_templates`">取消</Button>
+        <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
       </div>
     </div>
   </Form>
@@ -27,6 +27,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Separator } from '$ui/separator'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -34,6 +35,7 @@ const line = useQueryLine()
 const params = route.params as any
 
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'new')
 
 const former = Former.build({
   name: "",
@@ -58,7 +60,7 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push('/projects/' + project_id + '/issue_templates')
+  router.push(path_info.collection)
 }
 
 </script>

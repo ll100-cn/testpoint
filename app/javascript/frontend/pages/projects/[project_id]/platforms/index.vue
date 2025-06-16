@@ -3,7 +3,7 @@
     <PageTitle>平台列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', Platform)" :to="`/projects/${project_id}/platforms/new`">新增平台</Button>
+      <Button v-if="allow('create', Platform)" :to="`${path_info.collection}/new`">新增平台</Button>
     </template>
   </PageHeader>
 
@@ -29,7 +29,7 @@
               </TableCell>
               <TableCell>{{ _.find(member_boxes, { member: { id: platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', platform)" :to="`/projects/${project_id}/platforms/${platform.id}/edit`" class="link">
+                <router-link v-if="allow('update', platform)" :to="`${path_info.collection}/${platform.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
                 <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
@@ -58,6 +58,8 @@ import { Validator } from '$ui/simple_form'
 import Button from '$ui/button/Button.vue'
 import PlatformBadge from '@/components/PlatformBadge.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PageContent from '@/components/PageContent.vue'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -69,6 +71,7 @@ const session = useSessionStore()
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
 const { data: platform_boxes } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id

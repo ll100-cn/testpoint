@@ -18,7 +18,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增成员</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/members`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -36,6 +36,7 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import Separator from '$ui/separator/Separator.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -43,6 +44,7 @@ const line = useQueryLine()
 const params = route.params as any
 
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'new')
 
 const former = Former.build({
   user_email: "",
@@ -63,6 +65,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push('/projects/' + project_id + '/members')
+  router.push(path_info.collection)
 }
 </script>

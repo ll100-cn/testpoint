@@ -3,7 +3,7 @@
     <PageTitle>标签列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', TestCaseLabel)" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</Button>
+      <Button v-if="allow('create', TestCaseLabel)" :to="`${path_info.collection}/new`">新增标签</Button>
     </template>
   </PageHeader>
 
@@ -27,7 +27,7 @@
               <TableCell>{{ test_case_label.description }}</TableCell>
               <TableCell>{{ cases_counts[test_case_label.id.toString()] }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label.id}/edit`" class="link">
+                <router-link v-if="allow('update', test_case_label)" :to="`${path_info.collection}/${test_case_label.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
                 <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -54,6 +54,8 @@ import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PageContent from '@/components/PageContent.vue'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -64,6 +66,7 @@ const allow = page.inProject()!.allow
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
 const { data: test_case_label_page } = line.request(q.project.test_case_labels.Page(), (req, it) => {
   req.interpolations.project_id = project_id

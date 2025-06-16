@@ -26,7 +26,7 @@
 
       <div class="space-x-3">
         <Button :disabled="isLoading">迁移</Button>
-        <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}/edit`">取消</Button>
+        <Button variant="secondary" :to="`${path_info.resource}/edit`">取消</Button>
       </div>
     </div>
   </Form>
@@ -49,6 +49,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -59,6 +60,7 @@ const session = useSessionStore()
 
 const project_id = _.toNumber(params.project_id)
 const issue_id = _.toNumber(params.issue_id)
+const path_info = PathHelper.parseMember(route.path, 'migrate')
 
 const former = Former.build({
   target_project_id: null as number | null,

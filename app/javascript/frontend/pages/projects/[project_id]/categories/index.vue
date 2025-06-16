@@ -3,7 +3,7 @@
     <PageTitle>分类列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', Category)" :to="`/projects/${project_id}/categories/new`">新增分类</Button>
+      <Button v-if="allow('create', Category)" :to="`${path_info.collection}/new`">新增分类</Button>
     </template>
   </PageHeader>
 
@@ -31,7 +31,7 @@
               <TableCell>{{ category.description }}</TableCell>
               <TableCell>{{ issues_counts[category.id.toString()] ?? 0 }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', category)" :to="`/projects/${project_id}/categories/${category.id}/edit`">
+                <router-link class="link" v-if="allow('update', category)" :to="`${path_info.collection}/${category.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
                 <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
@@ -59,6 +59,7 @@ import { usePageStore } from '@/store'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -68,6 +69,7 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
 const { data: category_page } = line.request(q.project.categories.Page(), (req, it) => {
   req.interpolations.project_id = project_id

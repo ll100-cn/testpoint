@@ -19,7 +19,7 @@
         <TableRow v-for="issue in issues" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
           <TableCell>{{ issue.id }}</TableCell>
           <TableCell>
-            <router-link class="link" :to="`/projects/${issue.project_id}/issues/${issue.id}`">
+            <router-link class="link" :to="path_info.resource">
               <span v-if="issue.priority === 'important'">!!</span>
               {{ issue.title }}
             </router-link>
@@ -90,6 +90,7 @@ import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import { AxiosError } from 'axios'
 import { usePageStore } from '@/store'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -100,6 +101,7 @@ const allow = page.inProject()!.allow
 
 const project_id = _.toInteger(params.project_id)
 const add_dialog_open = ref(false)
+const path_info = PathHelper.parseMember(route.path, 'merge')
 
 const issues = ref([] as Issue[])
 
@@ -188,7 +190,7 @@ async function merge() {
       }
     })
 
-    router.push(`/projects/${project_id}/issues/${issue_box.issue.id}`)
+    router.push(path_info.resource)
   } catch(e) {
     if (e instanceof UnprocessableEntityError) {
       alert(e.errors.errorMessages.join("\n"))

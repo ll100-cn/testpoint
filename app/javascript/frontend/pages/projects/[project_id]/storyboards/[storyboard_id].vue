@@ -26,7 +26,7 @@
     <div class="overflow-y-auto scrollbar-none">
       <Nav preset="tabs">
         <NavItem v-for="storyboard in storyboards" class="shrink-0" as-child>
-          <RLink :to="{ path: `/projects/${params.project_id}/storyboards/${storyboard.id}`, query: utils.plainToQuery(query) }">{{ storyboard.title }}</RLink>
+          <RLink :to="{ path: `${path_info.collection}/${storyboard.id}`, query: utils.plainToQuery(query) }">{{ storyboard.title }}</RLink>
         </NavItem>
       </Nav>
     </div>
@@ -162,11 +162,13 @@ import type { StoryboardFrameComponent } from '@/components/StoryboardFrame'
 import type { RequirementFrameComponent } from '@/components/RequirementFrame'
 import type { RoadmapFrameComponent } from '@/components/RoadmapFrame'
 import type { SceneFrameComponent } from '@/components/SceneFrame'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const path_info = PathHelper.parseMember(route.path, 'show')
 const query = utils.queryToPlain(route.query)
 const page = usePageStore()
 const allow = page.inProject()!.allow
@@ -358,7 +360,7 @@ function onStoryboardUpdated(a_storyboard: Storyboard) {
 }
 
 function onStoryboardDestroyed(a_storyboard: Storyboard) {
-  router.push(`/projects/${params.project_id}/storyboards`)
+  router.push(path_info.collection)
 }
 
 function onConnect(connection: Connection) {

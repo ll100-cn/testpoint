@@ -36,6 +36,7 @@ import { useQueryLine } from '@/lib/useQueryLine'
 import { computed, reactive } from 'vue'
 import _ from 'lodash'
 import { Validator } from '$ui/simple_form'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -44,6 +45,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 const plan_id = params.plan_id
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
 const { data: plan_box } = line.request(q.test.plans.Get(), (req, it) => {
   req.interpolations.project_id = project_id
@@ -80,11 +82,11 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(`/projects/${project_id}/plans/${plan_id}`)
+  router.push(path_info.resource)
 }
 
 function onCancel() {
-  router.push(`/projects/${project_id}/plans/${plan_id}`)
+  router.push(path_info.resource)
 }
 
 async function onDestroy() {
@@ -96,7 +98,7 @@ async function onDestroy() {
     interpolations: { project_id, plan_id }
   })
 
-  router.push(`/projects/${project_id}/plans`)
+  router.push(path_info.collection)
 }
 
 </script>

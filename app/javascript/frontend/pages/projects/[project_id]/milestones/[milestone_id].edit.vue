@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>编辑里程碑</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/milestones`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -30,6 +30,7 @@ import _ from 'lodash'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -38,6 +39,7 @@ const params = route.params as any
 
 const project_id = params.project_id
 const milestone_id = params.milestone_id
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
 const former = Former.build({
   title: null as string | null,
@@ -65,7 +67,7 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(`/projects/${project_id}/milestones`)
+  router.push(path_info.collection)
 }
 
 former.form.title = milestone_box.value.milestone.title

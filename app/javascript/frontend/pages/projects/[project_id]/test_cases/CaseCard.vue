@@ -12,7 +12,7 @@
             <template #menuAfter>
               <DropdownMenuSeparator></DropdownMenuSeparator>
               <DropdownMenuItem as-child>
-                <router-link target="_blank" :to="`/projects/${project_id}/platforms`">平台列表</router-link>
+                <router-link target="_blank" :to="`${path_info.parent.resource}/${project_id}/platforms`">平台列表</router-link>
               </DropdownMenuItem>
             </template>
           </controls.Selectpicker>
@@ -27,7 +27,7 @@
             <template #menuAfter>
               <DropdownMenuSeparator></DropdownMenuSeparator>
               <DropdownMenuItem as-child>
-                <router-link target="_blank" :to="`/projects/${project_id}/test_case_labels`">标签列表</router-link>
+                <router-link target="_blank" :to="`${path_info.parent.resource}/${project_id}/test_case_labels`">标签列表</router-link>
               </DropdownMenuItem>
             </template>
           </controls.Selectpicker>
@@ -94,6 +94,7 @@ import { SelectdropItem } from '@/components/controls/selectdrop'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { TEST_CASE_RELATE_STATES } from '@/constants'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -103,6 +104,7 @@ const query = utils.queryToPlain(route.query) as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const session = useSessionStore()
+const path_info = PathHelper.parseMember(route.path, 'show')
 
 const TestCaseDialog = BlankDialog as typeof BlankDialog & TestCaseFrameComponent
 const TestCaseBatchDialog = BlankDialog as typeof BlankDialog & TestCaseBatchFrameComponent

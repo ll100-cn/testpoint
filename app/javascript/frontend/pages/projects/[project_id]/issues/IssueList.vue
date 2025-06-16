@@ -19,7 +19,7 @@
         </TableCell>
         <TableCell>{{ issue.id }}</TableCell>
         <TableCell>
-          <router-link class="link" :to="`/projects/${issue.project_id}/issues/${issue.id}`">
+          <router-link class="link" :to="`${path_info.collection}/${issue.id}`">
             <span v-if="issue.priority === 'important'">!!</span>
             {{ issue.title }}
           </router-link>
@@ -39,8 +39,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import SortLink from '@/components/SortLink.vue'
-import { IssueBox } from '@/models'
+import { type IssueBox } from '@/models'
 import { ref } from 'vue'
+import PathHelper from '@/lib/PathHelper'
+import { useRoute } from 'vue-router'
 
 interface Props {
   issue_boxes: IssueBox[],
@@ -48,6 +50,8 @@ interface Props {
   sorts?: string
 }
 
+const route = useRoute()
+const path_info = PathHelper.parseCollection(route.path, 'index')
 const props = withDefaults(defineProps<Props>(), {
   columns: () => []
 })

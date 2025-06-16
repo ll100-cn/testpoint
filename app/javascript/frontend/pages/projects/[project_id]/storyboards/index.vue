@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { Button } from '$ui/button'
-import { Nav } from '$ui/nav'
+import { Nav, NavItem } from '$ui/nav'
 import BlankDialog from '@/components/BlankDialog.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 import { Storyboard } from '@/models'
@@ -18,11 +18,13 @@ import { onActivated, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import StoryboardCreateDialogContent from './StoryboardCreateDialogContent.vue'
 import type { StoryboardFrameComponent } from '@/components/StoryboardFrame'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const path_info = PathHelper.parseCollection(route.path, 'index')
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -39,11 +41,11 @@ await line.wait()
 
 onActivated(() => {
   if (storyboard_boxes.value.length > 0) {
-    router.replace(`/projects/${params.project_id}/storyboards/${storyboard_boxes.value[0].storyboard.id}`)
+    router.replace(`${path_info.collection}/${storyboard_boxes.value[0].storyboard.id}`)
   }
 })
 
 function onStoryboardCreated(storyboard: Storyboard) {
-  router.push(`/projects/${params.project_id}/storyboards/${storyboard.id}`)
+  router.push(`${path_info.collection}/${storyboard.id}`)
 }
 </script>

@@ -5,8 +5,8 @@
       <IssueStateBadge :state="issue_box.issue.state" />
     </span>
     <div class="flex ms-auto space-x-3 items-center">
-      <Button v-if="!readonly && allow('update', Issue)" :to="`/projects/${project_id}/issues/${params.issue_id}/edit`">修改</Button>
-      <Button variant="destructive" v-if="!readonly && allow('manage', Issue)" :to="`/projects/${project_id}/issues/${issue_box.issue.id}/merge`">合并</Button>
+      <Button v-if="!readonly && allow('update', Issue)" :to="`${path_info.resource}/edit`">修改</Button>
+      <Button variant="destructive" v-if="!readonly && allow('manage', Issue)" :to="`${path_info.resource}/merge`">合并</Button>
     </div>
   </PageHeader>
 
@@ -159,6 +159,7 @@ import { useQueryLine } from '@/lib/useQueryLine'
 import type { IssueCommentFrameComponent } from "@/components/IssueCommentFrame"
 import type { IssueFrameComponent } from "@/components/IssueFrame"
 import type { IssueStateFrameComponent } from "@/components/IssueStateFrame"
+import PathHelper from '@/lib/PathHelper'
 
 const IssueCommentDialog = BlankDialog as typeof BlankDialog & IssueCommentFrameComponent
 const comment_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueCommentFrameComponent>)
@@ -175,6 +176,7 @@ const project_id = _.toInteger(params.project_id)
 const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = profile.allow
+const path_info = PathHelper.parseMember(route.path, 'show')
 
 const { data: issue_box } = line.request(q.bug.issues.Get('+info'), (req, it) => {
   req.interpolations.project_id = project_id

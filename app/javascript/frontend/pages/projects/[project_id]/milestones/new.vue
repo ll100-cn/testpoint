@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增里程碑</Button>
-          <Button variant="secondary" :to="`/projects/${params.project_id}/milestones`">取消</Button>
+          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -29,11 +29,13 @@ import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const path_info = PathHelper.parseCollection(route.path, 'new')
 
 const former = Former.build({
   title: null as string | null,
@@ -54,6 +56,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(`/projects/${params.project_id}/milestones`)
+  router.push(path_info.collection)
 }
 </script>

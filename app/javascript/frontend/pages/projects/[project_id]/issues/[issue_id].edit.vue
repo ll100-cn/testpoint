@@ -31,8 +31,8 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>更新问题</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/issues/${issue_id}`">取消</Button>
-          <Button variant="destructive" v-if="allow('manage', issue_box.issue)" :to="`/projects/${project_id}/issues/${issue_id}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
+          <Button variant="secondary" :to="`${path_info.resource}`">取消</Button>
+          <Button variant="destructive" v-if="allow('manage', issue_box.issue)" :to="`${path_info.resource}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
         </div>
       </FormGroup>
     </div>
@@ -58,6 +58,7 @@ import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
 import { computed } from 'vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const route = useRoute()
 const router = useRouter()
@@ -68,6 +69,7 @@ const issue_id = _.toInteger(params.issue_id)
 const page = usePageStore()
 const session = useSessionStore()
 const allow = page.inProject()!.allow
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
 const { data: issue_box } = line.request(q.bug.issues.Get(), (req, it) => {
   req.interpolations.project_id = project_id
@@ -106,6 +108,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push({ path: `/projects/${project_id}/issues/${issue_id}` })
+  router.push({ path: path_info.resource })
 }
 </script>

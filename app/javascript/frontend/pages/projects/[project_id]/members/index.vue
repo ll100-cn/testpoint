@@ -3,7 +3,7 @@
     <PageTitle>项目成员列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', Member)" :to="`/projects/${project_id}/members/new`">新增成员</Button>
+      <Button v-if="allow('create', Member)" :to="`${path_info.collection}/new`">新增成员</Button>
     </template>
   </PageHeader>
 
@@ -34,7 +34,7 @@
               <TableCell>{{ user.email }}</TableCell>
               <TableCell>{{ member.role_text }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', member)" :to="`/projects/${project_id}/members/${member.id}/edit`" class="link">
+                <router-link v-if="allow('update', member)" :to="`${path_info.collection}/${member.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
                 <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
@@ -63,6 +63,7 @@ import { Validator } from '$ui/simple_form'
 import Button from "$ui/button/Button.vue"
 import { Nav, NavItem } from '$ui/nav'
 import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -76,6 +77,7 @@ const active = ref('normal')
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
 const { data: member_boxes } = line.request(q.project.members.List('+user'), (req, it) => {
   req.interpolations.project_id = project_id
