@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { EntityRepo, Platform, Requirement, RequirementBox, RequirementPage, Roadmap, StoryboardBox, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, Requirement, type RequirementBox, RequirementPage, Roadmap, type StoryboardBox, TestCase, TestCaseLabel } from '@/models'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import * as q from '@/requests'

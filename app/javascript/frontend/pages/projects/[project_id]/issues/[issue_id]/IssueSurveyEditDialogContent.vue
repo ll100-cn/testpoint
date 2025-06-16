@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import * as q from '@/requests'
-import { IssueSurvey, IssueBox, IssueTemplateBox } from "@/models"
+import { IssueSurvey, type IssueBox, type IssueTemplateBox } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
@@ -81,7 +81,7 @@ const loading = ref(true)
 
 async function reset(a_issue_box: IssueBox, a_issue_survey: IssueSurvey) {
   loading.value = true
-  issue_box.value = a_issue_box
+  issue_box.value = { ...a_issue_box }
   issue_survey.value = a_issue_survey
 
   try {

@@ -72,8 +72,8 @@ function attachmentChange($event: Attachment[]) {
 }
 
 function reset(a_issue_box: IssueBox, a_comment_box: CommentBox) {
-  issue_box.value = a_issue_box
-  comment_box.value = a_comment_box
+  issue_box.value = { ...a_issue_box }
+  comment_box.value = { ...a_comment_box }
 
   loading.value = false
 }

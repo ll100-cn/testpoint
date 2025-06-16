@@ -47,7 +47,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import * as q from '@/requests'
 import { usePageStore, useSessionStore } from '@/store'
-import { MemberBox } from '@/models'
+import { type MemberBox } from '@/models'
 import _ from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'

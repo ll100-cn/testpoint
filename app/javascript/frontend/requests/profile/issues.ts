@@ -1,4 +1,4 @@
-import { IssueBox, IssuePage } from "@/models"
+import { type IssueBox, IssueBoxImpl, IssuePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 

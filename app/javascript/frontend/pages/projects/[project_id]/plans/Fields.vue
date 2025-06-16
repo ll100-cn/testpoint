@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForSelect from "@/components/OptionsForSelect.vue"
-import { Platform, PlatformBox, TestCaseStat } from "@/models"
+import { Platform, type PlatformBox, TestCaseStat } from "@/models"
 import _ from "lodash"
 import { computed } from 'vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'

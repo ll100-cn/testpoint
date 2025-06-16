@@ -22,7 +22,7 @@
 
       <div v-for="item in timelines" class="mb-2">
         <template v-if="(item instanceof Comment)">
-          <IssueComment :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBox.from(item)" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_dialog.show(...args)" />
+          <IssueComment :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBoxImpl.from(item)" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_dialog.show(...args)" />
         </template>
         <template v-else-if="(item instanceof IssueActivity)">
           <IssueActivityInfo :issue_box="issue_box" :issue_activity="item" />
@@ -130,7 +130,7 @@ import { Actioner } from "@/components/Actioner"
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/requests'
-import { Comment, CommentBox, CommentRepo, Issue, IssueActivity, IssueBox, IssueRelationship, IssueSurvey } from "@/models"
+import { Comment, type CommentBox, CommentBoxImpl, CommentRepo, Issue, IssueActivity, type IssueBox, IssueRelationship, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"

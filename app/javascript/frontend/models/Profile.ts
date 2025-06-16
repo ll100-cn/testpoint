@@ -1,4 +1,5 @@
 import * as t from '@/lib/transforms'
+import type { OmitByValue } from "utility-types"
 
 export class Profile {
   member_id!: number
@@ -47,6 +48,8 @@ export class Profile {
   }
 }
 
-export class ProfileBox {
+export class ProfileBoxImpl {
   @t.Klass(Profile) profile!: Profile
 }
+
+export type ProfileBox = OmitByValue<ProfileBoxImpl, Function>

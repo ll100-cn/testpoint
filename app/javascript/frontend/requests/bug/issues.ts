@@ -1,4 +1,4 @@
-import { Issue, IssueBox, IssuePage, IssueSummary, Pagination } from "@/models"
+import { Issue, type IssueBox, IssueBoxImpl, IssuePage, IssueSummary } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
@@ -10,7 +10,7 @@ class CreateRequest extends BaseRequest<IssueBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response)
+    return this.responseToObject(IssueBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -33,7 +33,7 @@ class MergeRequest extends BaseRequest<IssueBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/merge" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response)
+    return this.responseToObject(IssueBoxImpl, response)
   }
 }
 export const Merge = () => new MergeRequest()
@@ -44,7 +44,7 @@ class GetRequest<Box extends IssueBox> extends BaseRequest<Box> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response) as Box
+    return this.responseToObject(IssueBoxImpl, response) as Box
   }
 }
 export function Get(): InstanceType<typeof GetRequest<IssueBox>>
@@ -66,7 +66,7 @@ class ResolveRequest<Box extends IssueBox> extends BaseRequest<Box> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/resolve" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response) as Box
+    return this.responseToObject(IssueBoxImpl, response) as Box
   }
 }
 export function Resolve(): InstanceType<typeof GetRequest<IssueBox>>
@@ -88,7 +88,7 @@ class ProcessRequest<Box extends IssueBox> extends BaseRequest<Box> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/process" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueBox, response) as Box
+    return this.responseToObject(IssueBoxImpl, response) as Box
   }
 }
 export function Process(): InstanceType<typeof ProcessRequest<IssueBox>>

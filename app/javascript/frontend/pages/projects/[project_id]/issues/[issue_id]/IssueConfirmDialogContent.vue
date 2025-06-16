@@ -44,7 +44,7 @@ import OptionsForMember from "@/components/OptionsForMember.vue"
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import { useQueryLine } from '@/lib/useQueryLine'
-import { CategoryBox, IssueBox, MemberBox } from "@/models"
+import { type CategoryBox, type IssueBox, type MemberBox } from "@/models"
 import * as q from '@/requests'
 import { nextTick, ref } from "vue"
 

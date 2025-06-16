@@ -64,7 +64,7 @@ const loading = ref(true)
 function reset(a_issue_box: IssueBox) {
   loading.value = true
 
-  issue_box.value = a_issue_box
+  issue_box.value = { ...a_issue_box }
   former.form.content = a_issue_box.issue.content
   former.form.attachments_params = a_issue_box.attachments.map(it => {
     return { id: it.id }

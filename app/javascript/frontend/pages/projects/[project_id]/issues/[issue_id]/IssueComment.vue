@@ -35,7 +35,7 @@
       <Callout class="mt-3 py-1" v-if="children.length > 0">
         <template v-for="(child, index) in children">
           <div class="mt-4" v-if="index != 0"></div>
-          <IssueCommentReply :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBox.from(child)" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
+          <IssueCommentReply :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBoxImpl.from(child)" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
         </template>
       </Callout>
     </CardContent>
@@ -47,7 +47,7 @@ import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Attachment, Comment, CommentBox, CommentRepo, Issue, IssueBox } from "@/models"
+import { Attachment, Comment, type CommentBox, CommentBoxImpl, CommentRepo, Issue, type IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"

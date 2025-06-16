@@ -62,7 +62,7 @@ import { Actioner } from "@/components/Actioner"
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import * as controls from '@/components/controls'
 import type { TaskUpshotFrameEmits } from '@/components/TaskUpshotFrame'
-import { Category, IssueTemplate, IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, PlanBox, TaskBox, TaskUpshot, TaskUpshotBox } from '@/models'
+import { Category, IssueTemplate, type IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, type PlanBox, type TaskBox, TaskUpshot, type TaskUpshotBox } from '@/models'
 import * as q from '@/requests'
 import { useQueryLine } from '@/lib/useQueryLine'
 import { usePageStore, useSessionStore } from '@/store'
@@ -167,7 +167,7 @@ const loading = ref(true)
 async function reset(a_task_upshot_box: TaskUpshotBox, a_task_box: TaskBox) {
   loading.value = true
 
-  task_upshot_box.value = a_task_upshot_box
+  task_upshot_box.value = { ...a_task_upshot_box }
   task_box.value = a_task_box
   addon.value = null
 

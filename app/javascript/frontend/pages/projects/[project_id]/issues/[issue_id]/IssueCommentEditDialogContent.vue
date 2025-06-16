@@ -19,7 +19,7 @@
 import { Button } from '$ui/button'
 import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Attachment, CommentBox, IssueBox } from "@/models"
+import { Attachment, type CommentBox, type IssueBox } from "@/models"
 import * as q from '@/requests'
 import _ from "lodash"
 import { ref } from "vue"
@@ -34,7 +34,7 @@ const emit = defineEmits<IssueCommentFrameEmits>()
 
 const former = Former.build({
   content: "",
-  attachment_ids: []
+  attachment_ids: [] as number[]
 })
 
 const Form = GenericForm<typeof former.form>
@@ -67,9 +67,8 @@ function attachmentChange($event: Attachment[]) {
 }
 
 function reset(a_issue_box: IssueBox, a_comment_box: CommentBox) {
-  console.log("reset", a_issue_box, a_comment_box)
-  issue_box.value = a_issue_box
-  comment_box.value = a_comment_box
+  issue_box.value = { ...a_issue_box }
+  comment_box.value = { ...a_comment_box }
 
   former.form.content = a_comment_box.comment.content
   former.form.attachment_ids = a_comment_box.comment.attachments.map(it => it.id)

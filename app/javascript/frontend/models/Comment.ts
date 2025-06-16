@@ -3,6 +3,7 @@ import { Attachment } from "./Attachment"
 import { Member } from "./Member"
 import { EntityIndex, EntityRepo } from './EntityRepo'
 import { Pagination } from './Pagination'
+import type { OmitByValue } from "utility-types"
 
 export class Comment {
   @t.Number id!: number
@@ -31,14 +32,16 @@ export class CommentRepo extends EntityRepo<Comment> {
   }
 }
 
-export class CommentBox {
+export class CommentBoxImpl {
   @t.Klass(Comment) comment!: Comment
 
-  static from(comment: Comment): CommentBox {
+  static from(comment: Comment): CommentBoxImpl {
     return { comment }
   }
 }
 
+export type CommentBox = OmitByValue<CommentBoxImpl, Function>
+
 export class CommentPage<Box extends CommentBox> extends Pagination<Box> {
-  @t.Klass(CommentBox) list: Box[] = []
+  @t.Klass(CommentBoxImpl) list: Box[] = []
 }

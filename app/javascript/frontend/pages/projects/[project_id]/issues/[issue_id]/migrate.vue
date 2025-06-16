@@ -40,7 +40,7 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/requests'
-import { Category, CategoryBox, CategoryPage, IssueBox, MemberBox, MemberPage } from "@/models"
+import { Category, type CategoryBox, CategoryPage, type IssueBox, type MemberBox, MemberPage } from "@/models"
 import { usePageStore, useSessionStore } from "@/store"
 import _ from "lodash"
 import { computed, ref, watch } from 'vue'

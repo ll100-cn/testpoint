@@ -1,5 +1,5 @@
 import type { EmitsAsProps } from '@/lib/utils'
-import { TaskUpshotBox } from '@/models'
+import type { TaskUpshotBox } from '@/models'
 import type { DefineComponent, Component } from 'vue'
 
 export interface TaskUpshotFrameProps {

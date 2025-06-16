@@ -74,7 +74,7 @@
 import * as q from '@/requests'
 import * as t from '@/lib/transforms'
 import * as utils from '@/lib/utils'
-import { EntityRepo, Milestone, MilestoneBox, MilestonePage, Platform, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Milestone, type MilestoneBox, MilestonePage, Platform, TestCase, TestCaseLabel } from '@/models'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, getCurrentInstance, provide, ref, watch } from 'vue'

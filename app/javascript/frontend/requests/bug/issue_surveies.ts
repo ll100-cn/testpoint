@@ -1,4 +1,4 @@
-import { IssueSurveyBox, IssueSurveyPage } from "@/models"
+import { type IssueSurveyBox, IssueSurveyBoxImpl, IssueSurveyPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
@@ -7,7 +7,7 @@ class CreateRequest extends BaseRequest<IssueSurveyBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurveyBox, response)
+    return this.responseToObject(IssueSurveyBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -18,7 +18,7 @@ class DestroyRequest extends BaseRequest<IssueSurveyBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurveyBox, response)
+    return this.responseToObject(IssueSurveyBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()
@@ -40,7 +40,7 @@ class UpdateRequest extends BaseRequest<IssueSurveyBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurveyBox, response)
+    return this.responseToObject(IssueSurveyBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()

@@ -1,6 +1,7 @@
 import * as t from '@/lib/transforms'
-import md5 from "js-md5"
+import { md5 } from "js-md5"
 import { Pagination } from "./Pagination"
+import type { OmitByValue } from "utility-types"
 
 export class User {
   id!: number
@@ -13,10 +14,12 @@ export class User {
   }
 }
 
-export class UserBox {
+export class UserBoxImpl {
   @t.Klass(User) user!: User
 }
 
+export type UserBox = OmitByValue<UserBoxImpl, Function>
+
 export class UserPage<Box extends UserBox> extends Pagination<Box> {
-  @t.Klass(UserBox) list: Box[] = []
+  @t.Klass(UserBoxImpl) list: Box[] = []
 }

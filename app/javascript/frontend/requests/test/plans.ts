@@ -1,4 +1,4 @@
-import { MemberPage, Plan, PlanBox, PlanPage } from "@/models"
+import { MemberPage, Plan, type PlanBox, PlanBoxImpl, PlanPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
@@ -8,7 +8,7 @@ class CreateRequest extends BaseRequest<PlanBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -19,7 +19,7 @@ class UpdateRequest extends BaseRequest<PlanBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -30,7 +30,7 @@ class DestroyRequest extends BaseRequest<PlanBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()
@@ -54,7 +54,7 @@ class InfoGetRequest extends BaseRequest<PlanBox> {
   graph = "counts, info"
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
 }
 export const InfoGet = () => new InfoGetRequest()
@@ -65,7 +65,7 @@ class GetRequest<Box extends PlanBox> extends BaseRequest<Box> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response) as Box
+    return this.responseToObject(PlanBoxImpl, response) as Box
   }
 }
 export function Get(): InstanceType<typeof GetRequest<PlanBox>>

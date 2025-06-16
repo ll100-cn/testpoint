@@ -1,6 +1,7 @@
 import * as t from '@/lib/transforms'
 import { User } from "./User"
 import md5 from 'js-md5'
+import type { OmitByValue } from "utility-types"
 
 export class Account {
   @t.Klass(User) user!: User
@@ -15,6 +16,8 @@ export class Account {
   }
 }
 
-export class AccountBox {
+export class AccountBoxImpl {
   @t.Klass(Account) account!: Account
 }
+
+export type AccountBox = OmitByValue<AccountBoxImpl, Function>

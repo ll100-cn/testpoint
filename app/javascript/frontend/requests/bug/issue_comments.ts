@@ -1,4 +1,4 @@
-import { CommentBox, CommentPage } from "@/models"
+import { type CommentBox, CommentBoxImpl, CommentPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
@@ -7,7 +7,7 @@ class CreateRequest extends BaseRequest<CommentBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -18,7 +18,7 @@ class ListRequest extends BaseRequest<CommentPage<CommentBox>> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentPage<CommentBox>, response)
+    return this.responseToObject(CommentPage<CommentBoxImpl>, response)
   }
 }
 export const List = () => new ListRequest()
@@ -29,7 +29,7 @@ class UpdateRequest extends BaseRequest<CommentBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -40,7 +40,7 @@ class ConvertRequest extends BaseRequest<CommentBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}", "/convert" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
 export const Convert = () => new ConvertRequest()
@@ -51,7 +51,7 @@ class DestroyRequest extends BaseRequest<CommentBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()

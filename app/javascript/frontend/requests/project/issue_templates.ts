@@ -1,4 +1,4 @@
-import { IssueTemplate, IssueTemplateBox, IssueTemplatePage } from "@/models"
+import { IssueTemplate, type IssueTemplateBox, IssueTemplateBoxImpl, IssueTemplatePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse, Method } from "axios"
 
@@ -7,7 +7,7 @@ class CreateRequest extends BaseRequest<IssueTemplateBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -18,7 +18,7 @@ class GetRequest extends BaseRequest<IssueTemplateBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
 export const Get = () => new GetRequest()
@@ -29,7 +29,7 @@ class UpdateRequest extends BaseRequest<IssueTemplateBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -40,7 +40,7 @@ class DestroyRequest extends BaseRequest<IssueTemplateBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()

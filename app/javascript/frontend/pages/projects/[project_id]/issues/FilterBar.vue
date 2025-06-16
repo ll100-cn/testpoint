@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import * as utils from "@/lib/utils"
-import { IssueSummaryBox } from "@/models"
+import { IssueSummary } from "@/models"
 import _ from "lodash"
 import { computed, reactive, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
@@ -61,7 +61,7 @@ const router = useRouter()
 const query = utils.queryToPlain(route.query)
 
 const props = defineProps<{
-  summary: IssueSummaryBox
+  summary: IssueSummary
 }>()
 
 const search2 = reactive(utils.instance(Search2, query))

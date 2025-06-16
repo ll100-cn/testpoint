@@ -1,4 +1,4 @@
-import { Category, CategoryBox, CategoryPage } from "@/models"
+import { Category, type CategoryBox, CategoryBoxImpl, CategoryPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -30,7 +30,7 @@ class CreateRequest extends BaseRequest<CategoryBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBox, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -41,7 +41,7 @@ class GetRequest extends BaseRequest<CategoryBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBox, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
 export const Get = () => new GetRequest()
@@ -52,7 +52,7 @@ class UpdateRequest extends BaseRequest<CategoryBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBox, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -63,7 +63,7 @@ class DestroyRequest extends BaseRequest<CategoryBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBox, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()

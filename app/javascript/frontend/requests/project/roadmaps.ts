@@ -1,4 +1,4 @@
-import { Roadmap, RoadmapBox, RoadmapPage } from "@/models"
+import { Roadmap, type RoadmapBox, RoadmapBoxImpl, RoadmapPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -18,7 +18,7 @@ class CreateRequest extends BaseRequest<RoadmapBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBox, response)
+    return this.responseToObject(RoadmapBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -29,7 +29,7 @@ class UpdateRequest extends BaseRequest<RoadmapBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps", "/{roadmap_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBox, response)
+    return this.responseToObject(RoadmapBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -40,7 +40,7 @@ class DestroyRequest extends BaseRequest<RoadmapBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps", "/{roadmap_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBox, response)
+    return this.responseToObject(RoadmapBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()

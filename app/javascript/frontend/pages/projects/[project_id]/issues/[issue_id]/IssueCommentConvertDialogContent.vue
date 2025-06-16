@@ -68,7 +68,7 @@ const comment = ref(null! as Comment)
 const loading = ref(true)
 
 function reset(a_issue_box: IssueBox, a_comment: Comment) {
-  issue_box.value = a_issue_box
+  issue_box.value = { ...a_issue_box }
   comment.value = a_comment
 
   former.form.comment_id = comment.value.comment_id

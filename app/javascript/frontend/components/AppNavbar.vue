@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import { MemberBox, MemberInfo, MemberPage } from '@/models'
+import { type MemberBox, MemberInfo, MemberPage } from '@/models'
 import { usePageStore } from '@/store'
 import { useSessionStore } from '@/store/session'
 import { computed, getCurrentInstance, ref } from 'vue'

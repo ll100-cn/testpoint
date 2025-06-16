@@ -1,4 +1,4 @@
-import { TestCaseLabel, TestCaseLabelBox, TestCaseLabelInfo, TestCaseLablePage } from "@/models"
+import { TestCaseLabel, type TestCaseLabelBox, TestCaseLabelBoxImpl, TestCaseLabelInfo, TestCaseLablePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -30,7 +30,7 @@ class CreateRequest extends BaseRequest<TestCaseLabelBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseLabelBox, response)
+    return this.responseToObject(TestCaseLabelBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -41,7 +41,7 @@ class UpdateRequest extends BaseRequest<TestCaseLabelBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseLabelBox, response)
+    return this.responseToObject(TestCaseLabelBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -52,7 +52,7 @@ class DestroyRequest extends BaseRequest<TestCaseLabelBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseLabelBox, response)
+    return this.responseToObject(TestCaseLabelBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()
@@ -63,7 +63,7 @@ class GetRequest extends BaseRequest<TestCaseLabelBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseLabelBox, response)
+    return this.responseToObject(TestCaseLabelBoxImpl, response)
   }
 }
 export const Get = () => new GetRequest()

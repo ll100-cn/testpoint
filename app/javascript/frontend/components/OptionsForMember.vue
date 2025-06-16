@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { useControlValue } from '$ui/simple_form'
-import { Member, MemberBox, Role } from '@/models'
+import { Member, type MemberBox, Role } from '@/models'
 import _ from 'lodash'
 import { type Ref, computed, inject } from 'vue'
 

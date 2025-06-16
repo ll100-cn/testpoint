@@ -54,7 +54,7 @@ former.doPerform = async function() {
 }
 
 function reset(a_issue_box: IssueBox) {
-  issue_box.value = a_issue_box
+  issue_box.value = { ...a_issue_box }
   loading.value = false
 }
 

@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, IssueStat, Project, MemberBox } from '@/models'
+import { EntityRepo, IssueStat, Project, type MemberBox } from '@/models'
 import * as q from '@/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"

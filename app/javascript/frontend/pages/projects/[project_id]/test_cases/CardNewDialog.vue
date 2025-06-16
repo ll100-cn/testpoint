@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import { EntityRepo, Platform, RequirementBox, Roadmap, StoryboardBox, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, type RequirementBox, Roadmap, type StoryboardBox, TestCase, TestCaseLabel } from '@/models'
 import { computed, nextTick, ref, watch } from 'vue'
 import CaseForm from './CaseForm.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'

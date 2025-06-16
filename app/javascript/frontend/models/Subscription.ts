@@ -1,5 +1,6 @@
 import * as t from '@/lib/transforms'
 import { Member } from './Member'
+import type { OmitByValue } from "utility-types"
 
 export class Subscription {
   @t.Number id!: number
@@ -9,6 +10,8 @@ export class Subscription {
   @t.Klass(Member) member!: Member
 }
 
-export class SubscriptionBox {
+export class SubscriptionBoxImpl {
   @t.Klass(Subscription) subscription!: Subscription
 }
+
+export type SubscriptionBox = OmitByValue<SubscriptionBoxImpl, Function>

@@ -2,6 +2,7 @@ import * as t from '@/lib/transforms'
 import { EntityIndex, EntityRepo } from "./EntityRepo"
 import { Pagination } from "./Pagination"
 import { RequirementStat } from './RequirementStat'
+import type { OmitByValue } from "utility-types"
 
 export class Requirement {
   id!: number
@@ -19,12 +20,14 @@ export class Requirement {
   @t.Date updated_at!: Date
 }
 
-export class RequirementBox {
+export class RequirementBoxImpl {
   @t.Klass(Requirement) requirement!: Requirement
 }
 
+export type RequirementBox = OmitByValue<RequirementBoxImpl, Function>
+
 export class RequirementPage<Box extends RequirementBox> extends Pagination<Box> {
-  @t.Klass(RequirementBox) list: Box[] = []
+  @t.Klass(RequirementBoxImpl) list: Box[] = []
   @t.Klass(RequirementStat) requirement_stats: RequirementStat[] = []
 }
 

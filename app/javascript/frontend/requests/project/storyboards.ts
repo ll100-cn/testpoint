@@ -1,4 +1,4 @@
-import { Storyboard, StoryboardBox, StoryboardPage } from "@/models"
+import { Storyboard, type StoryboardBox, StoryboardBoxImpl, StoryboardPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -18,7 +18,7 @@ class GetRequest extends BaseRequest<StoryboardBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
 export const Get = () => new GetRequest()
@@ -29,7 +29,7 @@ class CreateRequest extends BaseRequest<StoryboardBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -41,7 +41,7 @@ class UpdateRequest extends BaseRequest<StoryboardBox> {
   headers = { 'Content-Type': 'application/json' }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -52,7 +52,7 @@ class DestroyRequest extends BaseRequest<StoryboardBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()

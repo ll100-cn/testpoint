@@ -1,4 +1,4 @@
-import { Requirement, RequirementBox, RequirementPage } from "@/models"
+import { Requirement, type RequirementBox, RequirementBoxImpl, RequirementPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -31,7 +31,7 @@ class CreateRequest extends BaseRequest<RequirementBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBox, response)
+    return this.responseToObject(RequirementBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -42,7 +42,7 @@ class UpdateRequest extends BaseRequest<RequirementBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements", "/{requirement_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBox, response)
+    return this.responseToObject(RequirementBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -53,7 +53,7 @@ class DestroyRequest extends BaseRequest<RequirementBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements", "/{requirement_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBox, response)
+    return this.responseToObject(RequirementBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()

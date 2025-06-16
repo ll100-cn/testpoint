@@ -1,4 +1,4 @@
-import { Task, TaskBox } from "@/models"
+import { Task, type TaskBox, TaskBoxImpl } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
@@ -8,7 +8,7 @@ class IgnoreRequest extends BaseRequest<TaskBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/ignore" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBox, response)
+    return this.responseToObject(TaskBoxImpl, response)
   }
 }
 export const Ignore = () => new IgnoreRequest()
@@ -19,7 +19,7 @@ class UnignoreRequest extends BaseRequest<TaskBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/unignore" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBox, response)
+    return this.responseToObject(TaskBoxImpl, response)
   }
 }
 export const Unignore = () => new UnignoreRequest()
@@ -30,7 +30,7 @@ class GetRequest<Box extends TaskBox> extends BaseRequest<Box> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBox, response) as Box
+    return this.responseToObject(TaskBoxImpl, response) as Box
   }
 }
 export function Get(): InstanceType<typeof GetRequest<TaskBox>>

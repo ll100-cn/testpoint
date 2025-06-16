@@ -1,4 +1,4 @@
-import { Scene, SceneBox, ScenePage } from "@/models"
+import { Scene, type SceneBox, SceneBoxImpl, ScenePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -18,7 +18,7 @@ class CreateRequest extends BaseRequest<SceneBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(SceneBox, response)
+    return this.responseToObject(SceneBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()
@@ -29,7 +29,7 @@ class UpdateRequest extends BaseRequest<SceneBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes", "/{scene_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(SceneBox, response)
+    return this.responseToObject(SceneBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -40,7 +40,7 @@ class DestroyRequest extends BaseRequest<SceneBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes", "/{scene_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(SceneBox, response)
+    return this.responseToObject(SceneBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()

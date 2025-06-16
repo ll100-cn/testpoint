@@ -1,4 +1,4 @@
-import { ProjectBox, ProjectPage } from "@/models"
+import { type ProjectBox, ProjectBoxImpl, ProjectPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
@@ -7,7 +7,7 @@ class UpdateRequest extends BaseRequest<ProjectBox> {
   endpoint = [ "/api/v2/admin/projects", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -18,7 +18,7 @@ class GetRequest extends BaseRequest<ProjectBox> {
   endpoint = [ "/api/v2/admin/projects", "/{project_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
 export const Get = () => new GetRequest()
@@ -29,7 +29,7 @@ class DestroyRequest extends BaseRequest<ProjectBox> {
   endpoint = [ "/api/v2/admin/projects", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()
@@ -40,7 +40,7 @@ class CreateRequest extends BaseRequest<ProjectBox> {
   endpoint = [ "/api/v2/admin/projects" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()

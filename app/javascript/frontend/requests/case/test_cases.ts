@@ -1,4 +1,4 @@
-import { TestCase, TestCaseBox, TestCasePage } from "@/models"
+import { TestCase, type TestCaseBox, TestCaseBoxImpl, TestCasePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
@@ -7,7 +7,7 @@ class UpdateRequest extends BaseRequest<TestCaseBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBox, response)
+    return this.responseToObject(TestCaseBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -29,7 +29,7 @@ class GetRequest extends BaseRequest<TestCaseBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases", "/{test_case_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBox, response)
+    return this.responseToObject(TestCaseBoxImpl, response)
   }
 }
 export const Get = () => new GetRequest()
@@ -40,7 +40,7 @@ class DestroyRequest extends BaseRequest<TestCaseBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBox, response)
+    return this.responseToObject(TestCaseBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()
@@ -51,7 +51,7 @@ class CreateRequest extends BaseRequest<TestCaseBox> {
   endpoint = [ "/api/v2/projects", "/{project_id}", "/test_cases" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBox, response)
+    return this.responseToObject(TestCaseBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()

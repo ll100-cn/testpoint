@@ -1,6 +1,7 @@
 import * as t from '@/lib/transforms'
 import { IssueTemplate } from './IssueTemplate'
 import { Pagination } from './Pagination'
+import type { OmitByValue } from "utility-types"
 
 export class IssueSurvey {
   @t.Number id!: number
@@ -16,10 +17,12 @@ export class IssueSurvey {
   @t.Klass(IssueTemplate) template!: IssueTemplate
 }
 
-export class IssueSurveyBox {
+export class IssueSurveyBoxImpl {
   @t.Klass(IssueSurvey) issue_survey!: IssueSurvey
 }
 
+export type IssueSurveyBox = OmitByValue<IssueSurveyBoxImpl, Function>
+
 export class IssueSurveyPage<Box extends IssueSurveyBox> extends Pagination<Box> {
-  @t.Klass(IssueSurveyBox) list: Box[] = []
+  @t.Klass(IssueSurveyBoxImpl) list: Box[] = []
 }

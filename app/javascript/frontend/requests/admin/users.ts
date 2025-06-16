@@ -1,4 +1,4 @@
-import { UserBox, UserPage } from "@/models"
+import { type UserBox, UserBoxImpl, UserPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
@@ -7,7 +7,7 @@ class UpdateRequest extends BaseRequest<UserBox> {
   endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
 export const Update = () => new UpdateRequest()
@@ -18,7 +18,7 @@ class GetRequest extends BaseRequest<UserBox> {
   endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
 export const Get = () => new GetRequest()
@@ -29,7 +29,7 @@ class DestroyRequest extends BaseRequest<UserBox> {
   endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
 export const Destroy = () => new DestroyRequest()
@@ -40,7 +40,7 @@ class CreateRequest extends BaseRequest<UserBox> {
   endpoint = [ "/api/v2/admin/users" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
 export const Create = () => new CreateRequest()

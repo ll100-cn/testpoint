@@ -21,7 +21,7 @@ import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } f
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import Fields from "./Fields.vue"
 import type { PlanFrameEmits } from '@/components/PlanFrame'
-import { Plan, Platform, PlatformBox, PlatformPage, TestCaseStat } from '@/models'
+import { Plan, Platform, type PlatformBox, PlatformPage, TestCaseStat } from '@/models'
 import * as q from '@/requests'
 import * as h from '@/lib/humanize'
 import { useQueryLine } from '@/lib/useQueryLine'
