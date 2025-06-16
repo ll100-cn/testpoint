@@ -7,7 +7,7 @@
     </template>
   </PageHeader>
 
-  <FormErrorAlert :validator="validator" />
+  <ActionerAlert :actioner="actioner" />
 
   <Card>
     <CardTable>
@@ -30,7 +30,7 @@
                 <router-link class="link" v-if="allow('update', box.issue_template)" :to="`${path_info.collection}/${box.issue_template.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', box.issue_template)" href="#" @click.prevent="onRemove(box.issue_template.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', box.issue_template)" href="#" v-confirm="'是否删除问题模版？'" @click.prevent="deleteIssueTemplate(box.issue_template.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -55,6 +55,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, 
 import Button from '$ui/button/Button.vue';
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
+import { Actioner } from '@/components/Actioner';
+import ActionerAlert from '@/components/ActionerAlert.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -62,8 +65,8 @@ const line = useQueryLine()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const actioner = Actioner.build()
 
-const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
 const path_info = PathHelper.parseCollection(route.path, 'index')
 
@@ -77,20 +80,10 @@ const { mutateAsync: destroy_issue_template_action } = line.request(q.project.is
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function onRemove(id: number) {
-  if (!confirm("是否删除问题模版？")) {
-    return
-  }
-
-  try {
-    await destroy_issue_template_action({
-      interpolations: { project_id, issue_template_id: id }
-    })
-
-    router.go(0)
-  } catch (error) {
-    validator.processError(error)
-  }
+async function deleteIssueTemplate(id: number) {
+  await actioner.perform(destroy_issue_template_action, {
+    interpolations: { project_id, issue_template_id: id }
+  })
 }
 
 </script>

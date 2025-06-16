@@ -37,7 +37,7 @@
                 <router-link v-if="allow('update', member)" :to="`${path_info.collection}/${member.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('archive', member)" @click.prevent="onArchive(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
+                <a href="#" v-if="allow('archive', member)" v-confirm="'是否归档成员？'" @click.prevent="archiveMember(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
@@ -64,6 +64,8 @@ import Button from "$ui/button/Button.vue"
 import { Nav, NavItem } from '$ui/nav'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from "@/components/Alerter"
 
 const line = useQueryLine()
 const route = useRoute()
@@ -72,6 +74,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const session = useSessionStore()
+const alerter = Alerter.build()
 
 const active = ref('normal')
 
@@ -89,20 +92,10 @@ const { mutateAsync: archive_member_action } = line.request(q.project.members.Ar
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function onArchive(id: number) {
-  if (!confirm("是否归档成员？")) {
-    return
-  }
-
-  try {
-    await archive_member_action({
-      interpolations: { project_id, member_id: id }
-    })
-
-    router.go(0)
-  } catch (error) {
-    validator.processError(error)
-  }
+async function archiveMember(id: number) {
+  await alerter.perform(archive_member_action, {
+    interpolations: { project_id, member_id: id }
+  })
 }
 
 const filtered_member_boxes = computed(() => {

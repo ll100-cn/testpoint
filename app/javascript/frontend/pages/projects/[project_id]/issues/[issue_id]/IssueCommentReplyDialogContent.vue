@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import { Attachment, Comment, CommentBox, IssueBox } from "@/models"
+import { Attachment, Comment, type CommentBox, type IssueBox } from "@/models"
 import _ from "lodash"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'

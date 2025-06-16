@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import { IssueBox } from "@/models"
+import { type IssueBox } from "@/models"
 import { ref } from "vue"
 
 const props = withDefaults(defineProps<{

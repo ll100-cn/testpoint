@@ -34,7 +34,7 @@
                 <router-link class="link" v-if="allow('update', category)" :to="`${path_info.collection}/${category.id}/edit`">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('destroy', category)" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
+                <a href="#" v-if="allow('destroy', category)" v-confirm="'确定操作？'" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -60,6 +60,7 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -67,6 +68,7 @@ const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const actioner = Actioner.build()
 
 const project_id = params.project_id
 const path_info = PathHelper.parseCollection(route.path, 'index')
@@ -79,19 +81,13 @@ await line.wait()
 const category_boxes = computed(() => category_page.value.list)
 const issues_counts = computed(() => category_page.value.issues_counts ?? {})
 
-const actioner = Actioner.build()
-
 const { mutateAsync: destroy_category_action } = line.request(q.project.categories.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))
 })
 
-function deleteCategory(id: number) {
-  actioner.perform(async function() {
-    await destroy_category_action({
-      interpolations: { project_id, category_id: id }
-    })
-
-    router.go(0)
+async function deleteCategory(id: number) {
+  await actioner.perform(destroy_category_action, {
+    interpolations: { project_id, category_id: id }
   })
 }
 </script>

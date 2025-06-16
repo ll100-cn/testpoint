@@ -27,7 +27,7 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import * as q from '@/requests'
-import { Comment, Issue, IssueBox } from "@/models"
+import { Comment, Issue, type IssueBox } from "@/models"
 import { ref } from "vue"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'

@@ -7,7 +7,7 @@
 
       <MoreDropdown class="ms-auto">
         <DropdownMenuItem v-if="!readonly && comment_box.comment.member.user_id == user.id && allow('update', comment_box.comment)" @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
-        <DropdownMenuItem v-if="!readonly && allow('destroy', comment_box.comment)" @click.prevent="deleteComment">删除</DropdownMenuItem>
+        <DropdownMenuItem v-if="!readonly && allow('destroy', comment_box.comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
         <DropdownMenuItem @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue_box, comment_box)">关联</DropdownMenuItem>
       </MoreDropdown>
     </div>
@@ -21,7 +21,7 @@ import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Attachment, Comment, CommentBox, Issue, IssueBox } from "@/models"
+import { Attachment, Comment, type CommentBox, type IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import { type Component } from "vue"
@@ -31,6 +31,7 @@ import IssueCommentConvertDialogContent from "./IssueCommentConvertDialogContent
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import { useQueryLine } from '@/lib/useQueryLine'
 import type { IssueCommentFrameEmits } from "@/components/IssueCommentFrame"
+import vConfirm from '@/components/vConfirm'
 
 const line = useQueryLine()
 const store = useSessionStore()
@@ -65,10 +66,6 @@ function onAttachmentDestroyed(attachment: Attachment) {
 }
 
 async function deleteComment() {
-  if (!confirm("确认删除该评论？")) {
-    return
-  }
-
   await destroy_comment_action({
     interpolations: {
       project_id: props.issue_box.issue.project_id,

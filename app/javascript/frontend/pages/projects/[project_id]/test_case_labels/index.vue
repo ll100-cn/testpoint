@@ -30,7 +30,7 @@
                 <router-link v-if="allow('update', test_case_label)" :to="`${path_info.collection}/${test_case_label.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', test_case_label)" href="#" @click.prevent="onRemove(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', test_case_label)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -56,6 +56,8 @@ import { Validator } from '$ui/simple_form'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PageContent from '@/components/PageContent.vue'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from '@/components/Alerter'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -63,6 +65,7 @@ const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const alerter = Alerter.build()
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
@@ -79,20 +82,10 @@ const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.t
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function onRemove(id: number) {
-  if (!confirm("是否删除标签？")) {
-    return
-  }
-
-  try {
-    await destroy_test_case_label_action({
-      interpolations: { project_id, test_case_label_id: id }
-    })
-
-    router.go(0)
-  } catch (error) {
-    validator.processError(error)
-  }
+async function deleteTestCaseLabel(id: number) {
+  await alerter.perform(destroy_test_case_label_action, {
+    interpolations: { project_id, test_case_label_id: id }
+  })
 }
 
 </script>

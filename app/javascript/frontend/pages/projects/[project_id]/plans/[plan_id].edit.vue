@@ -3,7 +3,7 @@
     <PageTitle>修改计划</PageTitle>
 
     <template #actions>
-      <a class="btn btn-link text-danger" type="button" @click="onDestroy">删除</a>
+      <a class="btn btn-link text-danger" type="button" v-confirm="'确认删除？'" @click="deletePlan">删除</a>
     </template>
   </PageHeader>
 
@@ -37,6 +37,7 @@ import { computed, reactive } from 'vue'
 import _ from 'lodash'
 import { Validator } from '$ui/simple_form'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
 
 const route = useRoute()
 const router = useRouter()
@@ -89,11 +90,7 @@ function onCancel() {
   router.push(path_info.resource)
 }
 
-async function onDestroy() {
-  if (!confirm("确认删除？")) {
-    return
-  }
-
+async function deletePlan() {
   await destroy_plan_action({
     interpolations: { project_id, plan_id }
   })

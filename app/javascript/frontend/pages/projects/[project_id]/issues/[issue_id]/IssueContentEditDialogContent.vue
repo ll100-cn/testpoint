@@ -18,7 +18,7 @@
 import { Button } from '$ui/button'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as q from '@/requests'
-import { Attachment, Issue, IssueBox } from '@/models'
+import { Attachment, Issue, type IssueBox } from '@/models'
 import { ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'

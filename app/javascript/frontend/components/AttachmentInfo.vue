@@ -50,7 +50,7 @@
           <a v-if="attachment.file_url" class="clipboard ms-1" :href="attachment.file_url" :download="attachment.title">
             <span class="far fa-fw fa-link text-muted" />
           </a>
-          <a v-if="editable" class="ms-auto" href="#" @click.prevent="deleteAttachment">
+          <a v-if="editable" class="ms-auto" href="#" v-confirm="'确认删除附件？'" @click.prevent="deleteAttachment">
             <span class="far fa-fw fa-trash-alt text-muted" />
           </a>
         </div>
@@ -72,6 +72,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import Well from "$ui/well/Well.vue"
 import { useQueryLine } from '@/lib/useQueryLine'
+import vConfirm from '@/components/vConfirm'
 
 const line = useQueryLine()
 const page = usePageStore()
@@ -141,9 +142,6 @@ function cancelEdit() {
 }
 
 async function deleteAttachment() {
-  if (!confirm("确认删除附件？")) {
-    return
-  }
   former.validator.clear()
 
   try {

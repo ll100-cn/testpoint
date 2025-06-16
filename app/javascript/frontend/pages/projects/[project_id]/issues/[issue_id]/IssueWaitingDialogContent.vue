@@ -20,7 +20,7 @@ import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } f
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import type { IssueStateFrameEmits } from '@/components/IssueStateFrame'
 import { useQueryLine } from '@/lib/useQueryLine'
-import { IssueBox } from "@/models"
+import { type IssueBox } from "@/models"
 import * as q from '@/requests'
 import { nextTick, ref } from "vue"
 import IssueCommentForm from "./IssueCommentForm.vue"

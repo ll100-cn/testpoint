@@ -32,7 +32,7 @@
                 <router-link v-if="allow('update', platform)" :to="`${path_info.collection}/${platform.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', platform)" href="#" @click.prevent="onRemove(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', platform)" href="#" v-confirm="'是否删除平台？'" @click.prevent="deletePlatform(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -60,14 +60,16 @@ import PlatformBadge from '@/components/PlatformBadge.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PageContent from '@/components/PageContent.vue'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from '@/components/Alerter'
 
 const line = useQueryLine()
 const route = useRoute()
-const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const session = useSessionStore()
+const alerter = Alerter.build()
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
@@ -87,20 +89,10 @@ const { mutateAsync: destroy_platform_action } = line.request(q.project.platform
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function onRemove(id: number) {
-  if (!confirm("是否删除平台？")) {
-    return
-  }
-
-  try {
-    await destroy_platform_action({
-      interpolations: { project_id, platform_id: id }
-    })
-
-    router.go(0)
-  } catch (error) {
-    validator.processError(error)
-  }
+async function deletePlatform(id: number) {
+  await alerter.perform(destroy_platform_action, {
+    interpolations: { project_id, platform_id: id }
+  })
 }
 
 </script>

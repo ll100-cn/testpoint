@@ -27,7 +27,7 @@
               <TableCell>{{ user_box.user.email }}</TableCell>
               <TableCell role="actions">
                 <router-link :to="`/users/${user_box.user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
-                <a href="#" @click.prevent="onRemove(user_box.user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a href="#" v-confirm="'是否删除用户？'" @click.prevent="deleteUser(user_box.user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -55,12 +55,15 @@ import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
 import { useQueryLine } from '@/lib/useQueryLine'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from '@/components/Alerter';
 
 const line = useQueryLine()
 const router = useRouter()
 const route = useRoute()
 const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
+const alerter = Alerter.build()
 
 const { data: user_page } = line.request(q.admin.users.Page(), (req, it) => {
   req.query = utils.plainToQuery(query)
@@ -72,20 +75,9 @@ const { mutateAsync: destroy_user_action } = line.request(q.admin.users.Destroy(
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function onRemove(user_id: number) {
-  if (!confirm("是否删除用户？")) {
-    return
-  }
-
-  try {
-    await destroy_user_action({
-      interpolations: { id: user_id }
-    })
-
-    router.go(0)
-  } catch (error) {
-    validations.processError(error)
-    alert(validations.errorMessages([]).join("\n"))
-  }
+async function deleteUser(user_id: number) {
+  await alerter.perform(destroy_user_action, {
+    interpolations: { id: user_id }
+  })
 }
 </script>

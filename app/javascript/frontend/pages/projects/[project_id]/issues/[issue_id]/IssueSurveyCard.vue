@@ -40,7 +40,7 @@
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Issue, IssueBox, IssueSurvey } from "@/models"
+import { Issue, type IssueBox, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import { type Component } from "vue"
 import IssueSurveyEditDialogContent from "./IssueSurveyEditDialogContent.vue"

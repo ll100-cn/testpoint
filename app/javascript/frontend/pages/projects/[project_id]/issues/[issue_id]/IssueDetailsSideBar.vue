@@ -127,7 +127,7 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Issue, IssueBox } from "@/models"
+import { Issue, type IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"

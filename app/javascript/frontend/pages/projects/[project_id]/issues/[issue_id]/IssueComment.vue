@@ -16,7 +16,7 @@
           <template v-if="!readonly && allow('update', comment_box.comment)">
             <DropdownMenuItem @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
             <DropdownMenuItem v-if="children.length == 0" @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue_box, comment_box)">关联</DropdownMenuItem>
-            <!-- <DropdownMenuItem v-if="allow('destroy', comment)" @click.prevent="deleteComment">删除</DropdownMenuItem> -->
+            <DropdownMenuItem v-if="allow('destroy', comment_box.comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
 
             <DropdownMenuSeparator />
 
@@ -64,6 +64,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import Button from "$ui/button/Button.vue"
 import { useQueryLine } from '@/lib/useQueryLine'
 import { type IssueCommentFrameEmits } from "@/components/IssueCommentFrame"
+import vConfirm from '@/components/vConfirm'
 
 const line = useQueryLine()
 const store = useSessionStore()
@@ -102,10 +103,6 @@ const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments
 })
 
 async function deleteComment() {
-  if (!confirm("确认删除该评论？")) {
-    return
-  }
-
   await destroy_comment_action({
     interpolations: {
       project_id: props.issue_box.issue.project_id,

@@ -17,7 +17,7 @@
   <div class="flex gap-x-6">
     <div class="flex-1 space-y-4">
       <IssueRelatedTask v-if="issue_box.issue.task" :task="issue_box.issue.task" :project_id="project_id" />
-      <IssueContent :readonly="readonly" :issue_box="issue_box" @updated="onIssueUpdated" @convert="onIssueConvert" />
+      <IssueContent :readonly="readonly" :issue_box="issue_box" @updated="onIssueUpdated" @convert="convertIssue" />
       <IssueSurveyCard :readonly="readonly" :issue_box="issue_box" v-if="issue_box.surveys?.length > 0" @modal="(...args) => issue_dialog.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
@@ -53,28 +53,28 @@
               <template v-if="issue_box.issue.assignee && ['confirmed', 'processing', 'processed'].includes(issue_box.issue.state)">
                 <ButtonGroup class="ms-auto">
                   <template v-if="issue_box.issue.state == 'confirmed'">
-                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processing')">
+                    <Button preset="outline" variant="secondary" v-confirm="'确定操作？'" @click.prevent="editIssueState('processing')">
                       <span class="me-1">设置为</span><IssueStateBadge state="processing" />
                     </Button>
-                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processed')">
+                    <Button preset="outline" variant="secondary" v-confirm="'确定操作？'" @click.prevent="editIssueState('processed')">
                       <span class="me-1">设置为</span><IssueStateBadge state="processed" />
                     </Button>
                   </template>
 
                   <template v-if="issue_box.issue.state == 'processing'">
-                    <Button preset="outline" variant="secondary" disabled @click.prevent="changeIssueState('processing')">
+                    <Button preset="outline" variant="secondary" disabled>
                       已设置 <IssueStateBadge state="processing" />
                     </Button>
-                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processed')">
+                    <Button preset="outline" variant="secondary" v-confirm="'确定操作？'" @click.prevent="editIssueState('processed')">
                       <span class="me-1">设置为</span><IssueStateBadge state="processed" />
                     </Button>
                   </template>
 
                   <template v-if="issue_box.issue.state == 'processed'">
-                    <Button preset="outline" variant="secondary" @click.prevent="changeIssueState('processing')">
+                    <Button preset="outline" variant="secondary" v-confirm="'确定操作？'" @click.prevent="editIssueState('processing')">
                       <span class="me-1">设置为</span><IssueStateBadge state="processing" />
                     </Button>
-                    <Button preset="outline" variant="secondary" disabled @click.prevent="changeIssueState('processed')">
+                    <Button preset="outline" variant="secondary" disabled>
                       已设置 <IssueStateBadge state="processed" />
                     </Button>
                   </template>
@@ -177,6 +177,7 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = profile.allow
 const path_info = PathHelper.parseMember(route.path, 'show')
+const actioner = Actioner.build()
 
 const { data: issue_box } = line.request(q.bug.issues.Get('+info'), (req, it) => {
   req.interpolations.project_id = project_id
@@ -235,24 +236,16 @@ const { mutateAsync: process_issue_action } = line.request(q.bug.issues.Process(
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function onIssueConvert(a_issue_box: IssueBox) {
-  await convert_issue_body_action({
+async function convertIssue(a_issue_box: IssueBox) {
+  await actioner.perform(convert_issue_body_action, {
     interpolations: { project_id, issue_id: a_issue_box.issue.id }
   })
-
-  router.go(0)
 }
 
-const actioner = Actioner.build()
-
-async function changeIssueState(state: string) {
-  actioner.perform(async function() {
-    const a_issue_box = await process_issue_action({
-      interpolations: { project_id, issue_id: params.issue_id },
-      body: { state }
-    })
-
-    issue_box.value = a_issue_box
+async function editIssueState(state: string) {
+  await actioner.perform(process_issue_action, {
+    interpolations: { project_id, issue_id: params.issue_id },
+    body: { state }
   })
 }
 </script>

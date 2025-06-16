@@ -4,7 +4,7 @@
       <DialogTitle>编辑需求 #{{ requirement.id }}</DialogTitle>
 
       <template #actions>
-        <Button preset="ghost" variant="destructive" @click.prevent="destroyRequirement">
+        <Button preset="ghost" variant="destructive" v-confirm="'确认删除？'" @click.prevent="deleteRequirement">
           删除
         </Button>
       </template>
@@ -35,6 +35,7 @@ import * as q from '@/requests'
 import { computed, getCurrentInstance, nextTick, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import RequirementForm from './RequirementForm.vue'
+import vConfirm from '@/components/vConfirm'
 
 const route = useRoute()
 const params = route.params as any
@@ -74,11 +75,7 @@ const { mutateAsync: update_requirement_action } = line.request(q.project.requir
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function destroyRequirement() {
-  if (!confirm("确认删除？")) {
-    return
-  }
-
+async function deleteRequirement() {
   await destroy_requirement_action({
     interpolations: {
       project_id: params.project_id,

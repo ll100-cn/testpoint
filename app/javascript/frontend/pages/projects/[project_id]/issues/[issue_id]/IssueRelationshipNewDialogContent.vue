@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import * as q from '@/requests'
-import { Issue, IssueBox } from "@/models"
+import { Issue, type IssueBox } from "@/models"
 import { ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'

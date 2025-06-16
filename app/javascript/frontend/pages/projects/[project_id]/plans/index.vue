@@ -55,7 +55,7 @@
   <PaginationBar class="mt-2" :per_size_enabled="false" :pagination="plan_page" />
 
   <teleport to="body">
-    <PlanDialog ref="plan_dialog" @created="onCreated" />
+    <PlanDialog ref="plan_dialog" @created="createdPlan" />
   </teleport>
 </template>
 
@@ -134,7 +134,6 @@ function onSearchInput() {
   }, 0);
 }
 
-function onCreated() {
-  router.go(0)
+function createdPlan() {
 }
 </script>

@@ -69,7 +69,7 @@
 
     <div ref="vueFlowContainer" class="flex-1">
       <div :style="{ height: `${height}px` }">
-        <VueFlow :nodes="nodes" :edges="edges" @edges-change="onEdgesChanged" @connect="onConnect" @node-drag-stop="onNodeDragStop" @nodes-initialized="onNodesInitialized" :snap-grid="[10, 10]" snap-to-grid fit-view-on-init :max-zoom="1">
+        <VueFlow :nodes="nodes" :edges="edges" @edges-change="changeEdges" @connect="connect" @node-drag-stop="stopNodeDrag" @nodes-initialized="onNodesInitialized" :snap-grid="[10, 10]" snap-to-grid fit-view-on-init :max-zoom="1">
           <Background />
 
           <template #node-requirement="slotProps">
@@ -106,18 +106,18 @@
     </div>
   </Card>
 
-  <StoryboardDialog ref="storyboard_dialog" @created="onStoryboardCreated" @updated="onStoryboardUpdated" @destroyed="onStoryboardDestroyed" />
+  <StoryboardDialog ref="storyboard_dialog" @created="createdStoryboard" @updated="updateStoryboard" @destroyed="destroyStoryboard" />
   <RequirementDialog
     ref="requirement_dialog"
-    @created="onRequirementCreated"
-    @updated="onRequirementUpdated"
-    @destroyed="onRequirementDestroyed"
+    @created="createRequirement"
+    @updated="updateRequirement"
+    @destroyed="destroyRequirement"
     :platforms="platforms"
     :test_case_labels="test_case_labels"
     :scenes="scenes"
     :storyboard="storyboard" />
-  <RoadmapDialog ref="roadmap_dialog" @created="" @updated="onRoadmapUpdated" />
-  <SceneDialog ref="scene_dialog" :scenes="scenes" @created="onSceneCreated" @destroyed="onSceneDestroyed" @updated="onSceneUpdated" />
+  <RoadmapDialog ref="roadmap_dialog" @created="" @updated="updatedRoadmap" />
+  <SceneDialog ref="scene_dialog" :scenes="scenes" @created="createScene" @destroyed="destroyeScene" @updated="updateScene" />
 </template>
 
 <script setup lang="ts">
@@ -346,11 +346,12 @@ const label_repo = computed(() => {
   return new LabelRepo().setup(test_case_labels.value)
 })
 
-function onStoryboardCreated() {
-  router.go(0)
+function createdStoryboard(a_storyboard: Storyboard) {
+  storyboards.value.push(a_storyboard)
+  storyboard.value = a_storyboard
 }
 
-function onStoryboardUpdated(a_storyboard: Storyboard) {
+function updateStoryboard(a_storyboard: Storyboard) {
   storyboards.value = storyboards.value.map((s) => s.id === a_storyboard.id ? a_storyboard : s)
   if (storyboard.value.id === a_storyboard.id) {
     storyboard.value = a_storyboard
@@ -359,11 +360,11 @@ function onStoryboardUpdated(a_storyboard: Storyboard) {
   updateNodeData(`storyboard_${a_storyboard.id}`, a_storyboard)
 }
 
-function onStoryboardDestroyed(a_storyboard: Storyboard) {
+function destroyStoryboard(a_storyboard: Storyboard) {
   router.push(path_info.collection)
 }
 
-function onConnect(connection: Connection) {
+function connect(connection: Connection) {
   const requirement_id = parseRequirementId(connection.target)!
   const requirement = requirement_repo.value.id.find(requirement_id)
   if (!requirement) {
@@ -375,7 +376,7 @@ function onConnect(connection: Connection) {
     return
   }
 
-  updateRequirement(requirement, { upstream_ids: [...requirement.upstream_ids, new_upstream_id] })
+  updateRequirementWithData(requirement, { upstream_ids: [...requirement.upstream_ids, new_upstream_id] })
   addEdges([{
     id: `${requirement.id}-${new_upstream_id}`,
     source: requimentNodeId(new_upstream_id),
@@ -383,7 +384,7 @@ function onConnect(connection: Connection) {
   }])
 }
 
-function onEdgesChanged(changes: EdgeChange[]) {
+function changeEdges(changes: EdgeChange[]) {
   for (const change of changes) {
     if (change.type != 'remove') {
       continue
@@ -402,7 +403,7 @@ function onEdgesChanged(changes: EdgeChange[]) {
   }
 }
 
-function onNodeDragStop(event: NodeDragEvent) {
+function stopNodeDrag(event: NodeDragEvent) {
   const node = event.node
   const requirement_id = parseRequirementId(node.id)!
   const node_id = requimentNodeId(requirement_id)
@@ -468,7 +469,7 @@ const { mutateAsync: update_storyboard_action } = line.request(q.project.storybo
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function updateRequirement(requirement: Requirement, data: any) {
+async function updateRequirementWithData(requirement: Requirement, data: any) {
   const a_requirement_box = await update_requirement_action({
     interpolations: {
       project_id: params.project_id,
@@ -484,41 +485,41 @@ async function updateRequirement(requirement: Requirement, data: any) {
   updateScenePositions()
 }
 
-function onRequirementCreated(new_requirement: Requirement) {
+function createRequirement(new_requirement: Requirement) {
   requirements.value.push(new_requirement)
   requirement_repo.value.setup([ new_requirement ])
   rebuildNodes()
 }
 
-function onRequirementUpdated(a_requirement: Requirement) {
+function updateRequirement(a_requirement: Requirement) {
   requirements.value = requirements.value.map((r) => r.id === a_requirement.id ? a_requirement : r)
   rebuildRequirementRepo()
   updateNodeData(requimentNodeId(a_requirement), { requirement: a_requirement })
   updateScenePositions()
 }
 
-function onRequirementDestroyed(a_requirement: Requirement) {
+function destroyeRequirement(a_requirement: Requirement) {
   requirements.value = requirements.value.filter((r) => r.id !== a_requirement.id)
   rebuildRequirementRepo()
   rebuildNodes()
 }
 
-function onRoadmapUpdated(a_roadmap: Roadmap) {
+function updatedRoadmap(a_roadmap: Roadmap) {
   roadmaps.value = roadmaps.value.map((r) => r.id === a_roadmap.id ? a_roadmap : r)
   if (roadmap.value?.id === a_roadmap.id) {
     roadmap.value = a_roadmap
   }
 }
 
-function onSceneCreated(a_scene: Scene) {
+function createScene(a_scene: Scene) {
   scenes.value.push(a_scene)
 }
 
-function onSceneDestroyed(a_scene: Scene) {
+function destroyeScene(a_scene: Scene) {
   scenes.value = scenes.value.filter(scene => scene.id !== a_scene.id)
 }
 
-function onSceneUpdated(a_scene: Scene) {
+function updateScene(a_scene: Scene) {
   scenes.value = scenes.value.map(scene => scene.id === a_scene.id ? a_scene : scene)
 }
 

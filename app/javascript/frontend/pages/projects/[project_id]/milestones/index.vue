@@ -41,9 +41,9 @@
                 <i class="far fa-pencil-alt" /> 修改
               </router-link>
 
-              <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" @click.prevent="milestoneArchive(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
-              <a v-if="milestone.archived_at && allow('active', milestone)" href="#" @click.prevent="milestoneActive(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
-              <a v-if="allow('destroy', milestone)" href="#" @click.prevent="milestoneDestroy(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
+              <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" v-confirm="'确定要归档吗？'" @click.prevent="archiveMilestone(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
+              <a v-if="milestone.archived_at && allow('active', milestone)" href="#" v-confirm="'确定要取消归档吗？'" @click.prevent="activeMilestone(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
+              <a v-if="allow('destroy', milestone)" href="#" v-confirm="'确定要删除吗？'" @click.prevent="deleteMilestone(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
             </TableCell>
           </TableRow>
         </TableBody>
@@ -69,6 +69,8 @@ import Button from '$ui/button/Button.vue'
 import PageContent from '@/components/PageContent.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from '@/components/Alerter'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -77,6 +79,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const session = useSessionStore()
+const alerter = Alerter.build()
 
 const active = ref('normal')
 
@@ -103,40 +106,22 @@ const { mutateAsync: active_milestone_action } = line.request(q.project.mileston
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function milestoneDestroy(milestone: Milestone) {
-  if (!confirm('确定要删除吗？')) {
-    return
-  }
-
-  await destroy_milestone_action({
+async function deleteMilestone(milestone: Milestone) {
+  await alerter.perform(destroy_milestone_action, {
     interpolations: { project_id, id: milestone.id }
   })
-
-  router.go(0)
 }
 
-async function milestoneArchive(milestone: Milestone) {
-  if (!confirm('确定要归档吗？')) {
-    return
-  }
-
-  await archive_milestone_action({
+async function archiveMilestone(milestone: Milestone) {
+  await alerter.perform(archive_milestone_action, {
     interpolations: { project_id, id: milestone.id }
   })
-
-  router.go(0)
 }
 
-async function milestoneActive(milestone: Milestone) {
-  if (!confirm('确定要取消归档吗？')) {
-    return
-  }
-
-  await active_milestone_action({
+async function activeMilestone(milestone: Milestone) {
+  await alerter.perform(active_milestone_action, {
     interpolations: { project_id, id: milestone.id }
   })
-
-  router.go(0)
 }
 
 const filtered_milestone_boxes = computed(() => {

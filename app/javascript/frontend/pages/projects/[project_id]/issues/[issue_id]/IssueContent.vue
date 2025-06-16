@@ -30,7 +30,7 @@ import BlankDialog from "@/components/BlankDialog.vue"
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
-import { Attachment, IssueBox } from "@/models"
+import { Attachment, type IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, ref } from "vue"
 import ContentBody from "./ContentBody.vue"

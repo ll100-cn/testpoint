@@ -22,7 +22,7 @@
             <a href="#" v-if="allow('update', scene)" class="link" @click.prevent="updateScene(scene)">
               <i class="far fa-pencil-alt" /> 修改
             </a>
-            <a v-if="allow('destroy', scene)" href="#" @click.prevent="deleteScene(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+            <a v-if="allow('destroy', scene)" href="#" v-confirm="'确认删除？'" @click.prevent="deleteScene(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
           </TableCell>
         </TableRow>
       </TableBody>
@@ -51,6 +51,7 @@ import { computed, getCurrentInstance, reactive, ref, type Component } from 'vue
 import { useRoute } from 'vue-router'
 import SceneCreateDialogContent from './SceneCreateDialogContent.vue'
 import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
+import vConfirm from '@/components/vConfirm'
 
 const route = useRoute()
 const params = route.params as any
@@ -89,10 +90,6 @@ const { mutateAsync: destroy_scene_action } = line.request(q.project.scenes.Dest
 })
 
 async function deleteScene(scene: Scene) {
-  if (!confirm("确认删除？")) {
-    return
-  }
-
   try {
     await destroy_scene_action({
       interpolations: {

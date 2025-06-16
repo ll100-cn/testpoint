@@ -61,12 +61,12 @@
       @modal="(...args) => case_dialog!.show(...args)"
       @batch="(...args) => case_batch_dialog!.show(...args)" />
 
-    <CardNewDialog ref="modal" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @create="onTestCaseCreated" />
+    <CardNewDialog ref="modal" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @create="createTestCase" />
   </Card>
 
   <teleport to="body">
-    <TestCaseDialog ref="case_dialog" :readonly="readonly" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></TestCaseDialog>
-    <TestCaseBatchDialog ref="case_batch_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></TestCaseBatchDialog>
+    <TestCaseDialog ref="case_dialog" :readonly="readonly" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @updated="updateTestCase" @destroyed="destroyTestCase"></TestCaseDialog>
+    <TestCaseBatchDialog ref="case_batch_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="batchUpdated"></TestCaseBatchDialog>
   </teleport>
 </template>
 
@@ -237,24 +237,16 @@ function showModal() {
   modal.value?.show(project_id.toString())
 }
 
-function onTestCaseSend(test_case: TestCase) {
-  console.log('onTestCaseSend', test_case)
+function updateTestCase(test_case: TestCase) {
 }
 
-function onTestCaseUpdated(test_case: TestCase) {
-  router.go(0)
+function destroyTestCase(test_case: TestCase) {
 }
 
-function onTestCaseDestroyed(test_case: TestCase) {
-  router.go(0)
+function batchUpdated() {
 }
 
-function onBatchUpdated() {
-  router.go(0)
-}
-
-function onTestCaseCreated(test_case: TestCase) {
-  router.go(0)
+function createTestCase(test_case: TestCase) {
 }
 
 </script>

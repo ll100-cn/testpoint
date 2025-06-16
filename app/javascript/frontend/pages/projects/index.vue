@@ -30,7 +30,7 @@
               <TableCell role="actions">
                 <router-link :to="`/projects/${project_box.project.id}`" class="link"><i class="far fa-search"></i> 详情</router-link>
                 <router-link :to="`/projects/${project_box.project.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
-                <a href="#" @click.prevent="onRemove(project_box.project.id)" class="link"><i class="far fa-trash-alt" /> 归档</a>
+                <a href="#" v-confirm="'是否归档项目？'" @click.prevent="archiveProject(project_box.project.id)" class="link"><i class="far fa-trash-alt" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
@@ -47,27 +47,21 @@
 <script setup lang="ts">
 import { Button } from '$ui/button'
 import { Card, CardFooter, CardTable } from '$ui/card'
-import { Validator } from '$ui/simple_form'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$ui/table'
+import { Alerter } from '@/components/Alerter'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
+import vConfirm from '@/components/vConfirm'
 import { useQueryLine } from '@/lib/useQueryLine'
 import * as utils from "@/lib/utils"
 import * as q from '@/requests'
-import { reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useSessionStore } from '@/store'
-import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import { useRoute } from 'vue-router'
 
 const line = useQueryLine()
 const route = useRoute()
-const router = useRouter()
-const session = useSessionStore()
-
+const alerter = Alerter.build()
 const query = utils.queryToPlain(route.query)
-
-const validator = reactive(new Validator())
 
 const { data: project_page } = line.request(q.admin.projects.Page(), (req, it) => {
   req.query = utils.plainToQuery(query)
@@ -79,20 +73,9 @@ const { mutateAsync: destroy_project_action } = line.request(q.admin.projects.De
   return it.useMutation(req.toMutationConfig(it))
 })
 
-async function onRemove(project_id: number) {
-  if (!confirm("是否归档项目？")) {
-    return
-  }
-
-  try {
-    await destroy_project_action({
-      interpolations: { id: project_id }
-    })
-
-    router.go(0)
-  } catch (error) {
-    validator.processError(error)
-    alert(validator.errorMessages([]).join("\n"))
-  }
+async function archiveProject(project_id: number) {
+  alerter.perform(destroy_project_action, {
+    interpolations: { id: project_id }
+  })
 }
 </script>

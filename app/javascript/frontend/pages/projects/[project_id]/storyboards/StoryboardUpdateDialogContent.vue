@@ -3,7 +3,7 @@
     <DialogHeader>
       <DialogTitle>修改需求板</DialogTitle>
       <template #actions>
-        <Button preset="ghost" variant="destructive" @click.prevent="destroyStoryboard">
+        <Button preset="ghost" variant="destructive" v-confirm="'确认删除？'" @click.prevent="deleteStoryboard">
           删除
         </Button>
       </template>
@@ -46,6 +46,7 @@ import { Storyboard } from '@/models'
 import * as q from '@/requests'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import vConfirm from '@/components/vConfirm'
 
 const route = useRoute()
 const params = route.params as any
@@ -97,11 +98,7 @@ defineExpose({
   reset
 })
 
-async function destroyStoryboard() {
-  if (!confirm("确认删除？")) {
-    return
-  }
-
+async function deleteStoryboard() {
   await destroy_storyboard_action({
     interpolations: { project_id: params.project_id, storyboard_id: storyboard.value.id }
   })

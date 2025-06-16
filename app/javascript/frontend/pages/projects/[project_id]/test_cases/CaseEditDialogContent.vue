@@ -4,7 +4,7 @@
       <DialogTitle>{{ test_case.title }}</DialogTitle>
 
       <template #actions>
-        <a v-if="allow('destroy', test_case)" href="#" class="text-destructive text-sm link" @click.prevent="archiveTestCase">归档</a>
+        <a v-if="allow('destroy', test_case)" href="#" class="text-destructive text-sm link" v-confirm="'确认归档？'" @click.prevent="archiveTestCase">归档</a>
       </template>
     </DialogHeader>
 
@@ -31,6 +31,7 @@ import { usePageStore } from "@/store"
 import $ from 'jquery'
 import { computed, getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
+import vConfirm from '@/components/vConfirm'
 
 const line = useQueryLine()
 const page = usePageStore()
@@ -102,10 +103,6 @@ former.doPerform = async function() {
 async function archiveTestCase(event: Event) {
   event.preventDefault()
   validations.clear()
-
-  if (!confirm('确认归档？')) {
-    return
-  }
 
   try {
     const test_case_box = await destroy_test_case_action({

@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import { Issue, IssueBox } from "@/models"
+import type { IssueBox } from "@/models"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import { useRouter } from "vue-router"
@@ -24,6 +24,7 @@ import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
 import { useQueryLine } from '@/lib/useQueryLine'
 import type { IssueStateFrameEmits } from '@/components/IssueStateFrame'
+import { Alerter } from '@/components/Alerter'
 
 const router = useRouter()
 const line = useQueryLine()
@@ -60,7 +61,6 @@ former.perform = async function() {
   })
 
   open.value = false
-  router.go(0)
 }
 
 const loading = ref(true)

@@ -27,7 +27,7 @@
           <TableCell>{{ issue.creator?.name }}</TableCell>
           <TableCell><IssueStateBadge :state="issue.state" /></TableCell>
           <TableCell class="text-right">
-            <button v-if="issue.id !== head.issue.id" @click="removeSource(issue)"><i class="far fa-trash-alt"></i></button>
+            <button v-if="issue.id !== head.issue.id" v-confirm="'确认删除？'" @click="deleteSource(issue)"><i class="far fa-trash-alt"></i></button>
             <span v-else><i class="far fa-check-circle"></i> 主工单</span>
           </TableCell>
         </TableRow>
@@ -42,7 +42,7 @@
       </Table>
     </CardTable>
     <CardFooter>
-      <Button v-if="allow('manage', Issue)" variant="primary" @click="merge" :disabled="issues.length < 2">
+      <Button v-if="allow('manage', Issue)" variant="primary" v-confirm="'确认合并？'" @click="merge" :disabled="issues.length < 2">
         <i class="far fa-object-group"></i> 合并
       </Button>
     </CardFooter>
@@ -91,6 +91,7 @@ import { AxiosError } from 'axios'
 import { usePageStore } from '@/store'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -118,11 +119,7 @@ function newSource() {
   add_dialog_open.value = true
 }
 
-function removeSource(issue: Issue) {
-  if (!confirm("确认删除？")) {
-    return
-  }
-
+function deleteSource(issue: Issue) {
   issues.value = issues.value.filter(i => i.id !== issue.id)
 }
 
@@ -147,7 +144,7 @@ former.doPerform = async function() {
   try {
     const { data: issueBox, suspense } = line.request(q.bug.issues.Get(), (req, it) => {
       req.interpolations.project_id = project_id
-      req.interpolations.issue_id = former.form.source_id
+      req.interpolations.issue_id = former.form.source_id!
       return it.useQuery(req.toQueryConfig())
     })
     await suspense()
@@ -175,10 +172,6 @@ const { mutateAsync: merge_issue_action } = line.request(q.bug.issues.Merge(), (
 })
 
 async function merge() {
-  if (!confirm("确认合并？")) {
-    return
-  }
-
   try {
     const issue_box = await merge_issue_action({
       interpolations: {

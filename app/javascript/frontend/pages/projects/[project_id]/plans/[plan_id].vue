@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import { Phase, TaskUpshotBox, TestCaseStat } from '@/models'
+import { Phase, type TaskUpshotBox, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
@@ -194,11 +194,11 @@ const avaiable_task_upshot_boxes = computed(() => {
     }
 
     if (filter.value.ignored === "1") {
-      if (!it.task.is_ignored()) {
+      if (!it.task?.is_ignored()) {
         return false
       }
     } else {
-      if (it.task.is_ignored()) {
+      if (it.task?.is_ignored()) {
         return false
       }
     }

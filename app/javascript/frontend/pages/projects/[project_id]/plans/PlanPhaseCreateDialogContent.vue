@@ -33,7 +33,7 @@ import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import type { PhaseFrameEmits } from '@/components/PhaseFrame'
 import { useQueryLine } from '@/lib/useQueryLine'
-import { Phase, PhaseInfo, Plan, PlanBox } from '@/models'
+import { Phase, PhaseInfo, Plan, type PlanBox } from '@/models'
 import * as q from '@/requests'
 import _ from 'lodash'
 import { nextTick, ref, computed } from 'vue'

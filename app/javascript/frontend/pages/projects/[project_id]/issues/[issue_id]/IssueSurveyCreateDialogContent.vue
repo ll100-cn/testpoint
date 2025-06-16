@@ -34,7 +34,7 @@ import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import type { IssueFrameEmits } from '@/components/IssueFrame'
 import OptionsForSelect from '@/components/OptionsForSelect.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
-import { IssueBox } from "@/models"
+import { type IssueBox } from "@/models"
 import * as q from '@/requests'
 import { computed } from "vue"
 
