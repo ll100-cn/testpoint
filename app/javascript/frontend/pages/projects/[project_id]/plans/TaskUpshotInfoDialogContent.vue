@@ -32,19 +32,20 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import TaskDetailsState from './TaskDetailsState.vue'
+import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
 import { Actioner } from "@/components/Actioner"
+import PageContent from "@/components/PageContent.vue"
+import type { TaskUpshotFrameEmits } from '@/components/TaskUpshotFrame'
 import { TASK_UPSHOT_STATES } from "@/constants"
+import { PlanBox, TaskBox, type TaskUpshotBox } from '@/models'
 import * as q from '@/requests'
-import { PlanBox, TaskBox, TaskUpshotBox } from '@/models'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { usePageStore } from "@/store"
 import _ from 'lodash'
 import { type Component, computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
-import TaskDetailsState from './TaskDetailsState.vue'
-import TaskUpshotFailureDialogContent from "./TaskUpshotFailureDialogContent.vue"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
-import { Button } from '$ui/button'
-import PageContent from "@/components/PageContent.vue"
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const line = useQueryLine()
 const page = usePageStore()
@@ -55,9 +56,8 @@ const props = defineProps<{
   current_phase_id: number
 }>()
 
-const emit = defineEmits<{
-  updated: [ TaskUpshotBox ]
-  switch: [ compoenent: Component, ...args: any[] ]
+const emit = defineEmits<TaskUpshotFrameEmits & {
+  switch: [Component, ...any]
 }>()
 
 const task_upshot_box = ref(null! as TaskUpshotBox)
@@ -121,7 +121,7 @@ actioner.submitContent = function(content: string) {
     if (index != null) {
       task_box.value.task_upshots![index] = a_task_upshot_box.task_upshot
     }
-    emit('updated', task_upshot_box.value)
+    emit('updated', task_upshot_box.value as TaskUpshotBox)
   }, { confirm_text: false })
 }
 
@@ -137,7 +137,7 @@ actioner.ignoreTask = function() {
 
     Object.assign(task_box.value.task, a_task_box.task)
     task_upshot_box.value.task = a_task_box.task
-    emit('updated', task_upshot_box.value)
+    emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
 }
 
@@ -153,7 +153,7 @@ actioner.unignoreTask = function() {
 
     Object.assign(task_box.value.task, a_task_box.task)
     task_upshot_box.value.task = a_task_box.task
-    emit('updated', task_upshot_box.value)
+    emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
 }
 
@@ -169,27 +169,33 @@ actioner.updateTaskUpshotState = function(state_override: "pass" | "pending" | n
       body: { task_upshot: { state_override } }
     })
 
-    Object.assign(task_upshot_box.value.task_upshot, a_task_upshot_box.task_upshot)
+    task_upshot_box.value.task_upshot = a_task_upshot_box.task_upshot
     const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.task_upshot.id)
     if (index != null) {
       task_box.value.task_upshots![index] = a_task_upshot_box.task_upshot
     }
-    emit('updated', task_upshot_box.value)
+    emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
 }
+
+const task_id = computed(() => task_upshot_box.value?.task?.id)
+const { data: a_task_box, suspense, queryKey: task_query_key } = line.request(q.test.tasks.Get('+info'), (req, it) => {
+  req.interpolations.project_id = props.plan_box.plan.project_id
+  req.interpolations.plan_id = props.plan_box.plan.id
+  req.interpolations.task_id = task_id as any
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    enabled: computed(() => task_id.value != null)
+  })
+})
 
 const loading = ref(true)
 async function reset(a_task_upshot_box: TaskUpshotBox) {
   loading.value = true
 
-  task_upshot_box.value = a_task_upshot_box
+  task_upshot_box.value = { ...a_task_upshot_box }
 
-  const { data: a_task_box, suspense } = line.request(q.test.tasks.Get('+info'), (req, it) => {
-    req.interpolations.project_id = props.plan_box.plan.project_id
-    req.interpolations.plan_id = props.plan_box.plan.id
-    req.interpolations.task_id = task_upshot_box.value.task!.id
-    return it.useQuery(req.toQueryConfig())
-  })
+
   await suspense()
   task_box.value = a_task_box.value
 

@@ -102,17 +102,18 @@
 </template>
 
 <script setup lang="ts">
+import Button from '$ui/button/Button.vue'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
+import * as controls from '@/components/controls'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import * as q from '@/requests'
+import type { TestCaseBatchFrameEmits } from '@/components/TestCaseBatchFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import * as q from '@/requests'
 import _ from 'lodash'
 import { nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
-import Button from '$ui/button/Button.vue'
-import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
-import * as controls from '@/components/controls'
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const validations = reactive(new Validator())
 const line = useQueryLine()
@@ -123,9 +124,7 @@ const props = defineProps<{
   label_repo: EntityRepo<TestCaseLabel>,
 }>()
 
-const emit = defineEmits<{
-  updated: []
-}>()
+const emit = defineEmits<TestCaseBatchFrameEmits>()
 
 const result = ref<{
   test_case: TestCase,

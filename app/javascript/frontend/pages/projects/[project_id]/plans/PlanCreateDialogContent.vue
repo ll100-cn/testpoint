@@ -16,17 +16,18 @@
 </template>
 
 <script setup lang="ts">
-import * as h from '@/lib/humanize'
-import * as q from '@/requests'
+import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import Fields from "./Fields.vue"
+import type { PlanFrameEmits } from '@/components/PlanFrame'
 import { Plan, Platform, PlatformBox, PlatformPage, TestCaseStat } from '@/models'
+import * as q from '@/requests'
+import * as h from '@/lib/humanize'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { usePageStore } from "@/store"
 import _ from 'lodash'
 import { computed, getCurrentInstance, nextTick, ref } from 'vue'
-import Fields from "./Fields.vue"
-import { usePageStore } from "@/store"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Button } from '$ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const line = useQueryLine()
 const el = ref(null! as InstanceType<typeof HTMLElement>)
@@ -34,9 +35,7 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  created: [plan: Plan]
-}>()
+const emit = defineEmits<PlanFrameEmits>()
 
 const former = Former.build({
   title: null as string | null,

@@ -55,7 +55,7 @@
   <PaginationBar class="mt-2" :per_size_enabled="false" :pagination="plan_page" />
 
   <teleport to="body">
-    <BlankDialog ref="plan_dialog" @created="onCreated" />
+    <PlanDialog ref="plan_dialog" @created="onCreated" />
   </teleport>
 </template>
 
@@ -78,6 +78,7 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import BlankDialog from '@/components/BlankDialog.vue'
 import PlanCreateDialogContent from './PlanCreateDialogContent.vue'
+import type { PlanFrameComponent } from '@/components/PlanFrame'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import Button from '$ui/button/Button.vue'
@@ -92,7 +93,8 @@ const params = route.params as any
 const query = route.query
 const page = usePageStore()
 const allow = page.inProject()!.allow
-const plan_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const PlanDialog = BlankDialog as typeof BlankDialog & PlanFrameComponent
+const plan_dialog = ref(null! as InstanceType<typeof BlankDialog & PlanFrameComponent>)
 
 class Search {
   @t.Number creator_id_eq?: number = undefined
@@ -125,9 +127,6 @@ const { data: test_case_stats } = line.request(q.case.test_case_stats.List(), (r
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-console.log(plan_page.value.tasks_state_counts)
-console.log(plan_page.value.tasks_state_counts[172])
-console.log(plan_page.value.tasks_state_counts["172"])
 
 function onSearchInput() {
   setTimeout(() => {

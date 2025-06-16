@@ -52,20 +52,21 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import { Category, IssueTemplate, IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, PlanBox, TaskBox, TaskUpshot, TaskUpshotBox } from '@/models'
-import { usePageStore, useSessionStore } from '@/store'
-import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { Former as NewFormer, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import TaskUpshotInfoDialogContent from "./TaskUpshotInfoDialogContent.vue"
 import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpshotFailureType.vue"
 import { Actioner } from "@/components/Actioner"
-import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
-import { Former as NewFormer, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import type { TaskUpshotFrameEmits } from '@/components/TaskUpshotFrame'
+import { Category, IssueTemplate, IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, PlanBox, TaskBox, TaskUpshot, TaskUpshotBox } from '@/models'
+import * as q from '@/requests'
 import { useQueryLine } from '@/lib/useQueryLine'
+import { usePageStore, useSessionStore } from '@/store'
+import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
 
 const line = useQueryLine()
 const page = usePageStore()
@@ -75,10 +76,7 @@ const props = defineProps<{
   plan_box: PlanBox
 }>()
 
-const emit = defineEmits<{
-  updated: [task_upshot: TaskUpshot]
-  switch: [Component, TaskUpshotBox]
-}>()
+const emit = defineEmits<TaskUpshotFrameEmits>()
 
 const addon = ref(null as AddonType)
 const task_upshot_box = ref(null! as TaskUpshotBox)

@@ -1,4 +1,4 @@
-import { TaskUpshotBox, TaskUpshotPage } from "@/models"
+import { TaskUpshotBoxImpl, TaskUpshotPage, type TaskUpshotBox } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"

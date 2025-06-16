@@ -25,18 +25,19 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Separator } from '$ui/separator'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import * as q from '@/requests'
+import type { PhaseFrameEmits } from '@/components/PhaseFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { Phase, PhaseInfo, Plan, PlanBox } from '@/models'
+import * as q from '@/requests'
 import _ from 'lodash'
 import { nextTick, ref, computed } from 'vue'
 import { useRoute } from "vue-router"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Separator } from '$ui/separator'
-import { Button } from '$ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
-import * as controls from '@/components/controls'
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -47,9 +48,7 @@ const props = defineProps<{
   plan_box: PlanBox
 }>()
 
-const emit = defineEmits<{
-  created: [ Phase ]
-}>()
+const emit = defineEmits<PhaseFrameEmits>()
 
 const upshots_state_counts = computed(() => {
   return _.last(props.plan_box.phase_infos)?.upshots_state_counts ?? {}

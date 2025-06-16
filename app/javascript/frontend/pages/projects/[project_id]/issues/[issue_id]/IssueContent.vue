@@ -7,7 +7,7 @@
 
         <template #actions>
           <MoreDropdown v-if="!readonly">
-            <DropdownMenuItem v-if="allow('update', 'IssueBody')" @click.prevent="blank_dialog.show(IssueContentEditDialogContent, issue_box)">修改</DropdownMenuItem>
+            <DropdownMenuItem v-if="allow('update', 'IssueBody')" @click.prevent="issue_dialog.show(IssueContentEditDialogContent, issue_box)">修改</DropdownMenuItem>
             <DropdownMenuItem v-if="allow('update', 'IssueBody')" @click.prevent="converComment">转换为评论</DropdownMenuItem>
           </MoreDropdown>
         </template>
@@ -19,7 +19,7 @@
   </div>
 
   <teleport to="body">
-    <BlankDialog ref="blank_dialog" @updated="onIssueUpdated" />
+    <IssueDialog ref="issue_dialog" @updated="onIssueUpdated" />
   </teleport>
 </template>
 
@@ -38,7 +38,7 @@ import IssueContentEditDialogContent from "./IssueContentEditDialogContent.vue"
 import type { IssueFrameComponent } from '@/components/IssueFrame'
 
 const IssueDialog = BlankDialog as typeof BlankDialog & IssueFrameComponent
-const blank_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueFrameComponent>)
+const issue_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueFrameComponent>)
 const page = usePageStore()
 const allow = page.inProject()!.allow
 

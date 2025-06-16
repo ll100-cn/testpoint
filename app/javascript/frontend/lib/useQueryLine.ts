@@ -15,6 +15,7 @@ class ReqWrapper<Req extends BaseRequest<any>> {
     TQueryKey extends readonly unknown[] = readonly unknown[]
   >(options: Parameters<typeof useQuery<TQueryFnData, TError, TData, TQueryKey>>[0]) {
     const hackOptions = options as any
+    const queryKey = hackOptions.queryKey
     const originQueryFn = hackOptions.queryFn
     hackOptions.queryFn = (context: QueryFunctionContext<TQueryKey, any>) => {
       this.request.ctx = { $axios: context.meta!.axios }
@@ -26,7 +27,7 @@ class ReqWrapper<Req extends BaseRequest<any>> {
     if (!hackOptions.enabled) {
       this.line.suspenses.push(suspense)
     }
-    return { data: data as Ref<TData>, suspense, ...rest }
+    return { data: data as Ref<TData>, suspense, queryKey, ...rest }
   }
 
   useMutation<

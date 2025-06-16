@@ -5,7 +5,7 @@ import type { Required } from "utility-types"
 
 class IgnoreRequest extends BaseRequest<TaskBox> {
   method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{id}", "/ignore" ]
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/ignore" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TaskBox, response)
@@ -16,7 +16,7 @@ export const Ignore = () => new IgnoreRequest()
 
 class UnignoreRequest extends BaseRequest<TaskBox> {
   method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{id}", "/unignore" ]
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/unignore" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TaskBox, response)

@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { EntityRepo, Platform, Requirement, RequirementBox, RequirementPage, Roadmap, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, Requirement, RequirementBox, RequirementPage, Roadmap, StoryboardBox, TestCase, TestCaseLabel } from '@/models'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import * as q from '@/requests'
@@ -44,45 +44,18 @@ import { usePageStore } from '@/store'
 import { useQueryLine } from '@/lib/useQueryLine'
 
 const line = useQueryLine()
-const page = usePageStore()
+
 
 const props = defineProps<{
   platform_repo: EntityRepo<Platform>
   label_repo: EntityRepo<TestCaseLabel>
   former: Former<any>
   newest_roadmap: Roadmap
+  storyboard_boxes: StoryboardBox[]
+  requirement_boxes: RequirementBox[]
 }>()
 
 const FormGroup = GenericFormGroup<typeof props.former.form>
 const Form = GenericForm<typeof props.former.form>
 
-const emit = defineEmits<{
-  (e: 'change', test_case: TestCase): void,
-  (e: 'destroy', test_case: TestCase): void,
-  (e: 'create', event: Event): void,
-}>()
-
-const storyboard_id = computed(() => props.former.form.storyboard_id)
-
-const { data: requirement_boxes } = line.request(q.project.requirements.List(), (req, it) => {
-  req.interpolations.project_id = page.inProject()!.project_id
-  req.interpolations.storyboard_id = storyboard_id
-  req.query.roadmap_id = props.newest_roadmap.id
-  return it.useQuery({
-    ...req.toQueryConfig(),
-    enabled: storyboard_id
-  })
-})
-
-const { data: storyboard_boxes } = line.request(q.project.storyboards.List(), (req, it) => {
-  req.interpolations.project_id = page.inProject()!.project_id
-  return it.useQuery(req.toQueryConfig())
-})
-await line.wait()
-
-watch(storyboard_id, async (new_storyboard_id) => {
-  if (new_storyboard_id) {
-    props.former.form.requirement_id = null
-  }
-})
 </script>

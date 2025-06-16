@@ -40,14 +40,14 @@
         <FormGroup path="relate_state" label="关联需求">
           <controls.Selectpicker include_blank>
             <SelectdropItem v-for="state in Object.keys(TEST_CASE_RELATE_STATES)" :value="state">
-              {{ TEST_CASE_RELATE_STATES[state] }}
+              {{ TEST_CASE_RELATE_STATES[state as keyof typeof TEST_CASE_RELATE_STATES] }}
             </SelectdropItem>
           </controls.Selectpicker>
         </FormGroup>
       </Form>
 
       <template #actions>
-        <Button size="sm" v-if="!readonly && allow('create', TestCase)" @click.prevent="showModal(project_id)">新增用例</Button>
+        <Button size="sm" v-if="!readonly && allow('create', TestCase)" @click.prevent="showModal()">新增用例</Button>
       </template>
     </CardHeader>
 
@@ -65,8 +65,8 @@
   </Card>
 
   <teleport to="body">
-    <BlankDialog ref="case_dialog" :readonly="readonly" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></BlankDialog>
-    <BlankDialog ref="case_batch_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></BlankDialog>
+    <TestCaseDialog ref="case_dialog" :readonly="readonly" :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onTestCaseUpdated" @destroyed="onTestCaseDestroyed"></TestCaseDialog>
+    <TestCaseBatchDialog ref="case_batch_dialog" :platform_repo="platform_repo" :label_repo="label_repo" @updated="onBatchUpdated"></TestCaseBatchDialog>
   </teleport>
 </template>
 
@@ -85,6 +85,8 @@ import { usePageStore, useSessionStore } from '@/store'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import BlankDialog from '@/components/BlankDialog.vue'
 import CardNewDialog from './CardNewDialog.vue'
+import type { TestCaseFrameComponent } from '@/components/TestCaseFrame'
+import type { TestCaseBatchFrameComponent } from '@/components/TestCaseBatchFrame'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
@@ -102,8 +104,10 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 const session = useSessionStore()
 
-const case_dialog = ref<InstanceType<typeof BlankDialog>>()
-const case_batch_dialog = ref<InstanceType<typeof BlankDialog>>()
+const TestCaseDialog = BlankDialog as typeof BlankDialog & TestCaseFrameComponent
+const TestCaseBatchDialog = BlankDialog as typeof BlankDialog & TestCaseBatchFrameComponent
+const case_dialog = ref<InstanceType<typeof BlankDialog & TestCaseFrameComponent>>()
+const case_batch_dialog = ref<InstanceType<typeof BlankDialog & TestCaseBatchFrameComponent>>()
 
 class Search {
   @t.String group_name_search?: string = undefined
@@ -227,6 +231,7 @@ provide("changeFilter", changeFilter)
 
 const modal = ref<InstanceType<typeof CardNewDialog>>()
 function showModal() {
+  console.log('showModal', modal.value)
   modal.value?.show(project_id.toString())
 }
 

@@ -35,21 +35,22 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
 import { Button } from '$ui/button'
+import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Validator } from '$ui/simple_form'
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import type { SceneFrameEmits } from '@/components/SceneFrame'
+import { STORYBOARD_MAIN_AXLE } from '@/constants'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { EntityRepo, Platform, Requirement, Storyboard, Roadmap, Scene } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import * as q from '@/requests'
+import { usePageStore } from '@/store'
+import * as utils from '@/lib/utils'
 import { computed, getCurrentInstance, reactive, ref, type Component } from 'vue'
 import { useRoute } from 'vue-router'
-import * as utils from '@/lib/utils'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { STORYBOARD_MAIN_AXLE } from '@/constants'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { usePageStore } from '@/store'
 import SceneCreateDialogContent from './SceneCreateDialogContent.vue'
-import { Validator } from '$ui/simple_form'
 import SceneUpdateDialogContent from './SceneUpdateDialogContent.vue'
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const params = route.params as any
@@ -58,9 +59,8 @@ const open = defineModel('open')
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
-const emit = defineEmits<{
+const emit = defineEmits<SceneFrameEmits & {
   switch: [Component, ...any]
-  destroyed: [Scene]
 }>()
 
 const scenes = ref([] as Scene[])

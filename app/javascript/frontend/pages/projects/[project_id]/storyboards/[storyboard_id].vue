@@ -106,8 +106,8 @@
     </div>
   </Card>
 
-  <BlankDialog ref="storyboard_dialog" @created="onStoryboardCreated" @updated="onStoryboardUpdated" @destroyed="onStoryboardDestroyed" />
-  <BlankDialog
+  <StoryboardDialog ref="storyboard_dialog" @created="onStoryboardCreated" @updated="onStoryboardUpdated" @destroyed="onStoryboardDestroyed" />
+  <RequirementDialog
     ref="requirement_dialog"
     @created="onRequirementCreated"
     @updated="onRequirementUpdated"
@@ -116,8 +116,8 @@
     :test_case_labels="test_case_labels"
     :scenes="scenes"
     :storyboard="storyboard" />
-  <BlankDialog ref="roadmap_dialog" @created="" @updated="onRoadmapUpdated" />
-  <BlankDialog ref="scene_dialog" :scenes="scenes" @created="onSceneCreated" @destroyed="onSceneDestroyed" @updated="onSceneUpdated" />
+  <RoadmapDialog ref="roadmap_dialog" @created="" @updated="onRoadmapUpdated" />
+  <SceneDialog ref="scene_dialog" :scenes="scenes" @created="onSceneCreated" @destroyed="onSceneDestroyed" @updated="onSceneUpdated" />
 </template>
 
 <script setup lang="ts">
@@ -158,6 +158,10 @@ import { REQUIREMENT_RELATE_STATS } from '@/constants'
 import SceneListDialogContent from './SceneListDialogContent.vue'
 import SceneNode from './SceneNode.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import type { StoryboardFrameComponent } from '@/components/StoryboardFrame'
+import type { RequirementFrameComponent } from '@/components/RequirementFrame'
+import type { RoadmapFrameComponent } from '@/components/RoadmapFrame'
+import type { SceneFrameComponent } from '@/components/SceneFrame'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -167,10 +171,14 @@ const query = utils.queryToPlain(route.query)
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
-const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const roadmap_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const scene_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const StoryboardDialog = BlankDialog as typeof BlankDialog & StoryboardFrameComponent
+const storyboard_dialog = ref(null! as InstanceType<typeof BlankDialog & StoryboardFrameComponent>)
+const RequirementDialog = BlankDialog as typeof BlankDialog & RequirementFrameComponent
+const requirement_dialog = ref(null! as InstanceType<typeof BlankDialog & RequirementFrameComponent>)
+const RoadmapDialog = BlankDialog as typeof BlankDialog & RoadmapFrameComponent
+const roadmap_dialog = ref(null! as InstanceType<typeof BlankDialog & RoadmapFrameComponent>)
+const SceneDialog = BlankDialog as typeof BlankDialog & SceneFrameComponent
+const scene_dialog = ref(null! as InstanceType<typeof BlankDialog & SceneFrameComponent>)
 const project_id = params.project_id
 
 const vueFlowContainer = ref(null! as HTMLDivElement)

@@ -74,8 +74,8 @@
   </Card>
 
   <teleport to="body">
-    <BlankDialog ref="phase_dialog" :plan_box="plan_box" @created="onPhaseCreated" />
-    <BlankDialog ref="task_upshot_info_dialog" :plan_box="plan_box" :current_phase_id="current_phase_info.phase.id" @updated="onTaskUpshotInfoUpdated" />
+    <PhaseDialog ref="phase_dialog" :plan_box="plan_box" @created="onPhaseCreated" />
+    <TaskUpshotDialog ref="task_upshot_info_dialog" :plan_box="plan_box" :current_phase_id="current_phase_info.phase.id" @updated="onTaskUpshotInfoUpdated" />
   </teleport>
 </template>
 
@@ -102,6 +102,8 @@ import { Separator } from '$ui/separator'
 import { Nav, NavItem } from '$ui/nav'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import BlankDialog from '@/components/BlankDialog.vue'
+import type { PhaseFrameComponent } from '@/components/PhaseFrame'
+import type { TaskUpshotFrameComponent } from '@/components/TaskUpshotFrame'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import RLink from '@/components/RLink.vue'
@@ -113,8 +115,10 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const query = route.query
-const phase_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const task_upshot_info_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const PhaseDialog = BlankDialog as typeof BlankDialog & PhaseFrameComponent
+const TaskUpshotDialog = BlankDialog as typeof BlankDialog & TaskUpshotFrameComponent
+const phase_dialog = ref(null! as InstanceType<typeof BlankDialog & PhaseFrameComponent>)
+const task_upshot_info_dialog = ref(null! as InstanceType<typeof BlankDialog & TaskUpshotFrameComponent>)
 
 const searcher = Former.build({
   state_eq: null as string | null,
@@ -153,7 +157,7 @@ filter.value.archived = null
 const test_case_stats = computed(() => {
   const result = _(task_upshot_page.value.list).groupBy((it) => {
     const test_case = it.test_case
-    return JSON.stringify({ ignored: it.is_ignored(), role_name: test_case?.role_name, scene_path: test_case?.scene_path })
+    return JSON.stringify({ ignored: it.task?.is_ignored(), role_name: test_case?.role_name, scene_path: test_case?.scene_path })
   }).mapValues((it) => {
     return it.length
   }).map((count, json) => {
@@ -190,11 +194,11 @@ const avaiable_task_upshot_boxes = computed(() => {
     }
 
     if (filter.value.ignored === "1") {
-      if (!it.is_ignored()) {
+      if (!it.task.is_ignored()) {
         return false
       }
     } else {
-      if (it.is_ignored()) {
+      if (it.task.is_ignored()) {
         return false
       }
     }

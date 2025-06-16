@@ -17,25 +17,24 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import type { RequirementFrameEmits } from '@/components/RequirementFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import * as q from '@/requests'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import RequirementForm from './RequirementForm.vue'
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const route = useRoute()
 const params = route.params as any
 const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  created: [ Requirement ]
-}>()
+const emit = defineEmits<RequirementFrameEmits>()
 
 const props = defineProps<{
   scenes: Scene[],

@@ -18,7 +18,6 @@
     <div class="flex-1 space-y-4">
       <IssueRelatedTask v-if="issue_box.issue.task" :task="issue_box.issue.task" :project_id="project_id" />
       <IssueContent :readonly="readonly" :issue_box="issue_box" @updated="onIssueUpdated" @convert="onIssueConvert" />
-      <div>outline issue_box.surveys counts is {{ issue_box.surveys.length }} </div>
       <IssueSurveyCard :readonly="readonly" :issue_box="issue_box" v-if="issue_box.surveys?.length > 0" @modal="(...args) => issue_dialog.show(...args)" />
 
       <div v-for="item in timelines" class="mb-2">
