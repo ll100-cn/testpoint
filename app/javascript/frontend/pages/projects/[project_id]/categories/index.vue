@@ -3,7 +3,7 @@
     <PageTitle>分类列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', Category)" :to="`${path_info.collection}/new`">新增分类</Button>
+      <Button v-if="allow('create', Category)" :to="ok_url.apply(`${path_info.collection}/new`)">新增分类</Button>
     </template>
   </PageHeader>
 
@@ -31,7 +31,7 @@
               <TableCell>{{ category.description }}</TableCell>
               <TableCell>{{ issues_counts[category.id.toString()] ?? 0 }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', category)" :to="`${path_info.collection}/${category.id}/edit`">
+                <router-link class="link" v-if="allow('update', category)" :to="ok_url.apply(`${path_info.collection}/${category.id}/edit`)">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
                 <a href="#" v-if="allow('destroy', category)" v-confirm="'确定操作？'" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
@@ -61,6 +61,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
 import vConfirm from '@/components/vConfirm'
+import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -69,6 +70,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const actioner = Actioner.build()
+const ok_url = new OkUrl(route)
 
 const project_id = params.project_id
 const path_info = PathHelper.parseCollection(route.path, 'index')

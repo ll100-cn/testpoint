@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>编辑里程碑</Button>
-          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -31,15 +31,20 @@ import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
 const line = useQueryLine()
 const params = route.params as any
+const ok_url = new OkUrl(route)
 
 const project_id = params.project_id
 const milestone_id = params.milestone_id
 const path_info = PathHelper.parseMember(route.path, 'edit')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   title: null as string | null,
@@ -67,7 +72,7 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(path_info.collection)
+  router.push(return_url.value)
 }
 
 former.form.title = milestone_box.value.milestone.title

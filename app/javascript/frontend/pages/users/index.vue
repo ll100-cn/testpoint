@@ -1,10 +1,10 @@
 <template>
   <PageHeader>
     <PageTitle>用户列表</PageTitle>
-    <router-link to="/projects" class="ms-3 link">项目</router-link>
+    <router-link :to="ok_url.apply('/projects')" class="ms-3 link">项目</router-link>
 
     <template #actions>
-      <Button to="/users/new">新增用户</Button>
+      <Button :to="ok_url.apply('/users/new')">新增用户</Button>
     </template>
   </PageHeader>
 
@@ -26,7 +26,7 @@
               <TableCell>{{ user_box.user.name }}</TableCell>
               <TableCell>{{ user_box.user.email }}</TableCell>
               <TableCell role="actions">
-                <router-link :to="`/users/${user_box.user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                <router-link :to="ok_url.apply(`/users/${user_box.user.id}/edit`)" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
                 <a href="#" v-confirm="'是否删除用户？'" @click.prevent="deleteUser(user_box.user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
@@ -57,6 +57,7 @@ import { Validator } from '$ui/simple_form'
 import { useQueryLine } from '@/lib/useQueryLine'
 import vConfirm from '@/components/vConfirm'
 import { Alerter } from '@/components/Alerter';
+import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const router = useRouter()
@@ -64,6 +65,7 @@ const route = useRoute()
 const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
 const alerter = Alerter.build()
+const ok_url = new OkUrl(route)
 
 const { data: user_page } = line.request(q.admin.users.Page(), (req, it) => {
   req.query = utils.plainToQuery(query)

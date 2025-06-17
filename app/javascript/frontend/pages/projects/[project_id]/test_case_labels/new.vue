@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增标签</Button>
-          <Button variant="secondary" :to="`${path_info.collection}`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -31,14 +31,19 @@ import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
 const line = useQueryLine()
 const params = route.params as any
+const ok_url = new OkUrl(route)
 
 const project_id = params.project_id
 const path_info = PathHelper.parseCollection(route.path, 'new')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   name: "",
@@ -58,6 +63,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(path_info.collection)
+  router.push(return_url.value)
 }
 </script>

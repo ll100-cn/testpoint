@@ -1,9 +1,11 @@
 <template>
   <Alert v-if="actioner.validations.hasError()" variant="destructive">
     <AlertDescription>
-      <div v-for="message in actioner.validations.errorMessages([])" :key="message">
-        {{ message }}
-      </div>
+      <ul>
+        <li v-for="message in actioner.validations.errorMessages([])" :key="message">
+          {{ message }}
+        </li>
+      </ul>
     </AlertDescription>
   </Alert>
 </template>

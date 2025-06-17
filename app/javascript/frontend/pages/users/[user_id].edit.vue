@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>编辑用户</Button>
-          <Button variant="secondary" to="/users">返回</Button>
+          <Button variant="secondary" :to="return_url">返回</Button>
         </div>
       </FormGroup>
     </div>
@@ -20,31 +20,37 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '$ui/button'
+import { Separator } from '$ui/separator'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
-import PageHeader from '@/components/PageHeader.vue'
-import PageTitle from '@/components/PageTitle.vue'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Button } from '$ui/button'
-import { Separator } from '$ui/separator'
 import { useQueryLine } from '@/lib/useQueryLine'
+import OkUrl from '@/lib/ok_url'
+import PathHelper from '@/lib/PathHelper'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
 const line = useQueryLine()
 const params = route.params as any
+const ok_url = new OkUrl(route)
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
-const user_id = params.user_id
+const return_url = computed(() => ok_url.withDefault(path_info.parent.collection))
+
 const { data: user_box } = line.request(q.admin.users.Get(), (req, it) => {
-  req.interpolations.id = user_id
+  req.interpolations.id = params.user_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
 const former = Former.build({
   email: user_box.value.user.email,
-  name: user_box.value.user.name
+  name: user_box.value.user.name,
 })
 
 const Form = GenericForm<typeof former.form>
@@ -60,7 +66,7 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(`/users`)
+  router.push(return_url.value)
 }
 
 </script>

@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增成员</Button>
-          <Button variant="secondary" to="/users">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -26,12 +26,20 @@ import { Separator } from '$ui/separator'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/requests'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
+import OkUrl from '@/lib/ok_url'
+import PathHelper from '@/lib/PathHelper'
+import { computed } from 'vue'
 
 const router = useRouter()
+const route = useRoute()
 const line = useQueryLine()
+const ok_url = new OkUrl(route)
+const path_info = PathHelper.parseCollection(route.path, 'new')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   email: "",
@@ -49,7 +57,7 @@ former.doPerform = async function() {
   await create_user_action({
     body: former.form,
   })
-  router.push("/users")
+  router.push(return_url.value)
 }
 
 </script>

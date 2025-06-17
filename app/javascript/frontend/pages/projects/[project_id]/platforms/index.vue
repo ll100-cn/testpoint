@@ -3,7 +3,7 @@
     <PageTitle>平台列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', Platform)" :to="`${path_info.collection}/new`">新增平台</Button>
+      <Button v-if="allow('create', Platform)" :to="ok_url.apply(`${path_info.collection}/new`)">新增平台</Button>
     </template>
   </PageHeader>
 
@@ -29,7 +29,7 @@
               </TableCell>
               <TableCell>{{ _.find(member_boxes, { member: { id: platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', platform)" :to="`${path_info.collection}/${platform.id}/edit`" class="link">
+                <router-link v-if="allow('update', platform)" :to="ok_url.apply(`${path_info.collection}/${platform.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
                 <a v-if="allow('destroy', platform)" href="#" v-confirm="'是否删除平台？'" @click.prevent="deletePlatform(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
@@ -62,6 +62,7 @@ import PageContent from '@/components/PageContent.vue'
 import PathHelper from '@/lib/PathHelper'
 import vConfirm from '@/components/vConfirm'
 import { Alerter } from '@/components/Alerter'
+import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -70,6 +71,7 @@ const page = usePageStore()
 const allow = page.inProject()!.allow
 const session = useSessionStore()
 const alerter = Alerter.build()
+const ok_url = new OkUrl(route)
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id

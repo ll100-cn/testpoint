@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增项目</Button>
-          <Button variant="secondary" to="/projects">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -30,9 +30,18 @@ import { getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import OkUrl from '@/lib/ok_url'
+import PathHelper from '@/lib/PathHelper'
 
 const router = useRouter()
+const route = useRoute()
 const line = useQueryLine()
+const ok_url = new OkUrl(route)
+const path_info = PathHelper.parseCollection(route.path, 'new')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   name: "",
@@ -50,6 +59,6 @@ former.doPerform = async function() {
   await create_project_action({
     body: former.form,
   })
-  router.push("/projects")
+  router.push(return_url.value)
 }
 </script>

@@ -19,7 +19,7 @@
         <TableRow v-for="issue in issues" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
           <TableCell>{{ issue.id }}</TableCell>
           <TableCell>
-            <router-link class="link" :to="path_info.resource">
+            <router-link class="link" :to="ok_url.apply(path_info.resource)">
               <span v-if="issue.priority === 'important'">!!</span>
               {{ issue.title }}
             </router-link>
@@ -92,6 +92,7 @@ import { usePageStore } from '@/store'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
 import vConfirm from '@/components/vConfirm'
+import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -99,6 +100,7 @@ const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const ok_url = new OkUrl(route)
 
 const project_id = _.toInteger(params.project_id)
 const add_dialog_open = ref(false)

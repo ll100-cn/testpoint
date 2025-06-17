@@ -12,7 +12,7 @@
         <FormGroup label="">
           <div class="space-x-3">
             <Button>编辑项目</Button>
-            <Button variant="secondary" to="/projects">取消</Button>
+            <Button variant="secondary" :to="return_url">取消</Button>
           </div>
         </FormGroup>
       </div>
@@ -37,11 +37,18 @@ import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
+import OkUrl from '@/lib/ok_url'
+import PathHelper from '@/lib/PathHelper'
+import { computed } from 'vue'
 
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const ok_url = new OkUrl(route)
+const path_info = PathHelper.parseMember(route.path, 'edit')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const { data: project_box } = line.request(q.admin.projects.Get(), (req, it) => {
   req.interpolations.project_id = params.project_id
@@ -67,7 +74,7 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(`/projects`)
+  router.push(return_url.value)
 }
 
 </script>

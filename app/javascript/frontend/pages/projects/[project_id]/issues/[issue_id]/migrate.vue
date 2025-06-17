@@ -26,7 +26,7 @@
 
       <div class="space-x-3">
         <Button :disabled="isLoading">迁移</Button>
-        <Button variant="secondary" :to="`${path_info.resource}/edit`">取消</Button>
+        <Button variant="secondary" :to="return_url">取消</Button>
       </div>
     </div>
   </Form>
@@ -50,6 +50,7 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -57,10 +58,13 @@ const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const session = useSessionStore()
+const ok_url = new OkUrl(route)
 
 const project_id = _.toNumber(params.project_id)
 const issue_id = _.toNumber(params.issue_id)
 const path_info = PathHelper.parseMember(route.path, 'migrate')
+
+const return_url = computed(() => ok_url.withDefault(`${path_info.resource}/edit`))
 
 const former = Former.build({
   target_project_id: null as number | null,
