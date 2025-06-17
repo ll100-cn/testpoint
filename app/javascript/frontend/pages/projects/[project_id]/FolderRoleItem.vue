@@ -8,7 +8,7 @@
 
       <div class="border-b -ms-2 ps-2 -me-1 pe-2 box-content" />
 
-      <TreeItemView :highlight="highlight" :item-title="role_item.role_name ?? '未设置'" :item-count="role_item.totalCount()" @click="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })" />
+      <TreeItemView :highlight="highlight" :item-title="role_item.role_name ?? '未设置'" :item-count="role_item.totalCount()" @click.prevent="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })" />
     </div>
 
     <ul :id="`treeview-${role_item.uuid}`" :class="{ 'hidden': toggled }" class="ms-8">

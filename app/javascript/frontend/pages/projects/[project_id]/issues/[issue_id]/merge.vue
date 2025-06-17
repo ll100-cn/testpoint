@@ -27,13 +27,13 @@
           <TableCell>{{ issue.creator?.name }}</TableCell>
           <TableCell><IssueStateBadge :state="issue.state" /></TableCell>
           <TableCell class="text-right">
-            <button v-if="issue.id !== head.issue.id" v-confirm="'确认删除？'" @click="deleteSource(issue)"><i class="far fa-trash-alt"></i></button>
+            <button v-if="issue.id !== head.issue.id" v-confirm="'确认删除？'" @click.prevent="deleteSource(issue)"><i class="far fa-trash-alt"></i></button>
             <span v-else><i class="far fa-check-circle"></i> 主工单</span>
           </TableCell>
         </TableRow>
         <TableRow>
           <TableCell colspan="5">
-            <button class="link" @click="newSource">
+            <button class="link" @click.prevent="newSource">
               <i class="far fa-plus fa-fw" /> 添加工单
             </button>
           </TableCell>
@@ -42,7 +42,7 @@
       </Table>
     </CardTable>
     <CardFooter>
-      <Button v-if="allow('manage', Issue)" variant="primary" v-confirm="'确认合并？'" @click="merge" :disabled="issues.length < 2">
+      <Button v-if="allow('manage', Issue)" variant="primary" v-confirm="'确认合并？'" @click.prevent="merge" :disabled="issues.length < 2">
         <i class="far fa-object-group"></i> 合并
       </Button>
     </CardFooter>

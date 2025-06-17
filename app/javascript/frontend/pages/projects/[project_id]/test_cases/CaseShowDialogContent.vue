@@ -15,7 +15,7 @@
     <PageContent :content="test_case.content" />
 
     <div class="text-center p-1" :class="{ 'hidden': !collapsed }">
-      <Button preset="ghost" @click="collapsed=false">
+      <Button preset="ghost" @click.prevent="collapsed=false">
         <i class="far fa-history me-1" />显示历史版本
       </Button>
     </div>

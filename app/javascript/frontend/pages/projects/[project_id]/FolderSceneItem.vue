@@ -9,7 +9,7 @@
         :highlight="highlight"
         :item-title="scene_item.name"
         :item-count="(scene_item.count == 0 || scene_item.count == scene_item.totalCount()) ? scene_item.totalCount() : `${scene_item.count} / ${scene_item.totalCount()}`"
-        @click="changeFilter({ ...params, scene_path: scene_item.path })" />
+        @click.prevent="changeFilter({ ...params, scene_path: scene_item.path })" />
     </div>
 
     <ul :id="`treeview-${scene_item.uuid}`" :class="{ 'hidden': collapsed }" class="ms-8">

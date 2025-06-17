@@ -16,7 +16,7 @@
           <input type="file" class="hidden" multiple @change="onInputFileSelected">
         </label>
         或者
-        <a href="#" @click.prevent="onClipboardInput" class="link">剪贴板</a>
+        <a href="#" @click.prevent="clipboardInput" class="link">剪贴板</a>
       </div>
     </div>
   </div>
@@ -135,7 +135,7 @@ function onInputFileSelected(event: Event) {
   input.value = null
 }
 
-async function onClipboardInput() {
+async function clipboardInput() {
   try {
     const contents = await navigator.clipboard.read();
     for (const item of contents) {

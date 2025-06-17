@@ -16,7 +16,7 @@
 
         <div class="space-x-3">
           <Button size="sm">更新</Button>
-          <Button variant="secondary" size="sm" type="button" @click="mode = 'show'">取消</Button>
+          <Button variant="secondary" size="sm" type="button" @click.prevent="mode = 'show'">取消</Button>
         </div>
       </Form>
     </div>

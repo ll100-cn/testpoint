@@ -6,8 +6,8 @@ import { DisposableRequest } from "@/lib/DisposableRequest"
 import { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
 import { type ClassConstructor, plainToInstance } from "class-transformer"
 import _ from "lodash"
-import queryString from "query-string"
 import URI from 'urijs'
+import qs from 'qs'
 import { parseTemplate } from 'url-template'
 import type { MutationOptions, QueryClient, QueryFilters, UseQueryOptions } from "@tanstack/vue-query"
 import { matchEndpoint } from "@/lib/EndpointMatch"
@@ -113,7 +113,7 @@ export abstract class BaseRequest<T> {
   buildUrl(options: RequestOptions) {
     const url = this.buildEndpointUrl(options).map(it => it.value).join("")
     const uri = new URI(url)
-    const query_string = queryString.stringify(options.query ?? {}, { arrayFormat: "bracket" })
+    const query_string = qs.stringify(options.query ?? {}, { arrayFormat: "brackets" })
     return uri.query(query_string).toString()
   }
 

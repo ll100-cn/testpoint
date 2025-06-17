@@ -40,12 +40,12 @@
               <TableCell><controls.String v-model="input['label']" /></TableCell>
               <TableCell><controls.Number v-model="input['order_index']" /></TableCell>
               <TableCell>
-                <a class="btn btn-danger" @click="onRemoveInput(index)">删除</a>
+                <Button variant="destructive" @click.prevent="removeInput(index)">删除</Button>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-        <Button size="sm" preset="outline" class="m-2" type="button" @click="onAddInput">+ 新增</Button>
+        <Button size="sm" preset="outline" class="m-2" type="button" @click.prevent="addInput">+ 新增</Button>
       </Card>
     </FormGroup>
   </div>
@@ -90,11 +90,11 @@ const { data: category_boxes } = line.request(q.project.categories.List(), (req,
 await line.wait()
 const categories = computed(() => category_boxes.value.map(it => it.category))
 
-async function onRemoveInput(index: number) {
+async function removeInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)
 }
 
-async function onAddInput() {
+async function addInput() {
   props.former.form.inputs_attributes.push({
     label: "",
     order_index: "",

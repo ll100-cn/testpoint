@@ -3,7 +3,7 @@
     <PageTitle>修改计划</PageTitle>
 
     <template #actions>
-      <a class="btn btn-link text-danger" type="button" v-confirm="'确认删除？'" @click="deletePlan">删除</a>
+      <a class="btn btn-link text-danger" type="button" v-confirm="'确认删除？'" @click.prevent="deletePlan">删除</a>
     </template>
   </PageHeader>
 
@@ -16,7 +16,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>更新计划</Button>
-          <Button variant="secondary" type="button" @click="onCancel">取消</Button>
+          <Button variant="secondary" type="button" :to="path_info.resource">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -83,10 +83,6 @@ former.doPerform = async function() {
     body: former.form,
   })
 
-  router.push(path_info.resource)
-}
-
-function onCancel() {
   router.push(path_info.resource)
 }
 

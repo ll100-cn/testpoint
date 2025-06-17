@@ -52,7 +52,7 @@ const FormGroup = GenericFormGroup<typeof former.form>
 
 const { data: milestone_box } = line.request(q.project.milestones.Get(), (req, it) => {
   req.interpolations.project_id = project_id
-  req.interpolations.milestone_id = milestone_id
+  req.interpolations.id = milestone_id
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()

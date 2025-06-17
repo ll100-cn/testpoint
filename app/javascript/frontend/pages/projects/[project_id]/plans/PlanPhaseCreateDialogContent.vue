@@ -51,7 +51,7 @@ const props = defineProps<{
 const emit = defineEmits<PhaseFrameEmits>()
 
 const upshots_state_counts = computed(() => {
-  return _.last(props.plan_box.phase_infos)?.upshots_state_counts ?? {}
+  return _.last(props.plan_box.phase_infos)?.upshots_state_counts ?? ({} as Record<string, number>)
 })
 
 const former = Former.build({

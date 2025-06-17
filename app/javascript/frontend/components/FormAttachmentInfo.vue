@@ -40,7 +40,7 @@
       <template v-else>
         <div class="flex items-center">
           <span class="me-2">{{ _.truncate(attachment.title, { length: 20 }) }}</span>
-          <span role="button" class="far fa-fw fa-edit ms-auto" @click="enterEditing" />
+          <span role="button" class="far fa-fw fa-edit ms-auto" @click.prevent="enterEditing" />
         </div>
         <div class="flex items-center x-actions">
           <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>

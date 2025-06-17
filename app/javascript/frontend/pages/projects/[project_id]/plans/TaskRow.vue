@@ -1,5 +1,5 @@
 <template>
-  <Card class="mb-2 c-pointer" @click="emit('click', task_upshot_box)">
+  <Card class="mb-2 c-pointer" @click.prevent="emit('show', task_upshot_box)">
     <CardContent class="py-2 px-2 flex">
       <span class="me-3">
         <i v-if="task_upshot_box.task_upshot.state_override" class="far fa-clipboard-check text-muted" />
@@ -32,7 +32,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  click: [task_upshot_box: TaskUpshotBox]
+  show: [ TaskUpshotBox ]
 }>()
 
 const test_case = computed(() => props.task_upshot_box.test_case)

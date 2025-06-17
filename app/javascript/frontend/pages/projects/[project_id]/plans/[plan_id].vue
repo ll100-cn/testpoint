@@ -68,7 +68,7 @@
       <Separator orientation="vertical" class="h-auto" />
 
       <div class="w-full md:w-3/4 xl:w-5/6 px-4">
-        <TaskRow v-for="task_upshot_box in avaiable_task_upshot_boxes" :task_upshot_box="task_upshot_box" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_box)" />
+        <TaskRow v-for="task_upshot_box in avaiable_task_upshot_boxes" :task_upshot_box="task_upshot_box" @show="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_box)" />
       </div>
     </CardContent>
   </Card>
@@ -80,33 +80,33 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import { Button } from '$ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '$ui/card'
+import { Nav, NavItem } from '$ui/nav'
+import { Separator } from '$ui/separator'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import BlankDialog from '@/components/BlankDialog.vue'
+import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import type { PhaseFrameComponent } from '@/components/PhaseFrame'
+import RLink from '@/components/RLink.vue'
+import TaskStateLabel from '@/components/TaskStateLabel.vue'
+import type { TaskUpshotFrameComponent } from '@/components/TaskUpshotFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { Phase, type TaskUpshotBox, TestCaseStat } from '@/models'
+import * as q from '@/requests'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { computed, getCurrentInstance, provide, ref } from 'vue'
+import { computed, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useQueryLine } from '@/lib/useQueryLine'
 import FolderSide from '../FolderSide.vue'
 import { type ChangeFilterFunction, ColumnFilter, Filter } from '../types'
 import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
 import TaskRow from './TaskRow.vue'
 import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
-import TaskStateLabel from '@/components/TaskStateLabel.vue'
-import PageHeader from '@/components/PageHeader.vue'
-import PageTitle from '@/components/PageTitle.vue'
-import { Button } from '$ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import { Separator } from '$ui/separator'
-import { Nav, NavItem } from '$ui/nav'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import BlankDialog from '@/components/BlankDialog.vue'
-import type { PhaseFrameComponent } from '@/components/PhaseFrame'
-import type { TaskUpshotFrameComponent } from '@/components/TaskUpshotFrame'
-import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
-import RLink from '@/components/RLink.vue'
 
 const line = useQueryLine()
 const route = useRoute()

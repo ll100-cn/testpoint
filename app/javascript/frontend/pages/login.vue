@@ -34,7 +34,7 @@
 
       <CardFooter>
         <Button>登陆</Button>
-        <Button variant="secondary" @click="login_code = null">取消</Button>
+        <Button variant="secondary" @click.prevent="login_code = null">取消</Button>
       </CardFooter>
     </Form>
   </Card>

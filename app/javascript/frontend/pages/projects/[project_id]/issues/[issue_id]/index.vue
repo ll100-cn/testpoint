@@ -39,13 +39,13 @@
         <CardContent>
           <ActionerAlert :actioner="actioner" />
           <div class="flex items-center gap-x-2">
-            <Button v-if="allow('create', Comment)" @click="comment_dialog.show(IssueCommentCreateDialogContent, issue_box)">
+            <Button v-if="allow('create', Comment)" @click.prevent="comment_dialog.show(IssueCommentCreateDialogContent, issue_box)">
               <i class="far fa-comment fa-fw" /> 新增评论
             </Button>
-            <Button v-if="allow('manage', issue_box.issue)" @click="issue_dialog.show(IssueRelationshipNewDialogContent)">
+            <Button v-if="allow('manage', issue_box.issue)" @click.prevent="issue_dialog.show(IssueRelationshipNewDialogContent)">
               <i class="far fa-link fa-fw" /> 关联其它问题
             </Button>
-            <Button v-if="allow('create', IssueSurvey)" @click="issue_dialog.show(IssueSurveyCreateDialogContent)">
+            <Button v-if="allow('create', IssueSurvey)" @click.prevent="issue_dialog.show(IssueSurveyCreateDialogContent)">
               <i class="far fa-file-lines fa-fw" /> 新增问题模版
             </Button>
 
@@ -205,7 +205,6 @@ const timelines = computed(() => {
 })
 
 function onIssueUpdated(new_issue_box: IssueBox) {
-  console.log("onIssueUpdated", new_issue_box.surveys.length)
   issue_box.value = new_issue_box
 }
 

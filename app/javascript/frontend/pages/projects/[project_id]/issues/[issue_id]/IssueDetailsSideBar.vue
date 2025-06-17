@@ -99,8 +99,8 @@
       <div class="flex flex-col" v-if="!readonly">
         <div class="h5">订阅</div>
         <div class="mt-1">
-          <Button v-if="_.find(issue_box.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click="unsubscribe">取消订阅</Button>
-          <Button v-else preset="outline" variant="secondary" class="w-full" @click="subscribe">订阅问题</Button>
+          <Button v-if="_.find(issue_box.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click.prevent="unsubscribe">取消订阅</Button>
+          <Button v-else preset="outline" variant="secondary" class="w-full" @click.prevent="subscribe">订阅问题</Button>
           <div class="mt-2 text-sm text-muted">{{ issue_box.subscriptions.length }} 人订阅:</div>
           <div class="flex items-center gap-1">
             <Tooltip v-for="subscription in issue_box.subscriptions">
@@ -183,7 +183,7 @@ const { mutateAsync: destroy_subscription_action } = line.request(q.bug.subscrip
 former.doPerform = async function(code: string) {
   const a_issue_action = await create_issue_action_action({
     interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
-    body: { [code]: this.form[code] }
+    body: { [code]: (this.form as any)[code] }
   })
 
   Object.assign(props.issue_box.issue, a_issue_action.issue)

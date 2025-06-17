@@ -11,8 +11,6 @@
     <hr>
     <TaskDetailsState :task_box="task_box" :phase_infos="plan_box.phase_infos" :current_phase_id="current_phase_id" />
 
-    <div>task_box.task.ignore_at is {{ task_box.task.ignore_at }}</div>
-
     <DialogFooter v-if="is_last_phase">
       <template v-if="task_box.task.ignore_at != null">
         <Button v-if="allow('update', task_box.task)" v-confirm="'确定操作？'" @click.prevent="unignoreTask()">取消忽略</Button>
@@ -65,7 +63,6 @@ const emit = defineEmits<TaskUpshotFrameEmits & {
 }>()
 
 const task_upshot_box = ref(null! as TaskUpshotBox)
-const task_box = ref(null! as TaskBox)
 
 const is_last_phase = computed(() => {
   return _.last(props.plan_box.phase_infos)?.phase.id == task_upshot_box.value.task_upshot.phase_id
@@ -178,7 +175,7 @@ async function updateTaskUpshotState(state_override: "pass" | "pending" | null) 
 }
 
 const task_id = computed(() => task_upshot_box.value?.task?.id)
-const { data: a_task_box, suspense, queryKey: task_query_key } = line.request(q.test.tasks.Get('+info'), (req, it) => {
+const { data: task_box, suspense } = line.request(q.test.tasks.Get('+info'), (req, it) => {
   req.interpolations.project_id = props.plan_box.plan.project_id
   req.interpolations.plan_id = props.plan_box.plan.id
   req.interpolations.task_id = task_id as any
@@ -195,7 +192,6 @@ async function reset(a_task_upshot_box: TaskUpshotBox) {
   task_upshot_box.value = { ...a_task_upshot_box }
 
   await suspense()
-  task_box.value = a_task_box.value
 
   content.value = task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content ?? ""
 
