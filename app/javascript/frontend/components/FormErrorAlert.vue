@@ -1,14 +1,19 @@
 <template>
-  <div v-if="validator.errorMessages([]).length > 0" class="alert alert-danger" role="alert">
-    <div v-for="message in validator.errorMessages([])" :key="message">
-      {{ message }}
-    </div>
-  </div>
+  <Alert v-if="validator.errorMessages([]).length > 0" variant="destructive">
+    <AlertDescription>
+      <ul>
+        <li v-for="message in validator.errorMessages([])" :key="message">
+          {{ message }}
+        </li>
+      </ul>
+    </AlertDescription>
+  </Alert>
 </template>
 
 <script setup lang="ts">
 import { type PropType, inject, reactive } from 'vue'
 import { Validator, useFormer } from '$ui/simple_form'
+import { Alert, AlertDescription } from '$ui/alert';
 
 const props = defineProps<{
   validator?: Validator

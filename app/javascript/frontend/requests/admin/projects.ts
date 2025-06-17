@@ -1,63 +1,57 @@
-import { ProjectBox, ProjectPage } from "@/models"
+import { type ProjectBox, ProjectBoxImpl, ProjectPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
-export const Update = class extends BaseRequest<ProjectBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/admin/projects/{id}"
-  }
+class UpdateRequest extends BaseRequest<ProjectBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/admin/projects", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Get = class extends BaseRequest<ProjectBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/admin/projects/{project_id}"
-  }
+
+class GetRequest extends BaseRequest<ProjectBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/admin/projects", "/{project_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Destroy = class extends BaseRequest<ProjectBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/admin/projects/{id}"
-  }
+
+class DestroyRequest extends BaseRequest<ProjectBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/admin/projects", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<ProjectBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/admin/projects"
-  }
+
+class CreateRequest extends BaseRequest<ProjectBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/admin/projects" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProjectBox, response)
+    return this.responseToObject(ProjectBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Page = class extends BaseRequest<ProjectPage<ProjectBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/admin/projects"
-  }
+
+class PageRequest extends BaseRequest<ProjectPage<ProjectBox>> {
+  method = "GET"
+  endpoint = [ "/api/v2/admin/projects" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(ProjectPage<ProjectBox>, response)
   }
 }
+export const Page = () => new PageRequest()

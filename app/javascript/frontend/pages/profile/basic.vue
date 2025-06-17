@@ -11,7 +11,7 @@
                 <FormErrorAlert />
 
                 <FormGroup path="email" label="邮箱">
-                  <controls.String v-model="account.user.email" readonly disabled />
+                  <controls.String v-model="email" readonly disabled />
                 </FormGroup>
 
                 <FormGroup path="name" label="姓名">
@@ -19,7 +19,7 @@
                 </FormGroup>
 
                 <FormGroup path="avatar" label="头像">
-                  <img :src="account.avatarUrl()" class="me-1" width="64" />
+                  <img :src="account?.avatarUrl()" class="me-1" width="64" />
                   <a href="https://gravatar.com" target="_blank">修改</a>
                 </FormGroup>
               </div>
@@ -38,19 +38,19 @@
 
 <script setup lang="ts">
 import * as q from "@/requests"
-import useRequestList from '@/lib/useRequestList'
 import { useSessionStore } from '@/store'
-import { getCurrentInstance, ref, watch } from 'vue'
+import { computed, getCurrentInstance, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import PageHeader from './PageHeader.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
 import * as controls from '@/components/controls'
 
-const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
+const line = useQueryLine()
 
 const account = session.account
 const former = Former.build({
@@ -67,11 +67,18 @@ watch(former.form, () => {
   success.value = false
 })
 
+const { mutateAsync: update_account_action } = line.request(q.profile.accounts.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const account_box = await reqs.add(q.profile.accounts.Update).setup(req => {
-  }).perform(this.form)
+  const account_box = await update_account_action({
+    body: former.form,
+  })
   session.account = account_box.account
 
   success.value = true
 }
+
+const email = computed(() => account?.user.email)
 </script>

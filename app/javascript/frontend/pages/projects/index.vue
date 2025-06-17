@@ -1,10 +1,10 @@
 <template>
   <PageHeader>
     <PageTitle>项目列表</PageTitle>
-    <router-link to="/users" class="ms-3 link">成员</router-link>
+    <router-link :to="ok_url.apply('/users')" class="ms-3 link">成员</router-link>
 
     <template #actions>
-      <Button to="/projects/new">新增项目</Button>
+      <Button :to="ok_url.apply('/projects/new')">新增项目</Button>
     </template>
   </PageHeader>
 
@@ -28,9 +28,9 @@
               <TableCell>{{ project_box.project.archived ? "是" : "否" }}</TableCell>
               <TableCell>{{ project_box.project.webhook_url }}</TableCell>
               <TableCell role="actions">
-                <router-link :to="`/projects/${project_box.project.id}`" class="link"><i class="far fa-search"></i> 详情</router-link>
-                <router-link :to="`/projects/${project_box.project.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
-                <a href="#" @click.prevent="onRemove(project_box.project.id)" class="link"><i class="far fa-trash-alt" /> 归档</a>
+                <router-link :to="ok_url.apply(`/projects/${project_box.project.id}`)" class="link"><i class="far fa-search"></i> 详情</router-link>
+                <router-link :to="ok_url.apply(`/projects/${project_box.project.id}/edit`)" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                <a href="#" v-confirm="'是否归档项目？'" @click.prevent="archiveProject(project_box.project.id)" class="link"><i class="far fa-trash-alt" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
@@ -47,42 +47,37 @@
 <script setup lang="ts">
 import { Button } from '$ui/button'
 import { Card, CardFooter, CardTable } from '$ui/card'
-import { Validator } from '$ui/simple_form'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$ui/table'
+import { Alerter } from '@/components/Alerter'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
-import useRequestList from '@/lib/useRequestList'
+import vConfirm from '@/components/vConfirm'
+import { useQueryLine } from '@/lib/useQueryLine'
 import * as utils from "@/lib/utils"
 import * as q from '@/requests'
-import { reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import OkUrl from '@/lib/ok_url'
 
-const reqs = useRequestList()
-const router = useRouter()
-const validations = reactive<Validator>(new Validator())
+const line = useQueryLine()
 const route = useRoute()
+const alerter = Alerter.build()
 const query = utils.queryToPlain(route.query)
+const ok_url = new OkUrl(route)
 
-const project_page = reqs.add(q.admin.projects.Page).setup(req => {
+const { data: project_page } = line.request(q.admin.projects.Page(), (req, it) => {
   req.query = utils.plainToQuery(query)
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
-async function onRemove(project_id: number) {
-  if (!confirm("是否归档项目？")) {
-    return
-  }
+const { mutateAsync: destroy_project_action } = line.request(q.admin.projects.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  try {
-    await reqs.add(q.admin.projects.Destroy).setup(req => {
-      req.interpolations.id = project_id
-    }).perform()
-
-    router.go(0)
-  } catch (error) {
-    validations.processError(error)
-    alert(validations.errorMessages([]).join("\n"))
-  }
+async function archiveProject(project_id: number) {
+  alerter.perform(destroy_project_action, {
+    interpolations: { id: project_id }
+  })
 }
 </script>

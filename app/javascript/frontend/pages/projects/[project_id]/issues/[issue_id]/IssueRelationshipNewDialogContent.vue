@@ -27,21 +27,20 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Issue, IssueBox } from "@/models"
+import { Issue, type IssueBox } from "@/models"
 import { ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox
@@ -55,11 +54,18 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_issue_relationship_action } = line.request(q.bug.issue_relationships.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_relationship_box = await reqs.add(q.bug.issue_relationships.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform(former.form)
+  const a_issue_relationship_box = await create_issue_relationship_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id
+    },
+    body: former.form
+  })
 
   props.issue_box.source_relationships.push(a_issue_relationship_box.issue_relationship)
   emit('updated', props.issue_box)

@@ -1,27 +1,24 @@
-import { Subscription } from "@/models"
+import { type SubscriptionBox, SubscriptionBoxImpl } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Destroy = class extends BaseRequest<Subscription> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/subscription"
-  }
+class DestroyRequest extends BaseRequest<SubscriptionBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/subscription" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(Subscription, response)
+    return this.responseToObject(SubscriptionBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<Subscription> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/subscription"
-  }
+
+class CreateRequest extends BaseRequest<SubscriptionBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/subscription" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(Subscription, response)
+    return this.responseToObject(SubscriptionBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()

@@ -1,51 +1,46 @@
-import { IssueSurvey } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { type IssueSurveyBox, IssueSurveyBoxImpl, IssueSurveyPage } from "@/models"
 import type { AxiosResponse } from "axios"
+import { BaseRequest } from "../BaseRequest"
 
-export const Create = class extends BaseRequest<IssueSurvey> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/issue_surveys"
-  }
+class CreateRequest extends BaseRequest<IssueSurveyBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Destroy = class extends BaseRequest<IssueSurvey> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}"
-  }
+
+class DestroyRequest extends BaseRequest<IssueSurveyBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const List = class extends BaseRequest<Array<IssueSurvey>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/issue_surveys"
-  }
+
+class ListRequest extends BaseRequest<IssueSurveyBox[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToArray(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyPage<IssueSurveyBox>, response).list
   }
 }
+export const List = () => new ListRequest()
 
-export const Update = class extends BaseRequest<IssueSurvey> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}"
-  }
+
+class UpdateRequest extends BaseRequest<IssueSurveyBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/issue_surveys", "/{issue_survey_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurvey, response)
+    return this.responseToObject(IssueSurveyBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()

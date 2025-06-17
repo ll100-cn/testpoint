@@ -1,6 +1,7 @@
 import { Type } from "class-transformer"
 import * as t from '@/lib/transforms'
 import { Pagination } from './Pagination'
+import type { OmitByValue } from "utility-types"
 
 export class TestCase {
   id!: number
@@ -22,10 +23,12 @@ export class TestCase {
   @Type(() => Date) updated_at!: Date
 }
 
-export class TestCaseBox {
+export class TestCaseBoxImpl {
   @t.Klass(TestCase) test_case!: TestCase
 }
 
+export type TestCaseBox = OmitByValue<TestCaseBoxImpl, Function>
+
 export class TestCasePage<Box extends TestCaseBox> extends Pagination<Box> {
-  @t.Klass(TestCaseBox) list: Box[] = []
+  @t.Klass(TestCaseBoxImpl) list: Box[] = []
 }

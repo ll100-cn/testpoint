@@ -18,7 +18,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增成员</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/members`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -27,7 +27,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
@@ -36,13 +35,21 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import Separator from '$ui/separator/Separator.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
+const ok_url = new OkUrl(route)
 
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'new')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   user_email: "",
@@ -53,11 +60,16 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  await reqs.add(q.project.members.Create).setup(req => {
-    req.interpolations.project_id = project_id
-  }).perform(this.form)
+const { mutateAsync: create_member_action } = line.request(q.project.members.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  router.push('/projects/' + project_id + '/members')
+former.doPerform = async function() {
+  await create_member_action({
+    interpolations: { project_id },
+    body: former.form,
+  })
+
+  router.push(return_url.value)
 }
 </script>

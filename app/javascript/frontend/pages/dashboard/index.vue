@@ -15,10 +15,10 @@
         </TableHeader>
         <TableBody>
           <TableRow v-for="[project, issue_stats_mapping] of grouped_issue_stats">
-            <TableCell class="text-nowrap"><router-link :to="`/projects/${project.id}`">{{ project.name }}</router-link></TableCell>
+            <TableCell class="text-nowrap"><router-link :to="ok_url.apply(`/projects/${project.id}`)">{{ project.name }}</router-link></TableCell>
 
             <TableCell v-for="[code, text] of enum_issue_stages">
-              <router-link v-for="issue_stat in issue_stats_mapping.get(code) ?? []" :to="{ path: `/projects/${project.id}/issues`, query: { stage: code, category_id_eq: issue_stat.category?.id } }">
+              <router-link v-for="issue_stat in issue_stats_mapping.get(code) ?? []" :to="ok_url.apply({ path: `/projects/${project.id}/issues`, query: { stage: code, category_id_eq: issue_stat.category?.id } })">
                 <CategoryBadge class="text-nowrap mb-1 me-2" :category="issue_stat.category" :count="issue_stat.count" />
               </router-link>
             </TableCell>
@@ -30,8 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, IssueStat, Project, MemberBox } from '@/models'
-import useRequestList from '@/lib/useRequestList'
+import { EntityRepo, IssueStat, Project, type MemberBox } from '@/models'
 import * as q from '@/requests'
 import { computed, getCurrentInstance, ref } from 'vue'
 import PageHeader from "./PageHeader.vue"
@@ -41,23 +40,28 @@ import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { useRoute } from 'vue-router'
+import OkUrl from '@/lib/ok_url'
 
-const reqs = useRequestList()
+const line = useQueryLine()
+const route = useRoute()
 const page = usePageStore()
 const session = useSessionStore()
-
+const ok_url = new OkUrl(route)
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const member_page = reqs.raw(session.request(q.profile.members.InfoList)).setup().wait()
-const unhandled_issue_page =  reqs.add(q.profile.issues.Page).setup(req => {
-  req.query.per_page = 1
-  req.query.filter = 'unhandled'
-}).wait()
-await reqs.performAll()
+const { data: member_boxes } = line.request(q.profile.members.List('+project'), (req, it) => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: unhandled_issue_page } = line.request(q.profile.issues.Page(), (req, it) => {
+  req.query = { per_page: 1, filter: 'unhandled' }
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
-const member_boxes = computed(() => member_page.value.list)
 const unhandled_issues_count = computed(() => unhandled_issue_page.value.total_count)
-const project_repo = computed(() => new EntityRepo<Project>().setup(member_boxes.value.map(it => it.project!)))
+const project_repo = computed(() => new EntityRepo<Project>().setup(member_boxes.value.map(it => it.project)))
 
 const grouped_issue_stats = computed(() => {
   const result = new Map<Project, Map<string, IssueStat[]>>()

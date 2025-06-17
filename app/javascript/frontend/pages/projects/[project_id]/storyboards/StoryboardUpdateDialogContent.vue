@@ -3,7 +3,7 @@
     <DialogHeader>
       <DialogTitle>修改需求板</DialogTitle>
       <template #actions>
-        <Button preset="ghost" variant="destructive" @click.prevent="destroyStoryboard">
+        <Button preset="ghost" variant="destructive" v-confirm="'确认删除？'" @click.prevent="deleteStoryboard">
           删除
         </Button>
       </template>
@@ -34,27 +34,26 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import { EntityRepo, Platform, Requirement, Storyboard } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import type { StoryboardFrameEmits } from '@/components/StoryboardFrame'
+import { STORYBOARD_MAIN_AXLE } from '@/constants'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { Storyboard } from '@/models'
+import * as q from '@/requests'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { STORYBOARD_MAIN_AXLE } from '@/constants'
+import vConfirm from '@/components/vConfirm'
 
 const route = useRoute()
 const params = route.params as any
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [ Storyboard ]
-  destroyed: [ Storyboard ]
-}>()
+const emit = defineEmits<StoryboardFrameEmits>()
 
 const former = Former.build({
   title: "",
@@ -65,11 +64,19 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_storyboard_action } = line.request(q.project.storyboards.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_storyboard_action } = line.request(q.project.storyboards.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_storyboard_box = await reqs.add(q.project.storyboards.Update).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = storyboard.value.id
-  }).perform(this.form)
+  const a_storyboard_box = await update_storyboard_action({
+    interpolations: { project_id: params.project_id, storyboard_id: storyboard.value.id },
+    body: former.form
+  })
 
   emit('updated', a_storyboard_box.storyboard)
   open.value = false
@@ -91,15 +98,10 @@ defineExpose({
   reset
 })
 
-async function destroyStoryboard() {
-  if (!confirm("确认删除？")) {
-    return
-  }
-
-  await reqs.add(q.project.storyboards.Destroy).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = storyboard.value.id
-  }).perform()
+async function deleteStoryboard() {
+  await destroy_storyboard_action({
+    interpolations: { project_id: params.project_id, storyboard_id: storyboard.value.id }
+  })
 
   emit('destroyed', storyboard.value)
   open.value = false

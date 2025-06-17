@@ -19,34 +19,40 @@
 import { Button } from '$ui/button'
 import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import useRequestList from '@/lib/useRequestList'
-import { Attachment, CommentBox, IssueBox } from "@/models"
+import { Attachment, type CommentBox, type IssueBox } from "@/models"
 import * as q from '@/requests'
 import _ from "lodash"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueCommentFrameEmits } from '@/components/IssueCommentFrame'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [ CommentBox ]
-}>()
+const emit = defineEmits<IssueCommentFrameEmits>()
 
 const former = Former.build({
   content: "",
-  attachment_ids: []
+  attachment_ids: [] as number[]
 })
 
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_comment = await reqs.add(q.bug.issue_comments.Update).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-    req.interpolations.comment_id = comment_box.value.comment.id
-  }).perform(this.form)
+  const a_comment = await update_comment_action({
+    interpolations: {
+      project_id: issue_box.value.issue.project_id,
+      issue_id: issue_box.value.issue.id,
+      comment_id: comment_box.value.comment.id
+    },
+    body: former.form
+  })
 
   emit("updated", a_comment)
   open.value = false
@@ -61,9 +67,8 @@ function attachmentChange($event: Attachment[]) {
 }
 
 function reset(a_issue_box: IssueBox, a_comment_box: CommentBox) {
-  console.log("reset", a_issue_box, a_comment_box)
-  issue_box.value = a_issue_box
-  comment_box.value = a_comment_box
+  issue_box.value = { ...a_issue_box }
+  comment_box.value = { ...a_comment_box }
 
   former.form.content = a_comment_box.comment.content
   former.form.attachment_ids = a_comment_box.comment.attachments.map(it => it.id)

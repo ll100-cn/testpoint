@@ -40,12 +40,12 @@
               <TableCell><controls.String v-model="input['label']" /></TableCell>
               <TableCell><controls.Number v-model="input['order_index']" /></TableCell>
               <TableCell>
-                <a class="btn btn-danger" @click="onRemoveInput(index)">删除</a>
+                <Button variant="destructive" @click.prevent="removeInput(index)">删除</Button>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-        <Button size="sm" preset="outline" class="m-2" type="button" @click="onAddInput">+ 新增</Button>
+        <Button size="sm" preset="outline" class="m-2" type="button" @click.prevent="addInput">+ 新增</Button>
       </Card>
     </FormGroup>
   </div>
@@ -53,7 +53,6 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, ref, computed } from 'vue'
-import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import { ISSUE_PRIORITY_OPTIONS } from "@/constants"
 import * as q from '@/requests'
@@ -66,8 +65,9 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import Button from '$ui/button/Button.vue'
 import { useRoute } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const session = useSessionStore()
 const route = useRoute()
 const params = route.params as any
@@ -83,15 +83,18 @@ const lookup_by_build_form_collection = ref([
 
 const FormGroup = GenericFormGroup<typeof props.former.form>
 
-const category_page = reqs.add(q.project.categories.List, params.project_id).setup().wait()
-await reqs.performAll()
-const categories = computed(() => category_page.value.list.map(it => it.category))
+const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
+  req.interpolations.project_id = params.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
+const categories = computed(() => category_boxes.value.map(it => it.category))
 
-async function onRemoveInput(index: number) {
+async function removeInput(index: number) {
   props.former.form.inputs_attributes.splice(index, 1)
 }
 
-async function onAddInput() {
+async function addInput() {
   props.former.form.inputs_attributes.push({
     label: "",
     order_index: "",

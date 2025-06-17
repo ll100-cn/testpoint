@@ -11,7 +11,7 @@
         <Button class="w-auto">搜索</Button>
       </Form>
 
-      <Button v-if="allow('create', Issue)" :to="`/projects/${project_id}/issues/new`">新增问题</Button>
+      <Button v-if="allow('create', Issue)" :to="`${path_info.collection}/new`">新增问题</Button>
     </template>
   </PageHeader>
 
@@ -47,7 +47,6 @@
 <script setup lang="ts">
 import { Card, CardContent, CardFooter, CardHeader, CardTable } from '$ui/card'
 import { Nav, NavItem } from '$ui/nav'
-import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import PaginationBar from "@/components/PaginationBar.vue"
@@ -67,14 +66,17 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import RLink from '@/components/RLink.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const query = utils.queryToPlain(route.query)
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
 const page2 = utils.instance(Page, query)
 const search2 = reactive(utils.instance(Search2, query))
@@ -97,15 +99,17 @@ former.doPerform = async function(search: Search2 | null) {
   }
 }
 
-const pagination = reqs.add(q.bug.issues.Page).setup(req => {
+const { data: pagination } = line.request(q.bug.issues.Page(), (req, it) => {
   req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...search2, ...filter2, ...page2 })
-}).wait()
-const issue_summary = reqs.add(q.bug.issue_summaries.Get).setup(req => {
+  req.query = { ...search2, ...filter2, ...page2 }
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: issue_summary } = line.request(q.bug.issues.Summary(), (req, it) => {
   req.interpolations.project_id = project_id
-  req.query = utils.compactObject({ ...search2, ...filter2 })
-}).wait()
-await reqs.performAll()
+  req.query = { ...search2, ...filter2 }
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const issue_stage_count = computed(() => {
   return _(pagination.value.issue_stats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()

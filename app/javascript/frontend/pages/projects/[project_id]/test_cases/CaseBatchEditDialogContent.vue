@@ -102,20 +102,21 @@
 </template>
 
 <script setup lang="ts">
+import Button from '$ui/button/Button.vue'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
+import * as controls from '@/components/controls'
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
-import * as q from '@/requests'
+import type { TestCaseBatchFrameEmits } from '@/components/TestCaseBatchFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import * as q from '@/requests'
 import _ from 'lodash'
 import { nextTick, reactive, ref } from 'vue'
 import SwitchFormGroup from './SwitchFormGroup.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
-import Button from '$ui/button/Button.vue'
-import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
-import * as controls from '@/components/controls'
 
 const validations = reactive(new Validator())
-const reqs = useRequestList()
+const line = useQueryLine()
 const state = ref('pending') // [ pending, submitting, submited ]
 
 const props = defineProps<{
@@ -123,9 +124,7 @@ const props = defineProps<{
   label_repo: EntityRepo<TestCaseLabel>,
 }>()
 
-const emit = defineEmits<{
-  updated: []
-}>()
+const emit = defineEmits<TestCaseBatchFrameEmits>()
 
 const result = ref<{
   test_case: TestCase,
@@ -145,6 +144,10 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_test_case_action } = line.request(q.case.test_cases.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
   result.value = []
   state.value = 'submitting'
@@ -161,10 +164,10 @@ former.doPerform = async function() {
     }
 
     try {
-      await reqs.add(q.case.test_cases.Update).setup(req => {
-        req.interpolations.project_id = test_case.project_id
-        req.interpolations.id = test_case.id
-      }).perform(form_data)
+      await update_test_case_action({
+        interpolations: { project_id: test_case.project_id, id: test_case.id },
+        body: form_data
+      })
     } catch (err) {
       validations.processError(err)
 

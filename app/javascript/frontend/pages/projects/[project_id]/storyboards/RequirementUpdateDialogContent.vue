@@ -4,7 +4,7 @@
       <DialogTitle>编辑需求 #{{ requirement.id }}</DialogTitle>
 
       <template #actions>
-        <Button preset="ghost" variant="destructive" @click.prevent="destroyRequirement">
+        <Button preset="ghost" variant="destructive" v-confirm="'确认删除？'" @click.prevent="deleteRequirement">
           删除
         </Button>
       </template>
@@ -23,27 +23,26 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import type { RequirementFrameEmits } from '@/components/RequirementFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
+import * as utils from '@/lib/utils'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import * as q from '@/requests'
 import { computed, getCurrentInstance, nextTick, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import * as utils from '@/lib/utils'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import RequirementForm from './RequirementForm.vue'
+import vConfirm from '@/components/vConfirm'
 
 const route = useRoute()
 const params = route.params as any
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [ Requirement ]
-  destroyed: [ Requirement ]
-}>()
+const emit = defineEmits<RequirementFrameEmits>()
 
 const props = defineProps<{
   scenes: Scene[],
@@ -68,16 +67,22 @@ async function reset(a_requirement: Requirement) {
   })
 }
 
-async function destroyRequirement() {
-  if (!confirm("确认删除？")) {
-    return
-  }
+const { mutateAsync: destroy_requirement_action } = line.request(q.project.requirements.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  await reqs.add(q.project.requirements.Destroy).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard.id
-    req.interpolations.requirement_id = requirement.value.id
-  }).perform()
+const { mutateAsync: update_requirement_action } = line.request(q.project.requirements.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+async function deleteRequirement() {
+  await destroy_requirement_action({
+    interpolations: {
+      project_id: params.project_id,
+      storyboard_id: props.storyboard.id,
+      requirement_id: requirement.value.id
+    }
+  })
 
   emit('destroyed', requirement.value)
   open.value = false
@@ -95,12 +100,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function(a_platforms: Platform[]) {
-  const a_requirement_box = await reqs.add(q.project.requirements.Update).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard.id
-    req.interpolations.requirement_id = requirement.value.id
-  }).perform(this.form)
+former.doPerform = async function() {
+  const a_requirement_box = await update_requirement_action({
+    interpolations: {
+      project_id: params.project_id,
+      storyboard_id: props.storyboard.id,
+      requirement_id: requirement.value.id
+    },
+    body: former.form
+  })
 
   emit('updated', a_requirement_box.requirement)
   open.value = false

@@ -1,77 +1,69 @@
-import { Category, CategoryBox, CategoryInfo, CategoryPage } from "@/models"
+import { Category, type CategoryBox, CategoryBoxImpl, CategoryPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<CategoryPage<CategoryBox>> {
-  constructor(project_id: number) {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/categories"
-    this.interpolations.project_id = project_id
+class ListRequest extends BaseRequest<CategoryBox[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/categories" ]
+
+  processResponse(response: AxiosResponse) {
+    return this.responseToObject(CategoryPage<CategoryBox>, response).list
   }
+}
+export const List = () => new ListRequest()
+
+
+class PageRequest extends BaseRequest<CategoryPage<CategoryBox>> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/categories" ]
+  graph = "counts"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(CategoryPage<CategoryBox>, response)
   }
 }
+export const Page = () => new PageRequest()
 
-export const InfoList = class extends BaseRequest<CategoryPage<CategoryBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/categories"
-    this.graph = "info"
-  }
+
+class CreateRequest extends BaseRequest<CategoryBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/categories" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryPage<CategoryBox>, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const InfoCreate = class extends BaseRequest<CategoryInfo> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/projects/{project_id}/category_infos"
-  }
+
+class GetRequest extends BaseRequest<CategoryBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryInfo, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const InfoGet = class extends BaseRequest<CategoryInfo> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/projects/{project_id}/category_infos/{category_id}"
-  }
+
+class UpdateRequest extends BaseRequest<CategoryBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryInfo, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const InfoUpdate = class extends BaseRequest<CategoryInfo> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/projects/{project_id}/category_infos/{category_id}"
-  }
+
+class DestroyRequest extends BaseRequest<CategoryBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/categories", "/{category_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryInfo, response)
+    return this.responseToObject(CategoryBoxImpl, response)
   }
 }
-
-export const InfoDestroy = class extends BaseRequest<CategoryInfo> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/projects/{project_id}/category_infos/{category_id}"
-  }
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryInfo, response)
-  }
-}
+export const Destroy = () => new DestroyRequest()

@@ -19,15 +19,15 @@
 
     <FormGroup path="storyboard_id" label="所属故事板">
       <controls.Select include-blank>
-        <option v-for="storyboard_box in storyboard_page.list" :value="storyboard_box.storyboard.id">
-          {{ storyboard_box.storyboard.title }}
+        <option v-for="{ storyboard } in storyboard_boxes" :value="storyboard.id">
+          {{ storyboard.title }}
         </option>
       </controls.Select>
     </FormGroup>
 
     <FormGroup path="requirement_id" label="所属需求">
       <controls.Select include-blank>
-        <option v-for="requirement in (requirement_page?.list.map(box => box.requirement) ?? [])" :value="requirement.id">{{ requirement.title }}</option>
+        <option v-for="{ requirement } in requirement_boxes" :value="requirement.id">{{ requirement.title }}</option>
       </controls.Select>
     </FormGroup>
   </div>
@@ -35,57 +35,27 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
-import { EntityRepo, Platform, Requirement, RequirementBox, RequirementPage, Roadmap, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, Requirement, type RequirementBox, RequirementPage, Roadmap, type StoryboardBox, TestCase, TestCaseLabel } from '@/models'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import * as q from '@/requests'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { usePageStore } from '@/store'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
-const page = usePageStore()
+const line = useQueryLine()
+
 
 const props = defineProps<{
   platform_repo: EntityRepo<Platform>
   label_repo: EntityRepo<TestCaseLabel>
   former: Former<any>
   newest_roadmap: Roadmap
+  storyboard_boxes: StoryboardBox[]
+  requirement_boxes: RequirementBox[]
 }>()
 
 const FormGroup = GenericFormGroup<typeof props.former.form>
 const Form = GenericForm<typeof props.former.form>
-
-const emit = defineEmits<{
-  (e: 'change', test_case: TestCase): void,
-  (e: 'destroy', test_case: TestCase): void,
-  (e: 'create', event: Event): void,
-}>()
-
-const requirement_page = ref(null as RequirementPage<RequirementBox> | null)
-
-const storyboard_page = reqs.add(q.project.storyboards.List).setup(req => {
-  req.interpolations.project_id = page.inProject()!.project_id
-}).wait()
-if (props.former.form.storyboard_id) {
-  requestRequirement(props.former.form.storyboard_id)
-}
-await reqs.performAll()
-
-watch(() => props.former.form.storyboard_id, async (storyboard_id) => {
-  if (storyboard_id) {
-    requestRequirement(storyboard_id)
-    await reqs.performAll()
-    props.former.form.requirement_id = null
-  }
-})
-
-function requestRequirement(storyboard_id: number) {
-  reqs.add(q.project.requirements.List).setup(req => {
-    req.interpolations.project_id = page.inProject()!.project_id
-    req.interpolations.storyboard_id = storyboard_id
-    req.query.roadmap_id = props.newest_roadmap.id
-  }).waitFor(requirement_page)
-}
 
 </script>

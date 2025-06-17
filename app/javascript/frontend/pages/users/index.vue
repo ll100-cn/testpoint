@@ -1,10 +1,10 @@
 <template>
   <PageHeader>
     <PageTitle>用户列表</PageTitle>
-    <router-link to="/projects" class="ms-3 link">项目</router-link>
+    <router-link :to="ok_url.apply('/projects')" class="ms-3 link">项目</router-link>
 
     <template #actions>
-      <Button to="/users/new">新增用户</Button>
+      <Button :to="ok_url.apply('/users/new')">新增用户</Button>
     </template>
   </PageHeader>
 
@@ -26,8 +26,8 @@
               <TableCell>{{ user_box.user.name }}</TableCell>
               <TableCell>{{ user_box.user.email }}</TableCell>
               <TableCell role="actions">
-                <router-link :to="`/users/${user_box.user.id}/edit`" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
-                <a href="#" @click.prevent="onRemove(user_box.user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <router-link :to="ok_url.apply(`/users/${user_box.user.id}/edit`)" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>
+                <a href="#" v-confirm="'是否删除用户？'" @click.prevent="deleteUser(user_box.user.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -43,7 +43,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
 import { useRouter } from 'vue-router';
@@ -55,32 +54,32 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
+import { useQueryLine } from '@/lib/useQueryLine'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from '@/components/Alerter';
+import OkUrl from '@/lib/ok_url'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const router = useRouter()
 const route = useRoute()
 const validations = reactive(new Validator())
 const query = utils.queryToPlain(route.query)
+const alerter = Alerter.build()
+const ok_url = new OkUrl(route)
 
-const user_page = reqs.add(q.admin.users.Page).setup(req => {
+const { data: user_page } = line.request(q.admin.users.Page(), (req, it) => {
   req.query = utils.plainToQuery(query)
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
-async function onRemove(user_id: number) {
-  if (!confirm("是否删除用户？")) {
-    return
-  }
+const { mutateAsync: destroy_user_action } = line.request(q.admin.users.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  try {
-    await reqs.add(q.admin.users.Destroy).setup(req => {
-      req.interpolations.id = user_id
-    }).perform()
-
-    router.go(0)
-  } catch (error) {
-    validations.processError(error)
-    alert(validations.errorMessages([]).join("\n"))
-  }
+async function deleteUser(user_id: number) {
+  await alerter.perform(destroy_user_action, {
+    interpolations: { id: user_id }
+  })
 }
 </script>

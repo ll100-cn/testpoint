@@ -1,63 +1,57 @@
-import { UserBox, UserPage } from "@/models"
+import { type UserBox, UserBoxImpl, UserPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
-export const Update = class extends BaseRequest<UserBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/admin/users/{id}"
-  }
+class UpdateRequest extends BaseRequest<UserBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Get = class extends BaseRequest<UserBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/admin/users/{id}"
-  }
+
+class GetRequest extends BaseRequest<UserBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Destroy = class extends BaseRequest<UserBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/admin/users/{id}"
-  }
+
+class DestroyRequest extends BaseRequest<UserBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/admin/users", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<UserBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/admin/users"
-  }
+
+class CreateRequest extends BaseRequest<UserBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/admin/users" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(UserBox, response)
+    return this.responseToObject(UserBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Page = class extends BaseRequest<UserPage<UserBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/admin/users"
-  }
+
+class PageRequest extends BaseRequest<UserPage<UserBox>> {
+  method = "GET"
+  endpoint = [ "/api/v2/admin/users" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(UserPage<UserBox>, response)
   }
 }
+export const Page = () => new PageRequest()

@@ -1,1 +1,0 @@
-render "api/shared/scene", scene: @scene

@@ -13,22 +13,22 @@
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableRow v-for="issue_box in issue_boxes" :key="issue_box.issue.id" :class="{ 'block-discard': issue_box.issue.archived_at }">
+      <TableRow v-for="{ issue } in issue_boxes" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
         <TableCell v-if="columns.includes('project')">
-          <router-link :to="`/projects/${issue_box.issue.project_id}`">{{ issue_box.issue.project_name }}</router-link>
+          <router-link :to="`/projects/${issue.project_id}`">{{ issue.project_name }}</router-link>
         </TableCell>
-        <TableCell>{{ issue_box.issue.id }}</TableCell>
+        <TableCell>{{ issue.id }}</TableCell>
         <TableCell>
-          <router-link class="link" :to="`/projects/${issue_box.issue.project_id}/issues/${issue_box.issue.id}`">
-            <span v-if="issue_box.issue.priority === 'important'">!!</span>
-            {{ issue_box.issue.title }}
+          <router-link class="link" :to="`${path_info.collection}/${issue.id}`">
+            <span v-if="issue.priority === 'important'">!!</span>
+            {{ issue.title }}
           </router-link>
         </TableCell>
-        <TableCell><CategoryBadge :category="issue_box.issue.category" /></TableCell>
-        <TableCell><IssueStateBadge :state="issue_box.issue.state" /></TableCell>
-        <TableCell>{{ issue_box.issue.milestone?.title }}</TableCell>
-        <TableCell>{{ issue_box.issue.creator?.name }}</TableCell>
-        <TableCell>{{ issue_box.issue.assignee?.name }}</TableCell>
+        <TableCell><CategoryBadge :category="issue.category" /></TableCell>
+        <TableCell><IssueStateBadge :state="issue.state" /></TableCell>
+        <TableCell>{{ issue.milestone?.title }}</TableCell>
+        <TableCell>{{ issue.creator?.name }}</TableCell>
+        <TableCell>{{ issue.assignee?.name }}</TableCell>
       </TableRow>
     </TableBody>
   </Table>
@@ -39,8 +39,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import SortLink from '@/components/SortLink.vue'
-import { IssueBox } from '@/models'
+import { type IssueBox } from '@/models'
 import { ref } from 'vue'
+import PathHelper from '@/lib/PathHelper'
+import { useRoute } from 'vue-router'
 
 interface Props {
   issue_boxes: IssueBox[],
@@ -48,6 +50,8 @@ interface Props {
   sorts?: string
 }
 
+const route = useRoute()
+const path_info = PathHelper.parseCollection(route.path, 'index')
 const props = withDefaults(defineProps<Props>(), {
   columns: () => []
 })

@@ -34,7 +34,7 @@
 
       <CardFooter>
         <Button>登陆</Button>
-        <Button variant="secondary" @click="login_code = null">取消</Button>
+        <Button variant="secondary" @click.prevent="login_code = null">取消</Button>
       </CardFooter>
     </Form>
   </Card>
@@ -50,7 +50,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { LoginCode } from "@/models"
 import { useSessionStore } from "@/store/session"
@@ -59,12 +58,13 @@ import { useRouter } from "vue-router"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState, CardTable } from '$ui/card'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
 import * as controls from '@/components/controls'
 
 const proxy = getCurrentInstance()!.proxy!
-const reqs = useRequestList()
 const router = useRouter()
 const session = useSessionStore()
+const line = useQueryLine()
 
 const code_former = Former.build({
   email: null as string | null
@@ -74,9 +74,14 @@ const login_code = ref(null as LoginCode | null)
 const CodeForm = GenericForm<typeof code_former.form>
 const CodeFormGroup = GenericFormGroup<typeof code_former.form>
 
+const { mutateAsync: deliver_login_code_action } = line.request(q.profile.login.Deliver(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 code_former.doPerform = async function() {
-  login_code.value = await reqs.add(q.profile.login.Deliver).setup(req => {
-  }).perform(this.form)
+  login_code.value = await deliver_login_code_action({
+    body: code_former.form,
+  })
   former.form.email = this.form.email
 }
 
@@ -88,10 +93,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: verify_login_action } = line.request(q.profile.login.Verify(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
   try {
-    await reqs.add(q.profile.login.Verify).setup(req => {
-    }).perform({ user: this.form })
+    await verify_login_action({
+      body: { user: this.form }
+    })
     session.account = undefined
     await session.prepare(proxy)
     router.push("/")

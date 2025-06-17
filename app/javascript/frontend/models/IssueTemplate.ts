@@ -2,6 +2,7 @@ import { Type } from "class-transformer"
 import { Category } from "./Category"
 import * as t from '@/lib/transforms'
 import { Pagination } from "./Pagination"
+import type { OmitByValue } from "utility-types"
 
 class IssueTemplateInput {
   id!: number
@@ -34,10 +35,12 @@ export class IssueTemplate {
   inputs: IssueTemplateInput[] = []
 }
 
-export class IssueTemplateBox {
+export class IssueTemplateBoxImpl {
   @t.Klass(IssueTemplate) issue_template!: IssueTemplate
 }
 
+export type IssueTemplateBox = OmitByValue<IssueTemplateBoxImpl, Function>
+
 export class IssueTemplatePage<Box extends IssueTemplateBox> extends Pagination<Box> {
-  @t.Klass(IssueTemplateBox) list: Box[] = []
+  @t.Klass(IssueTemplateBoxImpl) list: Box[] = []
 }

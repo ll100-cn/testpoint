@@ -3,7 +3,7 @@
     <PageTitle>标签列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', TestCaseLabel)" :to="`/projects/${project_id}/test_case_labels/new`">新增标签</Button>
+      <Button v-if="allow('create', TestCaseLabel)" :to="`${path_info.collection}/new`">新增标签</Button>
     </template>
   </PageHeader>
 
@@ -21,16 +21,16 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="test_case_label_box in test_case_label_boxes" :key="test_case_label_box.test_case_label.id">
+          <template v-for="{test_case_label} in test_case_label_page.list" :key="test_case_label.id">
             <TableRow>
-              <TableCell>{{ test_case_label_box.test_case_label.name }}</TableCell>
-              <TableCell>{{ test_case_label_box.test_case_label.description }}</TableCell>
-              <TableCell>{{ test_case_label_box.test_case_count }}</TableCell>
+              <TableCell>{{ test_case_label.name }}</TableCell>
+              <TableCell>{{ test_case_label.description }}</TableCell>
+              <TableCell>{{ cases_counts[test_case_label.id.toString()] }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', test_case_label_box.test_case_label)" :to="`/projects/${project_id}/test_case_labels/${test_case_label_box.test_case_label.id}/edit`" class="link">
+                <router-link v-if="allow('update', test_case_label)" :to="`${path_info.collection}/${test_case_label.id}/edit`" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', test_case_label_box.test_case_label)" href="#" @click.prevent="onRemove(test_case_label_box.test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', test_case_label)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -41,8 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import useRequestList from '@/lib/useRequestList'
+import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
@@ -54,38 +53,39 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$
 import { Button } from '$ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Validator } from '$ui/simple_form'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PageContent from '@/components/PageContent.vue'
+import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from '@/components/Alerter'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const alerter = Alerter.build()
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
-const test_case_label_page = reqs.add(q.project.test_case_labels.InfoList).setup(req => {
+const { data: test_case_label_page } = line.request(q.project.test_case_labels.Page(), (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-await reqs.performAll()
-const test_case_label_boxes = computed(() => test_case_label_page.value.list)
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
+const cases_counts = computed(() => test_case_label_page.value.cases_counts)
 
-async function onRemove(id: number) {
-  if (!confirm("是否删除标签？")) {
-    return
-  }
+const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  try {
-    await reqs.add(q.project.test_case_labels.InfoDestroy).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.test_case_label_id = id
-    }).perform()
-
-    router.go(0)
-  } catch (error) {
-    validator.processError(error)
-  }
+async function deleteTestCaseLabel(id: number) {
+  await alerter.perform(destroy_test_case_label_action, {
+    interpolations: { project_id, test_case_label_id: id }
+  })
 }
 
 </script>

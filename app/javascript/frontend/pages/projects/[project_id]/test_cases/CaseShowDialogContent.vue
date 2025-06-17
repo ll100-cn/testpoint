@@ -15,7 +15,7 @@
     <PageContent :content="test_case.content" />
 
     <div class="text-center p-1" :class="{ 'hidden': !collapsed }">
-      <Button preset="ghost" @click="collapsed=false">
+      <Button preset="ghost" @click.prevent="collapsed=false">
         <i class="far fa-history me-1" />显示历史版本
       </Button>
     </div>
@@ -46,7 +46,6 @@
 
 <script setup lang="ts">
 import * as h from '@/lib/humanize'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { TestCase } from '@/models'
 import { usePageStore } from '@/store'
@@ -57,8 +56,8 @@ import { Well } from '$ui/well'
 import Button from '$ui/button/Button.vue'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '$ui/collapsible'
 import PageContent from '@/components/PageContent.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
 
 const props = defineProps<{
   readonly: boolean
@@ -70,6 +69,7 @@ const emit = defineEmits<{
 
 const page = usePageStore()
 const allow = page.inProject()!.allow
+const line = useQueryLine()
 
 const textarea = ref()
 const collapsed = ref(true)
@@ -82,12 +82,13 @@ async function reset(a_test_case: TestCase) {
   loading.value = true
   test_case.value = a_test_case
 
-  const history_page = await reqs.add(q.case.test_cases.History).setup(req => {
+  const { data: history_page, suspense } = line.request(q.case.test_cases.History(), (req, it) => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
-  }).perform()
-
-  history.value = history_page.list.map(it => it.test_case)
+    return it.useQuery(req.toQueryConfig())
+  })
+  await suspense()
+  history.value = history_page.value.list.map(it => it.test_case)
 
   nextTick(() => {
     loading.value = false

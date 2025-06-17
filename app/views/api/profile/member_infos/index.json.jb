@@ -1,1 +1,0 @@
-render partial: "api/shared/member_info", collection: @members, as: :member

@@ -1,52 +1,59 @@
-import { Requirement, RequirementBox, RequirementPage } from "@/models"
+import { Requirement, type RequirementBox, RequirementBoxImpl, RequirementPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<RequirementPage<RequirementBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements"
-    this.graph = 'counts'
-  }
+class ListRequest<Box extends RequirementBox> extends BaseRequest<Box[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
+  graph = 'counts'
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementPage<RequirementBox>, response)
+    return this.responseToObject(RequirementPage<Box>, response).list
   }
 }
+export const List = () => new ListRequest()
 
-export const Create = class extends BaseRequest<RequirementBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements"
-  }
+
+class PageRequest<Box extends RequirementBox> extends BaseRequest<RequirementPage<Box>> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
+  graph = 'counts'
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBox, response)
+    return this.responseToObject(RequirementPage<Box>, response)
   }
 }
+export const Page = () => new PageRequest()
 
-export const Update = class extends BaseRequest<RequirementBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}"
-  }
+
+class CreateRequest extends BaseRequest<RequirementBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBox, response)
+    return this.responseToObject(RequirementBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Destroy = class extends BaseRequest<RequirementBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}"
-  }
+
+class UpdateRequest extends BaseRequest<RequirementBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements", "/{requirement_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBox, response)
+    return this.responseToObject(RequirementBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
+
+
+class DestroyRequest extends BaseRequest<RequirementBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/requirements", "/{requirement_id}" ]
+
+  processResponse(response: AxiosResponse) {
+    return this.responseToObject(RequirementBoxImpl, response)
+  }
+}
+export const Destroy = () => new DestroyRequest()

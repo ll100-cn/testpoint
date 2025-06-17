@@ -25,24 +25,24 @@
 <script setup lang="ts">
 import PageContent from '@/components/PageContent.vue'
 import * as h from '@/lib/humanize'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import _ from 'lodash'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const milestone_id = route.query.milestone_id != null ? _.toNumber(route.query.milestone_id) : null
-const milestone_page = reqs.add(q.project.milestones.List, project_id).setup(req => {
-  req.query.filter = "available"
-}).wait()
-await reqs.performAll()
-
-const milestone_boxes = computed(() => milestone_page.value.list)
+const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
+  req.interpolations.project_id = project_id
+  req.query = { filter: "available" }
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 </script>
 
 <style scoped>

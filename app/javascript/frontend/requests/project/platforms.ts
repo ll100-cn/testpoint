@@ -1,63 +1,57 @@
-import { Platform, PlatformBox, PlatformPage } from "@/models"
+import { Platform, type PlatformBox, PlatformBoxImpl, PlatformPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Update = class extends BaseRequest<PlatformBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/platforms/{platform_id}"
-  }
+class UpdateRequest extends BaseRequest<PlatformBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/platforms", "/{platform_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBox, response)
+    return this.responseToObject(PlatformBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const List = class extends BaseRequest<PlatformPage<PlatformBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/platforms"
-  }
+
+class ListRequest<Box extends PlatformBox> extends BaseRequest<Box[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/platforms" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformPage<PlatformBox>, response)
+    return this.responseToObject(PlatformPage<Box>, response).list
   }
 }
+export const List = () => new ListRequest()
 
-export const Get = class extends BaseRequest<PlatformBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/platforms/{platform_id}"
-  }
+
+class GetRequest extends BaseRequest<PlatformBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/platforms", "/{platform_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBox, response)
+    return this.responseToObject(PlatformBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Destroy = class extends BaseRequest<PlatformBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/platforms/{platform_id}"
-  }
+
+class DestroyRequest extends BaseRequest<PlatformBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/platforms", "/{platform_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBox, response)
+    return this.responseToObject(PlatformBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Create = class extends BaseRequest<PlatformBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/platforms"
-  }
+
+class CreateRequest extends BaseRequest<PlatformBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/platforms" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBox, response)
+    return this.responseToObject(PlatformBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()

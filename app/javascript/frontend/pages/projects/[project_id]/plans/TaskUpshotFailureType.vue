@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import IssueRichLink from '@/components/IssueRichLink.vue'
-import { TaskBox } from '@/models'
+import { type TaskBox } from '@/models'
 
 export type ModalValue = 'new_issue' | number | null
 const model_value = defineModel<ModalValue>()

@@ -52,22 +52,23 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
-import * as q from '@/requests'
-import { Category, IssueTemplate, IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, PlanBox, TaskBox, TaskUpshot, TaskUpshotBox } from '@/models'
-import { usePageStore, useSessionStore } from '@/store'
-import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
+import { Button } from '$ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { Former as NewFormer, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import TaskUpshotInfoDialogContent from "./TaskUpshotInfoDialogContent.vue"
 import TaskUpshotFailureType, { type ModalValue as AddonType } from "./TaskUpshotFailureType.vue"
 import { Actioner } from "@/components/Actioner"
-import IssueCommentForm from "../issues/[issue_id]/IssueCommentForm.vue"
 import ActionerAlert from "@/components/ActionerAlert.vue"
-import { Former as NewFormer, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import type { TaskUpshotFrameEmits } from '@/components/TaskUpshotFrame'
+import { Category, IssueTemplate, type IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, type PlanBox, type TaskBox, TaskUpshot, type TaskUpshotBox } from '@/models'
+import * as q from '@/requests'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { usePageStore, useSessionStore } from '@/store'
+import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const session = useSessionStore()
 
@@ -75,15 +76,11 @@ const props = defineProps<{
   plan_box: PlanBox
 }>()
 
-const emit = defineEmits<{
-  updated: [task_upshot: TaskUpshot]
-  switch: [Component, TaskUpshotBox]
-}>()
+const emit = defineEmits<TaskUpshotFrameEmits>()
 
 const addon = ref(null as AddonType)
 const task_upshot_box = ref(null! as TaskUpshotBox)
 const task_box = ref(null! as TaskBox)
-const issue_template_page = ref(null! as IssueTemplatePage<IssueTemplateBox>)
 
 const issue_former = NewFormer.build({
   from_task_id: null as number | null,
@@ -96,10 +93,19 @@ const issue_former = NewFormer.build({
 const IssueForm = GenericForm<typeof issue_former.form>
 const IssueFormGroup = GenericFormGroup<typeof issue_former.form>
 
+const { mutateAsync: create_issue_action } = line.request(q.bug.issues.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.task_upshot_states.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 issue_former.doPerform = async function() {
-  await reqs.add(q.bug.issues.Create).setup(req => {
-    req.interpolations.project_id = props.plan_box.plan.project_id
-  }).perform(this.form)
+  const issue_box = await create_issue_action({
+    interpolations: { project_id: props.plan_box.plan.project_id },
+    body: this.form
+  })
 
   await actioner.failTaskUpshot()
 }
@@ -116,11 +122,18 @@ const comment_former = NewFormer.build({
 const CommentForm = GenericForm<typeof comment_former.form>
 const CommentFormGroup = GenericFormGroup<typeof comment_former.form>
 
+const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 comment_former.doPerform = async function() {
-  await reqs.add(q.bug.issue_comments.Create).setup(req => {
-    req.interpolations.project_id = comment_issue.value!.project_id
-    req.interpolations.issue_id = comment_issue.value!.id
-  }).perform(this.form)
+  await create_comment_action({
+    interpolations: {
+      project_id: comment_issue.value!.project_id,
+      issue_id: comment_issue.value!.id
+    },
+    body: this.form
+  })
 
   await actioner.failTaskUpshot()
 }
@@ -131,14 +144,17 @@ const actioner = Actioner.build<{
 
 actioner.failTaskUpshot = async function() {
   this.perform(async function() {
-    const a_task_upshot_box = await reqs.add(q.test.task_upshot_states.Update).setup(req => {
-      req.interpolations.project_id = props.plan_box.plan.project_id
-      req.interpolations.plan_id = props.plan_box.plan.id
-      req.interpolations.task_id = task_box.value.task.id
-      req.interpolations.upshot_id = task_upshot_box.value.task_upshot.id
-    }).perform({
-      task_upshot: {
-        state_override: 'failure',
+    const a_task_upshot_box = await update_task_upshot_state_action({
+      interpolations: {
+        project_id: props.plan_box.plan.project_id,
+        plan_id: props.plan_box.plan.id,
+        task_id: task_box.value.task.id,
+        upshot_id: task_upshot_box.value.task_upshot.id
+      },
+      body: {
+        task_upshot: {
+          state_override: 'failure',
+        }
       }
     })
 
@@ -151,14 +167,9 @@ const loading = ref(true)
 async function reset(a_task_upshot_box: TaskUpshotBox, a_task_box: TaskBox) {
   loading.value = true
 
-  task_upshot_box.value = a_task_upshot_box
+  task_upshot_box.value = { ...a_task_upshot_box }
   task_box.value = a_task_box
   addon.value = null
-
-  reqs.add(q.project.issue_templates.List).setup(req => {
-    req.interpolations.project_id = props.plan_box.plan.project_id
-  }).waitFor(issue_template_page)
-  await reqs.performAll()
 
   issue_former.form.issue_attributes.title = `「${props.plan_box.plan.platform.name}」 ${task_upshot_box.value.test_case?.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content}\n\n实际效果:\n`

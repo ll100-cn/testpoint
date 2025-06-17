@@ -19,7 +19,7 @@
     </div>
 
     <template #actions>
-      <Button preset="ghost" v-if="allow('update', plan_box)" :to="`${plan_id}/edit`">设置</Button>
+      <Button preset="ghost" v-if="allow('update', plan_box.plan)" :to="`${plan_id}/edit`">设置</Button>
     </template>
   </PageHeader>
 
@@ -68,53 +68,57 @@
       <Separator orientation="vertical" class="h-auto" />
 
       <div class="w-full md:w-3/4 xl:w-5/6 px-4">
-        <TaskRow v-for="task_upshot_box in avaiable_task_upshot_boxes" :task_upshot_box="task_upshot_box" @click="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_box)" />
+        <TaskRow v-for="task_upshot_box in avaiable_task_upshot_boxes" :task_upshot_box="task_upshot_box" @show="task_upshot_info_dialog.show(TaskUpshotInfoDialogContent, task_upshot_box)" />
       </div>
     </CardContent>
   </Card>
 
   <teleport to="body">
-    <BlankDialog ref="phase_dialog" :plan_box="plan_box" @created="onPhaseCreated" />
-    <BlankDialog ref="task_upshot_info_dialog" :plan_box="plan_box" :current_phase_id="current_phase_info.phase.id" @updated="onTaskUpshotInfoUpdated" />
+    <PhaseDialog ref="phase_dialog" :plan_box="plan_box" @created="onPhaseCreated" />
+    <TaskUpshotDialog ref="task_upshot_info_dialog" :plan_box="plan_box" :current_phase_id="current_phase_info.phase.id" @updated="onTaskUpshotInfoUpdated" />
   </teleport>
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
+import { Button } from '$ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '$ui/card'
+import { Nav, NavItem } from '$ui/nav'
+import { Separator } from '$ui/separator'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import BlankDialog from '@/components/BlankDialog.vue'
+import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
+import PageHeader from '@/components/PageHeader.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import type { PhaseFrameComponent } from '@/components/PhaseFrame'
+import RLink from '@/components/RLink.vue'
+import TaskStateLabel from '@/components/TaskStateLabel.vue'
+import type { TaskUpshotFrameComponent } from '@/components/TaskUpshotFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { Phase, type TaskUpshotBox, TestCaseStat } from '@/models'
 import * as q from '@/requests'
-import { Phase, TaskUpshotBox, TestCaseStat } from '@/models'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { computed, getCurrentInstance, provide, ref } from 'vue'
+import { computed, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FolderSide from '../FolderSide.vue'
 import { type ChangeFilterFunction, ColumnFilter, Filter } from '../types'
 import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
 import TaskRow from './TaskRow.vue'
 import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
-import TaskStateLabel from '@/components/TaskStateLabel.vue'
-import PageHeader from '@/components/PageHeader.vue'
-import PageTitle from '@/components/PageTitle.vue'
-import { Button } from '$ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import { Separator } from '$ui/separator'
-import { Nav, NavItem } from '$ui/nav'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import BlankDialog from '@/components/BlankDialog.vue'
-import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
-import RLink from '@/components/RLink.vue'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const query = route.query
-const phase_dialog = ref(null! as InstanceType<typeof BlankDialog>)
-const task_upshot_info_dialog = ref(null! as InstanceType<typeof BlankDialog>)
+const PhaseDialog = BlankDialog as typeof BlankDialog & PhaseFrameComponent
+const TaskUpshotDialog = BlankDialog as typeof BlankDialog & TaskUpshotFrameComponent
+const phase_dialog = ref(null! as InstanceType<typeof BlankDialog & PhaseFrameComponent>)
+const task_upshot_info_dialog = ref(null! as InstanceType<typeof BlankDialog & TaskUpshotFrameComponent>)
 
 const searcher = Former.build({
   state_eq: null as string | null,
@@ -127,23 +131,25 @@ const FormGroup = GenericFormGroup<typeof searcher.form>
 const project_id = _.toNumber(params.project_id)
 const plan_id = _.toNumber(params.plan_id)
 
-const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
+const { data: plan_box } = line.request(q.test.plans.Get('+phase'), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const current_phase_info = computed(() => {
   const phase_infos = plan_box.value.phase_infos
   return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
-const task_upshot_page = reqs.add(q.test.task_upshots.InfoList).setup(req => {
+const { data: task_upshot_page } = line.request(q.test.task_upshots.List('+info'), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.plan_id = plan_id
   req.interpolations.phase_id = current_phase_info.value.phase.id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const filter = ref(new Filter())
 filter.value.archived = null
@@ -151,7 +157,7 @@ filter.value.archived = null
 const test_case_stats = computed(() => {
   const result = _(task_upshot_page.value.list).groupBy((it) => {
     const test_case = it.test_case
-    return JSON.stringify({ ignored: it.is_ignored(), role_name: test_case?.role_name, scene_path: test_case?.scene_path })
+    return JSON.stringify({ ignored: it.task?.is_ignored(), role_name: test_case?.role_name, scene_path: test_case?.scene_path })
   }).mapValues((it) => {
     return it.length
   }).map((count, json) => {
@@ -188,11 +194,11 @@ const avaiable_task_upshot_boxes = computed(() => {
     }
 
     if (filter.value.ignored === "1") {
-      if (!it.is_ignored()) {
+      if (!it.task?.is_ignored()) {
         return false
       }
     } else {
-      if (it.is_ignored()) {
+      if (it.task?.is_ignored()) {
         return false
       }
     }

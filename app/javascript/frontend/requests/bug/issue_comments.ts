@@ -1,63 +1,57 @@
-import { CommentBox, CommentPage } from "@/models"
+import { type CommentBox, CommentBoxImpl, CommentPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import { BaseRequest } from "../BaseRequest"
 
-export const Create = class extends BaseRequest<CommentBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/comments"
-  }
+class CreateRequest extends BaseRequest<CommentBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const List = class extends BaseRequest<CommentPage<CommentBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/comments"
-  }
+
+class ListRequest extends BaseRequest<CommentPage<CommentBox>> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentPage<CommentBox>, response)
+    return this.responseToObject(CommentPage<CommentBoxImpl>, response)
   }
 }
+export const List = () => new ListRequest()
 
-export const Update = class extends BaseRequest<CommentBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/comments/{comment_id}"
-  }
+
+class UpdateRequest extends BaseRequest<CommentBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Convert = class extends BaseRequest<CommentBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/comments/{comment_id}/convert"
-  }
+
+class ConvertRequest extends BaseRequest<CommentBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}", "/convert" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
+export const Convert = () => new ConvertRequest()
 
-export const Destroy = class extends BaseRequest<CommentBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/issues/{issue_id}/comments/{comment_id}"
-  }
+
+class DestroyRequest extends BaseRequest<CommentBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(CommentBox, response)
+    return this.responseToObject(CommentBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

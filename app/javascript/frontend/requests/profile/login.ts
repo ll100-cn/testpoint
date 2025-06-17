@@ -2,38 +2,34 @@ import { Account, LoginCode } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Deliver = class extends BaseRequest<LoginCode> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/deliver"
-  }
+class DeliverRequest extends BaseRequest<LoginCode> {
+  method = "POST"
+  endpoint = [ "/api/deliver" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(LoginCode, response)
   }
 }
+export const Deliver = () => new DeliverRequest()
 
-export const Verify = class extends BaseRequest<LoginCode> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/sign_in"
-  }
+
+class VerifyRequest extends BaseRequest<LoginCode> {
+  method = "POST"
+  endpoint = [ "/api/sign_in" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(LoginCode, response)
   }
 }
+export const Verify = () => new VerifyRequest()
 
-export const Destroy = class extends BaseRequest<Account> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/sign_out"
-  }
+
+class DestroyRequest extends BaseRequest<Account> {
+  method = "DELETE"
+  endpoint = [ "/api/sign_out" ]
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(Account, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增标签</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/test_case_labels`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
@@ -30,13 +29,21 @@ import PageTitle from '@/components/PageTitle.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
+const ok_url = new OkUrl(route)
 
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'new')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   name: "",
@@ -46,11 +53,16 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  await reqs.add(q.project.test_case_labels.InfoCreate).setup(req => {
-    req.interpolations.project_id = project_id
-  }).perform(this.form)
+const { mutateAsync: create_test_case_label_action } = line.request(q.project.test_case_labels.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  router.push('/projects/' + project_id + '/test_case_labels')
+former.doPerform = async function() {
+  await create_test_case_label_action({
+    interpolations: { project_id },
+    body: former.form,
+  })
+
+  router.push(return_url.value)
 }
 </script>

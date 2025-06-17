@@ -1,65 +1,82 @@
-import { Plan, PlanBox, PlanPage } from "@/models"
+import { MemberPage, Plan, type PlanBox, PlanBoxImpl, PlanPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
+import type { Required } from "utility-types"
 
-export const Create = class extends BaseRequest<PlanBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/plans"
-  }
+class CreateRequest extends BaseRequest<PlanBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<PlanBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}"
-  }
+
+class UpdateRequest extends BaseRequest<PlanBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<PlanBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}"
-  }
+
+class DestroyRequest extends BaseRequest<PlanBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Page = class extends BaseRequest<PlanPage<PlanBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/plans"
-    this.graph = "counts"
-  }
+
+class PageRequest extends BaseRequest<PlanPage<PlanBox>> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans" ]
+  graph = "counts"
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(PlanPage<PlanBox>, response)
   }
 }
+export const Page = () => new PageRequest()
 
-export const InfoGet = class extends BaseRequest<PlanBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}"
-    this.graph = "counts, info"
-  }
+
+class InfoGetRequest extends BaseRequest<PlanBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
+  graph = "counts, info"
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBox, response)
+    return this.responseToObject(PlanBoxImpl, response)
   }
+}
+export const InfoGet = () => new InfoGetRequest()
+
+
+class GetRequest<Box extends PlanBox> extends BaseRequest<Box> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
+
+  processResponse(response: AxiosResponse) {
+    return this.responseToObject(PlanBoxImpl, response) as Box
+  }
+}
+export function Get(): InstanceType<typeof GetRequest<PlanBox>>
+export function Get(graph: '+phase'): InstanceType<typeof GetRequest<Required<PlanBox, 'phase_infos'>>>
+export function Get(graph?: string) {
+  const request = new GetRequest<PlanBox>()
+  request.graph = graph ?? null
+
+  if (graph == "+phase") {
+    request.graph = 'info'
+  }
+
+  return request as any
 }

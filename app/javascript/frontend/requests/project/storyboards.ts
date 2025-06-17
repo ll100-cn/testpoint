@@ -1,64 +1,58 @@
-import { Storyboard, StoryboardBox, StoryboardPage } from "@/models"
+import { Storyboard, type StoryboardBox, StoryboardBoxImpl, StoryboardPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<StoryboardPage<StoryboardBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards"
-  }
+class ListRequest<Box extends StoryboardBox> extends BaseRequest<Box[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardPage<StoryboardBox>, response)
+    return this.responseToObject(StoryboardPage<Box>, response).list
   }
 }
+export const List = () => new ListRequest()
 
-export const Get = class extends BaseRequest<StoryboardBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards/{storyboard_id}"
-  }
+
+class GetRequest extends BaseRequest<StoryboardBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Create = class extends BaseRequest<StoryboardBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards"
-  }
+
+class CreateRequest extends BaseRequest<StoryboardBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<StoryboardBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards/{storyboard_id}"
-    this.headers = { 'Content-Type': 'application/json' }
-  }
+
+class UpdateRequest extends BaseRequest<StoryboardBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
+  headers = { 'Content-Type': 'application/json' }
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<StoryboardBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/storyboards/{storyboard_id}"
-  }
+
+class DestroyRequest extends BaseRequest<StoryboardBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBox, response)
+    return this.responseToObject(StoryboardBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

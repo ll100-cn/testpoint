@@ -4,6 +4,7 @@ import { Platform } from "./Platform"
 import * as t from '@/lib/transforms'
 import { Pagination } from "./Pagination"
 import { PhaseInfo } from "./Phase"
+import type { OmitByValue } from "utility-types"
 
 export class Plan {
   id!: number
@@ -20,12 +21,16 @@ export class Plan {
   @Type(() => Platform) platform!: Platform
 }
 
-export class PlanBox {
+export class PlanBoxImpl {
   @t.Klass(Plan) plan!: Plan
-  tasks_state_counts: { [x in "pass" | "failure" | "pending"]: number } | null = null
+
   @t.Klass(PhaseInfo) phase_infos: PhaseInfo[] = []
 }
 
+export type PlanBox = OmitByValue<PlanBoxImpl, Function>
+
+type TasksStateCounts = { [x in "pass" | "failure" | "pending"]: number }
 export class PlanPage<Box extends PlanBox> extends Pagination<Box> {
-  @t.Klass(Plan) list: Box[] = []
+  @t.Klass(PlanBoxImpl) list: Box[] = []
+  tasks_state_counts: { [plan_id: string]: TasksStateCounts } = {}
 }

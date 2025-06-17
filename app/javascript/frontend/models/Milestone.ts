@@ -1,6 +1,7 @@
 import { Type } from "class-transformer"
 import * as t from '@/lib/transforms'
 import { Pagination } from "./Pagination"
+import type { OmitByValue } from "utility-types"
 
 export class Milestone {
   id!: number
@@ -28,10 +29,12 @@ export class Milestone {
   }
 }
 
-export class MilestoneBox {
+export class MilestoneBoxImpl {
   @t.Klass(Milestone) milestone!: Milestone
 }
 
+export type MilestoneBox = OmitByValue<MilestoneBoxImpl, Function>
+
 export class MilestonePage<Box extends MilestoneBox> extends Pagination<Box> {
-  @t.Klass(MilestoneBox) list: Box[] = []
+  @t.Klass(MilestoneBoxImpl) list: Box[] = []
 }

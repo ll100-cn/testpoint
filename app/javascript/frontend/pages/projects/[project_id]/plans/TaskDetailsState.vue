@@ -24,7 +24,7 @@
 import IssueRichLink from '@/components/IssueRichLink.vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
 import * as h from '@/lib/humanize'
-import { Issue, PhaseInfo, TaskBox, TaskUpshot } from '@/models'
+import { Issue, PhaseInfo, type TaskBox, TaskUpshot } from '@/models'
 import _ from 'lodash'
 import { computed } from 'vue'
 

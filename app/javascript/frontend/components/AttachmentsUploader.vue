@@ -16,7 +16,7 @@
           <input type="file" class="hidden" multiple @change="onInputFileSelected">
         </label>
         或者
-        <a href="#" @click.prevent="onClipboardInput" class="link">剪贴板</a>
+        <a href="#" @click.prevent="clipboardInput" class="link">剪贴板</a>
       </div>
     </div>
   </div>
@@ -24,18 +24,18 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { Attachment } from "@/models"
 import { type AxiosProgressEvent } from "axios"
 import { getCurrentInstance, onMounted, onUnmounted, reactive, ref } from "vue"
 import FormAttachmentInfo from "./FormAttachmentInfo.vue"
 import FormAttachmentUpload from "./FormAttachmentUpload.vue"
 import { UploadFile } from './types'
+import { useQueryLine } from '@/lib/useQueryLine'
 
 const props = defineProps<{
   attachments?: Attachment[]
 }>()
-const reqs = useRequestList()
+const line = useQueryLine()
 
 class Item {
   upload_file?: UploadFile
@@ -61,6 +61,12 @@ onMounted(() => {
   })
 })
 
+const { mutateAsync: create_attachment_action } = line.request(q.project.attachments.Create(), (req, it) => {
+  return it.useMutation({
+    ...req.toMutationConfig(it),
+  })
+})
+
 async function upload(file: File) {
   if (!file) return
 
@@ -70,19 +76,14 @@ async function upload(file: File) {
   items.value.push(item)
 
   try {
-    const attachment = await reqs.add(q.project.attachments.Create).setup(req => {
-      req.config.onUploadProgress = (progressEvent: AxiosProgressEvent) => {
-        upload_file.state = "uploading"
-        upload_file.loaded = progressEvent.loaded
-        upload_file.total = progressEvent.total
-      }
-
-    }).perform({ file: file })
+    const attachment = await create_attachment_action({
+      body: { upload_file: upload_file },
+    })
 
     item.attachment = attachment
-    item.upload_file = null
+    item.upload_file = undefined
     onAttachmenChanged(attachment, { id: attachment.id })
-  } catch (error) {
+  } catch (error: any) {
     if (error.name == "CanceledError") {
       const index = items.value.findIndex((it) => it.upload_file === upload_file)
       if (index !== -1) {
@@ -134,7 +135,7 @@ function onInputFileSelected(event: Event) {
   input.value = null
 }
 
-async function onClipboardInput() {
+async function clipboardInput() {
   try {
     const contents = await navigator.clipboard.read();
     for (const item of contents) {
@@ -146,7 +147,7 @@ async function onClipboardInput() {
         upload(file)
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(error.message);
   }
 }

@@ -1,28 +1,23 @@
-import { ProfileBox } from "@/models"
-import type { AxiosResponse } from "axios"
+import { type ProfileBox, ProfileBoxImpl } from "@/models"
 import { BaseRequest } from "../BaseRequest"
+import type { AxiosResponse } from "axios"
 
-export const Get = class extends BaseRequest<ProfileBox> {
-  constructor(project_id: number) {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/profile"
-    this.interpolations.project_id = project_id
-  }
+class GetRequest extends BaseRequest<ProfileBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/profile" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProfileBox, response)
+    return this.responseToObject(ProfileBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Update = class extends BaseRequest<ProfileBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/profile"
-  }
+class UpdateRequest extends BaseRequest<ProfileBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/profile" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProfileBox, response)
+    return this.responseToObject(ProfileBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()

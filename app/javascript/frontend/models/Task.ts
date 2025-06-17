@@ -9,4 +9,8 @@ export class Task {
   test_case_id: number | null = null
 
   @t.Date ignore_at: Date | null = null
+
+  is_ignored(): boolean {
+    return this.ignore_at != null
+  }
 }

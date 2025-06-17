@@ -29,31 +29,24 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
-import { EntityRepo, Platform, Requirement, Storyboard } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import type { StoryboardFrameEmits } from '@/components/StoryboardFrame'
+import { STORYBOARD_MAIN_AXLE } from '@/constants'
+import { useQueryLine } from '@/lib/useQueryLine'
+import * as q from '@/requests'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import { STORYBOARD_MAIN_AXLE } from '@/constants'
 
 const route = useRoute()
 const params = route.params as any
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  created: [ Storyboard ]
-}>()
-
-const props = defineProps<{
-  platforms: Platform[],
-  storyboard_id: number,
-}>()
+const emit = defineEmits<StoryboardFrameEmits>()
 
 const former = Former.build({
   title: "",
@@ -64,10 +57,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_storyboard_action } = line.request(q.project.storyboards.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_storyboard_box = await reqs.add(q.project.storyboards.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-  }).perform(this.form)
+  const a_storyboard_box = await create_storyboard_action({
+    interpolations: { project_id: params.project_id },
+    body: former.form,
+  })
 
   emit('created', a_storyboard_box.storyboard)
   open.value = false

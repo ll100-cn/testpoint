@@ -2,24 +2,20 @@
   <div class="flex flex-col min-h-screen">
     <div class="flex flex-col flex-1">
       <div class="flex flex-col flex-1">
-        <SuspenseWrapper :helper="navbar">
-          <suspense v-bind="{ ...navbar.events() }">
-            <AppNavbar :key="JSON.stringify([navbar.key()])" />
-          </suspense>
-        </SuspenseWrapper>
+        <suspense>
+          <AppNavbar />
+        </suspense>
 
         <Error v-if="errors.length > 0" :errors="errors" />
 
         <Container v-else class="flex flex-col flex-1" :class="{ 'select-none grayscale opacity-40 pointer-events-none': view.state == 'pending' }">
-          <SuspenseWrapper :helper="view">
-            <router-view v-slot="{ Component }">
-              <keep-alive>
-                <suspense v-bind="{ ...view.events() }">
-                  <component :is="Component" :key="JSON.stringify([view.key()])" />
-                </suspense>
-              </keep-alive>
-            </router-view>
-          </SuspenseWrapper>
+          <router-view v-slot="{ Component, route }">
+            <keep-alive>
+              <suspense v-bind="{ ...view.events() }">
+                <component :is="Component" :key="route.fullPath" />
+              </suspense>
+            </keep-alive>
+          </router-view>
         </Container>
       </div>
     </div>
@@ -34,10 +30,8 @@ import Error from './Error.vue'
 import AppNavbar from '../components/AppNavbar.vue'
 import { Container } from "$ui/container"
 import SuspenseHelper from "./SuspenseHelper"
-import SuspenseWrapper from "./SuspenseWrapper.vue"
 
 const errors = ref([])
-const route = useRoute()
 
 onBeforeRouteLeave(() => {
   errors.value = []
@@ -51,6 +45,5 @@ onErrorCaptured((err, vm, info) => {
   return false
 })
 
-const navbar = SuspenseHelper.build(() => 'navbar')
-const view = SuspenseHelper.build(() => route.fullPath)
+const view = SuspenseHelper.build()
 </script>

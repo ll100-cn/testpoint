@@ -32,7 +32,6 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from "@/requests"
 import { usePageStore, useSessionStore } from '@/store'
 import _ from 'lodash'
@@ -43,8 +42,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, 
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const router = useRouter()
 const route = useRoute()
 const page = usePageStore()
@@ -53,8 +53,11 @@ const params = route.params as any
 
 const project_id = _.toNumber(params.project_id)
 const account = ref(session.account)
-const profile_box = reqs.raw(session.request(q.project.profiles.Get, project_id)).setup().wait()
-await reqs.performAll()
+const { data: profile_box } = line.request(q.project.profiles.Get(), (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   nickname: profile_box.value.profile.nickname
@@ -68,10 +71,15 @@ watch(former.form, () => {
   success.value = false
 })
 
+const { mutateAsync: update_profile_action } = line.request(q.project.profiles.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  await reqs.add(q.project.profiles.Update).setup(req => {
-    req.interpolations.project_id = project_id
-  }).waitFor(profile_box).perform(this.form)
+  await update_profile_action({
+    interpolations: { project_id },
+    body: former.form,
+  })
 
   success.value = true
 }

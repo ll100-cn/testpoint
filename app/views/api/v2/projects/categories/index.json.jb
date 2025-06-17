@@ -2,4 +2,8 @@ json = {
   list: (render partial: "box", collection: @categories, as: :category)
 }
 
+if resource_graph_columns.include?("counts")
+  json[:issues_counts] = @issues_counts
+end
+
 json

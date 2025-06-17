@@ -2,4 +2,8 @@ json = {
   list: render(partial: "box", collection: @test_case_labels, as: :test_case_label)
 }
 
+if resource_graph_columns.include?("counts")
+  json[:cases_counts] = @cases_counts
+end
+
 json

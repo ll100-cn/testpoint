@@ -15,20 +15,19 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { Issue, IssueBox } from "@/models"
-import { getCurrentInstance, ref } from "vue"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { type IssueBox } from "@/models"
+import * as q from '@/requests'
+import { ref } from "vue"
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox
@@ -42,13 +41,20 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: resolve_issue_action } = line.request(q.bug.issues.Resolve('+info'), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_box = await reqs.add(q.bug.issues.InfoResolve).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform({
-    action: 'resolve',
-    comment_attributes: this.form
+  const a_issue_box = await resolve_issue_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id
+    },
+    body: {
+      action: 'resolve',
+      comment_attributes: former.form
+    }
   })
 
   emit("updated", a_issue_box)

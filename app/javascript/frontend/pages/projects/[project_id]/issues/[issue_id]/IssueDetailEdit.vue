@@ -16,7 +16,7 @@
 
         <div class="space-x-3">
           <Button size="sm">更新</Button>
-          <Button variant="secondary" size="sm" type="button" @click="mode = 'show'">取消</Button>
+          <Button variant="secondary" size="sm" type="button" @click.prevent="mode = 'show'">取消</Button>
         </div>
       </Form>
     </div>
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import { IssueBox } from "@/models"
+import { type IssueBox } from "@/models"
 import { ref } from "vue"
 
 const props = withDefaults(defineProps<{

@@ -1,77 +1,85 @@
-import { Member, MemberBox, MemberInfo, MemberPage } from "@/models"
+import { Member, type MemberBox, MemberBoxImpl, MemberInfo, MemberPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
+import { type Required } from 'utility-types'
 
-export const Create = class extends BaseRequest<MemberBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/members"
-  }
+class CreateRequest extends BaseRequest<MemberBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/members" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberBox, response)
+    return this.responseToObject(MemberBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<MemberBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/members/{member_id}"
-  }
+
+class GetRequest extends BaseRequest<MemberBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberBox, response)
+    return this.responseToObject(MemberBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Update = class extends BaseRequest<MemberBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/members/{member_id}"
-  }
+
+class UpdateRequest extends BaseRequest<MemberBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberBox, response)
+    return this.responseToObject(MemberBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<MemberBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/members/{member_id}"
-  }
+
+class DestroyRequest extends BaseRequest<MemberBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberBox, response)
+    return this.responseToObject(MemberBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Archive = class extends BaseRequest<MemberBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/members/{member_id}/archive"
-  }
+
+class ArchiveRequest extends BaseRequest<MemberBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}", "/archive" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberBox, response)
+    return this.responseToObject(MemberBoxImpl, response)
   }
 }
+export const Archive = () => new ArchiveRequest()
 
-export const InfoList = class extends BaseRequest<MemberPage<MemberBox>> {
-  constructor(project_id: number) {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/members"
-    this.interpolations.project_id = project_id
-    this.graph = "info"
-  }
+
+class ListRequest<Box extends MemberBox> extends BaseRequest<Box[]> {
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/members" ]
+  method = "GET"
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberPage<MemberBox>, response)
+    return this.responseToObject(MemberPage<Box>, response).list
   }
+}
+export function List(): InstanceType<typeof ListRequest<MemberBox>>
+export function List(graph: '+user'): InstanceType<typeof ListRequest<Required<MemberBox, 'user'>>>
+export function List(graph: '+project'): InstanceType<typeof ListRequest<Required<MemberBox, 'project'>>>
+export function List(graph?: string) {
+  const request = new ListRequest<MemberBox>()
+  request.graph = graph ?? null
+
+  if (graph == '+user') {
+    request.graph = 'info'
+  }
+
+  if (graph == '+project') {
+    request.graph = 'info'
+  }
+
+  return request as any
 }

@@ -12,11 +12,11 @@
 
 <script setup lang="ts">
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models';
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests';
 import { type PropType, getCurrentInstance, nextTick, ref } from 'vue';
 import CardShow from './CardShow.vue';
 import CaseEditFrame from './CaseEditFrame.vue';
+import { useQueryLine } from '@/lib/useQueryLine';
 
 const props = defineProps({
   platform_repo: {
@@ -29,7 +29,7 @@ const props = defineProps({
   }
 })
 
-const reqs = useRequestList()
+const line = useQueryLine()
 
 const emit = defineEmits<{
   (e: 'change', test_case: TestCase): void,
@@ -46,11 +46,13 @@ async function show(a_test_case: TestCase) {
   mode.value = 'show'
   test_case.value = a_test_case
 
-  const history_page = await reqs.add(q.case.test_cases.History).setup(req => {
+  const { data: history_page, suspense } = line.request(q.case.test_cases.History(), (req, it) => {
     req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
-  }).perform()
-  history.value = history_page.list.map(it => it.test_case)
+    return it.useQuery(req.toQueryConfig())
+  })
+  await suspense()
+  history.value = history_page.value.list.map(it => it.test_case)
 
   nextTick(() => {
     const $modal = Modal.getOrCreateInstance(modal.value)

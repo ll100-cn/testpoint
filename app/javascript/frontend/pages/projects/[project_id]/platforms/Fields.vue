@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import { Member, MemberBox } from '@/models'
+import { Member, type MemberBox } from '@/models'
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import { Former, GenericForm, GenericFormGroup } from "$ui/simple_form"
 import * as controls from '@/components/controls'

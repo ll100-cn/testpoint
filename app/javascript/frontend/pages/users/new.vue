@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增成员</Button>
-          <Button variant="secondary" to="/users">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -23,15 +23,23 @@
 import { Button } from '$ui/button'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
-import useRequestList from '@/lib/useRequestList'
 import PageHeader from "@/components/PageHeader.vue"
 import PageTitle from "@/components/PageTitle.vue"
 import * as q from '@/requests'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
+import OkUrl from '@/lib/ok_url'
+import PathHelper from '@/lib/PathHelper'
+import { computed } from 'vue'
 
 const router = useRouter()
-const reqs = useRequestList()
+const route = useRoute()
+const line = useQueryLine()
+const ok_url = new OkUrl(route)
+const path_info = PathHelper.parseCollection(route.path, 'new')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   email: "",
@@ -41,9 +49,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_user_action } = line.request(q.admin.users.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const user = await reqs.add(q.admin.users.Create).setup().perform(this.form)
-  router.push("/users")
+  await create_user_action({
+    body: former.form,
+  })
+  router.push(return_url.value)
 }
 
 </script>

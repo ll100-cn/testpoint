@@ -9,7 +9,7 @@
 
       <div class="space-y-3">
         <FormGroup label="备注"><span>{{ issue_survey.remark }}</span></FormGroup>
-        <FormGroup v-for="(input, index) in current_issue_template?.inputs" :path="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
+        <FormGroup v-for="(input, index) in current_issue_template_box?.issue_template.inputs" :path="`inputs_attributes.${index}.value`" :key="index" :label="input.label">
           <controls.String />
         </FormGroup>
       </div>
@@ -23,22 +23,21 @@
 
 <script setup lang="ts">
 import FormErrorAlert from '@/components/FormErrorAlert.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Issue, IssueSurvey, IssueTemplate, IssueBox, IssueTemplateBox } from "@/models"
+import { IssueSurvey, type IssueBox, type IssueTemplateBox } from "@/models"
 import _ from "lodash"
 import { getCurrentInstance, ref } from "vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emits = defineEmits<{
-  updated: [Issue]
-}>()
+const emits = defineEmits<IssueFrameEmits>()
 
 const former = Former.build({
   inputs_attributes: []
@@ -47,17 +46,24 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_issue_survey_action } = line.request(q.bug.issue_surveies.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_survey = await reqs.add(q.bug.issue_surveies.Update).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-    req.interpolations.issue_survey_id = issue_survey.value.id
-  }).perform(this.form)
+  const a_issue_survey_box = await update_issue_survey_action({
+    interpolations: {
+      project_id: issue_box.value.issue.project_id,
+      issue_id: issue_box.value.issue.id,
+      issue_survey_id: issue_survey.value.id
+    },
+    body: former.form
+  })
 
-  const index = issue_box.value.surveys.findIndex(it => it.id == a_issue_survey.id)
-  issue_box.value.surveys[index] = a_issue_survey
+  const index = issue_box.value.surveys.findIndex(it => it.id == a_issue_survey_box.issue_survey.id)
+  issue_box.value.surveys[index] = a_issue_survey_box.issue_survey
 
-  emits("updated", issue_box.value.issue)
+  emits("updated", issue_box.value)
   open.value = false
 }
 
@@ -75,14 +81,18 @@ const loading = ref(true)
 
 async function reset(a_issue_box: IssueBox, a_issue_survey: IssueSurvey) {
   loading.value = true
-  issue_box.value = a_issue_box
+  issue_box.value = { ...a_issue_box }
   issue_survey.value = a_issue_survey
 
   try {
-    current_issue_template_box.value = await reqs.add(q.project.issue_templates.Get).setup(req => {
+    const { data: a_issue_template_box, suspense } = line.request(q.project.issue_templates.Get(), (req, it) => {
       req.interpolations.project_id = issue_box.value.issue.project_id
       req.interpolations.issue_template_id = issue_survey.value.template_id
-    }).perform()
+      return it.useQuery(req.toQueryConfig())
+    })
+    await suspense()
+
+    current_issue_template_box.value = a_issue_template_box.value
 
     former.form.inputs_attributes = build_inputs_attributes()
   } finally {

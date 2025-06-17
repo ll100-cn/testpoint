@@ -1,1 +1,0 @@
-render partial: "api/shared/scene", collection: @scenes, as: :scene

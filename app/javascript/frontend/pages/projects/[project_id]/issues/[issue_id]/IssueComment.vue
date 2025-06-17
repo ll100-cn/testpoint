@@ -16,7 +16,7 @@
           <template v-if="!readonly && allow('update', comment_box.comment)">
             <DropdownMenuItem @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
             <DropdownMenuItem v-if="children.length == 0" @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue_box, comment_box)">关联</DropdownMenuItem>
-            <!-- <DropdownMenuItem v-if="allow('destroy', comment)" @click.prevent="deleteComment">删除</DropdownMenuItem> -->
+            <DropdownMenuItem v-if="allow('destroy', comment_box.comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
 
             <DropdownMenuSeparator />
 
@@ -35,7 +35,7 @@
       <Callout class="mt-3 py-1" v-if="children.length > 0">
         <template v-for="(child, index) in children">
           <div class="mt-4" v-if="index != 0"></div>
-          <IssueCommentReply :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBox.from(child)" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
+          <IssueCommentReply :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBoxImpl.from(child)" @destroyed="emit('destroyed', $event)" @modal="(...args) => emit('modal', ...args)" />
         </template>
       </Callout>
     </CardContent>
@@ -44,11 +44,10 @@
 
 <script setup lang="ts">
 import MemberLabel from "@/components/MemberLabel.vue"
-import useRequestList from '@/lib/useRequestList'
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Attachment, Comment, CommentBox, CommentRepo, Issue, IssueBox } from "@/models"
+import { Attachment, Comment, type CommentBox, CommentBoxImpl, CommentRepo, Issue, type IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
@@ -63,8 +62,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, 
 import { Callout } from '$ui/callout'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import Button from "$ui/button/Button.vue"
+import { useQueryLine } from '@/lib/useQueryLine'
+import { type IssueCommentFrameEmits } from "@/components/IssueCommentFrame"
+import vConfirm from '@/components/vConfirm'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const store = useSessionStore()
 const user = store.account!.user
 const page = usePageStore()
@@ -77,10 +79,7 @@ const props = defineProps<{
   readonly: boolean
 }>()
 
-const emit = defineEmits<{
-  destroyed: [ CommentBox ]
-  updated: [ CommentBox ]
-
+const emit = defineEmits<IssueCommentFrameEmits & {
   modal: [ component: Component, ...args: any[] ]
 }>()
 
@@ -95,25 +94,35 @@ const children = computed(() => {
 
 const content_id = _.uniqueId("content_")
 
+const { mutateAsync: destroy_comment_action } = line.request(q.bug.issue_comments.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 async function deleteComment() {
-  if (!confirm("确认删除该评论？")) {
-    return
-  }
-  await reqs.add(q.bug.issue_comments.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.comment_id = props.comment_box.comment.id
-  }).perform()
+  await destroy_comment_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      comment_id: props.comment_box.comment.id
+    }
+  })
 
   emit("destroyed", props.comment_box)
 }
 
 async function updateComment(data: Record<string, any>) {
-  const a_comment_box = await reqs.add(q.bug.issue_comments.Update).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.comment_id = props.comment_box.comment.id
-  }).perform(data)
+  const a_comment_box = await update_comment_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      comment_id: props.comment_box.comment.id
+    },
+    body: data
+  })
 
   display.value = a_comment_box.comment.display
   emit('updated', a_comment_box)

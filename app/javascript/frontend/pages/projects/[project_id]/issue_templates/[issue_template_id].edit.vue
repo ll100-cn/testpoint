@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>修改问题模版</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/issue_templates`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import PageHeader from "@/components/PageHeader.vue"
@@ -29,20 +28,29 @@ import PageTitle from "@/components/PageTitle.vue"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
+import { computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
+const ok_url = new OkUrl(route)
 
 const project_id = params.project_id
 const issue_template_id = params.issue_template_id
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
-const issue_template_box = reqs.add(q.project.issue_templates.Get).setup(req => {
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
+
+const { data: issue_template_box } = line.request(q.project.issue_templates.Get(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_template_id = issue_template_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   name: issue_template_box.value.issue_template.name,
@@ -57,12 +65,16 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  await reqs.add(q.project.issue_templates.Update).setup(req => {
-    req.interpolations.project_id = project_id
-    req.interpolations.issue_template_id = issue_template_id
-  }).perform(this.form)
+const { mutateAsync: update_issue_template_action } = line.request(q.project.issue_templates.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  router.push('/projects/' + project_id + '/issue_templates')
+former.doPerform = async function() {
+  await update_issue_template_action({
+    interpolations: { project_id, issue_template_id },
+    body: former.form,
+  })
+
+  router.push(return_url.value)
 }
 </script>

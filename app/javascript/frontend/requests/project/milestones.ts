@@ -1,88 +1,79 @@
-import { Milestone, MilestoneBox, MilestonePage } from "@/models"
+import { Milestone, type MilestoneBox, MilestoneBoxImpl, MilestonePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const Create = class extends BaseRequest<MilestoneBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/milestones"
-  }
+class CreateRequest extends BaseRequest<MilestoneBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBox, response)
+    return this.responseToObject(MilestoneBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<MilestoneBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/milestones/{id}"
-  }
+
+class GetRequest extends BaseRequest<MilestoneBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBox, response)
+    return this.responseToObject(MilestoneBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const List = class extends BaseRequest<MilestonePage<MilestoneBox>> {
-  constructor(project_id: number) {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/milestones"
-    this.interpolations.project_id = project_id
-  }
+
+class ListRequest<Box extends MilestoneBox> extends BaseRequest<Box[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestonePage<MilestoneBox>, response)
+    return this.responseToObject(MilestonePage<Box>, response).list
   }
 }
+export const List = () => new ListRequest()
 
-export const Update = class extends BaseRequest<MilestoneBox> {
-  constructor() {
-    super()
-    this.method = "PUT"
-    this.endpoint = "/api/v2/projects/{project_id}/milestones/{id}"
-  }
+
+class UpdateRequest extends BaseRequest<MilestoneBox> {
+  method = "PUT"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBox, response)
+    return this.responseToObject(MilestoneBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<MilestoneBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/milestones/{id}"
-  }
+
+class DestroyRequest extends BaseRequest<MilestoneBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBox, response)
+    return this.responseToObject(MilestoneBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const Archive = class extends BaseRequest<MilestoneBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/milestones/{id}/archive"
-  }
+
+class ArchiveRequest extends BaseRequest<MilestoneBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}", "/archive" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBox, response)
+    return this.responseToObject(MilestoneBoxImpl, response)
   }
 }
+export const Archive = () => new ArchiveRequest()
 
-export const Active = class extends BaseRequest<MilestoneBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/milestones/{id}/active"
-  }
+
+class ActiveRequest extends BaseRequest<MilestoneBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/milestones", "/{id}", "/active" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBox, response)
+    return this.responseToObject(MilestoneBoxImpl, response)
   }
 }
+export const Active = () => new ActiveRequest()

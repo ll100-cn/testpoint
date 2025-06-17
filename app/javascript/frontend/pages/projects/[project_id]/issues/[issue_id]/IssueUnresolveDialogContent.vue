@@ -15,22 +15,22 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { Issue, IssueBox } from "@/models"
+import type { IssueBox } from "@/models"
 import { ref } from "vue"
 import IssueCommentForm from './IssueCommentForm.vue'
 import { useRouter } from "vue-router"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueStateFrameEmits } from '@/components/IssueStateFrame'
+import { Alerter } from '@/components/Alerter'
 
 const router = useRouter()
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueStateFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox
@@ -44,17 +44,23 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: unresolve_issue_action } = line.request(q.bug.issues.Resolve(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.perform = async function() {
-  const a_issue_box = await reqs.add(q.bug.issues.InfoResolve).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform({
-    action: 'unresolve',
-    comment_attributes: this.form
+  const a_issue_box = await unresolve_issue_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id
+    },
+    body: {
+      action: 'unresolve',
+      comment_attributes: former.form
+    }
   })
 
   open.value = false
-  router.go(0)
 }
 
 const loading = ref(true)

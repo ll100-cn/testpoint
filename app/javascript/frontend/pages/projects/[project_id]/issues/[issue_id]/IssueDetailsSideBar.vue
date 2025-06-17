@@ -99,8 +99,8 @@
       <div class="flex flex-col" v-if="!readonly">
         <div class="h5">订阅</div>
         <div class="mt-1">
-          <Button v-if="_.find(issue_box.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click="unsubscribe">取消订阅</Button>
-          <Button v-else preset="outline" variant="secondary" class="w-full" @click="subscribe">订阅问题</Button>
+          <Button v-if="_.find(issue_box.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click.prevent="unsubscribe">取消订阅</Button>
+          <Button v-else preset="outline" variant="secondary" class="w-full" @click.prevent="subscribe">订阅问题</Button>
           <div class="mt-2 text-sm text-muted">{{ issue_box.subscriptions.length }} 人订阅:</div>
           <div class="flex items-center gap-1">
             <Tooltip v-for="subscription in issue_box.subscriptions">
@@ -119,7 +119,6 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 import CategoryBadgeVue from "@/components/CategoryBadge.vue"
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
@@ -128,7 +127,7 @@ import OptionsForSelect from "@/components/OptionsForSelect.vue"
 import { ISSUE_PRIORITY_OPTIONS, OPTIONS_FOR_ISSUE_STATE } from "@/constants"
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Issue, IssueBox } from "@/models"
+import { Issue, type IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { useSessionStore } from "@/store/session"
 import _ from "lodash"
@@ -141,8 +140,9 @@ import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
 import SelectDropdownItemsForCategory from '@/components/SelectDropdownItemsForCategory.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const session = useSessionStore()
 const current_user = session.account!.user
 const page = usePageStore()
@@ -168,43 +168,63 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: create_subscription_action } = line.request(q.bug.subscriptions.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_subscription_action } = line.request(q.bug.subscriptions.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function(code: string) {
-  const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform({ [code]: this.form[code] })
+  const a_issue_action = await create_issue_action_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    body: { [code]: (this.form as any)[code] }
+  })
 
   Object.assign(props.issue_box.issue, a_issue_action.issue)
   props.issue_box.activities.push(...a_issue_action.activities)
   emit('updated', props.issue_box)
 }
 
-const member_page = reqs.raw(session.request(q.project.members.InfoList, props.issue_box.issue.project_id)).setup().wait()
-const category_page = reqs.raw(session.request(q.project.categories.List, props.issue_box.issue.project_id)).setup().wait()
-const milestone_page = reqs.add(q.project.milestones.List, props.issue_box.issue.project_id).setup().wait()
-await reqs.performAll()
-
-const member_boxes = computed(() => member_page.value.list)
-const category_boxes = computed(() => category_page.value.list)
-const milestone_boxes = computed(() => milestone_page.value.list)
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
+  req.interpolations.project_id = props.issue_box.issue.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 async function subscribe() {
-  const a_subscription = await reqs.add(q.bug.subscriptions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform()
+  const a_subscription_box = await create_subscription_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id }
+  })
 
-  props.issue_box.subscriptions.push(a_subscription)
+  props.issue_box.subscriptions.push(a_subscription_box.subscription)
   emit("updated", props.issue_box)
 }
 
 async function unsubscribe() {
-  await reqs.add(q.bug.subscriptions.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform()
-
   const index = props.issue_box.subscriptions.findIndex(it => it.user_id == current_user.id)
+  if (index == -1) {
+    return
+  }
+
+  const subscription = props.issue_box.subscriptions[index]
+  await destroy_subscription_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id, subscription_id: subscription.id }
+  })
+
   props.issue_box.subscriptions.splice(index, 1)
   emit("updated", props.issue_box)
 }

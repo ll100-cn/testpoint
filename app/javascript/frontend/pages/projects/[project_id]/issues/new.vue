@@ -47,7 +47,7 @@
 
         <div class="space-x-3">
           <Button>新增问题</Button>
-          <Button variant="secondary" :to="`/projects/${params.project_id}/issues`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </template>
     </div>
@@ -56,7 +56,6 @@
 
 <script setup lang="ts">
 import AttachmentsUploader from "@/components/AttachmentsUploader.vue"
-import useRequestList from '@/lib/useRequestList'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
 import OptionsForMember from "@/components/OptionsForMember.vue"
 import PageHeader from "@/components/PageHeader.vue"
@@ -71,8 +70,11 @@ import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from "@/lib/PathHelper"
+import OkUrl from '@/lib/ok_url'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
@@ -80,14 +82,20 @@ const page = usePageStore()
 const profile = page.inProject()!.profile
 const allow = page.inProject()!.allow
 const session = useSessionStore()
+const path_info = PathHelper.parseCollection(route.path, 'new')
+const ok_url = new OkUrl(route)
 
-const member_page = reqs.raw(session.request(q.project.members.InfoList, params.project_id)).setup().wait()
-const issue_template_page = reqs.add(q.project.issue_templates.List).setup(req => {
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
+
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
   req.interpolations.project_id = params.project_id
-}).wait()
-await reqs.performAll()
-const member_boxes = computed(() => member_page.value.list)
-const issue_template_boxes = computed(() => issue_template_page.value.list)
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: issue_template_boxes } = line.request(q.project.issue_templates.List(), (req, it) => {
+  req.interpolations.project_id = params.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 const issue_template_box = computed(() => {
   return issue_template_boxes.value.find(it => it.issue_template.id == former.form.issue_template_id)
 })
@@ -106,12 +114,17 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  const issue_box = await reqs.add(q.bug.issues.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-  }).perform(this.form)
+const { mutateAsync: create_issue_action } = line.request(q.bug.issues.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  router.push(`/projects/${params.project_id}/issues/${issue_box.issue.id}`)
+former.doPerform = async function() {
+  const issue_box = await create_issue_action({
+    interpolations: { project_id: params.project_id },
+    body: former.form,
+  })
+
+  router.push(`${path_info.collection}/${issue_box.issue.id}`)
 }
 
 watch(issue_template_box, function(new_value) {

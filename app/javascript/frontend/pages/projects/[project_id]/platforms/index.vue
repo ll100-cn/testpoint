@@ -3,7 +3,7 @@
     <PageTitle>平台列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', Platform)" :to="`/projects/${project_id}/platforms/new`">新增平台</Button>
+      <Button v-if="allow('create', Platform)" :to="ok_url.apply(`${path_info.collection}/new`)">新增平台</Button>
     </template>
   </PageHeader>
 
@@ -21,18 +21,18 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="platform_box in platform_boxes" :key="platform_box.platform.id">
+          <template v-for="{ platform } in platform_boxes" :key="platform.id">
             <TableRow>
-              <TableCell>{{ platform_box.platform.name }}</TableCell>
+              <TableCell>{{ platform.name }}</TableCell>
               <TableCell>
-                <PlatformBadge :platform="platform_box.platform" />
+                <PlatformBadge :platform="platform" />
               </TableCell>
-              <TableCell>{{ _.find(member_boxes, { member: { id: platform_box.platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
+              <TableCell>{{ _.find(member_boxes, { member: { id: platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', platform_box.platform)" :to="`/projects/${project_id}/platforms/${platform_box.platform.id}/edit`" class="link">
+                <router-link v-if="allow('update', platform)" :to="ok_url.apply(`${path_info.collection}/${platform.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', platform_box.platform)" href="#" @click.prevent="onRemove(platform_box.platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', platform)" href="#" v-confirm="'是否删除平台？'" @click.prevent="deletePlatform(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -44,7 +44,6 @@
 
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import * as q from '@/requests'
 import _ from 'lodash'
@@ -58,41 +57,44 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, 
 import { Validator } from '$ui/simple_form'
 import Button from '$ui/button/Button.vue'
 import PlatformBadge from '@/components/PlatformBadge.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PageContent from '@/components/PageContent.vue'
+import PathHelper from '@/lib/PathHelper'
+import vConfirm from '@/components/vConfirm'
+import { Alerter } from '@/components/Alerter'
+import OkUrl from '@/lib/ok_url'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
-const router = useRouter()
 const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const session = useSessionStore()
+const alerter = Alerter.build()
+const ok_url = new OkUrl(route)
 
 const validator = reactive<Validator>(new Validator())
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'index')
 
-const platform_page = reqs.add(q.project.platforms.List).setup(req => {
+const { data: platform_boxes } = line.request(q.project.platforms.List(), (req, it) => {
   req.interpolations.project_id = project_id
-}).wait()
-const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-await reqs.performAll()
-const member_boxes = computed(() => member_page.value.list)
-const platform_boxes = computed(() => platform_page.value.list)
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
-async function onRemove(id: number) {
-  if (!confirm("是否删除平台？")) {
-    return
-  }
+const { mutateAsync: destroy_platform_action } = line.request(q.project.platforms.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  try {
-    await reqs.add(q.project.platforms.Destroy).setup(req => {
-      req.interpolations.project_id = project_id
-      req.interpolations.platform_id = id
-    }).perform()
-
-    router.go(0)
-  } catch (error) {
-    validator.processError(error)
-  }
+async function deletePlatform(id: number) {
+  await alerter.perform(destroy_platform_action, {
+    interpolations: { project_id, platform_id: id }
+  })
 }
 
 </script>

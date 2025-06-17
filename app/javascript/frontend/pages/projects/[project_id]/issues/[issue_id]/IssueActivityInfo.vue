@@ -77,7 +77,7 @@ import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import MemberLabel from '@/components/MemberLabel.vue'
 import * as h from '@/lib/humanize'
-import { IssueBox, IssueActivity } from "@/models"
+import { type IssueBox, IssueActivity } from "@/models"
 
 const props = defineProps<{
   issue_box: IssueBox

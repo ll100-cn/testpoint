@@ -1,3 +1,0 @@
-json = @roles.map { |item| { label: item[0], value: item[1] } }
-
-json

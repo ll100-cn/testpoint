@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增平台</Button>
-          <Button variant="secondary" :to="`/projects/${project_id}/platforms`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
 import { usePageStore, useSessionStore } from "@/store"
@@ -31,19 +30,28 @@ import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
 import { Button } from '$ui/button'
 import { computed } from 'vue'
+import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
 
 const route = useRoute()
 const router = useRouter()
-const reqs = useRequestList()
+const line = useQueryLine()
 const params = route.params as any
 const page = usePageStore()
 const session = useSessionStore()
+const ok_url = new OkUrl(route)
 
 const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'new')
 
-const member_page = reqs.raw(session.request(q.project.members.InfoList, project_id)).setup().wait()
-await reqs.performAll()
-const member_boxes = computed(() => member_page.value.list)
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
+
+const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
+  req.interpolations.project_id = project_id
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   name: "",
@@ -54,11 +62,16 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  await reqs.add(q.project.platforms.Create).setup(req => {
-    req.interpolations.project_id = project_id
-  }).perform(this.form)
+const { mutateAsync: create_platform_action } = line.request(q.project.platforms.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  router.push('/projects/' + project_id + '/platforms')
+former.doPerform = async function() {
+  await create_platform_action({
+    interpolations: { project_id },
+    body: former.form,
+  })
+
+  router.push(return_url.value)
 }
 </script>

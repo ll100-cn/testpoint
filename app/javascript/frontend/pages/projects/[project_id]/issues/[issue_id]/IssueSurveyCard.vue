@@ -1,6 +1,7 @@
 <template>
   <Card>
     <CardContent>
+      <div> surverys counts is {{ issue_box.surveys.length }} </div>
       <template v-for="(issue_survey, index) in issue_box.surveys">
         <hr class="my-4" v-if="index > 0">
 
@@ -37,10 +38,9 @@
 
 <script setup lang="ts">
 import MoreDropdown from "@/components/MoreDropdown.vue"
-import useRequestList from '@/lib/useRequestList'
 import * as h from '@/lib/humanize'
 import * as q from '@/requests'
-import { Issue, IssueBox, IssueSurvey } from "@/models"
+import { Issue, type IssueBox, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import { type Component } from "vue"
 import IssueSurveyEditDialogContent from "./IssueSurveyEditDialogContent.vue"
@@ -48,8 +48,10 @@ import { Card, CardContent } from '$ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
 import Button from "$ui/button/Button.vue"
 import { Alert } from "$ui/alert"
+import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueFrameEmits } from "@/components/IssueFrame"
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -58,21 +60,25 @@ const props = defineProps<{
   issue_box: IssueBox
 }>()
 
-const emit = defineEmits<{
-  updated: [IssueBox]
+const emit = defineEmits<IssueFrameEmits & {
   modal: [ component: Component, ...args: any[] ]
 }>()
 
-async function deleteIssueSurvey(issue_survey: IssueSurvey) {
-  await reqs.add(q.bug.issue_surveies.Destroy).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-    req.interpolations.issue_survey_id = issue_survey.id
-  }).perform()
+const { mutateAsync: destroy_issue_survey_action } = line.request(q.bug.issue_surveies.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  const index = props.issue_box.surveys.findIndex(it => it.id == issue_survey.id)
-  props.issue_box.surveys.splice(index , 1)
-  emit("updated", props.issue_box)
+async function deleteIssueSurvey(issue_survey: IssueSurvey) {
+  await destroy_issue_survey_action({
+    interpolations: {
+      project_id: props.issue_box.issue.project_id,
+      issue_id: props.issue_box.issue.id,
+      issue_survey_id: issue_survey.id
+    }
+  })
+
+  const new_surveys = props.issue_box.surveys.filter(it => it.id !== issue_survey.id)
+  emit("updated", { ...props.issue_box, surveys: new_surveys })
 }
 
 function onSurveyChanged(issue_survey: IssueSurvey) {

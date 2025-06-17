@@ -12,7 +12,7 @@
         <FormGroup label="">
           <div class="space-x-3">
             <Button>编辑项目</Button>
-            <Button variant="secondary" to="/projects">取消</Button>
+            <Button variant="secondary" :to="return_url">取消</Button>
           </div>
         </FormGroup>
       </div>
@@ -33,20 +33,28 @@ import { Separator } from '$ui/separator'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
 import Fields from './Fields.vue'
+import { useQueryLine } from '@/lib/useQueryLine'
+import OkUrl from '@/lib/ok_url'
+import PathHelper from '@/lib/PathHelper'
+import { computed } from 'vue'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
+const ok_url = new OkUrl(route)
+const path_info = PathHelper.parseMember(route.path, 'edit')
 
-const project_box = reqs.add(q.admin.projects.Get).setup(req => {
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
+
+const { data: project_box } = line.request(q.admin.projects.Get(), (req, it) => {
   req.interpolations.project_id = params.project_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 
 const former = Former.build({
   name: project_box.value.project.name,
@@ -56,12 +64,17 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  await reqs.add(q.admin.projects.Update).setup(req => {
-    req.interpolations.id = project_box.value.project.id
-  }).perform(this.form)
+const { mutateAsync: update_project_action } = line.request(q.admin.projects.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  router.push(`/projects`)
+former.doPerform = async function() {
+  await update_project_action({
+    interpolations: { id: project_box.value.project.id },
+    body: former.form,
+  })
+
+  router.push(return_url.value)
 }
 
 </script>

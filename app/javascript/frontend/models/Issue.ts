@@ -11,6 +11,7 @@ import { IssueRelationship } from "./IssueRelationship"
 import { Attachment } from "./Attachment"
 import { Subscription } from "./Subscription"
 import { IssueSurvey } from "./IssueSurvey"
+import type { OmitByValue } from "utility-types"
 
 export class Issue {
   id!: number
@@ -63,7 +64,7 @@ export class Issue {
   }
 }
 
-export class IssueBox {
+export class IssueBoxImpl {
   @t.Klass(Issue) issue!: Issue
 
   @t.Klass(Attachment) attachments: Attachment[] = []
@@ -74,7 +75,16 @@ export class IssueBox {
   @t.Klass(Subscription) subscriptions: Subscription[] = []
 }
 
+export type IssueBox = OmitByValue<IssueBoxImpl, Function>
+
 export class IssuePage<Box extends IssueBox> extends Pagination<Box> {
-  @Type(() => IssueBox) list: Box[] = []
-  @Type(() => IssueStat) issue_stats!: IssueStat[]
+  @t.Klass(IssueBoxImpl) list: Box[] = []
+  @t.Klass(IssueStat) issue_stats!: IssueStat[]
+}
+
+export class IssueSummary {
+  by_category: { category: Category, count: number }[] = []
+  by_milestone: { milestone: Milestone, count: number }[] = []
+  by_assignee: { assignee: Member, count: number }[] = []
+  by_creator: { creator: Member, count: number }[] = []
 }

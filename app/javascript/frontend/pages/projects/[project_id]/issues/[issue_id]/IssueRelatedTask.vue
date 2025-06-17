@@ -1,31 +1,39 @@
 <template>
   <p class="flex items-center">
     <span class="text-muted">该问题来自测试</span>
-    <span><router-link :to="`/projects/${project_id}/plans/${task.plan_id}`">{{ test_case_box.test_case.title }}</router-link></span>
+    <span><router-link :to="`${path_info.parent.resource}/plans/${task.plan_id}`">{{ test_case_box.test_case.title }}</router-link></span>
     <Badge preset="standard" variant="secondary" class="ms-1">{{ plan_box.plan.platform.name }}</Badge>
   </p>
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
 
 import { Task } from "@/models"
 import * as q from '@/requests'
 import Badge from "$ui/badge/Badge.vue";
+import { useQueryLine } from '@/lib/useQueryLine'
+import PathHelper from '@/lib/PathHelper'
+import { useRoute } from 'vue-router'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const props = defineProps<{
   task: Task
   project_id: number
 }>()
 
-const test_case_box = reqs.add(q.case.test_cases.Get).setup(req => {
+const route = useRoute()
+const params = route.params as any
+const path_info = PathHelper.parseMember(route.path, 'show')
+
+const { data: test_case_box } = line.request(q.case.test_cases.Get(), (req, it) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.test_case_id = props.task.test_case_id
-}).wait()
-const plan_box = reqs.add(q.test.plans.InfoGet).setup(req => {
+  return it.useQuery(req.toQueryConfig())
+})
+const { data: plan_box } = line.request(q.test.plans.Get(), (req, it) => {
   req.interpolations.project_id = props.project_id
   req.interpolations.plan_id = props.task.plan_id
-}).wait()
-await reqs.performAll()
+  return it.useQuery(req.toQueryConfig())
+})
+await line.wait()
 </script>

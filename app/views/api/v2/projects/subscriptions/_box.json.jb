@@ -1,0 +1,5 @@
+json = {
+  subscription: render('api/shared/subscription', subscription: subscription)
+}
+
+json

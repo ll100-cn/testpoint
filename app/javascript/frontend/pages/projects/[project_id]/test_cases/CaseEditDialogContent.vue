@@ -4,12 +4,12 @@
       <DialogTitle>{{ test_case.title }}</DialogTitle>
 
       <template #actions>
-        <a v-if="allow('destroy', test_case)" href="#" class="text-destructive text-sm link" @click.prevent="archiveTestCase">归档</a>
+        <a v-if="allow('destroy', test_case)" href="#" class="text-destructive text-sm link" v-confirm="'确认归档？'" @click.prevent="archiveTestCase">归档</a>
       </template>
     </DialogHeader>
 
     <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
-      <CaseForm :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
+      <CaseForm v-bind="{ former, requirement_boxes, storyboard_boxes, label_repo, platform_repo, newest_roadmap }" />
 
       <DialogFooter>
         <DialogClose><Button variant="secondary" type="button">Close</Button></DialogClose>
@@ -20,18 +20,20 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
-import * as q from '@/requests'
+import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
+import type { TestCaseFrameEmits } from '@/components/TestCaseFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
+import * as q from '@/requests'
 import { usePageStore } from "@/store"
 import $ from 'jquery'
-import { getCurrentInstance, nextTick, reactive, ref } from 'vue'
+import { computed, getCurrentInstance, nextTick, reactive, ref } from 'vue'
 import CaseForm from './CaseForm.vue'
-import { Former, GenericForm, GenericFormGroup, Validator } from '$ui/simple_form'
-import { Button } from '$ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import vConfirm from '@/components/vConfirm'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()!.allow
 
@@ -44,10 +46,7 @@ const props = defineProps<{
   newest_roadmap: Roadmap
 }>()
 
-const emit = defineEmits<{
-  (e: 'updated', test_case: TestCase): void,
-  (e: 'destroyed', test_case: TestCase): void,
-}>()
+const emit = defineEmits<TestCaseFrameEmits>()
 
 const test_case = ref(null! as TestCase)
 
@@ -66,11 +65,36 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_test_case_action } = line.request(q.case.test_cases.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_test_case_action } = line.request(q.case.test_cases.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const storyboard_id = computed(() => former.form.storyboard_id)
+
+const { data: requirement_boxes } = line.request(q.project.requirements.List(), (req, it) => {
+  req.interpolations.project_id = page.inProject()!.project_id
+  req.interpolations.storyboard_id = storyboard_id
+  req.query.roadmap_id = props.newest_roadmap.id
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    enabled: computed(() => !!storyboard_id.value)
+  })
+})
+
+const { data: storyboard_boxes } = line.request(q.project.storyboards.List(), (req, it) => {
+  req.interpolations.project_id = page.inProject()!.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+
 former.doPerform = async function() {
-  const new_test_case_box = await reqs.add(q.case.test_cases.Update).setup(req => {
-    req.interpolations.project_id = test_case.value.project_id
-    req.interpolations.id = test_case.value.id
-  }).perform(this.form)
+  const new_test_case_box = await update_test_case_action({
+    interpolations: { project_id: test_case.value.project_id, id: test_case.value.id },
+    body: former.form,
+  })
 
   emit('updated', new_test_case_box.test_case)
   open.value = false
@@ -80,15 +104,10 @@ async function archiveTestCase(event: Event) {
   event.preventDefault()
   validations.clear()
 
-  if (!confirm('确认归档？')) {
-    return
-  }
-
   try {
-    const test_case_box = await reqs.add(q.case.test_cases.Destroy).setup(req => {
-      req.interpolations.project_id = test_case.value.project_id
-      req.interpolations.id = test_case.value.id
-    }).perform()
+    const test_case_box = await destroy_test_case_action({
+      interpolations: { project_id: test_case.value.project_id, id: test_case.value.id }
+    })
 
     emit('destroyed', test_case_box.test_case)
     open.value = false
@@ -100,7 +119,7 @@ async function archiveTestCase(event: Event) {
 
 const loading = ref(true)
 
-function reset(a_test_case: TestCase) {
+async function reset(a_test_case: TestCase) {
   loading.value = true
   test_case.value = a_test_case
 
@@ -113,6 +132,8 @@ function reset(a_test_case: TestCase) {
   former.form.label_ids = test_case.value.label_ids
   former.form.storyboard_id = test_case.value.storyboard_id
   former.form.requirement_id = test_case.value.requirement_id
+
+  await line.wait()
 
   nextTick(() => {
     loading.value = false

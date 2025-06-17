@@ -1,63 +1,57 @@
-import { IssueTemplate, IssueTemplateBox, IssueTemplatePage } from "@/models"
+import { IssueTemplate, type IssueTemplateBox, IssueTemplateBoxImpl, IssueTemplatePage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse, Method } from "axios"
 
-export const Create = class extends BaseRequest<IssueTemplateBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/issue_templates"
-  }
+class CreateRequest extends BaseRequest<IssueTemplateBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Get = class extends BaseRequest<IssueTemplateBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/issue_templates/{issue_template_id}"
-  }
+
+class GetRequest extends BaseRequest<IssueTemplateBox> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
+export const Get = () => new GetRequest()
 
-export const Update = class extends BaseRequest<IssueTemplateBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/issue_templates/{issue_template_id}"
-  }
+
+class UpdateRequest extends BaseRequest<IssueTemplateBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<IssueTemplateBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/issue_templates/{issue_template_id}"
-  }
+
+class DestroyRequest extends BaseRequest<IssueTemplateBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates", "/{issue_template_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplateBox, response)
+    return this.responseToObject(IssueTemplateBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()
 
-export const List = class extends BaseRequest<IssueTemplatePage<IssueTemplateBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/issue_templates"
-  }
+
+class ListRequest extends BaseRequest<IssueTemplateBox[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_templates" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueTemplatePage<IssueTemplateBox>, response)
+    return this.responseToObject(IssueTemplatePage<IssueTemplateBox>, response).list
   }
 }
+export const List = () => new ListRequest()

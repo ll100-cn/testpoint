@@ -1,51 +1,46 @@
-import { Roadmap, RoadmapBox, RoadmapPage } from "@/models"
+import { Roadmap, type RoadmapBox, RoadmapBoxImpl, RoadmapPage } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
-export const List = class extends BaseRequest<RoadmapPage<RoadmapBox>> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/roadmaps"
-  }
+class ListRequest<Box extends RoadmapBox> extends BaseRequest<Box[]> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapPage<RoadmapBox>, response)
+    return this.responseToObject(RoadmapPage<Box>, response).list
   }
 }
+export const List = () => new ListRequest()
 
-export const Create = class extends BaseRequest<RoadmapBox> {
-  constructor() {
-    super()
-    this.method = "POST"
-    this.endpoint = "/api/v2/projects/{project_id}/roadmaps"
-  }
+
+class CreateRequest extends BaseRequest<RoadmapBox> {
+  method = "POST"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBox, response)
+    return this.responseToObject(RoadmapBoxImpl, response)
   }
 }
+export const Create = () => new CreateRequest()
 
-export const Update = class extends BaseRequest<RoadmapBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/roadmaps/{roadmap_id}"
-  }
+
+class UpdateRequest extends BaseRequest<RoadmapBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps", "/{roadmap_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBox, response)
+    return this.responseToObject(RoadmapBoxImpl, response)
   }
 }
+export const Update = () => new UpdateRequest()
 
-export const Destroy = class extends BaseRequest<RoadmapBox> {
-  constructor() {
-    super()
-    this.method = "DELETE"
-    this.endpoint = "/api/v2/projects/{project_id}/roadmaps/{roadmap_id}"
-  }
+
+class DestroyRequest extends BaseRequest<RoadmapBox> {
+  method = "DELETE"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/roadmaps", "/{roadmap_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBox, response)
+    return this.responseToObject(RoadmapBoxImpl, response)
   }
 }
+export const Destroy = () => new DestroyRequest()

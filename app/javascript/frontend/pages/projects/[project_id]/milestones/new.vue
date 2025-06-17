@@ -12,7 +12,7 @@
       <FormGroup label="">
         <div class="space-x-3">
           <Button>新增里程碑</Button>
-          <Button variant="secondary" :to="`/projects/${params.project_id}/milestones`">取消</Button>
+          <Button variant="secondary" :to="return_url">取消</Button>
         </div>
       </FormGroup>
     </div>
@@ -23,17 +23,26 @@
 import { Button } from '$ui/button'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Separator } from '$ui/separator'
-import useRequestList from '@/lib/useRequestList'
 import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import * as q from '@/requests'
 import { useRoute, useRouter } from 'vue-router'
+import { useQueryLine } from '@/lib/useQueryLine'
 import Fields from './Fields.vue'
+import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
+import { computed } from 'vue'
 
-const reqs = useRequestList()
 const route = useRoute()
 const router = useRouter()
+const line = useQueryLine()
 const params = route.params as any
+const ok_url = new OkUrl(route)
+
+const project_id = params.project_id
+const path_info = PathHelper.parseCollection(route.path, 'new')
+
+const return_url = computed(() => ok_url.withDefault(path_info.collection))
 
 const former = Former.build({
   title: null as string | null,
@@ -44,11 +53,16 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
-former.doPerform = async function() {
-  await reqs.add(q.project.milestones.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-  }).perform(this.form)
+const { mutateAsync: create_milestone_action } = line.request(q.project.milestones.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
 
-  router.push(`/projects/${params.project_id}/milestones`)
+former.doPerform = async function() {
+  await create_milestone_action({
+    interpolations: { project_id: params.project_id },
+    body: former.form,
+  })
+
+  router.push(return_url.value)
 }
 </script>

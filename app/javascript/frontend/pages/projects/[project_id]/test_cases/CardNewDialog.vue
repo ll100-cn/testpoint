@@ -5,7 +5,7 @@
         <DialogTitle>新增案例</DialogTitle>
       </DialogHeader>
       <Form preset="vertical" v-bind="{ former }" @submit.prevent="former.perform()">
-        <CaseForm :newest_roadmap="newest_roadmap" :platform_repo="platform_repo" :label_repo="label_repo" v-bind="{ former }" />
+        <CaseForm v-bind="{ former, requirement_boxes, storyboard_boxes, label_repo, platform_repo, newest_roadmap }" />
 
         <DialogFooter>
           <DialogClose><Button variant="secondary" type="button">Close</Button></DialogClose>
@@ -18,16 +18,18 @@
 
 <script setup lang="ts">
 import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { EntityRepo, Platform, Roadmap, TestCase, TestCaseLabel } from '@/models'
-import { nextTick, ref } from 'vue'
+import { EntityRepo, Platform, type RequirementBox, Roadmap, type StoryboardBox, TestCase, TestCaseLabel } from '@/models'
+import { computed, nextTick, ref, watch } from 'vue'
 import CaseForm from './CaseForm.vue'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { usePageStore } from '@/store'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = ref(false)
+const page = usePageStore()
 
 const props = defineProps<{
   platform_repo: EntityRepo<Platform>,
@@ -51,10 +53,15 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 const modal = ref<InstanceType<typeof HTMLElement>>()
 
+const { mutateAsync: create_test_case_action } = line.request(q.case.test_cases.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const new_test_case_box = await reqs.add(q.case.test_cases.Create).setup(req => {
-    req.interpolations.project_id = project_id.value
-  }).perform(this.form)
+  const new_test_case_box = await create_test_case_action({
+    interpolations: { project_id: project_id.value },
+    body: former.form
+  })
 
   emit('create', new_test_case_box.test_case)
   open.value = false
@@ -64,9 +71,33 @@ const project_id = ref("")
 
 const emit = defineEmits<{(e: 'create', test_case: TestCase): void}>()
 
+const storyboard_id = computed(() => former.form.storyboard_id)
 
-function show(current_project_id: string) {
+const { data: requirement_boxes } = line.request(q.project.requirements.List(), (req, it) => {
+  req.interpolations.project_id = page.inProject()!.project_id
+  req.interpolations.storyboard_id = storyboard_id
+  req.query.roadmap_id = props.newest_roadmap.id
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    enabled: computed(() => !!storyboard_id.value)
+  })
+})
+
+const { data: storyboard_boxes } = line.request(q.project.storyboards.List(), (req, it) => {
+  req.interpolations.project_id = page.inProject()!.project_id
+  return it.useQuery(req.toQueryConfig())
+})
+
+watch(storyboard_id, async (new_storyboard_id: number | null) => {
+  if (new_storyboard_id) {
+    former.form.requirement_id = null
+  }
+})
+
+async function show(current_project_id: string) {
   project_id.value = current_project_id
+
+  await line.wait()
 
   nextTick(() => {
     open.value = true

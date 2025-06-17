@@ -25,20 +25,21 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Separator } from '$ui/separator'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import * as controls from '@/components/controls'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
-import useRequestList from '@/lib/useRequestList'
+import type { PhaseFrameEmits } from '@/components/PhaseFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
+import { Phase, PhaseInfo, Plan, type PlanBox } from '@/models'
 import * as q from '@/requests'
-import { Phase, PhaseInfo, Plan, PlanBox } from '@/models'
 import _ from 'lodash'
 import { nextTick, ref, computed } from 'vue'
 import { useRoute } from "vue-router"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Separator } from '$ui/separator'
-import { Button } from '$ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
-import * as controls from '@/components/controls'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const route = useRoute()
 const params = route.params as any
 const el = ref(null! as HTMLElement)
@@ -47,12 +48,10 @@ const props = defineProps<{
   plan_box: PlanBox
 }>()
 
-const emit = defineEmits<{
-  created: [ Phase ]
-}>()
+const emit = defineEmits<PhaseFrameEmits>()
 
 const upshots_state_counts = computed(() => {
-  return _.last(props.plan_box.phase_infos)?.upshots_state_counts ?? {}
+  return _.last(props.plan_box.phase_infos)?.upshots_state_counts ?? ({} as Record<string, number>)
 })
 
 const former = Former.build({
@@ -63,11 +62,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_plan_phase_action } = line.request(q.test.plan_phases.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const phase_box = await reqs.add(q.test.plan_phases.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.plan_id = params.plan_id
-  }).perform(this.form)
+  const phase_box = await create_plan_phase_action({
+    interpolations: { project_id: params.project_id, plan_id: params.plan_id },
+    body: former.form
+  })
 
   emit('created', phase_box.phase)
 }

@@ -43,14 +43,14 @@
       <template v-else>
         <div class="flex items-center">
           <span class="me-2">{{ _.truncate(attachment.title, { length: 20 }) }}</span>
-          <span v-if="editable" role="button" class="far fa-fw fa-edit ms-auto" @click="onEdit" />
+          <span v-if="editable" role="button" class="far fa-fw fa-edit ms-auto" @click.prevent="edit" />
         </div>
         <div class="flex items-center">
           <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
           <a v-if="attachment.file_url" class="clipboard ms-1" :href="attachment.file_url" :download="attachment.title">
             <span class="far fa-fw fa-link text-muted" />
           </a>
-          <a v-if="editable" class="ms-auto" href="#" @click.prevent="deleteAttachment">
+          <a v-if="editable" class="ms-auto" href="#" v-confirm="'确认删除附件？'" @click.prevent="deleteAttachment">
             <span class="far fa-fw fa-trash-alt text-muted" />
           </a>
         </div>
@@ -61,7 +61,6 @@
 
 <script setup lang="ts">
 import * as controls from '@/components/controls'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
 import { Attachment } from "@/models"
 import ClipboardJS from "clipboard"
@@ -72,8 +71,10 @@ import { usePageStore } from "@/store"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import Well from "$ui/well/Well.vue"
+import { useQueryLine } from '@/lib/useQueryLine'
+import vConfirm from '@/components/vConfirm'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const page = usePageStore()
 const allow = page.inProject()?.allow
 
@@ -98,10 +99,19 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_attachment_action } = line.request(q.project.attachments.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
+const { mutateAsync: destroy_attachment_action } = line.request(q.project.attachments.Destroy(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const attachment = await reqs.add(q.project.attachments.Update).setup(req => {
-    req.interpolations.attachment_id = props.attachment.id
-  }).perform(this.form)
+  const attachment = await update_attachment_action({
+    interpolations: { attachment_id: props.attachment.id },
+    body: former.form,
+  })
 
   editing.value = false
   emits('edited', attachment)
@@ -121,7 +131,7 @@ function buildClipboard() {
   })
 }
 
-function onEdit() {
+function edit() {
   editing.value = true
   former.form.title = props.attachment.title
 }
@@ -132,15 +142,12 @@ function cancelEdit() {
 }
 
 async function deleteAttachment() {
-  if (!confirm("确认删除附件？")) {
-    return
-  }
   former.validator.clear()
 
   try {
-    const attachment = await reqs.add(q.project.attachments.Destroy).setup(req => {
-      req.interpolations.attachment_id = props.attachment.id
-    }).perform()
+    const attachment = await destroy_attachment_action({
+      interpolations: { attachment_id: props.attachment.id }
+    })
     if (attachment) {
       emits('deleted', attachment)
     }

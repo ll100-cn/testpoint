@@ -17,19 +17,18 @@
 <script setup lang="ts">
 import { Button } from '$ui/button'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import useRequestList from '@/lib/useRequestList'
 import * as q from '@/requests'
-import { Attachment, Issue, IssueBox } from '@/models'
+import { Attachment, Issue, type IssueBox } from '@/models'
 import { ref } from 'vue'
 import IssueCommentForm from './IssueCommentForm.vue'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { useQueryLine } from '@/lib/useQueryLine'
+import type { IssueFrameEmits } from '@/components/IssueFrame'
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueFrameEmits>()
 
 const issue_box = ref(null! as IssueBox)
 
@@ -41,11 +40,18 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: update_issue_body_action } = line.request(q.bug.issue_bodies.Update(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_body = await reqs.add(q.bug.issue_bodies.Update).setup(req => {
-    req.interpolations.project_id = issue_box.value.issue.project_id
-    req.interpolations.issue_id = issue_box.value.issue.id
-  }).perform(this.form)
+  const a_issue_body = await update_issue_body_action({
+    interpolations: {
+      project_id: issue_box.value.issue.project_id,
+      issue_id: issue_box.value.issue.id
+    },
+    body: former.form
+  })
 
   Object.assign(issue_box.value.issue, a_issue_body.issue)
   issue_box.value.attachments = a_issue_body.attachments
@@ -58,7 +64,7 @@ const loading = ref(true)
 function reset(a_issue_box: IssueBox) {
   loading.value = true
 
-  issue_box.value = a_issue_box
+  issue_box.value = { ...a_issue_box }
   former.form.content = a_issue_box.issue.content
   former.form.attachments_params = a_issue_box.attachments.map(it => {
     return { id: it.id }

@@ -17,25 +17,24 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
-import useRequestList from '@/lib/useRequestList'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import FormErrorAlert from '@/components/FormErrorAlert.vue'
+import type { RequirementFrameEmits } from '@/components/RequirementFrame'
+import { useQueryLine } from '@/lib/useQueryLine'
 import { EntityRepo, Platform, Requirement, Scene, Storyboard, TestCaseLabel } from '@/models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import * as q from '@/requests'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import FormErrorAlert from '@/components/FormErrorAlert.vue'
 import RequirementForm from './RequirementForm.vue'
 
 const route = useRoute()
 const params = route.params as any
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
 
-const emit = defineEmits<{
-  created: [ Requirement ]
-}>()
+const emit = defineEmits<RequirementFrameEmits>()
 
 const props = defineProps<{
   scenes: Scene[],
@@ -56,11 +55,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_requirement_action } = line.request(q.project.requirements.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_requirement_box = await reqs.add(q.project.requirements.Create).setup(req => {
-    req.interpolations.project_id = params.project_id
-    req.interpolations.storyboard_id = props.storyboard.id
-  }).perform(this.form)
+  const a_requirement_box = await create_requirement_action({
+    interpolations: { project_id: params.project_id, storyboard_id: props.storyboard.id },
+    body: former.form
+  })
 
   emit('created', a_requirement_box.requirement)
   open.value = false

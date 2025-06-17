@@ -35,29 +35,23 @@
 </template>
 
 <script setup lang="ts">
-import useRequestList from '@/lib/useRequestList'
-import OptionsForMember from "@/components/OptionsForMember.vue"
-import * as q from '@/requests'
-import { Category, Issue, MemberInfo, IssueBox } from "@/models"
-import { useSessionStore } from "@/store"
-import { nextTick, ref, computed } from "vue"
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
-import * as controls from '@/components/controls'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import FormErrorAlert from "@/components/FormErrorAlert.vue"
+import type { IssueFrameEmits } from '@/components/IssueFrame'
+import OptionsForMember from "@/components/OptionsForMember.vue"
+import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
-import { useRoute } from "vue-router"
+import { useQueryLine } from '@/lib/useQueryLine'
+import { type CategoryBox, type IssueBox, type MemberBox } from "@/models"
+import * as q from '@/requests'
+import { nextTick, ref } from "vue"
 
-const reqs = useRequestList()
+const line = useQueryLine()
 const open = defineModel('open')
-const session = useSessionStore()
-const route = useRoute()
-const params = route.params as any
 
-const emit = defineEmits<{
-  updated: [IssueBox]
-}>()
+const emit = defineEmits<IssueFrameEmits>()
 
 const props = defineProps<{
   issue_box: IssueBox
@@ -73,11 +67,15 @@ const former = Former.build({
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
+const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_actions.Create(), (req, it) => {
+  return it.useMutation(req.toMutationConfig(it))
+})
+
 former.doPerform = async function() {
-  const a_issue_action = await reqs.add(q.bug.issue_actions.Create).setup(req => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
-    req.interpolations.issue_id = props.issue_box.issue.id
-  }).perform(this.form)
+  const a_issue_action = await create_issue_action_action({
+    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    body: this.form
+  })
 
   Object.assign(props.issue_box.issue, a_issue_action.issue)
   props.issue_box.activities.push(...a_issue_action.activities)
@@ -86,22 +84,32 @@ former.doPerform = async function() {
 }
 
 const loading = ref(true)
-const member_page = ref(null! as any)
-const category_page = ref(null! as any)
 
-reqs.raw(session.request(q.project.members.InfoList, props.issue_box.issue.project_id)).setup().waitFor(member_page)
-reqs.raw(session.request(q.project.categories.List, props.issue_box.issue.project_id)).setup().waitFor(category_page)
-await reqs.performAll()
+const member_boxes = ref([] as MemberBox[])
+const category_boxes = ref([] as CategoryBox[])
 
-const member_boxes = computed(() => member_page.value.list)
-const category_boxes = computed(() => category_page.value.list)
+async function reset() {
+  loading.value = true
 
-nextTick(() => {
-  loading.value = false
-})
+  const { data: member_boxes_data } = line.request(q.project.members.List(), (req, it) => {
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    return it.useQuery(req.toQueryConfig())
+  })
+  const { data: category_boxes_data } = line.request(q.project.categories.List(), (req, it) => {
+    req.interpolations.project_id = props.issue_box.issue.project_id
+    return it.useQuery(req.toQueryConfig())
+  })
+  await line.wait()
+
+  member_boxes.value = member_boxes_data.value
+  category_boxes.value = category_boxes_data.value
+
+  nextTick(() => {
+    loading.value = false
+  })
+}
 
 defineExpose({
   reset
 })
-
 </script>

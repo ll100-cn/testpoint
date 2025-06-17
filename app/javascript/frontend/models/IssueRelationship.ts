@@ -2,6 +2,7 @@ import { Type } from "class-transformer"
 import * as t from "@/lib/transforms"
 import { Member } from "./Member"
 import { Issue } from "./Issue"
+import type { OmitByValue } from "utility-types"
 
 export class IssueRelationship {
   id!: number
@@ -26,6 +27,8 @@ export class IssueRelationship {
   updated_at!: Date
 }
 
-export class IssueRelationshipBox {
+export class IssueRelationshipBoxImpl {
   @t.Klass(IssueRelationship) issue_relationship!: IssueRelationship
 }
+
+export type IssueRelationshipBox = OmitByValue<IssueRelationshipBoxImpl, Function>

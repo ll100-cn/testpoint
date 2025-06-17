@@ -1,40 +1,47 @@
-import { Task, TaskBox } from "@/models"
+import { Task, type TaskBox, TaskBoxImpl } from "@/models"
 import { BaseRequest } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
+import type { Required } from "utility-types"
 
-export const Ignore = class extends BaseRequest<TaskBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{id}/ignore"
-  }
+class IgnoreRequest extends BaseRequest<TaskBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/ignore" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBox, response)
+    return this.responseToObject(TaskBoxImpl, response)
   }
 }
+export const Ignore = () => new IgnoreRequest()
 
-export const Unignore = class extends BaseRequest<TaskBox> {
-  constructor() {
-    super()
-    this.method = "PATCH"
-    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{id}/unignore"
-  }
+
+class UnignoreRequest extends BaseRequest<TaskBox> {
+  method = "PATCH"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/unignore" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBox, response)
+    return this.responseToObject(TaskBoxImpl, response)
   }
 }
+export const Unignore = () => new UnignoreRequest()
 
-export const InfoGet = class extends BaseRequest<TaskBox> {
-  constructor() {
-    super()
-    this.method = "GET"
-    this.endpoint = "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}"
-    this.graph = "info"
-  }
+
+class GetRequest<Box extends TaskBox> extends BaseRequest<Box> {
+  method = "GET"
+  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}" ]
 
   processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBox, response)
+    return this.responseToObject(TaskBoxImpl, response) as Box
   }
+}
+export function Get(): InstanceType<typeof GetRequest<TaskBox>>
+export function Get(graph: '+info'): InstanceType<typeof GetRequest<Required<TaskBox, 'task_upshots' | 'issues'>>>
+export function Get(graph?: string) {
+  const request = new GetRequest<TaskBox>()
+  request.graph = graph ?? null
+
+  if (graph == '+info') {
+    request.graph = 'info'
+  }
+
+  return request as any
 }
