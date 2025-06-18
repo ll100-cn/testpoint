@@ -19,7 +19,7 @@
         </TableCell>
         <TableCell>{{ issue.id }}</TableCell>
         <TableCell>
-          <router-link class="link" :to="`${path_info.collection}/${issue.id}`">
+          <router-link class="link" :to="ok_url.apply(`/projects/${issue.project_id}/issues/${issue.id}`)">
             <span v-if="issue.priority === 'important'">!!</span>
             {{ issue.title }}
           </router-link>
@@ -39,23 +39,22 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '$
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import SortLink from '@/components/SortLink.vue'
-import { type IssueBox } from '@/models'
-import { ref } from 'vue'
-import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
+import { Issue, type IssueBox } from '@/models'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface Props {
   issue_boxes: IssueBox[],
   columns?: string[],
-  sorts?: string
+  sorts?: string,
 }
 
-const route = useRoute()
-const path_info = PathHelper.parseCollection(route.path, 'index')
 const props = withDefaults(defineProps<Props>(), {
   columns: () => []
 })
 
+const route = useRoute()
+const ok_url = new OkUrl(route)
 const sorts = ref(props.sorts)
-
 </script>

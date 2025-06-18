@@ -19,7 +19,7 @@
     </div>
 
     <template #actions>
-      <Button preset="ghost" v-if="allow('update', plan_box.plan)" :to="`${plan_id}/edit`">设置</Button>
+      <Button preset="ghost" v-if="allow('update', plan_box.plan)" :to="ok_url.apply(`${plan_id}/edit`)">设置</Button>
     </template>
   </PageHeader>
 
@@ -107,6 +107,7 @@ import { type ChangeFilterFunction, ColumnFilter, Filter } from '../types'
 import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
 import TaskRow from './TaskRow.vue'
 import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
+import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -115,6 +116,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const query = route.query
+const ok_url = new OkUrl(route)
 const PhaseDialog = BlankDialog as typeof BlankDialog & PhaseFrameComponent
 const TaskUpshotDialog = BlankDialog as typeof BlankDialog & TaskUpshotFrameComponent
 const phase_dialog = ref(null! as InstanceType<typeof BlankDialog & PhaseFrameComponent>)

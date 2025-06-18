@@ -3,7 +3,7 @@
     <PageTitle>里程碑列表</PageTitle>
 
     <template #actions>
-      <Button v-if="allow('create', Milestone)" :to="`${path_info.collection}/new`">新增里程碑</Button>
+      <Button v-if="allow('create', Milestone)" :to="ok_url.apply(`${path_info.collection}/new`)">新增里程碑</Button>
     </template>
   </PageHeader>
 
@@ -37,7 +37,7 @@
               <PageContent :content="milestone.description ?? ''" />
             </TableCell>
             <TableCell role="actions">
-              <router-link v-if="allow('update', milestone)" :to="`${path_info.collection}/${milestone.id}/edit`" class="link">
+              <router-link v-if="allow('update', milestone)" :to="ok_url.apply(`${path_info.collection}/${milestone.id}/edit`)" class="link">
                 <i class="far fa-pencil-alt" /> 修改
               </router-link>
 
@@ -69,6 +69,7 @@ import Button from '$ui/button/Button.vue'
 import PageContent from '@/components/PageContent.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
 import vConfirm from '@/components/vConfirm'
 import { Alerter } from '@/components/Alerter'
 
@@ -85,6 +86,7 @@ const active = ref('normal')
 
 const project_id = _.toNumber(params.project_id)
 const path_info = PathHelper.parseCollection(route.path, 'index')
+const ok_url = new OkUrl(route)
 
 const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
   req.interpolations.project_id = project_id

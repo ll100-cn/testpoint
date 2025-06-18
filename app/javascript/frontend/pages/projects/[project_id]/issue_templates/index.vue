@@ -3,7 +3,7 @@
     <PageTitle>问题模版列表</Pagetitle>
 
     <template #actions>
-      <Button v-if="allow('create', IssueTemplate)" @click.prevent="router.push(`${path_info.collection}/new`)">新增问题模版</Button>
+      <Button v-if="allow('create', IssueTemplate)" :to="ok_url.apply(`${path_info.collection}/new`)">新增问题模版</Button>
     </template>
   </PageHeader>
 
@@ -21,16 +21,18 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="box in issue_template_boxes" :key="box.issue_template.id">
+          <template v-for="{ issue_template } in issue_template_boxes" :key="issue_template.id">
             <TableRow>
-              <TableCell>{{ box.issue_template.id }}</TableCell>
-              <TableCell>{{ box.issue_template.name }}</TableCell>
-              <TableCell>{{ box.issue_template.lookup_by_build_form ? "可见" : "隐藏" }}</TableCell>
+              <TableCell>{{ issue_template.id }}</TableCell>
+              <TableCell>{{ issue_template.name }}</TableCell>
+              <TableCell>{{ issue_template.lookup_by_build_form ? "可见" : "隐藏" }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', box.issue_template)" :to="`${path_info.collection}/${box.issue_template.id}/edit`">
+                <router-link class="link" v-if="allow('update', issue_template)" :to="ok_url.apply(`${path_info.collection}/${issue_template.id}/edit`)">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', box.issue_template)" href="#" v-confirm="'是否删除问题模版？'" @click.prevent="deleteIssueTemplate(box.issue_template.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', issue_template)" href="#" v-confirm="'是否删除问题模版？'" @click.prevent="deleteIssueTemplate(issue_template.id)" class="link">
+                  <i class="far fa-trash-alt" /> 删除
+                </a>
               </TableCell>
             </TableRow>
           </template>
@@ -55,6 +57,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, 
 import Button from '$ui/button/Button.vue';
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
 import vConfirm from '@/components/vConfirm'
 import { Actioner } from '@/components/Actioner';
 import ActionerAlert from '@/components/ActionerAlert.vue';
@@ -69,6 +72,7 @@ const actioner = Actioner.build()
 
 const project_id = params.project_id
 const path_info = PathHelper.parseCollection(route.path, 'index')
+const ok_url = new OkUrl(route)
 
 const { data: issue_template_boxes } = line.request(q.project.issue_templates.List(), (req, it) => {
   req.interpolations.project_id = project_id

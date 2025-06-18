@@ -11,7 +11,7 @@
         <Button class="w-auto">搜索</Button>
       </Form>
 
-      <Button v-if="allow('create', Issue)" :to="`${path_info.collection}/new`">新增问题</Button>
+      <Button v-if="allow('create', Issue)" :to="ok_url.apply(`${path_info.collection}/new`)">新增问题</Button>
     </template>
   </PageHeader>
 
@@ -34,7 +34,7 @@
     </CardHeader>
 
     <CardTable>
-      <IssueList :issue_boxes="pagination.list" :sorts="search2.sorts" />
+      <IssueList :issue_boxes="pagination.list" :sorts="search2.sorts" :collection_path="path_info.collection" />
     </CardTable>
 
     <CardFooter>
@@ -68,6 +68,7 @@ import * as controls from '@/components/controls'
 import RLink from '@/components/RLink.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 import PathHelper from '@/lib/PathHelper'
+import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -77,6 +78,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const path_info = PathHelper.parseCollection(route.path, 'index')
+const ok_url = new OkUrl(route)
 
 const page2 = utils.instance(Page, query)
 const search2 = reactive(utils.instance(Search2, query))
