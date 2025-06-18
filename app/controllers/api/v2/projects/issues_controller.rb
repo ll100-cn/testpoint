@@ -1,7 +1,7 @@
 class Api::V2::Projects::IssuesController < Api::V2::Projects::BaseController
   before_action -> { @project = current_project }
   load_and_authorize_resource through: :project, authorization_action: ->(action) {
-    { merge: :manage, process2: :manage, resolve: :manage, summary: :index }[action]
+    { merge: :manage, process2: :process, summary: :index }[action]
   }
 
   def index
