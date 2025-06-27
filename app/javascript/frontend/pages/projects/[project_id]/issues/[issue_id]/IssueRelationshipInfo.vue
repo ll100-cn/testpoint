@@ -58,7 +58,7 @@ async function deleteIssueRelationship() {
     interpolations: {
       project_id: props.issue_box.issue.project_id,
       issue_id: props.issue_box.issue.id,
-      issue_relationship_id: props.issue_relationship.id
+      relationship_id: props.issue_relationship.id
     }
   })
 
