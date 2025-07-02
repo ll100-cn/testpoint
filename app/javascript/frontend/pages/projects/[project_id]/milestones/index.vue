@@ -34,7 +34,7 @@
             <TableCell>{{ milestone.title }}</TableCell>
             <TableCell>{{ h.datetime(milestone.published_at ?? null) }}</TableCell>
             <TableCell>
-              <PageContent :content="milestone.description ?? ''" />
+              <PageContent :content="milestone.description ?? ''" :readonly="true" />
             </TableCell>
             <TableCell role="actions">
               <router-link v-if="allow('update', milestone)" :to="ok_url.apply(`${path_info.collection}/${milestone.id}/edit`)" class="link">

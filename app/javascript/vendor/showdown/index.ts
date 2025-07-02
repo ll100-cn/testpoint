@@ -2,15 +2,18 @@ import $ from 'jquery'
 import _ from 'lodash'
 import showdown from 'showdown'
 
-const checkboxRegex = /^\s*(?:\*|-|\+)\s+(\[(?:x| )?\])\s+/gm
+const checkboxRegex = /^\s*(?:\*|-|\+)\s+(\[(?:x|-| )?\])\s+/gm
 
 function checkboxExtension(options: any) {
   const checkbox = {
     type: 'lang',
     filter: function(text: string, converter: any) {
-      return replaceMarkdownTaskList(text, function(mark: string, position: number, checked: boolean) {
+      return replaceMarkdownTaskList(text, function(mark: string, position: number, checked: boolean | 'indeterminate') {
         const attrs = []
-        if (checked) {
+
+        if (checked == 'indeterminate') {
+          attrs.push("data-indeterminate")
+        } else if (checked == true) {
           attrs.push("checked")
         }
 
@@ -25,11 +28,16 @@ function checkboxExtension(options: any) {
   return checkbox
 }
 
-export function replaceMarkdownTaskList(markdown: string, callback: (mark: string, position: number, checked: boolean) => string) {
+export function replaceMarkdownTaskList(markdown: string, callback: (mark: string, position: number, checked: boolean | 'indeterminate') => string) {
   let position = 0
   return markdown.replace(checkboxRegex, function(match: string, mark: string) {
     position++
-    const checked = (mark == "[x]")
+    let checked: boolean | 'indeterminate' = false
+    if (mark == "[x]") {
+      checked = true
+    } else if (mark == "[-]") {
+      checked = 'indeterminate'
+    }
     const newMark = callback(mark, position, checked)
     return match.replace(mark, newMark)
   })

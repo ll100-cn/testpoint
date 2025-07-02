@@ -20,6 +20,10 @@ const props = withDefaults(defineProps<{
   readonly: false
 })
 
+const emit = defineEmits<{
+  (e: 'update:content', value: string): void
+}>()
+
 const textarea = useTemplateRef('textarea')
 const view = useTemplateRef('view')
 
@@ -54,13 +58,14 @@ function toggleTaskList(event: Event) {
   inputElement!.dispatchEvent(inputEvent)
 
   $(inputElement!).trigger("change")
-
+  emit("update:content", inputElement!.value)
 }
 
 function renderView() {
   const inputElement = textarea.value
   const options = { checkbox: { readonly: props.readonly } }
   view.value!.innerHTML = renderMarkdown(_.trim(inputElement!.value), options)
+  $(view.value!).find("input[type=checkbox][data-indeterminate]").prop("indeterminate", true)
 }
 
 function bindEvents() {

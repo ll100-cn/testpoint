@@ -4,7 +4,7 @@
       <DialogTitle>{{ task_upshot_box.test_case?.title }}</DialogTitle>
     </DialogHeader>
 
-    <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', task_upshot_box.task_upshot)" />
+    <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', task_upshot_box.task_upshot)" @update:content="submitContent" />
 
     <small v-else class="text-muted">无详细信息</small>
 
@@ -69,13 +69,6 @@ const is_last_phase = computed(() => {
 })
 
 const content = ref("")
-watch(content, (new_value) => {
-  if (loading.value) {
-    return
-  }
-
-  submitContent(new_value)
-})
 
 const prev_task_upshot = computed(() => {
   const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.task_upshot.id)
