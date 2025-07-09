@@ -57,7 +57,7 @@ former.doPerform = async function() {
       project_id: issue_box.value.issue.project_id,
       issue_id: issue_box.value.issue.id
     },
-    body: { ...former.form, parent_id: comment_box.value.comment.id }
+    body: { ...former.form, comment_id: comment_box.value.comment.id }
   })
 
   emit("created", a_comment_box)
