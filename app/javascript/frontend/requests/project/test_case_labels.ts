@@ -1,10 +1,11 @@
 import { TestCaseLabel, type TestCaseLabelBox, TestCaseLabelBoxImpl, TestCaseLabelInfo, TestCaseLablePage } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
 class ListRequest<Box extends TestCaseLabelBox> extends BaseRequest<Box[]> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_case_labels" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLablePage<Box>, response).list
@@ -14,8 +15,9 @@ export const List = () => new ListRequest()
 
 
 class PageRequest extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_case_labels" ],
+  })
   graph = "counts"
 
   processResponse(response: AxiosResponse) {
@@ -26,8 +28,10 @@ export const Page = () => new PageRequest()
 
 
 class CreateRequest extends BaseRequest<TestCaseLabelBox> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/test_case_labels",
+    relatedKeys: [ [ "/test_case_labels" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLabelBoxImpl, response)
@@ -37,8 +41,10 @@ export const Create = () => new CreateRequest()
 
 
 class UpdateRequest extends BaseRequest<TestCaseLabelBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/test_case_labels/{test_case_label_id}",
+    relatedKeys: [ [ "/test_case_labels", "/{test_case_label_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLabelBoxImpl, response)
@@ -48,8 +54,10 @@ export const Update = () => new UpdateRequest()
 
 
 class DestroyRequest extends BaseRequest<TestCaseLabelBox> {
-  method = "DELETE"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
+  scheme = Scheme.delete({
+    endpoint: "/api/v2/projects/{project_id}/test_case_labels/{test_case_label_id}",
+    relatedKeys: [ [ "/test_case_labels" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLabelBoxImpl, response)
@@ -59,8 +67,9 @@ export const Destroy = () => new DestroyRequest()
 
 
 class GetRequest extends BaseRequest<TestCaseLabelBox> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/test_case_labels", "/{test_case_label_id}" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_case_labels/{test_case_label_id}" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TestCaseLabelBoxImpl, response)

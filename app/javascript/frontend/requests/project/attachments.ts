@@ -1,11 +1,13 @@
 import { Attachment } from "@/models"
-import { BaseRequest, type RequestOptions } from "../BaseRequest"
+import { BaseRequest, Scheme, type RequestOptions } from "../BaseRequest"
 import type { AxiosProgressEvent, AxiosResponse } from "axios"
 import type { UploadFile } from "@/components/types"
 
 class CreateRequest extends BaseRequest<Attachment> {
-  method = "POST"
-  endpoint = [ "/api/attachments" ]
+  scheme = Scheme.post({
+    endpoint: "/api/attachments",
+    relatedKeys: [ [ "/attachments" ] ]
+  })
   headers = {
     "Content-Type": "multipart/form-data",
   }
@@ -42,8 +44,10 @@ export const Create = () => new CreateRequest()
 
 
 class UpdateRequest extends BaseRequest<Attachment> {
-  method = "PATCH"
-  endpoint = [ "/api/attachments", "/{attachment_id}" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/attachments/{attachment_id}",
+    relatedKeys: [ [ "/attachments", "/{attachment_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(Attachment, response)
@@ -53,8 +57,10 @@ export const Update = () => new UpdateRequest()
 
 
 class DestroyRequest extends BaseRequest<Attachment> {
-  method = "DELETE"
-  endpoint = [ "/api/attachments", "/{attachment_id}" ]
+  scheme = Scheme.delete({
+    endpoint: "/api/attachments/{attachment_id}",
+    relatedKeys: [ [ "/attachments" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(Attachment, response)

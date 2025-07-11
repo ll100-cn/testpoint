@@ -1,10 +1,12 @@
 import { Issue } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
 class CreateRequest extends BaseRequest<void> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issue_migrations" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/issue_migrations",
+    relatedKeys: []
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(Issue, response)

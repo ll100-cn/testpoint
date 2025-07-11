@@ -70,20 +70,19 @@
 </template>
 
 <script setup lang="ts">
+import { Container } from '$ui/container'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
+import { Nav, NavItem } from '$ui/nav'
+import { type NavPresenter } from '$ui/nav/types'
+import { bva } from '$ui/utils'
+import { useQueryLine } from '@/lib/useQueryLine'
 import * as q from '@/requests'
-import { type MemberBox, MemberInfo, MemberPage } from '@/models'
 import { usePageStore } from '@/store'
 import { useSessionStore } from '@/store/session'
-import { computed, getCurrentInstance, ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import ProjectNav from './ProjectNav.vue'
-import { Nav, NavItem } from '$ui/nav'
-import { bva } from '$ui/utils'
-import { type NavPresenter } from '$ui/nav/types'
 import RLink from './RLink.vue'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
-import { Container } from '$ui/container'
-import { useQueryLine } from '@/lib/useQueryLine'
 
 const router = useRouter()
 const session = useSessionStore()

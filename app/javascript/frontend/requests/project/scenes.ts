@@ -1,10 +1,11 @@
 import { Scene, type SceneBox, SceneBoxImpl, ScenePage } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
 class ListRequest<Box extends SceneBox> extends BaseRequest<Box[]> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/scenes" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(ScenePage<Box>, response).list
@@ -14,8 +15,10 @@ export const List = () => new ListRequest()
 
 
 class CreateRequest extends BaseRequest<SceneBox> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes",
+    relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/scenes" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(SceneBoxImpl, response)
@@ -25,8 +28,10 @@ export const Create = () => new CreateRequest()
 
 
 class UpdateRequest extends BaseRequest<SceneBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes", "/{scene_id}" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes/{scene_id}",
+    relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/scenes", "/{scene_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(SceneBoxImpl, response)
@@ -36,8 +41,10 @@ export const Update = () => new UpdateRequest()
 
 
 class DestroyRequest extends BaseRequest<SceneBox> {
-  method = "DELETE"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/storyboards", "/{storyboard_id}", "/scenes", "/{scene_id}" ]
+  scheme = Scheme.delete({
+    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes/{scene_id}",
+    relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/scenes" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(SceneBoxImpl, response)

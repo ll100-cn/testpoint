@@ -1,10 +1,11 @@
 import { type IssueBox, IssueBoxImpl, IssuePage } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 
 class PageRequest extends BaseRequest<IssuePage<IssueBox>> {
-  method = "GET"
-  endpoint = [ "/api/v2/profile/issues" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2/profile", "/issues" ],
+  })
   graph = "counts"
 
   processResponse(response: AxiosResponse) {

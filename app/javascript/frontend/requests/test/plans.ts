@@ -1,11 +1,13 @@
 import { MemberPage, Plan, type PlanBox, PlanBoxImpl, PlanPage } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
 
 class CreateRequest extends BaseRequest<PlanBox> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/plans",
+    relatedKeys: [ [ "/plans" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(PlanBoxImpl, response)
@@ -15,8 +17,10 @@ export const Create = () => new CreateRequest()
 
 
 class UpdateRequest extends BaseRequest<PlanBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}",
+    relatedKeys: [ [ "/plans", "/{plan_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(PlanBoxImpl, response)
@@ -26,8 +30,10 @@ export const Update = () => new UpdateRequest()
 
 
 class DestroyRequest extends BaseRequest<PlanBox> {
-  method = "DELETE"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
+  scheme = Scheme.delete({
+    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}",
+    relatedKeys: [ [ "/plans" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(PlanBoxImpl, response)
@@ -37,8 +43,9 @@ export const Destroy = () => new DestroyRequest()
 
 
 class PageRequest extends BaseRequest<PlanPage<PlanBox>> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans" ],
+  })
   graph = "counts"
 
   processResponse(response: AxiosResponse) {
@@ -49,8 +56,9 @@ export const Page = () => new PageRequest()
 
 
 class InfoGetRequest extends BaseRequest<PlanBox> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
+  })
   graph = "counts, info"
 
   processResponse(response: AxiosResponse) {
@@ -61,8 +69,9 @@ export const InfoGet = () => new InfoGetRequest()
 
 
 class GetRequest<Box extends PlanBox> extends BaseRequest<Box> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(PlanBoxImpl, response) as Box

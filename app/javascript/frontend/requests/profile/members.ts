@@ -1,11 +1,12 @@
-import { type MemberBox, MemberBoxImpl, MemberPage } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { type MemberBox, MemberPage } from "@/models"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
+import { BaseRequest, Scheme } from "../BaseRequest"
 
 class ListRequest<Box extends MemberBox> extends BaseRequest<Box[]> {
-  method = "GET"
-  endpoint = [ "/api/v2/profile/members" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2/profile", "/members" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(MemberPage<Box>, response).list

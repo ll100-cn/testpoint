@@ -1,13 +1,15 @@
 import { Issue, type IssueBox, IssueBoxImpl, IssuePage, IssueSummary } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
 
 type IssueBoxInfoFields = 'activities' | 'attachments' | 'source_relationships' | 'subscriptions' | 'surveys' | 'target_relationships'
 
 class CreateRequest extends BaseRequest<IssueBox> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/issues",
+    relatedKeys: [ [ "/issues" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBoxImpl, response)
@@ -17,8 +19,9 @@ export const Create = () => new CreateRequest()
 
 
 class PageRequest extends BaseRequest<IssuePage<IssueBox>> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues" ],
+  })
   graph = "counts"
 
   processResponse(response: AxiosResponse) {
@@ -29,8 +32,10 @@ export const Page = () => new PageRequest()
 
 
 class MergeRequest extends BaseRequest<IssueBox> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/merge" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/merge",
+    relatedKeys: [ [ "/issues", "/{issue_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBoxImpl, response)
@@ -40,8 +45,9 @@ export const Merge = () => new MergeRequest()
 
 
 class GetRequest<Box extends IssueBox> extends BaseRequest<Box> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues/{issue_id}" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBoxImpl, response) as Box
@@ -62,8 +68,10 @@ export function Get(graph?: string) {
 
 
 class ResolveRequest<Box extends IssueBox> extends BaseRequest<Box> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/resolve" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/resolve",
+    relatedKeys: [ [ "/issues", "/{issue_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBoxImpl, response) as Box
@@ -84,8 +92,10 @@ export function Resolve(graph?: string) {
 
 
 class ProcessRequest<Box extends IssueBox> extends BaseRequest<Box> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/process" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/process",
+    relatedKeys: [ [ "/projects", "/{project_id}", "/issues", "/{issue_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueBoxImpl, response) as Box
@@ -106,8 +116,9 @@ export function Process(graph?: string) {
 
 
 class SummaryRequest extends BaseRequest<IssueSummary> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/summary" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues", "/summary" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(IssueSummary, response)

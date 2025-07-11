@@ -1,151 +1,81 @@
-// API Endpoints Collection (项目中所有的 Request endpoints)
-//
-// Links
-// "/links"
-// "/links", "/{id}"
-// "/links", "/summary"
-//
-// Access Keys
-// "/access_keys"
-// "/access_keys", "/{id}"
-//
-// Account
-// "/account"
-//
-// Session
-// "/session"
-//
-// Synchronizations
-// "/synchronizations", "/{id}"
-//
-// OAuth
-// "/oauth/authorize"
-//
-// Connections
-// "/connections"
-// "/connections", "/{id}"
-// "/connections", "/{id}", "/perform"
-//
-// GitHub
-// "/connections/{connection_id}/github/user"
-// "/connections/{connection_id}/github/user", "/configure"
-// "/connections/{connection_id}/github/user", "/sync"
-// "/connections/{connection_id}/github/starred_repos"
-// "/connections/{connection_id}/github/lists"
-//
-// Bilibili
-// "/connections/{connection_id}/bilibili/fav_folders"
-// "/connections/{connection_id}/bilibili/fav_folders", "/{id}", "/move_resources"
-// "/connections/{connection_id}/bilibili/fav_resources"
-// "/connections/{connection_id}/bilibili/users/{user_id}/set_as_idle"
-// "/connections/{connection_id}/bilibili/user/configure"
-//
-// Douban
-// "/connections/{connection_id}/douban/focances"
-// "/connections/{connection_id}/douban/user", "/configure"
-//
-// Karakeep
-// "/connections/{connection_id}/karakeep/user"
-// "/connections/{connection_id}/karakeep/user", "/configure"
-// "/connections/{connection_id}/karakeep/user", "/sync"
-// "/connections/{connection_id}/karakeep/bookmarks"
-// "/connections/{connection_id}/karakeep/bookmarks", "/batch_update"
-// "/connections/{connection_id}/karakeep/bookmarks", "/{id}"
-//
-// Pocket
-// "/connections/{connection_id}/pocket/items"
-// "/connections/{connection_id}/pocket/profile", "/configure"
-// "/connections/{connection_id}/pocket/profile", "/sync"
+import _ from "lodash"
+import { toValue } from "vue"
+import { parseTemplate } from 'url-template'
 
-export function matchEndpoint(queryKey: readonly unknown[], targetOptions: { endpoint: string[], interpolations?: Record<string, any> }): boolean {
-  const { endpoint: targetEndpoint, interpolations } = targetOptions
-  const pathStartIndex = queryKey.findIndex(item => !(typeof item === 'string' && item.startsWith('/')))
-  const queryFullPath = queryKey.slice(0, pathStartIndex === -1 ? queryKey.length : pathStartIndex).join('')
-  
-  const targetRule = convertMatchRule(targetEndpoint, interpolations)
-  
-  const matchResult = matchQuery(queryFullPath, targetRule)
-  if (!matchResult) return false
-  
-  const queryPath = matchResult.path
-  const targetPath = extractTargetByRule(matchResult.rules, interpolations)
-  
-  return queryPath === targetPath ||
-         queryPath.startsWith(targetPath) ||
-         targetPath.startsWith(queryPath)
-}
+/**
+ * 检查 queryKey 中是否有任何一个与 invalidateKeys 中的通配符模式匹配
+ * 支持通配符匹配，例如 "/channels/*" 可以匹配 "/channels/1"
+ */
+export function matchInvalidateKeys(queryKey: readonly unknown[], options: { invalidateKeys: Array<string[] | string>, interpolations?: Record<string, any> }): boolean {
+  const keys = queryKey.filter(it => typeof it === "string").map(it => toValue(it)) as string[]
+  const { invalidateKeys, interpolations } = options
 
-type PlaceholderInfo = {
-  key: string
-  type: 'number' | 'string'
-}
+  // 展开 invalidateKeys，支持数组格式
+  const expandedKeys = expandInvalidateKeys(invalidateKeys)
 
-type SegmentRule = {
-  template: string
-  placeholders: PlaceholderInfo[]
-}
-
-function convertMatchRule(targetEndpoint: string[], interpolations?: Record<string, any>): SegmentRule[] {
-  return targetEndpoint.map(segment => {
-    const placeholderMatches = [...segment.matchAll(/\{([^}]+)\}/g)]
-    const placeholders: PlaceholderInfo[] = placeholderMatches.map(match => {
-      const key = match[1]
-      const interpolationValue = interpolations?.[key]
-      const type = typeof interpolationValue === 'number' ? 'number' : 'string'
-      return { key, type }
-    })
-    
-    return {
-      template: segment,
-      placeholders
-    }
+  // 处理模板插值
+  const patterns = expandedKeys.map((template) => {
+    const values = _.mapValues(interpolations ?? {}, it => toValue(it))
+    return parseTemplate(template).expand(values)
   })
+
+  return keys.some(key => matchWildcardPatterns(key, patterns))
 }
 
-function matchQuery(queryPath: string, rule: SegmentRule[]) {
-  let matchedLength = 0
-  let currentPath = queryPath
-  const matchedRules: SegmentRule[] = []
-  
-  for (const segment of rule) {
-    const pattern = segment.placeholders.reduce((template: string, placeholder: PlaceholderInfo) => {
-      const regex = placeholder.type === 'number' ? '\\d+' : '[^/]*'
-      return template.replace(`{${placeholder.key}}`, `(${regex})`)
-    }, segment.template)
-    
-    const regex = new RegExp(`^${pattern}`)
-    const match = currentPath.match(regex)
-    
-    if (match) {
-      matchedLength += match[0].length
-      currentPath = currentPath.slice(match[0].length)
-      matchedRules.push(segment)
-    } else {
-      break
+/**
+ * 展开 invalidateKeys，将数组格式转换为字符串数组
+ * @param invalidateKeys 可能包含字符串或字符串数组的数组
+ * @returns 展开后的字符串数组
+ *
+ * 示例：
+ * - ["/feeds", "/feeds/{id}"] => ["/feeds", "/feeds/{id}"]
+ * - [["/feeds", "/{id}"]] => ["/feeds", "/feeds/{id}"]
+ * - [["/feeds", "/{id}", "/perform"]] => ["/feeds", "/feeds/{id}", "/feeds/{id}/perform"]
+ */
+function expandInvalidateKeys(invalidateKeys: Array<string[] | string>): string[] {
+  const result: string[] = []
+
+  for (const key of invalidateKeys) {
+    if (typeof key === 'string') {
+      result.push(key)
+    } else if (Array.isArray(key)) {
+      // 数组格式：第一个元素是基础路径，后面的元素累积拼接
+      const [basePath, ...suffixes] = key
+      result.push(basePath)
+
+      let currentPath = basePath
+      for (const suffix of suffixes) {
+        currentPath += suffix
+        result.push(currentPath)
+      }
     }
   }
-  
-  return matchedLength > 0 ? { path: queryPath.slice(0, matchedLength), rules:matchedRules } : null
+
+  return result
 }
 
-function interpolateTemplate(template: string, placeholders: PlaceholderInfo[], interpolations?: Record<string, any>): string {
-  return placeholders.reduce((result, placeholder) => {
-    const value = interpolations?.[placeholder.key]
-    return value !== undefined
-      ? result.replace(`{${placeholder.key}}`, String(value))
-      : result
-  }, template)
-}
+/**
+ * 检查一个字符串是否匹配通配符模式数组中的任何一个
+ * @param target 目标字符串，例如 "/channels/1"
+ * @param patterns 模式字符串数组，例如 ["/channels/*", "/users/*"]
+ * @returns 是否匹配
+ */
+function matchWildcardPatterns(target: string, patterns: string[]): boolean {
+  return patterns.some(pattern => {
+    // 如果没有通配符，直接比较
+    if (!pattern.includes('*')) {
+      return target === pattern
+    }
 
-function extractTargetByRule(matchedRules: SegmentRule[], interpolations?: Record<string, any>): string {
-  const extractedSegments: string[] = []
-  
-  for (const ruleSegment of matchedRules) {
-    const expandedSegment = interpolateTemplate(ruleSegment.template, ruleSegment.placeholders, interpolations)
-    extractedSegments.push(expandedSegment)
-  }
-  
-  return extractedSegments.join('')
+    // 将通配符模式转换为正则表达式
+    // 转义特殊字符，然后将 * 替换为 [^/]*（不包含 "/" 的任意字符）
+    const regexPattern = pattern
+      .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 转义特殊字符
+      .replace(/\*/g, '[^/]*') // 将 * 替换为 [^/]*（不包含 "/" 的任意字符）
+
+    const regex = new RegExp(`^${regexPattern}$`)
+    return regex.test(target)
+  })
 }
 
 
