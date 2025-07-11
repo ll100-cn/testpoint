@@ -1,11 +1,13 @@
 import { Member, type MemberBox, MemberBoxImpl, MemberInfo, MemberPage } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import { type Required } from 'utility-types'
 
 class CreateRequest extends BaseRequest<MemberBox> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/members" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/members",
+    relatedKeys: [ [ "/projects", "/{project_id}" ], [ "/members" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(MemberBoxImpl, response)
@@ -15,8 +17,9 @@ export const Create = () => new CreateRequest()
 
 
 class GetRequest extends BaseRequest<MemberBox> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/members/{member_id}" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(MemberBoxImpl, response)
@@ -26,8 +29,10 @@ export const Get = () => new GetRequest()
 
 
 class UpdateRequest extends BaseRequest<MemberBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/members/{member_id}",
+    relatedKeys: [ [ "/members", "/{member_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(MemberBoxImpl, response)
@@ -37,8 +42,10 @@ export const Update = () => new UpdateRequest()
 
 
 class DestroyRequest extends BaseRequest<MemberBox> {
-  method = "DELETE"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}" ]
+  scheme = Scheme.delete({
+    endpoint: "/api/v2/projects/{project_id}/members/{member_id}",
+    relatedKeys: [ [ "/members" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(MemberBoxImpl, response)
@@ -48,8 +55,10 @@ export const Destroy = () => new DestroyRequest()
 
 
 class ArchiveRequest extends BaseRequest<MemberBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/members", "/{member_id}", "/archive" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/members/{member_id}/archive",
+    relatedKeys: [ [ "/members", "/{member_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(MemberBoxImpl, response)
@@ -59,8 +68,9 @@ export const Archive = () => new ArchiveRequest()
 
 
 class ListRequest<Box extends MemberBox> extends BaseRequest<Box[]> {
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/members" ]
-  method = "GET"
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/members" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(MemberPage<Box>, response).list

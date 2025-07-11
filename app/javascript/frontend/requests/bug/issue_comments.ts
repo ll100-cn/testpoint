@@ -1,10 +1,12 @@
 import { type CommentBox, CommentBoxImpl, CommentPage } from "@/models"
 import type { AxiosResponse } from "axios"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 
 class CreateRequest extends BaseRequest<CommentBox> {
-  method = "POST"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
+  scheme = Scheme.post({
+    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/comments",
+    relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/comments" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(CommentBoxImpl, response)
@@ -14,8 +16,9 @@ export const Create = () => new CreateRequest()
 
 
 class ListRequest extends BaseRequest<CommentPage<CommentBox>> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues/{issue_id}", "/comments" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(CommentPage<CommentBoxImpl>, response)
@@ -25,8 +28,10 @@ export const List = () => new ListRequest()
 
 
 class UpdateRequest extends BaseRequest<CommentBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/comments/{comment_id}",
+    relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/comments", "/{comment_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(CommentBoxImpl, response)
@@ -36,8 +41,10 @@ export const Update = () => new UpdateRequest()
 
 
 class ConvertRequest extends BaseRequest<CommentBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}", "/convert" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/comments/{comment_id}/convert",
+    relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/comments", "/{comment_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(CommentBoxImpl, response)
@@ -47,8 +54,10 @@ export const Convert = () => new ConvertRequest()
 
 
 class DestroyRequest extends BaseRequest<CommentBox> {
-  method = "DELETE"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/issues", "/{issue_id}", "/comments", "/{comment_id}" ]
+  scheme = Scheme.delete({
+    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/comments/{comment_id}",
+    relatedKeys: [ [ "/issues", "/{issue_id}"], [ "/comments" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(CommentBoxImpl, response)

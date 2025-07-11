@@ -2,7 +2,6 @@ import { ErrorAccessDenied, ErrorUnauthorized } from "@/requests"
 import { Pagination } from "@/models"
 import { ErrorsObject } from "@/models/ErrorsObject"
 import { UnprocessableEntityError } from "$ui/simple_form"
-import { DisposableRequest } from "@/lib/DisposableRequest"
 import { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
 import { type ClassConstructor, plainToInstance } from "class-transformer"
 import _ from "lodash"
@@ -10,7 +9,7 @@ import URI from 'urijs'
 import qs from 'qs'
 import { parseTemplate } from 'url-template'
 import type { MutationOptions, QueryClient, QueryFilters, UseQueryOptions } from "@tanstack/vue-query"
-import { matchEndpoint } from "@/lib/EndpointMatch"
+import { matchInvalidateKeys } from "@/lib/EndpointMatch"
 import { computed, toValue } from "vue"
 import type { Ref } from "vue"
 
@@ -19,22 +18,62 @@ export type RequestOptions = {
   query?: Record<string, any>
   body?: Record<string, any>
 }
+
+type RequestScheme = {
+  endpoint: string[]
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
+  relatedKeys: Array<string[] | string>
+}
+
+export const Scheme = {
+  get(config: { endpoint: string[], relatedKeys?: Array<string[] | string> }) {
+    return {
+      method: "GET",
+      endpoint: config.endpoint,
+      relatedKeys: config.relatedKeys ?? config.endpoint ?? []
+    }
+  },
+
+  post(config: { endpoint: string, relatedKeys: Array<string[] | string> }) {
+    return {
+      method: "POST",
+      endpoint: [ config.endpoint ],
+      relatedKeys: config.relatedKeys
+    }
+  },
+
+  patch(config: { endpoint: string, relatedKeys: Array<string[] | string> }) {
+    return {
+      method: "PATCH",
+      endpoint: [ config.endpoint ],
+      relatedKeys: config.relatedKeys
+    }
+  },
+
+  delete(config: { endpoint: string, relatedKeys: Array<string[] | string> }) {
+    return {
+      method: "DELETE",
+      endpoint: [ config.endpoint ],
+      relatedKeys: config.relatedKeys
+    }
+  },
+} satisfies { [_: string]: (...args: any[]) => RequestScheme }
+
 export interface RequestContext {
   $axios: AxiosInstance,
 }
 
 export abstract class BaseRequest<T> {
-  endpoint!: string[]
   interpolations: Required<RequestOptions>["interpolations"] = {}
   query = {} as { [ x: string]: any }
   data: any = {}
-  method!: Method | string
   graph: string | null = null
   declare readonly _responseType: T
   headers = {}
   config: AxiosRequestConfig = {}
   ctx: RequestContext = { $axios: null! }
   abortSignal?: AbortSignal
+  scheme!: RequestScheme
 
   toQueryConfig() {
     const config = {
@@ -42,7 +81,10 @@ export abstract class BaseRequest<T> {
       query: this.query ?? {},
     } satisfies RequestOptions
 
-    const queryKey: Array<string | Record<string, any>> = [ ...this.buildEndpointUrl(config) ]
+    const queryKey: Array<string | Record<string, any>> = this.scheme.relatedKeys.map(it => computed(() => {
+      const interpolations = _.mapValues(config.interpolations, it => toValue(it))
+      return parseTemplate(typeof it === "string" ? it : it.join("")).expand(interpolations)
+    }))
     if (this.graph) {
       queryKey.push(`+${this.graph}`)
     }
@@ -50,8 +92,8 @@ export abstract class BaseRequest<T> {
 
     return {
       queryKey,
-      queryFn: (context) => {
-        return this.perform()
+      queryFn: async () => {
+        return await this.perform()
       },
       throwOnError: true,
     } satisfies UseQueryOptions<T>
@@ -68,7 +110,7 @@ export abstract class BaseRequest<T> {
 
   invalidatePredicate({ interpolations }: RequestOptions) {
     return {
-      predicate: (query) => matchEndpoint(query.queryKey, { endpoint: this.endpoint, interpolations })
+      predicate: (query) => matchInvalidateKeys(query.queryKey, { invalidateKeys: this.scheme.relatedKeys, interpolations })
     } satisfies QueryFilters
   }
 
@@ -103,15 +145,9 @@ export abstract class BaseRequest<T> {
     }
   }
 
-  buildEndpointUrl(options: RequestOptions) {
-    return this.endpoint.map(it => computed(() => {
-      const interpolations = _.mapValues(options.interpolations ?? {}, it => toValue(it))
-      return parseTemplate(it).expand(interpolations)
-    }))
-  }
-
   buildUrl(options: RequestOptions) {
-    const url = this.buildEndpointUrl(options).map(it => it.value).join("")
+    const values = _.mapValues(options.interpolations ?? {}, it => toValue(it))
+    const url = this.scheme.endpoint.map(it => parseTemplate(it).expand(values)).join("")
     const uri = new URI(url)
     const query_string = qs.stringify(options.query ?? {}, { arrayFormat: "brackets" })
     return uri.query(query_string).toString()
@@ -123,7 +159,7 @@ export abstract class BaseRequest<T> {
     const config: AxiosRequestConfig = {
       signal: this.abortSignal,
       url: this.buildUrl(options),
-      method: this.method,
+      method: this.scheme.method,
       headers: this.headers,
       ...this.config,
     }

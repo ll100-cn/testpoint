@@ -1,11 +1,12 @@
 import { TaskUpshotBoxImpl, TaskUpshotPage, type TaskUpshotBox } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
 
 class ListRequest<Box extends TaskUpshotBox> extends BaseRequest<TaskUpshotPage<Box>> {
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/phases", "/{phase_id}", "/task_upshots" ]
-  method = "GET"
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}", "/phases/{phase_id}", "/task_upshots" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TaskUpshotPage<Box>, response)

@@ -1,11 +1,13 @@
 import { Task, type TaskBox, TaskBoxImpl } from "@/models"
-import { BaseRequest } from "../BaseRequest"
+import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
 
 class IgnoreRequest extends BaseRequest<TaskBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/ignore" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/ignore",
+    relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TaskBoxImpl, response)
@@ -15,8 +17,10 @@ export const Ignore = () => new IgnoreRequest()
 
 
 class UnignoreRequest extends BaseRequest<TaskBox> {
-  method = "PATCH"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}", "/unignore" ]
+  scheme = Scheme.patch({
+    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/unignore",
+    relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ] ]
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TaskBoxImpl, response)
@@ -26,8 +30,9 @@ export const Unignore = () => new UnignoreRequest()
 
 
 class GetRequest<Box extends TaskBox> extends BaseRequest<Box> {
-  method = "GET"
-  endpoint = [ "/api/v2/projects", "/{project_id}", "/plans", "/{plan_id}", "/tasks", "/{task_id}" ]
+  scheme = Scheme.get({
+    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}", "/tasks/{task_id}" ],
+  })
 
   processResponse(response: AxiosResponse) {
     return this.responseToObject(TaskBoxImpl, response) as Box
