@@ -1,3 +1,0 @@
-json = render partial: "svc/shared/phase", locals: { phase: phase }
-json[:upshots_state_counts] = upshots_state_counts_mapping[phase.id] || {}
-json

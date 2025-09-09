@@ -1,5 +1,5 @@
 json = {
-  comment: (render partial: "svc/shared/comment", locals: { comment: comment })
+  comment: (render_schema "schema://svc/comment", comment: comment)
 }
 
 json

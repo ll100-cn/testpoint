@@ -1,0 +1,27 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/issue_activity",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    issue_id: { type: "integer" },
+    member_id: { type: "integer" },
+    property: { type: "string" },
+    before_value: { type: ["string", "null"] },
+    after_value: { type: ["string", "null"] },
+    created_at: { type: "string", format: "date-time" },
+    updated_at: { type: "string", format: "date-time" },
+    member: { $ref: "schema://svc/member" },
+    before_category: { $ref: "schema://svc/category" },
+    after_category: { $ref: "schema://svc/category" },
+    before_creator: { $ref: "schema://svc/member" },
+    after_creator: { $ref: "schema://svc/member" },
+    before_assignee: { $ref: "schema://svc/member" },
+    after_assignee: { $ref: "schema://svc/member" },
+    before_milestone: { $ref: "schema://svc/milestone" },
+    after_milestone: { $ref: "schema://svc/milestone" },
+    before_project: { $ref: "schema://svc/project" },
+    after_project: { $ref: "schema://svc/project" },
+  },
+  required: [ "id", "issue_id", "member_id", "property", "created_at", "updated_at" ]
+}

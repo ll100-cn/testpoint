@@ -1,0 +1,17 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/issue_survey",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    issue_id: { type: "integer" },
+    template_id: { type: "integer" },
+    state: { type: "string" },
+    values: { type: "object" },
+    created_at: { type: "string", format: "date-time" },
+    updated_at: { type: "string", format: "date-time" },
+    remark: { type: ["string", "null"] },
+    template: { $ref: "schema://svc/issue_template" },
+  },
+  required: [ "id", "issue_id", "template_id", "state", "values", "created_at", "updated_at", "template" ]
+}

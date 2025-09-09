@@ -1,0 +1,4 @@
+{
+  "schema://svc/": "app/views/svc/shared",
+  "schema://svc/v2/": "app/views/svc/v2/shared",
+}

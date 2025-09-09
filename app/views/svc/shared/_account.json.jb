@@ -1,6 +1,6 @@
 json = {}
 
-json[:user] = render partial: 'svc/shared/user', locals: { user: user }
+json[:user] = render_schema 'schema://svc/user', user: user
 
 json[:name] = user.name
 json[:email] = user.email

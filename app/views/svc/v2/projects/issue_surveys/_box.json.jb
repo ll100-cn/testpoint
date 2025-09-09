@@ -1,5 +1,5 @@
 json = {
-  issue_survey: render("svc/shared/issue_survey", issue_survey: issue_survey)
+  issue_survey: render_schema("schema://svc/issue_survey", issue_survey: issue_survey)
 }
 
 json

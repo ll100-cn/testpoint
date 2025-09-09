@@ -1,5 +1,5 @@
 json = {
-  scene: render(partial: "svc/shared/scene", locals: { scene: scene })
+  scene: render_schema("schema://svc/scene", scene: scene)
 }
 
 json

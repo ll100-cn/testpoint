@@ -1,5 +1,5 @@
 json = {
-  subscription: render('svc/shared/subscription', subscription: subscription)
+  subscription: render_schema("schema://svc/subscription", subscription: subscription)
 }
 
 json

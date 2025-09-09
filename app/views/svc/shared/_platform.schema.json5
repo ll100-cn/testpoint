@@ -1,0 +1,12 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/platform",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    name: { type: "string" },
+    default_assignee_id: { type: ["integer", "null"] },
+    icon_svg: { type: ["string", "null"] },
+  },
+  required: [ "id", "name" ]
+}

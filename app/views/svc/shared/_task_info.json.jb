@@ -1,4 +1,4 @@
-json = render(partial: "svc/shared/task", locals: { task: task })
-json['task_upshots'] = render partial: "svc/shared/task_upshot", collection: @task_upshots, as: :task_upshot
-json['issues'] = render partial: "svc/shared/issue", collection: @issues, as: :issue
+json = render_schema("schema://svc/task", task: task)
+json['task_upshots'] = render_schema("schema://svc/task_upshot", collection: @task_upshots, as: :task_upshot)
+json['issues'] = render_schema("schema://svc/issue", collection: @issues, as: :issue)
 json

@@ -1,0 +1,18 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/member",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    name: { type: "string" },
+    nickname: { type: ["string", "null"] },
+    role: { type: "string" },
+    role_text: { type: "string" },
+    receive_mail: { type: "boolean" },
+    user_id: { type: "integer" },
+    project_id: { type: "integer" },
+    archived_at: { type: ["string", "null"], format: "date-time" },
+    avatar_url: { type: ["string", "null"] },
+  },
+  required: [ "id", "name", "role", "role_text", "receive_mail", "user_id", "project_id" ]
+}

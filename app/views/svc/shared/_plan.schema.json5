@@ -1,0 +1,17 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/plan",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    title: { type: "string" },
+    created_at: { type: "string", format: "date-time" },
+    creator_id: { type: "integer" },
+    platform_id: { type: "integer" },
+    project_id: { type: "integer" },
+    milestone_id: { type: ["integer", "null"] },
+    creator_name: { type: "string" },
+    platform: { $ref: "schema://svc/platform" },
+  },
+  required: [ "id", "title", "created_at", "creator_id", "platform_id", "project_id", "creator_name", "platform" ]
+}

@@ -1,22 +1,22 @@
 json = {
-  issue: (render partial: "svc/shared/issue", locals: { issue: issue })
+  issue: (render_schema "schema://svc/issue", issue: issue)
 }
 
 if resource_graph_columns.include?("info")
-  json[:attachments] = render partial: "svc/shared/attachment", collection: issue.attachments, as: :attachment
+  json[:attachments] = render_schema("schema://svc/attachment", collection: issue.attachments, as: :attachment)
 
-  json[:surveys] = render partial: "svc/shared/issue_survey", collection: issue.issue_surveys, as: :issue_survey
+  json[:surveys] = render_schema("schema://svc/issue_survey", collection: issue.issue_surveys, as: :issue_survey)
 
   activities = issue.activities.joins(:member).where(members: { project_id: current_member.project_id })
-  json[:activities] = render partial: "svc/shared/issue_activity", collection: activities, as: :issue_activity
+  json[:activities] = render_schema("schema://svc/issue_activity", collection: activities, as: :issue_activity)
 
   source_relationships = issue.source_relationships.joins(:member).where(members: { project_id: current_member.project_id })
-  json[:source_relationships] = render partial: "svc/shared/issue_relationship", collection: source_relationships, as: :issue_relationship
+  json[:source_relationships] = render_schema("schema://svc/issue_relationship", collection: source_relationships, as: :issue_relationship)
 
   target_relationships = issue.target_relationships.joins(:member).where(members: { project_id: current_member.project_id })
-  json[:target_relationships] = render partial: "svc/shared/issue_relationship", collection: target_relationships, as: :issue_relationship
+  json[:target_relationships] = render_schema("schema://svc/issue_relationship", collection: target_relationships, as: :issue_relationship)
 
-  json[:subscriptions] = render partial: "svc/shared/subscription", collection: issue.subscriptions, as: :subscription
+  json[:subscriptions] = render_schema("schema://svc/subscription", collection: issue.subscriptions, as: :subscription)
 end
 
 json

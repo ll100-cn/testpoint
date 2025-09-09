@@ -4,7 +4,7 @@ json = issue_template.slice(
 )
 
 if issue_template.default_category
-  json[:default_category] = render partial: "svc/shared/category", locals: { category: issue_template.default_category }
+  json[:default_category] = render_schema("schema://svc/category", category: issue_template.default_category)
 end
 
 json[:inputs] = issue_template.inputs

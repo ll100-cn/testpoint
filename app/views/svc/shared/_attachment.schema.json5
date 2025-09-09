@@ -1,0 +1,16 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/attachment",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    title: { type: "string" },
+    updated_at: { type: "string", format: "date-time" },
+    content_type: { type: "string" },
+    file_url: { type: "string" },
+    file_size: { type: "integer" },
+    file_previewable: { type: "boolean" },
+    file_preview_url: { type: ["string", "null"] },
+  },
+  required: [ "id", "title", "updated_at", "content_type", "file_url", "file_size", "file_previewable" ]
+}

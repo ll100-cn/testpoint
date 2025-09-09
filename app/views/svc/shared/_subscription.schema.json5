@@ -1,0 +1,13 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/subscription",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    user_id: { type: "integer" },
+    issue_id: { type: "integer" },
+    updated_at: { type: "string", format: "date-time" },
+    member: { $ref: "schema://svc/member" },
+  },
+  required: [ "id", "user_id", "issue_id", "updated_at", "member" ]
+}

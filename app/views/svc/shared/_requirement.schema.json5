@@ -1,0 +1,17 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/requirement",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    scene_id: { type: ["integer", "null"] },
+    title: { type: "string" },
+    description: { type: ["string", "null"] },
+    upstream_ids: { type: "array", items: { type: "integer" } },
+    platform_ids: { type: "array", items: { type: "integer" } },
+    label_ids: { type: "array", items: { type: "integer" } },
+    label_descriptions: { },
+    updated_at: { type: "string", format: "date-time" },
+  },
+  required: [ "id", "title", "upstream_ids", "platform_ids", "label_ids", "label_descriptions", "updated_at" ]
+}

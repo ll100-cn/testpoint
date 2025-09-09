@@ -1,5 +1,5 @@
 json = {
-  storyboard: render(partial: "svc/shared/storyboard", locals: { storyboard: storyboard })
+  storyboard: render_schema("schema://svc/storyboard", storyboard: storyboard)
 }
 
 json

@@ -5,26 +5,26 @@ json = issue.slice(
   :stage, :stage_text
 )
 
-json[:creator] = render partial: "svc/shared/member", locals: { member: issue.creator }
+json[:creator] = render_schema "schema://svc/member", member: issue.creator
 
 if issue.subscribed_users
-  json[:subscribed_users] = render partial: "svc/shared/user", collection: issue.subscribed_users || [], as: :user
+  json[:subscribed_users] = render_schema("schema://svc/user", collection: issue.subscribed_users || [], as: :user)
 end
 
 if issue.task
-  json[:task] = render partial: "svc/shared/task", locals: { task: issue.task }
+  json[:task] = render_schema "schema://svc/task", task: issue.task
 end
 
 if issue.milestone
-  json[:milestone] = render partial: "svc/shared/milestone", locals: { milestone: issue.milestone }
+  json[:milestone] = render_schema "schema://svc/milestone", milestone: issue.milestone
 end
 
 if issue.assignee
-  json[:assignee] = render partial: "svc/shared/member", locals: { member: issue.assignee }
+  json[:assignee] = render_schema "schema://svc/member", member: issue.assignee
 end
 
 if issue.category
-  json[:category] = render partial: "svc/shared/category", locals: { category: issue.category }
+  json[:category] = render_schema "schema://svc/category", category: issue.category
 end
 
 json[:project_name] = issue.project.name

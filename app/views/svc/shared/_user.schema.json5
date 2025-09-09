@@ -1,0 +1,11 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/user",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    email: { type: "string" },
+    name: { type: "string" },
+  },
+  required: [ "id" ]
+}

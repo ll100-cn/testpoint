@@ -1,0 +1,22 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/test_case",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    title: { type: "string" },
+    content: { type: ["string", "null"] },
+    scene_name: { type: ["string", "null"] },
+    role_name: { type: ["string", "null"] },
+    group_name: { type: ["string", "null"] },
+    archived: { type: "boolean" },
+    project_id: { type: "integer" },
+    platform_ids: { type: "array", items: { type: "integer" } },
+    label_ids: { type: "array", items: { type: "integer" } },
+    scene_path: { type: ["string", "array", "null"] },
+    updated_at: { type: "string", format: "date-time" },
+    requirement_id: { type: ["integer", "null"] },
+    roadmap_id: { type: ["integer", "null"] },
+  },
+  required: [ "id", "title", "archived", "project_id", "platform_ids", "label_ids", "updated_at" ]
+}

@@ -1,5 +1,5 @@
 json = {
-  roadmap: render(partial: "svc/shared/roadmap", locals: { roadmap: roadmap })
+  roadmap: render_schema("schema://svc/roadmap", roadmap: roadmap)
 }
 
 json

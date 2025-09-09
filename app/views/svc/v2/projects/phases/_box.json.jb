@@ -1,5 +1,5 @@
 json = {
-  phase: render(partial: "svc/shared/phase", locals: { phase: phase })
+  phase: render_schema("schema://svc/phase", phase: phase)
 }
 
 json

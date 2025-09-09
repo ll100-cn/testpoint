@@ -1,0 +1,13 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/storyboard",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    title: { type: "string" },
+    main_axle: { type: ["string", "null"] },
+    description: { type: ["string", "null"] },
+    positions: { },
+  },
+  required: [ "id", "title" ]
+}

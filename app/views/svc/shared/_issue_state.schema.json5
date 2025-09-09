@@ -1,0 +1,13 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/issue_state",
+  type: "object",
+  properties: {
+    project_id: { type: "integer" },
+    stage: { type: "string" },
+    category_id: { type: ["integer", "null"] },
+    count: { type: "integer" },
+    category: { $ref: "schema://svc/category" }
+  },
+  required: [ "project_id", "stage", "count" ]
+}

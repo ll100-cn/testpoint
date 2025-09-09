@@ -1,0 +1,15 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/profile",
+  type: "object",
+  properties: {
+    member_id: { type: "integer" },
+    project_id: { type: "integer" },
+    role: { type: "string" },
+    role_text: { type: "string" },
+    nickname: { type: ["string", "null"] },
+    project_name: { type: "string" },
+    permissions: { type: "object" },
+  },
+  required: [ "member_id", "project_id", "role", "role_text", "project_name", "permissions" ]
+}

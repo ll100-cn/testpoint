@@ -1,1 +1,1 @@
-render 'svc/shared/attachment', attachment: @attachment
+render_schema 'schema://svc/attachment', attachment: @attachment

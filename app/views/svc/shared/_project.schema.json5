@@ -1,0 +1,15 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/project",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    name: { type: "string" },
+    archived: { type: "boolean" },
+    trello_list_id: { type: [ "string", "null" ] },
+    trello_api_key: { type: [ "string", "null" ] },
+    trello_api_token: { type: [ "string", "null" ] },
+    webhook_url: { type: [ "string", "null" ] },
+  },
+  required: [ "id" ]
+}

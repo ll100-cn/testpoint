@@ -1,5 +1,0 @@
-json = render(partial: "svc/shared/plan", locals: { plan: plan, tasks_state_counts_mapping: tasks_state_counts_mapping})
-
-json[:phase_infos] = render partial: "svc/shared/phase_info", collection: plan.phases.ranked, as: :phase, locals: { upshots_state_counts_mapping: upshots_state_counts_mapping }
-
-json

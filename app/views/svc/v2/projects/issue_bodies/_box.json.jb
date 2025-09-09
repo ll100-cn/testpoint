@@ -1,6 +1,6 @@
 json = {}
 
-json[:issue] = render 'svc/shared/issue', issue: issue
-json[:attachments] = render partial: "svc/shared/attachment", collection: issue.attachments, as: :attachment
+json[:issue] = render_schema 'schema://svc/issue', issue: issue
+json[:attachments] = render_schema("schema://svc/attachment", collection: issue.attachments, as: :attachment)
 
 json

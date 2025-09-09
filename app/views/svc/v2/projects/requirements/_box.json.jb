@@ -1,5 +1,5 @@
 json = {
-  requirement: render(partial: "svc/shared/requirement", locals: { requirement: requirement })
+  requirement: render_schema("schema://svc/requirement", requirement: requirement)
 }
 
 json

@@ -1,5 +1,5 @@
 json = {
-  user: render(partial: "svc/shared/user", locals: { user: user })
+  user: render_schema("schema://svc/user", user: user)
 }
 
 json
