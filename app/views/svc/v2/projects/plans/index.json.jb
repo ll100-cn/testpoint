@@ -1,0 +1,11 @@
+json = {
+  **(render "svc/v2/shared/pager", items: @plans),
+  list: render(partial: "box", collection: @plans, as: :plan)
+}
+
+if resource_graph_columns.include?("counts")
+  tasks_state_counts_mapping ||= {}
+  json[:tasks_state_counts] = @tasks_state_counts_mapping
+end
+
+json

@@ -4,7 +4,7 @@ import { BaseRequest, Scheme } from "../BaseRequest"
 
 class UpdateRequest extends BaseRequest<ProjectBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/admin/projects/{id}",
+    endpoint: "/svc/v2/admin/projects/{id}",
     relatedKeys: [ [ "/projects", "/{id}" ] ]
   })
 
@@ -17,7 +17,7 @@ export const Update = () => new UpdateRequest()
 
 class GetRequest extends BaseRequest<ProjectBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2/admin", "/projects/{project_id}" ],
+    endpoint: [ "/svc/v2/admin", "/projects/{project_id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -29,7 +29,7 @@ export const Get = () => new GetRequest()
 
 class DestroyRequest extends BaseRequest<ProjectBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/admin/projects/{id}",
+    endpoint: "/svc/v2/admin/projects/{id}",
     relatedKeys: [ "/projects" ]
   })
 
@@ -42,7 +42,7 @@ export const Destroy = () => new DestroyRequest()
 
 class CreateRequest extends BaseRequest<ProjectBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/admin/projects",
+    endpoint: "/svc/v2/admin/projects",
     relatedKeys: [ "/projects" ]
   })
 
@@ -55,7 +55,7 @@ export const Create = () => new CreateRequest()
 
 class PageRequest extends BaseRequest<ProjectPage<ProjectBox>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2/admin", "/projects" ],
+    endpoint: [ "/svc/v2/admin", "/projects" ],
   })
 
   processResponse(response: AxiosResponse) {

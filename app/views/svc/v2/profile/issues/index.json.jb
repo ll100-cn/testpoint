@@ -1,0 +1,10 @@
+json = {
+  **(render "svc/v2/shared/pager", items: @issues),
+  list: render(partial: "svc/v2/shared/issue_box", collection: @issues, as: :issue)
+}
+
+if resource_graph_columns.include?("counts")
+  json[:issue_stats] = render partial: "svc/shared/issue_state", collection: @project_issue_stats, as: :issue_stat
+end
+
+json

@@ -5,7 +5,7 @@ import { BaseRequest, Scheme } from "../BaseRequest"
 
 class ListRequest<Box extends MemberBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2/profile", "/members" ],
+    endpoint: [ "/svc/v2/profile", "/members" ],
   })
 
   processResponse(response: AxiosResponse) {

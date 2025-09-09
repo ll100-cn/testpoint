@@ -5,7 +5,7 @@ import { type Required } from 'utility-types'
 
 class CreateRequest extends BaseRequest<MemberBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/members",
+    endpoint: "/svc/v2/projects/{project_id}/members",
     relatedKeys: [ [ "/projects", "/{project_id}" ], [ "/members" ] ]
   })
 
@@ -18,7 +18,7 @@ export const Create = () => new CreateRequest()
 
 class GetRequest extends BaseRequest<MemberBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/members/{member_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/members/{member_id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -30,7 +30,7 @@ export const Get = () => new GetRequest()
 
 class UpdateRequest extends BaseRequest<MemberBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/members/{member_id}",
+    endpoint: "/svc/v2/projects/{project_id}/members/{member_id}",
     relatedKeys: [ [ "/members", "/{member_id}" ] ]
   })
 
@@ -43,7 +43,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<MemberBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/members/{member_id}",
+    endpoint: "/svc/v2/projects/{project_id}/members/{member_id}",
     relatedKeys: [ [ "/members" ] ]
   })
 
@@ -56,7 +56,7 @@ export const Destroy = () => new DestroyRequest()
 
 class ArchiveRequest extends BaseRequest<MemberBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/members/{member_id}/archive",
+    endpoint: "/svc/v2/projects/{project_id}/members/{member_id}/archive",
     relatedKeys: [ [ "/members", "/{member_id}" ] ]
   })
 
@@ -69,7 +69,7 @@ export const Archive = () => new ArchiveRequest()
 
 class ListRequest<Box extends MemberBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/members" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/members" ],
   })
 
   processResponse(response: AxiosResponse) {

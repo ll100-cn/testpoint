@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class GetRequest extends BaseRequest<IssueActivityChart> {
   scheme = Scheme.get({
-    endpoint: [ "/api", "/projects/{project_id}", "/analytics/issue_activity_chart" ],
+    endpoint: [ "/svc", "/projects/{project_id}", "/analytics/issue_activity_chart" ],
   })
 
   processResponse(response: AxiosResponse) {

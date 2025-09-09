@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class ListRequest<Box extends TestCaseLabelBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_case_labels" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_case_labels" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -16,7 +16,7 @@ export const List = () => new ListRequest()
 
 class PageRequest extends BaseRequest<TestCaseLablePage<TestCaseLabelBox>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_case_labels" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_case_labels" ],
   })
   graph = "counts"
 
@@ -29,7 +29,7 @@ export const Page = () => new PageRequest()
 
 class CreateRequest extends BaseRequest<TestCaseLabelBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/test_case_labels",
+    endpoint: "/svc/v2/projects/{project_id}/test_case_labels",
     relatedKeys: [ [ "/test_case_labels" ] ]
   })
 
@@ -42,7 +42,7 @@ export const Create = () => new CreateRequest()
 
 class UpdateRequest extends BaseRequest<TestCaseLabelBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/test_case_labels/{test_case_label_id}",
+    endpoint: "/svc/v2/projects/{project_id}/test_case_labels/{test_case_label_id}",
     relatedKeys: [ [ "/test_case_labels", "/{test_case_label_id}" ] ]
   })
 
@@ -55,7 +55,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<TestCaseLabelBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/test_case_labels/{test_case_label_id}",
+    endpoint: "/svc/v2/projects/{project_id}/test_case_labels/{test_case_label_id}",
     relatedKeys: [ [ "/test_case_labels" ] ]
   })
 
@@ -68,7 +68,7 @@ export const Destroy = () => new DestroyRequest()
 
 class GetRequest extends BaseRequest<TestCaseLabelBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_case_labels/{test_case_label_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_case_labels/{test_case_label_id}" ],
   })
 
   processResponse(response: AxiosResponse) {

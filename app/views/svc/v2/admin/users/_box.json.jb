@@ -1,0 +1,5 @@
+json = {
+  user: render(partial: "svc/shared/user", locals: { user: user })
+}
+
+json

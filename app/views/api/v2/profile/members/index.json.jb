@@ -1,5 +1,0 @@
-json = {
-  list: render(partial: "api/v2/shared/member_box", collection: @members, as: :member)
-}
-
-json

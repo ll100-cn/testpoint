@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class ListRequest extends BaseRequest<CategoryBox[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/categories" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/categories" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -16,7 +16,7 @@ export const List = () => new ListRequest()
 
 class PageRequest extends BaseRequest<CategoryPage<CategoryBox>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/categories" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/categories" ],
   })
   graph = "counts"
 
@@ -29,7 +29,7 @@ export const Page = () => new PageRequest()
 
 class CreateRequest extends BaseRequest<CategoryBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/categories",
+    endpoint: "/svc/v2/projects/{project_id}/categories",
     relatedKeys: [ [ "/categories" ] ]
   })
 
@@ -42,7 +42,7 @@ export const Create = () => new CreateRequest()
 
 class GetRequest extends BaseRequest<CategoryBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/categories/{category_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/categories/{category_id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -54,7 +54,7 @@ export const Get = () => new GetRequest()
 
 class UpdateRequest extends BaseRequest<CategoryBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/categories/{category_id}",
+    endpoint: "/svc/v2/projects/{project_id}/categories/{category_id}",
     relatedKeys: [ [ "/categories", "/{category_id}" ] ]
   })
 
@@ -67,7 +67,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<CategoryBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/categories/{category_id}",
+    endpoint: "/svc/v2/projects/{project_id}/categories/{category_id}",
     relatedKeys: [ [ "/categories" ] ]
   })
 

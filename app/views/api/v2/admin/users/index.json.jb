@@ -1,6 +1,0 @@
-json = {
-  **(render "api/v2/shared/pager", items: @users),
-  list: render(partial: "box", collection: @users, as: :user)
-}
-
-json

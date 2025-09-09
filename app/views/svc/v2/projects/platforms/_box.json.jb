@@ -1,0 +1,5 @@
+json = {
+  platform: (render partial: "svc/shared/platform", locals: { platform: platform })
+}
+
+json

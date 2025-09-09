@@ -1,5 +1,0 @@
-json = {
-  platform: (render partial: "api/shared/platform", locals: { platform: platform })
-}
-
-json

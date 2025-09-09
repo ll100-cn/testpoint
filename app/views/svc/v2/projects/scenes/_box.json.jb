@@ -1,0 +1,5 @@
+json = {
+  scene: render(partial: "svc/shared/scene", locals: { scene: scene })
+}
+
+json

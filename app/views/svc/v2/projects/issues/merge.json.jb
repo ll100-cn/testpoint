@@ -1,0 +1,1 @@
+render "svc/v2/shared/issue_box", issue: @form.head

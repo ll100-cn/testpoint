@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class CreateRequest extends BaseRequest<IssueRelationshipBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/issue_relationships",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_relationships",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_relationships" ] ]
   })
 
@@ -17,7 +17,7 @@ export const Create = () => new CreateRequest()
 
 class DestroyRequest extends BaseRequest<IssueRelationshipBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/issue_relationships/{relationship_id}",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_relationships/{relationship_id}",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_relationships" ] ]
   })
 

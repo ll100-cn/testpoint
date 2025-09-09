@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class UpdateRequest extends BaseRequest<TestCaseBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/test_cases/{id}",
+    endpoint: "/svc/v2/projects/{project_id}/test_cases/{id}",
     relatedKeys: [ [ "/test_cases", "/{id}" ] ]
   })
 
@@ -17,7 +17,7 @@ export const Update = () => new UpdateRequest()
 
 class ListRequest extends BaseRequest<TestCasePage<TestCaseBox>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_cases" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_cases" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -29,7 +29,7 @@ export const List = () => new ListRequest()
 
 class GetRequest extends BaseRequest<TestCaseBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_cases/{test_case_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_cases/{test_case_id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -41,7 +41,7 @@ export const Get = () => new GetRequest()
 
 class DestroyRequest extends BaseRequest<TestCaseBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/test_cases/{id}",
+    endpoint: "/svc/v2/projects/{project_id}/test_cases/{id}",
     relatedKeys: [ [ "/test_cases" ] ]
   })
 
@@ -54,7 +54,7 @@ export const Destroy = () => new DestroyRequest()
 
 class CreateRequest extends BaseRequest<TestCaseBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/test_cases",
+    endpoint: "/svc/v2/projects/{project_id}/test_cases",
     relatedKeys: [ [ "/test_cases" ] ]
   })
 
@@ -67,7 +67,7 @@ export const Create = () => new CreateRequest()
 
 class HistoryRequest extends BaseRequest<TestCasePage<TestCaseBox>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_cases/{id}", "/history" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_cases/{id}", "/history" ],
   })
 
   processResponse(response: AxiosResponse) {

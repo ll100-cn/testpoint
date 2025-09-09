@@ -1,5 +1,0 @@
-json = {
-  issue_survey: render("api/shared/issue_survey", issue_survey: issue_survey)
-}
-
-json

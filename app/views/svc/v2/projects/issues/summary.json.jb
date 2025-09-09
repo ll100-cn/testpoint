@@ -1,0 +1,21 @@
+json = {}
+json[:by_category] = @categories_counts.map do |category, count|
+  category = render partial: "svc/shared/category", locals: { category: category } if category
+  { category: category, count: count }
+end
+
+json[:by_milestone] = @milestone_counts.map do |milestone, count|
+  milestone = render partial: "svc/shared/milestone", locals: { milestone: milestone } if milestone
+  { milestone: milestone, count: count }
+end
+
+json[:by_assignee] = @assignee_counts.map do |assignee, count|
+  assignee = render partial: "svc/shared/member", locals: { member: assignee } if assignee
+  { assignee: assignee, count: count }
+end
+
+json[:by_creator] = @creator_counts.map do |creator, count|
+  creator = render partial: "svc/shared/member", locals: { member: creator } if creator
+  { creator: creator, count: count }
+end
+json

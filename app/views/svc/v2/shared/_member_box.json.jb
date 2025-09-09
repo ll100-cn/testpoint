@@ -1,0 +1,10 @@
+json = {
+  member: (render partial: "svc/shared/member", locals: { member: member })
+}
+
+if resource_graph_columns.include?("info")
+  json[:project] = render partial: "svc/shared/project", locals: { project: member.project }
+  json[:user] = render partial: "svc/shared/user", locals: { user: member.user }
+end
+
+json

@@ -4,7 +4,7 @@ import { BaseRequest, Scheme } from "../BaseRequest"
 
 class CreateRequest extends BaseRequest<IssueSurveyBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/issue_surveys",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_surveys",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_surveys" ] ]
   })
 
@@ -17,7 +17,7 @@ export const Create = () => new CreateRequest()
 
 class DestroyRequest extends BaseRequest<IssueSurveyBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_surveys" ] ]
   })
 
@@ -30,7 +30,7 @@ export const Destroy = () => new DestroyRequest()
 
 class ListRequest extends BaseRequest<IssueSurveyBox[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues/{issue_id}", "/issue_surveys" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/issues/{issue_id}", "/issue_surveys" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -42,7 +42,7 @@ export const List = () => new ListRequest()
 
 class UpdateRequest extends BaseRequest<IssueSurveyBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_surveys", "/{issue_survey_id}" ] ]
   })
 

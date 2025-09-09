@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class CreateRequest extends BaseRequest<IssueActionBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/issue_actions",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_actions",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_actions" ] ]
   })
 

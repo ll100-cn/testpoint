@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class DeliverRequest extends BaseRequest<LoginCode> {
   scheme = Scheme.post({
-    endpoint: "/api/deliver",
+    endpoint: "/svc/deliver",
     relatedKeys: []
   })
 
@@ -17,7 +17,7 @@ export const Deliver = () => new DeliverRequest()
 
 class VerifyRequest extends BaseRequest<LoginCode> {
   scheme = Scheme.post({
-    endpoint: "/api/sign_in",
+    endpoint: "/svc/sign_in",
     relatedKeys: []
   })
 
@@ -30,7 +30,7 @@ export const Verify = () => new VerifyRequest()
 
 class DestroyRequest extends BaseRequest<Account> {
   scheme = Scheme.delete({
-    endpoint: "/api/sign_out",
+    endpoint: "/svc/sign_out",
     relatedKeys: []
   })
 

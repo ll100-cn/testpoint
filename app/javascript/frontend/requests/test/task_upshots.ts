@@ -5,7 +5,7 @@ import type { Required } from "utility-types"
 
 class ListRequest<Box extends TaskUpshotBox> extends BaseRequest<TaskUpshotPage<Box>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}", "/phases/{phase_id}", "/task_upshots" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}", "/phases/{phase_id}", "/task_upshots" ],
   })
 
   processResponse(response: AxiosResponse) {

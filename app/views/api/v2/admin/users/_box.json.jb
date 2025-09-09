@@ -1,5 +1,0 @@
-json = {
-  user: render(partial: "api/shared/user", locals: { user: user })
-}
-
-json

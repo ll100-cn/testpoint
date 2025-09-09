@@ -4,7 +4,7 @@ import type { AxiosResponse, Method } from "axios"
 
 class CreateRequest extends BaseRequest<IssueTemplateBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/issue_templates",
+    endpoint: "/svc/v2/projects/{project_id}/issue_templates",
     relatedKeys: [ [ "/issue_templates" ] ]
   })
 
@@ -17,7 +17,7 @@ export const Create = () => new CreateRequest()
 
 class GetRequest extends BaseRequest<IssueTemplateBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/issue_templates/{issue_template_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/issue_templates/{issue_template_id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -29,7 +29,7 @@ export const Get = () => new GetRequest()
 
 class UpdateRequest extends BaseRequest<IssueTemplateBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/issue_templates/{issue_template_id}",
+    endpoint: "/svc/v2/projects/{project_id}/issue_templates/{issue_template_id}",
     relatedKeys: [ [ "/issue_templates", "/{issue_template_id}" ] ]
   })
 
@@ -42,7 +42,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<IssueTemplateBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/issue_templates/{issue_template_id}",
+    endpoint: "/svc/v2/projects/{project_id}/issue_templates/{issue_template_id}",
     relatedKeys: [ [ "/issue_templates" ] ]
   })
 
@@ -55,7 +55,7 @@ export const Destroy = () => new DestroyRequest()
 
 class ListRequest extends BaseRequest<IssueTemplateBox[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/issue_templates" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/issue_templates" ],
   })
 
   processResponse(response: AxiosResponse) {

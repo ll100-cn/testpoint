@@ -1,0 +1,6 @@
+json = subscription.slice(:id, :user_id, :issue_id, :updated_at)
+
+member = subscription.issue.project.members.where(user_id: subscription.user_id).take!
+json[:member] = render partial: "svc/shared/member", locals: { member: member }
+
+json

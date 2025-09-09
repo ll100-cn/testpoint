@@ -1,9 +1,0 @@
-json = {
-  category: (render partial: "api/shared/category", locals: { category: category })
-}
-
-if resource_graph_columns.include?("info")
-  json[:issue_count] = category.issues.count
-end
-
-json

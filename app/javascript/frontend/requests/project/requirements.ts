@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class ListRequest<Box extends RequirementBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/requirements" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/requirements" ],
   })
   graph = 'counts'
 
@@ -17,7 +17,7 @@ export const List = () => new ListRequest()
 
 class PageRequest<Box extends RequirementBox> extends BaseRequest<RequirementPage<Box>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/requirements" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/requirements" ],
   })
   graph = 'counts'
 
@@ -30,7 +30,7 @@ export const Page = () => new PageRequest()
 
 class CreateRequest extends BaseRequest<RequirementBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/requirements" ] ]
   })
 
@@ -43,7 +43,7 @@ export const Create = () => new CreateRequest()
 
 class UpdateRequest extends BaseRequest<RequirementBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/requirements", "/{requirement_id}" ] ]
   })
 
@@ -56,7 +56,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<RequirementBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/requirements" ] ]
   })
 

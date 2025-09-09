@@ -1,0 +1,6 @@
+json = {}
+
+json[:issue] = render 'svc/shared/issue', issue: issue
+json[:attachments] = render partial: "svc/shared/attachment", collection: issue.attachments, as: :attachment
+
+json

@@ -1,4 +1,0 @@
-json = issue_stat.slice(:project_id, :stage, :category_id, :count)
-json[:category] = render partial: 'api/shared/category', locals: { category: issue_stat.category } if issue_stat.category_id?
-
-json

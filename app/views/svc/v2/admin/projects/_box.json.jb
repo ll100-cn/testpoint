@@ -1,0 +1,3 @@
+json = {
+  project: render(partial: "svc/shared/project", locals: { project: project })
+}

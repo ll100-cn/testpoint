@@ -5,7 +5,7 @@ import type { UploadFile } from "@/components/types"
 
 class CreateRequest extends BaseRequest<Attachment> {
   scheme = Scheme.post({
-    endpoint: "/api/attachments",
+    endpoint: "/svc/attachments",
     relatedKeys: [ [ "/attachments" ] ]
   })
   headers = {
@@ -45,7 +45,7 @@ export const Create = () => new CreateRequest()
 
 class UpdateRequest extends BaseRequest<Attachment> {
   scheme = Scheme.patch({
-    endpoint: "/api/attachments/{attachment_id}",
+    endpoint: "/svc/attachments/{attachment_id}",
     relatedKeys: [ [ "/attachments", "/{attachment_id}" ] ]
   })
 
@@ -58,7 +58,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<Attachment> {
   scheme = Scheme.delete({
-    endpoint: "/api/attachments/{attachment_id}",
+    endpoint: "/svc/attachments/{attachment_id}",
     relatedKeys: [ [ "/attachments" ] ]
   })
 

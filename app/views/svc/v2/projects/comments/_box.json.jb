@@ -1,0 +1,5 @@
+json = {
+  comment: (render partial: "svc/shared/comment", locals: { comment: comment })
+}
+
+json

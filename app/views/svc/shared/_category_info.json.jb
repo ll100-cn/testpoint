@@ -1,0 +1,3 @@
+json = render(partial: "svc/shared/category", locals: { category: category })
+json[:issue_count] = category.issues.count
+json

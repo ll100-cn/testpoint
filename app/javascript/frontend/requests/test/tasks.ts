@@ -5,7 +5,7 @@ import type { Required } from "utility-types"
 
 class IgnoreRequest extends BaseRequest<TaskBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/ignore",
+    endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/ignore",
     relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ] ]
   })
 
@@ -18,7 +18,7 @@ export const Ignore = () => new IgnoreRequest()
 
 class UnignoreRequest extends BaseRequest<TaskBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/unignore",
+    endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/unignore",
     relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ] ]
   })
 
@@ -31,7 +31,7 @@ export const Unignore = () => new UnignoreRequest()
 
 class GetRequest<Box extends TaskBox> extends BaseRequest<Box> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}", "/tasks/{task_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}", "/tasks/{task_id}" ],
   })
 
   processResponse(response: AxiosResponse) {

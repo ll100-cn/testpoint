@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class CreateRequest extends BaseRequest<void> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/issue_migrations",
+    endpoint: "/svc/v2/projects/{project_id}/issue_migrations",
     relatedKeys: []
   })
 

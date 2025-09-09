@@ -1,4 +1,0 @@
-json = render(partial: "api/shared/task", locals: { task: task })
-json['task_upshots'] = render partial: "api/shared/task_upshot", collection: @task_upshots, as: :task_upshot
-json['issues'] = render partial: "api/shared/issue", collection: @issues, as: :issue
-json

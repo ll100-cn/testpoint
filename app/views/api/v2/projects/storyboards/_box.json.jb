@@ -1,5 +1,0 @@
-json = {
-  storyboard: render(partial: "api/shared/storyboard", locals: { storyboard: storyboard })
-}
-
-json

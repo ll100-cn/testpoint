@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class CreateRequest extends BaseRequest<PhaseBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}/phases",
+    endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}/phases",
     relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/phases" ] ]
   })
 

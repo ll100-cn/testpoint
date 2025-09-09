@@ -7,7 +7,7 @@ type IssueBoxInfoFields = 'activities' | 'attachments' | 'source_relationships' 
 
 class CreateRequest extends BaseRequest<IssueBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/issues",
+    endpoint: "/svc/v2/projects/{project_id}/issues",
     relatedKeys: [ [ "/issues" ] ]
   })
 
@@ -20,7 +20,7 @@ export const Create = () => new CreateRequest()
 
 class PageRequest extends BaseRequest<IssuePage<IssueBox>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/issues" ],
   })
   graph = "counts"
 
@@ -33,7 +33,7 @@ export const Page = () => new PageRequest()
 
 class MergeRequest extends BaseRequest<IssueBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/merge",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/merge",
     relatedKeys: [ [ "/issues", "/{issue_id}" ] ]
   })
 
@@ -46,7 +46,7 @@ export const Merge = () => new MergeRequest()
 
 class GetRequest<Box extends IssueBox> extends BaseRequest<Box> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues/{issue_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/issues/{issue_id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -69,7 +69,7 @@ export function Get(graph?: string) {
 
 class ResolveRequest<Box extends IssueBox> extends BaseRequest<Box> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/resolve",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/resolve",
     relatedKeys: [ [ "/issues", "/{issue_id}" ] ]
   })
 
@@ -93,7 +93,7 @@ export function Resolve(graph?: string) {
 
 class ProcessRequest<Box extends IssueBox> extends BaseRequest<Box> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/issues/{issue_id}/process",
+    endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/process",
     relatedKeys: [ [ "/projects", "/{project_id}", "/issues", "/{issue_id}" ] ]
   })
 
@@ -117,7 +117,7 @@ export function Process(graph?: string) {
 
 class SummaryRequest extends BaseRequest<IssueSummary> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/issues", "/summary" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/issues", "/summary" ],
   })
 
   processResponse(response: AxiosResponse) {

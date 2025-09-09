@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class ListRequest<Box extends RoadmapBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/roadmaps" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/roadmaps" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -16,7 +16,7 @@ export const List = () => new ListRequest()
 
 class CreateRequest extends BaseRequest<RoadmapBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/roadmaps",
+    endpoint: "/svc/v2/projects/{project_id}/roadmaps",
     relatedKeys: [ [ "/roadmaps" ] ]
   })
 
@@ -29,7 +29,7 @@ export const Create = () => new CreateRequest()
 
 class UpdateRequest extends BaseRequest<RoadmapBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/roadmaps/{roadmap_id}",
+    endpoint: "/svc/v2/projects/{project_id}/roadmaps/{roadmap_id}",
     relatedKeys: [ [ "/roadmaps", "/{roadmap_id}" ] ]
   })
 
@@ -42,7 +42,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<RoadmapBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/roadmaps/{roadmap_id}",
+    endpoint: "/svc/v2/projects/{project_id}/roadmaps/{roadmap_id}",
     relatedKeys: [ [ "/roadmaps" ] ]
   })
 

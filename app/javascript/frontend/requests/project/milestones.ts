@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class CreateRequest extends BaseRequest<MilestoneBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/milestones",
+    endpoint: "/svc/v2/projects/{project_id}/milestones",
     relatedKeys: [ [ "/milestones" ] ]
   })
 
@@ -17,7 +17,7 @@ export const Create = () => new CreateRequest()
 
 class GetRequest extends BaseRequest<MilestoneBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/milestones/{id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/milestones/{id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -29,7 +29,7 @@ export const Get = () => new GetRequest()
 
 class ListRequest<Box extends MilestoneBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/milestones" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/milestones" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -41,7 +41,7 @@ export const List = () => new ListRequest()
 
 class UpdateRequest extends BaseRequest<MilestoneBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/milestones/{id}",
+    endpoint: "/svc/v2/projects/{project_id}/milestones/{id}",
     relatedKeys: [ [ "/milestones", "/{id}" ] ]
   })
 
@@ -54,7 +54,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<MilestoneBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/milestones/{id}",
+    endpoint: "/svc/v2/projects/{project_id}/milestones/{id}",
     relatedKeys: [ [ "/milestones" ] ]
   })
 
@@ -67,7 +67,7 @@ export const Destroy = () => new DestroyRequest()
 
 class ArchiveRequest extends BaseRequest<MilestoneBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/milestones/{id}/archive",
+    endpoint: "/svc/v2/projects/{project_id}/milestones/{id}/archive",
     relatedKeys: [ [ "/milestones" ] ]
   })
 

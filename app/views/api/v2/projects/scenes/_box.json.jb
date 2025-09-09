@@ -1,5 +1,0 @@
-json = {
-  scene: render(partial: "api/shared/scene", locals: { scene: scene })
-}
-
-json

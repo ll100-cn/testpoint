@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  namespace :api, defaults: { format: :json } do
+  namespace :svc, defaults: { format: :json } do
     resources :users
     resources :attachments
 

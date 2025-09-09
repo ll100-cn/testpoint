@@ -1,0 +1,1 @@
+render partial: "svc/v2/shared/task_upshot_box", locals: { task_upshot: @upshot }

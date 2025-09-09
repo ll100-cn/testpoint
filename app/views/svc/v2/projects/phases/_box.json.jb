@@ -1,0 +1,5 @@
+json = {
+  phase: render(partial: "svc/shared/phase", locals: { phase: phase })
+}
+
+json

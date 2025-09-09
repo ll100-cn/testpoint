@@ -1,3 +1,0 @@
-json = {
-  project: render(partial: "api/shared/project", locals: { project: project })
-}

@@ -1,0 +1,5 @@
+json = {
+  account: (render partial: "svc/shared/account", locals: { user: user })
+}
+
+json

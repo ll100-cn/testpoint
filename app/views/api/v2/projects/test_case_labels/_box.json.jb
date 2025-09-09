@@ -1,9 +1,0 @@
-json = {
-  test_case_label: (render partial: "api/shared/test_case_label", locals: { test_case_label: test_case_label })
-}
-
-if resource_graph_columns.include?("info")
-  json[:test_case_count] = test_case_label.test_cases.count
-end
-
-json

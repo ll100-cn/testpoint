@@ -1,0 +1,5 @@
+json = {
+  storyboard: render(partial: "svc/shared/storyboard", locals: { storyboard: storyboard })
+}
+
+json

@@ -1,0 +1,5 @@
+json = {
+  list: render(partial: "svc/v2/shared/member_box", collection: @members, as: :member)
+}
+
+json

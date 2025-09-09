@@ -1,0 +1,6 @@
+json = {
+  **(render "svc/v2/shared/pager", items: @users),
+  list: render(partial: "box", collection: @users, as: :user)
+}
+
+json

@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class UpdateRequest extends BaseRequest<TaskUpshotBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/upshots/{upshot_id}/state",
+    endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/upshots/{upshot_id}/state",
     relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ], [ "/upshots", "/{upshot_id}" ] ]
   })
 

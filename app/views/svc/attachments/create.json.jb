@@ -1,0 +1,1 @@
+render 'svc/shared/attachment', attachment: @attachment

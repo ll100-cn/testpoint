@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class ListRequest<Box extends SceneBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/scenes" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/scenes" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -16,7 +16,7 @@ export const List = () => new ListRequest()
 
 class CreateRequest extends BaseRequest<SceneBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/scenes" ] ]
   })
 
@@ -29,7 +29,7 @@ export const Create = () => new CreateRequest()
 
 class UpdateRequest extends BaseRequest<SceneBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes/{scene_id}",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes/{scene_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/scenes", "/{scene_id}" ] ]
   })
 
@@ -42,7 +42,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<SceneBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes/{scene_id}",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/scenes/{scene_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/scenes" ] ]
   })
 

@@ -1,5 +1,0 @@
-json = {
-  comment: (render partial: "api/shared/comment", locals: { comment: comment })
-}
-
-json

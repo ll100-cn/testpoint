@@ -1,0 +1,1 @@
+render "svc/v2/shared/member_box", member: @member

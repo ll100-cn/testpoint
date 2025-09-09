@@ -1,0 +1,4 @@
+json = render partial: "svc/shared/member", locals: { member: member }
+json[:project] = render partial: "svc/shared/project", locals: { project: member.project }
+json[:user] = render partial: "svc/shared/user", locals: { user: member.user }
+json

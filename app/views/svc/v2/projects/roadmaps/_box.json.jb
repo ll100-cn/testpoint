@@ -1,0 +1,5 @@
+json = {
+  roadmap: render(partial: "svc/shared/roadmap", locals: { roadmap: roadmap })
+}
+
+json

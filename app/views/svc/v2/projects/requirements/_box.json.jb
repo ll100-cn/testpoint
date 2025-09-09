@@ -1,0 +1,5 @@
+json = {
+  requirement: render(partial: "svc/shared/requirement", locals: { requirement: requirement })
+}
+
+json

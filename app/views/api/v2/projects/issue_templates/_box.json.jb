@@ -1,5 +1,0 @@
-json = {
-  issue_template: render(partial: "api/shared/issue_template", locals: { issue_template: issue_template })
-}
-
-json

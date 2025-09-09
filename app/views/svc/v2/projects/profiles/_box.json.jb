@@ -1,0 +1,5 @@
+json = {
+  profile: (render partial: "svc/shared/profile", locals: { member: member })
+}
+
+json

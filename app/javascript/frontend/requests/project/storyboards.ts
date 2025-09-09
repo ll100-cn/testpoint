@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class ListRequest<Box extends StoryboardBox> extends BaseRequest<Box[]> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/storyboards" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -16,7 +16,7 @@ export const List = () => new ListRequest()
 
 class GetRequest extends BaseRequest<StoryboardBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -28,7 +28,7 @@ export const Get = () => new GetRequest()
 
 class CreateRequest extends BaseRequest<StoryboardBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/storyboards",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards",
     relatedKeys: [ [ "/storyboards" ] ]
   })
 
@@ -41,7 +41,7 @@ export const Create = () => new CreateRequest()
 
 class UpdateRequest extends BaseRequest<StoryboardBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ] ]
   })
   headers = { 'Content-Type': 'application/json' }
@@ -55,7 +55,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<StoryboardBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/storyboards/{storyboard_id}",
+    endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}",
     relatedKeys: [ [ "/storyboards" ] ]
   })
 

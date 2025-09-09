@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class ListRequest extends BaseRequest<Array<TestCaseStat>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/test_case_stats" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_case_stats" ],
   })
 
   processResponse(response: AxiosResponse) {

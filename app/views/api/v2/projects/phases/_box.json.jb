@@ -1,5 +1,0 @@
-json = {
-  phase: render(partial: "api/shared/phase", locals: { phase: phase })
-}
-
-json

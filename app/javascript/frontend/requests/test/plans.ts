@@ -5,7 +5,7 @@ import type { Required } from "utility-types"
 
 class CreateRequest extends BaseRequest<PlanBox> {
   scheme = Scheme.post({
-    endpoint: "/api/v2/projects/{project_id}/plans",
+    endpoint: "/svc/v2/projects/{project_id}/plans",
     relatedKeys: [ [ "/plans" ] ]
   })
 
@@ -18,7 +18,7 @@ export const Create = () => new CreateRequest()
 
 class UpdateRequest extends BaseRequest<PlanBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}",
+    endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}",
     relatedKeys: [ [ "/plans", "/{plan_id}" ] ]
   })
 
@@ -31,7 +31,7 @@ export const Update = () => new UpdateRequest()
 
 class DestroyRequest extends BaseRequest<PlanBox> {
   scheme = Scheme.delete({
-    endpoint: "/api/v2/projects/{project_id}/plans/{plan_id}",
+    endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}",
     relatedKeys: [ [ "/plans" ] ]
   })
 
@@ -44,7 +44,7 @@ export const Destroy = () => new DestroyRequest()
 
 class PageRequest extends BaseRequest<PlanPage<PlanBox>> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans" ],
   })
   graph = "counts"
 
@@ -57,7 +57,7 @@ export const Page = () => new PageRequest()
 
 class InfoGetRequest extends BaseRequest<PlanBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
   })
   graph = "counts, info"
 
@@ -70,7 +70,7 @@ export const InfoGet = () => new InfoGetRequest()
 
 class GetRequest<Box extends PlanBox> extends BaseRequest<Box> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
+    endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
   })
 
   processResponse(response: AxiosResponse) {

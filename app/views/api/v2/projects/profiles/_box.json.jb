@@ -1,5 +1,0 @@
-json = {
-  profile: (render partial: "api/shared/profile", locals: { member: member })
-}
-
-json

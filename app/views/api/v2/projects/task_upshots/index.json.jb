@@ -1,5 +1,0 @@
-json = {
-  list: render(partial: "api/v2/shared/task_upshot_box", collection: @task_upshots, as: :task_upshot, locals: { test_case_mapping: @test_case_mapping })
-}
-
-json

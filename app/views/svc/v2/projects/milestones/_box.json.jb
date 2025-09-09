@@ -1,0 +1,5 @@
+json = {
+  milestone: (render partial: "svc/shared/milestone", locals: { milestone: milestone })
+}
+
+json

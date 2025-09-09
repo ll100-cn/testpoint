@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios"
 
 class GetRequest extends BaseRequest<AccountBox> {
   scheme = Scheme.get({
-    endpoint: [ "/api/v2/profile", "/account" ],
+    endpoint: [ "/svc/v2/profile", "/account" ],
   })
 
   processResponse(response: AxiosResponse) {
@@ -16,7 +16,7 @@ export const Get = () => new GetRequest()
 
 class UpdateRequest extends BaseRequest<AccountBox> {
   scheme = Scheme.patch({
-    endpoint: "/api/v2/profile/account",
+    endpoint: "/svc/v2/profile/account",
     relatedKeys: [ "/account" ]
   })
 

@@ -161,6 +161,7 @@ import type { IssueFrameComponent } from "@/components/IssueFrame"
 import type { IssueStateFrameComponent } from "@/components/IssueStateFrame"
 import PathHelper from '@/lib/PathHelper'
 import OkUrl from "@/lib/ok_url"
+import vConfirm from '@/components/vConfirm'
 
 const IssueCommentDialog = BlankDialog as typeof BlankDialog & IssueCommentFrameComponent
 const comment_dialog = ref(null! as InstanceType<typeof BlankDialog & IssueCommentFrameComponent>)

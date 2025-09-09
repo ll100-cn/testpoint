@@ -1,0 +1,5 @@
+json = {
+  test_case: (render partial: "svc/shared/test_case", locals: { test_case: test_case })
+}
+
+json
