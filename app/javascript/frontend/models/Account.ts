@@ -1,9 +1,10 @@
 import * as t from '@/lib/transforms'
 import { User } from "./User"
-import md5 from 'js-md5'
+import { md5 } from 'js-md5'
 import type { OmitByValue } from "utility-types"
+import type { AccountSchema } from './schema/account'
 
-export class Account {
+export class Account implements AccountSchema {
   @t.Klass(User) user!: User
 
   @t.String name!: string

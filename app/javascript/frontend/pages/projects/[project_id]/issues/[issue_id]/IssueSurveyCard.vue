@@ -9,7 +9,7 @@
           <div class="flex items-center mb-1">
             <span>备注：{{ issue_survey.remark }}</span>
             工单模版：{{ issue_survey.template.name }}
-            <span class="ms-3 text-sm text-muted">修改于 {{ h.datetime(issue_survey.updated_at) }}</span>
+            <span class="ms-3 text-sm text-muted">修改于 {{ h.datetime(issue_survey.updatedAt) }}</span>
 
             <MoreDropdown class="ms-auto">
               <DropdownMenuItem v-if="!readonly && allow('update', IssueSurvey)" @click.prevent="emit('modal', IssueSurveyEditDialogContent, issue_box, issue_survey)">修改</DropdownMenuItem>
@@ -71,7 +71,7 @@ const { mutateAsync: destroy_issue_survey_action } = line.request(q.bug.issue_su
 async function deleteIssueSurvey(issue_survey: IssueSurvey) {
   await destroy_issue_survey_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id,
       issue_survey_id: issue_survey.id
     }

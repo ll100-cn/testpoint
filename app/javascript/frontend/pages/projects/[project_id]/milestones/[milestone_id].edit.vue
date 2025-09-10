@@ -76,6 +76,6 @@ former.doPerform = async function() {
 }
 
 former.form.title = milestone_box.value.milestone.title
-former.form.published_at = milestone_box.value.milestone.published_at ?? null
+former.form.published_at = milestone_box.value.milestone.publishedAt ?? null
 former.form.description = milestone_box.value.milestone.description ?? null
 </script>

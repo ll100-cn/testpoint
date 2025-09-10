@@ -1,4 +1,4 @@
-import { Member, type MemberBox, MemberBoxImpl, MemberInfo, MemberPage } from "@/models"
+import { Member, type MemberBox, MemberBoxImpl, MemberPage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import { type Required } from 'utility-types'

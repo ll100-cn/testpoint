@@ -106,7 +106,7 @@ const former = Former.build({
     content: null,
     title: null,
     attachments_params: [],
-    creator_id: profile.member_id,
+    creator_id: profile.memberId,
   },
   survey_attributes: { inputs_attributes: [] },
 })
@@ -129,8 +129,8 @@ former.doPerform = async function() {
 
 watch(issue_template_box, function(new_value) {
   if (new_value) {
-    former.form.issue_attributes.title ||= new_value.issue_template.title_suggestion
-    former.form.issue_attributes.content ||= new_value.issue_template.content_suggestion
+    former.form.issue_attributes.title ||= new_value.issue_template.titleSuggestion
+    former.form.issue_attributes.content ||= new_value.issue_template.contentSuggestion
     former.form.survey_attributes.inputs_attributes = (new_value?.issue_template.inputs ?? []).map(input => {
       return { template_input_id: input.id, value: "" }
     })

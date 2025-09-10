@@ -10,7 +10,7 @@
     </div>
   </PageHeader>
 
-  <div v-if="issue_box.issue.archived_at" class="alert alert-danger">
+  <div v-if="issue_box.issue.archivedAt" class="alert alert-danger">
     该问题已完结
   </div>
 
@@ -49,7 +49,7 @@
               <i class="far fa-file-lines fa-fw" /> 新增问题模版
             </Button>
 
-            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.assignee_id == profile.member_id">
+            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.assigneeId == profile.memberId">
               <template v-if="issue_box.issue.assignee && ['confirmed', 'processing', 'processed'].includes(issue_box.issue.state)">
                 <ButtonGroup class="ms-auto">
                   <template v-if="issue_box.issue.state == 'confirmed'">
@@ -93,8 +93,8 @@
               </ButtonGroup>
             </template>
 
-            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.creator_id == profile.member_id">
-              <template v-if="issue_box.issue.state == 'resolved' && !issue_box.issue.archived_at">
+            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.creatorId == profile.memberId">
+              <template v-if="issue_box.issue.state == 'resolved' && !issue_box.issue.archivedAt">
                 <ButtonGroup class="ms-auto">
                   <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_dialog.show(IssueResolveDialogContent)">
                     <span class="me-1">设置为</span><IssueStateBadge state="archived" text="已完结" />
@@ -105,7 +105,7 @@
                   </Button>
                 </ButtonGroup>
               </template>
-              <template v-if="issue_box.issue.state == 'closed' && !issue_box.issue.archived_at">
+              <template v-if="issue_box.issue.state == 'closed' && !issue_box.issue.archivedAt">
                 <Button preset="outline" variant="silence" size="sm" @click.prevent="issue_dialog.show(IssueResolveDialogContent)">
                   <span class="me-1">设置为</span><IssueStateBadge state="archived" text="确认完结" />
                 </Button>
@@ -191,7 +191,7 @@ await line.wait()
 
 page.meta.title = `#${issue_box.value.issue.id} ${issue_box.value.issue.title}`
 
-const readonly = computed(() => issue_box.value.issue.project_id.toString() !== params.project_id)
+const readonly = computed(() => issue_box.value.issue.projectId.toString() !== params.project_id)
 const { data: comment_page } = line.request(q.bug.issue_comments.List(), (req, it) => {
   req.interpolations.project_id = project_id
   req.interpolations.issue_id = issue_box.value.issue.id
@@ -204,7 +204,7 @@ const comment_repo = computed(() => {
 })
 
 const timelines = computed(() => {
-  return _.orderBy([ ...comment_repo.value.parent_id.findAll(null), ...issue_box.value.activities, ...issue_box.value.target_relationships, ...issue_box.value.source_relationships ], [ "created_at" ])
+  return _.orderBy([ ...comment_repo.value.parent_id.findAll(null), ...issue_box.value.activities, ...issue_box.value.targetRelationships, ...issue_box.value.sourceRelationships ], [ "createdAt" ])
 })
 
 function onIssueUpdated(new_issue_box: IssueBox) {

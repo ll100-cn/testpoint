@@ -4,28 +4,29 @@ import { Member } from "./Member"
 import { EntityIndex, EntityRepo } from './EntityRepo'
 import { Pagination } from './Pagination'
 import type { OmitByValue } from "utility-types"
+import type { CommentSchema } from './schema/comment'
 
-export class Comment {
+export class Comment implements CommentSchema {
   @t.Number id!: number
   @t.String content!: string
 
-  @t.Date created_at!: Date
-  @t.Date updated_at!: Date
-  @t.Date last_edited_at: Date | null = null
+  @t.Date createdAt!: Date
+  @t.Date updatedAt!: Date
+  @t.Date lastEditedAt: Date | null = null
 
-  @t.Number issue_id!: number
+  @t.Number issueId!: number
   @t.Boolean collapsed!: boolean
   @t.String display!: string
-  @t.Number member_id!: number
+  @t.Number memberId!: number
   @t.Klass(Member) member!: Member
 
-  @t.Number comment_id: number | null = null
+  @t.Number commentId: number | null = null
 
   @t.Klass(Attachment) attachments: Attachment[] = []
 }
 
 export class CommentRepo extends EntityRepo<Comment> {
-  parent_id = new EntityIndex<number | null, Comment>(it => it.comment_id)
+  parent_id = new EntityIndex<number | null, Comment>(it => it.commentId)
 
   override buildIndex(entity: Comment): void {
     this.parent_id.add(entity)

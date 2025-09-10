@@ -1,8 +1,8 @@
 <template>
-  <optgroup v-for="group in grouped_member_boxes" :label="group[0].member.role_text">
+  <optgroup v-for="group in grouped_member_boxes" :label="group[0].member.roleText">
     <option v-for="member_box in group" :value="member_box.member.id">
       {{ member_box.member.name }}
-      <span v-if="member_box.member.archived_at">(已归档)</span>
+      <span v-if="member_box.member.archivedAt">(已归档)</span>
     </option>
   </optgroup>
 </template>
@@ -32,7 +32,7 @@ const available_member_boxes = computed(() => {
       return true
     }
 
-    if (member.archived_at) {
+    if (member.archivedAt) {
       return false
     }
 

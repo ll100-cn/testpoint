@@ -90,9 +90,9 @@ const categories = computed(() => category_boxes.value.map(it => it.category))
 
   const former = Former.build({
     title: issue_box.value.issue.title,
-    category_id: issue_box.value.issue.category_id,
-    assignee_id: issue_box.value.issue.assignee_id,
-    creator_id: issue_box.value.issue.creator_id,
+    category_id: issue_box.value.issue.categoryId,
+    assignee_id: issue_box.value.issue.assigneeId,
+    creator_id: issue_box.value.issue.creatorId,
   })
 
 const Form = GenericForm<typeof former.form>

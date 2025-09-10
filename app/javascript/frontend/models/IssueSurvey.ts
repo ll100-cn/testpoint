@@ -2,16 +2,17 @@ import * as t from '@/lib/transforms'
 import { IssueTemplate } from './IssueTemplate'
 import { Pagination } from './Pagination'
 import type { OmitByValue } from "utility-types"
+import type { IssueSurveySchema } from './schema/issue_survey'
 
-export class IssueSurvey {
+export class IssueSurvey implements IssueSurveySchema {
   @t.Number id!: number
-  @t.Number issue_id!: number
-  @t.Number template_id!: number
+  @t.Number issueId!: number
+  @t.Number templateId!: number
   @t.String state!: string
   values: Record<number, string> = {}
 
-  @t.Date created_at!: Date
-  @t.Date updated_at!: Date
+  @t.Date createdAt!: Date
+  @t.Date updatedAt!: Date
   @t.String remark: string | null = null
 
   @t.Klass(IssueTemplate) template!: IssueTemplate

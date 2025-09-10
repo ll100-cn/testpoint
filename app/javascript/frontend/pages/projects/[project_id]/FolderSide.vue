@@ -58,31 +58,31 @@ const tree = computed(() => {
       mapping = result["ignored"]
     }
 
-    let tree_item = mapping.find((it) => it.role_name === test_case_stat.role_name)
+    let tree_item = mapping.find((it) => it.roleName === test_case_stat.roleName)
     if (!tree_item) {
       tree_item = new TreeItem()
-      tree_item.role_name = test_case_stat.role_name
+      tree_item.roleName = test_case_stat.roleName
       tree_item.uuid = new UUID(4).format()
       mapping.push(tree_item)
     }
 
-    let scene_tree = tree_item.scene_tree
-    for (let i = 0; i < test_case_stat.scene_path.length; i++) {
-      const scene_name = test_case_stat.scene_path[i];
-      let scene_item = scene_tree.find((it) => it.name === scene_name)
+    let scene_tree = tree_item.sceneTree
+    for (let i = 0; i < test_case_stat.scenePath.length; i++) {
+      const scene_name = test_case_stat.scenePath[i];
+      let scene_item = scene_tree.find((it: SceneItem) => it.name === scene_name)
 
       if (scene_item) {
         scene_tree = scene_item.children
       } else {
         scene_item = new SceneItem()
         scene_item.name = scene_name
-        scene_item.path = _.slice(test_case_stat.scene_path, 0, i + 1)
+        scene_item.path = _.slice(test_case_stat.scenePath, 0, i + 1)
         scene_item.uuid = new UUID(4).format()
         scene_tree.push(scene_item)
         scene_tree = scene_item.children
       }
 
-      if (i === test_case_stat.scene_path.length - 1) {
+      if (i === test_case_stat.scenePath.length - 1) {
         scene_item.count = test_case_stat.count
       }
     }

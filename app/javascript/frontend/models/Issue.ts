@@ -12,36 +12,40 @@ import { Attachment } from "./Attachment"
 import { Subscription } from "./Subscription"
 import { IssueSurvey } from "./IssueSurvey"
 import type { OmitByValue } from "utility-types"
+import type { IssueSchema } from './schema/issue'
 
-export class Issue {
+export class Issue implements IssueSchema {
   id!: number
   title!: string
   content!: string
   state!: string
-  state_text!: string
+  stateText!: string
 
   stage!: string
+  stageText!: string
+  subscribedUsers?: unknown[]
 
   @Type(() => Date)
-  created_at!: Date
+  createdAt!: Date
 
   @Type(() => Date)
-  updated_at!: Date
+  updatedAt!: Date
 
-  project_id!: number
-  project_name!: string
+  projectId!: number
+  projectName!: string
 
   @Type(() => Date)
-  last_edited_at?: Date
+  lastEditedAt?: Date
 
-  creator_id!: number
-  assignee_id?: number
+  creatorId!: number
+  assigneeId?: number
   priority!: string
-  priority_text!: string
-  task_id?: number
-  category_id?: number
-  archived_at?: string
-  milestone_id?: number
+  priorityText!: string
+  taskId?: number
+  categoryId?: number
+  @Type(() => Date)
+  archivedAt?: Date
+  milestoneId?: number
 
   @Type(() => Milestone)
   milestone?: Milestone
@@ -70,8 +74,8 @@ export class IssueBoxImpl {
   @t.Klass(Attachment) attachments: Attachment[] = []
   @t.Klass(IssueSurvey) surveys: IssueSurvey[] = []
   @t.Klass(IssueActivity) activities: IssueActivity[] = []
-  @t.Klass(IssueRelationship) source_relationships: IssueRelationship[] = []
-  @t.Klass(IssueRelationship) target_relationships: IssueRelationship[] = []
+  @t.Klass(IssueRelationship) sourceRelationships: IssueRelationship[] = []
+  @t.Klass(IssueRelationship) targetRelationships: IssueRelationship[] = []
   @t.Klass(Subscription) subscriptions: Subscription[] = []
 }
 
@@ -79,12 +83,12 @@ export type IssueBox = OmitByValue<IssueBoxImpl, Function>
 
 export class IssuePage<Box extends IssueBox> extends Pagination<Box> {
   @t.Klass(IssueBoxImpl) list: Box[] = []
-  @t.Klass(IssueStat) issue_stats!: IssueStat[]
+  @t.Klass(IssueStat) issueStats!: IssueStat[]
 }
 
 export class IssueSummary {
-  by_category: { category: Category, count: number }[] = []
-  by_milestone: { milestone: Milestone, count: number }[] = []
-  by_assignee: { assignee: Member, count: number }[] = []
-  by_creator: { creator: Member, count: number }[] = []
+  byCategory: { category: Category, count: number }[] = []
+  byMilestone: { milestone: Milestone, count: number }[] = []
+  byAssignee: { assignee: Member, count: number }[] = []
+  byCreator: { creator: Member, count: number }[] = []
 }

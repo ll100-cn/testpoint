@@ -51,7 +51,7 @@ const { mutateAsync: unresolve_issue_action } = line.request(q.bug.issues.Resolv
 former.perform = async function() {
   const a_issue_box = await unresolve_issue_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id
     },
     body: {

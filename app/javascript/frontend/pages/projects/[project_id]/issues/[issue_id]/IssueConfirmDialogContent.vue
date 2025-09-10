@@ -59,8 +59,8 @@ const props = defineProps<{
 
 const former = Former.build({
   title: props.issue_box.issue.title,
-  category_id: props.issue_box.issue.category_id,
-  assignee_id: props.issue_box.issue.assignee_id,
+  category_id: props.issue_box.issue.categoryId,
+  assignee_id: props.issue_box.issue.assigneeId,
   state: 'confirmed',
 })
 
@@ -73,7 +73,7 @@ const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_act
 
 former.doPerform = async function() {
   const a_issue_action = await create_issue_action_action({
-    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    interpolations: { project_id: props.issue_box.issue.projectId, issue_id: props.issue_box.issue.id },
     body: this.form
   })
 
@@ -92,11 +92,11 @@ async function reset() {
   loading.value = true
 
   const { data: member_boxes_data } = line.request(q.project.members.List(), (req, it) => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.project_id = props.issue_box.issue.projectId
     return it.useQuery(req.toQueryConfig())
   })
   const { data: category_boxes_data } = line.request(q.project.categories.List(), (req, it) => {
-    req.interpolations.project_id = props.issue_box.issue.project_id
+    req.interpolations.project_id = props.issue_box.issue.projectId
     return it.useQuery(req.toQueryConfig())
   })
   await line.wait()

@@ -1,14 +1,14 @@
 <template>
   <ul>
     <template v-for="{ phase_info, task_upshot, issues } in items">
-      <li :style="{ listStyleType: current_phase_id == task_upshot.phase_id ? 'disclosure-closed' : 'initial'}">
+      <li :style="{ listStyleType: current_phase_id == task_upshot.phaseId ? 'disclosure-closed' : 'initial'}">
         <div class="flex items-center">
           <span class="me-2">{{ phase_info.phase.title }}</span>
 
-          <TaskStateLabel v-if="task_upshot.state_override" :state="task_upshot.state_override" />
+          <TaskStateLabel v-if="task_upshot.stateOverride" :state="task_upshot.stateOverride" />
           <span v-else>未操作</span>
 
-          <small class="text-muted ms-auto">{{ h.datetime(task_upshot.state_changed_at) }}</small>
+          <small class="text-muted ms-auto">{{ h.datetime(task_upshot.stateChangedAt) }}</small>
         </div>
         <ul v-if="issues.length > 0">
           <li v-for="issue in issues">
@@ -44,13 +44,13 @@ const items = computed(() => {
   const result = [] as Item[]
   const phase_info_repo = _.keyBy(props.phase_infos, it => it.phase.id)
 
-  for (const task_upshot of _.orderBy(props.task_box.task_upshots ?? [], it => it.created_at)) {
-    const phase_info = phase_info_repo[task_upshot.phase_id]
+  for (const task_upshot of _.orderBy(props.task_box.task_upshots ?? [], it => it.createdAt)) {
+    const phase_info = phase_info_repo[task_upshot.phaseId]
     result.push({ phase_info, task_upshot, issues: []})
   }
 
-  for (const issue of _.orderBy(props.task_box.issues ?? [], it => it.created_at)) {
-    const index = _.findLastIndex(result, it => it.task_upshot.created_at <= issue.created_at)
+  for (const issue of _.orderBy(props.task_box.issues ?? [], it => it.createdAt)) {
+    const index = _.findLastIndex(result, it => it.task_upshot.createdAt <= issue.createdAt)
     if (index == -1) {
       result[0].issues.push(issue)
     } else {

@@ -2,8 +2,9 @@ import { EntityRepo } from "./EntityRepo"
 import * as t from '@/lib/transforms'
 import { Pagination } from './Pagination'
 import type { OmitByValue } from "utility-types"
+import type { SceneSchema } from './schema/scene'
 
-export class Scene {
+export class Scene implements SceneSchema {
 	id!: number
 	name!: string
 }

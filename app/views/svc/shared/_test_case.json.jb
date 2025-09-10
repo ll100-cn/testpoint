@@ -13,7 +13,7 @@ json[:platform_ids] = test_case.platform_ids
 
 json[:label_ids] = test_case.label_ids.compact
 json[:scene_path] = test_case.scene_path
-json[:updated_at] = test_case.updated_at.to_s
+json[:updated_at] = test_case.updated_at
 
 json[:requirement_id] = test_case.requirement_id
 json[:roadmap_id] = test_case.roadmap_id

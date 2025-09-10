@@ -47,7 +47,7 @@ const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments
 former.doPerform = async function() {
   const a_comment = await update_comment_action({
     interpolations: {
-      project_id: issue_box.value.issue.project_id,
+      project_id: issue_box.value.issue.projectId,
       issue_id: issue_box.value.issue.id,
       comment_id: comment_box.value.comment.id
     },

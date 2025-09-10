@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="ok_url.apply(`/projects/${issue.project_id}/issues/${issue.id}`)">{{ issue.title }}</router-link>
+  <router-link :to="ok_url.apply(`/projects/${issue.projectId}/issues/${issue.id}`)">{{ issue.title }}</router-link>
 </template>
 
 <script setup lang="ts">

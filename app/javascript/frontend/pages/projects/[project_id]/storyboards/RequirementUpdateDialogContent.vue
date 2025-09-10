@@ -57,10 +57,10 @@ async function reset(a_requirement: Requirement) {
   requirement.value = a_requirement
   former.form.title = a_requirement.title
   former.form.description = a_requirement.description ?? ''
-  former.form.scene_id = a_requirement.scene_id
-  former.form.platform_ids = a_requirement.platform_ids
-  former.form.label_ids = a_requirement.label_ids
-  former.form.label_descriptions = a_requirement.label_descriptions
+  former.form.scene_id = a_requirement.sceneId
+  former.form.platform_ids = a_requirement.platformIds
+  former.form.label_ids = a_requirement.labelIds
+  former.form.label_descriptions = a_requirement.labelDescriptions
 
   nextTick(() => {
     loading.value = false

@@ -3,10 +3,10 @@
     <div class="flex items-center gap-x-2 mb-2">
       <MemberLabel :member="comment_box.comment.member" />
 
-      <span class="text-muted">回复于 {{ h.datetime(comment_box.comment.created_at) }}</span>
+      <span class="text-muted">回复于 {{ h.datetime(comment_box.comment.createdAt) }}</span>
 
       <MoreDropdown class="ms-auto">
-        <DropdownMenuItem v-if="!readonly && comment_box.comment.member.user_id == user.id && allow('update', comment_box.comment)" @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
+        <DropdownMenuItem v-if="!readonly && comment_box.comment.member.userId == user.id && allow('update', comment_box.comment)" @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
         <DropdownMenuItem v-if="!readonly && allow('destroy', comment_box.comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
         <DropdownMenuItem @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue_box, comment_box)">关联</DropdownMenuItem>
       </MoreDropdown>
@@ -68,7 +68,7 @@ function onAttachmentDestroyed(attachment: Attachment) {
 async function deleteComment() {
   await destroy_comment_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id,
       comment_id: props.comment_box.comment.id
     }

@@ -2,12 +2,13 @@ import { EntityRepo } from "./EntityRepo"
 import * as t from '@/lib/transforms'
 import { Pagination } from "./Pagination"
 import type { OmitByValue } from "utility-types"
+import type { PlatformSchema } from './schema/platform'
 
-export class Platform {
+export class Platform implements PlatformSchema {
   id!: number
   name!: string
-  default_assignee_id: number | null = null
-  icon_svg: string | null = null
+  defaultAssigneeId: number | null = null
+  iconSvg: string | null = null
 }
 
 export class PlatformRepo extends EntityRepo<Platform> {

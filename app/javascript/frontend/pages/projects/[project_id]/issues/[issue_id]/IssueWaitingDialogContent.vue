@@ -53,12 +53,12 @@ const { mutateAsync: create_issue_action_action } = line.request(q.bug.issue_act
 
 former.doPerform = async function() {
   const a_comment_box = await create_comment_action({
-    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    interpolations: { project_id: props.issue_box.issue.projectId, issue_id: props.issue_box.issue.id },
     body: former.form
   })
 
   const a_issue_action = await create_issue_action_action({
-    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    interpolations: { project_id: props.issue_box.issue.projectId, issue_id: props.issue_box.issue.id },
     body: { state: "waiting" }
   })
 

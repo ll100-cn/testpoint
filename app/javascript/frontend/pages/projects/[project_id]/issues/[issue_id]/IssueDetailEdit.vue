@@ -55,12 +55,11 @@ function switchMode(a_mode: 'show' | 'edit') {
   if (a_mode == 'edit') {
     props.former.form['state'] = props.issue_box.issue.state
     props.former.form['priority'] = props.issue_box.issue.priority
-    props.former.form['creator_id'] = props.issue_box.issue.creator_id
-    props.former.form['assignee_id'] = props.issue_box.issue.assignee_id
-    props.former.form['category_id'] = props.issue_box.issue.category_id
-    props.former.form['milestone_id'] = props.issue_box.issue.milestone_id
+    props.former.form['creator_id'] = props.issue_box.issue.creatorId
+    props.former.form['assignee_id'] = props.issue_box.issue.assigneeId
+    props.former.form['category_id'] = props.issue_box.issue.categoryId
+    props.former.form['milestone_id'] = props.issue_box.issue.milestoneId
   }
-  console.log('former')
 
   mode.value = a_mode
 }

@@ -52,7 +52,7 @@ const { mutateAsync: convert_comment_action } = line.request(q.bug.issue_comment
 former.doPerform = async function() {
   const a_comment_box = await convert_comment_action({
     interpolations: {
-      project_id: issue_box.value.issue.project_id,
+      project_id: issue_box.value.issue.projectId,
       issue_id: issue_box.value.issue.id,
       comment_id: comment.value.id
     },
@@ -71,7 +71,7 @@ function reset(a_issue_box: IssueBox, a_comment: Comment) {
   issue_box.value = { ...a_issue_box }
   comment.value = a_comment
 
-  former.form.comment_id = comment.value.comment_id
+  former.form.comment_id = comment.value.commentId
 
   loading.value = false
 }

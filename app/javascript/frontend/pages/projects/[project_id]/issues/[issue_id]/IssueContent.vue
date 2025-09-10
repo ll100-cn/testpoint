@@ -3,7 +3,7 @@
     <Card class="grow mb-3">
       <CardHeader>
         <MemberLabel :member="issue_box.issue.creator" class="me-1" />
-        <span class="ms-1 small text-muted">创建于 {{ h.datetime(issue_box.issue.created_at) }}</span>
+        <span class="ms-1 small text-muted">创建于 {{ h.datetime(issue_box.issue.createdAt) }}</span>
 
         <template #actions>
           <MoreDropdown v-if="!readonly">
@@ -56,8 +56,8 @@ const body = computed(() => {
   return {
     content: props.issue_box.issue.content,
     attachments: props.issue_box.attachments,
-    created_at: props.issue_box.issue.created_at,
-    last_edited_at: props.issue_box.issue.last_edited_at
+    createdAt: props.issue_box.issue.createdAt,
+    lastEditedAt: props.issue_box.issue.lastEditedAt
   }
 })
 

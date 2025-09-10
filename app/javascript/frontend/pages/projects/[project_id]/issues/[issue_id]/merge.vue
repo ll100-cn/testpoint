@@ -16,7 +16,7 @@
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-for="issue in issues" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
+        <TableRow v-for="issue in issues" :key="issue.id" :class="{ 'block-discard': issue.archivedAt }">
           <TableCell>{{ issue.id }}</TableCell>
           <TableCell>
             <router-link class="link" :to="ok_url.apply(path_info.resource)">

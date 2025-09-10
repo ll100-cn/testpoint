@@ -32,7 +32,7 @@
         <TableBody>
           <TableRow v-for="{ milestone } in filtered_milestone_boxes" :key="milestone.id" :class="{ 'block-discard': milestone.isPublished() }">
             <TableCell>{{ milestone.title }}</TableCell>
-            <TableCell>{{ h.datetime(milestone.published_at ?? null) }}</TableCell>
+            <TableCell>{{ h.datetime(milestone.publishedAt ?? null) }}</TableCell>
             <TableCell>
               <PageContent :content="milestone.description ?? ''" :readonly="true" />
             </TableCell>
@@ -41,8 +41,8 @@
                 <i class="far fa-pencil-alt" /> 修改
               </router-link>
 
-              <a v-if="milestone.archived_at === null && allow('archive', milestone)" href="#" v-confirm="'确定要归档吗？'" @click.prevent="archiveMilestone(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
-              <a v-if="milestone.archived_at && allow('active', milestone)" href="#" v-confirm="'确定要取消归档吗？'" @click.prevent="activeMilestone(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
+              <a v-if="milestone.archivedAt === null && allow('archive', milestone)" href="#" v-confirm="'确定要归档吗？'" @click.prevent="archiveMilestone(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
+              <a v-if="milestone.archivedAt && allow('active', milestone)" href="#" v-confirm="'确定要取消归档吗？'" @click.prevent="activeMilestone(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
               <a v-if="allow('destroy', milestone)" href="#" v-confirm="'确定要删除吗？'" @click.prevent="deleteMilestone(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
             </TableCell>
           </TableRow>
@@ -94,7 +94,7 @@ const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req
 })
 await line.wait()
 
-const grouped_milestones = ref(_.groupBy(milestone_boxes.value, (m) => m.milestone.archived_at ? 'archived' : 'normal'))
+const grouped_milestones = ref(_.groupBy(milestone_boxes.value, (m) => m.milestone.archivedAt ? 'archived' : 'normal'))
 
 const { mutateAsync: destroy_milestone_action } = line.request(q.project.milestones.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))

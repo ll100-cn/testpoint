@@ -12,8 +12,8 @@
       </template>
     </CardHeader>
     <CardContent class="py-2">
-      <div class="flex flex-wrap gap-1 mb-2" v-if="requirement.platform_ids.length > 0">
-        <PlatformBadge v-for="platform_id in requirement.platform_ids" :platform="platform_repo.id.find(platform_id)" only="icon" />
+      <div class="flex flex-wrap gap-1 mb-2" v-if="requirement.platformIds.length > 0">
+        <PlatformBadge v-for="platform_id in requirement.platformIds" :platform="platform_repo.id.find(platform_id)" only="icon" />
       </div>
 
       <div class="text-sm space-y-2">
@@ -21,15 +21,15 @@
           <VueMarkdown :source="requirement.description" />
         </div>
 
-        <template v-for="label_id in requirement.label_ids">
-          <template v-if="requirement.label_descriptions[label_id.toString()]">
+        <template v-for="label_id in requirement.labelIds">
+          <template v-if="requirement.labelDescriptions[label_id.toString()]">
             <Collapsible>
               <Callout class="py-1.5 px-2" variant="tint" :style="{ '--color-tint': utils.calcColorHlsValue(label_repo.find(label_id)!.name) }">
                 <CollapsibleTrigger as-child><CalloutTitle class="mb-0">{{ label_repo.find(label_id)!.name }}</CalloutTitle></CollapsibleTrigger>
                 <CollapsibleContent>
                   <CalloutDescription>
                     <div class="text-muted mt-1">
-                      <VueMarkdown :source="requirement.label_descriptions[label_id.toString()]"></VueMarkdown>
+                      <VueMarkdown :source="requirement.labelDescriptions[label_id.toString()]"></VueMarkdown>
                     </div>
                   </CalloutDescription>
                 </CollapsibleContent>
@@ -85,11 +85,11 @@ const actived = computed(() => {
   let result = true
 
   if (props.filter.platform_id_eq != null) {
-    result = result && (props.requirement.platform_ids.length == 0 || props.requirement.platform_ids.includes(props.filter.platform_id_eq))
+    result = result && (props.requirement.platformIds.length == 0 || props.requirement.platformIds.includes(props.filter.platform_id_eq))
   }
 
   if (props.filter.label_id_eq != null) {
-    result = result && props.requirement.label_ids.includes(props.filter.label_id_eq)
+    result = result && props.requirement.labelIds.includes(props.filter.label_id_eq)
   }
 
   if (props.filter.relate_stat_eq != null) {

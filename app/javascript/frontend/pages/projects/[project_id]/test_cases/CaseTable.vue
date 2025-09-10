@@ -19,22 +19,22 @@
           </TableCell>
           <TableCell>
             <a href="#" @click.prevent="onModal?.(CaseShowDialogContent, test_case)" class="link">
-              <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
+              <span v-if="test_case.groupName" class="me-1">[{{ test_case.groupName }}]</span>
               {{ test_case.title }}
             </a>
 
-            <template v-if="!test_case.requirement_id">
+            <template v-if="!test_case.requirementId">
               <Badge preset="outline" variant="secondary" class="ms-2 text-secondary">未关联</Badge>
             </template>
-            <template v-else-if="test_case.roadmap_id != newest_roadmap.id">
+            <template v-else-if="test_case.roadmapId != newest_roadmap.id">
               <Badge preset="outline" variant="secondary" class="ms-2 text-secondary">已过期</Badge>
             </template>
           </TableCell>
           <TableCell class="space-x-2">
-            <PlatformBadge v-for="platform_id in test_case.platform_ids" :platform="platform_repo.id.find(platform_id)" />
+            <PlatformBadge v-for="platform_id in test_case.platformIds" :platform="platform_repo.id.find(platform_id)" />
           </TableCell>
           <TableCell>
-            <CaseLabelCell :label_ids="test_case.label_ids" :label_repo="label_repo" />
+            <CaseLabelCell :label_ids="test_case.labelIds" :label_repo="label_repo" />
           </TableCell>
         </TableRow>
       </TableBody>

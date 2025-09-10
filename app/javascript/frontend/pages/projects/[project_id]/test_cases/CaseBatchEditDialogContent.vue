@@ -165,7 +165,7 @@ former.doPerform = async function() {
 
     try {
       await update_test_case_action({
-        interpolations: { project_id: test_case.project_id, id: test_case.id },
+        interpolations: { project_id: test_case.projectId, id: test_case.id },
         body: form_data
       })
     } catch (err) {

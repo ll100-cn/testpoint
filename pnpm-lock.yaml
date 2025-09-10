@@ -53,12 +53,15 @@ importers:
       buffer:
         specifier: 6.0.3
         version: 6.0.3
+      change-case:
+        specifier: 5.4.4
+        version: 5.4.4
       chart.js:
         specifier: 2.9.4
         version: 2.9.4
       class-transformer:
-        specifier: 0.5.1
-        version: 0.5.1
+        specifier: github:sunteya/class-transformer#deploy
+        version: https://codeload.github.com/sunteya/class-transformer/tar.gz/74c80f6ddd56645c77c7c3f0b6faa7754f2c337a
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -150,6 +153,9 @@ importers:
       '@types/big.js':
         specifier: 6.2.2
         version: 6.2.2
+      '@types/chart.js':
+        specifier: ^4.0.1
+        version: 4.0.1
       '@types/jquery':
         specifier: 3.5.32
         version: 3.5.32
@@ -1479,6 +1485,10 @@ packages:
   '@types/big.js@6.2.2':
     resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
 
+  '@types/chart.js@4.0.1':
+    resolution: {integrity: sha512-OwXJ6Eg14eFpCsTG6sljiGnvVpit5R9rapG7nwDnQlljsdplVIOYVuCSwy07IduCtihrOwvOnbhXKLyp3nvPcw==}
+    deprecated: This is a stub types definition. chart.js provides its own type definitions, so you do not need this installed.
+
   '@types/codemirror@5.60.15':
     resolution: {integrity: sha512-dTOvwEQ+ouKJ/rE9LT1Ue2hmP6H1mZv5+CCnNWu2qtiOe2LQa9lCprEY20HxiDmV/Bxh+dXjywmy5aKvoGjULA==}
 
@@ -1899,6 +1909,9 @@ packages:
     resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
+  change-case@5.4.4:
+    resolution: {integrity: sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==}
+
   chart.js@2.9.4:
     resolution: {integrity: sha512-B07aAzxcrikjAPyV+01j7BmOpxtQETxTSlQ26BEYJ+3iUkbNKaOJ/nDbT6JjyqYxseM0ON12COHYdU2cTIjC7A==}
 
@@ -1923,8 +1936,9 @@ packages:
   citty@0.1.6:
     resolution: {integrity: sha512-tskPPKEs8D2KPafUypv2gxwJP8h/OaJmC82QQGGDQcHvXX43xF2VDACcJVmZ0EuSxkpO9Kc4MlrA3q0+FG58AQ==}
 
-  class-transformer@0.5.1:
-    resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
+  class-transformer@https://codeload.github.com/sunteya/class-transformer/tar.gz/74c80f6ddd56645c77c7c3f0b6faa7754f2c337a:
+    resolution: {tarball: https://codeload.github.com/sunteya/class-transformer/tar.gz/74c80f6ddd56645c77c7c3f0b6faa7754f2c337a}
+    version: 0.5.1
 
   class-variance-authority@0.7.1:
     resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
@@ -5093,6 +5107,11 @@ snapshots:
   '@types/big.js@6.2.2':
     optional: true
 
+  '@types/chart.js@4.0.1':
+    dependencies:
+      chart.js: 2.9.4
+    optional: true
+
   '@types/codemirror@5.60.15':
     dependencies:
       '@types/tern': 0.23.9
@@ -5604,6 +5623,8 @@ snapshots:
 
   chalk@5.4.1: {}
 
+  change-case@5.4.4: {}
+
   chart.js@2.9.4:
     dependencies:
       chartjs-color: 2.4.1
@@ -5640,7 +5661,7 @@ snapshots:
     dependencies:
       consola: 3.4.0
 
-  class-transformer@0.5.1: {}
+  class-transformer@https://codeload.github.com/sunteya/class-transformer/tar.gz/74c80f6ddd56645c77c7c3f0b6faa7754f2c337a: {}
 
   class-variance-authority@0.7.1:
     dependencies:

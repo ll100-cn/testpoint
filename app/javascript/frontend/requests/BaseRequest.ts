@@ -3,7 +3,8 @@ import { Pagination } from "@/models"
 import { ErrorsObject } from "@/models/ErrorsObject"
 import { UnprocessableEntityError } from "$ui/simple_form"
 import { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios"
-import { type ClassConstructor, plainToInstance } from "class-transformer"
+import { plainToArray, plainToObject } from '@/lib/transforms'
+import { plainToInstance, type ClassConstructor } from 'class-transformer'
 import _ from "lodash"
 import URI from 'urijs'
 import qs from 'qs'
@@ -220,18 +221,10 @@ export abstract class BaseRequest<T> {
   }
 
   responseToArray<K>(klass: ClassConstructor<K>, response: AxiosResponse): K[] {
-    return plainToInstance<K, K>(klass, response.data)
+    return plainToArray(klass, response.data)
   }
 
   responseToObject<K>(klass: ClassConstructor<K>, response: AxiosResponse): K {
-    return plainToInstance(klass, response.data)
-  }
-
-  responseToPagination<K>(klass: ClassConstructor<K>, response: AxiosResponse): Pagination<K> {
-    const pagination = new Pagination<K>()
-    const result = this.responseToArray(klass, response)
-    pagination.list = result
-    pagination.build(response)
-    return pagination
+    return plainToObject(klass, response.data)
   }
 }

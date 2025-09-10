@@ -14,11 +14,11 @@ export class SceneItem {
 }
 
 export class TreeItem {
-  role_name: string | null
+  roleName: string | null
   uuid: string
-  scene_tree: SceneItem[] = []
+  sceneTree: SceneItem[] = []
   totalCount(): number {
-    return this.scene_tree.reduce((acc, cur) => acc + cur.totalCount(), 0)
+    return this.sceneTree.reduce((acc, cur) => acc + cur.totalCount(), 0)
   }
 }
 
@@ -44,20 +44,20 @@ export class ColumnFilter {
 }
 
 export class Filter {
-  role_name: string | null = null
-  scene_path: string[] = []
+  roleName: string | null = null
+  scenePath: string[] = []
   archived: string = "0"
-  relate_state: keyof typeof TEST_CASE_RELATE_STATES | null = null
+  relateState: keyof typeof TEST_CASE_RELATE_STATES | null = null
   ignored: string | null = null
   // platform_id: string | null
   // label_id: string | null
 
   toParams(): { [x: string]: string | string[] } {
     return {
-      role_name: this.role_name,
-      scene_path: this.scene_path,
+      roleName: this.roleName,
+      scenePath: this.scenePath,
       archived: this.archived,
-      relate_state: this.relate_state
+      relateState: this.relateState
       // platform_id: this.platform_id,
       // label_id: this.label_id,
     }
@@ -65,19 +65,19 @@ export class Filter {
 
   isMatch(testCase: TestCase, columns: ColumnFilter = new ColumnFilter()): boolean {
     // if (columns.isEnabled('platform_id') && !_.isEmpty(this.platform_id)) {
-    //   if (!testCase.platform_ids.includes(_.toNumber(this.platform_id))) {
+    //   if (!testCase.platformIds.includes(_.toNumber(this.platform_id))) {
     //     return false
     //   }
     // }
 
     // if (columns.isEnabled('label_id') && !_.isEmpty(this.label_id)) {
-    //   if (!testCase.label_ids.includes(_.toNumber(this.label_id))) {
+    //   if (!testCase.labelIds.includes(_.toNumber(this.label_id))) {
     //     return false
     //   }
     // }
 
-    if (columns.isEnabled('role_name') && this.role_name) {
-      if (testCase.role_name !== (this.role_name === "" ? null : this.role_name)) {
+    if (columns.isEnabled('roleName') && this.roleName) {
+      if (testCase.roleName !== (this.roleName === "" ? null : this.roleName)) {
         return false
       }
     }
@@ -88,8 +88,8 @@ export class Filter {
       }
     }
 
-    if (columns.isEnabled('scene_path') && !_.isEmpty(this.scene_path)) {
-      if (!_.isEqual(this.scene_path, _.slice(testCase.scene_path, 0, this.scene_path.length))) {
+    if (columns.isEnabled('scenePath') && !_.isEmpty(this.scenePath)) {
+      if (!_.isEqual(this.scenePath, _.slice(testCase.scenePath, 0, this.scenePath.length))) {
         return false
       }
     }

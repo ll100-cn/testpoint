@@ -25,7 +25,7 @@
             <TableRow>
               <TableCell>{{ issue_template.id }}</TableCell>
               <TableCell>{{ issue_template.name }}</TableCell>
-              <TableCell>{{ issue_template.lookup_by_build_form ? "可见" : "隐藏" }}</TableCell>
+              <TableCell>{{ issue_template.lookupByBuildForm ? "可见" : "隐藏" }}</TableCell>
               <TableCell role="actions">
                 <router-link class="link" v-if="allow('update', issue_template)" :to="ok_url.apply(`${path_info.collection}/${issue_template.id}/edit`)">
                   <i class="far fa-pencil-alt" /> 修改

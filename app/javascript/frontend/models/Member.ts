@@ -3,6 +3,7 @@ import { Project } from './Project'
 import { User } from './User'
 import { Pagination } from './Pagination'
 import type { OmitByValue } from "utility-types"
+import type { MemberSchema } from './schema/member'
 
 export enum Role {
   reporter,
@@ -11,18 +12,18 @@ export enum Role {
   owner,
 }
 
-export class Member {
+export class Member implements MemberSchema {
   id!: number
   name!: string
   nickname?: string
   role!: keyof typeof Role
-  role_text!: string
-  receive_mail!: boolean
-  user_id!: number
-  project_id!: number
-  avatar_url?: string
+  roleText!: string
+  receiveMail!: boolean
+  userId!: number
+  projectId!: number
+  avatarUrl?: string
 
-  @t.Date archived_at?: Date
+  @t.Date archivedAt?: Date
 }
 
 export class MemberBoxImpl {

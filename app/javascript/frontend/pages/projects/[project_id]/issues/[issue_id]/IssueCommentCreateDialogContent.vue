@@ -45,7 +45,7 @@ const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments
 
 former.doPerform = async function() {
   const a_comment_box = await create_comment_action({
-    interpolations: { project_id: issue_box.value.issue.project_id, issue_id: issue_box.value.issue.id },
+    interpolations: { project_id: issue_box.value.issue.projectId, issue_id: issue_box.value.issue.id },
     body: former.form,
   })
 
