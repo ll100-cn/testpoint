@@ -3,12 +3,13 @@ import * as t from '@/lib/transforms'
 import { EntityRepo } from "./EntityRepo"
 import { Pagination } from "./Pagination"
 import type { OmitByValue } from "utility-types"
+import type { RoadmapSchema } from './schema/roadmap'
 
-export class Roadmap {
+export class Roadmap implements RoadmapSchema {
   id!: number
   title!: string
-  @t.Date created_at!: Date
-  @t.Date updated_at!: Date
+  @t.Date createdAt!: Date
+  @t.Date updatedAt!: Date
 }
 
 export class RoadmapBoxImpl {

@@ -1,15 +1,16 @@
 import * as t from '@/lib/transforms'
 import type { OmitByValue } from "utility-types"
+import type { ProfileSchema } from './schema/profile'
 
-export class Profile {
-  member_id!: number
+export class Profile implements ProfileSchema {
+  memberId!: number
   role!: string
-  role_text!: string
+  roleText!: string
   nickname: string | null = null
-  project_id!: number
-  project_name!: string
+  projectId!: number
+  projectName!: string
 
-  @t.Klass(Map<string, string[]>) permissions!: Map<string, string[]>
+  @t.Raw permissions!: Record<string, string[]>
 
   constructor() {
     this.allow = this.allow.bind(this)
@@ -33,7 +34,7 @@ export class Profile {
     const klasses = this.findKlass(resource)
 
     for (const klass of klasses) {
-      const permission = this.permissions.get(klass)
+      const permission = this.permissions[klass]
 
       if (permission == null) {
         continue

@@ -3,12 +3,13 @@ import * as t from "@/lib/transforms"
 import { Member } from "./Member"
 import { Issue } from "./Issue"
 import type { OmitByValue } from "utility-types"
+import type { IssueRelationshipSchema } from './schema/issue_relationship'
 
-export class IssueRelationship {
+export class IssueRelationship implements IssueRelationshipSchema {
   id!: number
-  target_id!: number
-  source_id!: number
-  member_id!: number
+  targetId!: number
+  sourceId!: number
+  memberId!: number
   category!: string
 
   @Type(() => Issue)
@@ -21,10 +22,10 @@ export class IssueRelationship {
   member!: Member
 
   @Type(() => Date)
-  created_at!: Date
+  createdAt!: Date
 
   @Type(() => Date)
-  updated_at!: Date
+  updatedAt!: Date
 }
 
 export class IssueRelationshipBoxImpl {

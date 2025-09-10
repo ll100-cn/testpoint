@@ -1,5 +1,5 @@
 json = issue_survey.slice(:id, :issue_id, :template_id, :state, :values, :created_at, :updated_at, :remark)
 
-json[:template] = render partial: "svc/shared/issue_template", locals: { issue_template: issue_survey.template }
+json[:template] = render_schema("schema://svc/issue_template", issue_template: issue_survey.template)
 
 json

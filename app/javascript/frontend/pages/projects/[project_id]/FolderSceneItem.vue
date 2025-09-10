@@ -9,7 +9,7 @@
         :highlight="highlight"
         :item-title="scene_item.name"
         :item-count="(scene_item.count == 0 || scene_item.count == scene_item.totalCount()) ? scene_item.totalCount() : `${scene_item.count} / ${scene_item.totalCount()}`"
-        @click.prevent="changeFilter({ ...params, scene_path: scene_item.path })" />
+        @click.prevent="changeFilter({ ...params, scenePath: scene_item.path })" />
     </div>
 
     <ul :id="`treeview-${scene_item.uuid}`" :class="{ 'hidden': collapsed }" class="ms-8">
@@ -52,10 +52,10 @@ defineOptions({
 const changeFilter = inject("changeFilter") as ChangeFilterFunction
 
 const collapsed = computed(() => {
-  return !props.actived || !_.isEqual(props.scene_item.path, _.slice(props.filter.scene_path, 0, props.scene_item.path.length))
+  return !props.actived || !_.isEqual(props.scene_item.path, _.slice(props.filter.scenePath, 0, props.scene_item.path.length))
 })
 
 const highlight = computed(() => {
-  return !collapsed.value && _.isEqual(props.scene_item.path, props.filter.scene_path)
+  return !collapsed.value && _.isEqual(props.scene_item.path, props.filter.scenePath)
 })
 </script>

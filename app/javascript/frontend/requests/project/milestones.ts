@@ -76,3 +76,16 @@ class ArchiveRequest extends BaseRequest<MilestoneBox> {
   }
 }
 export const Archive = () => new ArchiveRequest()
+
+
+class ActiveRequest extends BaseRequest<MilestoneBox> {
+  scheme = Scheme.patch({
+    endpoint: "/svc/v2/projects/{project_id}/milestones/{id}/active",
+    relatedKeys: [ [ "/milestones" ] ]
+  })
+
+  processResponse(response: AxiosResponse) {
+    return this.responseToObject(MilestoneBoxImpl, response)
+  }
+}
+export const Active = () => new ActiveRequest()

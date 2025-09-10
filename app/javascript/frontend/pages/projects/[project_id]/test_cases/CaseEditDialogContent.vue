@@ -92,11 +92,11 @@ const { data: storyboard_boxes } = line.request(q.project.storyboards.List(), (r
 
 former.doPerform = async function() {
   const new_test_case_box = await update_test_case_action({
-    interpolations: { project_id: test_case.value.project_id, id: test_case.value.id },
+    interpolations: { project_id: test_case.value.projectId, id: test_case.value.id },
     body: former.form,
   })
 
-  emit('updated', new_test_case_box.test_case)
+  emit('updated', new_test_case_box.testCase)
   open.value = false
 }
 
@@ -106,10 +106,10 @@ async function archiveTestCase(event: Event) {
 
   try {
     const test_case_box = await destroy_test_case_action({
-      interpolations: { project_id: test_case.value.project_id, id: test_case.value.id }
+      interpolations: { project_id: test_case.value.projectId, id: test_case.value.id }
     })
 
-    emit('destroyed', test_case_box.test_case)
+    emit('destroyed', test_case_box.testCase)
     open.value = false
   } catch (err) {
     validations.processError(err)
@@ -125,13 +125,13 @@ async function reset(a_test_case: TestCase) {
 
   former.form.title = test_case.value.title
   former.form.content = test_case.value.content
-  former.form.role_name = test_case.value.role_name
-  former.form.scene_name = test_case.value.scene_name
-  former.form.group_name = test_case.value.group_name
-  former.form.platform_ids = test_case.value.platform_ids
-  former.form.label_ids = test_case.value.label_ids
-  former.form.storyboard_id = test_case.value.storyboard_id
-  former.form.requirement_id = test_case.value.requirement_id
+  former.form.role_name = test_case.value.roleName
+  former.form.scene_name = test_case.value.sceneName
+  former.form.group_name = test_case.value.groupName
+  former.form.platform_ids = test_case.value.platformIds
+  former.form.label_ids = test_case.value.labelIds
+  former.form.storyboard_id = test_case.value.storyboardId
+  former.form.requirement_id = test_case.value.requirementId
 
   await line.wait()
 

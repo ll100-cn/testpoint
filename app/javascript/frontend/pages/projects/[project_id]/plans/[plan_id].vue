@@ -13,7 +13,7 @@
 
       <div class="px-2">
         <span class="text-secondary font-bold">
-          创建人: {{ plan_box.plan.creator_name }}
+          创建人: {{ plan_box.plan.creatorName }}
         </span>
       </div>
     </div>
@@ -25,7 +25,7 @@
 
 
   <Nav preset="pill" class="mb-4">
-    <NavItem v-for="(phase_info, index) in plan_box.phase_infos" as-child>
+    <NavItem v-for="(phase_info, index) in plan_box.phaseInfos" as-child>
       <RLink :to="{ query: { phase_index: index } }" active-by="query" active-column="phase_index">
         <span>{{ phase_info.phase.title }}</span>
       </RLink>
@@ -141,7 +141,7 @@ const { data: plan_box } = line.request(q.test.plans.Get('+phase'), (req, it) =>
 await line.wait()
 
 const current_phase_info = computed(() => {
-  const phase_infos = plan_box.value.phase_infos
+  const phase_infos = plan_box.value.phaseInfos
   return phase_infos[_.toNumber(query.phase_index)] ?? phase_infos[phase_infos.length - 1]
 })
 
@@ -158,8 +158,8 @@ filter.value.archived = null
 
 const test_case_stats = computed(() => {
   const result = _(task_upshot_page.value.list).groupBy((it) => {
-    const test_case = it.test_case
-    return JSON.stringify({ ignored: it.task?.is_ignored(), role_name: test_case?.role_name, scene_path: test_case?.scene_path })
+    const test_case = it.testCase
+    return JSON.stringify({ ignored: it.task?.is_ignored(), roleName: test_case?.roleName, scenePath: test_case?.scenePath })
   }).mapValues((it) => {
     return it.length
   }).map((count, json) => {
@@ -174,8 +174,8 @@ const test_case_stats = computed(() => {
 const columns = new ColumnFilter()
 const avaiable_task_upshot_boxes = computed(() => {
   return _.filter(task_upshot_page.value.list, (it) => {
-    const test_case = it.test_case
-    const task_upshot = it.task_upshot
+    const test_case = it.testCase
+    const task_upshot = it.taskUpshot
 
     if (searcher.form.state_eq) {
       if (task_upshot.state !== searcher.form.state_eq) {
@@ -184,13 +184,13 @@ const avaiable_task_upshot_boxes = computed(() => {
     }
 
     if (searcher.form.state_modify_is == 'not_overrided') {
-      if (task_upshot.state_override !== null) {
+      if (task_upshot.stateOverride !== null) {
         return false
       }
     }
 
     if (searcher.form.state_modify_is == 'overrided') {
-      if (task_upshot.state_override === null) {
+      if (task_upshot.stateOverride === null) {
         return false
       }
     }
@@ -216,14 +216,14 @@ const changeFilter: ChangeFilterFunction = (overrides) => {
 provide("changeFilter", changeFilter)
 
 function onTaskUpshotInfoUpdated(task_upshot_box: TaskUpshotBox) {
-  const index = task_upshot_page.value.list.findIndex(it => it.task_upshot.id == task_upshot_box.task_upshot.id)
+  const index = task_upshot_page.value.list.findIndex(it => it.taskUpshot.id == task_upshot_box.taskUpshot.id)
   task_upshot_page.value.list[index] = task_upshot_box
 
-  const counts = _.countBy(task_upshot_page.value.list, it => it.task_upshot.state)
-  current_phase_info.value.upshots_state_counts = counts as any
+  const counts = _.countBy(task_upshot_page.value.list, it => it.taskUpshot.state)
+  current_phase_info.value.upshotsStateCounts = counts as any
 }
 
 function onPhaseCreated(phase: Phase) {
-  router.push({ query: { phase_index: plan_box.value.phase_infos.length } })
+  router.push({ query: { phase_index: plan_box.value.phaseInfos.length } })
 }
 </script>

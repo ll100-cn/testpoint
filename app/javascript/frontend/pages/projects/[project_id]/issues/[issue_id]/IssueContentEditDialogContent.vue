@@ -47,7 +47,7 @@ const { mutateAsync: update_issue_body_action } = line.request(q.bug.issue_bodie
 former.doPerform = async function() {
   const a_issue_body = await update_issue_body_action({
     interpolations: {
-      project_id: issue_box.value.issue.project_id,
+      project_id: issue_box.value.issue.projectId,
       issue_id: issue_box.value.issue.id
     },
     body: former.form

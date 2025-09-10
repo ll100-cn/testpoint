@@ -4,11 +4,11 @@ json = comment.slice(
 )
 
 if comment.member
-  json[:member] = render partial: "svc/shared/member", locals: { member: comment.member }
+  json[:member] = render_schema "schema://svc/member", member: comment.member
 end
 
 if comment.attachments
-  json[:attachments] = render partial: "svc/shared/attachment", collection: comment.attachments, as: :attachment
+  json[:attachments] = render_schema("schema://svc/attachment", collection: comment.attachments, as: :attachment)
 end
 
 json

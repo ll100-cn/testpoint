@@ -2,8 +2,9 @@ import * as t from '@/lib/transforms'
 import { md5 } from "js-md5"
 import { Pagination } from "./Pagination"
 import type { OmitByValue } from "utility-types"
+import type { UserSchema } from './schema/user'
 
-export class User {
+export class User implements UserSchema {
   id!: number
   email!: string
   name!: string

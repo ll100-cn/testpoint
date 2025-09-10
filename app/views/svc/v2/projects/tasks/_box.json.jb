@@ -1,10 +1,10 @@
 json = {
-  task: render(partial: "svc/shared/task", locals: { task: task })
+  task: render_schema("schema://svc/task", task: task)
 }
 
 if resource_graph_columns.include?('info')
-  json['task_upshots'] = render(partial: "svc/shared/task_upshot", collection: task.upshots, as: :task_upshot)
-  json['issues'] = render partial: "svc/shared/issue", collection: task.issues, as: :issue
+  json['task_upshots'] = render_schema("schema://svc/task_upshot", collection: task.upshots, as: :task_upshot)
+  json['issues'] = render_schema("schema://svc/issue", collection: task.issues, as: :issue)
 end
 
 json

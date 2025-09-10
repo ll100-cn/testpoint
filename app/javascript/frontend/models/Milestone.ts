@@ -2,30 +2,31 @@ import { Type } from "class-transformer"
 import * as t from '@/lib/transforms'
 import { Pagination } from "./Pagination"
 import type { OmitByValue } from "utility-types"
+import type { MilestoneSchema } from './schema/milestone'
 
-export class Milestone {
+export class Milestone implements MilestoneSchema {
   id!: number
-  project_id!: number
+  projectId!: number
   title!: string
   description?: string
-  platform_ids: number[] = []
+  platformIds: number[] = []
 
   @Type(() => Date)
-  published_at?: Date
+  publishedAt?: Date
   @Type(() => Date)
-  archived_at?: Date
+  archivedAt?: Date
 
   isPublished(): boolean {
-    if (this.published_at == null) {
+    if (this.publishedAt == null) {
       return false
     }
 
     const now = new Date()
-    return this.published_at <= now
+    return this.publishedAt <= now
   }
 
   isArchived(): boolean {
-    return this.archived_at !== null
+    return this.archivedAt !== null
   }
 }
 

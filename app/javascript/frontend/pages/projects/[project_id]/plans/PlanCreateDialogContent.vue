@@ -54,7 +54,7 @@ const { mutateAsync: create_plan_action } = line.request(q.test.plans.Create(), 
 
 former.doPerform = async function() {
   const plan_box = await create_plan_action({
-    interpolations: { project_id: profile.project_id },
+    interpolations: { project_id: profile.projectId },
     body: former.form
   })
 
@@ -71,7 +71,7 @@ async function reset(new_test_case_stats: TestCaseStat[]) {
   test_case_stats.value = new_test_case_stats
 
   const { data: a_platform_boxes, suspense } = line.request(q.project.platforms.List(), (req, it) => {
-    req.interpolations.project_id = profile.project_id
+    req.interpolations.project_id = profile.projectId
     return it.useQuery(req.toQueryConfig())
   })
   await suspense()

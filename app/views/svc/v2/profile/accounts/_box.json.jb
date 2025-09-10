@@ -1,5 +1,5 @@
 json = {
-  account: (render partial: "svc/shared/account", locals: { user: user })
+  account: (render_schema "schema://svc/account", user: user)
 }
 
 json

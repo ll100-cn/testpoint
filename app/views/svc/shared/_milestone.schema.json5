@@ -1,0 +1,14 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/milestone",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    title: { type: "string" },
+    description: { type: ["string", "null"] },
+    published_at: { type: ["string", "null"], format: "date-time" },
+    archived_at: { type: ["string", "null"], format: "date-time" },
+    project_id: { type: "integer" },
+  },
+  required: [ "id", "title", "project_id" ]
+}

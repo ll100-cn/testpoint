@@ -63,7 +63,7 @@ const validator = reactive<Validator>(new Validator())
 
 const former = Former.build({
   title: plan_box.value.plan.title,
-  platform_id: plan_box.value.plan.platform_id,
+  platform_id: plan_box.value.plan.platformId,
 })
 
 const Form = GenericForm<typeof former.form>

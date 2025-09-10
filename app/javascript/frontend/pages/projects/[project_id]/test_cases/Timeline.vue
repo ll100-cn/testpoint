@@ -9,7 +9,7 @@
         <template v-for="milestone_box in milestone_boxes" :key="milestone_box.milestone.id">
           <li class="timeline-item mb-5" :class="{ 'active': milestone_box.milestone.id == milestone_id }">
             <div class="text-sm mb-2" :class="{ 'text-muted': milestone_box.milestone.id != milestone_id }">
-              <router-link :to="{ query: { milestone_id: milestone_box.milestone.id }}" class="link">{{ h.datetime(milestone_box.milestone.published_at ?? null) ?? '尚未发布' }}</router-link>
+              <router-link :to="{ query: { milestone_id: milestone_box.milestone.id }}" class="link">{{ h.datetime(milestone_box.milestone.publishedAt ?? null) ?? '尚未发布' }}</router-link>
             </div>
             {{ milestone_box.milestone.title }}
             <p class="text-muted">

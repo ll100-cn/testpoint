@@ -1,14 +1,15 @@
 import { Pagination } from "./Pagination"
 import * as t from '@/lib/transforms'
 import type { OmitByValue } from "utility-types"
+import type { CategorySchema } from './schema/category'
 
-export class Category {
+export class Category implements CategorySchema {
   id!: number
   name!: string
   description?: string
   color?: string
-  project_id!: number
-  default_as_test_failure?: boolean
+  projectId!: number
+  defaultAsTestFailure!: boolean
 }
 
 export class CategoryBoxImpl {

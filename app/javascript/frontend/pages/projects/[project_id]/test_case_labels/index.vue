@@ -21,16 +21,16 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="{test_case_label} in test_case_label_page.list" :key="test_case_label.id">
+          <template v-for="{testCaseLabel} in test_case_label_page.list">
             <TableRow>
-              <TableCell>{{ test_case_label.name }}</TableCell>
-              <TableCell>{{ test_case_label.description }}</TableCell>
-              <TableCell>{{ cases_counts[test_case_label.id.toString()] }}</TableCell>
+              <TableCell>{{ testCaseLabel.name }}</TableCell>
+              <TableCell>{{ testCaseLabel.description }}</TableCell>
+              <TableCell>{{ cases_counts[testCaseLabel.id.toString()] }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', test_case_label)" :to="ok_url.apply(`${path_info.collection}/${test_case_label.id}/edit`)" class="link">
+                <router-link v-if="allow('update', testCaseLabel)" :to="ok_url.apply(`${path_info.collection}/${testCaseLabel.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', test_case_label)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', testCaseLabel)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(testCaseLabel.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -78,7 +78,7 @@ const { data: test_case_label_page } = line.request(q.project.test_case_labels.P
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-const cases_counts = computed(() => test_case_label_page.value.cases_counts)
+const cases_counts = computed(() => test_case_label_page.value.casesCounts)
 
 const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))

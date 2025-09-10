@@ -1,0 +1,14 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/task",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    plan_id: { type: ["integer", "null"] },
+    ignore_at: { type: ["string", "null"], format: "date-time" },
+    phase_id: { type: ["integer", "null"] },
+    test_case_id: { type: ["integer", "null"] },
+    finished: { type: "boolean" },
+  },
+  required: [ "id", "finished" ]
+}

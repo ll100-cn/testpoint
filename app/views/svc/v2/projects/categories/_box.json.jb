@@ -1,5 +1,5 @@
 json = {
-  category: (render partial: "svc/shared/category", locals: { category: category })
+  category: (render_schema "schema://svc/category", category: category)
 }
 
 if resource_graph_columns.include?("info")

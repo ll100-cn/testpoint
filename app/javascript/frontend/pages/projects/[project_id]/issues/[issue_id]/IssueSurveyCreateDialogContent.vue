@@ -59,7 +59,7 @@ const { mutateAsync: create_issue_survey_action } = line.request(q.bug.issue_sur
   return it.useMutation(req.toMutationConfig(it))
 })
 
-const project_id = computed(() => props.issue_box.issue.project_id)
+const project_id = computed(() => props.issue_box.issue.projectId)
 
 const { data: issue_template_boxes, isLoading: loading } = line.request(q.project.issue_templates.List(), (req, it) => {
   req.interpolations.project_id = project_id
@@ -69,7 +69,7 @@ const { data: issue_template_boxes, isLoading: loading } = line.request(q.projec
 former.doPerform = async function() {
   const a_issue_survey_box = await create_issue_survey_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id
     },
     body: former.form

@@ -3,34 +3,35 @@ import { Category } from "./Category"
 import * as t from '@/lib/transforms'
 import { Pagination } from "./Pagination"
 import type { OmitByValue } from "utility-types"
+import type { IssueTemplateSchema } from './schema/issue_template'
 
 class IssueTemplateInput {
   id!: number
   label: string | null = null
-  order_index: number | null = null
-  template_id: number | null = null
+  orderIndex: number | null = null
+  templateId: number | null = null
 
   @Type(() => Date)
-  created_at!: Date
+  createdAt!: Date
 
   @Type(() => Date)
-  updated_at!: Date
+  updatedAt!: Date
 }
-export class IssueTemplate {
+export class IssueTemplate implements IssueTemplateSchema {
   id!: number
-  content_suggestion: string | null = null
+  contentSuggestion: string | null = null
 
   @Type(() => Category)
-  default_category: Category | null = null
+  defaultCategory?: Category
 
-  default_category_id: number | null = null
+  defaultCategoryId: number | null = null
 
-  default_priority: string | null = null
-  default_priority_text: string | null = null
-  lookup_by_build_form: boolean | null = null
-  name: string | null = null
-  project_id!: number
-  title_suggestion: string | null = null
+  defaultPriority!: string
+  defaultPriorityText!: string
+  lookupByBuildForm!: boolean
+  name!: string
+  projectId!: number
+  titleSuggestion: string | null = null
 
   inputs: IssueTemplateInput[] = []
 }

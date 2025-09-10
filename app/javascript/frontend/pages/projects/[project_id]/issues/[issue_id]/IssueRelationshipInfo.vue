@@ -6,9 +6,9 @@
     <span v-if="direction === 'source'">关联到</span>
     <span v-else>关联自</span>
 
-    <router-link :to="`/projects/${other.project_id}/issues/${other.id}`" class="link">#{{ other.id }} {{ other.titleWithPriority() }}</router-link>
+    <router-link :to="`/projects/${other.projectId}/issues/${other.id}`" class="link">#{{ other.id }} {{ other.titleWithPriority() }}</router-link>
 
-    <span class="text-sm text-muted">{{ h.datetime(issue_relationship.created_at) }}</span>
+    <span class="text-sm text-muted">{{ h.datetime(issue_relationship.createdAt) }}</span>
 
     <MoreDropdown v-if="!readonly && allow('destroy', IssueRelationship)">
       <DropdownMenuItem v-confirm="'确认删除问题的关联？'" @click.prevent="deleteIssueRelationship">取消关联</DropdownMenuItem>
@@ -56,18 +56,18 @@ const { mutateAsync: destroy_issue_relationship_action } = line.request(q.bug.is
 async function deleteIssueRelationship() {
   await destroy_issue_relationship_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id,
       relationship_id: props.issue_relationship.id
     }
   })
 
   if (direction.value === 'source') {
-    const source_index = props.issue_box.source_relationships.findIndex((it: IssueRelationship) => it.id == props.issue_relationship.id)
-    props.issue_box.source_relationships.splice(source_index, 1)
+    const source_index = props.issue_box.sourceRelationships.findIndex((it: IssueRelationship) => it.id == props.issue_relationship.id)
+    props.issue_box.sourceRelationships.splice(source_index, 1)
   } else {
-    const target_index = props.issue_box.target_relationships.findIndex((it: IssueRelationship) => it.id == props.issue_relationship.id)
-    props.issue_box.target_relationships.splice(target_index, 1)
+    const target_index = props.issue_box.targetRelationships.findIndex((it: IssueRelationship) => it.id == props.issue_relationship.id)
+    props.issue_box.targetRelationships.splice(target_index, 1)
   }
 
   emit("updated", props.issue_box)

@@ -3,7 +3,7 @@
     <CardHeader :class="{ 'bg-destructive/10': comment_box.comment.display == 'important' }">
       <MemberLabel :member="comment_box.comment.member" class="me-1" />
 
-      <span class="ms-1 text-sm text-muted">添加于 {{ h.datetime(comment_box.comment.created_at) }}</span>
+      <span class="ms-1 text-sm text-muted">添加于 {{ h.datetime(comment_box.comment.createdAt) }}</span>
 
       <span class="ms-1 text-sm text-body-tertiary">[{{ comment_box.comment.id }}]</span>
 
@@ -89,7 +89,7 @@ function changeDisplay() {
 }
 
 const children = computed(() => {
-  return props.comment_repo.parent_id.findAll(props.comment_box.comment.id).sort((a, b) => a.created_at > b.created_at ? 1 : -1)
+  return props.comment_repo.parent_id.findAll(props.comment_box.comment.id).sort((a, b) => a.createdAt > b.createdAt ? 1 : -1)
 })
 
 const content_id = _.uniqueId("content_")
@@ -105,7 +105,7 @@ const { mutateAsync: update_comment_action } = line.request(q.bug.issue_comments
 async function deleteComment() {
   await destroy_comment_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id,
       comment_id: props.comment_box.comment.id
     }
@@ -117,7 +117,7 @@ async function deleteComment() {
 async function updateComment(data: Record<string, any>) {
   const a_comment_box = await update_comment_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id,
       comment_id: props.comment_box.comment.id
     },

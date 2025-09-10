@@ -1,10 +1,10 @@
 json = {
-  member: (render partial: "svc/shared/member", locals: { member: member })
+  member: (render_schema "schema://svc/member", member: member)
 }
 
 if resource_graph_columns.include?("info")
-  json[:project] = render partial: "svc/shared/project", locals: { project: member.project }
-  json[:user] = render partial: "svc/shared/user", locals: { user: member.user }
+  json[:project] = render_schema "schema://svc/project", project: member.project
+  json[:user] = render_schema "schema://svc/user", user: member.user
 end
 
 json

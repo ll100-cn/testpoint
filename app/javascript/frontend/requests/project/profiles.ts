@@ -13,6 +13,7 @@ class GetRequest extends BaseRequest<ProfileBox> {
 }
 export const Get = () => new GetRequest()
 
+
 class UpdateRequest extends BaseRequest<ProfileBox> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/profile",

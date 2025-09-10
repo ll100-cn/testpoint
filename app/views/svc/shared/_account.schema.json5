@@ -1,0 +1,12 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/account",
+  type: "object",
+  properties: {
+    user: { $ref: "schema://svc/user" },
+    name: { type: "string" },
+    email: { type: "string" },
+    admin: { type: "boolean" },
+  },
+  required: [ "user", "name", "email", "admin" ]
+}

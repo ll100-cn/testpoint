@@ -6,10 +6,10 @@ import { Pagination } from './Pagination'
 import type { OmitByValue } from 'utility-types'
 
 export class TaskUpshotBoxImpl {
-  @t.Klass(TaskUpshot) task_upshot!: TaskUpshot
+  @t.Klass(TaskUpshot) taskUpshot!: TaskUpshot
 
   @t.Klass(Task) task: Task | null = null
-  @t.Klass(TestCase) test_case: TestCase | null = null
+  @t.Klass(TestCase) testCase: TestCase | null = null
 }
 
 export type TaskUpshotBox = OmitByValue<TaskUpshotBoxImpl, Function>

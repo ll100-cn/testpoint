@@ -28,11 +28,11 @@
         </TableHeader>
         <TableBody>
           <template v-for="{ member, user } in filtered_member_boxes" :key="member.id">
-            <TableRow :class="{ 'block-discard': member.archived_at }">
+            <TableRow :class="{ 'block-discard': member.archivedAt }">
               <TableCell>{{ member.id }}</TableCell>
               <TableCell>{{ member.name }}</TableCell>
               <TableCell>{{ user.email }}</TableCell>
-              <TableCell>{{ member.role_text }}</TableCell>
+              <TableCell>{{ member.roleText }}</TableCell>
               <TableCell role="actions">
                 <router-link v-if="allow('update', member)" :to="ok_url.apply(`${path_info.collection}/${member.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
@@ -101,7 +101,7 @@ async function archiveMember(id: number) {
 }
 
 const filtered_member_boxes = computed(() => {
-  return member_boxes.value.filter(({ member }) => active.value == (member.archived_at ? "archived" : "normal"))
+  return member_boxes.value.filter(({ member }) => active.value == (member.archivedAt ? "archived" : "normal"))
 })
 
 </script>

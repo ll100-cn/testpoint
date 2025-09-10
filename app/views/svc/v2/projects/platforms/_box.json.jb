@@ -1,5 +1,5 @@
 json = {
-  platform: (render partial: "svc/shared/platform", locals: { platform: platform })
+  platform: (render_schema "schema://svc/platform", platform: platform)
 }
 
 json

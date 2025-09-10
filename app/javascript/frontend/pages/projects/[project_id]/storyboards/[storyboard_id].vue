@@ -214,7 +214,7 @@ const { data: scene_boxes } = line.request(q.project.scenes.List(), (req, it) =>
 await line.wait()
 
 const platforms = computed(() => platform_boxes.value.map(it => it.platform))
-const test_case_labels = computed(() => test_case_label_boxes.value.map(it => it.test_case_label))
+const test_case_labels = computed(() => test_case_label_boxes.value.map(it => it.testCaseLabel))
 const roadmaps = ref([] as Roadmap[])
 roadmaps.value = roadmap_boxes.value.map(it => it.roadmap)
 const storyboards = ref([] as Storyboard[])
@@ -252,7 +252,7 @@ requirements.value = requirement_page.value.list.map(it => it.requirement)
 
 const requirement_repo = ref(new RequirementRepo().setup(requirements.value))
 const requirement_stat_repo = computed(() => {
-  return new RequirementStatRepo().setup(requirement_page.value.requirement_stats)
+  return new RequirementStatRepo().setup(requirement_page.value.requirementStats)
 })
 
 function rebuildRequirementRepo() {
@@ -308,7 +308,7 @@ function rebuildNodes() {
       type: 'requirement'
     })
 
-    for (const upstream_id of requirement.upstream_ids) {
+    for (const upstream_id of requirement.upstreamIds) {
       edges.value.push({
         id: `${requimentNodeId(requirement)}-${requimentNodeId(upstream_id)}`,
         source: requimentNodeId(upstream_id),
@@ -372,11 +372,11 @@ function connect(connection: Connection) {
   }
 
   const new_upstream_id = parseRequirementId(connection.source)!
-  if (requirement.upstream_ids.includes(new_upstream_id)) {
+  if (requirement.upstreamIds.includes(new_upstream_id)) {
     return
   }
 
-  updateRequirementWithData(requirement, { upstream_ids: [...requirement.upstream_ids, new_upstream_id] })
+  updateRequirementWithData(requirement, { upstream_ids: [...requirement.upstreamIds, new_upstream_id] })
   addEdges([{
     id: `${requirement.id}-${new_upstream_id}`,
     source: requimentNodeId(new_upstream_id),
@@ -397,8 +397,8 @@ function changeEdges(changes: EdgeChange[]) {
     }
 
     const old_upstream_id = parseRequirementId(change.source)!
-    if (requirement.upstream_ids.includes(old_upstream_id)) {
-      updateRequirement(requirement, { upstream_ids: requirement.upstream_ids.filter((id) => id !== old_upstream_id) })
+    if (requirement.upstreamIds.includes(old_upstream_id)) {
+      updateRequirement(requirement, { upstream_ids: requirement.upstreamIds.filter((id) => id !== old_upstream_id) })
     }
   }
 }
@@ -413,6 +413,8 @@ function stopNodeDrag(event: NodeDragEvent) {
 
 function onNodesInitialized(graphNodes: GraphNode[]) {
   node_size_mapping.clear()
+
+  console.log("graphNodes", graphNodes)
 
   const requirement_nodes = graphNodes.filter(it => it.type == "requirement")
   for (const node of requirement_nodes) {
@@ -430,7 +432,7 @@ function onNodesInitialized(graphNodes: GraphNode[]) {
 
 function updateScenePositions() {
   for (const scene of scenes.value) {
-    const requirements = requirement_repo.value.scene_id.findAll(scene.id)
+    const requirements = requirement_repo.value.sceneId.findAll(scene.id)
     if (requirements.length > 0) {
       let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
 
@@ -498,7 +500,7 @@ function updateRequirement(a_requirement: Requirement) {
   updateScenePositions()
 }
 
-function destroyeRequirement(a_requirement: Requirement) {
+function destroyRequirement(a_requirement: Requirement) {
   requirements.value = requirements.value.filter((r) => r.id !== a_requirement.id)
   rebuildRequirementRepo()
   rebuildNodes()
@@ -529,7 +531,7 @@ function relayout() {
   g.setDefaultEdgeLabel(function() { return {} })
 
   const grouped_requirements = _.groupBy(requirements.value, requirement => {
-    return requirement.scene_id
+    return requirement.sceneId
   })
 
   for (const scene_id of Object.keys(grouped_requirements)) {
@@ -544,7 +546,7 @@ function relayout() {
     }
 
     for (const requirement of grouped_requirements[scene_id]) {
-      const upstream_ids = requirement.upstream_ids.filter(id => !!requirement_repo.value.id.find(id))
+      const upstream_ids = requirement.upstreamIds.filter(id => !!requirement_repo.value.id.find(id))
       for (const upstream_id of upstream_ids) {
         g.setEdge(requimentNodeId(upstream_id), requimentNodeId(requirement))
       }

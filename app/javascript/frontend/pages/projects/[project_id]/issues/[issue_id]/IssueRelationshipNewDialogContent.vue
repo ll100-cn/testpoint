@@ -61,13 +61,13 @@ const { mutateAsync: create_issue_relationship_action } = line.request(q.bug.iss
 former.doPerform = async function() {
   const a_issue_relationship_box = await create_issue_relationship_action({
     interpolations: {
-      project_id: props.issue_box.issue.project_id,
+      project_id: props.issue_box.issue.projectId,
       issue_id: props.issue_box.issue.id
     },
     body: former.form
   })
 
-  props.issue_box.source_relationships.push(a_issue_relationship_box.issue_relationship)
+  props.issue_box.sourceRelationships.push(a_issue_relationship_box.issue_relationship)
   emit('updated', props.issue_box)
 
   open.value = false

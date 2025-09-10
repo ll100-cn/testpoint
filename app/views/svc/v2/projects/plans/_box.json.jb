@@ -1,12 +1,12 @@
 json = {
-  plan: (render partial: "svc/shared/plan", locals: { plan: plan })
+  plan: (render_schema "schema://svc/plan", plan: plan)
 }
 
 if resource_graph_columns.include?("info")
   upshots_state_counts_mapping ||= {}
   json[:phase_infos] = plan.phases.ranked.map do |phase|
     {
-      phase: render(partial: "svc/shared/phase", locals: { phase: phase }),
+      phase: render_schema("schema://svc/phase", phase: phase),
       upshots_state_counts: upshots_state_counts_mapping[phase.id] || {}
     }
   end

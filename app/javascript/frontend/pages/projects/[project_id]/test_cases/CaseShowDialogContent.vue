@@ -3,7 +3,7 @@
     <DialogHeader>
       <DialogTitle>
         #{{ test_case.id }}
-        <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
+        <span v-if="test_case.groupName" class="me-1">[{{ test_case.groupName }}]</span>
         {{ test_case.title }}
       </DialogTitle>
 
@@ -25,7 +25,7 @@
         <Collapsible>
           <CollapsibleTrigger as-child>
             <div class="flex">
-              <div>{{ h.datetime(version_case.updated_at) }}</div>
+              <div>{{ h.datetime(version_case.updatedAt) }}</div>
               <div class="ms-auto"><i class="fa-regular fa-chevron-down"></i></div>
             </div>
           </CollapsibleTrigger>
@@ -45,18 +45,17 @@
 </template>
 
 <script setup lang="ts">
-import * as h from '@/lib/humanize'
-import * as q from '@/requests'
-import { TestCase } from '@/models'
-import { usePageStore } from '@/store'
-import { type Component, getCurrentInstance, nextTick, onUpdated, ref } from 'vue'
-import CaseEditDialogContent from './CaseEditDialogContent.vue'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '$ui/dialog'
-import { Well } from '$ui/well'
 import Button from '$ui/button/Button.vue'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '$ui/collapsible'
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '$ui/dialog'
 import PageContent from '@/components/PageContent.vue'
+import * as h from '@/lib/humanize'
 import { useQueryLine } from '@/lib/useQueryLine'
+import { TestCase } from '@/models'
+import * as q from '@/requests'
+import { usePageStore } from '@/store'
+import { type Component, nextTick, onUpdated, ref } from 'vue'
+import CaseEditDialogContent from './CaseEditDialogContent.vue'
 
 
 const props = defineProps<{
@@ -83,12 +82,12 @@ async function reset(a_test_case: TestCase) {
   test_case.value = a_test_case
 
   const { data: history_page, suspense } = line.request(q.case.test_cases.History(), (req, it) => {
-    req.interpolations.project_id = a_test_case.project_id
+    req.interpolations.project_id = a_test_case.projectId
     req.interpolations.id = a_test_case.id
     return it.useQuery(req.toQueryConfig())
   })
   await suspense()
-  history.value = history_page.value.list.map(it => it.test_case)
+  history.value = history_page.value.list.map(it => it.testCase)
 
   nextTick(() => {
     loading.value = false

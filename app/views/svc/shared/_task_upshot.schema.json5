@@ -1,0 +1,15 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/task_upshot",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    state: { type: "string" },
+    state_override: { type: ["string", "null"] },
+    state_changed_at: { type: ["string", "null"], format: "date-time" },
+    phase_id: { type: ["integer", "null"] },
+    content: { type: ["string", "null"] },
+    created_at: { type: "string", format: "date-time" },
+  },
+  required: [ "id" ]
+}

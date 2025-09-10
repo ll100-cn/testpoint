@@ -1,0 +1,14 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/category",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    name: { type: "string" },
+    description: { type: ["string", "null"] },
+    color: { type: ["string", "null"] },
+    project_id: { type: "integer" },
+    default_as_test_failure: { type: "boolean" },
+  },
+  required: [ "id", "name", "project_id", "default_as_test_failure" ]
+}

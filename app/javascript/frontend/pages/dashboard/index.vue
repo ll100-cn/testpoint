@@ -60,7 +60,7 @@ const { data: unhandled_issue_page } = line.request(q.profile.issues.Page(), (re
 })
 await line.wait()
 
-const unhandled_issues_count = computed(() => unhandled_issue_page.value.total_count)
+const unhandled_issues_count = computed(() => unhandled_issue_page.value.totalCount)
 const project_repo = computed(() => new EntityRepo<Project>().setup(member_boxes.value.map(it => it.project)))
 
 const grouped_issue_stats = computed(() => {
@@ -70,8 +70,8 @@ const grouped_issue_stats = computed(() => {
     result.set(project, new Map<string, IssueStat[]>())
   }
 
-  for (const issue_stat of unhandled_issue_page.value.issue_stats) {
-    const project = project_repo.value.id.find(issue_stat.project_id)
+  for (const issue_stat of unhandled_issue_page.value.issueStats) {
+    const project = project_repo.value.id.find(issue_stat.projectId)
 
     let issue_stats_mapping = result.get(project)
     if (!issue_stats_mapping) {
@@ -94,7 +94,7 @@ const grouped_issue_stats = computed(() => {
 const issue_stages_counts = computed(() => {
   const result = new Map<string, number>()
 
-  for (const issue_stat of unhandled_issue_page.value.issue_stats) {
+  for (const issue_stat of unhandled_issue_page.value.issueStats) {
     const count = result.get(issue_stat.stage) || 0
     result.set(issue_stat.stage, count + issue_stat.count)
   }

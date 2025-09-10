@@ -1,5 +1,5 @@
 json = {
-  profile: (render partial: "svc/shared/profile", locals: { member: member })
+  profile: (render_schema "schema://svc/profile", member: member)
 }
 
 json

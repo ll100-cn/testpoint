@@ -1,4 +1,4 @@
 json = issue_stat.slice(:project_id, :stage, :category_id, :count)
-json[:category] = render partial: 'svc/shared/category', locals: { category: issue_stat.category } if issue_stat.category_id?
+json[:category] = render_schema('schema://svc/category', category: issue_stat.category) if issue_stat.category_id?
 
 json

@@ -4,32 +4,33 @@ import * as t from '@/lib/transforms'
 import { Category } from "./Category"
 import { Milestone } from "./Milestone"
 import { Project } from "./Project"
+import type { IssueActivitySchema } from './schema/issue_activity'
 
-export class IssueActivity {
-  @t.Number id: number
-  @t.Number issue_id: number
-  @t.Number member_id: number
-  @t.String property: string
-  @t.String after_value: string
-  @t.String before_value: string
+export class IssueActivity implements IssueActivitySchema {
+  @t.Number id!: number
+  @t.Number issueId!: number
+  @t.Number memberId!: number
+  @t.String property!: string
+  @t.String afterValue: string | null = null
+  @t.String beforeValue: string | null = null
 
-  @t.Klass(Member) member: Member
+  @t.Klass(Member) member?: Member
 
-  @t.Date created_at: Date
-  @t.Date updated_at: Date
+  @t.Date createdAt!: Date
+  @t.Date updatedAt!: Date
 
-  @t.Klass(Category) before_category?: Category
-  @t.Klass(Category) after_category?: Category
+  @t.Klass(Category) beforeCategory?: Category
+  @t.Klass(Category) afterCategory?: Category
 
-  @t.Klass(Member) before_creator?: Member
-  @t.Klass(Member) after_creator?: Member
+  @t.Klass(Member) beforeCreator?: Member
+  @t.Klass(Member) afterCreator?: Member
 
-  @t.Klass(Member) before_assignee?: Member
-  @t.Klass(Member) after_assignee?: Member
+  @t.Klass(Member) beforeAssignee?: Member
+  @t.Klass(Member) afterAssignee?: Member
 
-  @t.Klass(Milestone) before_milestone?: Milestone
-  @t.Klass(Milestone) after_milestone?: Milestone
+  @t.Klass(Milestone) beforeMilestone?: Milestone
+  @t.Klass(Milestone) afterMilestone?: Milestone
 
-  @t.Klass(Project) before_project?: Project
-  @t.Klass(Project) after_project?: Project
+  @t.Klass(Project) beforeProject?: Project
+  @t.Klass(Project) afterProject?: Project
 }

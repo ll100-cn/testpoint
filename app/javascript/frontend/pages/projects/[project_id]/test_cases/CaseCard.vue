@@ -71,30 +71,30 @@
 </template>
 
 <script setup lang="ts">
-import * as q from '@/requests'
+import { Button } from '$ui/button'
+import { Card, CardHeader } from '$ui/card'
+import { DropdownMenuItem, DropdownMenuSeparator } from '$ui/dropdown-menu'
+import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
+import BlankDialog from '@/components/BlankDialog.vue'
+import * as controls from '@/components/controls'
+import { SelectdropItem } from '@/components/controls/selectdrop'
+import type { TestCaseBatchFrameComponent } from '@/components/TestCaseBatchFrame'
+import type { TestCaseFrameComponent } from '@/components/TestCaseFrame'
+import { TEST_CASE_RELATE_STATES } from '@/constants'
+import PathHelper from '@/lib/PathHelper'
 import * as t from '@/lib/transforms'
+import { useQueryLine } from '@/lib/useQueryLine'
 import * as utils from '@/lib/utils'
-import { EntityRepo, Milestone, type MilestoneBox, MilestonePage, Platform, TestCase, TestCaseLabel } from '@/models'
+import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
+import * as q from '@/requests'
+import { usePageStore, useSessionStore } from '@/store'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
-import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
+import { computed, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { type ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
-import { usePageStore, useSessionStore } from '@/store'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
-import BlankDialog from '@/components/BlankDialog.vue'
 import CardNewDialog from './CardNewDialog.vue'
-import type { TestCaseFrameComponent } from '@/components/TestCaseFrame'
-import type { TestCaseBatchFrameComponent } from '@/components/TestCaseBatchFrame'
-import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
-import { Button } from '$ui/button'
-import * as controls from '@/components/controls'
-import { SelectdropItem } from '@/components/controls/selectdrop'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '$ui/dropdown-menu'
-import { TEST_CASE_RELATE_STATES } from '@/constants'
-import { useQueryLine } from '@/lib/useQueryLine'
-import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -168,8 +168,8 @@ const { data: _roadmap_boxes } = line.request(q.project.roadmaps.List(), (req, i
 })
 await line.wait()
 
-const test_cases = computed(() => test_case_page.value.list.map(it => it.test_case))
-const _labels = computed(() => _label_boxes.value.map(it => it.test_case_label))
+const test_cases = computed(() => test_case_page.value.list.map(it => it.testCase))
+const _labels = computed(() => _label_boxes.value.map(it => it.testCaseLabel))
 const _platforms = computed(() => _platform_boxes.value.map(it => it.platform))
 const _roadmaps = computed(() => _roadmap_boxes.value.map(it => it.roadmap))
 const milestone = computed(() => {
@@ -188,7 +188,7 @@ const newest_roadmap = computed(() => {
   const newest = _roadmaps.value.sort((a, b) => b.id - a.id)[0]
 
   if (milestone.value) {
-    return _roadmaps.value.filter((it) => (milestone!.value!.published_at != null && it.created_at < milestone!.value!.published_at)).sort((a, b) => b.id - a.id)[0] ?? newest
+    return _roadmaps.value.filter((it) => (milestone!.value!.publishedAt != null && it.createdAt < milestone!.value!.publishedAt)).sort((a, b) => b.id - a.id)[0] ?? newest
   } else {
     return newest
   }
@@ -199,25 +199,25 @@ const search_test_cases = computed(() => {
 
   const platform = platform_repo.value.find(_.toNumber(query.platform_id))
   if (platform) {
-    scope = scope.filter(it => it.platform_ids.includes(platform.id))
+    scope = scope.filter(it => it.platformIds.includes(platform.id))
   }
 
   const label = label_repo.value.find(_.toNumber(query.label_id))
   if (label) {
-    scope = scope.filter(it => it.label_ids.includes(label.id))
+    scope = scope.filter(it => it.labelIds.includes(label.id))
   }
 
   if (query.group_name_search) {
-    scope = scope.filter((it) => !!it.group_name?.includes(query.group_name_search))
+    scope = scope.filter((it) => !!it.groupName?.includes(query.group_name_search))
   }
 
   if (query.relate_state) {
     if (query.relate_state === 'related') {
-      scope = scope.filter((it) => it.requirement_id != null)
+      scope = scope.filter((it) => it.requirementId != null)
     } else if (query.relate_state === 'unrelated') {
-      scope = scope.filter((it) => it.requirement_id == null)
+      scope = scope.filter((it) => it.requirementId == null)
     } else if (query.relate_state === 'expired') {
-      scope = scope.filter((it) => (it.requirement_id != null && it.roadmap_id != newest_roadmap.value.id))
+      scope = scope.filter((it) => (it.requirementId != null && it.roadmapId != newest_roadmap.value.id))
     }
   }
 

@@ -2,7 +2,7 @@
   <div>
     <PageContent :content="body.content" />
     <span v-if="is_edited" class="text-muted text-sm mt-1">
-      最后修改于: {{ h.datetime(body.last_edited_at) }}
+      最后修改于: {{ h.datetime(body.lastEditedAt) }}
     </span>
 
     <div class="grid grid-cols-3 gap-4 mt-2 gy-2" v-if="body.attachments.length > 0">
@@ -21,8 +21,8 @@ import { computed } from 'vue'
 interface ContentBody {
   content: string
   attachments: Attachment[]
-  created_at: Date
-  last_edited_at?: Date
+  createdAt: Date
+  lastEditedAt?: Date
 }
 
 const emit = defineEmits<{
@@ -35,5 +35,5 @@ const props = defineProps<{
   editable?: boolean
 }>()
 
-const is_edited = computed(() => props.body.last_edited_at && props.body.created_at != props.body.last_edited_at)
+const is_edited = computed(() => props.body.lastEditedAt && props.body.createdAt != props.body.lastEditedAt)
 </script>

@@ -103,7 +103,7 @@ const { mutateAsync: update_task_upshot_state_action } = line.request(q.test.tas
 
 issue_former.doPerform = async function() {
   const issue_box = await create_issue_action({
-    interpolations: { project_id: props.plan_box.plan.project_id },
+    interpolations: { project_id: props.plan_box.plan.projectId },
     body: this.form
   })
 
@@ -129,7 +129,7 @@ const { mutateAsync: create_comment_action } = line.request(q.bug.issue_comments
 comment_former.doPerform = async function() {
   await create_comment_action({
     interpolations: {
-      project_id: comment_issue.value!.project_id,
+      project_id: comment_issue.value!.projectId,
       issue_id: comment_issue.value!.id
     },
     body: this.form
@@ -146,10 +146,10 @@ actioner.failTaskUpshot = async function() {
   this.perform(async function() {
     const a_task_upshot_box = await update_task_upshot_state_action({
       interpolations: {
-        project_id: props.plan_box.plan.project_id,
+        project_id: props.plan_box.plan.projectId,
         plan_id: props.plan_box.plan.id,
         task_id: task_box.value.task.id,
-        upshot_id: task_upshot_box.value.task_upshot.id
+        upshot_id: task_upshot_box.value.taskUpshot.id
       },
       body: {
         task_upshot: {
@@ -158,7 +158,7 @@ actioner.failTaskUpshot = async function() {
       }
     })
 
-    Object.assign(task_upshot_box.value.task_upshot, a_task_upshot_box.task_upshot)
+    Object.assign(task_upshot_box.value.taskUpshot, a_task_upshot_box.taskUpshot)
     emit('switch', TaskUpshotInfoDialogContent, task_upshot_box.value)
   })
 }
@@ -171,8 +171,8 @@ async function reset(a_task_upshot_box: TaskUpshotBox, a_task_box: TaskBox) {
   task_box.value = a_task_box
   addon.value = null
 
-  issue_former.form.issue_attributes.title = `「${props.plan_box.plan.platform.name}」 ${task_upshot_box.value.test_case?.title}`
-  issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content}\n\n实际效果:\n`
+  issue_former.form.issue_attributes.title = `「${props.plan_box.plan.platform.name}」 ${task_upshot_box.value.testCase?.title}`
+  issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_box.value.taskUpshot.content ?? task_upshot_box.value.testCase?.content}\n\n实际效果:\n`
   issue_former.form.from_task_id = task_upshot_box.value.task!.id
 
   nextTick(() => {

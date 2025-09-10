@@ -1,8 +1,9 @@
 import * as t from '@/lib/transforms'
 import { Pagination } from './Pagination'
 import type { OmitByValue } from "utility-types"
+import type { StoryboardSchema } from './schema/storyboard'
 
-export class Storyboard {
+export class Storyboard implements StoryboardSchema {
   id!: number
 
   title!: string

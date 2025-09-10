@@ -1,19 +1,19 @@
 <template>
   <Well ref="el" class="flex items-center p-2">
     <div class="me-2" style="width: 3rem">
-      <template v-if="attachment.isImage() && attachment.file_url">
-        <a :href="attachment.file_url" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
+      <template v-if="attachment.isImage() && attachment.fileUrl">
+        <a :href="attachment.fileUrl" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
           <div class="aspect-square">
-            <img :src="attachment.file_url" class="object-cover size-full">
+            <img :src="attachment.fileUrl" class="object-cover size-full">
           </div>
         </a>
       </template>
 
-      <template v-else-if="attachment.isVideo() && attachment.file_url">
-        <a :href="attachment.file_url" data-fancybox-trigger="gallery" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
+      <template v-else-if="attachment.isVideo() && attachment.fileUrl">
+        <a :href="attachment.fileUrl" data-fancybox-trigger="gallery" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
           <div class="relative aspect-square">
-            <template v-if="attachment.file_previewable">
-              <img :src="attachment.file_preview_url" class="object-cover size-full">
+            <template v-if="attachment.filePreviewable">
+              <img :src="attachment.filePreviewUrl" class="object-cover size-full">
             </template>
 
             <div class="absolute inset-0 flex items-center justify-center">
@@ -46,8 +46,8 @@
           <span v-if="editable" role="button" class="far fa-fw fa-edit ms-auto" @click.prevent="edit" />
         </div>
         <div class="flex items-center">
-          <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
-          <a v-if="attachment.file_url" class="clipboard ms-1" :href="attachment.file_url" :download="attachment.title">
+          <span class="text-secondary">{{ prettyBytes(attachment.fileSize) }}</span>
+          <a v-if="attachment.fileUrl" class="clipboard ms-1" :href="attachment.fileUrl" :download="attachment.title">
             <span class="far fa-fw fa-link text-muted" />
           </a>
           <a v-if="editable" class="ms-auto" href="#" v-confirm="'确认删除附件？'" @click.prevent="deleteAttachment">

@@ -1,18 +1,18 @@
 <template>
   <div class="flex border bg-light p-2 items-center">
     <div class="me-2" style="width: 3rem">
-      <template v-if="attachment.isImage() && attachment.file_url">
-        <a :href="attachment.file_url" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
+      <template v-if="attachment.isImage() && attachment.fileUrl">
+        <a :href="attachment.fileUrl" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
           <div class="aspect-square flex items-center justify-center img-thumbnail overflow-hidden">
-            <img :src="attachment.file_url" class="h-100 images" alt="">
+            <img :src="attachment.fileUrl" class="h-100 images" alt="">
           </div>
         </a>
       </template>
-      <template v-else-if="attachment.isVideo() && attachment.file_url">
-        <a :href="attachment.file_url" data-fancybox-trigger="gallery" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
+      <template v-else-if="attachment.isVideo() && attachment.fileUrl">
+        <a :href="attachment.fileUrl" data-fancybox-trigger="gallery" :data-fancybox="`attachment_${attachment.id}`" target="_blank">
           <div class="aspect-square flex items-center justify-center">
-            <template v-if="attachment.file_previewable">
-              <img :src="attachment.file_preview_url" class="h-100" alt="">
+            <template v-if="attachment.filePreviewable">
+              <img :src="attachment.filePreviewUrl" class="h-100" alt="">
             </template>
             <template v-else>
               <i class="fal fa-play-circle text-muted" :style="{fontSize: '2.8rem'}"></i>
@@ -43,8 +43,8 @@
           <span role="button" class="far fa-fw fa-edit ms-auto" @click.prevent="enterEditing" />
         </div>
         <div class="flex items-center x-actions">
-          <span class="text-secondary">{{ prettyBytes(attachment.file_size) }}</span>
-          <a v-if="attachment.file_url" class="clipboard ms-1" :href="attachment.file_url" @click.prevent>
+          <span class="text-secondary">{{ prettyBytes(attachment.fileSize) }}</span>
+          <a v-if="attachment.fileUrl" class="clipboard ms-1" :href="attachment.fileUrl" @click.prevent>
             <span class="far fa-fw fa-link text-muted" />
           </a>
           <a class="ms-auto" href="#" @click.prevent="deleteAttachment">

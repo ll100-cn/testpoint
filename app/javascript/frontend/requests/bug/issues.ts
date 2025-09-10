@@ -3,7 +3,7 @@ import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 import type { Required } from "utility-types"
 
-type IssueBoxInfoFields = 'activities' | 'attachments' | 'source_relationships' | 'subscriptions' | 'surveys' | 'target_relationships'
+type IssueBoxInfoFields = 'activities' | 'attachments' | 'sourceRelationships' | 'subscriptions' | 'surveys' | 'targetRelationships'
 
 class CreateRequest extends BaseRequest<IssueBox> {
   scheme = Scheme.post({

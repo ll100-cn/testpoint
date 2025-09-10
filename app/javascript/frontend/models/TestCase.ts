@@ -2,29 +2,30 @@ import { Type } from "class-transformer"
 import * as t from '@/lib/transforms'
 import { Pagination } from './Pagination'
 import type { OmitByValue } from "utility-types"
+import type { TestCaseSchema } from './schema/test_case'
 
-export class TestCase {
+export class TestCase implements TestCaseSchema {
   id!: number
-  project_id!: number
+  projectId!: number
   title!: string
   content!: string
-  platform_ids: number[] = []
-  label_ids: number[] = []
-  role_name: string | null = null
-  scene_name: string | null = null
-  group_name: string | null = null
-  scene_path?: string[]
+  platformIds: number[] = []
+  labelIds: number[] = []
+  roleName: string | null = null
+  sceneName: string | null = null
+  groupName: string | null = null
+  scenePath?: string[]
   archived!: boolean
 
-  storyboard_id: number | null = null
-  requirement_id: number | null = null
-  roadmap_id: number | null = null
+  storyboardId: number | null = null
+  requirementId: number | null = null
+  roadmapId: number | null = null
 
-  @Type(() => Date) updated_at!: Date
+  @Type(() => Date) updatedAt!: Date
 }
 
 export class TestCaseBoxImpl {
-  @t.Klass(TestCase) test_case!: TestCase
+  @t.Klass(TestCase) testCase!: TestCase
 }
 
 export type TestCaseBox = OmitByValue<TestCaseBoxImpl, Function>

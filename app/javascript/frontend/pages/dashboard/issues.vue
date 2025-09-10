@@ -83,9 +83,9 @@ await line.wait()
 
 const unhandled_issues_count = computed(() => {
   if (filter == 'unhandled') {
-    return pagination.value.total_count
+    return pagination.value.totalCount
   } else {
-    return unhandled_issue_page.value?.total_count ?? 0
+    return unhandled_issue_page.value?.totalCount ?? 0
   }
 })
 </script>

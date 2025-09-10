@@ -47,15 +47,15 @@ const props = defineProps<{
 }>()
 
 const total_count = computed(() => {
-  return _.sumBy(props.analytics.issue_counts, (issue_count) => {
-    if (issue_count.creator_id == props.member.id) {
+  return _.sumBy(props.analytics.issueCounts, (issue_count) => {
+    if (issue_count.creatorId == props.member.id) {
       return issue_count.count
     }
   })
 })
 
 function getCount(category: Category, member: Member) {
-  return _.find(props.analytics.issue_counts, { category_id: category.id, creator_id: member.id })?.count ?? 0
+  return _.find(props.analytics.issueCounts, { category_id: category.id, creatorId: member.id })?.count ?? 0
 }
 
 function buildPercentStr(count, total) {

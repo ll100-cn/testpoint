@@ -1,0 +1,18 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/issue_relationship",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    target_id: { type: "integer" },
+    source_id: { type: "integer" },
+    member_id: { type: "integer" },
+    category: { type: [ "string", "null" ] },
+    created_at: { type: "string", format: "date-time" },
+    updated_at: { type: "string", format: "date-time" },
+    member: { $ref: "schema://svc/member" },
+    target: { $ref: "schema://svc/issue" },
+    source: { $ref: "schema://svc/issue" },
+  },
+  required: [ "id", "target_id", "source_id", "member_id", "created_at", "updated_at" ]
+}

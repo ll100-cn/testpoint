@@ -1,0 +1,20 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/comment",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    content: { type: "string" },
+    created_at: { type: "string", format: "date-time" },
+    updated_at: { type: "string", format: "date-time" },
+    issue_id: { type: "integer" },
+    last_edited_at: { type: ["string", "null"], format: "date-time" },
+    member_id: { type: "integer" },
+    comment_id: { type: ["integer", "null"] },
+    collapsed: { type: "boolean" },
+    display: { type: ["boolean", "string", "null"] },
+    member: { $ref: "schema://svc/member" },
+    attachments: { type: "array", items: { $ref: "schema://svc/attachment" } },
+  },
+  required: [ "id", "content", "created_at", "updated_at", "issue_id", "member_id", "collapsed", "display" ]
+}

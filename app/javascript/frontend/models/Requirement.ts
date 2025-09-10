@@ -3,21 +3,22 @@ import { EntityIndex, EntityRepo } from "./EntityRepo"
 import { Pagination } from "./Pagination"
 import { RequirementStat } from './RequirementStat'
 import type { OmitByValue } from "utility-types"
+import type { RequirementSchema } from './schema/requirement'
 
-export class Requirement {
+export class Requirement implements RequirementSchema {
   id!: number
-  scene_id: number | null = null
+  sceneId: number | null = null
 
-  platform_ids: number[] = []
-  upstream_ids: number[] = []
-  label_ids: number[] = []
-  label_descriptions: Record<string, string> = {}
+  platformIds: number[] = []
+  upstreamIds: number[] = []
+  labelIds: number[] = []
+  labelDescriptions: Record<string, string> = {}
 
   title!: string
   description?: string
   roles: string[] = []
 
-  @t.Date updated_at!: Date
+  @t.Date updatedAt!: Date
 }
 
 export class RequirementBoxImpl {
@@ -28,13 +29,13 @@ export type RequirementBox = OmitByValue<RequirementBoxImpl, Function>
 
 export class RequirementPage<Box extends RequirementBox> extends Pagination<Box> {
   @t.Klass(RequirementBoxImpl) list: Box[] = []
-  @t.Klass(RequirementStat) requirement_stats: RequirementStat[] = []
+  @t.Klass(RequirementStat) requirementStats: RequirementStat[] = []
 }
 
 export class RequirementRepo extends EntityRepo<Requirement> {
-  scene_id = new EntityIndex<number | null, Requirement>(it => it.scene_id)
+  sceneId = new EntityIndex<number | null, Requirement>(it => it.sceneId)
 
   buildIndex(entity: Requirement): void {
-    this.scene_id.add(entity);
+    this.sceneId.add(entity);
   }
 }

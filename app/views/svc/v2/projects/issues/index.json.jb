@@ -4,7 +4,7 @@ json = {
 }
 
 if resource_graph_columns.include?("counts")
-  json[:issue_stats] = render partial: "svc/shared/issue_state", collection: @project_issue_stats, as: :issue_stat
+  json[:issue_stats] = render_schema("schema://svc/issue_state", collection: @project_issue_stats, as: :issue_stat)
 end
 
 json

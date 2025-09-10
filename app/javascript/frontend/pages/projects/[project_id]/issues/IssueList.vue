@@ -13,13 +13,13 @@
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableRow v-for="{ issue } in issue_boxes" :key="issue.id" :class="{ 'block-discard': issue.archived_at }">
+      <TableRow v-for="{ issue } in issue_boxes" :key="issue.id" :class="{ 'block-discard': issue.archivedAt }">
         <TableCell v-if="columns.includes('project')">
-          <router-link :to="`/projects/${issue.project_id}`">{{ issue.project_name }}</router-link>
+          <router-link :to="`/projects/${issue.projectId}`">{{ issue.projectName }}</router-link>
         </TableCell>
         <TableCell>{{ issue.id }}</TableCell>
         <TableCell>
-          <router-link class="link" :to="ok_url.apply(`/projects/${issue.project_id}/issues/${issue.id}`)">
+          <router-link class="link" :to="ok_url.apply(`/projects/${issue.projectId}/issues/${issue.id}`)">
             <span v-if="issue.priority === 'important'">!!</span>
             {{ issue.title }}
           </router-link>

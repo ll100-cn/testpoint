@@ -54,11 +54,11 @@ await line.wait()
 
 const former = Former.build({
   name: issue_template_box.value.issue_template.name,
-  content_suggestion: issue_template_box.value.issue_template.content_suggestion,
-  lookup_by_build_form: issue_template_box.value.issue_template.lookup_by_build_form,
-  title_suggestion: issue_template_box.value.issue_template.title_suggestion,
-  default_priority: issue_template_box.value.issue_template.default_priority,
-  default_category_id: issue_template_box.value.issue_template.default_category_id,
+  contentSuggestion: issue_template_box.value.issue_template.contentSuggestion,
+  lookupByBuildForm: issue_template_box.value.issue_template.lookupByBuildForm,
+  titleSuggestion: issue_template_box.value.issue_template.titleSuggestion,
+  defaultPriority: issue_template_box.value.issue_template.defaultPriority,
+  defaultCategoryId: issue_template_box.value.issue_template.defaultCategoryId,
   inputs_attributes: issue_template_box.value.issue_template.inputs
 })
 

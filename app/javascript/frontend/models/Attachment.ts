@@ -1,29 +1,29 @@
 import { Type } from "class-transformer"
 import _ from "lodash"
+import type { AttachmentSchema } from './schema/attachment'
 
-export class Attachment {
-  content_type: string
-  id: number
-  title: string
+export class Attachment implements AttachmentSchema {
+  contentType!: string
+  id!: number
+  title!: string
 
-  @Type(() => Date)
-  updated_at: Date
+  @Type(() => Date) updatedAt!: Date
 
-  file_url: string
-  file_size: number
-  file_previewable!: boolean
-  file_preview_url?: string
+  fileUrl!: string
+  fileSize!: number
+  filePreviewable!: boolean
+  filePreviewUrl?: string
 
 
   isImage() {
-    return _.startsWith(this.content_type, "image/")
+    return _.startsWith(this.contentType, "image/")
   }
 
   isVideo() {
-    return _.startsWith(this.content_type, "video/") && _.includes(this.content_type, "mp4")
+    return _.startsWith(this.contentType, "video/") && _.includes(this.contentType, "mp4")
   }
 
   isAudio() {
-    return _.startsWith(this.content_type, "audio/")
+    return _.startsWith(this.contentType, "audio/")
   }
 }

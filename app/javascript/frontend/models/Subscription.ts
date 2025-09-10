@@ -1,12 +1,14 @@
 import * as t from '@/lib/transforms'
 import { Member } from './Member'
 import type { OmitByValue } from "utility-types"
+import type { SubscriptionSchema } from './schema/subscription'
 
-export class Subscription {
+export class Subscription implements SubscriptionSchema {
   @t.Number id!: number
-  @t.Number user_id!: number
+  @t.Number userId!: number
+  @t.Number issueId!: number
 
-  @t.Date updated_at!: Date
+  @t.Date updatedAt!: Date
   @t.Klass(Member) member!: Member
 }
 

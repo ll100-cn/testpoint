@@ -5,7 +5,7 @@
     <div class="flex flex-col gap-y-4">
       <div>
         <div class="text-sm text-muted mb-2">创建时间</div>
-        <span>{{ h.datetime(issue_box.issue.created_at) }}</span>
+        <span>{{ h.datetime(issue_box.issue.createdAt) }}</span>
       </div>
 
       <hr>
@@ -35,7 +35,7 @@
           </FormGroup>
         </template>
 
-        <span :class="{'text-danger': issue_box.issue.priority == 'important'}">{{ issue_box.issue.priority_text }}</span>
+        <span :class="{'text-danger': issue_box.issue.priority == 'important'}">{{ issue_box.issue.priorityText }}</span>
       </IssueDetailEdit>
 
       <hr>
@@ -77,7 +77,7 @@
           </FormGroup>
         </template>
 
-        <CategoryBadgeVue :category="_.find(category_boxes.map(it => it.category), { id: issue_box.issue.category_id })" />
+        <CategoryBadgeVue :category="_.find(category_boxes.map(it => it.category), { id: issue_box.issue.categoryId })" />
       </IssueDetailEdit>
 
       <hr>
@@ -91,7 +91,7 @@
           </FormGroup>
         </template>
 
-        {{ _.find(milestone_boxes, { milestone: { id: issue_box.issue.milestone_id } })?.milestone.title ?? '无' }}
+        {{ _.find(milestone_boxes, { milestone: { id: issue_box.issue.milestoneId } })?.milestone.title ?? '无' }}
       </IssueDetailEdit>
 
       <hr>
@@ -99,13 +99,13 @@
       <div class="flex flex-col" v-if="!readonly">
         <div class="h5">订阅</div>
         <div class="mt-1">
-          <Button v-if="_.find(issue_box.subscriptions, it => it.user_id == current_user.id)" preset="outline" variant="secondary" class="w-full" @click.prevent="unsubscribe">取消订阅</Button>
+          <Button v-if="_.find(issue_box.subscriptions, it => it.userId == current_user.id)" preset="outline" variant="secondary" class="w-full" @click.prevent="unsubscribe">取消订阅</Button>
           <Button v-else preset="outline" variant="secondary" class="w-full" @click.prevent="subscribe">订阅问题</Button>
           <div class="mt-2 text-sm text-muted">{{ issue_box.subscriptions.length }} 人订阅:</div>
           <div class="flex items-center gap-1">
             <Tooltip v-for="subscription in issue_box.subscriptions">
               <TooltipTrigger>
-                <img class="rounded-full" :src="subscription.member.avatar_url" width="30">
+                <img class="rounded-full" :src="subscription.member.avatarUrl" width="30">
               </TooltipTrigger>
               <TooltipContent>
                 {{ subscription.member.name }}
@@ -159,10 +159,10 @@ const emit = defineEmits<{
 const former = Former.build({
   state: props.issue_box.issue.state,
   priority: props.issue_box.issue.priority,
-  creator_id: props.issue_box.issue.creator_id,
-  assignee_id: props.issue_box.issue.assignee_id,
-  category_id: props.issue_box.issue.category_id,
-  milestone_id: props.issue_box.issue.milestone_id,
+  creator_id: props.issue_box.issue.creatorId,
+  assignee_id: props.issue_box.issue.assigneeId,
+  category_id: props.issue_box.issue.categoryId,
+  milestone_id: props.issue_box.issue.milestoneId,
 })
 
 const Form = GenericForm<typeof former.form>
@@ -182,7 +182,7 @@ const { mutateAsync: destroy_subscription_action } = line.request(q.bug.subscrip
 
 former.doPerform = async function(code: string) {
   const a_issue_action = await create_issue_action_action({
-    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id },
+    interpolations: { project_id: props.issue_box.issue.projectId, issue_id: props.issue_box.issue.id },
     body: { [code]: (this.form as any)[code] }
   })
 
@@ -192,22 +192,22 @@ former.doPerform = async function(code: string) {
 }
 
 const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
-  req.interpolations.project_id = props.issue_box.issue.project_id
+  req.interpolations.project_id = props.issue_box.issue.projectId
   return it.useQuery(req.toQueryConfig())
 })
 const { data: category_boxes } = line.request(q.project.categories.List(), (req, it) => {
-  req.interpolations.project_id = props.issue_box.issue.project_id
+  req.interpolations.project_id = props.issue_box.issue.projectId
   return it.useQuery(req.toQueryConfig())
 })
 const { data: milestone_boxes } = line.request(q.project.milestones.List(), (req, it) => {
-  req.interpolations.project_id = props.issue_box.issue.project_id
+  req.interpolations.project_id = props.issue_box.issue.projectId
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
 
 async function subscribe() {
   const a_subscription_box = await create_subscription_action({
-    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id }
+    interpolations: { project_id: props.issue_box.issue.projectId, issue_id: props.issue_box.issue.id }
   })
 
   props.issue_box.subscriptions.push(a_subscription_box.subscription)
@@ -215,14 +215,14 @@ async function subscribe() {
 }
 
 async function unsubscribe() {
-  const index = props.issue_box.subscriptions.findIndex(it => it.user_id == current_user.id)
+  const index = props.issue_box.subscriptions.findIndex(it => it.userId == current_user.id)
   if (index == -1) {
     return
   }
 
   const subscription = props.issue_box.subscriptions[index]
   await destroy_subscription_action({
-    interpolations: { project_id: props.issue_box.issue.project_id, issue_id: props.issue_box.issue.id, subscription_id: subscription.id }
+    interpolations: { project_id: props.issue_box.issue.projectId, issue_id: props.issue_box.issue.id, subscription_id: subscription.id }
   })
 
   props.issue_box.subscriptions.splice(index, 1)

@@ -53,7 +53,7 @@ const { mutateAsync: update_issue_survey_action } = line.request(q.bug.issue_sur
 former.doPerform = async function() {
   const a_issue_survey_box = await update_issue_survey_action({
     interpolations: {
-      project_id: issue_box.value.issue.project_id,
+      project_id: issue_box.value.issue.projectId,
       issue_id: issue_box.value.issue.id,
       issue_survey_id: issue_survey.value.id
     },
@@ -86,7 +86,7 @@ async function reset(a_issue_box: IssueBox, a_issue_survey: IssueSurvey) {
 
   try {
     const { data: a_issue_template_box, suspense } = line.request(q.project.issue_templates.Get(), (req, it) => {
-      req.interpolations.project_id = issue_box.value.issue.project_id
+      req.interpolations.project_id = issue_box.value.issue.projectId
       req.interpolations.issue_template_id = issue_survey.value.template_id
       return it.useQuery(req.toQueryConfig())
     })

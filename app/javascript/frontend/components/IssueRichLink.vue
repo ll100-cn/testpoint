@@ -1,6 +1,6 @@
 <template>
   <span>
-    <router-link class="me-3 link" :to="ok_url.apply(`/projects/${issue.project_id}/issues/${issue.id}`)">
+    <router-link class="me-3 link" :to="ok_url.apply(`/projects/${issue.projectId}/issues/${issue.id}`)">
       #{{ issue.id }} {{ issue.title }}
     </router-link>
     <IssueStateBadge :state="issue.state" />

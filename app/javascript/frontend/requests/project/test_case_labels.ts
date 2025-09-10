@@ -1,4 +1,4 @@
-import { TestCaseLabel, type TestCaseLabelBox, TestCaseLabelBoxImpl, TestCaseLabelInfo, TestCaseLablePage } from "@/models"
+import { TestCaseLabel, type TestCaseLabelBox, TestCaseLabelBoxImpl, TestCaseLablePage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
 import type { AxiosResponse } from "axios"
 

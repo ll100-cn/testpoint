@@ -21,7 +21,7 @@ onMounted(() => {
       labels: _.range(1, 25),
       datasets: [{
         label: '提交工单后的确认时间(小时)',
-        data: props.analytics.issues_confirm_time[props.wday],
+        data: props.analytics.issuesConfirmTime[props.wday],
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
       }]
     },

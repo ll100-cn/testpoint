@@ -1,4 +1,4 @@
-json = render partial: "svc/shared/member", locals: { member: member }
-json[:project] = render partial: "svc/shared/project", locals: { project: member.project }
-json[:user] = render partial: "svc/shared/user", locals: { user: member.user }
+json = render_schema "schema://svc/member", member: member
+json[:project] = render_schema "schema://svc/project", project: member.project
+json[:user] = render_schema "schema://svc/user", user: member.user
 json

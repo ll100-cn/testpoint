@@ -1,0 +1,19 @@
+{
+  $schema: "http://json-schema.org/draft-06/schema#",
+  $id: "schema://svc/issue_template",
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    name: { type: "string" },
+    project_id: { type: "integer" },
+    lookup_by_build_form: { type: "boolean" },
+    title_suggestion: { type: ["string", "null"] },
+    content_suggestion: { type: ["string", "null"] },
+    default_category_id: { type: ["integer", "null"] },
+    default_priority: { type: "string" },
+    default_priority_text: { type: "string" },
+    default_category: { $ref: "schema://svc/category" },
+    inputs: { type: "array" },
+  },
+  required: [ "id", "name", "project_id", "lookup_by_build_form", "default_priority", "default_priority_text", "inputs" ]
+}

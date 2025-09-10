@@ -1,5 +1,5 @@
 json = {
-  issue_relationship: render("svc/shared/issue_relationship", issue_relationship: issue_relationship)
+  issue_relationship: render_schema("schema://svc/issue_relationship", issue_relationship: issue_relationship)
 }
 
 json

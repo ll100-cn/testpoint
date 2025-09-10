@@ -53,8 +53,8 @@ const { data: test_case_label_box } = line.request(q.project.test_case_labels.Ge
 await line.wait()
 
 const former = Former.build({
-  name: test_case_label_box.value.test_case_label.name,
-  description: test_case_label_box.value.test_case_label.description,
+  name: test_case_label_box.value.testCaseLabel.name,
+  description: test_case_label_box.value.testCaseLabel.description,
 })
 
 const Form = GenericForm<typeof former.form>
