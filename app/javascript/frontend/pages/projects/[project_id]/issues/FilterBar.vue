@@ -2,7 +2,7 @@
   <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
     <FormGroup label="分类" path="category_id_eq">
       <controls.Selectpicker include-blank="全部">
-        <template v-for="category_stat in summary.by_category">
+        <template v-for="category_stat in summary.byCategory">
           <SelectdropItem v-if="category_stat.count > 0" :value="category_stat.category?.id ?? -1">
             {{ category_stat.category?.name ?? '未分配' }} ({{ category_stat.count }})
           </SelectdropItem>
@@ -82,7 +82,7 @@ watch(former.form, () => { former.perform() })
 const issue_type_collection = [{ label: "案例问题", value: "not_null" }, { label: "非案例问题", value: "null" }]
 
 const category_collection = computed(() => {
-  return _(props.summary.by_category).map(({ category, count }) => {
+  return _(props.summary.byCategory).map(({ category, count }) => {
     if (category && count > 0) {
       return { name: `${category.name} (${count})`, id: category.id }
     }
@@ -91,7 +91,7 @@ const category_collection = computed(() => {
 })
 
 const milestone_collection = computed(() => {
-  return _(props.summary.by_milestone).map(({ milestone, count }) => {
+  return _(props.summary.byMilestone).map(({ milestone, count }) => {
     if (milestone && count > 0) {
       return { title: `${milestone.title} (${count})`, id: milestone.id }
     }
@@ -100,7 +100,7 @@ const milestone_collection = computed(() => {
 })
 
 const assignee_collection = computed(() => {
-  return _(props.summary.by_assignee).map(({ assignee, count }) => {
+  return _(props.summary.byAssignee).map(({ assignee, count }) => {
     if (assignee && count > 0) {
       return { name: `${assignee.name} (${count})`, id: assignee.id }
     }
@@ -109,7 +109,7 @@ const assignee_collection = computed(() => {
 })
 
 const creator_collection = computed(() => {
-  return _(props.summary.by_creator).map(({ creator, count }) => {
+  return _(props.summary.byCreator).map(({ creator, count }) => {
     if (creator && count > 0) {
       return { name: `${creator.name} (${count})`, id: creator.id }
     }

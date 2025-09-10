@@ -37,7 +37,7 @@ export class IssueTemplate implements IssueTemplateSchema {
 }
 
 export class IssueTemplateBoxImpl {
-  @t.Klass(IssueTemplate) issue_template!: IssueTemplate
+  @t.Klass(IssueTemplate) issueTemplate!: IssueTemplate
 }
 
 export type IssueTemplateBox = OmitByValue<IssueTemplateBoxImpl, Function>

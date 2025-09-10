@@ -10,8 +10,8 @@
       <div class="space-y-3">
         <FormGroup path="issue_template_id" label="选择问题模版">
           <controls.Selectpicker include_blank>
-            <SelectdropItem v-for="item in issue_template_boxes" :value="item.issue_template.id">
-              {{ item.issue_template.name }}
+            <SelectdropItem v-for="item in issue_template_boxes" :value="item.issueTemplate.id">
+              {{ item.issueTemplate.name }}
             </SelectdropItem>
           </controls.Selectpicker>
         </FormGroup>
@@ -38,7 +38,7 @@
         <Separator class="my-4" preset="through" />
 
         <div class="space-y-3">
-          <FormGroup v-for="(input, index) in issue_template_box.issue_template.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
+          <FormGroup v-for="(input, index) in issue_template_box.issueTemplate.inputs" :path="`survey_attributes.inputs_attributes.${index}.value`" :key="index" :label="input.label">
             <controls.String />
           </FormGroup>
         </div>
@@ -97,7 +97,7 @@ const { data: issue_template_boxes } = line.request(q.project.issue_templates.Li
 })
 await line.wait()
 const issue_template_box = computed(() => {
-  return issue_template_boxes.value.find(it => it.issue_template.id == former.form.issue_template_id)
+  return issue_template_boxes.value.find(it => it.issueTemplate.id == former.form.issue_template_id)
 })
 
 const former = Former.build({
@@ -129,9 +129,9 @@ former.doPerform = async function() {
 
 watch(issue_template_box, function(new_value) {
   if (new_value) {
-    former.form.issue_attributes.title ||= new_value.issue_template.titleSuggestion
-    former.form.issue_attributes.content ||= new_value.issue_template.contentSuggestion
-    former.form.survey_attributes.inputs_attributes = (new_value?.issue_template.inputs ?? []).map(input => {
+    former.form.issue_attributes.title ||= new_value.issueTemplate.titleSuggestion
+    former.form.issue_attributes.content ||= new_value.issueTemplate.contentSuggestion
+    former.form.survey_attributes.inputs_attributes = (new_value?.issueTemplate.inputs ?? []).map(input => {
       return { template_input_id: input.id, value: "" }
     })
   }
