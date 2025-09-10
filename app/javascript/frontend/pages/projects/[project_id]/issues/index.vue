@@ -22,7 +22,7 @@
       </RLink>
     </NavItem>
     <NavItem v-for="(name, code) in ENUM_ISSUE_STAGES" :value="code" as-child>
-      <RLink :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }" active-by="query" active-column="stage">
+      <RLink :to="{ query: utils.plainToQuery({ ...search2, stage: code }, true) }" active-by="query" active-column="stage" default-active-column="pending">
         {{ name }} ({{ issue_stage_count[code] ?? 0 }})
       </RLink>
     </NavItem>
@@ -114,6 +114,6 @@ const { data: issue_summary } = line.request(q.bug.issues.Summary(), (req, it) =
 await line.wait()
 
 const issue_stage_count = computed(() => {
-  return _(pagination.value.issue_stats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
+  return _(pagination.value.issueStats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
 })
 </script>

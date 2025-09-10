@@ -7,7 +7,7 @@ import type { OmitByValue } from "utility-types"
 export class TaskBoxImpl {
   @t.Klass(Task) task!: Task
 
-  @t.Klass(TaskUpshot) task_upshots: TaskUpshot[] | null = null
+  @t.Klass(TaskUpshot) taskUpshots: TaskUpshot[] | null = null
   @t.Klass(Issue) issues: Issue[] | null = null
 }
 

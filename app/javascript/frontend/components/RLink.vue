@@ -22,6 +22,7 @@ interface Props {
   class?: HTMLAttributes['class']
   activeBy?: "default" | 'exact' | 'fullpath' | 'query'
   activeColumn?: string
+  defaultActiveColumn?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -42,8 +43,11 @@ function isActive(n: UnwrapRef<UseLinkReturn>) {
   if (props.activeBy == 'query') {
     const a = new URL(n.href, location.href).searchParams
     const b = new URL(route.fullPath, location.href).searchParams
+    const currentColumnValue = b.get(props.activeColumn!)
 
-    if (a.get(props.activeColumn!) == b.get(props.activeColumn!)) {
+    if (!currentColumnValue) {
+      return a.get(props.activeColumn!) == props.defaultActiveColumn
+    } else if (a.get(props.activeColumn!) == currentColumnValue) {
       return true
     }
 

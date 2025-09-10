@@ -44,7 +44,7 @@ const items = computed(() => {
   const result = [] as Item[]
   const phase_info_repo = _.keyBy(props.phase_infos, it => it.phase.id)
 
-  for (const task_upshot of _.orderBy(props.task_box.task_upshots ?? [], it => it.createdAt)) {
+  for (const task_upshot of _.orderBy(props.task_box.taskUpshots ?? [], it => it.createdAt)) {
     const phase_info = phase_info_repo[task_upshot.phaseId]
     result.push({ phase_info, task_upshot, issues: []})
   }
