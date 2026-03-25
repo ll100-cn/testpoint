@@ -119,6 +119,8 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: "main#root"
-  get "*path" => "main#root"
+  root to: 'nuxt#proxy'
+  get '*path' => 'nuxt#proxy', constraints: lambda { |req|
+    !(req.path.starts_with?('/rails') || req.path.starts_with?('/svc'))
+  }
 end

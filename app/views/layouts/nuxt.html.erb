@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testpoint</title>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <% if Rails.env.development? %>
+      <script type="module" src="<%= "#{nuxt_dev_origin}#{File.join(nuxt_base_path, '_nuxt/@vite/client')}" %>"></script>
+      <script type="module" src="<%= "#{nuxt_dev_origin}#{File.join(nuxt_base_path, '_nuxt/entry.js')}" %>"></script>
+    <% end %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

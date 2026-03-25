@@ -4,4 +4,7 @@ set -ex
 
 bundle exec rake db:create
 bundle exec rake db:migrate
-bundle exec bin/vite build
+pnpm --dir www install
+pnpm --dir www run generate
+rm -rf public/_nuxt public/200.html
+cp -R www/.output/public/. public/
