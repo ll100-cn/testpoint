@@ -10,7 +10,7 @@
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="state" title="状态">
+      <IssueDetailEdit :editable="!readonly && allow('update', Issue)" v-bind="{ former, issue_box }" code="state" title="状态">
         <template #editable>
           <FormGroup path="state" label="">
             <controls.Selectpicker>
@@ -26,7 +26,7 @@
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="priority" title="优先级">
+      <IssueDetailEdit :editable="!readonly && allow('update', Issue)" v-bind="{ former, issue_box }" code="priority" title="优先级">
         <template #editable>
           <FormGroup path="priority" label="">
             <controls.Select>
@@ -40,7 +40,7 @@
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('manage', issue_box.issue)" v-bind="{ former, issue_box }" code="creator_id" title="创建人">
+      <IssueDetailEdit :editable="!readonly && allow('manage', Issue)" v-bind="{ former, issue_box }" code="creator_id" title="创建人">
         <template #editable>
           <FormGroup path="creator_id" label="">
             <controls.Select include-blank>
@@ -54,7 +54,7 @@
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="assignee_id" title="受理人">
+      <IssueDetailEdit :editable="!readonly && allow('update', Issue)" v-bind="{ former, issue_box }" code="assignee_id" title="受理人">
         <template #editable>
           <FormGroup path="assignee_id" label="">
             <controls.Select include-blank>
@@ -68,7 +68,7 @@
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="category_id" title="分类">
+      <IssueDetailEdit :editable="!readonly && allow('update', Issue)" v-bind="{ former, issue_box }" code="category_id" title="分类">
         <template #editable>
           <FormGroup path="category_id" label="">
             <controls.Selectpicker>
@@ -82,7 +82,7 @@
 
       <hr>
 
-      <IssueDetailEdit :editable="!readonly && allow('update', issue_box.issue)" v-bind="{ former, issue_box }" code="milestone_id" title="里程碑">
+      <IssueDetailEdit :editable="!readonly && allow('update', Issue)" v-bind="{ former, issue_box }" code="milestone_id" title="里程碑">
         <template #editable>
           <FormGroup path="milestone_id" label="">
             <controls.Select>

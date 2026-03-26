@@ -13,7 +13,7 @@
         </template>
       </CardHeader>
       <CardContent>
-        <ContentBody :body="body" :editable="!readonly && allow('update', issue_box.issue)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+        <ContentBody :body="body" :editable="!readonly && allow('update', Issue)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
       </CardContent>
     </Card>
   </div>
@@ -30,7 +30,7 @@ import BlankDialog from "@/components/BlankDialog.vue"
 import MemberLabel from "@/components/MemberLabel.vue"
 import MoreDropdown from "@/components/MoreDropdown.vue"
 import * as h from '@/lib/humanize'
-import { Attachment, type IssueBox } from "@/models"
+import { Attachment, Issue, type IssueBox } from "@/models"
 import { usePageStore } from "@/store"
 import { computed, ref } from "vue"
 import ContentBody from "./ContentBody.vue"

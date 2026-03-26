@@ -1,15 +1,13 @@
-import { type IssueActionBox, IssueActionBoxImpl } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { IssueActionBodySchema, IssueActionBoxSchema, type IssueActionBoxType } from '@/schemas/issue_extra'
 
-class CreateRequest extends BaseRequest<IssueActionBox> {
+class CreateRequest extends BaseRequest<IssueActionBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_actions",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_actions" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueActionBoxImpl, response)
-  }
+  schema = IssueActionBoxSchema
+  bodySchema = IssueActionBodySchema
 }
 export const Create = () => new CreateRequest()

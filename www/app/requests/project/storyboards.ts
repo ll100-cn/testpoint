@@ -1,66 +1,62 @@
-import { Storyboard, type StoryboardBox, StoryboardBoxImpl, StoryboardPage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import {
+  StoryboardBodySchema,
+  StoryboardBoxSchema,
+  StoryboardListSchema,
+  type StoryboardBoxType,
+  type StoryboardListType,
+} from '@/schemas/project_misc'
 
-class ListRequest<Box extends StoryboardBox> extends BaseRequest<Box[]> {
+class ListRequest extends BaseRequest<StoryboardListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardPage<Box>, response).list
-  }
+  schema = StoryboardListSchema
 }
 export const List = () => new ListRequest()
 
 
-class GetRequest extends BaseRequest<StoryboardBox> {
+class GetRequest extends BaseRequest<StoryboardBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBoxImpl, response)
-  }
+  schema = StoryboardBoxSchema
 }
 export const Get = () => new GetRequest()
 
 
-class CreateRequest extends BaseRequest<StoryboardBox> {
+class CreateRequest extends BaseRequest<StoryboardBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/storyboards",
     relatedKeys: [ [ "/storyboards" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBoxImpl, response)
-  }
+  schema = StoryboardBoxSchema
+  bodySchema = StoryboardBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class UpdateRequest extends BaseRequest<StoryboardBox> {
+class UpdateRequest extends BaseRequest<StoryboardBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ] ]
   })
   headers = { 'Content-Type': 'application/json' }
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBoxImpl, response)
-  }
+  schema = StoryboardBoxSchema
+  bodySchema = StoryboardBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<StoryboardBox> {
+class DestroyRequest extends BaseRequest<StoryboardBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}",
     relatedKeys: [ [ "/storyboards" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(StoryboardBoxImpl, response)
-  }
+  schema = StoryboardBoxSchema
 }
 export const Destroy = () => new DestroyRequest()

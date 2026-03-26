@@ -37,13 +37,13 @@
               <PageContent :content="milestone.description ?? ''" :readonly="true" />
             </TableCell>
             <TableCell role="actions">
-              <router-link v-if="allow('update', milestone)" :to="ok_url.apply(`${path_info.collection}/${milestone.id}/edit`)" class="link">
+              <router-link v-if="allow('update', Milestone)" :to="ok_url.apply(`${path_info.collection}/${milestone.id}/edit`)" class="link">
                 <i class="far fa-pencil-alt" /> 修改
               </router-link>
 
-              <a v-if="milestone.archivedAt === null && allow('archive', milestone)" href="#" v-confirm="'确定要归档吗？'" @click.prevent="archiveMilestone(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
-              <a v-if="milestone.archivedAt && allow('active', milestone)" href="#" v-confirm="'确定要取消归档吗？'" @click.prevent="activeMilestone(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
-              <a v-if="allow('destroy', milestone)" href="#" v-confirm="'确定要删除吗？'" @click.prevent="deleteMilestone(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
+              <a v-if="milestone.archivedAt === null && allow('archive', Milestone)" href="#" v-confirm="'确定要归档吗？'" @click.prevent="archiveMilestone(milestone)" class="link"><i class="far fa-archive"></i> 归档</a>
+              <a v-if="milestone.archivedAt && allow('active', Milestone)" href="#" v-confirm="'确定要取消归档吗？'" @click.prevent="activeMilestone(milestone)" class="link"><i class="far fa-box-up"></i> 取消归档</a>
+              <a v-if="allow('destroy', Milestone)" href="#" v-confirm="'确定要删除吗？'" @click.prevent="deleteMilestone(milestone)" class="link"><i class="far fa-trash-alt"></i> 删除</a>
             </TableCell>
           </TableRow>
         </TableBody>

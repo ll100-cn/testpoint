@@ -19,7 +19,7 @@
                 </FormGroup>
 
                 <FormGroup path="avatar" label="头像">
-                  <img :src="account?.avatarUrl()" class="me-1" width="64" />
+                  <img :src="avatarUrlByEmail(account?.email)" class="me-1" width="64" />
                   <a href="https://gravatar.com" target="_blank">修改</a>
                 </FormGroup>
               </div>
@@ -45,6 +45,7 @@ import PageHeader from './PageHeader.vue'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
+import { avatarUrlByEmail } from '@/lib/avatar_url'
 import { useQueryLine } from '@/lib/useQueryLine'
 import * as controls from '@/components/controls'
 

@@ -1,28 +1,28 @@
-import { type IssueRelationshipBox, IssueRelationshipBoxImpl } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import {
+  IssueRelationshipBodySchema,
+  IssueRelationshipBoxSchema,
+  type IssueRelationshipBoxType,
+} from '@/schemas/issue_extra'
 
-class CreateRequest extends BaseRequest<IssueRelationshipBox> {
+class CreateRequest extends BaseRequest<IssueRelationshipBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_relationships",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_relationships" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueRelationshipBoxImpl, response)
-  }
+  schema = IssueRelationshipBoxSchema
+  bodySchema = IssueRelationshipBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class DestroyRequest extends BaseRequest<IssueRelationshipBox> {
+class DestroyRequest extends BaseRequest<IssueRelationshipBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_relationships/{relationship_id}",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_relationships" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueRelationshipBoxImpl, response)
-  }
+  schema = IssueRelationshipBoxSchema
 }
 export const Destroy = () => new DestroyRequest()

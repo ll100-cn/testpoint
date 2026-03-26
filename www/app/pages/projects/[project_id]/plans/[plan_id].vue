@@ -19,7 +19,7 @@
     </div>
 
     <template #actions>
-      <Button preset="ghost" v-if="allow('update', plan_box.plan)" :to="ok_url.apply(`${plan_id}/edit`)">设置</Button>
+      <Button preset="ghost" v-if="allow('update', Plan)" :to="ok_url.apply(`${plan_id}/edit`)">设置</Button>
     </template>
   </PageHeader>
 
@@ -95,7 +95,7 @@ import RLink from '@/components/RLink.vue'
 import TaskStateLabel from '@/components/TaskStateLabel.vue'
 import type { TaskUpshotFrameComponent } from '@/components/TaskUpshotFrame'
 import { useQueryLine } from '@/lib/useQueryLine'
-import { Phase, type TaskUpshotBox, TestCaseStat } from '@/models'
+import { Phase, Plan, type TaskUpshotBox, TestCaseStat } from '@/models'
 import * as q from '@/requests'
 import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'

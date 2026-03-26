@@ -40,7 +40,7 @@ import CategoryBadge from '@/components/CategoryBadge.vue'
 import IssueStateBadge from '@/components/IssueStateBadge.vue'
 import SortLink from '@/components/SortLink.vue'
 import OkUrl from '@/lib/ok_url'
-import { Issue, type IssueBox } from '@/models'
+import type { IssueBox } from '@/models'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 

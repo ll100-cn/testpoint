@@ -18,7 +18,7 @@
       </DropdownMenu>
 
       <Button v-if="!roadmap && allow('create', Roadmap)" class="ms-auto" @click.prevent="roadmap_dialog.show(RoadmapCreateDialogContent)">保存线路图</Button>
-      <Button v-if="roadmap && allow('update', roadmap)" class="ms-auto" @click.prevent="roadmap_dialog.show(RoadmapUpdateDialogContent, roadmap)">编辑线路图</Button>
+      <Button v-if="roadmap && allow('update', Roadmap)" class="ms-auto" @click.prevent="roadmap_dialog.show(RoadmapUpdateDialogContent, roadmap)">编辑线路图</Button>
     </template>
   </PageHeader>
 
@@ -30,7 +30,7 @@
         </NavItem>
       </Nav>
     </div>
-    <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
+    <Button v-if="allow('create', Storyboard) && storyboards.length === 0" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
   </div>
 
   <Card class="min-h-96 flex-1 rounded-ss-none">
@@ -62,7 +62,7 @@
 
       <template #actions>
         <Button preset="ghost" v-if="allow('read', Scene)" @click.prevent="scene_dialog.show(SceneListDialogContent, scenes)">场景列表 [{{ scenes.length }}]</Button>
-        <Button preset="ghost" v-if="allow('update', storyboard)" @click.prevent="storyboard_dialog.show(StoryboardUpdateDialogContent, storyboard)">编辑</Button>
+        <Button preset="ghost" v-if="allow('update', Storyboard)" @click.prevent="storyboard_dialog.show(StoryboardUpdateDialogContent, storyboard)">编辑</Button>
         <Button v-if="allow('create', Requirement)" @click.prevent="requirement_dialog.show(RequirementCreateDialogContent, platforms)">新建需求</Button>
       </template>
     </CardHeader>
@@ -117,7 +117,7 @@
     :scenes="scenes"
     :storyboard="storyboard" />
   <RoadmapDialog ref="roadmap_dialog" @created="" @updated="updatedRoadmap" />
-  <SceneDialog ref="scene_dialog" :scenes="scenes" @created="createScene" @destroyed="destroyeScene" @updated="updateScene" />
+  <SceneDialog ref="scene_dialog" :scenes="scenes" :storyboard="storyboard" @created="createScene" @destroyed="destroyeScene" @updated="updateScene" />
 </template>
 
 <script setup lang="ts">

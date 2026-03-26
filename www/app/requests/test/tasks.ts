@@ -1,52 +1,41 @@
-import { Task, type TaskBox, TaskBoxImpl } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
-import type { Required } from "utility-types"
+import { TaskBoxSchema, TaskInfoBoxSchema, type TaskBoxType, type TaskInfoBoxType } from '@/schemas/task_upshot'
 
-class IgnoreRequest extends BaseRequest<TaskBox> {
+class IgnoreRequest extends BaseRequest<TaskBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/ignore",
     relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ] ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBoxImpl, response)
-  }
+  schema = TaskBoxSchema
 }
 export const Ignore = () => new IgnoreRequest()
 
 
-class UnignoreRequest extends BaseRequest<TaskBox> {
+class UnignoreRequest extends BaseRequest<TaskBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/unignore",
     relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ] ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBoxImpl, response)
-  }
+  schema = TaskBoxSchema
 }
 export const Unignore = () => new UnignoreRequest()
 
 
-class GetRequest<Box extends TaskBox> extends BaseRequest<Box> {
+class GetRequest<T> extends BaseRequest<T> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}", "/tasks/{task_id}" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskBoxImpl, response) as Box
-  }
 }
-export function Get(): InstanceType<typeof GetRequest<TaskBox>>
-export function Get(graph: '+info'): InstanceType<typeof GetRequest<Required<TaskBox, 'task_upshots' | 'issues'>>>
-export function Get(graph?: string) {
-  const request = new GetRequest<TaskBox>()
-  request.graph = graph ?? null
+export function Get(): GetRequest<TaskBoxType>
+export function Get(graph: '+info'): GetRequest<TaskInfoBoxType>
+export function Get(graph?: '+info') {
+  const request = new GetRequest<TaskBoxType>()
+  request.schema = TaskBoxSchema
 
   if (graph == '+info') {
     request.graph = 'info'
+    request.schema = TaskInfoBoxSchema
   }
 
-  return request as any
+  return request as GetRequest<TaskBoxType | TaskInfoBoxType>
 }

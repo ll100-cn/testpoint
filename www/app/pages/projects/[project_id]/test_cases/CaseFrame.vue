@@ -52,7 +52,7 @@ async function show(a_test_case: TestCase) {
     return it.useQuery(req.toQueryConfig())
   })
   await suspense()
-  history.value = history_page.value.list.map(it => it.test_case)
+  history.value = history_page.value.list.map(it => it.testCase)
 
   nextTick(() => {
     const $modal = Modal.getOrCreateInstance(modal.value)

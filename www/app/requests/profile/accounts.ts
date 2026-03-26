@@ -1,27 +1,21 @@
-import { Account, type AccountBox, AccountBoxImpl } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { AccountBodySchema, AccountBoxSchema, type AccountBoxType } from "@/schemas/account"
 
-class GetRequest extends BaseRequest<AccountBox> {
+class GetRequest extends BaseRequest<AccountBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2/profile", "/account" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(AccountBoxImpl, response)
-  }
+  schema = AccountBoxSchema
 }
 export const Get = () => new GetRequest()
 
 
-class UpdateRequest extends BaseRequest<AccountBox> {
+class UpdateRequest extends BaseRequest<AccountBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/profile/account",
     relatedKeys: [ "/account" ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(AccountBoxImpl, response)
-  }
+  schema = AccountBoxSchema
+  bodySchema = AccountBodySchema
 }
 export const Update = () => new UpdateRequest()

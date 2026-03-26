@@ -1,53 +1,52 @@
-import { type IssueSurveyBox, IssueSurveyBoxImpl, IssueSurveyPage } from "@/models"
-import type { AxiosResponse } from "axios"
 import { BaseRequest, Scheme } from "../BaseRequest"
+import {
+  IssueSurveyBodySchema,
+  IssueSurveyBoxSchema,
+  IssueSurveyListSchema,
+  type IssueSurveyBoxType,
+  type IssueSurveyListType,
+} from '@/schemas/issue_extra'
 
-class CreateRequest extends BaseRequest<IssueSurveyBox> {
+class CreateRequest extends BaseRequest<IssueSurveyBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_surveys",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_surveys" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurveyBoxImpl, response)
-  }
+  schema = IssueSurveyBoxSchema
+  bodySchema = IssueSurveyBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class DestroyRequest extends BaseRequest<IssueSurveyBox> {
+class DestroyRequest extends BaseRequest<IssueSurveyBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_surveys" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurveyBoxImpl, response)
-  }
+  schema = IssueSurveyBoxSchema
 }
 export const Destroy = () => new DestroyRequest()
 
 
-class ListRequest extends BaseRequest<IssueSurveyBox[]> {
+class ListRequest extends BaseRequest<IssueSurveyListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/issues/{issue_id}", "/issue_surveys" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurveyPage<IssueSurveyBox>, response).list
-  }
+  schema = IssueSurveyListSchema
 }
 export const List = () => new ListRequest()
 
 
-class UpdateRequest extends BaseRequest<IssueSurveyBox> {
+class UpdateRequest extends BaseRequest<IssueSurveyBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/issues/{issue_id}/issue_surveys/{issue_survey_id}",
     relatedKeys: [ [ "/issues", "/{issue_id}" ], [ "/issue_surveys", "/{issue_survey_id}" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueSurveyBoxImpl, response)
-  }
+  schema = IssueSurveyBoxSchema
+  bodySchema = IssueSurveyBodySchema
 }
 export const Update = () => new UpdateRequest()

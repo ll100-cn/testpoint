@@ -19,10 +19,10 @@
           <TableCell>{{ scene.id }}</TableCell>
           <TableCell>{{ scene.name }}</TableCell>
           <TableCell role="actions">
-            <a href="#" v-if="allow('update', scene)" class="link" @click.prevent="updateScene(scene)">
+            <a href="#" v-if="allow('update', Scene)" class="link" @click.prevent="updateScene(scene)">
               <i class="far fa-pencil-alt" /> 修改
             </a>
-            <a v-if="allow('destroy', scene)" href="#" v-confirm="'确认删除？'" @click.prevent="deleteScene(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+            <a v-if="allow('destroy', Scene)" href="#" v-confirm="'确认删除？'" @click.prevent="deleteScene(scene)" class="link"><i class="far fa-trash-alt" /> 删除</a>
           </TableCell>
         </TableRow>
       </TableBody>
@@ -100,7 +100,7 @@ async function deleteScene(scene: Scene) {
     })
     emit('destroyed', scene)
 
-    scenes.value = scenes.value.filter(scene => scene.id !== scene.id)
+    scenes.value = scenes.value.filter((it) => it.id !== scene.id)
   } catch (error) {
     validator.processError(error)
   }

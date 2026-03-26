@@ -42,14 +42,14 @@
             <Button v-if="allow('create', Comment)" @click.prevent="comment_dialog.show(IssueCommentCreateDialogContent, issue_box)">
               <i class="far fa-comment fa-fw" /> 新增评论
             </Button>
-            <Button v-if="allow('manage', issue_box.issue)" @click.prevent="issue_dialog.show(IssueRelationshipNewDialogContent)">
+            <Button v-if="allow('manage', Issue)" @click.prevent="issue_dialog.show(IssueRelationshipNewDialogContent)">
               <i class="far fa-link fa-fw" /> 关联其它问题
             </Button>
             <Button v-if="allow('create', IssueSurvey)" @click.prevent="issue_dialog.show(IssueSurveyCreateDialogContent)">
               <i class="far fa-file-lines fa-fw" /> 新增问题模版
             </Button>
 
-            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.assigneeId == profile.memberId">
+            <template v-if="allow('manage', Issue) || issue_box.issue.assigneeId == profile.memberId">
               <template v-if="issue_box.issue.assignee && ['confirmed', 'processing', 'processed'].includes(issue_box.issue.state)">
                 <ButtonGroup class="ms-auto">
                   <template v-if="issue_box.issue.state == 'confirmed'">
@@ -82,7 +82,7 @@
               </template>
             </template>
 
-            <template v-if="allow('manage', issue_box.issue) && issue_box.issue.state == 'pending'">
+            <template v-if="allow('manage', Issue) && issue_box.issue.state == 'pending'">
               <ButtonGroup class="ms-auto">
                 <Button preset="outline" variant="secondary" @click.prevent="issue_state_dialog.show(IssueWaitingDialogContent, issue_box)">
                   <span class="me-1">设置为</span><IssueStateBadge state="waiting" />
@@ -93,7 +93,7 @@
               </ButtonGroup>
             </template>
 
-            <template v-if="allow('manage', issue_box.issue) || issue_box.issue.creatorId == profile.memberId">
+            <template v-if="allow('manage', Issue) || issue_box.issue.creatorId == profile.memberId">
               <template v-if="issue_box.issue.state == 'resolved' && !issue_box.issue.archivedAt">
                 <ButtonGroup class="ms-auto">
                   <Button preset="outline" variant="secondary" size="sm" @click.prevent="issue_dialog.show(IssueResolveDialogContent)">
@@ -177,7 +177,7 @@ const params = route.params as any
 const project_id = _.toInteger(params.project_id)
 const page = usePageStore()
 const profile = page.inProject()!.profile
-const allow = profile.allow
+const allow = (action: string, resource: any) => profile.allow(action, resource)
 const path_info = PathHelper.parseMember(route.path, 'show')
 const actioner = Actioner.build()
 const ok_url = new OkUrl(route)

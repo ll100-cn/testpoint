@@ -8,7 +8,7 @@
       </DialogTitle>
 
       <template v-if="!readonly" #actions>
-        <a v-if="allow('update', test_case)" href="#" class="link" @click.prevent="emit('switch', CaseEditDialogContent, test_case)">编辑</a>
+        <a v-if="allow('update', TestCase)" href="#" class="link" @click.prevent="emit('switch', CaseEditDialogContent, test_case)">编辑</a>
       </template>
     </DialogHeader>
 

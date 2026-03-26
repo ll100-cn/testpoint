@@ -13,10 +13,10 @@
         <MoreDropdown>
           <DropdownMenuItem v-if="!readonly && allow('create', Comment)" @click.prevent="emit('modal', IssueCommentReplyDialogContent, issue_box, comment_box)">回复</DropdownMenuItem>
 
-          <template v-if="!readonly && allow('update', comment_box.comment)">
+          <template v-if="!readonly && allow('update', Comment)">
             <DropdownMenuItem @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
             <DropdownMenuItem v-if="children.length == 0" @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue_box, comment_box)">关联</DropdownMenuItem>
-            <DropdownMenuItem v-if="allow('destroy', comment_box.comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
+            <DropdownMenuItem v-if="allow('destroy', Comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
 
             <DropdownMenuSeparator />
 
@@ -31,7 +31,7 @@
     </CardHeader>
 
     <CardContent :id="content_id" :class="{ hidden: display == 'collapsed' }">
-      <ContentBody :body="comment_box.comment" :editable="!readonly && allow('update', comment_box.comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+      <ContentBody :body="comment_box.comment" :editable="!readonly && allow('update', Comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
       <Callout class="mt-3 py-1" v-if="children.length > 0">
         <template v-for="(child, index) in children">
           <div class="mt-4" v-if="index != 0"></div>

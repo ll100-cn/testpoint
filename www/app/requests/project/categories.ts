@@ -1,78 +1,69 @@
-import { Category, type CategoryBox, CategoryBoxImpl, CategoryPage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import {
+  CategoryBodySchema,
+  CategoryBoxSchema,
+  CategoryListSchema,
+  CategoryPageSchema,
+  type CategoryBoxType,
+  type CategoryListType,
+  type CategoryPageType,
+} from '@/schemas/category'
 
-class ListRequest extends BaseRequest<CategoryBox[]> {
+class ListRequest extends BaseRequest<CategoryListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/categories" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryPage<CategoryBox>, response).list
-  }
+  schema = CategoryListSchema
 }
 export const List = () => new ListRequest()
 
 
-class PageRequest extends BaseRequest<CategoryPage<CategoryBox>> {
+class PageRequest extends BaseRequest<CategoryPageType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/categories" ],
   })
   graph = "counts"
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryPage<CategoryBox>, response)
-  }
+  schema = CategoryPageSchema
 }
 export const Page = () => new PageRequest()
 
 
-class CreateRequest extends BaseRequest<CategoryBox> {
+class CreateRequest extends BaseRequest<CategoryBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/categories",
     relatedKeys: [ [ "/categories" ] ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBoxImpl, response)
-  }
+  schema = CategoryBoxSchema
+  bodySchema = CategoryBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class GetRequest extends BaseRequest<CategoryBox> {
+class GetRequest extends BaseRequest<CategoryBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/categories/{category_id}" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBoxImpl, response)
-  }
+  schema = CategoryBoxSchema
 }
 export const Get = () => new GetRequest()
 
 
-class UpdateRequest extends BaseRequest<CategoryBox> {
+class UpdateRequest extends BaseRequest<CategoryBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/categories/{category_id}",
     relatedKeys: [ [ "/categories", "/{category_id}" ] ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBoxImpl, response)
-  }
+  schema = CategoryBoxSchema
+  bodySchema = CategoryBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<CategoryBox> {
+class DestroyRequest extends BaseRequest<CategoryBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/categories/{category_id}",
     relatedKeys: [ [ "/categories" ] ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(CategoryBoxImpl, response)
-  }
+  schema = CategoryBoxSchema
 }
 export const Destroy = () => new DestroyRequest()

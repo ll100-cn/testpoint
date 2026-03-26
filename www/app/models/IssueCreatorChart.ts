@@ -1,3 +1,3 @@
 export class IssueCreatorChart {
-  issueCounts: [{ creatorId: number, categoryId: number, count: number }] = []
+  issueCounts: Array<{ creatorId: number, categoryId: number | null, count: number, creator_id?: number, category_id?: number | null }> = []
 }

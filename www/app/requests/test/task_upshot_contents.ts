@@ -1,15 +1,12 @@
-import { TaskUpshot, TaskUpshotBoxImpl, type TaskUpshotBox } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { TaskUpshotBoxSchema, TaskUpshotContentBodySchema, type TaskUpshotBoxType } from '@/schemas/task_upshot'
 
-class UpdateRequest extends BaseRequest<TaskUpshotBox> {
+class UpdateRequest extends BaseRequest<TaskUpshotBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}/tasks/{task_id}/upshots/{upshot_id}/content",
     relatedKeys: [ [ "/plans", "/{plan_id}" ], [ "/tasks", "/{task_id}" ], [ "/upshots", "/{upshot_id}" ] ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskUpshotBoxImpl, response)
-  }
+  schema = TaskUpshotBoxSchema
+  bodySchema = TaskUpshotContentBodySchema
 }
 export const Update = () => new UpdateRequest()

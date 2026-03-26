@@ -32,7 +32,7 @@
         <div class="space-x-3">
           <Button>更新问题</Button>
           <Button variant="secondary" :to="`${path_info.resource}`">取消</Button>
-          <Button variant="destructive" v-if="allow('manage', issue_box.issue)" :to="`${path_info.resource}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
+          <Button variant="destructive" v-if="allow('manage', Issue)" :to="`${path_info.resource}/migrate`"><i class="far fa-exchange-alt me-1" /> 迁移到其它项目</Button>
         </div>
       </FormGroup>
     </div>
@@ -47,7 +47,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import * as q from '@/requests'
 import { usePageStore, useSessionStore } from '@/store'
-import { type MemberBox } from '@/models'
+import { Issue, type MemberBox } from '@/models'
 import _ from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'

@@ -29,10 +29,10 @@
               </TableCell>
               <TableCell>{{ _.find(member_boxes, { member: { id: platform.default_assignee_id } })?.member.name ?? "无" }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', platform)" :to="ok_url.apply(`${path_info.collection}/${platform.id}/edit`)" class="link">
+                <router-link v-if="allow('update', Platform)" :to="ok_url.apply(`${path_info.collection}/${platform.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', platform)" href="#" v-confirm="'是否删除平台？'" @click.prevent="deletePlatform(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', Platform)" href="#" v-confirm="'是否删除平台？'" @click.prevent="deletePlatform(platform.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>

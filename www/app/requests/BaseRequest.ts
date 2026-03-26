@@ -26,6 +26,10 @@ type RequestScheme = {
   relatedKeys: Array<string[] | string>
 }
 
+export interface RequestParser<T> {
+  parse(input: unknown): T
+}
+
 export const Scheme = {
   get(config: { endpoint: string[], relatedKeys?: Array<string[] | string> }) {
     return {
@@ -46,6 +50,14 @@ export const Scheme = {
   patch(config: { endpoint: string, relatedKeys: Array<string[] | string> }) {
     return {
       method: "PATCH",
+      endpoint: [ config.endpoint ],
+      relatedKeys: config.relatedKeys
+    }
+  },
+
+  put(config: { endpoint: string, relatedKeys: Array<string[] | string> }) {
+    return {
+      method: "PUT",
       endpoint: [ config.endpoint ],
       relatedKeys: config.relatedKeys
     }
@@ -74,12 +86,16 @@ export abstract class BaseRequest<T> {
   config: AxiosRequestConfig = {}
   ctx: RequestContext = { $axios: null! }
   abortSignal?: AbortSignal
+  onSubscribe?: (observable: any) => void
   scheme!: RequestScheme
+  schema?: RequestParser<T>
+  bodySchema?: RequestParser<any>
+  querySchema?: RequestParser<Record<string, any>>
 
   toQueryConfig() {
     const config = {
       interpolations: this.interpolations ?? {},
-      query: this.query ?? {},
+      query: this.normalizeQuery(this.query ?? {}),
     } satisfies RequestOptions
 
     const queryKey: Array<string | Record<string, any>> = this.scheme.relatedKeys.map(it => computed(() => {
@@ -121,8 +137,8 @@ export abstract class BaseRequest<T> {
 
     const options = {
       interpolations: overrides.interpolations ?? this.interpolations,
-      query: overrides.query ?? this.query,
-      body: overrides.body,
+      query: this.normalizeQuery(overrides.query ?? this.query),
+      body: this.normalizeBody(overrides.body),
     }
     const config = this.buildPerformConfig(options)
     try {
@@ -150,11 +166,17 @@ export abstract class BaseRequest<T> {
     const values = _.mapValues(options.interpolations ?? {}, it => toValue(it))
     const url = this.scheme.endpoint.map(it => parseTemplate(it).expand(values)).join("")
     const uri = new URI(url)
-    const query_string = qs.stringify(options.query ?? {}, { arrayFormat: "brackets" })
+    const query_string = qs.stringify(this.normalizeQuery(options.query ?? {}), { arrayFormat: "brackets" })
     return uri.query(query_string).toString()
   }
 
-  abstract processResponse(response: AxiosResponse): T
+  processResponse(response: AxiosResponse): T {
+    if (!this.schema) {
+      return response.data as T
+    }
+
+    return this.schema.parse(response.data)
+  }
 
   buildPerformConfig(options: RequestOptions) {
     const config: AxiosRequestConfig = {
@@ -196,6 +218,10 @@ export abstract class BaseRequest<T> {
   }
 
   fillFormData(formData: FormData, name: string, value: any) {
+    if (value === undefined) {
+      return
+    }
+
     if (_.isArray(value)) {
       for (const [ key, val ] of value.entries()) {
         if (_.isPlainObject(val)) {
@@ -226,5 +252,25 @@ export abstract class BaseRequest<T> {
 
   responseToObject<K>(klass: ClassConstructor<K>, response: AxiosResponse): K {
     return plainToObject(klass, response.data)
+  }
+
+  normalizeBody(body: RequestOptions["body"]) {
+    if (body === undefined || !this.bodySchema) {
+      return body
+    }
+
+    return this.bodySchema.parse(body)
+  }
+
+  normalizeQuery(query: RequestOptions["query"]) {
+    if (query == null) {
+      return {}
+    }
+
+    if (!this.querySchema) {
+      return query
+    }
+
+    return this.querySchema.parse(query)
   }
 }

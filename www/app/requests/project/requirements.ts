@@ -1,67 +1,66 @@
-import { Requirement, type RequirementBox, RequirementBoxImpl, RequirementPage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import {
+  RequirementBodySchema,
+  RequirementBoxSchema,
+  RequirementListSchema,
+  RequirementPageSchema,
+  type RequirementBoxType,
+  type RequirementListType,
+  type RequirementPageType,
+} from '@/schemas/project_misc'
 
-class ListRequest<Box extends RequirementBox> extends BaseRequest<Box[]> {
+class ListRequest extends BaseRequest<RequirementListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/requirements" ],
   })
   graph = 'counts'
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementPage<Box>, response).list
-  }
+  schema = RequirementListSchema
 }
 export const List = () => new ListRequest()
 
 
-class PageRequest<Box extends RequirementBox> extends BaseRequest<RequirementPage<Box>> {
+class PageRequest extends BaseRequest<RequirementPageType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/storyboards/{storyboard_id}", "/requirements" ],
   })
   graph = 'counts'
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementPage<Box>, response)
-  }
+  schema = RequirementPageSchema
 }
 export const Page = () => new PageRequest()
 
 
-class CreateRequest extends BaseRequest<RequirementBox> {
+class CreateRequest extends BaseRequest<RequirementBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/requirements" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBoxImpl, response)
-  }
+  schema = RequirementBoxSchema
+  bodySchema = RequirementBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class UpdateRequest extends BaseRequest<RequirementBox> {
+class UpdateRequest extends BaseRequest<RequirementBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/requirements", "/{requirement_id}" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBoxImpl, response)
-  }
+  schema = RequirementBoxSchema
+  bodySchema = RequirementBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<RequirementBox> {
+class DestroyRequest extends BaseRequest<RequirementBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/storyboards/{storyboard_id}/requirements/{requirement_id}",
     relatedKeys: [ [ "/storyboards", "/{storyboard_id}" ], [ "/requirements" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RequirementBoxImpl, response)
-  }
+  schema = RequirementBoxSchema
 }
 export const Destroy = () => new DestroyRequest()

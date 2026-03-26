@@ -6,7 +6,7 @@
         <span v-if="requirement_stat_repo.find(requirement.id)"> [{{ requirement_stat_repo.find(requirement.id)!.test_cases_count }}]</span>
       </div>
       <template #actions>
-        <Button preset="ghost" variant="secondary" size="xs" class="-me-3" v-if="allow('update', requirement)" @click.prevent="emits('edit', requirement)">
+        <Button preset="ghost" variant="secondary" size="xs" class="-me-3" v-if="allow('update', Requirement)" @click.prevent="emits('edit', requirement)">
           <i class="far fa-pencil-alt" />
         </Button>
       </template>

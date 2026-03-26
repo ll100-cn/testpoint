@@ -1,53 +1,46 @@
-import { Roadmap, type RoadmapBox, RoadmapBoxImpl, RoadmapPage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { RoadmapBodySchema, RoadmapBoxSchema, RoadmapListSchema, type RoadmapBoxType, type RoadmapListType } from '@/schemas/project_misc'
 
-class ListRequest<Box extends RoadmapBox> extends BaseRequest<Box[]> {
+class ListRequest extends BaseRequest<RoadmapListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/roadmaps" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapPage<Box>, response).list
-  }
+  schema = RoadmapListSchema
 }
 export const List = () => new ListRequest()
 
 
-class CreateRequest extends BaseRequest<RoadmapBox> {
+class CreateRequest extends BaseRequest<RoadmapBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/roadmaps",
     relatedKeys: [ [ "/roadmaps" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBoxImpl, response)
-  }
+  schema = RoadmapBoxSchema
+  bodySchema = RoadmapBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class UpdateRequest extends BaseRequest<RoadmapBox> {
+class UpdateRequest extends BaseRequest<RoadmapBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/roadmaps/{roadmap_id}",
     relatedKeys: [ [ "/roadmaps", "/{roadmap_id}" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBoxImpl, response)
-  }
+  schema = RoadmapBoxSchema
+  bodySchema = RoadmapBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<RoadmapBox> {
+class DestroyRequest extends BaseRequest<RoadmapBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/roadmaps/{roadmap_id}",
     relatedKeys: [ [ "/roadmaps" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(RoadmapBoxImpl, response)
-  }
+  schema = RoadmapBoxSchema
 }
 export const Destroy = () => new DestroyRequest()

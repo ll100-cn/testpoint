@@ -1,6 +1,6 @@
 <template>
   <Nav preset="tabs">
-    <Button v-if="allow('create', Storyboard)" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
+    <Button v-if="allow('create', Storyboard) && storyboard_boxes.length === 0" preset="ghost" class="ms-auto" @click.prevent="storyboard_dialog.show(StoryboardCreateDialogContent)">+ 新建需求板</Button>
   </Nav>
 
   <StoryboardDialog ref="storyboard_dialog" @created="onStoryboardCreated" />
@@ -37,13 +37,20 @@ const { data: storyboard_boxes } = line.request(q.project.storyboards.List(), (r
   req.interpolations.project_id = project_id
   return it.useQuery(req.toQueryConfig())
 })
-await line.wait()
 
-onActivated(() => {
-  if (storyboard_boxes.value.length > 0) {
-    router.replace(`${path_info.collection}/${storyboard_boxes.value[0].storyboard.id}`)
+function redirectToFirstStoryboard() {
+  const firstStoryboard = storyboard_boxes.value[0]?.storyboard
+  if (firstStoryboard == null) {
+    return
   }
-})
+
+  router.replace(`${path_info.collection}/${firstStoryboard.id}`)
+}
+
+onActivated(redirectToFirstStoryboard)
+
+await line.wait()
+redirectToFirstStoryboard()
 
 function onStoryboardCreated(storyboard: Storyboard) {
   router.push(`${path_info.collection}/${storyboard.id}`)

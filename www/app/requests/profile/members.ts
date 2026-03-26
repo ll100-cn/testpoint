@@ -1,26 +1,27 @@
-import { type MemberBox, MemberPage } from "@/models"
-import type { AxiosResponse } from "axios"
-import type { Required } from "utility-types"
 import { BaseRequest, Scheme } from "../BaseRequest"
+import {
+  MemberInfoListSchema,
+  MemberListSchema,
+  type MemberInfoListType,
+  type MemberListType,
+} from '@/schemas/member'
 
-class ListRequest<Box extends MemberBox> extends BaseRequest<Box[]> {
+class ListRequest<T> extends BaseRequest<T> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2/profile", "/members" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MemberPage<Box>, response).list
-  }
 }
-export function List(): InstanceType<typeof ListRequest<MemberBox>>
-export function List(graph: '+project'): InstanceType<typeof ListRequest<Required<MemberBox, 'project'>>>
-export function List(graph?: string) {
-  const request = new ListRequest<MemberBox>()
-  request.graph = graph ?? null
+export function List(): ListRequest<MemberListType>
+export function List(graph: '+project'): ListRequest<MemberInfoListType>
+export function List(graph: '+info'): ListRequest<MemberInfoListType>
+export function List(graph?: '+project' | '+info') {
+  const request = new ListRequest<MemberListType>()
+  request.schema = MemberListSchema
 
-  if (graph == '+project') {
+  if (graph == '+project' || graph == '+info') {
     request.graph = 'info'
+    request.schema = MemberInfoListSchema
   }
 
-  return request as any
+  return request as ListRequest<MemberListType | MemberInfoListType>
 }

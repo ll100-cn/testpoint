@@ -1,65 +1,56 @@
-import { Platform, type PlatformBox, PlatformBoxImpl, PlatformPage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { PlatformBodySchema, PlatformBoxSchema, PlatformListSchema, type PlatformBoxType, type PlatformListType } from '@/schemas/platform'
 
-class UpdateRequest extends BaseRequest<PlatformBox> {
+class UpdateRequest extends BaseRequest<PlatformBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/platforms/{platform_id}",
     relatedKeys: [ [ "/platforms", "/{platform_id}" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBoxImpl, response)
-  }
+  schema = PlatformBoxSchema
+  bodySchema = PlatformBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class ListRequest<Box extends PlatformBox> extends BaseRequest<Box[]> {
+class ListRequest extends BaseRequest<PlatformListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/platforms" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformPage<Box>, response).list
-  }
+  schema = PlatformListSchema
 }
 export const List = () => new ListRequest()
 
 
-class GetRequest extends BaseRequest<PlatformBox> {
+class GetRequest extends BaseRequest<PlatformBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/platforms/{platform_id}" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBoxImpl, response)
-  }
+  schema = PlatformBoxSchema
 }
 export const Get = () => new GetRequest()
 
 
-class DestroyRequest extends BaseRequest<PlatformBox> {
+class DestroyRequest extends BaseRequest<PlatformBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/platforms/{platform_id}",
     relatedKeys: [ [ "/platforms" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBoxImpl, response)
-  }
+  schema = PlatformBoxSchema
 }
 export const Destroy = () => new DestroyRequest()
 
 
-class CreateRequest extends BaseRequest<PlatformBox> {
+class CreateRequest extends BaseRequest<PlatformBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/platforms",
     relatedKeys: [ [ "/platforms" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlatformBoxImpl, response)
-  }
+  schema = PlatformBoxSchema
+  bodySchema = PlatformBodySchema
 }
 export const Create = () => new CreateRequest()

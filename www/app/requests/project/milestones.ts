@@ -1,91 +1,84 @@
-import { Milestone, type MilestoneBox, MilestoneBoxImpl, MilestonePage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import {
+  MilestoneBodySchema,
+  MilestoneBoxSchema,
+  MilestoneListSchema,
+  type MilestoneBoxType,
+  type MilestoneListType,
+} from '@/schemas/milestone'
 
-class CreateRequest extends BaseRequest<MilestoneBox> {
+class CreateRequest extends BaseRequest<MilestoneBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/milestones",
     relatedKeys: [ [ "/milestones" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBoxImpl, response)
-  }
+  schema = MilestoneBoxSchema
+  bodySchema = MilestoneBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class GetRequest extends BaseRequest<MilestoneBox> {
+class GetRequest extends BaseRequest<MilestoneBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/milestones/{id}" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBoxImpl, response)
-  }
+  schema = MilestoneBoxSchema
 }
 export const Get = () => new GetRequest()
 
 
-class ListRequest<Box extends MilestoneBox> extends BaseRequest<Box[]> {
+class ListRequest extends BaseRequest<MilestoneListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/milestones" ],
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestonePage<Box>, response).list
-  }
+  schema = MilestoneListSchema
 }
 export const List = () => new ListRequest()
 
 
-class UpdateRequest extends BaseRequest<MilestoneBox> {
+class UpdateRequest extends BaseRequest<MilestoneBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/milestones/{id}",
     relatedKeys: [ [ "/milestones", "/{id}" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBoxImpl, response)
-  }
+  schema = MilestoneBoxSchema
+  bodySchema = MilestoneBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<MilestoneBox> {
+class DestroyRequest extends BaseRequest<MilestoneBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/milestones/{id}",
     relatedKeys: [ [ "/milestones" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBoxImpl, response)
-  }
+  schema = MilestoneBoxSchema
 }
 export const Destroy = () => new DestroyRequest()
 
 
-class ArchiveRequest extends BaseRequest<MilestoneBox> {
+class ArchiveRequest extends BaseRequest<MilestoneBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/milestones/{id}/archive",
     relatedKeys: [ [ "/milestones" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBoxImpl, response)
-  }
+  schema = MilestoneBoxSchema
 }
 export const Archive = () => new ArchiveRequest()
 
 
-class ActiveRequest extends BaseRequest<MilestoneBox> {
+class ActiveRequest extends BaseRequest<MilestoneBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/milestones/{id}/active",
     relatedKeys: [ [ "/milestones" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(MilestoneBoxImpl, response)
-  }
+  schema = MilestoneBoxSchema
 }
 export const Active = () => new ActiveRequest()

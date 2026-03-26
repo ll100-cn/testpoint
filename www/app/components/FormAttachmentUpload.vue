@@ -14,7 +14,7 @@
         <a href="#" class="small" @click.prevent="uploadAbort(upload_file)"><span class="far fa-trash-alt" /></a>
       </div>
       <div class="progress" style="height: 4px">
-        <div class="upload-progress progress-bar" :style="`width: ${upload_file.loaded / upload_file.total * 100 ?? 0}%`" />
+        <div class="upload-progress progress-bar" :style="`width: ${upload_file.total ? upload_file.loaded / upload_file.total * 100 : 0}%`" />
       </div>
     </div>
   </div>

@@ -27,10 +27,10 @@
               <TableCell>{{ testCaseLabel.description }}</TableCell>
               <TableCell>{{ cases_counts[testCaseLabel.id.toString()] }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', testCaseLabel)" :to="ok_url.apply(`${path_info.collection}/${testCaseLabel.id}/edit`)" class="link">
+                <router-link v-if="allow('update', TestCaseLabel)" :to="ok_url.apply(`${path_info.collection}/${testCaseLabel.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', testCaseLabel)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(testCaseLabel.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', TestCaseLabel)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(testCaseLabel.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>

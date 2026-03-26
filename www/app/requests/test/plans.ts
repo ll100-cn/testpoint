@@ -1,91 +1,82 @@
-import { MemberPage, Plan, type PlanBox, PlanBoxImpl, PlanPage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
-import type { Required } from "utility-types"
+import {
+  PlanBodySchema,
+  PlanBoxSchema,
+  PlanInfoBoxSchema,
+  PlanPageSchema,
+  type PlanBoxType,
+  type PlanInfoBoxType,
+  type PlanPageType,
+} from '@/schemas/plan'
 
-class CreateRequest extends BaseRequest<PlanBox> {
+class CreateRequest extends BaseRequest<PlanBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/plans",
-    relatedKeys: [ [ "/plans" ] ]
+    relatedKeys: [ "/plans" ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBoxImpl, response)
-  }
+  schema = PlanBoxSchema
+  bodySchema = PlanBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class UpdateRequest extends BaseRequest<PlanBox> {
+class UpdateRequest extends BaseRequest<PlanBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}",
-    relatedKeys: [ [ "/plans", "/{plan_id}" ] ]
+    relatedKeys: [ [ "/plans", "/{plan_id}" ], "/plans" ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBoxImpl, response)
-  }
+  schema = PlanBoxSchema
+  bodySchema = PlanBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<PlanBox> {
+class DestroyRequest extends BaseRequest<PlanBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/plans/{plan_id}",
-    relatedKeys: [ [ "/plans" ] ]
+    relatedKeys: [ "/plans" ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBoxImpl, response)
-  }
+  schema = PlanBoxSchema
 }
 export const Destroy = () => new DestroyRequest()
 
 
-class PageRequest extends BaseRequest<PlanPage<PlanBox>> {
+class PageRequest extends BaseRequest<PlanPageType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans" ],
   })
   graph = "counts"
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanPage<PlanBox>, response)
-  }
+  schema = PlanPageSchema
 }
 export const Page = () => new PageRequest()
 
 
-class InfoGetRequest extends BaseRequest<PlanBox> {
+class InfoGetRequest extends BaseRequest<PlanInfoBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
   })
   graph = "counts, info"
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBoxImpl, response)
-  }
+  schema = PlanInfoBoxSchema
 }
 export const InfoGet = () => new InfoGetRequest()
 
 
-class GetRequest<Box extends PlanBox> extends BaseRequest<Box> {
+class GetRequest<T> extends BaseRequest<T> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(PlanBoxImpl, response) as Box
-  }
 }
-export function Get(): InstanceType<typeof GetRequest<PlanBox>>
-export function Get(graph: '+phase'): InstanceType<typeof GetRequest<Required<PlanBox, 'phase_infos'>>>
-export function Get(graph?: string) {
-  const request = new GetRequest<PlanBox>()
-  request.graph = graph ?? null
+export function Get(): GetRequest<PlanBoxType>
+export function Get(graph: '+phase'): GetRequest<PlanInfoBoxType>
+export function Get(graph: '+info'): GetRequest<PlanInfoBoxType>
+export function Get(graph?: '+phase' | '+info') {
+  const request = new GetRequest<PlanBoxType>()
+  request.schema = PlanBoxSchema
 
-  if (graph == "+phase") {
+  if (graph == "+phase" || graph == '+info') {
     request.graph = 'info'
+    request.schema = PlanInfoBoxSchema
   }
 
-  return request as any
+  return request as GetRequest<PlanBoxType | PlanInfoBoxType>
 }

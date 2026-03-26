@@ -4,7 +4,7 @@
       <DialogTitle>{{ task_upshot_box.testCase?.title }}</DialogTitle>
     </DialogHeader>
 
-    <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', task_upshot_box.taskUpshot)" @update:content="submitContent" />
+    <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', TaskUpshot)" @update:content="submitContent" />
 
     <small v-else class="text-muted">无详细信息</small>
 
@@ -13,19 +13,19 @@
 
     <DialogFooter v-if="is_last_phase">
       <template v-if="task_box.task.ignoreAt != null">
-        <Button v-if="allow('update', task_box.task)" v-confirm="'确定操作？'" @click.prevent="unignoreTask()">取消忽略</Button>
+        <Button v-if="allow('update', Task)" v-confirm="'确定操作？'" @click.prevent="unignoreTask()">取消忽略</Button>
       </template>
       <template v-else-if="task_upshot_box.taskUpshot.state == 'pending'">
-        <Button variant="secondary" v-if="allow('update', task_box.task)" class="me-auto" v-confirm="'确定操作？'" :disabled="actioner.processing" @click.prevent="ignoreTask()">忽略</Button>
+        <Button variant="secondary" v-if="allow('update', Task)" class="me-auto" v-confirm="'确定操作？'" :disabled="actioner.processing" @click.prevent="ignoreTask()">忽略</Button>
 
-        <template v-if="allow('update', task_upshot_box.taskUpshot)">
+        <template v-if="allow('update', TaskUpshot)">
           <Button variant="primary" @click.prevent="updateTaskUpshotState('pass')">设置为通过</Button>
           <Button variant="destructive" @click.prevent="emit('switch', TaskUpshotFailureDialogContent, task_upshot_box, task_box)">不通过</Button>
           <Button variant="secondary" v-if="task_upshot_box.taskUpshot.stateOverride && prev_task_upshot" @click.prevent="updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</Button>
         </template>
       </template>
       <template v-else>
-        <Button v-if="allow('update', task_upshot_box.taskUpshot)" @click.prevent="updateTaskUpshotState('pending')">撤销测试结果</Button>
+        <Button v-if="allow('update', TaskUpshot)" @click.prevent="updateTaskUpshotState('pending')">撤销测试结果</Button>
       </template>
     </DialogFooter>
   </DialogContent>
@@ -40,7 +40,7 @@ import { Actioner } from "@/components/Actioner"
 import PageContent from "@/components/PageContent.vue"
 import type { TaskUpshotFrameEmits } from '@/components/TaskUpshotFrame'
 import { TASK_UPSHOT_STATES } from "@/constants"
-import { type PlanBox, type TaskBox, type TaskUpshotBox } from '@/models'
+import { Task, TaskUpshot, type PlanBox, type TaskBox, type TaskUpshotBox } from '@/models'
 import * as q from '@/requests'
 import { useQueryLine } from '@/lib/useQueryLine'
 import { usePageStore } from "@/store"
@@ -71,8 +71,8 @@ const is_last_phase = computed(() => {
 const content = ref("")
 
 const prev_task_upshot = computed(() => {
-  const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
-  return index != null ? task_box.value.task_upshots?.[index - 1] : null
+  const index = task_box.value.taskUpshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
+  return index != null ? task_box.value.taskUpshots?.[index - 1] : null
 })
 
 
@@ -105,9 +105,9 @@ async function submitContent(content: string) {
     })
 
     Object.assign(task_upshot_box.value.taskUpshot, a_task_upshot_box.taskUpshot)
-    const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
+    const index = task_box.value.taskUpshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
     if (index != null) {
-      task_box.value.task_upshots![index] = a_task_upshot_box.taskUpshot
+      task_box.value.taskUpshots![index] = a_task_upshot_box.taskUpshot
     }
     emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
@@ -124,7 +124,7 @@ async function ignoreTask() {
     })
 
     task_box.value.task = a_task_box.task
-    task_box.value.task_upshots = a_task_box.task_upshots
+    task_box.value.taskUpshots = a_task_box.taskUpshots
     task_upshot_box.value.task = a_task_box.task
     emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
@@ -159,9 +159,9 @@ async function updateTaskUpshotState(state_override: "pass" | "pending" | null) 
     })
 
     task_upshot_box.value.taskUpshot = a_task_upshot_box.taskUpshot
-    const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
+    const index = task_box.value.taskUpshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
     if (index != null) {
-      task_box.value.task_upshots![index] = a_task_upshot_box.taskUpshot
+      task_box.value.taskUpshots![index] = a_task_upshot_box.taskUpshot
     }
     emit('updated', task_upshot_box.value as TaskUpshotBox)
   })

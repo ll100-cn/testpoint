@@ -6,6 +6,6 @@ export interface RequirementSchema {
   upstreamIds: number[]
   platformIds: number[]
   labelIds: number[]
-  labelDescriptions: unknown
+  labelDescriptions: Record<string, string>
   updatedAt: Date
 }

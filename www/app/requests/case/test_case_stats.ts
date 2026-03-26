@@ -1,14 +1,10 @@
-import { TestCaseStat } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { TestCaseStatListSchema, type TestCaseStatListType } from "@/schemas/test_case_stat"
 
-class ListRequest extends BaseRequest<Array<TestCaseStat>> {
+class ListRequest extends BaseRequest<TestCaseStatListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_case_stats" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToArray(TestCaseStat, response)
-  }
+  schema = TestCaseStatListSchema
 }
 export const List = () => new ListRequest()

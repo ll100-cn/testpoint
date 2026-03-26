@@ -31,10 +31,10 @@
               <TableCell>{{ category.description }}</TableCell>
               <TableCell>{{ issues_counts[category.id.toString()] ?? 0 }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', category)" :to="ok_url.apply(`${path_info.collection}/${category.id}/edit`)">
+                <router-link class="link" v-if="allow('update', Category)" :to="ok_url.apply(`${path_info.collection}/${category.id}/edit`)">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('destroy', category)" v-confirm="'确定操作？'" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
+                <a href="#" v-if="allow('destroy', Category)" v-confirm="'确定操作？'" @click.prevent="deleteCategory(category.id)" class="link" :class="{ disabled: actioner.processing }"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -81,7 +81,7 @@ const { data: category_page } = line.request(q.project.categories.Page(), (req, 
 })
 await line.wait()
 const category_boxes = computed(() => category_page.value.list)
-const issues_counts = computed(() => category_page.value.issues_counts ?? {})
+const issues_counts = computed(() => category_page.value.issuesCounts ?? {})
 
 const { mutateAsync: destroy_category_action } = line.request(q.project.categories.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))

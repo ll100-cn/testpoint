@@ -44,12 +44,12 @@
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <span v-if="profile">
-                  <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
+                  <img class="rounded-circle h-6 inline-block" :src="avatarUrlByEmail(account.email)">
                   {{ profile?.nickname ?? account.name }} ({{ profile.roleText }})
                 </span>
 
                 <span v-else>
-                  <img class="rounded-circle h-6 inline-block" :src="account.avatarUrl()">
+                  <img class="rounded-circle h-6 inline-block" :src="avatarUrlByEmail(account.email)">
                   {{ account.name }}
                 </span>
 
@@ -75,6 +75,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Nav, NavItem } from '$ui/nav'
 import { type NavPresenter } from '$ui/nav/types'
 import { bva } from '$ui/utils'
+import { avatarUrlByEmail } from '@/lib/avatar_url'
 import { useQueryLine } from '@/lib/useQueryLine'
 import * as q from '@/requests'
 import { usePageStore } from '@/store'

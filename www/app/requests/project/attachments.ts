@@ -1,9 +1,10 @@
-import { Attachment } from "@/models"
 import { BaseRequest, Scheme, type RequestOptions } from "../BaseRequest"
-import type { AxiosProgressEvent, AxiosResponse } from "axios"
+import type { AxiosProgressEvent } from "axios"
 import type { UploadFile } from "@/components/types"
+import { AttachmentSchema } from '@/schemas/issue'
+import { AttachmentBodySchema } from '@/schemas/issue_extra'
 
-class CreateRequest extends BaseRequest<Attachment> {
+class CreateRequest extends BaseRequest<any> {
   scheme = Scheme.post({
     endpoint: "/svc/attachments",
     relatedKeys: [ [ "/attachments" ] ]
@@ -11,8 +12,9 @@ class CreateRequest extends BaseRequest<Attachment> {
   headers = {
     "Content-Type": "multipart/form-data",
   }
+  schema = AttachmentSchema
 
-  async perform(overrides: RequestOptions = {}): Promise<Attachment> {
+  async perform(overrides: RequestOptions = {}): Promise<any> {
     this.interpolations = overrides.interpolations ?? this.interpolations
     this.query = overrides.query ?? this.query
 
@@ -35,35 +37,28 @@ class CreateRequest extends BaseRequest<Attachment> {
       return this.processError(e)
     }
   }
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(Attachment, response)
-  }
 }
 export const Create = () => new CreateRequest()
 
 
-class UpdateRequest extends BaseRequest<Attachment> {
+class UpdateRequest extends BaseRequest<any> {
   scheme = Scheme.patch({
     endpoint: "/svc/attachments/{attachment_id}",
     relatedKeys: [ [ "/attachments", "/{attachment_id}" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(Attachment, response)
-  }
+  schema = AttachmentSchema
+  bodySchema = AttachmentBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<Attachment> {
+class DestroyRequest extends BaseRequest<any> {
   scheme = Scheme.delete({
     endpoint: "/svc/attachments/{attachment_id}",
     relatedKeys: [ [ "/attachments" ] ]
   })
 
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(Attachment, response)
-  }
+  schema = AttachmentSchema
 }
 export const Destroy = () => new DestroyRequest()

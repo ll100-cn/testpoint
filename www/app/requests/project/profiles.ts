@@ -1,27 +1,21 @@
-import { type ProfileBox, ProfileBoxImpl } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { ProfileBodySchema, ProfileBoxSchema, type ProfileBoxType } from '@/schemas/profile'
 
-class GetRequest extends BaseRequest<ProfileBox> {
+class GetRequest extends BaseRequest<ProfileBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/profile" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProfileBoxImpl, response)
-  }
+  schema = ProfileBoxSchema
 }
 export const Get = () => new GetRequest()
 
 
-class UpdateRequest extends BaseRequest<ProfileBox> {
+class UpdateRequest extends BaseRequest<ProfileBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/profile",
     relatedKeys: [ [ "/projects", "/{project_id}" ], [ "/profile" ] ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(ProfileBoxImpl, response)
-  }
+  schema = ProfileBoxSchema
+  bodySchema = ProfileBodySchema
 }
 export const Update = () => new UpdateRequest()

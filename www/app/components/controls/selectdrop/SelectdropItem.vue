@@ -27,12 +27,12 @@ provide(selectdropContextKey, {
 })
 
 
-function traverse(node: VNodeChild, callback: (node: VNode) => void) {
-  if (typeof node == 'string' || typeof node == 'number' || typeof node == 'boolean' || node === null || node === undefined) {
+function traverse(node: VNodeChild | void, callback: (node: VNode) => void) {
+  if (node == null || typeof node == 'string' || typeof node == 'number' || typeof node == 'boolean') {
     return
   }
 
-  if (node instanceof Array) {
+  if (Array.isArray(node)) {
     for (const child of node) {
       traverse(child, callback)
     }
@@ -40,7 +40,7 @@ function traverse(node: VNodeChild, callback: (node: VNode) => void) {
     if (node.type == Text) {
       callback(node)
     } else if (typeof node.type == 'symbol') {
-      const children = (node.children ?? []) as VNodeArrayChildren
+      const children = Array.isArray(node.children) ? node.children as VNodeArrayChildren : []
 
       for (const child of children) {
         traverse(child, callback)

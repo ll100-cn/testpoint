@@ -14,7 +14,7 @@
       </TableHeader>
       <TableBody>
         <TableRow v-for="test_case in test_cases" :key="test_case.id">
-          <TableCell role="checkbox" v-if="!readonly && allow('update', test_case)">
+          <TableCell role="checkbox" v-if="!readonly && allow('update', TestCase)">
             <Checkbox v-model="select_test_case_ids" :value="test_case.id" />
           </TableCell>
           <TableCell>

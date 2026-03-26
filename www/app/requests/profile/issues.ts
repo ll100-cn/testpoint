@@ -1,15 +1,12 @@
-import { type IssueBox, IssueBoxImpl, IssuePage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { IssuePageWithCountsSchema, ProfileIssueQuerySchema, type IssuePageWithCountsType } from '@/schemas/issue'
 
-class PageRequest extends BaseRequest<IssuePage<IssueBox>> {
+class PageRequest extends BaseRequest<IssuePageWithCountsType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2/profile", "/issues" ],
   })
   graph = "counts"
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssuePage<IssueBox>, response)
-  }
+  schema = IssuePageWithCountsSchema
+  querySchema = ProfileIssueQuerySchema
 }
 export const Page = () => new PageRequest()

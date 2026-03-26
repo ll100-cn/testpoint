@@ -4,7 +4,7 @@
       <DialogTitle>{{ test_case.title }}</DialogTitle>
 
       <template #actions>
-        <a v-if="allow('destroy', test_case)" href="#" class="text-destructive text-sm link" v-confirm="'确认归档？'" @click.prevent="archiveTestCase">归档</a>
+        <a v-if="allow('destroy', TestCase)" href="#" class="text-destructive text-sm link" v-confirm="'确认归档？'" @click.prevent="archiveTestCase">归档</a>
       </template>
     </DialogHeader>
 

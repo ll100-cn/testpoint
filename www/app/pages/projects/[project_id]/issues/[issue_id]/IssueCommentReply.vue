@@ -6,13 +6,13 @@
       <span class="text-muted">回复于 {{ h.datetime(comment_box.comment.createdAt) }}</span>
 
       <MoreDropdown class="ms-auto">
-        <DropdownMenuItem v-if="!readonly && comment_box.comment.member.userId == user.id && allow('update', comment_box.comment)" @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
-        <DropdownMenuItem v-if="!readonly && allow('destroy', comment_box.comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
+        <DropdownMenuItem v-if="!readonly && comment_box.comment.member.userId == user.id && allow('update', Comment)" @click.prevent="emit('modal', IssueCommentEditDialogContent, issue_box, comment_box)">修改</DropdownMenuItem>
+        <DropdownMenuItem v-if="!readonly && allow('destroy', Comment)" v-confirm="'确认删除该评论？'" @click.prevent="deleteComment">删除</DropdownMenuItem>
         <DropdownMenuItem @click.prevent="emit('modal', IssueCommentConvertDialogContent, issue_box, comment_box)">关联</DropdownMenuItem>
       </MoreDropdown>
     </div>
 
-    <ContentBody :body="comment_box.comment" :editable="!readonly && allow('update', comment_box.comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
+    <ContentBody :body="comment_box.comment" :editable="!readonly && allow('update', Comment)" @attachment_destroyed="onAttachmentDestroyed" @attachment_updated="onAttachmentUpdated" />
   </div>
 </template>
 

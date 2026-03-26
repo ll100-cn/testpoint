@@ -54,7 +54,7 @@ import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
 import { Nav, NavItem } from '$ui/nav'
-import type { Issue, IssueBox, IssuePage, Pagination } from "@/models"
+import type { IssueBox, IssuePage } from "@/models"
 import RLink from "@/components/RLink.vue"
 import { Badge } from "$ui/badge"
 import { useQueryLine } from '@/lib/useQueryLine'
@@ -63,8 +63,8 @@ const line = useQueryLine()
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
 
-const filter = query.filter || 'unhandled'
-const sorts = ref(query.sorts ?? 'id desc')
+const filter = String(query.filter ?? 'unhandled')
+const sorts = ref(String(query.sorts ?? 'id desc'))
 
 const { data: pagination } = line.request(q.profile.issues.Page(), (req, it) => {
   req.query = { ...utils.plainToQuery(query), filter: filter, sorts: sorts.value }

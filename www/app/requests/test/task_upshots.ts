@@ -1,26 +1,28 @@
-import { TaskUpshotBoxImpl, TaskUpshotPage, type TaskUpshotBox } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
-import type { Required } from "utility-types"
+import {
+  TaskUpshotInfoBoxSchema,
+  TaskUpshotPageSchema,
+  TaskUpshotBoxSchema,
+  type TaskUpshotInfoBoxType,
+  type TaskUpshotPageType,
+  type TaskUpshotBoxType,
+} from '@/schemas/task_upshot'
 
-class ListRequest<Box extends TaskUpshotBox> extends BaseRequest<TaskUpshotPage<Box>> {
+class ListRequest<T> extends BaseRequest<T> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/plans/{plan_id}", "/phases/{phase_id}", "/task_upshots" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TaskUpshotPage<Box>, response)
-  }
 }
-export function List(): InstanceType<typeof ListRequest<TaskUpshotBox>>
-export function List(graph: '+info'): InstanceType<typeof ListRequest<Required<TaskUpshotBox, 'task' | 'test_case'>>>
-export function List(graph?: string) {
-  const request = new ListRequest<TaskUpshotBox>()
-  request.graph = graph ?? null
+export function List(): ListRequest<TaskUpshotPageType>
+export function List(graph: '+info'): ListRequest<TaskUpshotPageType>
+export function List(graph?: '+info') {
+  const request = new ListRequest<TaskUpshotPageType>()
+  request.schema = TaskUpshotPageSchema
 
   if (graph == '+info') {
     request.graph = 'info'
+    request.schema = TaskUpshotPageSchema
   }
 
-  return request as any
+  return request
 }

@@ -1,77 +1,60 @@
-import { TestCase, type TestCaseBox, TestCaseBoxImpl, TestCasePage } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { TestCaseBodySchema, TestCaseBoxSchema, TestCaseListSchema, type TestCaseBoxType, type TestCaseListType } from "@/schemas/test_case"
 
-class UpdateRequest extends BaseRequest<TestCaseBox> {
+class UpdateRequest extends BaseRequest<TestCaseBoxType> {
   scheme = Scheme.patch({
     endpoint: "/svc/v2/projects/{project_id}/test_cases/{id}",
-    relatedKeys: [ [ "/test_cases", "/{id}" ] ]
+    relatedKeys: [ [ "/test_cases", "/{id}" ], "/test_cases" ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBoxImpl, response)
-  }
+  schema = TestCaseBoxSchema
+  bodySchema = TestCaseBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class ListRequest extends BaseRequest<TestCasePage<TestCaseBox>> {
+class ListRequest extends BaseRequest<TestCaseListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_cases" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCasePage<TestCaseBox>, response)
-  }
+  schema = TestCaseListSchema
 }
 export const List = () => new ListRequest()
 
 
-class GetRequest extends BaseRequest<TestCaseBox> {
+class GetRequest extends BaseRequest<TestCaseBoxType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_cases/{test_case_id}" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBoxImpl, response)
-  }
+  schema = TestCaseBoxSchema
 }
 export const Get = () => new GetRequest()
 
 
-class DestroyRequest extends BaseRequest<TestCaseBox> {
+class DestroyRequest extends BaseRequest<TestCaseBoxType> {
   scheme = Scheme.delete({
     endpoint: "/svc/v2/projects/{project_id}/test_cases/{id}",
-    relatedKeys: [ [ "/test_cases" ] ]
+    relatedKeys: [ "/test_cases" ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBoxImpl, response)
-  }
+  schema = TestCaseBoxSchema
 }
 export const Destroy = () => new DestroyRequest()
 
 
-class CreateRequest extends BaseRequest<TestCaseBox> {
+class CreateRequest extends BaseRequest<TestCaseBoxType> {
   scheme = Scheme.post({
     endpoint: "/svc/v2/projects/{project_id}/test_cases",
-    relatedKeys: [ [ "/test_cases" ] ]
+    relatedKeys: [ "/test_cases" ]
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCaseBoxImpl, response)
-  }
+  schema = TestCaseBoxSchema
+  bodySchema = TestCaseBodySchema
 }
 export const Create = () => new CreateRequest()
 
 
-class HistoryRequest extends BaseRequest<TestCasePage<TestCaseBox>> {
+class HistoryRequest extends BaseRequest<TestCaseListType> {
   scheme = Scheme.get({
     endpoint: [ "/svc/v2", "/projects/{project_id}", "/test_cases/{id}", "/history" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(TestCasePage<TestCaseBox>, response)
-  }
+  schema = TestCaseListSchema
 }
 export const History = () => new HistoryRequest()

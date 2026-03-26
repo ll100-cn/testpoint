@@ -27,10 +27,10 @@
               <TableCell>{{ issue_template.name }}</TableCell>
               <TableCell>{{ issue_template.lookupByBuildForm ? "可见" : "隐藏" }}</TableCell>
               <TableCell role="actions">
-                <router-link class="link" v-if="allow('update', issue_template)" :to="ok_url.apply(`${path_info.collection}/${issue_template.id}/edit`)">
+                <router-link class="link" v-if="allow('update', IssueTemplate)" :to="ok_url.apply(`${path_info.collection}/${issue_template.id}/edit`)">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', issue_template)" href="#" v-confirm="'是否删除问题模版？'" @click.prevent="deleteIssueTemplate(issue_template.id)" class="link">
+                <a v-if="allow('destroy', IssueTemplate)" href="#" v-confirm="'是否删除问题模版？'" @click.prevent="deleteIssueTemplate(issue_template.id)" class="link">
                   <i class="far fa-trash-alt" /> 删除
                 </a>
               </TableCell>

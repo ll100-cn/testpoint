@@ -1,4 +1,4 @@
-import md5 from 'js-md5'
+import { md5 } from 'js-md5'
 import _ from 'lodash'
 import { colord } from "colord"
 import dayjs from '@/lib/dayjs'
@@ -13,7 +13,8 @@ export * from './EmitsAsProps'
 
 export function calcColorHex(text: string) {
   if (!color_cache.has(text)) {
-    const hex = md5.array(text).slice(0, 3)
+    const hash = md5(text)
+    const hex = [ hash.slice(0, 2), hash.slice(2, 4), hash.slice(4, 6) ].map((it) => Number.parseInt(it, 16))
     const color = colord({ r: hex[0], g: hex[1], b: hex[2] })
     const hsl = color.toHsl()
     const new_color = colord({ h: hsl.h, s: hsl.s, l: 10 + 0.4 * hsl.l })
@@ -27,7 +28,8 @@ export function calcColorHlsValue(text: string) {
   const key = `hsl-(${text})`
 
   if (!color_cache.has(key)) {
-    const hex = md5.array(text).slice(0, 3)
+    const hash = md5(text)
+    const hex = [ hash.slice(0, 2), hash.slice(2, 4), hash.slice(4, 6) ].map((it) => Number.parseInt(it, 16))
     const hue = hex[0] % 360
     const result = `${hue} 72% 35%`
 
@@ -99,5 +101,5 @@ export function createOrEditTimeInWords(created_at: Date, last_edited_at: Date) 
 }
 
 export function stringToBoolean(stringValue: string | null | undefined) {
-  return ![ "false", "no", "0", null, undefined ].includes(stringValue.toLowerCase()?.trim())
+  return ![ "false", "no", "0", null, undefined ].includes(stringValue?.toLowerCase()?.trim())
 }

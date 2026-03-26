@@ -1,14 +1,10 @@
-import { IssueCreatorChart } from "@/models"
 import { BaseRequest, Scheme } from "../BaseRequest"
-import type { AxiosResponse } from "axios"
+import { IssueCreatorChartSchema, type IssueCreatorChartType } from '@/schemas/project_misc'
 
-class GetRequest extends BaseRequest<IssueCreatorChart> {
+class GetRequest extends BaseRequest<IssueCreatorChartType> {
   scheme = Scheme.get({
     endpoint: [ "/svc", "/projects/{project_id}", "/analytics/issue_creator_chart" ],
   })
-
-  processResponse(response: AxiosResponse) {
-    return this.responseToObject(IssueCreatorChart, response)
-  }
+  schema = IssueCreatorChartSchema
 }
 export const Get = () => new GetRequest()

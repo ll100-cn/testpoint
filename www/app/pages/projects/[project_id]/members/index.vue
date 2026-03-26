@@ -34,10 +34,10 @@
               <TableCell>{{ user.email }}</TableCell>
               <TableCell>{{ member.roleText }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', member)" :to="ok_url.apply(`${path_info.collection}/${member.id}/edit`)" class="link">
+                <router-link v-if="allow('update', Member)" :to="ok_url.apply(`${path_info.collection}/${member.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a href="#" v-if="allow('archive', member)" v-confirm="'是否归档成员？'" @click.prevent="archiveMember(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
+                <a href="#" v-if="allow('archive', Member)" v-confirm="'是否归档成员？'" @click.prevent="archiveMember(member.id)" class="link"><i class="far fa-archive" /> 归档</a>
               </TableCell>
             </TableRow>
           </template>
