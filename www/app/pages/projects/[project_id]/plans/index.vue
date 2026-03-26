@@ -9,7 +9,7 @@
 
   <Form preset="inline" v-bind="{ former }" @submit.prevent="former.perform()">
     <FormGroup path="creator_id_eq" label="成员">
-      <controls.Select include-blank @update:model-value="onSearchInput">
+      <controls.Select include-blank>
         <OptionsForMember :collection="member_boxes" except_level="reporter" />
       </controls.Select>
     </FormGroup>
@@ -65,14 +65,15 @@ import dayjs from '@/lib/dayjs'
 import * as q from '@/requests'
 import * as utils from '@/lib/utils'
 import _ from 'lodash'
-import { ref, computed } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import * as t from '@/lib/transforms'
-import { usePageStore, useSessionStore } from '@/store'
+import { z } from 'zod'
+import { NullableIntegerInputSchema } from '@/schemas/_shared'
+import { usePageStore } from '@/store'
 import { Plan } from '@/models'
 import OptionsForMember from '@/components/OptionsForMember.vue'
 import { Badge } from '$ui/badge'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardContent, CardFooter } from '$ui/card'
 import { Progress } from '$ui/progress'
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
@@ -89,24 +90,28 @@ const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
-const query = route.query
+const query = utils.queryToPlain(route.query)
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const PlanDialog = BlankDialog as typeof BlankDialog & PlanFrameComponent
 const plan_dialog = ref(null! as InstanceType<typeof BlankDialog & PlanFrameComponent>)
 
-class Search {
-  @t.Number creator_id_eq?: number = undefined
+const SearchSchema = z.object({
+  creator_id_eq: NullableIntegerInputSchema.optional(),
+})
+
+function parseSearch(raw: unknown) {
+  return SearchSchema.parse(raw)
 }
 
-const search = utils.instance(Search, query)
+const search = parseSearch(query)
 const former = Former.build(search)
 
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const data = utils.compactObject(this.form)
+  const data = utils.compactObject(parseSearch(this.form))
   router.push({ query: utils.plainToQuery(data) })
 }
 
@@ -114,7 +119,7 @@ const project_id = _.toNumber(params.project_id)
 
 const { data: plan_page } = line.request(q.test.plans.Page(), (req, it) => {
   req.interpolations.project_id = project_id
-  req.query = { ...utils.plainToQuery(query), q: search }
+  req.query = { ...utils.plainToQuery(query), q: utils.compactObject(search) }
   return it.useQuery(req.toQueryConfig())
 })
 const { data: member_boxes } = line.request(q.project.members.List(), (req, it) => {
@@ -127,11 +132,11 @@ const { data: test_case_stats } = line.request(q.case.test_case_stats.List(), (r
 })
 await line.wait()
 
-function onSearchInput() {
-  setTimeout(() => {
+watch(() => former.form.creator_id_eq, (value, oldValue) => {
+  if (value !== oldValue) {
     former.perform()
-  }, 0);
-}
+  }
+})
 
 function createdPlan() {
 }

@@ -82,16 +82,17 @@ import type { TestCaseBatchFrameComponent } from '@/components/TestCaseBatchFram
 import type { TestCaseFrameComponent } from '@/components/TestCaseFrame'
 import { TEST_CASE_RELATE_STATES } from '@/constants'
 import PathHelper from '@/lib/PathHelper'
-import * as t from '@/lib/transforms'
 import { useQueryLine } from '@/lib/useQueryLine'
 import * as utils from '@/lib/utils'
 import { EntityRepo, Platform, TestCase, TestCaseLabel } from '@/models'
 import * as q from '@/requests'
-import { usePageStore, useSessionStore } from '@/store'
+import { NullableIntegerInputSchema } from '@/schemas/_shared'
+import { usePageStore } from '@/store'
 import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import { computed, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { z } from 'zod'
 import { type ChangeFilterFunction, Filter } from '../types'
 import CardBody from './CardBody.vue'
 import CardNewDialog from './CardNewDialog.vue'
@@ -103,7 +104,6 @@ const params = route.params as any
 const query = utils.queryToPlain(route.query) as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
-const session = useSessionStore()
 const path_info = PathHelper.parseMember(route.path, 'show')
 
 const TestCaseDialog = BlankDialog as typeof BlankDialog & TestCaseFrameComponent
@@ -111,23 +111,29 @@ const TestCaseBatchDialog = BlankDialog as typeof BlankDialog & TestCaseBatchFra
 const case_dialog = ref<InstanceType<typeof BlankDialog & TestCaseFrameComponent>>()
 const case_batch_dialog = ref<InstanceType<typeof BlankDialog & TestCaseBatchFrameComponent>>()
 
-class Search {
-  @t.String group_name_search?: string = undefined
-  @t.Number platform_id?: number | null = null
-  @t.Number label_id?: number | null = null
-  @t.String relate_state?: keyof typeof TEST_CASE_RELATE_STATES = undefined
+const SearchSchema = z.object({
+  group_name_search: z.string().optional(),
+  platform_id: NullableIntegerInputSchema.optional(),
+  label_id: NullableIntegerInputSchema.optional(),
+  relate_state: z.enum(['unrelated', 'related', 'expired']).optional(),
+})
+
+type Search = z.infer<typeof SearchSchema>
+
+function parseSearch(raw: unknown): Search {
+  return SearchSchema.parse(raw)
 }
 
-const search = ref(plainToClass(Search, query))
+const search = parseSearch(query)
 const filter = plainToClass(Filter, query.f ?? {})
 
-const former = Former.build(search.value)
+const former = Former.build(search)
 
 const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const data = utils.compactObject(this.form)
+  const data = utils.compactObject(parseSearch(this.form))
   router.push({ query: utils.plainToQuery(data) })
 }
 
@@ -197,26 +203,26 @@ const newest_roadmap = computed(() => {
 const search_test_cases = computed(() => {
   let scope = _(test_cases.value)
 
-  const platform = platform_repo.value.find(_.toNumber(query.platform_id))
+  const platform = platform_repo.value.find(_.toNumber(former.form.platform_id))
   if (platform) {
     scope = scope.filter(it => it.platformIds.includes(platform.id))
   }
 
-  const label = label_repo.value.find(_.toNumber(query.label_id))
+  const label = label_repo.value.find(_.toNumber(former.form.label_id))
   if (label) {
     scope = scope.filter(it => it.labelIds.includes(label.id))
   }
 
-  if (query.group_name_search) {
-    scope = scope.filter((it) => !!it.groupName?.includes(query.group_name_search))
+  if (former.form.group_name_search) {
+    scope = scope.filter((it) => !!it.groupName?.includes(former.form.group_name_search))
   }
 
-  if (query.relate_state) {
-    if (query.relate_state === 'related') {
+  if (former.form.relate_state) {
+    if (former.form.relate_state === 'related') {
       scope = scope.filter((it) => it.requirementId != null)
-    } else if (query.relate_state === 'unrelated') {
+    } else if (former.form.relate_state === 'unrelated') {
       scope = scope.filter((it) => it.requirementId == null)
-    } else if (query.relate_state === 'expired') {
+    } else if (former.form.relate_state === 'expired') {
       scope = scope.filter((it) => (it.requirementId != null && it.roadmapId != newest_roadmap.value.id))
     }
   }

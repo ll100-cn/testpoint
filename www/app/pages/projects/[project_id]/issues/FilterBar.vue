@@ -50,8 +50,7 @@ import { IssueSummary } from "@/models"
 import _ from "lodash"
 import { computed, reactive, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Search2, Filter2 } from "./types"
-import BSOption from "@/components/BSOption.vue"
+import { parseFilter, parseSearch } from "./types"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import * as controls from '@/components/controls'
 import { SelectdropItem } from '@/components/controls/selectdrop'
@@ -64,8 +63,8 @@ const props = defineProps<{
   summary: IssueSummary
 }>()
 
-const search2 = reactive(utils.instance(Search2, query))
-const filter2 = reactive(utils.instance(Filter2, query))
+const search2 = reactive(parseSearch(query))
+const filter2 = reactive(parseFilter(query))
 
 const former = Former.build(filter2)
 
@@ -73,7 +72,7 @@ const Form = GenericForm<typeof former.form>
 const FormGroup = GenericFormGroup<typeof former.form>
 
 former.doPerform = async function() {
-  const data = utils.compactObject({ ...search2, ...this.form })
+  const data = utils.compactObject({ ...search2, ...parseFilter(this.form) })
   router.push({ query: utils.plainToQuery(data) })
 }
 

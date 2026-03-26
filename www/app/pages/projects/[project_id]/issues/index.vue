@@ -61,7 +61,7 @@ import { computed, getCurrentInstance, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import FilterBar from "./FilterBar.vue"
 import IssueList from "./IssueList.vue"
-import { Filter2, Search2 } from "./types"
+import { parseFilter, parseSearch, type Search2 } from "./types"
 import { Former, GenericForm, GenericFormGroup } from '$ui/simple_form'
 import { Button } from '$ui/button'
 import * as controls from '@/components/controls'
@@ -81,8 +81,8 @@ const path_info = PathHelper.parseCollection(route.path, 'index')
 const ok_url = new OkUrl(route)
 
 const page2 = utils.instance(Page, query)
-const search2 = reactive(utils.instance(Search2, query))
-const filter2 = reactive(utils.instance(Filter2, query))
+const search2 = reactive(parseSearch(query))
+const filter2 = reactive(parseFilter(query))
 
 const project_id = params.project_id
 
