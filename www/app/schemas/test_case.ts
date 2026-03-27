@@ -10,6 +10,11 @@ import {
   pathArraySchema,
 } from './_shared'
 
+const IntegerArraySchema = z.preprocess(
+  (value) => Array.isArray(value) ? value.filter((it) => it != null) : value,
+  z.array(z.coerce.number().int()),
+)
+
 export const TestCaseSchema = z.object({
   id: z.number().int(),
   title: z.string(),
@@ -19,8 +24,8 @@ export const TestCaseSchema = z.object({
   group_name: NullableStringSchema,
   archived: z.boolean(),
   project_id: z.number().int(),
-  platform_ids: z.array(z.number().int()),
-  label_ids: z.array(z.number().int()),
+  platform_ids: IntegerArraySchema,
+  label_ids: IntegerArraySchema,
   scene_path: pathArraySchema(),
   updated_at: DateTimeSchema,
   storyboard_id: z.number().int().nullable().optional().default(null),
@@ -43,8 +48,8 @@ export const TestCaseBodySchema = z.object({
   role_name: NullableInputStringSchema,
   scene_name: NullableInputStringSchema,
   group_name: NullableInputStringSchema,
-  platform_ids: z.preprocess((value) => Array.isArray(value) ? value.filter((it) => it != null) : value, z.array(z.coerce.number().int())),
-  label_ids: z.preprocess((value) => Array.isArray(value) ? value.filter((it) => it != null) : value, z.array(z.coerce.number().int())),
+  platform_ids: IntegerArraySchema,
+  label_ids: IntegerArraySchema,
   storyboard_id: NullableIntegerInputSchema,
   requirement_id: NullableIntegerInputSchema,
 })
