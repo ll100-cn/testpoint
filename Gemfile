@@ -58,10 +58,6 @@ gem "uri_template", "0.7.0"
 gem "json_schemer", "2.4.0"
 gem "rb_json5", "0.3.0"
 
-# Assets
-gem 'vite_rails', '3.0.19'
-gem 'vite_ruby', '3.9.1'
-
 # Use Active Storage variant
 gem 'image_processing', '1.12.1'
 

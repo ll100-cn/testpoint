@@ -47,8 +47,8 @@ namespace :deploy do
   desc "yarn install"
   task :yarn_install do
     on roles(:web) do
-      within release_path do
-        execute :yarn, 'install'
+      within release_path.join('www') do
+        execute :pnpm, 'install'
       end
     end
   end
@@ -73,15 +73,19 @@ namespace :local do
       end
 
       run_locally do
-        execute "cp -f config/database.yml.example config/database.yml"
-        execute "cp -f config/redis.yml.example config/redis.yml"
-        Bundler.with_original_env do
-          execute "bundle", "install"
-          execute "pnpm", "install"
+        with fetch(:default_env, {}) do
+          execute "cp", "-f", "config/database.yml.example", "config/database.yml"
+          execute "cp", "-f", "config/redis.yml.example", "config/redis.yml"
 
-          execute "rm", "-rf", "public/assets"
-          execute "bin/vite", "clobber", "-m", "production"
-          execute "bundle", "exec", "rake", "assets:precompile", "RAILS_ENV=production"
+          Bundler.with_original_env do
+            execute "bundle", "install"
+            execute "pnpm", "--dir", "www", "install"
+            execute "pnpm", "--dir", "www", "run", "generate"
+
+            execute "rm", "-rf", "public/assets", "public/_nuxt", "public/200.html"
+            execute "cp", "-R", "www/.output/public/.", "public/"
+            execute "bundle", "exec", "rake", "assets:precompile", "RAILS_ENV=production"
+          end
         end
       end
     end

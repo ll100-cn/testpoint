@@ -1,42 +1,32 @@
-# Be sure to restart your server when you modify this file.
+require 'base64'
+require 'digest'
 
-# Define an application-wide content security policy
-# For further information see the following documentation
-# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+nuxt_inline_script_hashes = lambda do
+  file = Rails.public_path.join('200.html')
+  next [] unless file.exist?
 
-# Rails.application.config.content_security_policy do |policy|
-#   policy.default_src :self, :https
-#   policy.font_src    :self, :https, :data
-#   policy.img_src     :self, :https, :data
-#   policy.object_src  :none
-#   policy.script_src  :self, :https
-    # Allow @vite/client to hot reload javascript changes in development
-#    policy.script_src *policy.script_src, :unsafe_eval, "http://#{ ViteRuby.config.host_with_port }" if Rails.env.development?
+  file.read.scan(/<script\b(?![^>]*\bsrc=)[^>]*>(.*?)<\/script>/m).flatten.filter_map do |content|
+    script = content.strip
+    next if script.empty?
 
-    # You may need to enable this in production as well depending on your setup.
-#    policy.script_src *policy.script_src, :blob if Rails.env.test?
+    Base64.strict_encode64(Digest::SHA256.digest(script))
+  end.uniq
+end
 
-#   policy.style_src   :self, :https
-    # Allow @vite/client to hot reload style changes in development
-#    policy.style_src *policy.style_src, :unsafe_inline if Rails.env.development?
+Rails.application.config.content_security_policy do |policy|
+  policy.default_src :self, :https
+  policy.font_src :self, :https, :data
+  policy.img_src :self, :https, :data, :blob
+  policy.object_src :none
+  policy.script_src :self, :https
+  policy.style_src :self, :https, :unsafe_inline
+  policy.connect_src :self, :https
 
-#   # If you are using webpack-dev-server then specify webpack-dev-server host
-#   policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
-    # Allow @vite/client to hot reload changes in development
-#    policy.connect_src *policy.connect_src, "ws://#{ ViteRuby.config.host_with_port }" if Rails.env.development?
-
-
-#   # Specify URI for violation reports
-#   # policy.report_uri "/csp-violation-report-endpoint"
-# end
-
-# If you are using UJS then enable automatic nonce generation
-# Rails.application.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
-
-# Set the nonce only to specific directives
-# Rails.application.config.content_security_policy_nonce_directives = %w(script-src)
-
-# Report CSP violations to a specified URI
-# For further information see the following documentation:
-# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
-# Rails.application.config.content_security_policy_report_only = true
+  if Rails.env.development?
+    policy.script_src *policy.script_src, :unsafe_eval, 'http:'
+    policy.connect_src *policy.connect_src, 'http:', 'ws:'
+  else
+    hashes = nuxt_inline_script_hashes.call
+    policy.script_src *policy.script_src, *hashes.map { |hash| "'sha256-#{hash}'" }
+  end
+end
