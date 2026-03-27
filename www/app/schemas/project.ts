@@ -10,15 +10,7 @@ export const ProjectSchema = z.object({
   trello_api_key: z.string().nullable().optional(),
   trello_api_token: z.string().nullable().optional(),
   webhook_url: z.string().nullable().optional(),
-}).transform((value) => ({
-  id: value.id,
-  name: value.name,
-  archived: value.archived,
-  trelloListId: value.trello_list_id ?? null,
-  trelloApiKey: value.trello_api_key ?? null,
-  trelloApiToken: value.trello_api_token ?? null,
-  webhookUrl: value.webhook_url ?? null,
-}))
+})
 export type ProjectType = z.output<typeof ProjectSchema>
 
 export const ProjectBoxSchema = z.object({

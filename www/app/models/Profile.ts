@@ -3,12 +3,12 @@ import type { OmitByValue } from "utility-types"
 import type { ProfileSchema } from './schema/profile'
 
 export class Profile implements ProfileSchema {
-  memberId!: number
+  member_id!: number
   role!: string
-  roleText!: string
+  role_text!: string
   nickname: string | null = null
-  projectId!: number
-  projectName!: string
+  project_id!: number
+  project_name!: string
 
   @t.Raw permissions!: Record<string, string[]>
 

@@ -1,6 +1,6 @@
 export interface RoadmapSchema {
   id: number
   title: string
-  createdAt: Date
-  updatedAt: Date
+  created_at: Date
+  updated_at: Date
 }

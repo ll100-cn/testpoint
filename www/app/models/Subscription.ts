@@ -5,10 +5,10 @@ import type { SubscriptionSchema } from './schema/subscription'
 
 export class Subscription implements SubscriptionSchema {
   @t.Number id!: number
-  @t.Number userId!: number
-  @t.Number issueId!: number
+  @t.Number user_id!: number
+  @t.Number issue_id!: number
 
-  @t.Date updatedAt!: Date
+  @t.Date updated_at!: Date
   @t.Klass(Member) member!: Member
 }
 

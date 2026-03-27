@@ -3,27 +3,27 @@ import _ from "lodash"
 import type { AttachmentSchema } from './schema/attachment'
 
 export class Attachment implements AttachmentSchema {
-  contentType!: string
+  content_type!: string
   id!: number
   title!: string
 
-  @Type(() => Date) updatedAt!: Date
+  @Type(() => Date) updated_at!: Date
 
-  fileUrl!: string
-  fileSize!: number
-  filePreviewable!: boolean
-  filePreviewUrl?: string
+  file_url!: string
+  file_size!: number
+  file_previewable!: boolean
+  file_preview_url?: string
 
 
   isImage() {
-    return _.startsWith(this.contentType, "image/")
+    return _.startsWith(this.content_type, "image/")
   }
 
   isVideo() {
-    return _.startsWith(this.contentType, "video/") && _.includes(this.contentType, "mp4")
+    return _.startsWith(this.content_type, "video/") && _.includes(this.content_type, "mp4")
   }
 
   isAudio() {
-    return _.startsWith(this.contentType, "audio/")
+    return _.startsWith(this.content_type, "audio/")
   }
 }

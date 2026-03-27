@@ -36,7 +36,7 @@ const FormGroup = GenericFormGroup<typeof props.former.form>
 
 console.log(props.test_case_stats)
 const test_case_stats_collection = computed(() => {
-  const role_name_list = _(props.test_case_stats).filter([ "archived", false ]).groupBy("roleName").keys().value()
+  const role_name_list = _(props.test_case_stats).filter([ "archived", false ]).groupBy("role_name").keys().value()
   return role_name_list?.map((stat) => {
     return { "label": stat, "value": stat }
   })

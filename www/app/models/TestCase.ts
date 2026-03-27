@@ -6,26 +6,26 @@ import type { TestCaseSchema } from './schema/test_case'
 
 export class TestCase implements TestCaseSchema {
   id!: number
-  projectId!: number
+  project_id!: number
   title!: string
   content!: string
-  platformIds: number[] = []
-  labelIds: number[] = []
-  roleName: string | null = null
-  sceneName: string | null = null
-  groupName: string | null = null
-  scenePath?: string[]
+  platform_ids: number[] = []
+  label_ids: number[] = []
+  role_name: string | null = null
+  scene_name: string | null = null
+  group_name: string | null = null
+  scene_path?: string[]
   archived!: boolean
 
-  storyboardId: number | null = null
-  requirementId: number | null = null
-  roadmapId: number | null = null
+  storyboard_id: number | null = null
+  requirement_id: number | null = null
+  roadmap_id: number | null = null
 
-  @Type(() => Date) updatedAt!: Date
+  @Type(() => Date) updated_at!: Date
 }
 
 export class TestCaseBoxImpl {
-  @t.Klass(TestCase) testCase!: TestCase
+  @t.Klass(TestCase) test_case!: TestCase
 }
 
 export type TestCaseBox = OmitByValue<TestCaseBoxImpl, Function>

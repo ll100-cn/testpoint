@@ -3,15 +3,15 @@ import type { TaskSchema } from './schema/task'
 
 export class Task implements TaskSchema {
   id!: number
-  planId!: number
+  plan_id!: number
   state!: string
   finished!: boolean
-  phaseId!: number
-  testCaseId: number | null = null
+  phase_id!: number
+  test_case_id: number | null = null
 
-  @t.Date ignoreAt: Date | null = null
+  @t.Date ignore_at: Date | null = null
 
   is_ignored(): boolean {
-    return this.ignoreAt != null
+    return this.ignore_at != null
   }
 }

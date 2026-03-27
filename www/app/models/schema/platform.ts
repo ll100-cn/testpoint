@@ -1,6 +1,6 @@
 export interface PlatformSchema {
   id: number
   name: string
-  defaultAssigneeId?: number | null
-  iconSvg?: string | null
+  default_assignee_id?: number | null
+  icon_svg?: string | null
 }

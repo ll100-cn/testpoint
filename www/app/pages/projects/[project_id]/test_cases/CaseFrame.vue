@@ -47,12 +47,12 @@ async function show(a_test_case: TestCase) {
   test_case.value = a_test_case
 
   const { data: history_page, suspense } = line.request(q.case.test_cases.History(), (req, it) => {
-    req.interpolations.project_id = a_test_case.projectId
+    req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
     return it.useQuery(req.toQueryConfig())
   })
   await suspense()
-  history.value = history_page.value.list.map(it => it.testCase)
+  history.value = history_page.value.list.map(it => it.test_case)
 
   nextTick(() => {
     const $modal = Modal.getOrCreateInstance(modal.value)

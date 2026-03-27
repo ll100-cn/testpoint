@@ -25,7 +25,7 @@ const props = defineProps<Props & Listeners & {
 
 const test_case_stats = computed(() => {
   const result = _(props.test_cases).groupBy((it) => {
-    return JSON.stringify({ archived: it.archived, roleName: it.roleName, scenePath: it.scenePath })
+    return JSON.stringify({ archived: it.archived, role_name: it.role_name, scene_path: it.scene_path })
   }).mapValues((it) => {
     return it.length
   }).map((count, json) => {
@@ -35,14 +35,14 @@ const test_case_stats = computed(() => {
   }).value()
 
   const stat = result.find((it) => {
-    return props.filter.isMatch(it as any, new ColumnFilter({ only: [ 'roleName', 'scenePath', 'archived' ] }))
+    return props.filter.isMatch(it as any, new ColumnFilter({ only: [ 'role_name', 'scene_path', 'archived' ] }))
   })
 
   if (!stat) {
     const empty_stat = new TestCaseStat()
     empty_stat.archived = props.filter.archived === '1'
-    empty_stat.roleName = props.filter.roleName === '' ? null : props.filter.roleName
-    empty_stat.scenePath = props.filter.scenePath ?? []
+    empty_stat.role_name = props.filter.role_name === '' ? null : props.filter.role_name
+    empty_stat.scene_path = props.filter.scene_path ?? []
     empty_stat.count = 0
     result.push(empty_stat)
   }

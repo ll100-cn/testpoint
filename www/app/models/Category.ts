@@ -8,8 +8,8 @@ export class Category implements CategorySchema {
   name!: string
   description?: string
   color?: string
-  projectId!: number
-  defaultAsTestFailure!: boolean
+  project_id!: number
+  default_as_test_failure!: boolean
 }
 
 export class CategoryBoxImpl {

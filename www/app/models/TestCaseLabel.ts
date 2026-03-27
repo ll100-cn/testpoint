@@ -14,12 +14,12 @@ export class LabelRepo extends EntityRepo<TestCaseLabel> {
 }
 
 export class TestCaseLabelBoxImpl {
-  @t.Klass(TestCaseLabel) testCaseLabel!: TestCaseLabel
+  @t.Klass(TestCaseLabel) test_case_label!: TestCaseLabel
 }
 
 export type TestCaseLabelBox = OmitByValue<TestCaseLabelBoxImpl, Function>
 
 export class TestCaseLablePage<Box extends TestCaseLabelBox> extends Pagination<Box> {
   @t.Klass(TestCaseLabelBoxImpl) list: Box[] = []
-  casesCounts: Record<string, number> = {}
+  cases_counts: Record<string, number> = {}
 }

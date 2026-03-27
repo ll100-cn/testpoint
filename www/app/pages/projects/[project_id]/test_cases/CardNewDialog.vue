@@ -63,7 +63,7 @@ former.doPerform = async function() {
     body: former.form
   })
 
-  emit('create', new_test_case_box.testCase)
+  emit('create', new_test_case_box.test_case)
   open.value = false
 }
 

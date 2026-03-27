@@ -3,7 +3,7 @@
     <DialogHeader>
       <DialogTitle>
         #{{ test_case.id }}
-        <span v-if="test_case.groupName" class="me-1">[{{ test_case.groupName }}]</span>
+        <span v-if="test_case.group_name" class="me-1">[{{ test_case.group_name }}]</span>
         {{ test_case.title }}
       </DialogTitle>
 
@@ -25,7 +25,7 @@
         <Collapsible>
           <CollapsibleTrigger as-child>
             <div class="flex">
-              <div>{{ h.datetime(version_case.updatedAt) }}</div>
+              <div>{{ h.datetime(version_case.updated_at) }}</div>
               <div class="ms-auto"><i class="fa-regular fa-chevron-down"></i></div>
             </div>
           </CollapsibleTrigger>
@@ -82,12 +82,12 @@ async function reset(a_test_case: TestCase) {
   test_case.value = a_test_case
 
   const { data: history_page, suspense } = line.request(q.case.test_cases.History(), (req, it) => {
-    req.interpolations.project_id = a_test_case.projectId
+    req.interpolations.project_id = a_test_case.project_id
     req.interpolations.id = a_test_case.id
     return it.useQuery(req.toQueryConfig())
   })
   await suspense()
-  history.value = history_page.value.list.map(it => it.testCase)
+  history.value = history_page.value.list.map(it => it.test_case)
 
   nextTick(() => {
     loading.value = false

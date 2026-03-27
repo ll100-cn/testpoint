@@ -1,38 +1,26 @@
 import { z } from 'zod'
 
-import { DateTimeSchema, NullableInputStringSchema, NullableIntegerInputSchema, NullableStringSchema } from './_shared'
+import { buildListParser, createParser, DateTimeSchema, NullableInputStringSchema, NullableIntegerInputSchema, NullableStringSchema } from './_shared'
 
 export const TestCaseLabelSchema = z.object({
   id: z.number().int(),
   name: z.string(),
   description: NullableStringSchema,
-}).transform((value) => ({
-  id: value.id,
-  name: value.name,
-  description: value.description ?? null,
-}))
+})
 export type TestCaseLabelType = z.output<typeof TestCaseLabelSchema>
 
 export const TestCaseLabelBoxSchema = z.object({
   test_case_label: TestCaseLabelSchema,
-}).transform((value) => ({
-  testCaseLabel: value.test_case_label,
-  test_case_label: value.test_case_label,
-}))
+})
 export type TestCaseLabelBoxType = z.output<typeof TestCaseLabelBoxSchema>
 
-export const TestCaseLabelListSchema = z.object({
-  list: z.array(TestCaseLabelBoxSchema),
-}).transform(({ list }) => list)
-export type TestCaseLabelListType = z.output<typeof TestCaseLabelListSchema>
+export const TestCaseLabelListSchema = buildListParser(TestCaseLabelBoxSchema)
+export type TestCaseLabelListType = TestCaseLabelBoxType[]
 
 export const TestCaseLabelPageSchema = z.object({
   list: z.array(TestCaseLabelBoxSchema),
   cases_counts: z.record(z.string(), z.number().int()).optional(),
-}).transform((value) => ({
-  list: value.list,
-  casesCounts: value.cases_counts ?? {},
-}))
+})
 export type TestCaseLabelPageType = z.output<typeof TestCaseLabelPageSchema>
 
 export const TestCaseLabelBodySchema = z.object({
@@ -49,19 +37,9 @@ export const RequirementSchema = z.object({
   upstream_ids: z.array(z.number().int()),
   platform_ids: z.array(z.number().int()),
   label_ids: z.array(z.number().int()),
-  label_descriptions: z.record(z.string(), z.string()).nullable().optional(),
+  label_descriptions: z.preprocess((value) => value ?? {}, z.record(z.string(), z.string())),
   updated_at: DateTimeSchema,
-}).transform((value) => ({
-  id: value.id,
-  sceneId: value.scene_id ?? null,
-  title: value.title,
-  description: value.description ?? null,
-  upstreamIds: value.upstream_ids,
-  platformIds: value.platform_ids,
-  labelIds: value.label_ids,
-  labelDescriptions: value.label_descriptions ?? {},
-  updatedAt: value.updated_at,
-}))
+})
 export type RequirementType = z.output<typeof RequirementSchema>
 
 export const RequirementBoxSchema = z.object({
@@ -72,27 +50,19 @@ export type RequirementBoxType = z.output<typeof RequirementBoxSchema>
 export const RequirementStatSchema = z.object({
   id: z.number().int(),
   test_cases_count: z.number().int(),
-}).transform((value) => ({
-  id: value.id,
-  test_cases_count: value.test_cases_count,
-}))
+})
 export type RequirementStatType = z.output<typeof RequirementStatSchema>
 
-export const RequirementListSchema = z.object({
-  list: z.array(RequirementBoxSchema),
-}).transform(({ list }) => list)
-export type RequirementListType = z.output<typeof RequirementListSchema>
+export const RequirementListSchema = buildListParser(RequirementBoxSchema)
+export type RequirementListType = RequirementBoxType[]
 
 export const RequirementPageSchema = z.object({
   list: z.array(RequirementBoxSchema),
   requirement_stats: z.array(RequirementStatSchema).optional(),
-}).transform((value) => ({
-  list: value.list,
-  requirementStats: value.requirement_stats ?? [],
-}))
+})
 export type RequirementPageType = z.output<typeof RequirementPageSchema>
 
-export const RequirementBodySchema = z.object({
+const RequirementBodyRawSchema = z.object({
   scene_id: NullableIntegerInputSchema.optional(),
   title: NullableInputStringSchema.optional(),
   description: NullableInputStringSchema.optional(),
@@ -100,25 +70,22 @@ export const RequirementBodySchema = z.object({
   upstream_ids: z.array(NullableIntegerInputSchema).optional(),
   label_ids: z.array(NullableIntegerInputSchema).optional(),
   label_descriptions: z.record(z.string(), z.string()).optional(),
-}).transform((value) => ({
+})
+
+export const RequirementBodySchema = createParser(RequirementBodyRawSchema, (value) => ({
   ...value,
   platform_ids: (value.platform_ids ?? []).filter((it): it is number => it != null),
   upstream_ids: (value.upstream_ids ?? []).filter((it): it is number => it != null),
   label_ids: (value.label_ids ?? []).filter((it): it is number => it != null),
 }))
-export type RequirementBodyType = z.output<typeof RequirementBodySchema>
+export type RequirementBodyType = z.output<typeof RequirementBodyRawSchema>
 
 export const RoadmapSchema = z.object({
   id: z.number().int(),
   title: z.string(),
   created_at: DateTimeSchema,
   updated_at: DateTimeSchema,
-}).transform((value) => ({
-  id: value.id,
-  title: value.title,
-  createdAt: value.created_at,
-  updatedAt: value.updated_at,
-}))
+})
 export type RoadmapType = z.output<typeof RoadmapSchema>
 
 export const RoadmapBoxSchema = z.object({
@@ -126,10 +93,8 @@ export const RoadmapBoxSchema = z.object({
 })
 export type RoadmapBoxType = z.output<typeof RoadmapBoxSchema>
 
-export const RoadmapListSchema = z.object({
-  list: z.array(RoadmapBoxSchema),
-}).transform(({ list }) => list)
-export type RoadmapListType = z.output<typeof RoadmapListSchema>
+export const RoadmapListSchema = buildListParser(RoadmapBoxSchema)
+export type RoadmapListType = RoadmapBoxType[]
 
 export const RoadmapBodySchema = z.object({
   title: NullableInputStringSchema.optional(),
@@ -147,10 +112,8 @@ export const SceneBoxSchema = z.object({
 })
 export type SceneBoxType = z.output<typeof SceneBoxSchema>
 
-export const SceneListSchema = z.object({
-  list: z.array(SceneBoxSchema),
-}).transform(({ list }) => list)
-export type SceneListType = z.output<typeof SceneListSchema>
+export const SceneListSchema = buildListParser(SceneBoxSchema)
+export type SceneListType = SceneBoxType[]
 
 export const SceneBodySchema = z.object({
   name: NullableInputStringSchema.optional(),
@@ -162,14 +125,8 @@ export const StoryboardSchema = z.object({
   title: z.string(),
   main_axle: z.string().nullable().optional(),
   description: NullableStringSchema,
-  positions: z.record(z.string(), z.unknown()).optional(),
-}).transform((value) => ({
-  id: value.id,
-  title: value.title,
-  main_axle: value.main_axle ?? null,
-  description: value.description ?? null,
-  positions: value.positions ?? {},
-}))
+  positions: z.preprocess((value) => value ?? {}, z.record(z.string(), z.unknown())),
+})
 export type StoryboardType = z.output<typeof StoryboardSchema>
 
 export const StoryboardBoxSchema = z.object({
@@ -177,10 +134,8 @@ export const StoryboardBoxSchema = z.object({
 })
 export type StoryboardBoxType = z.output<typeof StoryboardBoxSchema>
 
-export const StoryboardListSchema = z.object({
-  list: z.array(StoryboardBoxSchema),
-}).transform(({ list }) => list)
-export type StoryboardListType = z.output<typeof StoryboardListSchema>
+export const StoryboardListSchema = buildListParser(StoryboardBoxSchema)
+export type StoryboardListType = StoryboardBoxType[]
 
 export const StoryboardBodySchema = z.object({
   title: NullableInputStringSchema.optional(),
@@ -192,9 +147,7 @@ export type StoryboardBodyType = z.output<typeof StoryboardBodySchema>
 
 export const IssueActivityChartSchema = z.object({
   issues_confirm_time: z.array(z.unknown()),
-}).transform((value) => ({
-  issuesConfirmTime: value.issues_confirm_time,
-}))
+})
 export type IssueActivityChartType = z.output<typeof IssueActivityChartSchema>
 
 export const IssueCreatorChartSchema = z.object({
@@ -202,14 +155,6 @@ export const IssueCreatorChartSchema = z.object({
     creator_id: z.number().int(),
     category_id: z.number().int().nullable().optional(),
     count: z.number().int(),
-  }).transform((item) => ({
-    creatorId: item.creator_id,
-    creator_id: item.creator_id,
-    categoryId: item.category_id ?? null,
-    category_id: item.category_id ?? null,
-    count: item.count,
-  }))),
-}).transform((value) => ({
-  issueCounts: value.issue_counts,
-}))
+  })),
+})
 export type IssueCreatorChartType = z.output<typeof IssueCreatorChartSchema>

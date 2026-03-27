@@ -81,7 +81,7 @@ const { data: category_page } = line.request(q.project.categories.Page(), (req, 
 })
 await line.wait()
 const category_boxes = computed(() => category_page.value.list)
-const issues_counts = computed(() => category_page.value.issuesCounts ?? {})
+const issues_counts = computed(() => category_page.value.issues_counts ?? {})
 
 const { mutateAsync: destroy_category_action } = line.request(q.project.categories.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))

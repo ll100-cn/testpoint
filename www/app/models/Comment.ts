@@ -10,23 +10,23 @@ export class Comment implements CommentSchema {
   @t.Number id!: number
   @t.String content!: string
 
-  @t.Date createdAt!: Date
-  @t.Date updatedAt!: Date
-  @t.Date lastEditedAt: Date | null = null
+  @t.Date created_at!: Date
+  @t.Date updated_at!: Date
+  @t.Date last_edited_at: Date | null = null
 
-  @t.Number issueId!: number
+  @t.Number issue_id!: number
   @t.Boolean collapsed!: boolean
   @t.String display!: string
-  @t.Number memberId!: number
+  @t.Number member_id!: number
   @t.Klass(Member) member!: Member
 
-  @t.Number commentId: number | null = null
+  @t.Number comment_id: number | null = null
 
   @t.Klass(Attachment) attachments: Attachment[] = []
 }
 
 export class CommentRepo extends EntityRepo<Comment> {
-  parent_id = new EntityIndex<number | null, Comment>(it => it.commentId)
+  parent_id = new EntityIndex<number | null, Comment>(it => it.comment_id)
 
   override buildIndex(entity: Comment): void {
     this.parent_id.add(entity)

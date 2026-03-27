@@ -1,3 +1,3 @@
 export class IssueActivityChart {
-  issuesConfirmTime: any[] = []
+  issues_confirm_time: any[] = []
 }

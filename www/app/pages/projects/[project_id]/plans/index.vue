@@ -20,7 +20,7 @@
       <router-link :to="{ path: `plans/${plan.id}` }">
         <Card>
           <CardContent class="flex flex-col gap-y-3">
-            <TempVar v-slot="{ current_tasks_state_counts }" :define="{ current_tasks_state_counts: plan_page.tasksStateCounts[plan.id.toString()] ?? {} }">
+            <TempVar v-slot="{ current_tasks_state_counts }" :define="{ current_tasks_state_counts: plan_page.tasks_state_counts[plan.id.toString()] ?? {} }">
               <div class="flex items-center">
                 <h4 class="text-lg font-medium">{{ plan.title }}</h4>
                 <Badge v-if="plan.milestone" preset="standard">{{ plan.milestone.title }}</Badge>
@@ -44,7 +44,7 @@
           </CardContent>
 
           <CardFooter>
-            <small>{{ dayjs(plan.createdAt).fromNow() }} {{ plan.creatorName }} 创建</small>
+            <small>{{ dayjs(plan.created_at).fromNow() }} {{ plan.creator_name }} 创建</small>
             <Button preset="outline" size="sm" class="py-1 ms-auto text-nowrap">进入测试</Button>
           </CardFooter>
         </Card>

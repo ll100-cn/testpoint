@@ -7,9 +7,9 @@ import type { IssueRelationshipSchema } from './schema/issue_relationship'
 
 export class IssueRelationship implements IssueRelationshipSchema {
   id!: number
-  targetId!: number
-  sourceId!: number
-  memberId!: number
+  target_id!: number
+  source_id!: number
+  member_id!: number
   category!: string
 
   @Type(() => Issue)
@@ -22,10 +22,10 @@ export class IssueRelationship implements IssueRelationshipSchema {
   member!: Member
 
   @Type(() => Date)
-  createdAt!: Date
+  created_at!: Date
 
   @Type(() => Date)
-  updatedAt!: Date
+  updated_at!: Date
 }
 
 export class IssueRelationshipBoxImpl {

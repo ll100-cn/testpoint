@@ -3,10 +3,10 @@ export interface MemberSchema {
   name: string
   nickname?: string | null
   role: string
-  roleText: string
-  receiveMail: boolean
-  userId: number
-  projectId: number
-  archivedAt?: Date | null
-  avatarUrl?: string | null
+  role_text: string
+  receive_mail: boolean
+  user_id: number
+  project_id: number
+  archived_at?: Date | null
+  avatar_url?: string | null
 }

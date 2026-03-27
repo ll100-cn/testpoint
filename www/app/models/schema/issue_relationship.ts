@@ -7,9 +7,9 @@ export interface IssueRelationshipSchema {
   member?: MemberSchema
   target?: IssueSchema
   source?: IssueSchema
-  targetId: number
-  sourceId: number
-  memberId: number
-  createdAt: Date
-  updatedAt: Date
+  target_id: number
+  source_id: number
+  member_id: number
+  created_at: Date
+  updated_at: Date
 }

@@ -32,7 +32,6 @@
     "base64-js": "^1.5.1",
     "big.js": "6.2.2",
     "buffer": "6.0.3",
-    "change-case": "5.4.4",
     "chart.js": "2.9.4",
     "class-transformer": "github:sunteya/class-transformer#deploy",
     "class-variance-authority": "0.7.1",

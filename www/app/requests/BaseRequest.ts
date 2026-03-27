@@ -203,8 +203,8 @@ export abstract class BaseRequest<T> {
     return config
   }
 
-  buildFormData(params: Record<string, any>, contentType: string) {
-    if (contentType === "application/json") {
+  buildFormData(params: Record<string, any>, content_type: string) {
+    if (content_type === "application/json") {
       return params
     }
 

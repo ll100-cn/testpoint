@@ -3,8 +3,8 @@ import { Category, Project } from "."
 import type { IssueStateSchema } from './schema/issue_state'
 
 export class IssueStat implements IssueStateSchema {
-  projectId!: number
-  categoryId?: number | null
+  project_id!: number
+  category_id?: number | null
   stage!: string
   count!: number
 

@@ -8,10 +8,10 @@ export class Project implements ProjectSchema {
   name?: string
   archived?: boolean
 
-  trelloListId: string | null = null
-  trelloApiKey: string | null = null
-  trelloApiToken: string | null = null
-  webhookUrl: string | null = null
+  trello_list_id: string | null = null
+  trello_api_key: string | null = null
+  trello_api_token: string | null = null
+  webhook_url: string | null = null
 }
 
 export class ProjectBoxImpl {

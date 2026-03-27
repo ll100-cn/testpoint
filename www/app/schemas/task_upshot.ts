@@ -1,27 +1,19 @@
 import { z } from 'zod'
 
-import { DateTimeSchema, buildListSchema, NullableInputStringSchema, NullableStringSchema } from './_shared'
-import { IssueSchema } from './issue'
-import { TaskSchema } from './task'
-import { TestCaseSchema } from './test_case'
+import { createParser, DateTimeSchema, buildListSchema, NullableInputStringSchema, NullableStringSchema } from './_shared'
+import { IssueSchema, parseIssue, type IssueType } from './issue'
+import { parseTask, TaskSchema, type TaskType } from './task'
+import { TestCaseSchema, type TestCaseType } from './test_case'
 
 export const TaskUpshotSchema = z.object({
   id: z.number().int(),
   state: z.string().optional(),
   state_override: NullableStringSchema,
-  state_changed_at: DateTimeSchema.nullable().optional().transform((value) => value ?? undefined),
-  phase_id: z.number().int().nullable().optional().transform((value) => value ?? undefined),
+  state_changed_at: DateTimeSchema.nullable().optional(),
+  phase_id: z.number().int().nullable().optional(),
   content: NullableStringSchema,
   created_at: DateTimeSchema,
-}).transform((value) => ({
-  id: value.id,
-  state: value.state,
-  stateOverride: value.state_override ?? null,
-  stateChangedAt: value.state_changed_at,
-  phaseId: value.phase_id,
-  content: value.content ?? undefined,
-  createdAt: value.created_at,
-}))
+})
 export type TaskUpshotType = z.output<typeof TaskUpshotSchema>
 
 const TaskUpshotBoxRawSchema = z.object({
@@ -30,18 +22,26 @@ const TaskUpshotBoxRawSchema = z.object({
   test_case: TestCaseSchema.nullable().optional(),
 })
 
-export const TaskUpshotBoxSchema = TaskUpshotBoxRawSchema.transform((value) => ({
-  taskUpshot: value.task_upshot,
-  task: value.task ?? null,
-  testCase: value.test_case ?? null,
+export type TaskUpshotBoxType = {
+  task_upshot: TaskUpshotType
+  task: TaskType | null
+  test_case: TestCaseType | null
+}
+
+export const TaskUpshotBoxSchema = createParser(TaskUpshotBoxRawSchema, (value) => ({
+  task_upshot: value.task_upshot,
+  task: value.task ? parseTask(value.task) : null,
+  test_case: value.test_case ?? null,
 }))
-export type TaskUpshotBoxType = z.output<typeof TaskUpshotBoxSchema>
 
 export const TaskUpshotInfoBoxSchema = TaskUpshotBoxSchema
-export type TaskUpshotInfoBoxType = z.output<typeof TaskUpshotInfoBoxSchema>
+export type TaskUpshotInfoBoxType = TaskUpshotBoxType
 
-export const TaskUpshotPageSchema = buildListSchema(TaskUpshotBoxSchema)
-export type TaskUpshotPageType = z.output<typeof TaskUpshotPageSchema>
+const TaskUpshotPageRawSchema = buildListSchema(TaskUpshotBoxRawSchema)
+export type TaskUpshotPageType = { list: TaskUpshotBoxType[] }
+export const TaskUpshotPageSchema = createParser(TaskUpshotPageRawSchema, (value) => ({
+  list: value.list.map((item) => TaskUpshotBoxSchema.parse(item)),
+}))
 
 const TaskBoxRawSchema = z.object({
   task: TaskSchema,
@@ -49,15 +49,20 @@ const TaskBoxRawSchema = z.object({
   issues: z.array(IssueSchema).nullable().optional(),
 })
 
-export const TaskBoxSchema = TaskBoxRawSchema.transform((value) => ({
-  task: value.task,
-  taskUpshots: value.task_upshots ?? null,
-  issues: value.issues ?? null,
+export type TaskBoxType = {
+  task: TaskType
+  task_upshots: TaskUpshotType[] | null | undefined
+  issues: IssueType[] | null | undefined
+}
+
+export const TaskBoxSchema = createParser(TaskBoxRawSchema, (value) => ({
+  task: parseTask(value.task),
+  task_upshots: value.task_upshots,
+  issues: value.issues?.map(parseIssue),
 }))
-export type TaskBoxType = z.output<typeof TaskBoxSchema>
 
 export const TaskInfoBoxSchema = TaskBoxSchema
-export type TaskInfoBoxType = z.output<typeof TaskInfoBoxSchema>
+export type TaskInfoBoxType = TaskBoxType
 
 export const TaskUpshotContentBodySchema = z.object({
   content: NullableInputStringSchema.optional(),

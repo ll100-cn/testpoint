@@ -7,8 +7,8 @@ import type { PlatformSchema } from './schema/platform'
 export class Platform implements PlatformSchema {
   id!: number
   name!: string
-  defaultAssigneeId: number | null = null
-  iconSvg: string | null = null
+  default_assignee_id: number | null = null
+  icon_svg: string | null = null
 }
 
 export class PlatformRepo extends EntityRepo<Platform> {

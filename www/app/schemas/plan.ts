@@ -5,15 +5,11 @@ import { MilestoneSchema } from './milestone'
 import { PhaseInfoSchema } from './phase'
 import { PlatformSchema } from './platform'
 
-function normalizeStateCounts(value: Record<string, unknown> | null | undefined) {
-  const counts = value ?? {}
-
-  return {
-    pass: Number(counts.pass ?? 0),
-    failure: Number(counts.failure ?? 0),
-    pending: Number(counts.pending ?? 0),
-  }
-}
+const StateCountsSchema = z.object({
+  pass: z.coerce.number().optional().default(0),
+  failure: z.coerce.number().optional().default(0),
+  pending: z.coerce.number().optional().default(0),
+})
 
 export const PlanSchema = z.object({
   id: z.number().int(),
@@ -26,18 +22,7 @@ export const PlanSchema = z.object({
   creator_name: z.string(),
   milestone: MilestoneSchema.optional(),
   platform: PlatformSchema,
-}).transform((value) => ({
-  id: value.id,
-  title: value.title,
-  createdAt: value.created_at,
-  creatorId: value.creator_id,
-  platformId: value.platform_id,
-  projectId: value.project_id,
-  milestoneId: value.milestone_id ?? undefined,
-  creatorName: value.creator_name,
-  milestone: value.milestone ?? null,
-  platform: value.platform,
-}))
+})
 export type PlanType = z.output<typeof PlanSchema>
 
 const PlanBoxRawSchema = z.object({
@@ -45,10 +30,7 @@ const PlanBoxRawSchema = z.object({
   phase_infos: z.array(PhaseInfoSchema).optional().default([]),
 })
 
-export const PlanBoxSchema = PlanBoxRawSchema.transform((value) => ({
-  plan: value.plan,
-  phaseInfos: value.phase_infos,
-}))
+export const PlanBoxSchema = PlanBoxRawSchema
 export type PlanBoxType = z.output<typeof PlanBoxSchema>
 
 export const PlanInfoBoxSchema = PlanBoxSchema
@@ -59,18 +41,8 @@ export const PlanPageSchema = z.object({
   offset: z.number().int(),
   limit: z.number().int(),
   list: z.array(PlanBoxSchema),
-  tasks_state_counts: z.record(z.string(), z.record(z.string(), z.unknown())).optional(),
-}).transform(({ total_count, offset, limit, list, tasks_state_counts }) => ({
-  list,
-  offset,
-  limit,
-  totalCount: total_count,
-  current_page: Math.floor(offset / limit) + 1,
-  total_pages: total_count === 0 ? 1 : Math.ceil(total_count / limit),
-  tasksStateCounts: Object.fromEntries(
-    Object.entries(tasks_state_counts ?? {}).map(([planId, counts]) => [planId, normalizeStateCounts(counts)]),
-  ),
-}))
+  tasks_state_counts: z.preprocess((value) => value ?? {}, z.record(z.string(), z.preprocess((item) => item ?? {}, StateCountsSchema))),
+})
 export type PlanPageType = z.output<typeof PlanPageSchema>
 
 export const PlanBodySchema = z.object({

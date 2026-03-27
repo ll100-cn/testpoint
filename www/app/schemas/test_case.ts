@@ -23,32 +23,15 @@ export const TestCaseSchema = z.object({
   label_ids: z.array(z.number().int()),
   scene_path: pathArraySchema(),
   updated_at: DateTimeSchema,
+  storyboard_id: z.number().int().nullable().optional().default(null),
   requirement_id: NullableIntegerSchema,
   roadmap_id: NullableIntegerSchema,
-}).transform((value) => ({
-  id: value.id,
-  title: value.title,
-  content: value.content,
-  sceneName: value.scene_name,
-  roleName: value.role_name,
-  groupName: value.group_name,
-  archived: value.archived,
-  projectId: value.project_id,
-  platformIds: value.platform_ids,
-  labelIds: value.label_ids,
-  scenePath: value.scene_path,
-  updatedAt: value.updated_at,
-  storyboardId: null,
-  requirementId: value.requirement_id,
-  roadmapId: value.roadmap_id,
-}))
+})
 export type TestCaseType = z.output<typeof TestCaseSchema>
 
 export const TestCaseBoxSchema = z.object({
   test_case: TestCaseSchema,
-}).transform((value) => ({
-  testCase: value.test_case,
-}))
+})
 export type TestCaseBoxType = z.output<typeof TestCaseBoxSchema>
 
 export const TestCaseListSchema = buildListSchema(TestCaseBoxSchema)
@@ -60,8 +43,8 @@ export const TestCaseBodySchema = z.object({
   role_name: NullableInputStringSchema,
   scene_name: NullableInputStringSchema,
   group_name: NullableInputStringSchema,
-  platform_ids: z.array(NullableIntegerInputSchema).transform((value) => value.filter((it): it is number => it != null)),
-  label_ids: z.array(NullableIntegerInputSchema).transform((value) => value.filter((it): it is number => it != null)),
+  platform_ids: z.preprocess((value) => Array.isArray(value) ? value.filter((it) => it != null) : value, z.array(z.coerce.number().int())),
+  label_ids: z.preprocess((value) => Array.isArray(value) ? value.filter((it) => it != null) : value, z.array(z.coerce.number().int())),
   storyboard_id: NullableIntegerInputSchema,
   requirement_id: NullableIntegerInputSchema,
 })

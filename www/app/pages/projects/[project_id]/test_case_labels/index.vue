@@ -21,16 +21,16 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <template v-for="{testCaseLabel} in test_case_label_page.list">
+          <template v-for="{test_case_label} in test_case_label_page.list">
             <TableRow>
-              <TableCell>{{ testCaseLabel.name }}</TableCell>
-              <TableCell>{{ testCaseLabel.description }}</TableCell>
-              <TableCell>{{ cases_counts[testCaseLabel.id.toString()] }}</TableCell>
+              <TableCell>{{ test_case_label.name }}</TableCell>
+              <TableCell>{{ test_case_label.description }}</TableCell>
+              <TableCell>{{ cases_counts[test_case_label.id.toString()] }}</TableCell>
               <TableCell role="actions">
-                <router-link v-if="allow('update', TestCaseLabel)" :to="ok_url.apply(`${path_info.collection}/${testCaseLabel.id}/edit`)" class="link">
+                <router-link v-if="allow('update', TestCaseLabel)" :to="ok_url.apply(`${path_info.collection}/${test_case_label.id}/edit`)" class="link">
                   <i class="far fa-pencil-alt" /> 修改
                 </router-link>
-                <a v-if="allow('destroy', TestCaseLabel)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(testCaseLabel.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
+                <a v-if="allow('destroy', TestCaseLabel)" href="#" v-confirm="'是否删除标签？'" @click.prevent="deleteTestCaseLabel(test_case_label.id)" class="link"><i class="far fa-trash-alt" /> 删除</a>
               </TableCell>
             </TableRow>
           </template>
@@ -78,7 +78,7 @@ const { data: test_case_label_page } = line.request(q.project.test_case_labels.P
   return it.useQuery(req.toQueryConfig())
 })
 await line.wait()
-const cases_counts = computed(() => test_case_label_page.value.casesCounts)
+const cases_counts = computed(() => test_case_label_page.value.cases_counts)
 
 const { mutateAsync: destroy_test_case_label_action } = line.request(q.project.test_case_labels.Destroy(), (req, it) => {
   return it.useMutation(req.toMutationConfig(it))

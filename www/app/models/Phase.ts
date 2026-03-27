@@ -9,11 +9,11 @@ export class Phase implements PhaseSchema {
 
 export class PhaseBoxImpl {
   @t.Klass(Phase) phase!: Phase
-  upshotsStateCounts: { [key in "pass" | "failure" | "pending"]: number } | null = null
+  upshots_state_counts: { [key in "pass" | "failure" | "pending"]: number } | null = null
 }
 
 export type PhaseBox = OmitByValue<PhaseBoxImpl, Function>
 
 export class PhaseInfo extends PhaseBoxImpl {
-  declare upshotsStateCounts: { [key in "pass" | "failure" | "pending"]: number }
+  declare upshots_state_counts: { [key in "pass" | "failure" | "pending"]: number }
 }

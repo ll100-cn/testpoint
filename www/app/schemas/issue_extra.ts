@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { NullableBooleanInputSchema, NullableInputStringSchema, NullableIntegerInputSchema } from './_shared'
+import { buildListParser, createParser, NullableBooleanInputSchema, NullableInputStringSchema, NullableIntegerInputSchema } from './_shared'
 import {
   AttachmentSchema,
   IssueActivitySchema,
@@ -8,14 +8,21 @@ import {
   IssueSchema,
   IssueSurveySchema,
   IssueTemplateSchema,
+  parseAttachment,
+  parseIssue,
+  parseIssueRelationship,
   SubscriptionSchema,
+  type AttachmentType,
+  type IssueRelationshipType,
+  type IssueType,
 } from './issue'
 
-export const IssueActionBoxSchema = z.object({
+const IssueActionBoxRawSchema = z.object({
   issue: IssueSchema,
   activities: z.array(IssueActivitySchema),
 })
-export type IssueActionBoxType = z.output<typeof IssueActionBoxSchema>
+export type IssueActionBoxType = { issue: IssueType, activities: z.output<typeof IssueActivitySchema>[] }
+export const IssueActionBoxSchema = createParser(IssueActionBoxRawSchema, ({ issue, activities }) => ({ issue: parseIssue(issue), activities }))
 
 export const IssueActionBodySchema = z.object({
   title: NullableInputStringSchema.optional(),
@@ -28,11 +35,15 @@ export const IssueActionBodySchema = z.object({
 }).passthrough()
 export type IssueActionBodyType = z.output<typeof IssueActionBodySchema>
 
-export const IssueBodyBoxSchema = z.object({
+const IssueBodyBoxRawSchema = z.object({
   issue: IssueSchema,
   attachments: z.array(AttachmentSchema),
 })
-export type IssueBodyBoxType = z.output<typeof IssueBodyBoxSchema>
+export type IssueBodyBoxType = { issue: IssueType, attachments: AttachmentType[] }
+export const IssueBodyBoxSchema = createParser(IssueBodyBoxRawSchema, ({ issue, attachments }) => ({
+  issue: parseIssue(issue),
+  attachments: attachments.map(parseAttachment),
+}))
 
 export const IssueBodyBodySchema = z.object({
   content: NullableInputStringSchema.optional(),
@@ -45,13 +56,13 @@ export const AttachmentBodySchema = z.object({
 }).passthrough()
 export type AttachmentBodyType = z.output<typeof AttachmentBodySchema>
 
-export const IssueRelationshipBoxSchema = z.object({
+const IssueRelationshipBoxRawSchema = z.object({
   issue_relationship: IssueRelationshipSchema,
-}).transform((value) => ({
-  issue_relationship: value.issue_relationship,
-  issueRelationship: value.issue_relationship,
+})
+export type IssueRelationshipBoxType = { issue_relationship: IssueRelationshipType }
+export const IssueRelationshipBoxSchema = createParser(IssueRelationshipBoxRawSchema, ({ issue_relationship }) => ({
+  issue_relationship: parseIssueRelationship(issue_relationship),
 }))
-export type IssueRelationshipBoxType = z.output<typeof IssueRelationshipBoxSchema>
 
 export const IssueRelationshipBodySchema = z.object({
   target_id: NullableIntegerInputSchema.optional(),
@@ -61,26 +72,23 @@ export type IssueRelationshipBodyType = z.output<typeof IssueRelationshipBodySch
 
 export const IssueSurveyBoxSchema = z.object({
   issue_survey: IssueSurveySchema,
-}).transform((value) => ({
-  issue_survey: value.issue_survey,
-  issueSurvey: value.issue_survey,
-}))
+})
 export type IssueSurveyBoxType = z.output<typeof IssueSurveyBoxSchema>
 
-export const IssueSurveyListSchema = z.object({
-  list: z.array(IssueSurveyBoxSchema),
-}).transform(({ list }) => list)
-export type IssueSurveyListType = z.output<typeof IssueSurveyListSchema>
+export const IssueSurveyListSchema = buildListParser(IssueSurveyBoxSchema)
+export type IssueSurveyListType = IssueSurveyBoxType[]
 
-export const IssueSurveyBodySchema = z.any().transform((input: any) => ({
-  template_id: input?.template_id ?? input?.templateId ?? null,
+const IssueSurveyBodyRawSchema = z.any()
+
+export const IssueSurveyBodySchema = createParser(IssueSurveyBodyRawSchema, (input: any) => ({
+  template_id: input?.template_id ?? null,
   remark: input?.remark ?? null,
   inputs_attributes: (input?.inputs_attributes ?? []).map((item: any) => ({
-    template_input_id: item?.template_input_id ?? item?.templateInputId ?? null,
+    template_input_id: item?.template_input_id ?? null,
     value: item?.value ?? null,
   })),
 }))
-export type IssueSurveyBodyType = z.output<typeof IssueSurveyBodySchema>
+export type IssueSurveyBodyType = any
 
 export const SubscriptionBoxSchema = z.object({
   subscription: SubscriptionSchema,
@@ -89,32 +97,29 @@ export type SubscriptionBoxType = z.output<typeof SubscriptionBoxSchema>
 
 export const IssueTemplateBoxSchema = z.object({
   issue_template: IssueTemplateSchema,
-}).transform((value) => ({
-  issue_template: value.issue_template,
-  issueTemplate: value.issue_template,
-}))
+})
 export type IssueTemplateBoxType = z.output<typeof IssueTemplateBoxSchema>
 
-export const IssueTemplateListSchema = z.object({
-  list: z.array(IssueTemplateBoxSchema),
-}).transform(({ list }) => list)
-export type IssueTemplateListType = z.output<typeof IssueTemplateListSchema>
+export const IssueTemplateListSchema = buildListParser(IssueTemplateBoxSchema)
+export type IssueTemplateListType = IssueTemplateBoxType[]
 
-export const IssueTemplateBodySchema = z.any().transform((input: any) => ({
+const IssueTemplateBodyRawSchema = z.any()
+
+export const IssueTemplateBodySchema = createParser(IssueTemplateBodyRawSchema, (input: any) => ({
   name: input?.name ?? '',
-  lookup_by_build_form: input?.lookup_by_build_form ?? input?.lookupByBuildForm ?? false,
-  title_suggestion: input?.title_suggestion ?? input?.titleSuggestion ?? null,
-  content_suggestion: input?.content_suggestion ?? input?.contentSuggestion ?? null,
-  default_category_id: input?.default_category_id ?? input?.defaultCategoryId ?? null,
-  default_priority: input?.default_priority ?? input?.defaultPriority ?? null,
-  inputs_attributes: (input?.inputs_attributes ?? input?.inputs ?? []).map((item: any) => ({
+  lookup_by_build_form: input?.lookup_by_build_form ?? false,
+  title_suggestion: input?.title_suggestion ?? null,
+  content_suggestion: input?.content_suggestion ?? null,
+  default_category_id: input?.default_category_id ?? null,
+  default_priority: input?.default_priority ?? null,
+  inputs_attributes: (input?.inputs_attributes ?? []).map((item: any) => ({
     id: item?.id ?? undefined,
-    order_index: item?.order_index ?? item?.orderIndex ?? null,
+    order_index: item?.order_index ?? null,
     label: item?.label ?? null,
     _destroy: item?._destroy,
   })),
 }))
-export type IssueTemplateBodyType = z.output<typeof IssueTemplateBodySchema>
+export type IssueTemplateBodyType = any
 
 export const IssueMigrationResponseSchema = z.object({}).passthrough()
 export type IssueMigrationResponseType = z.output<typeof IssueMigrationResponseSchema>

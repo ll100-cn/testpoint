@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { DateTimeSchema, NullableBooleanInputSchema, NullableInputStringSchema, NullableStringSchema } from './_shared'
+import { buildListParser, DateTimeSchema, NullableBooleanInputSchema, NullableInputStringSchema, NullableStringSchema } from './_shared'
 import { ProjectSchema, type ProjectType } from './project'
 import { UserSchema, type UserType } from './user'
 
@@ -8,14 +8,14 @@ export type MemberRole = 'reporter' | 'developer' | 'manager' | 'owner'
 export type MemberType = {
   id: number
   name: string
-  nickname?: string
+  nickname?: string | null
   role: MemberRole
-  roleText: string
-  receiveMail: boolean
-  userId: number
-  projectId: number
-  avatarUrl?: string
-  archivedAt?: Date
+  role_text: string
+  receive_mail: boolean
+  user_id: number
+  project_id: number
+  avatar_url?: string | null
+  archived_at?: Date | null
 }
 export type MemberBoxType = { member: MemberType, project?: ProjectType, user?: UserType }
 export type MemberInfoBoxType = { member: MemberType, project: ProjectType, user: UserType }
@@ -31,20 +31,9 @@ export const MemberSchema = z.object({
   receive_mail: z.boolean(),
   user_id: z.number().int(),
   project_id: z.number().int(),
-  archived_at: DateTimeSchema.nullable().optional().transform((value) => value ?? null),
+  archived_at: DateTimeSchema.nullable().optional(),
   avatar_url: NullableStringSchema,
-}).transform((value) => ({
-  id: value.id,
-  name: value.name,
-  nickname: value.nickname ?? undefined,
-  role: value.role,
-  roleText: value.role_text,
-  receiveMail: value.receive_mail,
-  userId: value.user_id,
-  projectId: value.project_id,
-  archivedAt: value.archived_at ?? undefined,
-  avatarUrl: value.avatar_url ?? undefined,
-}) as MemberType)
+}) as z.ZodType<MemberType>
 
 export const MemberBoxSchema = z.object({
   member: MemberSchema,
@@ -58,13 +47,9 @@ export const MemberInfoBoxSchema = z.object({
   user: UserSchema,
 }) as z.ZodType<MemberInfoBoxType>
 
-export const MemberListSchema = z.object({
-  list: z.array(MemberBoxSchema),
-}).transform(({ list }) => list) as z.ZodType<MemberListType>
+export const MemberListSchema = buildListParser(MemberBoxSchema) as { parse(input: unknown): MemberListType }
 
-export const MemberInfoListSchema = z.object({
-  list: z.array(MemberInfoBoxSchema),
-}).transform(({ list }) => list) as z.ZodType<MemberInfoListType>
+export const MemberInfoListSchema = buildListParser(MemberInfoBoxSchema) as { parse(input: unknown): MemberInfoListType }
 
 export const MemberBodySchema = z.object({
   user_email: NullableInputStringSchema.optional(),

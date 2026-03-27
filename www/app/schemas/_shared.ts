@@ -3,9 +3,23 @@ import { z } from 'zod'
 export const IntegerSchema = z.number().int()
 export const DateTimeSchema = z.coerce.date()
 
-export const NullableStringSchema = z.string().nullable().optional().transform((value) => value ?? null)
-export const NullableIntegerSchema = IntegerSchema.nullable().optional().transform((value) => value ?? null)
-export const BooleanOrNullSchema = z.boolean().nullable().optional().transform((value) => value ?? null)
+export type Parser<T> = { parse(input: unknown): T }
+
+export function createParser<Input, Output>(schema: z.ZodType<Input>, map: (value: Input) => Output): Parser<Output> {
+  return {
+    parse(input: unknown) {
+      return map(schema.parse(input))
+    },
+  }
+}
+
+export function buildListParser<Item>(itemSchema: z.ZodType<Item>): Parser<Item[]> {
+  return createParser(z.object({ list: z.array(itemSchema) }), ({ list }) => list)
+}
+
+export const NullableStringSchema = z.preprocess((value) => value ?? null, z.string().nullable())
+export const NullableIntegerSchema = z.preprocess((value) => value ?? null, IntegerSchema.nullable())
+export const BooleanOrNullSchema = z.preprocess((value) => value ?? null, z.boolean().nullable())
 
 export const IntegerInputSchema = z.preprocess((value) => {
   if (typeof value === 'string') {
@@ -53,14 +67,7 @@ export function buildPageSchema<Item extends z.ZodTypeAny>(itemSchema: Item) {
     offset: IntegerSchema,
     limit: IntegerSchema,
     list: z.array(itemSchema),
-  }).transform(({ total_count, offset, limit, list }) => ({
-    list,
-    offset,
-    limit,
-    totalCount: total_count,
-    current_page: Math.floor(offset / limit) + 1,
-    total_pages: total_count === 0 ? 1 : Math.ceil(total_count / limit),
-  }))
+  })
 }
 
 export function buildListSchema<Item extends z.ZodTypeAny>(itemSchema: Item) {
@@ -70,16 +77,11 @@ export function buildListSchema<Item extends z.ZodTypeAny>(itemSchema: Item) {
 }
 
 export function pathArraySchema() {
-  return z.union([
-    z.array(z.string()),
-    z.string(),
-    z.null(),
-    z.undefined(),
-  ]).transform((value) => {
+  return z.preprocess((value) => {
     if (value == null) {
       return []
     }
 
     return Array.isArray(value) ? value : [value]
-  })
+  }, z.array(z.string()))
 }

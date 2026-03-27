@@ -1,7 +1,7 @@
 <template>
   <DialogContent class="max-w-4xl" v-if="!loading">
     <DialogHeader>
-      <DialogTitle>{{ task_upshot_box.testCase?.title }}</DialogTitle>
+      <DialogTitle>{{ task_upshot_box.test_case?.title }}</DialogTitle>
     </DialogHeader>
 
     <PageContent v-if="content.length > 0" :content="content" :readonly="!is_last_phase || !allow('update', TaskUpshot)" @update:content="submitContent" />
@@ -9,19 +9,19 @@
     <small v-else class="text-muted">无详细信息</small>
 
     <hr>
-    <TaskDetailsState :task_box="task_box" :phase_infos="plan_box.phaseInfos" :current_phase_id="current_phase_id" />
+    <TaskDetailsState :task_box="task_box" :phase_infos="plan_box.phase_infos" :current_phase_id="current_phase_id" />
 
     <DialogFooter v-if="is_last_phase">
-      <template v-if="task_box.task.ignoreAt != null">
+      <template v-if="task_box.task.ignore_at != null">
         <Button v-if="allow('update', Task)" v-confirm="'确定操作？'" @click.prevent="unignoreTask()">取消忽略</Button>
       </template>
-      <template v-else-if="task_upshot_box.taskUpshot.state == 'pending'">
+      <template v-else-if="task_upshot_box.task_upshot.state == 'pending'">
         <Button variant="secondary" v-if="allow('update', Task)" class="me-auto" v-confirm="'确定操作？'" :disabled="actioner.processing" @click.prevent="ignoreTask()">忽略</Button>
 
         <template v-if="allow('update', TaskUpshot)">
           <Button variant="primary" @click.prevent="updateTaskUpshotState('pass')">设置为通过</Button>
           <Button variant="destructive" @click.prevent="emit('switch', TaskUpshotFailureDialogContent, task_upshot_box, task_box)">不通过</Button>
-          <Button variant="secondary" v-if="task_upshot_box.taskUpshot.stateOverride && prev_task_upshot" @click.prevent="updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</Button>
+          <Button variant="secondary" v-if="task_upshot_box.task_upshot.state_override && prev_task_upshot" @click.prevent="updateTaskUpshotState(null)">保留上一轮结果 ({{ TASK_UPSHOT_STATES[prev_task_upshot.state] }})</Button>
         </template>
       </template>
       <template v-else>
@@ -65,14 +65,14 @@ const emit = defineEmits<TaskUpshotFrameEmits & {
 const task_upshot_box = ref(null! as TaskUpshotBox)
 
 const is_last_phase = computed(() => {
-  return _.last(props.plan_box.phaseInfos)?.phase.id == task_upshot_box.value.taskUpshot.phaseId
+  return _.last(props.plan_box.phase_infos)?.phase.id == task_upshot_box.value.task_upshot.phase_id
 })
 
 const content = ref("")
 
 const prev_task_upshot = computed(() => {
-  const index = task_box.value.taskUpshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
-  return index != null ? task_box.value.taskUpshots?.[index - 1] : null
+  const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.task_upshot.id)
+  return index != null ? task_box.value.task_upshots?.[index - 1] : null
 })
 
 
@@ -96,18 +96,18 @@ async function submitContent(content: string) {
   actioner.perform(async () => {
     const a_task_upshot_box = await update_task_upshot_content_action({
       interpolations: {
-        project_id: props.plan_box.plan.projectId,
+        project_id: props.plan_box.plan.project_id,
         plan_id: props.plan_box.plan.id,
         task_id: task_upshot_box.value.task!.id,
-        upshot_id: task_upshot_box.value.taskUpshot.id
+        upshot_id: task_upshot_box.value.task_upshot.id
       },
       body: { content }
     })
 
-    Object.assign(task_upshot_box.value.taskUpshot, a_task_upshot_box.taskUpshot)
-    const index = task_box.value.taskUpshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
+    Object.assign(task_upshot_box.value.task_upshot, a_task_upshot_box.task_upshot)
+    const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.task_upshot.id)
     if (index != null) {
-      task_box.value.taskUpshots![index] = a_task_upshot_box.taskUpshot
+      task_box.value.task_upshots![index] = a_task_upshot_box.task_upshot
     }
     emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
@@ -117,14 +117,14 @@ async function ignoreTask() {
   actioner.perform(async function() {
     const a_task_box = await ignore_task_action({
       interpolations: {
-        project_id: props.plan_box.plan.projectId,
+        project_id: props.plan_box.plan.project_id,
         plan_id: props.plan_box.plan.id,
         task_id: task_box.value.task.id
       }
     })
 
     task_box.value.task = a_task_box.task
-    task_box.value.taskUpshots = a_task_box.taskUpshots
+    task_box.value.task_upshots = a_task_box.task_upshots
     task_upshot_box.value.task = a_task_box.task
     emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
@@ -134,7 +134,7 @@ async function unignoreTask() {
   actioner.perform(async function() {
     const a_task_box = await unignore_task_action({
       interpolations: {
-        project_id: props.plan_box.plan.projectId,
+        project_id: props.plan_box.plan.project_id,
         plan_id: props.plan_box.plan.id,
         task_id: task_box.value.task.id
       }
@@ -150,18 +150,18 @@ async function updateTaskUpshotState(state_override: "pass" | "pending" | null) 
   actioner.perform(async function() {
     const a_task_upshot_box = await update_task_upshot_state_action({
       interpolations: {
-        project_id: props.plan_box.plan.projectId,
+        project_id: props.plan_box.plan.project_id,
         plan_id: props.plan_box.plan.id,
         task_id: task_box.value.task.id,
-        upshot_id: task_upshot_box.value.taskUpshot.id
+        upshot_id: task_upshot_box.value.task_upshot.id
       },
       body: { task_upshot: { state_override } }
     })
 
-    task_upshot_box.value.taskUpshot = a_task_upshot_box.taskUpshot
-    const index = task_box.value.taskUpshots?.findIndex(it => it.id == task_upshot_box.value.taskUpshot.id)
+    task_upshot_box.value.task_upshot = a_task_upshot_box.task_upshot
+    const index = task_box.value.task_upshots?.findIndex(it => it.id == task_upshot_box.value.task_upshot.id)
     if (index != null) {
-      task_box.value.taskUpshots![index] = a_task_upshot_box.taskUpshot
+      task_box.value.task_upshots![index] = a_task_upshot_box.task_upshot
     }
     emit('updated', task_upshot_box.value as TaskUpshotBox)
   })
@@ -169,7 +169,7 @@ async function updateTaskUpshotState(state_override: "pass" | "pending" | null) 
 
 const task_id = computed(() => task_upshot_box.value?.task?.id)
 const { data: task_box, suspense } = line.request(q.test.tasks.Get('+info'), (req, it) => {
-  req.interpolations.project_id = props.plan_box.plan.projectId
+  req.interpolations.project_id = props.plan_box.plan.project_id
   req.interpolations.plan_id = props.plan_box.plan.id
   req.interpolations.task_id = task_id as any
   return it.useQuery({
@@ -186,7 +186,7 @@ async function reset(a_task_upshot_box: TaskUpshotBox) {
 
   await suspense()
 
-  content.value = task_upshot_box.value.taskUpshot.content ?? task_upshot_box.value.testCase?.content ?? ""
+  content.value = task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content ?? ""
 
   nextTick(() => {
     loading.value = false

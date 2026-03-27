@@ -8,29 +8,29 @@ import type { IssueActivitySchema } from './schema/issue_activity'
 
 export class IssueActivity implements IssueActivitySchema {
   @t.Number id!: number
-  @t.Number issueId!: number
-  @t.Number memberId!: number
+  @t.Number issue_id!: number
+  @t.Number member_id!: number
   @t.String property!: string
-  @t.String afterValue: string | null = null
-  @t.String beforeValue: string | null = null
+  @t.String after_value: string | null = null
+  @t.String before_value: string | null = null
 
   @t.Klass(Member) member?: Member
 
-  @t.Date createdAt!: Date
-  @t.Date updatedAt!: Date
+  @t.Date created_at!: Date
+  @t.Date updated_at!: Date
 
-  @t.Klass(Category) beforeCategory?: Category
-  @t.Klass(Category) afterCategory?: Category
+  @t.Klass(Category) before_category?: Category
+  @t.Klass(Category) after_category?: Category
 
-  @t.Klass(Member) beforeCreator?: Member
-  @t.Klass(Member) afterCreator?: Member
+  @t.Klass(Member) before_creator?: Member
+  @t.Klass(Member) after_creator?: Member
 
-  @t.Klass(Member) beforeAssignee?: Member
-  @t.Klass(Member) afterAssignee?: Member
+  @t.Klass(Member) before_assignee?: Member
+  @t.Klass(Member) after_assignee?: Member
 
-  @t.Klass(Milestone) beforeMilestone?: Milestone
-  @t.Klass(Milestone) afterMilestone?: Milestone
+  @t.Klass(Milestone) before_milestone?: Milestone
+  @t.Klass(Milestone) after_milestone?: Milestone
 
-  @t.Klass(Project) beforeProject?: Project
-  @t.Klass(Project) afterProject?: Project
+  @t.Klass(Project) before_project?: Project
+  @t.Klass(Project) after_project?: Project
 }

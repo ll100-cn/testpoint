@@ -7,20 +7,20 @@ export interface IssueActivitySchema {
   id: number
   property: string
   member?: MemberSchema
-  issueId: number
-  memberId: number
-  beforeValue?: string | null
-  afterValue?: string | null
-  createdAt: Date
-  updatedAt: Date
-  beforeCategory?: CategorySchema
-  afterCategory?: CategorySchema
-  beforeCreator?: MemberSchema
-  afterCreator?: MemberSchema
-  beforeAssignee?: MemberSchema
-  afterAssignee?: MemberSchema
-  beforeMilestone?: MilestoneSchema
-  afterMilestone?: MilestoneSchema
-  beforeProject?: ProjectSchema
-  afterProject?: ProjectSchema
+  issue_id: number
+  member_id: number
+  before_value?: string | null
+  after_value?: string | null
+  created_at: Date
+  updated_at: Date
+  before_category?: CategorySchema
+  after_category?: CategorySchema
+  before_creator?: MemberSchema
+  after_creator?: MemberSchema
+  before_assignee?: MemberSchema
+  after_assignee?: MemberSchema
+  before_milestone?: MilestoneSchema
+  after_milestone?: MilestoneSchema
+  before_project?: ProjectSchema
+  after_project?: ProjectSchema
 }

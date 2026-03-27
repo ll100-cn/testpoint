@@ -11,7 +11,7 @@
                 <FormErrorAlert />
 
                 <FormGroup label="项目">
-                  <controls.String v-model="profile_box.profile.projectName" readonly disabled />
+                  <controls.String v-model="profile_box.profile.project_name" readonly disabled />
                 </FormGroup>
 
                 <FormGroup path="nickname" label="昵称">

@@ -6,27 +6,27 @@ import type { MilestoneSchema } from './schema/milestone'
 
 export class Milestone implements MilestoneSchema {
   id!: number
-  projectId!: number
+  project_id!: number
   title!: string
   description?: string
-  platformIds: number[] = []
+  platform_ids: number[] = []
 
   @Type(() => Date)
-  publishedAt?: Date
+  published_at?: Date
   @Type(() => Date)
-  archivedAt?: Date
+  archived_at?: Date
 
   isPublished(): boolean {
-    if (this.publishedAt == null) {
+    if (this.published_at == null) {
       return false
     }
 
     const now = new Date()
-    return this.publishedAt <= now
+    return this.published_at <= now
   }
 
   isArchived(): boolean {
-    return this.archivedAt !== null
+    return this.archived_at !== null
   }
 }
 

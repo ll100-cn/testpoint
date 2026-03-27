@@ -8,8 +8,8 @@ import type { RoadmapSchema } from './schema/roadmap'
 export class Roadmap implements RoadmapSchema {
   id!: number
   title!: string
-  @t.Date createdAt!: Date
-  @t.Date updatedAt!: Date
+  @t.Date created_at!: Date
+  @t.Date updated_at!: Date
 }
 
 export class RoadmapBoxImpl {

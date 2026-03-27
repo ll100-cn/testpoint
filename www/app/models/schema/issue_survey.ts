@@ -6,8 +6,8 @@ export interface IssueSurveySchema {
   values: Record<string, any>
   remark?: string | null
   template: IssueTemplateSchema
-  issueId: number
-  templateId: number
-  createdAt: Date
-  updatedAt: Date
+  issue_id: number
+  template_id: number
+  created_at: Date
+  updated_at: Date
 }

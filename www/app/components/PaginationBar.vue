@@ -1,8 +1,8 @@
 <template>
   <div v-if="pagination" class="flex items-center gap-2 ms-auto">
-    <span class="whitespace-nowrap text-sm">共 {{ pagination.totalCount }} 条</span>
+    <span class="whitespace-nowrap text-sm">共 {{ pagination.total_count }} 条</span>
     <ButtonProvider preset="ghost" shape="square-rounded" variant="secondary">
-      <PaginationVue :page="page" :items-per-page="per_size" :total="pagination.totalCount" :sibling-count="1" show-edges>
+      <PaginationVue :page="page" :items-per-page="per_size" :total="pagination.total_count" :sibling-count="1" show-edges>
         <PaginationList v-slot="{ items }" class="flex items-center gap-1">
           <PaginationFirst>
             <Button class="text-sm" inherit :to="buildPagePath({ page: 1 })">
@@ -89,7 +89,7 @@ const props = withDefaults(defineProps<{
   per_size_enabled: true
 })
 
-const page = ref(props.pagination?.current_page ?? 1)
+const page = ref(props.pagination ? Math.floor(props.pagination.offset / props.pagination.limit) + 1 : 1)
 const per_size = ref(props.pagination?.limit)
 
 watch(per_size, (new_value) => {

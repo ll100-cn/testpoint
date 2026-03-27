@@ -3,6 +3,6 @@ export interface CategorySchema {
   name: string
   description?: string | null
   color?: string | null
-  projectId: number
-  defaultAsTestFailure: boolean
+  project_id: number
+  default_as_test_failure: boolean
 }

@@ -52,7 +52,7 @@ await line.wait()
 
 const former = Former.build({
   name: project_box.value.project.name,
-  webhook_url: project_box.value.project.webhookUrl,
+  webhook_url: project_box.value.project.webhook_url,
 })
 
 const Form = GenericForm<typeof former.form>

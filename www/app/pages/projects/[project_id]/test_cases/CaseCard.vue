@@ -174,8 +174,8 @@ const { data: _roadmap_boxes } = line.request(q.project.roadmaps.List(), (req, i
 })
 await line.wait()
 
-const test_cases = computed(() => test_case_page.value.list.map(it => it.testCase))
-const _labels = computed(() => _label_boxes.value.map(it => it.testCaseLabel))
+const test_cases = computed(() => test_case_page.value.list.map(it => it.test_case))
+const _labels = computed(() => _label_boxes.value.map(it => it.test_case_label))
 const _platforms = computed(() => _platform_boxes.value.map(it => it.platform))
 const _roadmaps = computed(() => _roadmap_boxes.value.map(it => it.roadmap))
 const milestone = computed(() => {
@@ -194,7 +194,7 @@ const newest_roadmap = computed(() => {
   const newest = _roadmaps.value.sort((a, b) => b.id - a.id)[0]
 
   if (milestone.value) {
-    return _roadmaps.value.filter((it) => (milestone!.value!.publishedAt != null && it.createdAt < milestone!.value!.publishedAt)).sort((a, b) => b.id - a.id)[0] ?? newest
+    return _roadmaps.value.filter((it) => (milestone!.value!.published_at != null && it.created_at < milestone!.value!.published_at)).sort((a, b) => b.id - a.id)[0] ?? newest
   } else {
     return newest
   }
@@ -205,25 +205,25 @@ const search_test_cases = computed(() => {
 
   const platform = platform_repo.value.find(_.toNumber(former.form.platform_id))
   if (platform) {
-    scope = scope.filter(it => it.platformIds.includes(platform.id))
+    scope = scope.filter(it => it.platform_ids.includes(platform.id))
   }
 
   const label = label_repo.value.find(_.toNumber(former.form.label_id))
   if (label) {
-    scope = scope.filter(it => it.labelIds.includes(label.id))
+    scope = scope.filter(it => it.label_ids.includes(label.id))
   }
 
   if (former.form.group_name_search) {
-    scope = scope.filter((it) => !!it.groupName?.includes(former.form.group_name_search))
+    scope = scope.filter((it) => !!it.group_name?.includes(former.form.group_name_search))
   }
 
   if (former.form.relate_state) {
     if (former.form.relate_state === 'related') {
-      scope = scope.filter((it) => it.requirementId != null)
+      scope = scope.filter((it) => it.requirement_id != null)
     } else if (former.form.relate_state === 'unrelated') {
-      scope = scope.filter((it) => it.requirementId == null)
+      scope = scope.filter((it) => it.requirement_id == null)
     } else if (former.form.relate_state === 'expired') {
-      scope = scope.filter((it) => (it.requirementId != null && it.roadmapId != newest_roadmap.value.id))
+      scope = scope.filter((it) => (it.requirement_id != null && it.roadmap_id != newest_roadmap.value.id))
     }
   }
 

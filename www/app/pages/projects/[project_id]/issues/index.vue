@@ -114,6 +114,6 @@ const { data: issue_summary } = line.request(q.bug.issues.Summary(), (req, it) =
 await line.wait()
 
 const issue_stage_count = computed(() => {
-  return _(pagination.value.issueStats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
+  return _(pagination.value.issue_stats).groupBy("stage").mapValues(stats => _.sumBy(stats, it => it.count)).value()
 })
 </script>

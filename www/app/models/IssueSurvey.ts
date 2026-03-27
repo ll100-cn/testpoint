@@ -6,13 +6,13 @@ import type { IssueSurveySchema } from './schema/issue_survey'
 
 export class IssueSurvey implements IssueSurveySchema {
   @t.Number id!: number
-  @t.Number issueId!: number
-  @t.Number templateId!: number
+  @t.Number issue_id!: number
+  @t.Number template_id!: number
   @t.String state!: string
   values: Record<number, string> = {}
 
-  @t.Date createdAt!: Date
-  @t.Date updatedAt!: Date
+  @t.Date created_at!: Date
+  @t.Date updated_at!: Date
   @t.String remark: string | null = null
 
   @t.Klass(IssueTemplate) template!: IssueTemplate

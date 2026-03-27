@@ -26,7 +26,7 @@
               <TableCell>{{ project_box.project.id }}</TableCell>
               <TableCell>{{ project_box.project.name }}</TableCell>
               <TableCell>{{ project_box.project.archived ? "是" : "否" }}</TableCell>
-              <TableCell>{{ project_box.project.webhookUrl }}</TableCell>
+              <TableCell>{{ project_box.project.webhook_url }}</TableCell>
               <TableCell role="actions">
                 <router-link :to="ok_url.apply(`/projects/${project_box.project.id}`)" class="link"><i class="far fa-search"></i> 详情</router-link>
                 <router-link :to="ok_url.apply(`/projects/${project_box.project.id}/edit`)" class="link"><i class="far fa-pencil-alt" /> 修改</router-link>

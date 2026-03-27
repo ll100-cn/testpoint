@@ -17,23 +17,10 @@ export const CommentSchema = z.object({
   member_id: z.number().int(),
   comment_id: z.number().int().nullable().optional(),
   collapsed: z.boolean(),
-  display: z.union([z.boolean(), z.string(), z.null()]).optional(),
+  display: z.preprocess((value) => String(value ?? ''), z.string()),
   member: MemberSchema.optional(),
   attachments: z.array(AttachmentSchema).optional().default([]),
-}).transform((value) => ({
-  id: value.id,
-  content: value.content,
-  createdAt: value.created_at,
-  updatedAt: value.updated_at,
-  issueId: value.issue_id,
-  lastEditedAt: value.last_edited_at ?? null,
-  memberId: value.member_id,
-  commentId: value.comment_id ?? null,
-  collapsed: value.collapsed,
-  display: String(value.display ?? ''),
-  member: value.member,
-  attachments: value.attachments,
-}))
+})
 export type CommentType = z.output<typeof CommentSchema>
 
 export const CommentBoxSchema = z.object({

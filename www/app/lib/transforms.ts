@@ -1,7 +1,6 @@
 import { Transform, Type, plainToInstance, type TransformFnParams } from "class-transformer"
 import Big from 'big.js'
 import _ from "lodash"
-import * as changeCase from 'change-case'
 
 export function Klass<T>(klass: new () => T) {
   return Type(() => klass)
@@ -49,17 +48,9 @@ export const Date = Klass(globalThis.Date)
 export const String = Klass(globalThis.String)
 
 export function plainToObject<T>(klass: new (...args: any[]) => T, plain: any) {
-  return plainToInstance<T, any>(klass, plain, {
-    propertyFormat: (key: string) => {
-      return changeCase.camelCase(key)
-    }
-  })
+  return plainToInstance<T, any>(klass, plain)
 }
 
 export function plainToArray<T>(klass: new (...args: any[]) => T, plain: any[]): Array<T> {
-  return plainToInstance<T, any>(klass, plain, {
-    propertyFormat: (key: string) => {
-      return changeCase.camelCase(key)
-    }
-  })
+  return plainToInstance<T, any>(klass, plain)
 }

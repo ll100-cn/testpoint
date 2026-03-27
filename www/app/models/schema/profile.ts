@@ -2,8 +2,8 @@ export interface ProfileSchema {
   role: string
   nickname?: string | null
   permissions: Record<string, any>
-  memberId: number
-  projectId: number
-  roleText: string
-  projectName: string
+  member_id: number
+  project_id: number
+  role_text: string
+  project_name: string
 }

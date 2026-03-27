@@ -4,10 +4,10 @@ export interface PlanSchema {
   id: number
   title: string
   platform: PlatformSchema
-  createdAt: Date
-  creatorId: number
-  platformId: number
-  projectId: number
-  milestoneId?: number | null
-  creatorName: string
+  created_at: Date
+  creator_id: number
+  platform_id: number
+  project_id: number
+  milestone_id?: number | null
+  creator_name: string
 }

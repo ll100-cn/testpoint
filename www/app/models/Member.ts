@@ -17,13 +17,13 @@ export class Member implements MemberSchema {
   name!: string
   nickname?: string
   role!: keyof typeof Role
-  roleText!: string
-  receiveMail!: boolean
-  userId!: number
-  projectId!: number
-  avatarUrl?: string
+  role_text!: string
+  receive_mail!: boolean
+  user_id!: number
+  project_id!: number
+  avatar_url?: string
 
-  @t.Date archivedAt?: Date
+  @t.Date archived_at?: Date
 }
 
 export class MemberBoxImpl {

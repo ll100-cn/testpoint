@@ -11,7 +11,7 @@
             <NavItem>
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <span>{{ profile?.projectName ?? "选择项目" }}</span>
+                  <span>{{ profile?.project_name ?? "选择项目" }}</span>
                   <i class="fa-solid fa-caret-down ms-1"></i>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -35,7 +35,7 @@
               </DropdownMenu>
             </NavItem>
 
-            <ProjectNav v-if="profile" :project_id="profile.projectId" />
+            <ProjectNav v-if="profile" :project_id="profile.project_id" />
           </template>
         </Nav>
 
@@ -45,7 +45,7 @@
               <DropdownMenuTrigger>
                 <span v-if="profile">
                   <img class="rounded-circle h-6 inline-block" :src="avatarUrlByEmail(account.email)">
-                  {{ profile?.nickname ?? account.name }} ({{ profile.roleText }})
+                  {{ profile?.nickname ?? account.name }} ({{ profile.role_text }})
                 </span>
 
                 <span v-else>

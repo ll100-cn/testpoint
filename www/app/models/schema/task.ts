@@ -1,8 +1,8 @@
 export interface TaskSchema {
   id: number
   finished: boolean
-  planId?: number | null
-  ignoreAt?: Date | null
-  phaseId?: number | null
-  testCaseId?: number | null
+  plan_id?: number | null
+  ignore_at?: Date | null
+  phase_id?: number | null
+  test_case_id?: number | null
 }

@@ -1,6 +1,11 @@
 import { z } from 'zod'
 
-import { NullableInputStringSchema, NullableStringSchema } from './_shared'
+import { createParser, NullableInputStringSchema, NullableStringSchema } from './_shared'
+
+type ProfileMethods = {
+  findKlass(resource: any): string[]
+  allow(action: string, resource: any): boolean
+}
 
 function withProfileMethods<T extends { permissions: Record<string, string[]> }>(profile: T) {
   return {
@@ -48,21 +53,28 @@ export const ProfileSchema = z.object({
   nickname: NullableStringSchema,
   project_name: z.string(),
   permissions: z.record(z.string(), z.array(z.string())),
-}).transform((value) => withProfileMethods({
-  memberId: value.member_id,
-  projectId: value.project_id,
-  role: value.role,
-  roleText: value.role_text,
-  nickname: value.nickname ?? null,
-  projectName: value.project_name,
-  permissions: value.permissions,
-}))
-export type ProfileType = z.output<typeof ProfileSchema>
+})
 
-export const ProfileBoxSchema = z.object({
+export type ProfileType = z.output<typeof ProfileSchema> & ProfileMethods
+
+export function parseProfile(value: z.output<typeof ProfileSchema>): ProfileType {
+  return withProfileMethods({
+    member_id: value.member_id,
+    project_id: value.project_id,
+    role: value.role,
+    role_text: value.role_text,
+    nickname: value.nickname ?? null,
+    project_name: value.project_name,
+    permissions: value.permissions,
+  })
+}
+
+const ProfileBoxRawSchema = z.object({
   profile: ProfileSchema,
 })
-export type ProfileBoxType = z.output<typeof ProfileBoxSchema>
+export type ProfileBoxType = { profile: ProfileType }
+
+export const ProfileBoxSchema = createParser(ProfileBoxRawSchema, ({ profile }) => ({ profile: parseProfile(profile) }))
 
 export const ProfileBodySchema = z.object({
   nickname: NullableInputStringSchema.optional(),

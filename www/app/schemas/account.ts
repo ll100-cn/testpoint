@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 import { avatarUrlByEmail } from '@/lib/avatar_url'
-import { NullableInputStringSchema } from './_shared'
-import { UserSchema, type UserType } from './user'
+import { createParser, NullableInputStringSchema } from './_shared'
+import { parseUser, UserSchema, type UserType } from './user'
 
 export type AccountType = {
   user: UserType
@@ -17,20 +17,26 @@ export const AccountSchema = z.object({
   name: z.string(),
   email: z.string(),
   admin: z.boolean(),
-}).transform((value) => ({
-  user: value.user,
+})
+
+export function parseAccount(value: z.output<typeof AccountSchema>): AccountType {
+  return {
+  user: parseUser(value.user),
   name: value.name,
   email: value.email,
   admin: value.admin,
   avatarUrl() {
     return avatarUrlByEmail(value.email)
   },
-}) as AccountType)
+  }
+}
 
 export type AccountBoxType = { account: AccountType }
-export const AccountBoxSchema = z.object({
+const AccountBoxRawSchema = z.object({
   account: AccountSchema,
 })
+
+export const AccountBoxSchema = createParser(AccountBoxRawSchema, ({ account }) => ({ account: parseAccount(account) }))
 
 export const AccountBodySchema = z.object({
   name: NullableInputStringSchema,

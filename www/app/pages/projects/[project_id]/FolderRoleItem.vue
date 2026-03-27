@@ -8,12 +8,12 @@
 
       <div class="border-b -ms-2 ps-2 -me-1 pe-2 box-content" />
 
-      <TreeItemView :highlight="highlight" :item-title="role_item.roleName ?? '未设置'" :item-count="role_item.totalCount()" @click.prevent="changeFilter({ ...params, roleName: role_item.roleName ?? '', scenePath: [] })" />
+      <TreeItemView :highlight="highlight" :item-title="role_item.role_name ?? '未设置'" :item-count="role_item.total_count()" @click.prevent="changeFilter({ ...params, role_name: role_item.role_name ?? '', scene_path: [] })" />
     </div>
 
     <ul :id="`treeview-${role_item.uuid}`" :class="{ 'hidden': toggled }" class="ms-8">
       <template v-for="scene_item in role_item.sceneTree">
-        <FolderSceneItem :scene_item="scene_item" :filter="filter" :actived="!toggled" :params="{ ...params, roleName: role_item.roleName ?? '' }" />
+        <FolderSceneItem :scene_item="scene_item" :filter="filter" :actived="!toggled" :params="{ ...params, role_name: role_item.role_name ?? '' }" />
       </template>
     </ul>
   </li>
@@ -46,13 +46,13 @@ const props = defineProps({
 })
 
 const collapsed = computed(() => {
-  return !props.actived || (props.role_item.roleName ?? '') != props.filter.roleName
+  return !props.actived || (props.role_item.role_name ?? '') != props.filter.role_name
 })
 
 const toggled = ref(collapsed.value)
 
 const highlight = computed(() => {
-  return !collapsed.value && (props.filter.scenePath ?? '') == ''
+  return !collapsed.value && (props.filter.scene_path ?? '') == ''
 })
 
 const changeFilter = inject("changeFilter") as ChangeFilterFunction

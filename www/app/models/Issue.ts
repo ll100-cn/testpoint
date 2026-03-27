@@ -19,33 +19,33 @@ export class Issue implements IssueSchema {
   title!: string
   content!: string
   state!: string
-  stateText!: string
+  state_text!: string
 
   stage!: string
-  stageText!: string
-  subscribedUsers?: unknown[]
+  stage_text!: string
+  subscribed_users?: unknown[]
 
   @Type(() => Date)
-  createdAt!: Date
+  created_at!: Date
 
   @Type(() => Date)
-  updatedAt!: Date
+  updated_at!: Date
 
-  projectId!: number
-  projectName!: string
+  project_id!: number
+  project_name!: string
 
   @Type(() => Date)
-  lastEditedAt?: Date
+  last_edited_at?: Date
 
-  creatorId!: number
-  assigneeId?: number
+  creator_id!: number
+  assignee_id?: number
   priority!: string
-  priorityText!: string
-  taskId?: number
-  categoryId?: number
+  priority_text!: string
+  task_id?: number
+  category_id?: number
   @Type(() => Date)
-  archivedAt?: Date
-  milestoneId?: number
+  archived_at?: Date
+  milestone_id?: number
 
   @Type(() => Milestone)
   milestone?: Milestone
@@ -74,8 +74,8 @@ export class IssueBoxImpl {
   @t.Klass(Attachment) attachments: Attachment[] = []
   @t.Klass(IssueSurvey) surveys: IssueSurvey[] = []
   @t.Klass(IssueActivity) activities: IssueActivity[] = []
-  @t.Klass(IssueRelationship) sourceRelationships: IssueRelationship[] = []
-  @t.Klass(IssueRelationship) targetRelationships: IssueRelationship[] = []
+  @t.Klass(IssueRelationship) source_relationships: IssueRelationship[] = []
+  @t.Klass(IssueRelationship) target_relationships: IssueRelationship[] = []
   @t.Klass(Subscription) subscriptions: Subscription[] = []
 }
 
@@ -83,12 +83,12 @@ export type IssueBox = OmitByValue<IssueBoxImpl, Function>
 
 export class IssuePage<Box extends IssueBox> extends Pagination<Box> {
   @t.Klass(IssueBoxImpl) list: Box[] = []
-  @t.Klass(IssueStat) issueStats!: IssueStat[]
+  @t.Klass(IssueStat) issue_stats!: IssueStat[]
 }
 
 export class IssueSummary {
-  byCategory: { category: Category, count: number }[] = []
-  byMilestone: { milestone: Milestone, count: number }[] = []
-  byAssignee: { assignee: Member, count: number }[] = []
-  byCreator: { creator: Member, count: number }[] = []
+  by_category: { category: Category, count: number }[] = []
+  by_milestone: { milestone: Milestone, count: number }[] = []
+  by_assignee: { assignee: Member, count: number }[] = []
+  by_creator: { creator: Member, count: number }[] = []
 }

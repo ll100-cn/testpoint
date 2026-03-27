@@ -3,7 +3,7 @@ import { type AxiosResponse } from "axios"
 
 export class Pagination<T> {
   list!: T[]
-  totalCount!: number
+  total_count!: number
   offset!: number
   limit!: number
 
@@ -12,6 +12,6 @@ export class Pagination<T> {
   }
 
   get total_pages() {
-    return this.totalCount == 0 ? 1 : Math.ceil(this.totalCount / this.limit)
+    return this.total_count == 0 ? 1 : Math.ceil(this.total_count / this.limit)
   }
 }
