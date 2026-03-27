@@ -55,7 +55,7 @@ namespace :deploy do
 end
 after "deploy:migrate", "deploy:seed"
 
-fetch(:rsync_options).concat %w[--exclude=/node_modules --exclude=/tmp/cache -v]
+fetch(:rsync_options).concat %w[--exclude=/node_modules --exclude=/www/node_modules --exclude=/tmp/cache -v]
 namespace :local do
   task :compile_assets do
     base_dir = fetch(:rsync_stage)

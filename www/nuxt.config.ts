@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     '$vendor': fileURLToPath(new URL('./app/vendor', import.meta.url)),
     '$ui': fileURLToPath(new URL('./app/ui', import.meta.url)),
     '$presets': fileURLToPath(new URL('./app/presets', import.meta.url)),
-    '#vendor': fileURLToPath(new URL('../vendor/javascript', import.meta.url)),
+    '#vendor': fileURLToPath(new URL('./vendor/javascript', import.meta.url)),
   },
 
   css: [
