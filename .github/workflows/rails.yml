@@ -44,9 +44,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
+          node-version: '22'
           cache: 'pnpm'
-
-      - run: pnpm install
+          cache-dependency-path: www/pnpm-lock.yaml
 
       - run: ./prepare.sh
       - run: ./test.sh
