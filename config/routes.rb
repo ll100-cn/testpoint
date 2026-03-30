@@ -1,14 +1,10 @@
-require 'sidekiq/web'
-# Sidekiq::Web.set :sessions, false
-
 Rails.application.routes.draw do
   devise_for :users, path: "", controllers: {
     sessions: "sessions",
     login_codes: "login_codes"
   }
-  authenticate :user, ->(u) { u.superadmin? } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
+
+  mount GoodJob::Engine => '/good_job'
 
   namespace :svc, defaults: { format: :json } do
     resources :users

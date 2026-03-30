@@ -63,7 +63,7 @@ gem "rb_json5", "0.3.0"
 gem 'image_processing', '1.12.1'
 
 # backgound
-gem 'sidekiq', '7.2.0'
+gem 'good_job', '4.12.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

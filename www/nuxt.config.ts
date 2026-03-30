@@ -91,6 +91,8 @@ export default defineNuxtConfig({
   routeRules: {
     '/svc/**': { proxy: `${railsOrigin}/svc/**` },
     '/rails/**': { proxy: `${railsOrigin}/rails/**` },
+    '/good_job': { proxy: `${railsOrigin}/good_job` },
+    '/good_job/**': { proxy: `${railsOrigin}/good_job/**` },
     '/200.html': { prerender: true },
     '/**': { prerender: false },
   },

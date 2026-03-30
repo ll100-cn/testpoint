@@ -5,8 +5,6 @@ set :deploy_to, "/home/app/www"
 fetch(:linked_files).concat %w[
   config/env
   config/mailer.yml
-  config/redis.yml
-  config/sidekiq.yml
   config/database.yml
   config/master.key
   tmp/restart.txt
@@ -75,7 +73,6 @@ namespace :local do
       run_locally do
         with fetch(:default_env, {}) do
           execute "cp", "-f", "config/database.yml.example", "config/database.yml"
-          execute "cp", "-f", "config/redis.yml.example", "config/redis.yml"
 
           Bundler.with_original_env do
             execute "bundle", "install"
