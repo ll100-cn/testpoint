@@ -1,10 +1,13 @@
 import { BaseRequest, Scheme, type RequestOptions } from "../BaseRequest"
 import type { AxiosProgressEvent } from "axios"
 import type { UploadFile } from "@/components/types"
-import { AttachmentSchema } from '@/schemas/issue'
+import { createParser } from '@/schemas/_shared'
+import { AttachmentSchema, parseAttachment, type AttachmentType } from '@/schemas/issue'
 import { AttachmentBodySchema } from '@/schemas/issue_extra'
 
-class CreateRequest extends BaseRequest<any> {
+const ParsedAttachmentSchema = createParser(AttachmentSchema, parseAttachment)
+
+class CreateRequest extends BaseRequest<AttachmentType> {
   scheme = Scheme.post({
     endpoint: "/svc/attachments",
     relatedKeys: [ [ "/attachments" ] ]
@@ -12,9 +15,9 @@ class CreateRequest extends BaseRequest<any> {
   headers = {
     "Content-Type": "multipart/form-data",
   }
-  schema = AttachmentSchema
+  schema = ParsedAttachmentSchema
 
-  async perform(overrides: RequestOptions = {}): Promise<any> {
+  async perform(overrides: RequestOptions = {}): Promise<AttachmentType> {
     this.interpolations = overrides.interpolations ?? this.interpolations
     this.query = overrides.query ?? this.query
 
@@ -41,24 +44,24 @@ class CreateRequest extends BaseRequest<any> {
 export const Create = () => new CreateRequest()
 
 
-class UpdateRequest extends BaseRequest<any> {
+class UpdateRequest extends BaseRequest<AttachmentType> {
   scheme = Scheme.patch({
     endpoint: "/svc/attachments/{attachment_id}",
     relatedKeys: [ [ "/attachments", "/{attachment_id}" ] ]
   })
 
-  schema = AttachmentSchema
+  schema = ParsedAttachmentSchema
   bodySchema = AttachmentBodySchema
 }
 export const Update = () => new UpdateRequest()
 
 
-class DestroyRequest extends BaseRequest<any> {
+class DestroyRequest extends BaseRequest<AttachmentType> {
   scheme = Scheme.delete({
     endpoint: "/svc/attachments/{attachment_id}",
     relatedKeys: [ [ "/attachments" ] ]
   })
 
-  schema = AttachmentSchema
+  schema = ParsedAttachmentSchema
 }
 export const Destroy = () => new DestroyRequest()

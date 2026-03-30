@@ -20,15 +20,15 @@
       <IssueContent :readonly="readonly" :issue_box="issue_box" @updated="onIssueUpdated" @convert="convertIssue" />
       <IssueSurveyCard :readonly="readonly" :issue_box="issue_box" v-if="issue_box.surveys?.length > 0" @modal="(...args) => issue_dialog.show(...args)" />
 
-      <div v-for="item in timelines" class="mb-2">
-        <template v-if="(item instanceof Comment)">
-          <IssueComment :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBoxImpl.from(item)" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_dialog.show(...args)" />
+      <div v-for="timeline in timelines" :key="`${timeline.kind}-${timeline.item.id}`" class="mb-2">
+        <template v-if="timeline.kind === 'comment'">
+          <IssueComment :readonly="readonly" :issue_box="issue_box" :comment_box="CommentBoxImpl.from(timeline.item)" :comment_repo="comment_repo" @updated="onCommentUpdated" @destroyed="onCommentDestroyed" @modal="(...args) => comment_dialog.show(...args)" />
         </template>
-        <template v-else-if="(item instanceof IssueActivity)">
-          <IssueActivityInfo :issue_box="issue_box" :issue_activity="item" />
+        <template v-else-if="timeline.kind === 'activity'">
+          <IssueActivityInfo :issue_box="issue_box" :issue_activity="timeline.item" />
         </template>
-        <template v-else-if="(item instanceof IssueRelationship)">
-          <IssueRelationshipInfo :readonly="readonly" :issue_box="issue_box" :issue_relationship="item" @updated="onIssueUpdated" />
+        <template v-else-if="timeline.kind === 'relationship'">
+          <IssueRelationshipInfo :readonly="readonly" :issue_box="issue_box" :issue_relationship="timeline.item" @updated="onIssueUpdated" />
         </template>
       </div>
 
@@ -130,7 +130,7 @@ import { Actioner } from "@/components/Actioner"
 import ActionerAlert from "@/components/ActionerAlert.vue"
 import IssueStateBadge from "@/components/IssueStateBadge.vue"
 import * as q from '@/requests'
-import { Comment, type CommentBox, CommentBoxImpl, CommentRepo, Issue, IssueActivity, type IssueBox, IssueRelationship, IssueSurvey } from "@/models"
+import { Comment, type CommentBox, CommentBoxImpl, CommentRepo, Issue, type IssueActivity, type IssueBox, type IssueRelationship, IssueSurvey } from "@/models"
 import { usePageStore } from "@/store"
 import _ from "lodash"
 import { computed, getCurrentInstance, ref } from "vue"
@@ -203,8 +203,20 @@ const comment_repo = computed(() => {
   return new CommentRepo().setup(comment_page.value.list.map(it => it.comment))
 })
 
+type TimelineItem =
+  | { kind: 'comment', item: Comment }
+  | { kind: 'activity', item: IssueActivity }
+  | { kind: 'relationship', item: IssueRelationship }
+
 const timelines = computed(() => {
-  return _.orderBy([ ...comment_repo.value.parent_id.findAll(null), ...issue_box.value.activities, ...issue_box.value.target_relationships, ...issue_box.value.source_relationships ], [ "created_at" ])
+  const items: TimelineItem[] = [
+    ...comment_repo.value.parent_id.findAll(null).map(item => ({ kind: 'comment' as const, item })),
+    ...issue_box.value.activities.map(item => ({ kind: 'activity' as const, item })),
+    ...issue_box.value.target_relationships.map(item => ({ kind: 'relationship' as const, item })),
+    ...issue_box.value.source_relationships.map(item => ({ kind: 'relationship' as const, item })),
+  ]
+
+  return _.orderBy(items, ["item.created_at"])
 })
 
 function onIssueUpdated(new_issue_box: IssueBox) {

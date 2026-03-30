@@ -2,12 +2,15 @@ import { z } from 'zod'
 
 import {
   AttachmentSchema,
+  parseAttachment,
+  type AttachmentType,
 } from './issue'
 import { MemberSchema } from './member'
 import { NullableInputStringSchema, NullableIntegerInputSchema } from './_shared'
 import { DateTimeSchema } from './_shared'
+import { createParser } from './_shared'
 
-export const CommentSchema = z.object({
+const CommentRawSchema = z.object({
   id: z.number().int(),
   content: z.string(),
   created_at: DateTimeSchema,
@@ -21,17 +24,42 @@ export const CommentSchema = z.object({
   member: MemberSchema.optional(),
   attachments: z.array(AttachmentSchema).optional().default([]),
 })
-export type CommentType = z.output<typeof CommentSchema>
+export type CommentType = Omit<z.output<typeof CommentRawSchema>, 'attachments'> & {
+  attachments: AttachmentType[]
+}
 
-export const CommentBoxSchema = z.object({
-  comment: CommentSchema,
-})
-export type CommentBoxType = z.output<typeof CommentBoxSchema>
+export function parseComment(value: z.output<typeof CommentRawSchema>): CommentType {
+  return {
+    ...value,
+    attachments: value.attachments.map(parseAttachment),
+  }
+}
 
-export const CommentListSchema = z.object({
-  list: z.array(CommentBoxSchema),
+export const CommentSchema = createParser(CommentRawSchema, parseComment)
+
+const CommentBoxRawSchema = z.object({
+  comment: CommentRawSchema,
 })
-export type CommentListType = z.output<typeof CommentListSchema>
+export type CommentBoxType = {
+  comment: CommentType
+}
+
+export const CommentBoxSchema = createParser(CommentBoxRawSchema, ({ comment }) => ({
+  comment: parseComment(comment),
+}))
+
+const CommentListRawSchema = z.object({
+  list: z.array(CommentBoxRawSchema),
+})
+export type CommentListType = {
+  list: CommentBoxType[]
+}
+
+export const CommentListSchema = createParser(CommentListRawSchema, ({ list }) => ({
+  list: list.map(({ comment }) => ({
+    comment: parseComment(comment),
+  })),
+}))
 
 export const CommentBodySchema = z.object({
   content: NullableInputStringSchema.optional(),
