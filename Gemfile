@@ -30,6 +30,7 @@ gem "ffi", "1.15.5"
 
 # Controllers
 gem "responders", "3.1.0"
+gem 'rails-reverse-proxy', '0.13.0'
 
 # Models
 gem "devise", "4.9.2"

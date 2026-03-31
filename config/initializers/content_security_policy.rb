@@ -23,7 +23,8 @@ Rails.application.config.content_security_policy do |policy|
   policy.connect_src :self, :https
 
   if Rails.env.development?
-    policy.script_src *policy.script_src, :unsafe_eval, 'http:'
+    # Nuxt/Vite dev HTML includes inline bootstrap scripts when proxied through Rails.
+    policy.script_src *policy.script_src, :unsafe_eval, :unsafe_inline, 'http:'
     policy.connect_src *policy.connect_src, 'http:', 'ws:'
   else
     hashes = nuxt_inline_script_hashes.call

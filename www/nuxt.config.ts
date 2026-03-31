@@ -3,6 +3,11 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 import { defineNuxtConfig } from 'nuxt/config'
 import type { CompilerOptions } from 'typescript'
+import * as dotenv from 'dotenv'
+
+// Load environment variables
+dotenv.config({ path: '.env.local' })
+dotenv.config()
 
 const typescriptCompilerOptions: CompilerOptions = {
   experimentalDecorators: true,
@@ -17,8 +22,7 @@ const typescriptCompilerOptions: CompilerOptions = {
 
 const baseURL = normalizeBaseURL(process.env.RAILS_RELATIVE_URL_ROOT || '/')
 const nuxtPort = Number(process.env.PORT || 3100)
-const railsPort = Number(process.env.RAILS_PORT || nuxtPort - 100)
-const railsOrigin = process.env.RAILS_ORIGIN || `http://127.0.0.1:${railsPort}`
+const nuxtDevOrigin = `http://${process.env.DEV_HOST}:${nuxtPort}`
 
 export default defineNuxtConfig({
   app: {
@@ -48,6 +52,8 @@ export default defineNuxtConfig({
     '@/assets/style.css',
     '#vendor/fontawesome-pro-web/css/all.css',
   ],
+
+  modules: [['./modules/force_dev_cdn', { origin: nuxtDevOrigin }] ],
 
   pages: {
     pattern: [ '**/*.vue', '!**/[A-Z]*.vue' ],
@@ -89,10 +95,6 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/svc/**': { proxy: `${railsOrigin}/svc/**` },
-    '/rails/**': { proxy: `${railsOrigin}/rails/**` },
-    '/good_job': { proxy: `${railsOrigin}/good_job` },
-    '/good_job/**': { proxy: `${railsOrigin}/good_job/**` },
     '/200.html': { prerender: true },
     '/**': { prerender: false },
   },
@@ -111,14 +113,6 @@ export default defineNuxtConfig({
     },
     server: {
       allowedHosts: true,
-    },
-  },
-
-  runtimeConfig: {
-    public: {
-      baseURL,
-      railsOrigin,
-      isProduction: process.env.NODE_ENV === 'production',
     },
   },
 

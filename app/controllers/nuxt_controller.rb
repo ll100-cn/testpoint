@@ -1,26 +1,13 @@
 class NuxtController < ApplicationController
-  layout 'nuxt'
-
-  helper_method :nuxt_base_path, :nuxt_dev_origin
+  include ReverseProxy::Controller
+  skip_forgery_protection
 
   def proxy
-    if Rails.env.development?
-      render :root
+    if Rails.env.production?
+      send_file Rails.public_path.join("200.html"), disposition: "inline"
     else
-      send_file Rails.public_path.join('200.html'), disposition: 'inline'
+      origin = "http://#{request.host}:#{request.port + 100}"
+      reverse_proxy origin, path: request.fullpath
     end
-  end
-
-private
-  def nuxt_base_path
-    value = ENV.fetch('RAILS_RELATIVE_URL_ROOT', '/')
-    value = "/#{value}" unless value.start_with?('/')
-    value = "#{value}/" unless value.end_with?('/')
-    value
-  end
-
-  def nuxt_dev_origin
-    port = ENV.fetch('NUXT_PORT') { ENV.fetch('PORT', 3000).to_i + 100 }
-    "#{request.protocol}#{request.host}:#{port}"
   end
 end
