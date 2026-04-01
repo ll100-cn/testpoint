@@ -9,6 +9,10 @@ import * as dotenv from 'dotenv'
 dotenv.config({ path: '.env.local' })
 dotenv.config()
 
+const baseURL = normalizeBaseURL(process.env.RAILS_RELATIVE_URL_ROOT || '/')
+const nuxtPort = parseInt(process.env.PORT || '3100')
+const nuxtDevOrigin = process.env.DEV_HOST || `http://localhost:${nuxtPort}`
+
 const typescriptCompilerOptions: CompilerOptions = {
   experimentalDecorators: true,
   emitDecoratorMetadata: true,
@@ -19,10 +23,6 @@ const typescriptCompilerOptions: CompilerOptions = {
   strictPropertyInitialization: false,
   verbatimModuleSyntax: false,
 }
-
-const baseURL = normalizeBaseURL(process.env.RAILS_RELATIVE_URL_ROOT || '/')
-const nuxtPort = Number(process.env.PORT || 3100)
-const nuxtDevOrigin = `http://${process.env.DEV_HOST}:${nuxtPort}`
 
 export default defineNuxtConfig({
   app: {

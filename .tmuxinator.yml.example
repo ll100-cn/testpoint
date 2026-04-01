@@ -1,0 +1,14 @@
+name: <%= Dir.pwd %>
+
+pre_window:
+  - unset GEM_HOME
+#   - set-proxy off | pipe-eval
+
+<% PORT = @settings['PORT']&.to_i || 3000 %>
+
+windows:
+  - docker: docker-compose up
+  - rails: bundle exec bin/rails s -b 0.0.0.0 -p <%= PORT %>
+  - www: PORT=<%= PORT + 100 %> pnpm --dir www dev
+
+startup_window: rails
