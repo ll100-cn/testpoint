@@ -19,7 +19,7 @@
     </div>
 
     <template #actions>
-      <Button preset="ghost" v-if="allow('update', Plan)" :to="ok_url.apply(`${plan_id}/edit`)">设置</Button>
+      <Button preset="ghost" v-if="allow('update', Plan)" :to="ok_url.apply(`${path_info.resource}/edit`)">设置</Button>
     </template>
   </PageHeader>
 
@@ -108,6 +108,7 @@ import PlanPhaseCreateDialogContent from './PlanPhaseCreateDialogContent.vue'
 import TaskRow from './TaskRow.vue'
 import TaskUpshotInfoDialogContent from './TaskUpshotInfoDialogContent.vue'
 import OkUrl from '@/lib/ok_url'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
@@ -116,6 +117,7 @@ const params = route.params as any
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const query = route.query
+const path_info = PathHelper.parseMember(route.path, 'show')
 const ok_url = new OkUrl(route)
 const PhaseDialog = BlankDialog as typeof BlankDialog & PhaseFrameComponent
 const TaskUpshotDialog = BlankDialog as typeof BlankDialog & TaskUpshotFrameComponent

@@ -17,7 +17,7 @@
 
   <div class="grid grid-cols-3 gap-4 mt-4">
     <div v-for="{ plan } in plan_page.list">
-      <router-link :to="{ path: `plans/${plan.id}` }">
+      <router-link :to="{ path: `${path_info.collection}/${plan.id}` }">
         <Card>
           <CardContent class="flex flex-col gap-y-3">
             <TempVar v-slot="{ current_tasks_state_counts }" :define="{ current_tasks_state_counts: plan_page.tasks_state_counts[plan.id.toString()] ?? {} }">
@@ -85,12 +85,14 @@ import PageTitle from '@/components/PageTitle.vue'
 import Button from '$ui/button/Button.vue'
 import { useQueryLine } from '@/lib/useQueryLine'
 import TempVar from 'vue-temp-var'
+import PathHelper from '@/lib/PathHelper'
 
 const line = useQueryLine()
 const route = useRoute()
 const router = useRouter()
 const params = route.params as any
 const query = utils.queryToPlain(route.query)
+const path_info = PathHelper.parseCollection(route.path, 'index')
 const page = usePageStore()
 const allow = page.inProject()!.allow
 const PlanDialog = BlankDialog as typeof BlankDialog & PlanFrameComponent
@@ -138,6 +140,7 @@ watch(() => former.form.creator_id_eq, (value, oldValue) => {
   }
 })
 
-function createdPlan() {
+function createdPlan(plan: Plan) {
+  router.push(`${path_info.collection}/${plan.id}`)
 }
 </script>
