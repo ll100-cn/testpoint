@@ -65,12 +65,12 @@ import type { TaskUpshotFrameEmits } from '@/components/TaskUpshotFrame'
 import { Category, IssueTemplate, type IssueTemplateBox, IssueTemplatePage, Member, PhaseInfo, Plan, type PlanBox, type TaskBox, TaskUpshot, type TaskUpshotBox } from '@/models'
 import * as q from '@/requests'
 import { useQueryLine } from '@/lib/useQueryLine'
-import { usePageStore, useSessionStore } from '@/store'
+import { usePageStore } from '@/store'
 import { type Component, computed, getCurrentInstance, nextTick, ref } from 'vue'
 
 const line = useQueryLine()
 const page = usePageStore()
-const session = useSessionStore()
+const profile = page.inProject()!.profile
 
 const props = defineProps<{
   plan_box: PlanBox
@@ -83,10 +83,16 @@ const task_upshot_box = ref(null! as TaskUpshotBox)
 const task_box = ref(null! as TaskBox)
 
 const issue_former = NewFormer.build({
+  issue_template_id: null as number | null,
   from_task_id: null as number | null,
   issue_attributes: {
     title: null as string | null,
     content: null as string | null,
+    attachments_params: [],
+    creator_id: profile.member_id,
+  },
+  survey_attributes: {
+    inputs_attributes: [],
   },
 })
 
@@ -173,6 +179,7 @@ async function reset(a_task_upshot_box: TaskUpshotBox, a_task_box: TaskBox) {
 
   issue_former.form.issue_attributes.title = `「${props.plan_box.plan.platform.name}」 ${task_upshot_box.value.test_case?.title}`
   issue_former.form.issue_attributes.content = `\n预期效果:\n${task_upshot_box.value.task_upshot.content ?? task_upshot_box.value.test_case?.content}\n\n实际效果:\n`
+  issue_former.form.issue_attributes.creator_id = profile.member_id
   issue_former.form.from_task_id = task_upshot_box.value.task!.id
 
   nextTick(() => {
