@@ -35,6 +35,8 @@
   </Nav>
 
   <Card class="rounded-t-none">
+    <CardTopState v-if="isLoading" />
+
     <CardTable>
       <IssueList :issue_boxes="pagination.list" :columns="['project']" :sorts="sorts" />
     </CardTable>
@@ -47,14 +49,14 @@
 <script setup lang="ts">
 import PaginationBar from "@/components/PaginationBar.vue"
 import * as q from '@/requests'
+import type { IssuePageWithCountsType } from '@/schemas/issue'
 import * as utils from "@/lib/utils"
-import { computed, getCurrentInstance, ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { useRoute } from "vue-router"
 import IssueList from "../projects/[project_id]/issues/IssueList.vue"
 import PageHeader from "./PageHeader.vue"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardFooter, CardTable, CardTopState } from '$ui/card'
 import { Nav, NavItem } from '$ui/nav'
-import type { IssueBox, IssuePage } from "@/models"
 import RLink from "@/components/RLink.vue"
 import { Badge } from "$ui/badge"
 import { useQueryLine } from '@/lib/useQueryLine'
@@ -62,30 +64,45 @@ import { useQueryLine } from '@/lib/useQueryLine'
 const line = useQueryLine()
 const route = useRoute()
 const query = utils.queryToPlain(route.query)
+const EMPTY_ISSUE_PAGE: IssuePageWithCountsType = {
+  total_count: 0,
+  offset: 0,
+  limit: 25,
+  list: [],
+  issue_stats: [],
+}
 
 const filter = String(query.filter ?? 'unhandled')
 const sorts = ref(String(query.sorts ?? 'id desc'))
 
-const { data: pagination } = line.request(q.profile.issues.Page(), (req, it) => {
+const { data: pagination, isLoading } = line.request(q.profile.issues.Page(), (req, it) => {
   req.query = { ...utils.plainToQuery(query), filter: filter, sorts: sorts.value }
-  return it.useQuery(req.toQueryConfig())
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    placeholderData: EMPTY_ISSUE_PAGE,
+  })
 })
 
-let unhandled_issue_page = ref(null as IssuePage<IssueBox> | null)
+let unhandled_issue_page: Ref<IssuePageWithCountsType> = ref(EMPTY_ISSUE_PAGE)
 if (filter != 'unhandled') {
   const { data: unhandled_temp } = line.request(q.profile.issues.Page(), (req, it) => {
     req.query = { per_page: 1, filter: 'unhandled' }
-    return it.useQuery(req.toQueryConfig())
+    return it.useQuery({
+      ...req.toQueryConfig(),
+      placeholderData: {
+        ...EMPTY_ISSUE_PAGE,
+        limit: 1,
+      },
+    })
   })
   unhandled_issue_page = unhandled_temp
 }
-await line.wait()
 
 const unhandled_issues_count = computed(() => {
   if (filter == 'unhandled') {
     return pagination.value.total_count
   } else {
-    return unhandled_issue_page.value?.total_count ?? 0
+    return unhandled_issue_page.value.total_count
   }
 })
 </script>

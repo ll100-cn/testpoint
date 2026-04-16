@@ -1,7 +1,7 @@
 // SNIP: 172183d46c2c08a2f2e3700f2f6adb93
 
 import { useMutation, useQuery, useQueryClient, type QueryFunctionContext, type UseQueryOptions } from "@tanstack/vue-query"
-import type { Ref } from "vue"
+import { toValue, type Ref } from "vue"
 import type { BaseRequest } from "../requests"
 
 class ReqWrapper<Req extends BaseRequest<any>> {
@@ -24,7 +24,7 @@ class ReqWrapper<Req extends BaseRequest<any>> {
     }
 
     const { suspense, data, ...rest } = useQuery<TQueryFnData, TError, TData, TQueryKey>(options, this.client)
-    if (!hackOptions.enabled) {
+    if (toValue(hackOptions.enabled ?? true)) {
       this.line.suspenses.push(suspense)
     }
     return { data: data as Ref<TData>, suspense, queryKey, ...rest }
@@ -120,4 +120,3 @@ export function paramsQueryKey<T extends unknown[]>(
 
   return result as MergeArrayTypes<T>
 }
-

@@ -2,6 +2,8 @@
   <PageHeader :issues_count="unhandled_issues_count" current="projects" />
 
   <Card>
+    <CardTopState v-if="loading" />
+
     <CardTable>
       <Table>
         <TableHeader>
@@ -30,36 +32,48 @@
 </template>
 
 <script setup lang="ts">
-import { EntityRepo, IssueStat, Project, type MemberBox } from '@/models'
+import { EntityRepo, IssueStat, Project } from '@/models'
 import * as q from '@/requests'
-import { computed, getCurrentInstance, ref } from 'vue'
+import type { IssuePageWithCountsType } from '@/schemas/issue'
+import type { MemberInfoListType } from '@/schemas/member'
+import { computed } from 'vue'
 import PageHeader from "./PageHeader.vue"
 import CategoryBadge from '@/components/CategoryBadge.vue'
 import { ENUM_ISSUE_STAGES } from "@/constants"
-import { usePageStore, useSessionStore } from '@/store'
-import _ from 'lodash'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '$ui/table'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTable, CardTitle, CardTopState } from '$ui/card'
+import { Card, CardTable, CardTopState } from '$ui/card'
 import { useQueryLine } from '@/lib/useQueryLine'
 import { useRoute } from 'vue-router'
 import OkUrl from '@/lib/ok_url'
 
 const line = useQueryLine()
 const route = useRoute()
-const page = usePageStore()
-const session = useSessionStore()
 const ok_url = new OkUrl(route)
+const EMPTY_MEMBER_BOXES: MemberInfoListType = []
+const EMPTY_ISSUE_PAGE: IssuePageWithCountsType = {
+  total_count: 0,
+  offset: 0,
+  limit: 1,
+  list: [],
+  issue_stats: [],
+}
 
 const enum_issue_stages = computed(() => Object.entries(ENUM_ISSUE_STAGES).filter(([code, text]) => code !== 'archived'))
-const { data: member_boxes } = line.request(q.profile.members.List('+project'), (req, it) => {
-  return it.useQuery(req.toQueryConfig())
+const { data: member_boxes, isLoading: memberBoxesLoading } = line.request(q.profile.members.List('+project'), (req, it) => {
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    placeholderData: EMPTY_MEMBER_BOXES,
+  })
 })
-const { data: unhandled_issue_page } = line.request(q.profile.issues.Page(), (req, it) => {
+const { data: unhandled_issue_page, isLoading: issuesLoading } = line.request(q.profile.issues.Page(), (req, it) => {
   req.query = { per_page: 1, filter: 'unhandled' }
-  return it.useQuery(req.toQueryConfig())
+  return it.useQuery({
+    ...req.toQueryConfig(),
+    placeholderData: EMPTY_ISSUE_PAGE,
+  })
 })
-await line.wait()
 
+const loading = computed(() => memberBoxesLoading.value || issuesLoading.value)
 const unhandled_issues_count = computed(() => unhandled_issue_page.value.total_count)
 const project_repo = computed(() => new EntityRepo<Project>().setup(member_boxes.value.map(it => it.project)))
 
@@ -72,6 +86,9 @@ const grouped_issue_stats = computed(() => {
 
   for (const issue_stat of unhandled_issue_page.value.issue_stats) {
     const project = project_repo.value.id.find(issue_stat.project_id)
+    if (!project) {
+      continue
+    }
 
     let issue_stats_mapping = result.get(project)
     if (!issue_stats_mapping) {

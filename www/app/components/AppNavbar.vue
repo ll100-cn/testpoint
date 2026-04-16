@@ -104,9 +104,17 @@ const { mutateAsync: destroy_login_action } = line.request(q.profile.login.Destr
 })
 
 async function signOut() {
-  await destroy_login_action({})
+  try {
+    await destroy_login_action({})
+  } catch (err) {
+    if (!(err instanceof q.ErrorUnauthorized)) {
+      throw err
+    }
+  }
+
   session.clear()
-  router.push('/')
+  page.clear()
+  router.replace('/login')
 }
 
 const navbarPt = {

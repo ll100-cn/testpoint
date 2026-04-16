@@ -1,4 +1,3 @@
-import legacy from '@vitejs/plugin-legacy'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 import { defineNuxtConfig } from 'nuxt/config'
@@ -101,7 +100,6 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
-      legacy(),
       tailwindcss(),
     ],
     resolve: {

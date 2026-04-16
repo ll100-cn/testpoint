@@ -1,3 +1,7 @@
 <script setup lang="ts">
-await navigateTo('/dashboard/issues')
+definePageMeta({
+  auth: false,
+  keepalive: false,
+  middleware: 'root-redirect',
+})
 </script>
