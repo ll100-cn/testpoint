@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users, path: "", controllers: {
-    sessions: "sessions",
-    login_codes: "login_codes"
-  }
+  # Rails 8 health check must precede the application catch-all route.
+  get "up" => "rails/health#show", as: :rails_health_check
+
+  # Keep the Devise mapping used by the JSON API without restoring the deleted HTML login flow.
+  devise_for :users, path: "", skip: :all
 
   mount GoodJob::Engine => '/good_job'
 
