@@ -12,6 +12,10 @@ module Testpoint
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    # Rails 8 replaces the Rails 7 singular preview_path setting with preview_paths.
+    config.action_mailer.delete(:preview_path)
+    config.action_mailer.preview_paths = [Rails.root.join("test/mailers/previews")]
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
