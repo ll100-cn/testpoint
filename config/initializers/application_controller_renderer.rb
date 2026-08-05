@@ -1,8 +1,2 @@
-# Be sure to restart your server when you modify this file.
-
-# ActiveSupport::Reloader.to_prepare do
-#   ApplicationController.renderer.defaults.merge!(
-#     http_host: 'example.org',
-#     https: false
-#   )
-# end
+# Rails 7 had no application-specific renderer defaults; retain the Rails
+# initializer as an extension point for the migrated application.

@@ -1,8 +1,8 @@
-require 'base64'
-require 'digest'
+require "base64"
+require "digest"
 
 nuxt_inline_script_hashes = lambda do
-  file = Rails.public_path.join('200.html')
+  file = Rails.public_path.join("200.html")
   next [] unless file.exist?
 
   file.read.scan(/<script\b(?![^>]*\bsrc=)[^>]*>(.*?)<\/script>/m).flatten.filter_map do |content|
@@ -23,9 +23,8 @@ Rails.application.config.content_security_policy do |policy|
   policy.connect_src :self, :https
 
   if Rails.env.development?
-    # Nuxt/Vite dev HTML includes inline bootstrap scripts when proxied through Rails.
-    policy.script_src *policy.script_src, :unsafe_eval, :unsafe_inline, 'http:'
-    policy.connect_src *policy.connect_src, 'http:', 'ws:'
+    policy.script_src *policy.script_src, :unsafe_eval, :unsafe_inline, "http:"
+    policy.connect_src *policy.connect_src, "http:", "ws:"
   else
     hashes = nuxt_inline_script_hashes.call
     policy.script_src *policy.script_src, *hashes.map { |hash| "'sha256-#{hash}'" }
