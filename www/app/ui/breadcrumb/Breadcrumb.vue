@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { computed, type HTMLAttributes } from 'vue'
 import { cn } from '../utils'
 import { relayBreadcrumbPresenterConfig, provideBreadcrumbPresenter, type BreadcrumbPresenter, type BreadcrumbPresenterConfig, useBreadcrumbPresenters } from './types'
 

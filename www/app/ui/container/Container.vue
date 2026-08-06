@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, withDefaults, type HTMLAttributes } from 'vue';
+import { computed, type HTMLAttributes } from 'vue';
 import { cn } from '../utils';
 import { provideContainerPresenter, relayContainerPresenterConfig, type ContainerPresenter, type ContainerPresenterConfig, useContainerPresenters } from './types';
 

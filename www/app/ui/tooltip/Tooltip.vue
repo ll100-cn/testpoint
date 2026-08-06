@@ -10,7 +10,7 @@
 -->
 <script setup lang="ts">
 import { TooltipProvider, TooltipRoot, type TooltipRootEmits, type TooltipRootProps, useForwardPropsEmits } from 'reka-ui'
-import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { computed, type HTMLAttributes } from 'vue'
 import { cn } from '../utils'
 import { provideTooltipPresenter, relayTooltipPresenterConfig, useTooltipPresenters, type TooltipPresenter, type TooltipPresenterConfig } from './types'
 

@@ -15,7 +15,7 @@
    - 2025-03-17 整理代码
 -->
 <script setup lang="ts">
-import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { computed, type HTMLAttributes } from 'vue'
 import { DropdownMenuRoot, type DropdownMenuRootEmits, type DropdownMenuRootProps, useForwardPropsEmits } from 'reka-ui'
 import { relayDropdownMenuPresenterConfig, useDropdownMenuPresenter, provideDropdownMenuPresenter, type DropdownMenuPresenter, type DropdownMenuPresenterConfig, useDropdownMenuPresenters } from './types'
 

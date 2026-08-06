@@ -90,8 +90,8 @@ const { data: category_boxes } = line.request(q.project.categories.List(), (req,
 await line.wait()
 const categories = computed(() => category_boxes.value.map(it => it.category))
 
-async function removeInput(index: number) {
-  props.former.form.inputs_attributes.splice(index, 1)
+async function removeInput(index: string | number) {
+  props.former.form.inputs_attributes.splice(Number(index), 1)
 }
 
 async function addInput() {

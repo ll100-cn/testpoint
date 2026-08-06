@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { type HTMLAttributes, type SelectHTMLAttributes, computed, withDefaults } from 'vue'
+import { type HTMLAttributes, type SelectHTMLAttributes, computed } from 'vue'
 import { cn } from '../utils'
 import { type InputPresenter, type InputPresenterConfig, provideInputPresenter, relayInputPresenterConfig, useInputPresenters } from './types'
 

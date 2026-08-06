@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type PrimitiveProps } from 'reka-ui'
-import { computed, withDefaults } from 'vue'
+import { computed } from 'vue'
 import { provideButtonPresenter, relayButtonPresenterConfig, useButtonPresenters, type ButtonPresenter, type ButtonPresenterConfig } from './types'
 
 const presenters = useButtonPresenters()

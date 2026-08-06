@@ -1,17 +1,8 @@
 import { Type } from "class-transformer"
-import * as t from '@/lib/transforms'
 import { Category } from "./Category"
 import { Member } from "./Member"
 import { Milestone } from "./Milestone"
 import { Task } from "./Task"
-import { Pagination } from "./Pagination"
-import { IssueStat } from "./IssueStat"
-import { IssueActivity } from "./IssueActivity"
-import { IssueRelationship } from "./IssueRelationship"
-import { Attachment } from "./Attachment"
-import { Subscription } from "./Subscription"
-import { IssueSurvey } from "./IssueSurvey"
-import type { OmitByValue } from "utility-types"
 import type { IssueSchema } from './schema/issue'
 
 export class Issue implements IssueSchema {
@@ -66,24 +57,6 @@ export class Issue implements IssueSchema {
     const prefix = this.priority == "important" ? "!!" : ""
     return `${prefix}${this.title}`
   }
-}
-
-export class IssueBoxImpl {
-  @t.Klass(Issue) issue!: Issue
-
-  @t.Klass(Attachment) attachments: Attachment[] = []
-  @t.Klass(IssueSurvey) surveys: IssueSurvey[] = []
-  @t.Klass(IssueActivity) activities: IssueActivity[] = []
-  @t.Klass(IssueRelationship) source_relationships: IssueRelationship[] = []
-  @t.Klass(IssueRelationship) target_relationships: IssueRelationship[] = []
-  @t.Klass(Subscription) subscriptions: Subscription[] = []
-}
-
-export type IssueBox = OmitByValue<IssueBoxImpl, Function>
-
-export class IssuePage<Box extends IssueBox> extends Pagination<Box> {
-  @t.Klass(IssueBoxImpl) list: Box[] = []
-  @t.Klass(IssueStat) issue_stats!: IssueStat[]
 }
 
 export class IssueSummary {

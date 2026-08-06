@@ -9,7 +9,7 @@
    - 2025-03-17 整理代码
 -->
 <script setup lang="ts">
-import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { computed, type HTMLAttributes } from 'vue'
 import { PopoverRoot, useForwardPropsEmits } from 'reka-ui'
 import { providePopoverPresenter, relayPopoverPresenterConfig, type PopoverPresenter, type PopoverPresenterConfig, usePopoverPresenters } from './types'
 import type { PopoverRootEmits, PopoverRootProps } from 'reka-ui'

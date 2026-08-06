@@ -1,6 +1,5 @@
 require "application_responder"
 require 'custom_cancan_controller_resource'
-require 'allow_graph_addons'
 
 class ApplicationController < ActionController::Base
   include AllowGraphAddons

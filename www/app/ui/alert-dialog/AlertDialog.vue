@@ -16,7 +16,7 @@
 -->
 <script setup lang="ts">
 import { type AlertDialogEmits, AlertDialogRoot, useForwardPropsEmits } from 'reka-ui'
-import { computed, type HTMLAttributes, withDefaults } from 'vue'
+import { computed, type HTMLAttributes } from 'vue'
 import { type AlertDialogPresenter, type AlertDialogPresenterConfig, provideAlertDialogPresenter, relayAlertDialogPresenterConfig, useAlertDialogPresenters } from './types'
 
 const presenters = useAlertDialogPresenters()

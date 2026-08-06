@@ -9,8 +9,9 @@ dotenv.config({ path: '.env.local' })
 dotenv.config()
 
 const baseURL = normalizeBaseURL(process.env.RAILS_RELATIVE_URL_ROOT || '/')
-const nuxtPort = parseInt(process.env.PORT || '3100')
-const nuxtDevOrigin = process.env.DEV_HOST || `http://localhost:${nuxtPort}`
+const nuxtPort = Number.parseInt(process.env.NUXT_PORT || process.env.PORT || '3001', 10)
+const railsOrigin = process.env.RAILS_ORIGIN || 'http://localhost:3000'
+const railsProxyBase = baseURL === '/' ? '' : baseURL.slice(0, -1)
 
 const typescriptCompilerOptions: CompilerOptions = {
   experimentalDecorators: true,
@@ -51,8 +52,6 @@ export default defineNuxtConfig({
     '@/assets/style.css',
     '#vendor/fontawesome-pro-web/css/all.css',
   ],
-
-  modules: [['./modules/force_dev_cdn', { origin: nuxtDevOrigin }] ],
 
   pages: {
     pattern: [ '**/*.vue', '!**/[A-Z]*.vue' ],
@@ -98,6 +97,12 @@ export default defineNuxtConfig({
     '/**': { prerender: false },
   },
 
+  runtimeConfig: {
+    public: {
+      railsOrigin,
+    },
+  },
+
   vite: {
     plugins: [
       tailwindcss(),
@@ -111,6 +116,13 @@ export default defineNuxtConfig({
     },
     server: {
       allowedHosts: true,
+      proxy: {
+        [railsProxyPath('/svc')]: { target: railsOrigin },
+        [railsProxyPath('/good_job')]: { target: railsOrigin },
+        [railsProxyPath('/rails/active_storage')]: { target: railsOrigin },
+        [railsProxyPath('/assets')]: { target: railsOrigin },
+        [railsProxyPath('/cable')]: { target: railsOrigin, ws: true },
+      },
     },
   },
 
@@ -132,4 +144,8 @@ function normalizeBaseURL(value: string) {
   }
 
   return result
+}
+
+function railsProxyPath(path: string) {
+  return `${railsProxyBase}${path}`
 }

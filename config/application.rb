@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 module Testpoint
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 8.1
 
     # Rails 8 replaces the Rails 7 singular preview_path setting with preview_paths.
     config.action_mailer.delete(:preview_path)
