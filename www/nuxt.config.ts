@@ -4,14 +4,14 @@ import { defineNuxtConfig } from 'nuxt/config'
 import type { CompilerOptions } from 'typescript'
 import * as dotenv from 'dotenv'
 
-// Load environment variables
-dotenv.config({ path: '.env.local' })
-dotenv.config()
+// Load the Rails-root environment files when Nuxt is started from www/.
+dotenv.config({ path: '../.env.local' })
+dotenv.config({ path: '../.env' })
 
 const baseURL = normalizeBaseURL(process.env.RAILS_RELATIVE_URL_ROOT || '/')
 const nuxtPort = Number.parseInt(process.env.NUXT_PORT || process.env.PORT || '3001', 10)
+const nuxtDevOrigin = process.env.NUXT_DEV_ORIGIN || process.env.DEV_HOST || `http://localhost:${nuxtPort}`
 const railsOrigin = process.env.RAILS_ORIGIN || 'http://localhost:3000'
-const railsProxyBase = baseURL === '/' ? '' : baseURL.slice(0, -1)
 
 const typescriptCompilerOptions: CompilerOptions = {
   experimentalDecorators: true,
@@ -36,6 +36,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   telemetry: { enabled: false },
+
+  modules: [['./modules/force_dev_cdn', { origin: nuxtDevOrigin }]],
 
   alias: {
     '@': fileURLToPath(new URL('./app', import.meta.url)),
@@ -75,6 +77,12 @@ export default defineNuxtConfig({
 
   nitro: {
     moduleSideEffects: [ 'reflect-metadata', 'class-transformer' ],
+    routeRules: {
+      '/svc/**': { proxy: `${railsOrigin}/svc/**` },
+      '/rails/**': { proxy: `${railsOrigin}/rails/**` },
+      '/good_job': { proxy: `${railsOrigin}/good_job` },
+      '/good_job/**': { proxy: `${railsOrigin}/good_job/**` },
+    },
     prerender: {
       failOnError: false,
       crawlLinks: false,
@@ -97,12 +105,6 @@ export default defineNuxtConfig({
     '/**': { prerender: false },
   },
 
-  runtimeConfig: {
-    public: {
-      railsOrigin,
-    },
-  },
-
   vite: {
     plugins: [
       tailwindcss(),
@@ -121,16 +123,7 @@ export default defineNuxtConfig({
       'import.meta.env.RAILS_RELATIVE_URL_ROOT': JSON.stringify(baseURL),
       'import.meta.env.VITE_RUBY_BASE': JSON.stringify(baseURL),
     },
-    server: {
-      allowedHosts: true,
-      proxy: {
-        [railsProxyPath('/svc')]: { target: railsOrigin },
-        [railsProxyPath('/good_job')]: { target: railsOrigin },
-        [railsProxyPath('/rails/active_storage')]: { target: railsOrigin },
-        [railsProxyPath('/assets')]: { target: railsOrigin },
-        [railsProxyPath('/cable')]: { target: railsOrigin, ws: true },
-      },
-    },
+    server: { allowedHosts: true },
   },
 
   devServer: {
@@ -151,8 +144,4 @@ function normalizeBaseURL(value: string) {
   }
 
   return result
-}
-
-function railsProxyPath(path: string) {
-  return `${railsProxyBase}${path}`
 }

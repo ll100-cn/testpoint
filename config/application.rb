@@ -2,6 +2,7 @@ require_relative "boot"
 
 require "rails/all"
 require "good_job/engine"
+require_relative "../engines/nuxt_fallback/boot"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -23,7 +24,7 @@ module Testpoint
 
     # Preserve the legacy route lookup and Active Storage route ordering.
     config.paths.add "config/routes.rb", with: ["config/routes.rb", "config/routes"], glob: "**/*.rb"
-    config.railties_order = [ActiveStorage::Engine, :main_app, :all]
+    config.railties_order = [ActiveStorage::Engine, :main_app, :all, NuxtFallback::Engine]
 
     config.generators do |g|
       g.assets false

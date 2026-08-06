@@ -116,6 +116,4 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: 'nuxt#proxy'
-  get '*path' => 'nuxt#proxy'
 end
