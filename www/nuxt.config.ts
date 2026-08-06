@@ -107,6 +107,13 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    build: {
+      rolldownOptions: {
+        output: {
+          keepNames: true,
+        },
+      },
+    },
     resolve: {
       preserveSymlinks: true,
     },
